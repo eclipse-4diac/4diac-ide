@@ -25,7 +25,7 @@ public class ChangeType extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		AbstractFBNElementEditPart element = getSelectedFBElementEditPart(event);
+		final AbstractFBNElementEditPart element = getSelectedFBElementEditPart(event);
 		if (null != element) {
 			element.performDirectEdit();
 			return Status.OK_STATUS;
@@ -34,14 +34,13 @@ public class ChangeType extends AbstractHandler {
 	}
 
 	private static AbstractFBNElementEditPart getSelectedFBElementEditPart(ExecutionEvent event) {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
-			Object selObj = ((StructuredSelection) selection).getFirstElement();
+			final Object selObj = ((StructuredSelection) selection).getFirstElement();
 			if (selObj instanceof AbstractFBNElementEditPart) {
 				return (AbstractFBNElementEditPart) selObj;
 			}
 		}
 		return null;
 	}
-
 }

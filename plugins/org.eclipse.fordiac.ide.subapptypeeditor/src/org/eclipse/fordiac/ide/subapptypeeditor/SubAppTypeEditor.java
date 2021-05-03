@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 public class SubAppTypeEditor extends FBTypeEditor {
 
 	@Override
-	protected FBType getFBType(PaletteEntry paletteEntry) {
+	protected FBType getFBType(final PaletteEntry paletteEntry) {
 		if (paletteEntry instanceof SubApplicationTypePaletteEntry) {
 			return ((SubApplicationTypePaletteEntry) paletteEntry).getSubApplicationType();
 		}
@@ -29,8 +29,14 @@ public class SubAppTypeEditor extends FBTypeEditor {
 	}
 
 	@Override
-	protected boolean checkTypeEditorType(FBType fbType, String editorType) {
+	protected boolean checkTypeEditorType(final FBType fbType, final String editorType) {
 		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("subapp"))); //$NON-NLS-1$
+	}
+
+	@Override
+	protected boolean checkTypeSaveAble() {
+		// no additional checks are needed
+		return true;
 	}
 }

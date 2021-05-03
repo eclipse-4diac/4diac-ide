@@ -26,8 +26,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariab
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
-import org.eclipse.fordiac.ide.model.structuredtext.validation.AbstractStructuredTextValidator;
-import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral;
 import org.eclipse.xtext.validation.Check;
 
 /**
@@ -170,13 +168,7 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
   }
   
   protected String _extractTypeInformation(final PrimaryVariable variable) {
-    String _xifexpression = null;
-    if ((null != variable)) {
-      _xifexpression = this.extractTypeInformation(variable, this.extractTypeInformation(variable.getVar()));
-    } else {
-      _xifexpression = variable.getVar().getType().getName();
-    }
-    return _xifexpression;
+    return this.extractTypeInformation(variable, this.extractTypeInformation(variable.getVar()));
   }
   
   protected String _extractTypeInformation(final VarDeclaration variable) {

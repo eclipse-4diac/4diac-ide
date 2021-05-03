@@ -33,6 +33,7 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -56,12 +57,12 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		FBNetwork fbNetwork = getFBNetwork();
+		final FBNetwork fbNetwork = getFBNetwork();
 		return (null != fbNetwork) && !getClipboardContents().isEmpty();
 	}
 
 	protected Command createPasteCommand() {
-		FBNetwork fbNetwork = getFBNetwork();
+		final FBNetwork fbNetwork = getFBNetwork();
 		if (null != fbNetwork) {
 			return new PasteCommand(getClipboardContents(), fbNetwork, pasteRefPosition);
 		}
@@ -69,7 +70,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	}
 
 	private List<? extends Object> getClipboardContents() {
-		Object obj = Clipboard.getDefault().getContents();
+		final Object obj = Clipboard.getDefault().getContents();
 		if (obj instanceof List) {
 			return (List<?>)obj;
 		}
@@ -80,7 +81,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	protected void init() {
 		setId(ActionFactory.PASTE.getId());
 		setText(Messages.PasteEditPartsAction_Text);
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		final ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
 	}
@@ -95,19 +96,19 @@ public class PasteEditPartsAction extends SelectionAction {
 	}
 
 	public void setMouseLocationAsPastePos(Event event) {
-		FigureCanvas figureCanvas = (FigureCanvas) event.widget;
-		org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
+		final FigureCanvas figureCanvas = (FigureCanvas) event.widget;
+		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
 		Point mouseLocation = Display.getCurrent().getCursorLocation();
 		mouseLocation = figureCanvas.toControl(mouseLocation.x, mouseLocation.y);
 
 		if (figureCanvas.getBounds().contains(mouseLocation.x, mouseLocation.y)) {
-			ZoomManager zoomManager = ((FBNetworkEditor) getWorkbenchPart()).getZoomManger();
+			final ZoomManager zoomManager = ((FBNetworkEditor) getWorkbenchPart()).getZoomManger();
 			mouseLocation.x += viewLocation.x;
 			mouseLocation.y += viewLocation.y;
 			setPastRefPosition(new org.eclipse.draw2d.geometry.Point(mouseLocation.x, mouseLocation.y)
 					.scale(1.0 / zoomManager.getZoom()));
 		} else {
-			Dimension visibleArea = figureCanvas.getViewport().getSize();
+			final Dimension visibleArea = figureCanvas.getViewport().getSize();
 			setPastRefPosition(
 					new Point(viewLocation.x + (visibleArea.width / 2), viewLocation.y + (visibleArea.height / 2)));
 		}
@@ -125,8 +126,8 @@ public class PasteEditPartsAction extends SelectionAction {
 	}
 
 	protected FBNetwork getFBNetwork() {
-		if (getWorkbenchPart() instanceof FBNetworkEditor) {
-			return ((FBNetworkEditor) getWorkbenchPart()).getModel();
+		if (getWorkbenchPart() instanceof IEditorPart) {
+			return getWorkbenchPart().getAdapter(FBNetwork.class);
 		}
 		return null;
 	}

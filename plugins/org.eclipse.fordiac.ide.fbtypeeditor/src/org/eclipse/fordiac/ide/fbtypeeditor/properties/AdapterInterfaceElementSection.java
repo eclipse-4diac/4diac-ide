@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -113,7 +113,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		typeCombo.addListener(SWT.Selection, event -> {
 			DataType newType = getTypeForSelection(typeCombo.getText());
 			if (null != newType) {
-				executeCommand(new ChangeTypeCommand((VarDeclaration) type, newType));
+				executeCommand(new ChangeDataTypeCommand((VarDeclaration) type, newType));
 				refresh();
 			}
 		});

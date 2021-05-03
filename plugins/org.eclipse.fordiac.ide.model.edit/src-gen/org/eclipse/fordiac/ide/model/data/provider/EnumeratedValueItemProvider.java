@@ -34,31 +34,22 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 
-/**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.data.EnumeratedValue} object. <!--
+/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.EnumeratedValue} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated
- */
+ * @generated */
 public class EnumeratedValueItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/**
-	 * This constructs an instance from a factory and a notifier. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public EnumeratedValueItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/**
-	 * This returns the property descriptors for the adapted class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -70,55 +61,43 @@ public class EnumeratedValueItemProvider extends ItemProviderAdapter implements 
 		return itemPropertyDescriptors;
 	}
 
-	/**
-	 * This adds a property descriptor for the Comment feature. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/** This adds a property descriptor for the Comment feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected void addCommentPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EnumeratedValue_comment_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_EnumeratedValue_comment_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_EnumeratedValue_type"), //$NON-NLS-1$
+								"_UI_EnumeratedValue_type"),  //$NON-NLS-1$
 						DataPackage.Literals.ENUMERATED_VALUE__COMMENT, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/**
-	 * This adds a property descriptor for the Name feature. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds a property descriptor for the Name feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EnumeratedValue_name_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_EnumeratedValue_name_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_EnumeratedValue_type"), //$NON-NLS-1$
+								"_UI_EnumeratedValue_type"),  //$NON-NLS-1$
 						DataPackage.Literals.ENUMERATED_VALUE__NAME, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/**
-	 * This returns EnumeratedValue.gif. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** This returns EnumeratedValue.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/EnumeratedValue")); //$NON-NLS-1$
 	}
 
-	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getText(Object object) {
 		String label = ((EnumeratedValue) object).getName();
@@ -126,13 +105,11 @@ public class EnumeratedValueItemProvider extends ItemProviderAdapter implements 
 				getString("_UI_EnumeratedValue_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
+	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
@@ -148,24 +125,18 @@ public class EnumeratedValueItemProvider extends ItemProviderAdapter implements 
 		}
 	}
 
-	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
+	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
-	/**
-	 * Return the resource locator for this item provider's resources. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return FordiacEditPlugin.INSTANCE;

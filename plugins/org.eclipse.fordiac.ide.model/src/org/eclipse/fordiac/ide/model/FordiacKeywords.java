@@ -21,7 +21,7 @@ import java.lang.reflect.Field;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class FordiacKeywords {
+public final class FordiacKeywords {
 
 	public static final Set<String> RESERVED_KEYWORDS = getKeywords();
 
@@ -51,6 +51,18 @@ public class FordiacKeywords {
 	public static final String ANY = "ANY"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE_CLASS)
 	public static final String ANY_STRUCT = "ANY_STRUCT"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE_CLASS)
+	public static final String ANY_DERIVED = "ANY_DERIVED"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE_CLASS)
+	public static final String ANY_SIGNED = "ANY_SIGNED"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE_CLASS)
+	public static final String ANY_UNSIGNED = "ANY_UNSIGNED"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE_CLASS)
+	public static final String ANY_DURATION = "ANY_DURATION"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE_CLASS)
+	public static final String ANY_CHAR = "ANY_CHAR"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE_CLASS)
+	public static final String ANY_CHARS = "ANY_CHARS"; //$NON-NLS-1$
 
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String DINT = "DINT"; //$NON-NLS-1$
@@ -94,6 +106,8 @@ public class FordiacKeywords {
 	public static final String TOD = "TOD"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String LTOD = "LTOD"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE)
+	public static final String LDT = "LDT";//$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String DATE = "DATE"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
@@ -209,6 +223,8 @@ public class FordiacKeywords {
 	@ModelString
 	public static final String ADAPTER_PLUG = "PLUG1"; //$NON-NLS-1$
 
+
+
 	private FordiacKeywords() {
 		throw new UnsupportedOperationException();
 	}
@@ -225,15 +241,15 @@ public class FordiacKeywords {
 	}
 
 	private static Set<String> getKeywords() {
-		Class<?> clazz = FordiacKeywords.class;
+		final Class<?> clazz = FordiacKeywords.class;
 
-		Set<String> keywordSet = new TreeSet<>();
+		final Set<String> keywordSet = new TreeSet<>();
 
-		for (Field field : clazz.getDeclaredFields()) {
+		for (final Field field : clazz.getDeclaredFields()) {
 			if (field.getType().equals(String.class) && field.isAnnotationPresent(Keyword.class)) {
 				try {
 					keywordSet.add((String) field.get(null));
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					throw new RuntimeException(e);
 				}
 			}

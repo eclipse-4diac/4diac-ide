@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 -2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Martin Melik Merkumians, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Martin Melik Merkumians, Monika Wenger
  *       - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
 public class WithCreateCommand extends Command {
@@ -58,17 +58,16 @@ public class WithCreateCommand extends Command {
 			return false;
 		}
 		if (varDeclaration.getType() instanceof AdapterType) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.AdapterConnectionNotAllowed);
+			ErrorMessenger.popUpErrorMessage(Messages.AdapterConnectionNotAllowed);
 			return false;
 		}
 		for (With w : varDeclaration.getWiths()) {
 			if (w.eContainer().equals(event)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.WithExists);
+				ErrorMessenger.popUpErrorMessage(Messages.WithExists);
 				return false;
 			}
 		}
 		if ((varDeclaration.isIsInput() && event.isIsInput()) || (!varDeclaration.isIsInput() && !event.isIsInput())) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 			return true;
 		}
 		return false;

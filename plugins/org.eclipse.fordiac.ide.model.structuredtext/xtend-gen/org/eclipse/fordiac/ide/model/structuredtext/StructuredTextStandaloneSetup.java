@@ -3,8 +3,6 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext;
 
-import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetupGenerated;
-
 /**
  * Initialization support for running Xtext languages
  * without equinox extension registry

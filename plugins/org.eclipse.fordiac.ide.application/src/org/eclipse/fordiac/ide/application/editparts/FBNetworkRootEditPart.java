@@ -38,7 +38,6 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.SelectionRequest;
-import org.eclipse.gef.tools.MarqueeDragTracker;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.swt.graphics.Point;
@@ -48,10 +47,9 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 	private class FBNetworkMarqueeDragTracker extends AdvancedMarqueeDragTracker {
 
-		@SuppressWarnings("unchecked")
 		@Override
-		protected Collection<Object> calculateMarqueeSelectedEditParts() {
-			Collection<Object> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
+		protected Collection<EditPart> calculateMarqueeSelectedEditParts() {
+			final Collection<EditPart> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
 			// only report connections and fbelements, isMarqueeslectable can not be used
 			// for that as it affects connection selection in the wrong way
 			return marqueeSelectedEditParts.stream()
@@ -65,16 +63,16 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	private final Palette palette;
 	private NewInstanceDirectEditManager manager;
 
-	public FBNetworkRootEditPart(FBNetwork fbNetwork, Palette palette, IWorkbenchPartSite site,
-			ActionRegistry actionRegistry) {
+	public FBNetworkRootEditPart(final FBNetwork fbNetwork, final Palette palette, final IWorkbenchPartSite site,
+			final ActionRegistry actionRegistry) {
 		super(site, actionRegistry);
 		this.fbNetwork = fbNetwork;
 		this.palette = palette;
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request req) {
-		MarqueeDragTracker dragTracker = new FBNetworkMarqueeDragTracker();
+	public DragTracker getDragTracker(final Request req) {
+		final FBNetworkMarqueeDragTracker dragTracker = new FBNetworkMarqueeDragTracker();
 		dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 		return dragTracker;
 	}
@@ -99,13 +97,13 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		return manager;
 	}
 
-	private void performDirectEdit(SelectionRequest request) {
-		NewInstanceDirectEditManager directEditManager = getManager();
+	void performDirectEdit(final SelectionRequest request) {
+		final NewInstanceDirectEditManager directEditManager = getManager();
 		directEditManager.updateRefPosition(new Point(request.getLocation().x, request.getLocation().y));
 		if (request.getExtendedData().isEmpty()) {
 			directEditManager.show();
 		} else {
-			Object key = request.getExtendedData().keySet().iterator().next();
+			final Object key = request.getExtendedData().keySet().iterator().next();
 			if (key instanceof String) {
 				directEditManager.show((String) key);
 			}
@@ -113,12 +111,12 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	@Override
-	public Command getCommand(Request request) {
+	public Command getCommand(final Request request) {
 		if (request instanceof DirectEditRequest) {
-			AbstractCreateFBNetworkElementCommand cmd = getDirectEditCommand((DirectEditRequest) request);
+			final AbstractCreateFBNetworkElementCommand cmd = getDirectEditCommand((DirectEditRequest) request);
 			if (null != cmd) {
 				getViewer().getEditDomain().getCommandStack().execute(cmd);
-				EditPart part = (EditPart) getViewer().getEditPartRegistry().get(cmd.getElement());
+				final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(cmd.getElement());
 				getViewer().select(part);
 			}
 			return null;
@@ -126,9 +124,9 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		return super.getCommand(request);
 	}
 
-	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(DirectEditRequest request) {
-		Object value = request.getCellEditor().getValue();
-		Point refPoint = getInsertPos();
+	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(final DirectEditRequest request) {
+		final Object value = request.getCellEditor().getValue();
+		final Point refPoint = getInsertPos();
 		if (value instanceof FBTypePaletteEntry) {
 			return new FBCreateCommand((FBTypePaletteEntry) value, fbNetwork, refPoint.x, refPoint.y);
 		}
@@ -140,13 +138,15 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	private Point getInsertPos() {
-		Point location = getManager().getLocator().getRefPoint();
-		FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
-		org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
+		final Point location = getManager().getLocator().getRefPoint();
+		final FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
+		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
 		location.x += viewLocation.x;
 		location.y += viewLocation.y;
-		org.eclipse.draw2d.geometry.Point insertPos = new org.eclipse.draw2d.geometry.Point(location.x, location.y)
+		final org.eclipse.draw2d.geometry.Point insertPos = new org.eclipse.draw2d.geometry.Point(location.x, location.y)
 				.scale(1.0 / getZoomManager().getZoom());
 		return new Point(insertPos.x, insertPos.y);
 	}
+
+
 }

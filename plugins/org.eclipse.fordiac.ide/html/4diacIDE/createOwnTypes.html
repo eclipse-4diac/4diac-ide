@@ -2,8 +2,9 @@
 <!--
  Copyright (c) 2010 - 2018 TU Wien ACIN, fortiss GmbH
                2018 - 2019 Andrea Zoitl, Johannes Kepler University Linz
-               2018		   Jan Holzweber
-  
+               2018        Jan Holzweber
+               2020        Primetals Technologies Austria GmbH
+
  This program and the accompanying materials are made available under the
  terms of the Eclipse Public License 2.0 which is available at
  http://www.eclipse.org/legal/epl-2.0.
@@ -16,6 +17,8 @@
    Andrea Zoitl - cleaning up tutorials for 1.10 release, updated ToC
    Bianca Wiesmayr - minor text corrections
    Jan Holzweber - added tutorial Step 7
+   Ernst Blecha - add information on automatic creation of CMakeLists.txt
+   Lukas Wais - Updated Change the Interface bullet points
 -->
 
 <html lang="en">
@@ -64,7 +67,7 @@ At an event input, the Boolean data output will be toggled and the event output 
 
 <p>Follow the instructions in the creation wizard. 
 For this tutorial, select BlinkTest as the parent folder. Choose a name for the new FB, we name it <i>BasicTest</i>. 
-Afterwards, select the type of FB you want to create, in this case we choose <i>Basic</i>.
+Afterwards, select the type of FB you want to create, in this case we choose <i>TemplateBasic</i>.
 The <b>Function Block Type Editor (FBT Editor)</b> opens after clicking Finish.</p>
 
 <img src="../../html/4diacIDE/img/Step4/newTypeWizardBasic.png" alt="New Type Wizard - Create a Basic Function Block" />
@@ -84,26 +87,21 @@ The <b>Function Block Type Editor (FBT Editor)</b> opens after clicking Finish.<
 <!--********************-->
 <h3 id="changeInterface">Change the Interface</h3>
 
-<p>The Basic FB already has some inputs and outputs which are commonly used.
+<p>The TemplateBasic FB already has some inputs and outputs which are commonly used.
 If you need another, just drag and drop it from the Palette into the FB or right-click at the FB to set another input or output.
 Of course you can also delete them by pressing the Delete key or right-click &rarr; Delete.</p>
 
 <p>In this example, we are doing a Blinking Function Block. 
 This should have then one input event that triggers the change, one output event as an indicator of a change, and a Boolean data output for the state.
 <br>By default, the Boolean output is set to <i>false</i> and remembers the state until a new event comes in and converts the Boolean to <i>true</i> until the next input arrives.
-<br>Right now, the Basic FB has more inputs and outputs than we need.</p>
+<br>Right now, the TemplateBasic FB has more inputs and outputs than we need.</p>
 
 <ol>
 	<li>Select the INIT event, and delete it. Do the same for QI and INITO.</li>
-	<li>Select the QO output, and change its name to STATE by either double-clicking on it, or in the Properties below. 
-		You can change the Comment for each event and data also in the Properties.</li>
+	<li>Select the QO output, and change its name to STATE by either double-clicking on it, or in the Properties below. You can change the Comment for each event and data also in the Properties.</li>
 	<li>Check that the Type of STATE is BOOL in Properties.</li>
-	<li>Check the lines between events and data which represent the WITH. 
-	    They indicate which data outputs are refreshed when an Event occurs. 
-	    Similarly work event and data inputs, but in this case there's no data input to refresh. 
-	    Since the STATE is changed when CNF is triggered, there's a WITH line between them.</li>
-	<li>Try and add Events and different types of Data input and outputs to the interface to play around from the Palette. 
-	    Finally, leave it again as in the image.</li>
+	<li>Check the lines between events and data which represent the WITH. They indicate which data outputs are refreshed when an Event occurs. Similarly work event and data inputs, but in this case there's no data input to refresh. Since the STATE is changed when CNF is triggered, there's a WITH line between them.</li>
+	<li>Try and add Events and different types of Data input and outputs to the interface to play around from the Palette. Finally, leave it again as in the image.</li>
 </ol>
 
 <img src="../../html/4diacIDE/img/Step4/createBasicInterface.png" alt="Create Basic Type - Interface"/>
@@ -250,9 +248,10 @@ In order to export a Function Block Type, either</p>
 <img src="../../html/4diacIDE/img/Step4/selectExportType.png" alt="Select Export Type" />
 
 <p>Select the FBs to be exported on the right side of the wizard. 
-It makes sense to use your own folder, we choose <i>ext_modules/EXAMPLE_TEST</i>.
-Before exporting one or more Function Block Types, the Export Destination and the Exporter (FORTE 1.x) have to be chosen.
-Furthermore, the version of the 4diac&nbsp;FORTE C++ format has to be selected. We'll export the three we just created.</p>
+It makes sense to use your own folder, we choose <span class="fileLocation">ext_modules/EXAMPLE_TEST</span>.
+Before exporting one or more Function Block Types, the Export Destination and the Exporter (FORTE 1.x NG) have to be chosen.
+We'll export the four Function Block Types we just created.</p>
+<p>You can select the option <span class="specificText">Export CMakeLists.txt</span> to create a configuration file for the forte-build-process. This will use the name of the folder to which the files were exported as the module name and include all .c, .cpp and .h files in that folder. If you need more control, you can manually create the configuration file.</p>
 <p class="attention"><span class="inlineTitle">Attention:</span> Make sure that not all FBs are checked, otherwise all existing FBs will be exported!</p>
 
 <img src="../../html/4diacIDE/img/Step4/export4DIACTypeWizard.png" alt="Export Type Wizard" />

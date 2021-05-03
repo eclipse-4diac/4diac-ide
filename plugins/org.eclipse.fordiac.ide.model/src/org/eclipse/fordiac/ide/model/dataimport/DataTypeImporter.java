@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 
@@ -37,7 +36,7 @@ public class DataTypeImporter extends TypeImporter {
 		return (AnyDerivedType) super.getElement();
 	}
 
-	public DataTypeImporter(IFile typeFile) {
+	public DataTypeImporter(final IFile typeFile) {
 		super(typeFile);
 	}
 
@@ -70,6 +69,9 @@ public class DataTypeImporter extends TypeImporter {
 			case LibraryElementTags.VERSION_INFO_ELEMENT:
 				parseVersionInfo(getElement());
 				break;
+			case LibraryElementTags.COMPILER_INFO_ELEMENT:
+				getElement().setCompilerInfo(parseCompilerInfo());
+				break;
 			case LibraryElementTags.ASN1_TAG:
 				parseASN1Tag(getElement());
 				break;
@@ -77,7 +79,7 @@ public class DataTypeImporter extends TypeImporter {
 				setElement(convertToStructuredType(getElement()));
 				parseStructuredType((StructuredType) getElement());
 				break;
-			// TODO support other AnyDerivedTypes such as ArrayType
+				// TODO support other AnyDerivedTypes such as ArrayType
 			default:
 				return false;
 			}
@@ -85,7 +87,7 @@ public class DataTypeImporter extends TypeImporter {
 		};
 	}
 
-	private void parseASN1Tag(AnyDerivedType type) throws XMLStreamException {
+	private void parseASN1Tag(final AnyDerivedType type) throws XMLStreamException {
 		proceedToEndElementNamed(LibraryElementTags.ASN1_TAG);
 	}
 
@@ -102,11 +104,12 @@ public class DataTypeImporter extends TypeImporter {
 		return structuredType;
 	}
 
-	private static void copyGeneralTypeInformation(DataType dstType, DataType srcType) {
+	private static void copyGeneralTypeInformation(final AnyDerivedType dstType, final AnyDerivedType srcType) {
 		dstType.setName(srcType.getName());
 		dstType.setComment(srcType.getComment());
 		dstType.setIdentification(srcType.getIdentification());
 		dstType.getVersionInfo().addAll(srcType.getVersionInfo());
+		dstType.setCompilerInfo(srcType.getCompilerInfo());
 	}
 
 	/**
@@ -116,7 +119,7 @@ public class DataTypeImporter extends TypeImporter {
 	 *
 	 * @
 	 */
-	private void parseStructuredType(StructuredType struct) throws TypeImportException, XMLStreamException {
+	private void parseStructuredType(final StructuredType struct) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.STRUCTURED_TYPE_ELEMENT, name -> {
 			switch (name) {
 			case LibraryElementTags.VAR_DECLARATION_ELEMENT:

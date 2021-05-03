@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import static org.junit.Assume.assumeTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,32 +25,20 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.gef.commands.Command;
+import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class DeleteMemberVariableCommandTestBase
-extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
+		extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
 	protected static DataTypeLibrary datatypeLib = new DataTypeLibrary();
 	protected static List<VarDeclaration> varList = new ArrayList<>();
 
 	// create a state description that holds the struct and the command
-	public static class State implements CommandTestBase.StateBase {
+	public static class State extends CommandTestBase.StateBase {
 
 		private final StructuredType struct;
 
-		private Command cmd;
-
 		public StructuredType getStructuredType() {
 			return struct;
-		}
-
-		@Override
-		public Command getCommand() {
-			return cmd;
-		}
-
-		@Override
-		public void setCommand(Command command) {
-			this.cmd = command;
 		}
 
 		public State() {
@@ -103,41 +89,27 @@ extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
 		}
 	}
 
-	protected static State undoCommand(Object stateObj) {
-		State state = (State) stateObj;
-		assumeTrue(state.getCommand().canUndo());
-		state.getCommand().undo();
-		return (state);
-	}
-
-	protected static State redoCommand(Object stateObj) {
-		State state = (State) stateObj;
-		assumeTrue(state.getCommand().canRedo());
-		state.getCommand().redo();
-		return (state);
-	}
-
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands) {
-		return describeCommand(description, initializer, initialVerifier, commands,
-				DeleteMemberVariableCommandTestBase::undoCommand, DeleteMemberVariableCommandTestBase::redoCommand);
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
+				CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
-		t.test(null != state.getStructuredType());
-		t.test(state.getStructuredType().getMemberVariables().size() == varList.size());
+		t.test(state.getStructuredType());
+		t.test(state.getStructuredType().getMemberVariables().size(), varList.size());
 	}
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
-	protected static List<Object[]> createCommands(List<Object> deletionExecutionDescriptions) {
-		List<Object[]> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> deletionExecutionDescriptions) {
+		Collection<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Autofilled Command", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				deletionExecutionDescriptions //
-				));
+		));
 		return commands;
 	}
 

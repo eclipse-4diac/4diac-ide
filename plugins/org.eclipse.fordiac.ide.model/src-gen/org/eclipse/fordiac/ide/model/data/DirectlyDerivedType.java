@@ -13,14 +13,12 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.data;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Directly
- * Derived Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Directly Derived Type</b></em>'. <!--
+ * end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDirectlyDerivedType()
  * @model
- * @generated
- */
+ * @generated */
 public interface DirectlyDerivedType extends DerivedType {
 } // DirectlyDerivedType

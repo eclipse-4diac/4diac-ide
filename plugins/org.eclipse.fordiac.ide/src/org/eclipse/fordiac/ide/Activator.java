@@ -19,6 +19,9 @@ import java.util.Date;
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImageURLStreamHandlerService;
 import org.eclipse.jface.util.Policy;
@@ -26,6 +29,7 @@ import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * The activator class controls the plug-in life cycle.
@@ -61,7 +65,7 @@ public class Activator extends AbstractUIPlugin {
 
 		super.start(context);
 		setPluginInstance(this);
-
+		setPreferences();
 		setVersionAndBuildID(context);
 
 		if (isDebugging()) {
@@ -72,7 +76,19 @@ public class Activator extends AbstractUIPlugin {
 		// instance to initialize the toollib and resource change listener.
 		// The variable is not needed therefore the suppress warning
 		@SuppressWarnings("unused")
+		final
 		SystemManager mgr = SystemManager.INSTANCE;
+	}
+
+	// enables the file auto refresh, for detecting changes necessary for egit
+	private static void setPreferences() {
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("org.eclipse.core.resources"); //$NON-NLS-1$
+		prefs.putBoolean("refresh.enabled", true); //$NON-NLS-1$
+		try {
+			prefs.flush();
+		} catch (final BackingStoreException e) {
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+		}
 	}
 
 	/*
@@ -89,7 +105,7 @@ public class Activator extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	private static void setPluginInstance(Activator instance) {
+	private static synchronized void setPluginInstance(final Activator instance) {
 		plugin = instance;
 	}
 
@@ -107,7 +123,7 @@ public class Activator extends AbstractUIPlugin {
 		// this should then be correctly handled by automatic error reporting.
 		Policy.setStatusHandler(new StatusHandler() {
 			@Override
-			public void show(IStatus status, String title) {
+			public void show(final IStatus status, final String title) {
 				// do nothing
 			}
 		});
@@ -129,17 +145,17 @@ public class Activator extends AbstractUIPlugin {
 	// this is somehow needed so that version and build ID are correctly shown in
 	// About dialog
 	private static void setVersionAndBuildID(final BundleContext context) {
-		Version v = context.getBundle().getVersion();
-		String version = v.getMajor() + "." + v.getMinor() + "." + v.getMicro(); //$NON-NLS-1$ //$NON-NLS-2$
+		final Version v = context.getBundle().getVersion();
+		final String version = v.getMajor() + "." + v.getMinor() + "." + v.getMicro(); //$NON-NLS-1$ //$NON-NLS-2$
 		System.setProperty("org.eclipse.fordiac.ide.version", version); //$NON-NLS-1$
 
 		String qualifier = v.getQualifier();
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm"); //$NON-NLS-1$
-			Date d = sdf.parse(qualifier);
-			SimpleDateFormat sdfVisu = new SimpleDateFormat("yyyy-MM-dd_HHmm"); //$NON-NLS-1$
+			final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm"); //$NON-NLS-1$
+			final Date d = sdf.parse(qualifier);
+			final SimpleDateFormat sdfVisu = new SimpleDateFormat("yyyy-MM-dd_HHmm"); //$NON-NLS-1$
 			qualifier = sdfVisu.format(d);
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			// can be ignored
 		}
 

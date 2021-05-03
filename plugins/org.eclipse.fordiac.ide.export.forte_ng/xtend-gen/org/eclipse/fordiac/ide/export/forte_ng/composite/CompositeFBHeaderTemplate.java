@@ -38,7 +38,7 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
   private CompositeFBType type;
   
   public CompositeFBHeaderTemplate(final CompositeFBType type, final String name, final Path prefix) {
-    super(name, prefix);
+    super(name, prefix, "CCompositeFB");
     this.type = type;
   }
   
@@ -57,10 +57,8 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
     _builder.append(_generateHeaderIncludes);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
-    _builder.append("class ");
-    CharSequence _fBClassName = this.getFBClassName();
-    _builder.append(_fBClassName);
-    _builder.append(": public CCompositeFB {");
+    CharSequence _generateFBClassHeader = this.generateFBClassHeader();
+    _builder.append(_generateFBClassHeader);
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
     CharSequence _generateFBDeclaration = this.generateFBDeclaration();
@@ -120,16 +118,23 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
     _builder.append("public:");
     _builder.newLine();
     _builder.append("  ");
-    _builder.append("COMPOSITE_FUNCTION_BLOCK_CTOR(");
-    CharSequence _fBClassName_1 = this.getFBClassName();
-    _builder.append(_fBClassName_1, "  ");
-    _builder.append(") {};");
+    CharSequence _fBClassName = this.getFBClassName();
+    _builder.append(_fBClassName, "  ");
+    _builder.append("(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :");
     _builder.newLineIfNotEmpty();
+    _builder.append("      ");
+    String _baseClass = this.baseClass();
+    _builder.append(_baseClass, "      ");
+    _builder.append("(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, &scm_stFBNData, m_anFBConnData, m_anFBVarsData) {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("};");
+    _builder.newLine();
     _builder.newLine();
     _builder.append("  ");
     _builder.append("virtual ~");
-    CharSequence _fBClassName_2 = this.getFBClassName();
-    _builder.append(_fBClassName_2, "  ");
+    CharSequence _fBClassName_1 = this.getFBClassName();
+    _builder.append(_fBClassName_1, "  ");
     _builder.append("() = default;");
     _builder.newLineIfNotEmpty();
     _builder.append("};");

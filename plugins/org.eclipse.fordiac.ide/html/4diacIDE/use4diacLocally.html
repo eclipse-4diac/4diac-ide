@@ -4,6 +4,7 @@
                2018 - 2019 Johannes Kepler University Linz
                2018 - 2019 Andrea Zoitl
                2019 - Jan Holzweber
+               2020 - Lukas Wais
   
  This program and the accompanying materials are made available under the
  terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +19,7 @@
    Andrea Zoitl - cleaning up tutorials for 1.10 release, updated ToC
    Bianca Wiesmayr - minor text corrections
    Jan Holzweber - added tutorial Step 7
+   Lukas Wais - updated the pictures, updated the text at Create a FB Network for the Blink Application
 -->
 
 <html lang="en">
@@ -78,12 +80,13 @@
       <p>A double-click on an Application in the System Explorer tab on the left opens the Application Editor for this specific application in the editor area.</p>
       <ol>
         <li>Drag and Drop the following Function Blocks (FBs) to the Editor. Open the palette (if not already open) on the upper right of <b>editor area</b> by clicking on the left arrow or use the Type Library in the System Explorer. 
-        The three FBs are in the <span class="folderLocation">event</span> folder:
+        The three FBs are in the <span class="folderLocation">events</span> folder:
           <ul>
             <li>E_CYCLE </li>
             <li>E_SWITCH</li>
             <li>E_SR</li>
           </ul>
+          You can also double-click the editor area and search for the FBs.
           <img src="../../html/4diacIDE/img/Step1/blinkFBs.png" alt="Function Blocks for the blink example" />
           <p>The name in the middle of the FB is its type. If you CTRL + click on it, you can access the definition of the type of the FB. 
           There you can see the interface and how it works. Check E_SWITCH and E_SR and go to the ECC tab to see how they behave.</p>
@@ -103,6 +106,7 @@
               <li>If you hover the mouse over a FB or Data or Event connection end, you'll get information about it.</li>
               <li>If you try to connect Data connections that have incompatible types, you will see a red error in the status bar at the lowest part of 4diac-IDE.</li>
               <li>Selected function blocks in the <span class="view4diac">Application Editor</span> can be parameterized using the <span class="view4diac">Properties View</span> typically located below.</li>
+          	  <li>The colors of the connections may differ. Remember you can change them in <span class="menu4diac">Window &rarr; Preferences &rarr; 4diac&nbsp;IDE</span></li>
           </ul>
         </li>
         <li>Set a literal as an input data connection. The DT input data connection of E_CYCLE must be set to a value in order for it to work. You can do it by either:
@@ -146,7 +150,7 @@
     
     <p>For this tutorial we give the device the name <i>testee</i>. 
     Device names help us to distinguish the different devices from each other. 
-    Names can be changes in the property view or by double-clicking on the name. 
+    Names can be changed in the property view or by double-clicking on the name. 
     <br/>The <b>resource</b> is automatically generated for your convenience. EMB_RES stands for Embedded Resource. 
     We named it <i>Blinky_RES</i>.</p>
        <img src="../../html/4diacIDE/img/Step1/changeResourceName.png" alt="changing the name of the Resource" />

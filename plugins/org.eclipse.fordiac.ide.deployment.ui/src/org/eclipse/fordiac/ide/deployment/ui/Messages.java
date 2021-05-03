@@ -21,7 +21,8 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-public class Messages extends NLS {
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.ui.messages"; //$NON-NLS-1$
 
 	public static String AbstractDeploymentCommand_ExtendedDeploymentErrorMessage;
@@ -47,6 +48,8 @@ public class Messages extends NLS {
 	public static String CreateBootFilesWizardPage_Destination;
 
 	public static String CreateBootFilesWizardPage_DestinationNotSelected;
+
+	public static String CreateBootFilesWizardPage_NoSystemSelected;
 
 	public static String CreateBootFilesWizardPage_NothingSelectedForBootFileGeneration;
 

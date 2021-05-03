@@ -41,7 +41,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -53,7 +52,7 @@ import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
-		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
+implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private ValueEditPart referencedPart;
 	private int mouseState;
 
@@ -64,7 +63,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request request) {
+	public DragTracker getDragTracker(final Request request) {
 		return new ConnCreateDirectEditDragTrackerProxy(this);
 	}
 
@@ -106,28 +105,28 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 				addMouseMotionListener(new MouseMotionListener() {
 
 					@Override
-					public void mouseDragged(MouseEvent me) {
+					public void mouseDragged(final MouseEvent me) {
 						mouseState = me.getState();
 					}
 
 					@Override
-					public void mouseEntered(MouseEvent me) {
+					public void mouseEntered(final MouseEvent me) {
 						mouseState = me.getState();
 
 					}
 
 					@Override
-					public void mouseExited(MouseEvent me) {
+					public void mouseExited(final MouseEvent me) {
 						mouseState = me.getState();
 					}
 
 					@Override
-					public void mouseHover(MouseEvent me) {
+					public void mouseHover(final MouseEvent me) {
 						mouseState = me.getState();
 					}
 
 					@Override
-					public void mouseMoved(MouseEvent me) {
+					public void mouseMoved(final MouseEvent me) {
 						mouseState = me.getState();
 					}
 
@@ -149,12 +148,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	protected abstract GraphicalNodeEditPolicy getNodeEditPolicy();
 
 	@SuppressWarnings("unchecked")
-	public void setInOutConnectionsWidth(int width) {
+	public void setInOutConnectionsWidth(final int width) {
 		getSourceConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
 		getTargetConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
 	}
 
-	private static void checkConnection(int width, ConnectionEditPart cep) {
+	private static void checkConnection(final int width, final ConnectionEditPart cep) {
 		if (cep.getFigure() instanceof PolylineConnection) {
 			((PolylineConnection) cep.getFigure()).setLineWidth(width);
 		}
@@ -162,7 +161,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@Override
 	protected void createEditPolicies() {
-		GraphicalNodeEditPolicy nodeEditPolicy = getNodeEditPolicy();
+		final GraphicalNodeEditPolicy nodeEditPolicy = getNodeEditPolicy();
 		if (null != nodeEditPolicy) {
 			installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, nodeEditPolicy);
 		}
@@ -188,7 +187,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	@Override
-	public void setConnectionHandleRoleEnabled(boolean enabled) {
+	public void setConnectionHandleRoleEnabled(final boolean enabled) {
 		// nothing to do
 	}
 
@@ -229,7 +228,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
@@ -259,12 +258,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
-		return new FixedAnchor(getFigure(), isInput(), this);
+		return new FixedAnchor(getFigure(), isInput());
 	}
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
-		return new FixedAnchor(getFigure(), isInput(), this);
+		return new FixedAnchor(getFigure(), isInput());
 	}
 
 	@Override
@@ -296,14 +295,6 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	@Override
-	public void setSelected(int value) {
-		if (value == 0) { // clear possible statusmessage
-			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
-		}
-		super.setSelected(value);
-	}
-
-	@Override
 	public void performRequest(final Request request) {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
@@ -311,7 +302,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 			// TODO: move parent editpart??
 		}
 		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
-			ValueEditPart part = getReferencedValueEditPart();
+			final ValueEditPart part = getReferencedValueEditPart();
 			if ((part != null) && (isVariable()) && (!(getModel() instanceof AdapterDeclaration))) {
 				part.performDirectEdit();
 			}
@@ -322,7 +313,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	public ValueEditPart getReferencedValueEditPart() {
 		if (null == referencedPart && getModel() instanceof VarDeclaration) {
-			Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration) getModel()).getValue());
+			final Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration) getModel()).getValue());
 			if (temp instanceof ValueEditPart) {
 				referencedPart = (ValueEditPart) temp;
 			}

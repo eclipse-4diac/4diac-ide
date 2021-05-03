@@ -1,7 +1,8 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
  * 				 2018 - 2020 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
+ * 				 2020 Primetals Technologies Germany GmbH,
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +17,7 @@
  *   Alois Zoitl - added separate colors for different data types
  *               - fixed hide event and data connection issues
  *               - reworked connection selection and hover feedback
+ *   Lukas Wais	 - reworked connection colors
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -32,13 +34,19 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
-import org.eclipse.fordiac.ide.application.policies.ConnectionGraphicalNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
+import org.eclipse.fordiac.ide.model.data.AnyBitType;
+import org.eclipse.fordiac.ide.model.data.AnyIntType;
+import org.eclipse.fordiac.ide.model.data.AnyRealType;
+import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -59,21 +67,21 @@ import org.eclipse.swt.graphics.Color;
 public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 	private static final class FBNConnectionEndPointHandle extends ScrollingConnectionEndpointHandle {
-		private FBNConnectionEndPointHandle(org.eclipse.gef.ConnectionEditPart owner, int endPoint) {
+		private FBNConnectionEndPointHandle(final org.eclipse.gef.ConnectionEditPart owner, final int endPoint) {
 			super(owner, endPoint);
 			setLocator(new ConnectionLocator(getConnection(), endPoint) {
 				@Override
-				protected Point getLocation(PointList points) {
-					Point p = super.getLocation(points);
+				protected Point getLocation(final PointList points) {
+					final Point p = super.getLocation(points);
 					// ensure that the returned point is such that the endpoint handle is on the
 					// connection
 					switch (getAlignment()) {
 					case SOURCE:
-						p.x += (getPreferredSize().width / 2 - 4); // TODO replace with connection
+						p.x += ((getPreferredSize().width / 2) - 4); // TODO replace with connection
 						// border size
 						break;
 					case TARGET:
-						p.x += (-getPreferredSize().width / 2 + 4);
+						p.x += ((-getPreferredSize().width / 2) + 4);
 						break;
 					default:
 						break;
@@ -86,22 +94,22 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		@Override
 		protected void init() {
 			super.init();
-			setPreferredSize(ConnectionPreferenceValues.HANDLE_SIZE * 4 / 3, ConnectionPreferenceValues.HANDLE_SIZE);
+			setPreferredSize((ConnectionPreferenceValues.HANDLE_SIZE * 4) / 3, ConnectionPreferenceValues.HANDLE_SIZE);
 		}
 
 		@Override
-		protected void paintHandleCenter(Graphics g, Rectangle r) {
-			int xbuf = r.x;
-			int wbuf = r.width;
+		protected void paintHandleCenter(final Graphics g, final Rectangle r) {
+			final int xbuf = r.x;
+			final int wbuf = r.width;
 
-			int shrinkVal = getInnerShrinkVal();
+			final int shrinkVal = getInnerShrinkVal();
 			r.shrink(shrinkVal, shrinkVal + 1);
 			switch (getEndPoint()) {
 			case ConnectionLocator.SOURCE:
 				r.x = xbuf;
 				break;
 			case ConnectionLocator.TARGET:
-				r.x = xbuf + wbuf - r.width;
+				r.x = (xbuf + wbuf) - r.width;
 				break;
 			default:
 				break;
@@ -150,11 +158,11 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	protected void createEditPolicies() {
 		// Selection handle edit policy.
 		// Makes the connection show a feedback, when selected by the user.
-//		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new DisableConnectionHandleRoleEditPolicy());
+		// installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new DisableConnectionHandleRoleEditPolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new FeedbackConnectionEndpointEditPolicy() {
 			@Override
 			protected ConnectionEndpointHandle createConnectionEndPointHandle(
-					org.eclipse.gef.ConnectionEditPart connectionEditPart, int connectionLocator) {
+					final org.eclipse.gef.ConnectionEditPart connectionEditPart, final int connectionLocator) {
 				return new FBNConnectionEndPointHandle(connectionEditPart, connectionLocator);
 			}
 		});
@@ -167,15 +175,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 					((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter())
 					.getBendpointPolicy(getModel()));
 		}
-
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new ConnectionGraphicalNodeEditPolicy());
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		PolylineConnection connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
+		final PolylineConnection connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
 
-		String status = getModel().getAttributeValue(HIDEN_CON);
+		final String status = getModel().getAttributeValue(HIDEN_CON);
 		if (connection instanceof HideableConnection) {
 			((HideableConnection) connection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
 			if ((getModel() != null) && (getModel().getSourceElement() != null)) {
@@ -185,46 +191,82 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			((HideableConnection) connection).setModel(getModel());
 		}
 
-		PolygonDecoration arrow = new PolygonDecoration();
+		final PolygonDecoration arrow = new PolygonDecoration();
 		arrow.setTemplate(PolygonDecoration.TRIANGLE_TIP);
 		arrow.setScale(7, 4);
 		connection.setTargetDecoration(arrow);
 
 		if (getModel() instanceof EventConnection) {
-			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
 			connection.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
 		}
 
 		if (getModel() instanceof AdapterConnection) {
-			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
 			connection.setTargetDecoration(null);
 			connection.setSourceDecoration(null);
 
 		}
 
 		if (getModel() instanceof DataConnection) {
-			connection.setForegroundColor(getDataConnectioncolor());
 			connection.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON));
 
 		}
+		setConnectionColor(connection);
 		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
 		connection.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		return connection;
 	}
 
+	@Override
+	public PolylineConnection getFigure() {
+		return (PolylineConnection) super.getFigure();
+	}
+
+	private void setConnectionColor(final PolylineConnection connection) {
+		if (getModel() instanceof EventConnection) {
+			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+		}
+
+		if (getModel() instanceof AdapterConnection) {
+			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+		}
+
+		if (getModel() instanceof DataConnection) {
+			connection.setForegroundColor(getDataConnectioncolor());
+		}
+	}
+
 	private Color getDataConnectioncolor() {
+		IInterfaceElement refElement = getModel().getSource();
+
 		// if the connections end point fb type could not be loaded it source or
 		// destination may be null
-		IInterfaceElement refElement = getModel().getSource();
-		if (null == refElement) {
+		if ((null == refElement)) {
 			refElement = getModel().getDestination();
 		}
+
+		if (null != refElement) {
+			final DataType dataType = refElement.getType();
+			//check if source is not of type for which we can determine the color
+			if (!isColoredDataype(dataType) && (refElement == getModel().getSource())) {
+				// if source is of a non defined color type the connection should be colored the other way
+				// take destination for determining the color
+				refElement = getModel().getDestination();
+			}
+		}
+
 		if (null != refElement) {
 			return PreferenceGetter.getDataColor(refElement.getType().getName());
 		}
+
 		return PreferenceGetter.getDefaultDataColor();
+	}
+
+	private static boolean isColoredDataype(final DataType dataType) {
+		return (dataType == IecTypes.ElementaryTypes.BOOL) || (dataType instanceof AnyBitType)
+				|| (dataType instanceof AnyIntType) || (dataType instanceof AnyRealType)
+				|| (dataType instanceof AnyStringType) || (dataType instanceof StructuredType);
 	}
 
 	@Override
@@ -258,17 +300,20 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		if (contentAdapter == null) {
 			contentAdapter = new AdapterImpl() {
 				@Override
-				public void notifyChanged(Notification notification) {
-					Object feature = notification.getFeature();
+				public void notifyChanged(final Notification notification) {
+					final Object feature = notification.getFeature();
 					refreshVisuals();
-
 					if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
 							|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
 							|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
 						refreshComment();
 					}
+					if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
+						setConnectionColor(getFigure());
+						// reset the line width so that any to struct connections have the right width
+						getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+					}
 				}
-
 			};
 		}
 		return contentAdapter;
@@ -287,14 +332,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 	}
 
-	public void setTransparency(int value) {
-		if (getFigure() instanceof PolylineConnection) {
-			final PolylineConnection connection = ((PolylineConnection) getFigure());
-			connection.setAlpha(value);
-			for (final Object fig : connection.getChildren()) {
-				if (fig instanceof Shape) {
-					((Shape) fig).setAlpha(value);
-				}
+	public void setTransparency(final int value) {
+		final PolylineConnection connection = getFigure();
+		connection.setAlpha(value);
+		for (final Object fig : connection.getChildren()) {
+			if (fig instanceof Shape) {
+				((Shape) fig).setAlpha(value);
 			}
 		}
 	}

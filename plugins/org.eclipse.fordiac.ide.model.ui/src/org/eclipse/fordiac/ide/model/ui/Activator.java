@@ -14,13 +14,13 @@
 
 package org.eclipse.fordiac.ide.model.ui;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends Abstract4DIACUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model.ui"; //$NON-NLS-1$
@@ -28,22 +28,20 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	/**
-	 * The constructor
-	 */
-	public Activator() {
-	}
-
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setPlugin(this);
 	}
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		super.stop(context);
-		plugin = null;
+		setPlugin(null);
+	}
+
+	private static synchronized void setPlugin(final Activator newPlugin) {
+		plugin = newPlugin;
 	}
 
 	/**

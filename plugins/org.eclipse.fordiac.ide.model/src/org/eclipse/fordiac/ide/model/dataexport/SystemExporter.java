@@ -48,7 +48,7 @@ public class SystemExporter extends CommonElementExporter {
 	}
 
 	public void saveSystem(final IFile targetFile) {
-		long startTime = System.currentTimeMillis();
+		final long startTime = System.currentTimeMillis();
 		if (null != getWriter()) {
 			try {
 				createNamedElementEntry(system, LibraryElementTags.SYSTEM);
@@ -56,7 +56,7 @@ public class SystemExporter extends CommonElementExporter {
 				addVersionInfo(system);
 				addApplications();
 
-				SystemConfiguration systemConfiguration = system.getSystemConfiguration();
+				final SystemConfiguration systemConfiguration = system.getSystemConfiguration();
 				if (null != systemConfiguration) {
 					addDevices(systemConfiguration.getDevices());
 					addMapping();
@@ -65,18 +65,18 @@ public class SystemExporter extends CommonElementExporter {
 				}
 
 				addEndElement();
-			} catch (XMLStreamException e) {
+			} catch (final XMLStreamException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 			writeToFile(targetFile);
 		}
-		long endTime = System.currentTimeMillis();
-		System.out
-				.println("Overall saving time for System (" + system.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		final long endTime = System.currentTimeMillis();
+		Activator.getDefault()
+				.logInfo("Overall saving time for System (" + system.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private void addApplications() throws XMLStreamException {
-		for (Application app : system.getApplication()) {
+		for (final Application app : system.getApplication()) {
 			addStartElement(LibraryElementTags.APPLICATION_ELEMENT);
 			addNameAndCommentAttribute(app);
 			addAttributes(app.getAttributes());
@@ -85,8 +85,8 @@ public class SystemExporter extends CommonElementExporter {
 		}
 	}
 
-	private void addLink(EList<Link> linkList) throws XMLStreamException {
-		for (Link link : linkList) {
+	private void addLink(final EList<Link> linkList) throws XMLStreamException {
+		for (final Link link : linkList) {
 			addStartElement(LibraryElementTags.LINK_ELEMENT);
 			getWriter().writeAttribute(LibraryElementTags.SEGMENT_NAME_ELEMENT, link.getSegment().getName());
 			getWriter().writeAttribute(LibraryElementTags.SEGMENT_COMM_RESOURCE, link.getDevice().getName());
@@ -95,11 +95,11 @@ public class SystemExporter extends CommonElementExporter {
 		}
 	}
 
-	private void addSegment(EList<Segment> segementList) throws XMLStreamException {
-		for (Segment segment : segementList) {
+	private void addSegment(final EList<Segment> segementList) throws XMLStreamException {
+		for (final Segment segment : segementList) {
 			addStartElement(LibraryElementTags.SEGMENT_ELEMENT);
 			addNameTypeCommentAttribute(segment, segment.getType());
-			addXYAttributes(segment.getX(), segment.getY());
+			addXYAttributes(segment);
 			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
 					CoordinateConverter.INSTANCE.convertTo1499XML(segment.getWidth()));
 			addColorAttributeElement(segment);
@@ -109,9 +109,9 @@ public class SystemExporter extends CommonElementExporter {
 	}
 
 	private void addMapping() throws XMLStreamException {
-		for (Mapping mappingEntry : system.getMapping()) {
-			String fromString = getFullHierarchicalName(mappingEntry.getFrom());
-			String toString = getFullHierarchicalName(mappingEntry.getTo());
+		for (final Mapping mappingEntry : system.getMapping()) {
+			final String fromString = getFullHierarchicalName(mappingEntry.getFrom());
+			final String toString = getFullHierarchicalName(mappingEntry.getTo());
 
 			if ((null != fromString) && (null != toString)) {
 				addEmptyStartElement(LibraryElementTags.MAPPING_ELEMENT);
@@ -130,14 +130,14 @@ public class SystemExporter extends CommonElementExporter {
 	 *                         generated
 	 * @return dot separated full name
 	 */
-	private static String getFullHierarchicalName(FBNetworkElement fbNetworkElement) {
-		Deque<String> names = new ArrayDeque<>();
+	private static String getFullHierarchicalName(final FBNetworkElement fbNetworkElement) {
+		final Deque<String> names = new ArrayDeque<>();
 
 		if (null != fbNetworkElement) {
 			names.addFirst(fbNetworkElement.getName());
 			EObject container = fbNetworkElement;
 			do {
-				FBNetworkElement runner = (FBNetworkElement) container;
+				final FBNetworkElement runner = (FBNetworkElement) container;
 				container = runner.getFbNetwork().eContainer();
 				if (container instanceof INamedElement) {
 					names.addFirst("."); //$NON-NLS-1$
@@ -151,10 +151,10 @@ public class SystemExporter extends CommonElementExporter {
 					break;
 				}
 			} while (container instanceof FBNetworkElement); // we are still in a subapp, try to find the resource or
-																// application as stop point
+			// application as stop point
 
-			StringBuilder fullName = new StringBuilder();
-			for (String string : names) {
+			final StringBuilder fullName = new StringBuilder();
+			for (final String string : names) {
 				fullName.append(string);
 			}
 			return fullName.toString();
@@ -162,8 +162,8 @@ public class SystemExporter extends CommonElementExporter {
 		return null;
 	}
 
-	private void addDevices(EList<Device> deviceList) throws XMLStreamException {
-		for (Device device : deviceList) {
+	private void addDevices(final EList<Device> deviceList) throws XMLStreamException {
+		for (final Device device : deviceList) {
 			addStartElement(LibraryElementTags.DEVICE_ELEMENT);
 			addNameTypeCommentAttribute(device, device.getType());
 			addXYAttributes(device);
@@ -174,14 +174,14 @@ public class SystemExporter extends CommonElementExporter {
 		}
 	}
 
-	private void addDeviceAttributes(Device device) throws XMLStreamException {
+	private void addDeviceAttributes(final Device device) throws XMLStreamException {
 		addDeviceProfile(device);
 		addColorAttributeElement(device);
 		addAttributes(device.getAttributes());
 	}
 
-	private void addDeviceProfile(Device device) throws XMLStreamException {
-		String profileName = device.getProfile();
+	private void addDeviceProfile(final Device device) throws XMLStreamException {
+		final String profileName = device.getProfile();
 		if ((null != profileName) && !"".equals(profileName)) { //$NON-NLS-1$
 			addAttributeElement(LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, //$NON-NLS-1$
 					"device profile"); //$NON-NLS-1$
@@ -193,8 +193,8 @@ public class SystemExporter extends CommonElementExporter {
 	 *
 	 * @param resourceList the list of resource to add to the MXL file
 	 */
-	private void addResources(EList<Resource> resourceList) throws XMLStreamException {
-		for (Resource resource : resourceList) {
+	private void addResources(final EList<Resource> resourceList) throws XMLStreamException {
+		for (final Resource resource : resourceList) {
 			if (!resource.isDeviceTypeResource()) {
 				addStartElement(LibraryElementTags.RESOURCE_ELEMENT);
 				addNameTypeCommentAttribute(resource, resource.getType());

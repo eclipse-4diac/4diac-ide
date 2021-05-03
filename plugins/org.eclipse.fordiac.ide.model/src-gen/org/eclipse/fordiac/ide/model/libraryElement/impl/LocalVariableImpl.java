@@ -24,96 +24,77 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Local
- * Variable</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Local Variable</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl#getArrayStart
- * <em>Array Start</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl#getArrayStop
- * <em>Array Stop</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl#getArrayStart <em>Array
+ * Start</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl#getArrayStop <em>Array Stop</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariable {
-	/**
-	 * The default value of the '{@link #getArrayStart() <em>Array Start</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getArrayStart() <em>Array Start</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getArrayStart()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int ARRAY_START_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getArrayStart() <em>Array Start</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getArrayStart() <em>Array Start</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getArrayStart()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int arrayStart = ARRAY_START_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getArrayStop() <em>Array Stop</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getArrayStop() <em>Array Stop</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getArrayStop()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int ARRAY_STOP_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getArrayStop() <em>Array Stop</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getArrayStop() <em>Array Stop</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getArrayStop()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int arrayStop = ARRAY_STOP_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected LocalVariableImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.LOCAL_VARIABLE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getArrayStart() {
 		return arrayStart;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setArrayStart(int newArrayStart) {
 		int oldArrayStart = arrayStart;
@@ -123,21 +104,17 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
 					oldArrayStart, arrayStart));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getArrayStop() {
 		return arrayStop;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setArrayStop(int newArrayStop) {
 		int oldArrayStop = arrayStop;
@@ -147,21 +124,17 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
 					oldArrayStop, arrayStop));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getArraySize() {
 		return arrayStop - arrayStart + 1;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -174,11 +147,9 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -194,11 +165,9 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -214,11 +183,9 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -231,11 +198,9 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

@@ -157,30 +157,45 @@
         <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dx1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
-      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
-        <details key="kind" value="attribute"/>
-        <details key="name" value="dx1"/>
+    <eOperations name="updateRoutingData" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="final ConnectionRoutingData newRoutingData = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createConnectionRoutingData();&#xA;newRoutingData.setDx1(dx1);&#xA;newRoutingData.setDy(dy);&#xA;newRoutingData.setDx2(dx2);&#xA;setRoutingData(newRoutingData);"/>
       </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dx2" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
-      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
-        <details key="kind" value="attribute"/>
-        <details key="name" value="dx2"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dy" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
-      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
-        <details key="kind" value="attribute"/>
-        <details key="name" value="dy"/>
-      </eAnnotations>
-    </eStructuralFeatures>
+      <eParameters name="dx1" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+      <eParameters name="dy" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+      <eParameters name="dx2" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="resTypeConnection" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="brokenConnection" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//IInterfaceElement"
         eOpposite="#//IInterfaceElement/outputConnections"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="destination" eType="#//IInterfaceElement"
         eOpposite="#//IInterfaceElement/inputConnections"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routingData" lowerBound="1"
+        eType="#//ConnectionRoutingData"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionRoutingData">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dx1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+        defaultValueLiteral="0">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="dx1"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dx2" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+        defaultValueLiteral="0">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="dx2"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dy" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+        defaultValueLiteral="0">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="dy"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ColorizableElement #//IVarElement">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
@@ -394,6 +409,21 @@
         <details key="body" value="//the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter) is a FBType. Therefore we can have this here.&#xA;&#xA;//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;&#xA;return super.getType() instanceof FBType ? (FBType)super.getType() : null;"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="isNestedInSubApp" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="final EObject parent = this.eContainer();if (parent == null) {return false;}final EObject grandParent = parent.eContainer();if (grandParent == null) {return false;}return grandParent instanceof org.eclipse.fordiac.ide.model.libraryElement.SubApp;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOuterFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&#x9;&#x9;if ((this.eContainer() == null) || !(this.eContainer().eContainer() instanceof FBNetworkElement)) {&#xA;&#x9;&#x9;&#x9;return null;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return (FBNetworkElement) this.eContainer().eContainer();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isContainedInTypedInstance" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//InterfaceList"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//Mapping"/>
@@ -596,11 +626,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OutputPrimitive" eSuperTypes="#//Primitive">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="TestResult" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int" volatile="true"
-        defaultValueLiteral="0" unsettable="true"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputPrimitive" eSuperTypes="#//Primitive"/>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//INamedElement #//TypedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDeclaration" eType="#//AttributeDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -687,9 +713,6 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="TestResult" ordered="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int" volatile="true"
-        defaultValueLiteral="0" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceTransaction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputPrimitive" eType="#//InputPrimitive"
@@ -708,9 +731,6 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="TestResult" ordered="false"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
-        volatile="true" defaultValueLiteral="0" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFBType" eSuperTypes="#//FBType"/>
   <eClassifiers xsi:type="ecore:EClass" name="STAlgorithm" eSuperTypes="#//TextAlgorithm"/>
@@ -1161,6 +1181,28 @@
         eType="#//ServiceInterface"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PositionableElement">
+    <eOperations name="updatePosition" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();&#xA;pos.setX(x);&#xA;pos.setY(y);&#xA;&#xA;setPosition(pos);"/>
+      </eAnnotations>
+      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+      <eParameters name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+    </eOperations>
+    <eOperations name="updatePosition" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="updatePosition(newPos.x, newPos.y);"/>
+      </eAnnotations>
+      <eParameters name="newPos" lowerBound="1" eType="#//Point"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" lowerBound="1"
+        eType="#//Position"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Position">
+    <eOperations name="asPoint" lowerBound="1" eType="#//Point">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.draw2d.geometry.Point(getX(), getY());"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
         defaultValueLiteral="0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
@@ -1211,6 +1253,12 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
   <eClassifiers xsi:type="ecore:EClass" name="StructManipulator" abstract="true" eSuperTypes="#//FB">
+    <eOperations name="setStructTypeElementsAtInterface">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);"/>
+      </eAnnotations>
+      <eParameters name="newStruct" eType="ecore:EClass data.ecore#//StructuredType"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="structType" lowerBound="1"
         eType="ecore:EClass data.ecore#//StructuredType" transient="true"/>
   </eClassifiers>
@@ -1227,4 +1275,5 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrayStop" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="CommandStack" instanceClassName="org.eclipse.gef.commands.CommandStack"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
 </ecore:EPackage>

@@ -17,15 +17,15 @@
 package org.eclipse.fordiac.ide.gef;
 
 import java.util.EventObject;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.handles.AdvancedGraphicalViewerKeyHandler;
+import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.FigureFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.UntypedEditorInput;
@@ -47,6 +48,7 @@ import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -62,9 +64,11 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -115,12 +119,11 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	/**
 	 * refresh all child editparts when editor gets focus.
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		for (Iterator iter = getGraphicalViewer().getRootEditPart().getChildren().iterator(); iter.hasNext();) {
-			EditPart ep = (EditPart) iter.next();
+		for (final Object element : getGraphicalViewer().getRootEditPart().getChildren()) {
+			final EditPart ep = (EditPart) element;
 			ep.refresh();
 		}
 	}
@@ -128,10 +131,36 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	private RulerComposite rulerComp;
 
 	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+
+		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
+		if (viewer.getControl() instanceof FigureCanvas) {
+			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+			final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
+					.getRootEditPart();
+			Display.getDefault().asyncExec(() -> {
+				viewer.flush();
+				// if an editpart is selected then the viewer has bee created with something to be shown centered
+				// therefore we will not show the initial position
+				// do not use getSelection() here because it will return always at least one element
+				if (viewer.getSelectedEditParts().isEmpty()) {
+					final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
+					canvas.scrollTo(drawingAreaBounds.x - DiagramEditor.INITIAL_SCROLL_OFFSET,
+							drawingAreaBounds.y - DiagramEditor.INITIAL_SCROLL_OFFSET);
+				} else {
+					// if we have a selected edit part we want to show it in the middle
+					viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
+				}
+			});
+		}
+	}
+
+	@Override
 	protected void createGraphicalViewer(final Composite parent) {
 		rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
-		AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
+		final AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
 		viewer.createControl(rulerComp);
 
 		setGraphicalViewer(viewer);
@@ -170,11 +199,11 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
+		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 
-		ScalableFreeformRootEditPart root = createRootEditPart();
+		final ScalableFreeformRootEditPart root = createRootEditPart();
 
-		ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
+		final ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
 		if (cmp != null) {
 			viewer.setContextMenu(cmp);
 			getSite().registerContextMenu("org.eclipse.fordiac.ide.gef.contextmenu", //$NON-NLS-1$
@@ -184,7 +213,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditPartFactory());
 
-		AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
+		final AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
 		keyHandler.setParent(getCommonKeyHandler());
 		viewer.setKeyHandler(keyHandler);
 
@@ -228,10 +257,10 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 */
 	@Override
 	protected void initializeGraphicalViewer() {
-		GraphicalViewer viewer = getGraphicalViewer();
+		final GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(getModel());
 		// listen for dropped parts
-		TransferDropTargetListener listener = createTransferDropTargetListener();
+		final TransferDropTargetListener listener = createTransferDropTargetListener();
 		if (listener != null) {
 			viewer.addDropTargetListener(listener);
 		}
@@ -251,8 +280,8 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		setModel(input);
 		super.init(site, input);
 		setEditorPartName(input);
-		ActionRegistry registry = getActionRegistry();
-		IActionBars bars = site.getActionBars();
+		final ActionRegistry registry = getActionRegistry();
+		final IActionBars bars = site.getActionBars();
 		String id = ActionFactory.UNDO.getId();
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 		id = ActionFactory.REDO.getId();
@@ -268,7 +297,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		}
 	}
 
-	protected void updateEditorTitle(String newTitle) {
+	protected void updateEditorTitle(final String newTitle) {
 		((UntypedEditorInput) getEditorInput()).setName(newTitle); // update the editor input so that the tooltip and
 		// header bars are correct as well
 		setPartName(newTitle);
@@ -352,7 +381,6 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
 	 * java.lang.Class)
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class type) {
 		if (type == ZoomManager.class) {
@@ -383,10 +411,9 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		IAction action;
 
 		action = new DirectEditAction((IWorkbenchPart) this);
@@ -426,22 +453,15 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PRINT.getId(), action);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionActions()
-	 */
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected List getSelectionActions() {
-		return super.getSelectionActions();
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		super.selectionChanged(part, selection);
+		updateActions(getSelectionActions());
 	}
 
-	/**
-	 * Gets the sel actions.
+	/** Gets the selection actions list
 	 *
-	 * @return the sel actions
-	 */
+	 * @return the sel actions */
 	@SuppressWarnings("rawtypes")
 	public List getSelActions() {
 		return getSelectionActions();

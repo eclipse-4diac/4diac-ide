@@ -17,27 +17,20 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.EventType;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Event
- * Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Event Type</b></em>'. <!-- end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class EventTypeImpl extends DataTypeImpl implements EventType {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected EventTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.EVENT_TYPE;

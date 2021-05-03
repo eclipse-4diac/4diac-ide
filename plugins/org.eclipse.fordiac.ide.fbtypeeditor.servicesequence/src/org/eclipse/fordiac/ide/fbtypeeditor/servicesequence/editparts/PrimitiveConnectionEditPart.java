@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2014, 2015 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -40,19 +40,18 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	public void setConnection(boolean isLeft, boolean isInput) {
-		PointList pl = new PointList();
 		if (isInput) {
 			connection.setSourceDecoration(null);
-			connection.setTargetDecoration(createArrowRectangle(pl));
+			connection.setTargetDecoration(createArrowRectangle());
 		} else {
-			connection.setSourceDecoration(createSquare(pl));
-			connection.setTargetDecoration(createArrow(pl));
+			connection.setSourceDecoration(createSquare());
+			connection.setTargetDecoration(createArrow());
 		}
 	}
 
-	private PolygonDecoration createArrow(PointList pl) {
+	private static PolygonDecoration createArrow() {
 		PolygonDecoration arrow = new PolygonDecoration();
-		pl = new PointList();
+		PointList pl = new PointList();
 		pl.addPoint(0, 0);
 		pl.addPoint(-7, -4);
 		pl.addPoint(-7, 4);
@@ -62,9 +61,9 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 		return arrow;
 	}
 
-	private PolygonDecoration createSquare(PointList pl) {
+	private static PolygonDecoration createSquare() {
 		PolygonDecoration square = new PolygonDecoration();
-		pl = new PointList();
+		PointList pl = new PointList();
 		pl.addPoint(-4, -4);
 		pl.addPoint(-4, 4);
 		pl.addPoint(4, 4);
@@ -75,8 +74,9 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 		return square;
 	}
 
-	private PolygonDecoration createArrowRectangle(PointList pl) {
+	private static PolygonDecoration createArrowRectangle() {
 		PolygonDecoration arrowRectangle = new PolygonDecoration();
+		PointList pl = new PointList();
 		pl.addPoint(-4, -4);
 		pl.addPoint(-4, 4);
 		pl.addPoint(4, 4);

@@ -13,15 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 public class ChangeCommentCommandTest extends FBNetworkTestBase {
 
@@ -30,10 +27,8 @@ public class ChangeCommentCommandTest extends FBNetworkTestBase {
 
 	public static State executeCommand(State state, String comment) {
 		state.setCommand(new ChangeCommentCommand(state.getFbNetwork().getNetworkElements().get(0).getType(), comment));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyStateBefore(State state, State oldState, TestFunction t) {
@@ -42,14 +37,12 @@ public class ChangeCommentCommandTest extends FBNetworkTestBase {
 	}
 
 	public static void verifyState(State state, State oldState, TestFunction t, String comment) {
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getComment().equals(comment));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getComment(), comment);
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						ChangeCommentCommandTest::verifyStateBefore //

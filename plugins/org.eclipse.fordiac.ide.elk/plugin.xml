@@ -7,8 +7,8 @@
         name="Layout with ELK">
     </command>
     <command
-        id="org.eclipse.fordiac.ide.elk.resetInterfaces"
-        name="Reset the layouted interfaces">
+        id="org.eclipse.fordiac.ide.elk.layoutUnfoldedSubApp"
+        name="Layout unfolded subapp with ELK">
     </command>
 </extension>
 <extension point="org.eclipse.ui.handlers">
@@ -17,8 +17,8 @@
         commandId="org.eclipse.fordiac.ide.elk.layout">
     </handler>
     <handler
-        class="org.eclipse.fordiac.ide.elk.handlers.ResetInterfacesHandler"
-        commandId="org.eclipse.fordiac.ide.elk.resetInterfaces">
+        class="org.eclipse.fordiac.ide.elk.handlers.UnfoldedSubAppLayoutHandler"
+        commandId="org.eclipse.fordiac.ide.elk.layoutUnfoldedSubApp">
     </handler>
 </extension>
 <extension point="org.eclipse.ui.menus">
@@ -28,19 +28,67 @@
       <separator name="layouting stuff" visible="true"/>
       <command
             commandId="org.eclipse.fordiac.ide.elk.layout"
-            label="Layout the diagrams"
+            label="Auto Layouting"
             style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            		<or>
+            			<count value="0" />
+            			<and>
+            				<count value="1" />
+            				<iterate>
+            					<or>
+            						<instanceof
+                       					value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
+            						</instanceof>
+            						<instanceof
+                       					value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
+            						</instanceof>
+            					</or>
+            				</iterate>
+            			</and>
+            		</or>
+            	</with>
+            </visibleWhen>
                </command>
-	</menuContribution> 
+	</menuContribution>
 	<menuContribution
          allPopups="false"
          locationURI="popup:org.eclipse.ui.popup.any?after=additions">  
+      <command
+            commandId="org.eclipse.fordiac.ide.elk.layoutUnfoldedSubApp"
+            label="Layout unfolded subapp"
+            style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            		<count value="1" />
+            		<iterate>
+            			<test
+                			property="org.eclipse.fordiac.ide.elk.properties.isUnfoldedSubApp" forcePluginActivation="true">
+                		</test>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+               </command>
+	</menuContribution>  
+	<menuContribution
+         allPopups="false"
+         locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">  
       <separator name="layouting stuff" visible="true"/>
       <command
-            commandId="org.eclipse.fordiac.ide.elk.resetInterfaces"
-            label="Reset Interfaces"
+            commandId="org.eclipse.fordiac.ide.elk.layout"
+            label="Auto Layouting"
             style="push">
                </command>
 	</menuContribution> 
    </extension>
+   <extension point="org.eclipse.core.expressions.propertyTesters">
+    	<propertyTester
+          class="org.eclipse.fordiac.ide.elk.properties.UnfoldedSubAppPropertyTester"
+          id="org.eclipse.fordiac.ide.elk.properties.unfoldedSubAppPropertyTester"
+          namespace="org.eclipse.fordiac.ide.elk.properties"
+          properties="isUnfoldedSubApp"
+          type="java.lang.Object">
+    	</propertyTester>
+ 	</extension>
 </plugin>

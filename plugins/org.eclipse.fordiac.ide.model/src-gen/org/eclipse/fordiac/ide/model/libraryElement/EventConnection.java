@@ -13,30 +13,24 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Event
- * Connection</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Event Connection</b></em>'. <!-- end-user-doc
+ * -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getEventConnection()
  * @model
- * @generated
- */
+ * @generated */
 public interface EventConnection extends Connection {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	Event getEventSource();
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	Event getEventDestination();
 
 } // EventConnection

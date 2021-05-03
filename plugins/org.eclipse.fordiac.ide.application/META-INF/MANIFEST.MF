@@ -8,8 +8,7 @@ Export-Package: org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.application.handlers,
  org.eclipse.fordiac.ide.application.policies,
  org.eclipse.fordiac.ide.application.properties,
- org.eclipse.fordiac.ide.application.utilities,
- org.eclipse.fordiac.ide.application.viewer.composite
+ org.eclipse.fordiac.ide.application.utilities
 Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.util,
@@ -23,10 +22,12 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.model.edit,
- org.eclipse.fordiac.ide.model.ui
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.core.expressions,
+ org.eclipse.fordiac.ide.ui.errormessages
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.13.1.qualifier
+Bundle-Version: 1.14.0.qualifier
 Bundle-Name: Application modeling (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.application.ApplicationPlugin
 Bundle-ManifestVersion: 2

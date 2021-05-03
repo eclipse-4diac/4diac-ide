@@ -18,7 +18,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages extends NLS {
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.messages"; //$NON-NLS-1$
 	public static String ActionEditingComposite_Actions;
 	public static String ActionEditingComposite_ConfigureActionTableLayout_Algorithm;
@@ -69,5 +70,6 @@ public class Messages extends NLS {
 	}
 
 	private Messages() {
+		// empty private constructor
 	}
 }

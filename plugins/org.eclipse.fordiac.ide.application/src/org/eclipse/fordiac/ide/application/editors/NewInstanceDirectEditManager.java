@@ -51,8 +51,8 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 		@Override
 		public void relocate(CellEditor celleditor) {
 			if (null != celleditor) {
-				Control control = celleditor.getControl();
-				Point pref = control.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				final Control control = celleditor.getControl();
+				final Point pref = control.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 				control.setBounds(refPoint.x - 1, refPoint.y - 1, pref.x + 1, pref.y + 1);
 			}
 		}
@@ -86,8 +86,8 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 		this.initialValue = initialValue;
 		super.show();
 		if (null != initialValue) {
-			Text text = getCellEditor().getText();
-			text.setSelection(initialValue.length());
+			final Text text = getCellEditor().getText();
+			text.selectAll();
 			setDirty(true);
 		}
 	}
@@ -118,17 +118,17 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 
 	@Override
 	protected IFigure getCellEditorFrame() {
-		IFigure cellEditorFrame = super.getCellEditorFrame();
+		final IFigure cellEditorFrame = super.getCellEditorFrame();
 		cellEditorFrame.setBorder(BORDER);
 		return cellEditorFrame;
 	}
 
 	private void showFBInsertPopUpMenu() {
-		EditPartViewer viewer = getEditPart().getViewer();
-		MenuManager mgr = new MenuManager();
+		final EditPartViewer viewer = getEditPart().getViewer();
+		final MenuManager mgr = new MenuManager();
 		((FBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr, getLocator().getRefPoint(),
 				useChangeFBType);
-		Menu menu = mgr.createContextMenu(viewer.getControl());
+		final Menu menu = mgr.createContextMenu(viewer.getControl());
 		menu.setVisible(true);
 		// put the menu on top of the editor
 		menu.setLocation(viewer.getControl().toDisplay(getLocator().getRefPoint()));

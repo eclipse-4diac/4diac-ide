@@ -38,31 +38,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.ECState} object. <!--
+/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ECState} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class ECStateItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/**
-	 * This constructs an instance from a factory and a notifier. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	public ECStateItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/**
-	 * This returns the property descriptors for the adapted class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -70,117 +61,81 @@ public class ECStateItemProvider extends ItemProviderAdapter implements IEditing
 
 			addNamePropertyDescriptor(object);
 			addCommentPropertyDescriptor(object);
-			addXPropertyDescriptor(object);
-			addYPropertyDescriptor(object);
+			addPositionPropertyDescriptor(object);
 			addOutTransitionsPropertyDescriptor(object);
 			addInTransitionsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
-	/**
-	 * This adds a property descriptor for the Name feature. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds a property descriptor for the Name feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_INamedElement_type"), //$NON-NLS-1$
+								"_UI_INamedElement_type"),  //$NON-NLS-1$
 						LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/**
-	 * This adds a property descriptor for the Comment feature. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/** This adds a property descriptor for the Comment feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected void addCommentPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_INamedElement_type"), //$NON-NLS-1$
+								"_UI_INamedElement_type"),  //$NON-NLS-1$
 						LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/**
-	 * This adds a property descriptor for the X feature. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds a property descriptor for the Position feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
-	protected void addXPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_PositionableElement_x_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_x_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_PositionableElement_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__X, true, false, false,
-						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	 * @generated */
+	protected void addPositionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_PositionableElement_position_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_position_feature", //$NON-NLS-1$ //$NON-NLS-2$
+						"_UI_PositionableElement_type"),  //$NON-NLS-1$
+				LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__POSITION, true, false, true, null, null, null));
 	}
 
-	/**
-	 * This adds a property descriptor for the Y feature. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected void addYPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_PositionableElement_y_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_y_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_PositionableElement_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__Y, true, false, false,
-						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Out Transitions feature. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This adds a property descriptor for the Out Transitions feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	protected void addOutTransitionsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_ECState_outTransitions_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_ECState_outTransitions_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ECState_type"), //$NON-NLS-1$
+								"_UI_ECState_type"),  //$NON-NLS-1$
 						LibraryElementPackage.Literals.EC_STATE__OUT_TRANSITIONS, true, false, true, null, null, null));
 	}
 
-	/**
-	 * This adds a property descriptor for the In Transitions feature. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This adds a property descriptor for the In Transitions feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	protected void addInTransitionsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_ECState_inTransitions_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_ECState_inTransitions_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ECState_type"), //$NON-NLS-1$
+								"_UI_ECState_type"),  //$NON-NLS-1$
 						LibraryElementPackage.Literals.EC_STATE__IN_TRANSITIONS, true, false, true, null, null, null));
 	}
 
-	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an
-	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
-	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated not
-	 */
+	 * @generated not */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
@@ -191,49 +146,39 @@ public class ECStateItemProvider extends ItemProviderAdapter implements IEditing
 		return childrenFeatures;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to
-		// use for
+		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
-	/**
-	 * This returns ECState.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This returns ECState.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT
-	 */
+	 * @generated NOT */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, FordiacImage.ICON_EC_STATE.getImage()); // $NON-NLS-1$
 	}
 
-	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT
-	 */
+	 * @generated NOT */
 	@Override
 	public String getText(Object object) {
 		String label = ((ECState) object).getName();
 		return label == null || label.length() == 0 ? getString("_UI_ECState_type") : label; //$NON-NLS-1$
 	}
 
-	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
+	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
@@ -241,8 +186,6 @@ public class ECStateItemProvider extends ItemProviderAdapter implements IEditing
 		switch (notification.getFeatureID(ECState.class)) {
 		case LibraryElementPackage.EC_STATE__NAME:
 		case LibraryElementPackage.EC_STATE__COMMENT:
-		case LibraryElementPackage.EC_STATE__X:
-		case LibraryElementPackage.EC_STATE__Y:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case LibraryElementPackage.EC_STATE__EC_ACTION:
@@ -254,13 +197,10 @@ public class ECStateItemProvider extends ItemProviderAdapter implements IEditing
 		}
 	}
 
-	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
+	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
@@ -269,12 +209,9 @@ public class ECStateItemProvider extends ItemProviderAdapter implements IEditing
 				LibraryElementFactory.eINSTANCE.createECAction()));
 	}
 
-	/**
-	 * Return the resource locator for this item provider's resources. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return FordiacEditPlugin.INSTANCE;

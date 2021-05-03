@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -39,7 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
 class FBNetworkExporter extends CommonElementExporter {
 
-	FBNetworkExporter(CommonElementExporter parent) {
+	FBNetworkExporter(final CommonElementExporter parent) {
 		super(parent);
 	}
 
@@ -62,8 +63,8 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addFBNetworkElements(final FBNetwork network) throws XMLStreamException {
-		for (FBNetworkElement fbnElement : network.getNetworkElements()) {
-			String nodeName = getFBNElementNodeName(fbnElement);
+		for (final FBNetworkElement fbnElement : network.getNetworkElements()) {
+			final String nodeName = getFBNElementNodeName(fbnElement);
 			if (null != nodeName) {
 				addStartElement(nodeName);
 				addNameAttribute(fbnElement.getName());
@@ -85,7 +86,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 	}
 
-	private static String getFBNElementNodeName(FBNetworkElement fbnElement) {
+	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
 		if (!(fbnElement.getType() instanceof AdapterFBType)) {
 			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)) {
 				return LibraryElementTags.FB_ELEMENT;
@@ -97,7 +98,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		return null;
 	}
 
-	private void createUntypedSubAppcontents(SubApp element) throws XMLStreamException {
+	private void createUntypedSubAppcontents(final SubApp element) throws XMLStreamException {
 		new SubApplicationTypeExporter(this).addInterfaceList(element.getInterface());
 		if (null != element.getSubAppNetwork()) {
 			// if mapped the subapp may be empty
@@ -106,17 +107,17 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addConnections(final List<? extends Connection> connections, final String connectionElementName,
-			FBNetwork fbNetwork) throws XMLStreamException {
+			final FBNetwork fbNetwork) throws XMLStreamException {
 		if (!connections.isEmpty()) {
 			addStartElement(connectionElementName);
-			for (Connection connection : connections) {
+			for (final Connection connection : connections) {
 				addConnection(connection, fbNetwork);
 			}
 			addEndElement();
 		}
 	}
 
-	private void addConnection(final Connection connection, FBNetwork fbNetwork) throws XMLStreamException {
+	private void addConnection(final Connection connection, final FBNetwork fbNetwork) throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
 		if ((connection.getSource() != null) && (connection.getSource().eContainer() instanceof InterfaceList)) {
 			getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE,
@@ -132,7 +133,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		addConnectionCoordinates(connection);
 	}
 
-	private static String getConnectionEndpointIdentifier(IInterfaceElement interfaceElement, FBNetwork fbNetwork) {
+	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement, final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$
 		if ((null != interfaceElement.getFBNetworkElement())
 				&& (interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork)) {
@@ -145,16 +146,17 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addConnectionCoordinates(final Connection connection) throws XMLStreamException {
-		if (0 != connection.getDx1()) {
+		final ConnectionRoutingData routingData = connection.getRoutingData();
+		if (0 != routingData.getDx1()) {
 			// only export connection routing information if not a straight line
 			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
-					CoordinateConverter.INSTANCE.convertTo1499XML(connection.getDx1()));
-			if (0 != connection.getDx2()) {
+					CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDx1()));
+			if (0 != routingData.getDx2()) {
 				// only export the second two if a five segment connection
 				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE,
-						CoordinateConverter.INSTANCE.convertTo1499XML(connection.getDx2()));
+						CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDx2()));
 				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE,
-						CoordinateConverter.INSTANCE.convertTo1499XML(connection.getDy()));
+						CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDy()));
 			}
 		}
 	}

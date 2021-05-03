@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.systemmanagement.ui,
+ org.eclipse.fordiac.ide.systemmanagement.ui.actions,
  org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer,
  org.eclipse.fordiac.ide.systemmanagement.ui.wizard
 Bundle-ActivationPolicy: lazy
@@ -29,9 +30,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.resourceediting,
  org.eclipse.jface,
  org.eclipse.fordiac.ide.systemconfiguration,
- org.eclipse.fordiac.ide.model.commands
+ org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.fordiac.ide.subapptypeeditor,
+ org.eclipse.fordiac.ide.fbtypeeditor.network
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 1.13.1.qualifier
+Bundle-Version: 1.14.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: org.eclipse.fordiac.ide.systemmanagement.ui.Activator
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemmanagement.ui;singleton:=true

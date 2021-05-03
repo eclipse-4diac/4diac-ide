@@ -19,21 +19,43 @@ package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter
+import org.eclipse.fordiac.ide.model.FordiacKeywords
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.model.libraryElement.With
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.emf.common.util.EList
+import org.eclipse.fordiac.ide.model.libraryElement.With
 
 abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
-	new(String name, Path prefix) {
+	extension STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
+	
+	final String DEFAULT_BASE_CLASS
+
+	new(String name, Path prefix, String baseClass) {
 		super(name, prefix)
+		this.DEFAULT_BASE_CLASS = baseClass
 	}
 
 	override protected FBType getType()
+	
+	def protected baseClass() {
+		if(type?.compilerInfo?.classdef !== null) {
+			type.compilerInfo.classdef.trim.isEmpty ? DEFAULT_BASE_CLASS : type.compilerInfo.classdef 
+		} else {
+			DEFAULT_BASE_CLASS
+		}
+	}
+	
+	def protected generateFBClassHeader() '''
+	class «FBClassName»: public «baseClass» {
+	'''
 
 	def protected generateHeaderIncludes() '''
 		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateTypeIncludes»
@@ -42,13 +64,39 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		«type.compilerInfo?.header»
 	'''
 
+	def protected generateVarTypesFromAlgorithms(Iterable<Algorithm> algorithms) {
+		val vars = newArrayList
+		for(alg : algorithms) {
+			if (alg instanceof STAlgorithm) 
+				vars.addAll(alg.generateLocalVariables())
+		}
+		return vars
+	}
+
+	def private getAlgorithmList(FBType type) {
+		if (type instanceof BasicFBType) {
+			return type.algorithm
+		} else if (type instanceof SimpleFBType) {
+			return List.of(type.algorithm)
+		} else {
+			return List.of()
+		}
+	}
+
 	def protected generateImplIncludes() '''
 		#include "«type.name».h"
 		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
 		#include "«type.name»_gen.cpp"
 		#endif
 		
+		«type.getAlgorithmList.generateVarTypesFromAlgorithms.generateImplTypeIncludes»
 		«type.compilerInfo?.header»
+	'''
+
+	def protected generateImplTypeIncludes(Iterable<VarDeclaration> vars) '''
+		«IF !vars.empty»
+		«vars.generateTypeIncludes»
+		«ENDIF»
 	'''
 
 	def protected generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
@@ -226,14 +274,14 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 	
 	def protected generateInitialAssignment(VarDeclaration variable) {
 		switch variable.typeName {
-			case "STRING":  '''«variable.name»() = "«variable.value.value»";'''
-			case "WSTRING":  '''«variable.name»() = "«variable.value.value»";'''
+			case FordiacKeywords.STRING:  '''«variable.name»() = "«variable.value.value»";'''
+			case FordiacKeywords.WSTRING:  '''«variable.name»() = "«variable.value.value»";'''
 			case "ARRAY":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "TIME":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "DATE":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "TIME:OF_DAY":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "DATE_AND_TIME":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "BOOL":  '''«variable.name»() = "«variable.value.value.toLowerCase»";'''
+			case FordiacKeywords.TIME:  '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.DATE:  '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.TIME_OF_DAY:  '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.DATE_AND_TIME:  '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.BOOL:  '''«variable.name»() = "«variable.value.value.toLowerCase»";'''
 			default: '''«variable.name»() = «variable.value.value»;'''
 		}
 	}

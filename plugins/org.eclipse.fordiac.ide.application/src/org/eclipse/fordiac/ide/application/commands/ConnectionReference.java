@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
@@ -25,16 +27,12 @@ public class ConnectionReference {
 
 	private final IInterfaceElement source;
 	private final IInterfaceElement destination;
-	private final int dX1;
-	private final int dX2;
-	private final int dY;
+	private final ConnectionRoutingData routingData;
 
-	public ConnectionReference(Connection con) {
+	public ConnectionReference(final Connection con) {
 		this.source = con.getSource();
 		this.destination = con.getDestination();
-		dX1 = con.getDx1();
-		dX2 = con.getDx2();
-		dY = con.getDy();
+		routingData = EcoreUtil.copy(con.getRoutingData());
 	}
 
 	public IInterfaceElement getSource() {
@@ -53,15 +51,7 @@ public class ConnectionReference {
 		return destination.getFBNetworkElement();
 	}
 
-	public int getDx1() {
-		return dX1;
-	}
-
-	public int getDx2() {
-		return dX2;
-	}
-
-	public int getDy() {
-		return dY;
+	public ConnectionRoutingData getRoutingData() {
+		return routingData;
 	}
 }

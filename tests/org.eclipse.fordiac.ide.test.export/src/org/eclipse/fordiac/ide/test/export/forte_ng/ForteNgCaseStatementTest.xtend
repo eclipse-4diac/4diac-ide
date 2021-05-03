@@ -13,12 +13,13 @@
 
 package org.eclipse.fordiac.ide.test.export.forte_ng
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertNull
+
 import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests

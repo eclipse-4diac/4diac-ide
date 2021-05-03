@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.SWT;
@@ -34,7 +33,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
-	protected FBNetworkElement getInputType(Object input) {
+	protected FBNetworkElement getInputType(final Object input) {
 		if ((input instanceof SubAppForFBNetworkEditPart) || (input instanceof AbstractFBNElementEditPart)) {
 			return (FBNetworkElement) ((EditPart) input).getModel();
 		}
@@ -45,28 +44,28 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
 		return null;
 	}
 
 	@Override
-	protected InsertInterfaceElementCommand newInsertCommand(IInterfaceElement interfaceElement, boolean isInput,
-			int index) {
+	protected InsertInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+			final int index) {
 		return null;
 	}
 
 	@Override
-	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
+	protected DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
 		return null;
 	}
 
 	@Override
-	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp) {
+	protected ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
 		return null;
 	}
 
 	@Override
-	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createButtons = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		getInputsViewer().setCellModifier(new CellImmutableModifier());
@@ -84,25 +83,20 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 		return (FBNetworkElement) type;
 	}
 
-	@Override
-	protected TypeLibrary getTypeLibrary() {
-		return getType().getTypeLibrary();
-	}
-
 	static class CellImmutableModifier implements ICellModifier {
 
 		@Override
-		public boolean canModify(Object element, String property) {
+		public boolean canModify(final Object element, final String property) {
 			return false;
 		}
 
 		@Override
-		public Object getValue(Object element, String property) {
+		public Object getValue(final Object element, final String property) {
 			return null;
 		}
 
 		@Override
-		public void modify(Object element, String property, Object value) {
+		public void modify(final Object element, final String property, final Object value) {
 
 		}
 

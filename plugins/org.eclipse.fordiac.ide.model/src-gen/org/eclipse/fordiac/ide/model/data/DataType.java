@@ -15,14 +15,17 @@ package org.eclipse.fordiac.ide.model.data;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object
- * '<em><b>Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Type</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDataType()
  * @model abstract="true"
- * @generated
- */
+ * @generated */
 public interface DataType extends LibraryElement {
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true" otherRequired="true"
+	 * @generated */
+	boolean isCompatibleWith(DataType other);
 } // DataType

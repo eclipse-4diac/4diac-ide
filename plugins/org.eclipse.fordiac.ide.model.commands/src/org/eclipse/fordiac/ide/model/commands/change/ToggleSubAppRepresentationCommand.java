@@ -29,19 +29,14 @@ public class ToggleSubAppRepresentationCommand extends Command {
 	@Override
 	public void execute() {
 		oldAttribute = subapp.getAttributeValue(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);
-		newAttribute = subapp.isUnfolded() ? "false" : "true"; //$NON-NLS-1$ //$NON-NLS-2$
+		newAttribute = subapp.isUnfolded() ? null : "true"; //$NON-NLS-1$
 
 		setRepresentationAttribute(newAttribute);
 	}
 
 	@Override
 	public void undo() {
-		if (oldAttribute == null) {
-			subapp.deleteAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);
-		} else {
-			setRepresentationAttribute(oldAttribute);
-		}
-
+		setRepresentationAttribute(oldAttribute);
 	}
 
 	@Override
@@ -50,6 +45,10 @@ public class ToggleSubAppRepresentationCommand extends Command {
 	}
 
 	private void setRepresentationAttribute(String text) {
-		subapp.setAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE, "STRING", text, ""); //$NON-NLS-1$ //$NON-NLS-2$
+		if (null == text) {
+			subapp.deleteAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);
+		} else {
+			subapp.setAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE, "STRING", text, ""); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 	}
 }

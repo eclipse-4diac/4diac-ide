@@ -46,16 +46,16 @@ import org.eclipse.swt.graphics.Point;
 public class FlattenSubAppCommand extends Command {
 	private final SubApp subapp;
 	private final FBNetwork parent;
-	private List<FBNetworkElement> elements = new ArrayList<>();
-	private List<EventConnection> transferEventConnections = new ArrayList<>();
-	private List<DataConnection> transferDataConnections = new ArrayList<>();
-	private List<AdapterConnection> transferAdapterConnections = new ArrayList<>();
-	private CompoundCommand deleteCommands = new CompoundCommand();
-	private CompoundCommand createCommands = new CompoundCommand();
-	private CompoundCommand mappCommands = new CompoundCommand();
-	private Point fbnetworkPosInSubapp;
+	private final List<FBNetworkElement> elements = new ArrayList<>();
+	private final List<EventConnection> transferEventConnections = new ArrayList<>();
+	private final List<DataConnection> transferDataConnections = new ArrayList<>();
+	private final List<AdapterConnection> transferAdapterConnections = new ArrayList<>();
+	private final CompoundCommand deleteCommands = new CompoundCommand();
+	private final CompoundCommand createCommands = new CompoundCommand();
+	private final CompoundCommand mappCommands = new CompoundCommand();
+	private final Point fbnetworkPosInSubapp;
 
-	public FlattenSubAppCommand(SubApp subapp) {
+	public FlattenSubAppCommand(final SubApp subapp) {
 		super(Messages.FlattenSubAppCommand_LABEL_FlattenSubAppCommand);
 		this.subapp = subapp;
 		parent = subapp.getFbNetwork();
@@ -140,45 +140,45 @@ public class FlattenSubAppCommand extends Command {
 	}
 
 	private int getOriginalPositionX() {
-		return -subapp.getX() + fbnetworkPosInSubapp.x;
+		return -subapp.getPosition().getX() + fbnetworkPosInSubapp.x;
 	}
 
 	private int getOriginalPositionY() {
-		return -subapp.getY() + fbnetworkPosInSubapp.y;
+		return -subapp.getPosition().getY() + fbnetworkPosInSubapp.y;
 	}
 
 	private void createMapCommands() {
 		if (subapp.isMapped()) {
-			for (FBNetworkElement fbNetworkElement : elements) {
+			for (final FBNetworkElement fbNetworkElement : elements) {
 				mappCommands.add(new MapToCommand(fbNetworkElement, subapp.getResource()));
 			}
 		}
 	}
 
-	private <T extends Connection> void checkConnectionList(List<T> connectionList, List<T> transferConnectionList) {
-		for (T connection : connectionList) {
+	private <T extends Connection> void checkConnectionList(final List<T> connectionList, final List<T> transferConnectionList) {
+		for (final T connection : connectionList) {
 			if ((connection.getSourceElement() != subapp) && (connection.getDestinationElement() != subapp)) {
 				// it is an internal connection transfer it
 				transferConnectionList.add(connection);
 			} else {
 				deleteCommands.add(new DeleteConnectionCommand(connection));
 				if ((connection.getSourceElement() == subapp) && (connection.getDestinationElement() == subapp)) {
-					for (Connection inboundConn : connection.getSource().getInputConnections()) {
-						for (Connection outboundConn : connection.getDestination().getOutputConnections()) {
+					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
+						for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
 							createCommands
-									.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
+							.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
 						}
 					}
 				} else if (connection.getSourceElement() == subapp) {
 					// for each connection coming into the sub app create one connection in the
 					// outer fb network
-					for (Connection inboundConn : connection.getSource().getInputConnections()) {
+					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
 						createCommands.add(createConnCreateCmd(inboundConn.getSource(), connection.getDestination()));
 					}
 				} else if (connection.getDestinationElement() == subapp) {
 					// for each connection going from the subapp outputs create one connection in
 					// the other fb network
-					for (Connection outboundConn : connection.getDestination().getOutputConnections()) {
+					for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
 						createCommands.add(createConnCreateCmd(connection.getSource(), outboundConn.getDestination()));
 					}
 				}
@@ -186,8 +186,8 @@ public class FlattenSubAppCommand extends Command {
 		}
 	}
 
-	private AbstractConnectionCreateCommand createConnCreateCmd(IInterfaceElement source,
-			IInterfaceElement destination) {
+	private AbstractConnectionCreateCommand createConnCreateCmd(final IInterfaceElement source,
+			final IInterfaceElement destination) {
 		AbstractConnectionCreateCommand cmd = null;
 		if (source instanceof Event) {
 			cmd = new EventConnectionCreateCommand(parent);

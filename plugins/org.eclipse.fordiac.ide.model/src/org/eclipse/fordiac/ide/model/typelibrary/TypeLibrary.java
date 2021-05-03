@@ -49,12 +49,17 @@ public final class TypeLibrary implements TypeLibraryTags {
 	// !> Holds type libraries of all open 4diac IDE projects
 	private static Map<IProject, TypeLibrary> typeLibraryList = new HashMap<>();
 
-	public static synchronized TypeLibrary getTypeLibrary(IProject proj) {
-		return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
+	public static TypeLibrary getTypeLibrary(final IProject proj) {
+		synchronized (typeLibraryList) {
+			return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
+		}
+
 	}
 
-	public static void removeProject(IProject project) {
-		typeLibraryList.remove(project);
+	public static void removeProject(final IProject project) {
+		synchronized (typeLibraryList) {
+			typeLibraryList.remove(project);
+		}
 	}
 
 	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
@@ -64,37 +69,36 @@ public final class TypeLibrary implements TypeLibraryTags {
 	/** An array of palette entry creators */
 	private static IPaletteEntryCreator[] paletteCreators = null;
 
-	public static String getTypeNameFromFile(IFile element) {
+	public static String getTypeNameFromFile(final IFile element) {
 		return getTypeNameFromFileName(element.getName());
 	}
 
 	public static String getTypeNameFromFileName(final String fileName) {
 		String name = fileName;
-		int index = fileName.lastIndexOf('.');
+		final int index = fileName.lastIndexOf('.');
 		if (-1 != index) {
 			name = fileName.substring(0, index);
 		}
 		return name;
 	}
 
-	public static PaletteEntry getPaletteEntryForFile(IFile typeFile) {
-		TypeLibrary typeLib = TypeLibrary.getTypeLibrary(typeFile.getProject());
+	public static PaletteEntry getPaletteEntryForFile(final IFile typeFile) {
+		final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(typeFile.getProject());
 		return typeLib.getPaletteEntry(typeFile);
 	}
 
-	public PaletteEntry getPaletteEntry(IFile typeFile) {
+	public PaletteEntry getPaletteEntry(final IFile typeFile) {
 		if (isDataTypeFile(typeFile)) {
 			return dataTypeLib.getDerivedDataTypes().get(TypeLibrary.getTypeNameFromFile(typeFile));
-		} else {
-			EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
-			if (null != typeEntryList) {
-				return typeEntryList.get(TypeLibrary.getTypeNameFromFile(typeFile));
-			}
+		}
+		final EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
+		if (null != typeEntryList) {
+			return typeEntryList.get(TypeLibrary.getTypeNameFromFile(typeFile));
 		}
 		return null;
 	}
 
-	private static boolean isDataTypeFile(IFile typeFile) {
+	private static boolean isDataTypeFile(final IFile typeFile) {
 		return TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(typeFile.getFileExtension());
 	}
 
@@ -110,8 +114,8 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return project;
 	}
 
-	private EMap<String, ? extends PaletteEntry> getTypeList(IFile typeFile) {
-		String extension = typeFile.getFileExtension();
+	private EMap<String, ? extends PaletteEntry> getTypeList(final IFile typeFile) {
+		final String extension = typeFile.getFileExtension();
 		if (null != extension) {
 			switch (extension.toUpperCase()) {
 			case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
@@ -136,7 +140,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	/**
 	 * Instantiates a new fB type library.
 	 */
-	private TypeLibrary(IProject project) {
+	private TypeLibrary(final IProject project) {
 		this.project = project;
 		blockTypeLib.setTypeLibrary(this);
 		if (null != project) {
@@ -144,17 +148,19 @@ public final class TypeLibrary implements TypeLibraryTags {
 		}
 	}
 
-	public static synchronized void loadToolLibrary() {
-		IProject toolLibProject = getToolLibProject();
-		typeLibraryList.computeIfAbsent(toolLibProject, TypeLibrary::createToolLibrary);
+	public static void loadToolLibrary() {
+		synchronized (typeLibraryList) {
+			final IProject toolLibProject = getToolLibProject();
+			typeLibraryList.computeIfAbsent(toolLibProject, TypeLibrary::createToolLibrary);
+		}
 	}
 
-	private static TypeLibrary createToolLibrary(IProject toolLibProject) {
+	private static TypeLibrary createToolLibrary(final IProject toolLibProject) {
 		if (toolLibProject.exists()) {
 			// clean-up old links
 			try {
 				toolLibProject.delete(true, new NullProgressMonitor());
-			} catch (CoreException e) {
+			} catch (final CoreException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		}
@@ -164,15 +170,12 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return new TypeLibrary(toolLibProject);
 	}
 
-	private void loadPaletteFolderMembers(IContainer container) {
+	private void loadPaletteFolderMembers(final IContainer container) {
 		IResource[] members;
 		try {
-			if (!ResourcesPlugin.getWorkspace().isTreeLocked()) {
-				container.refreshLocal(IResource.DEPTH_ONE, null);
-			}
 			members = container.members();
 
-			for (IResource iResource : members) {
+			for (final IResource iResource : members) {
 				if (iResource instanceof IFolder) {
 					loadPaletteFolderMembers((IFolder) iResource);
 				}
@@ -180,7 +183,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 					createPaletteEntry((IFile) iResource);
 				}
 			}
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
@@ -191,9 +194,9 @@ public final class TypeLibrary implements TypeLibraryTags {
 	 * @param file
 	 * @return
 	 */
-	public PaletteEntry createPaletteEntry(IFile file) {
+	public PaletteEntry createPaletteEntry(final IFile file) {
 		PaletteEntry entry = null;
-		for (IPaletteEntryCreator in : getPaletteCreators()) {
+		for (final IPaletteEntryCreator in : getPaletteCreators()) {
 			if (in.canHandle(file)) {
 				entry = in.createPaletteEntry();
 				configurePaletteEntry(entry, file);
@@ -203,7 +206,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return entry;
 	}
 
-	public void addPaletteEntry(PaletteEntry entry) {
+	public void addPaletteEntry(final PaletteEntry entry) {
 		if (entry instanceof DataTypePaletteEntry) {
 			entry.setPalette(blockTypeLib); // for data type entries the palette will not be automatically set
 			dataTypeLib.addPaletteEntry((DataTypePaletteEntry) entry);
@@ -212,7 +215,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		}
 	}
 
-	public void removePaletteEntry(PaletteEntry entry) {
+	public void removePaletteEntry(final PaletteEntry entry) {
 		if (entry instanceof DataTypePaletteEntry) {
 			dataTypeLib.removePaletteEntry((DataTypePaletteEntry) entry);
 		} else {
@@ -224,20 +227,20 @@ public final class TypeLibrary implements TypeLibraryTags {
 	 *
 	 */
 	private static void setPaletteCreators() {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] elems = registry
 				.getConfigurationElementsFor(org.eclipse.fordiac.ide.model.Activator.PLUGIN_ID, "PaletteEntryCreator"); //$NON-NLS-1$
 		int countPaletteCreater = 0;
 		paletteCreators = new IPaletteEntryCreator[elems.length];
 
-		for (IConfigurationElement elem : elems) {
+		for (final IConfigurationElement elem : elems) {
 			try {
-				Object object = elem.createExecutableExtension("class"); //$NON-NLS-1$
+				final Object object = elem.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof IPaletteEntryCreator) {
 					paletteCreators[countPaletteCreater] = (IPaletteEntryCreator) object;
 					countPaletteCreater++;
 				}
-			} catch (CoreException e) {
+			} catch (final CoreException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		}
@@ -250,21 +253,21 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return paletteCreators;
 	}
 
-	private static void configurePaletteEntry(PaletteEntry entry, IFile file) {
+	private static void configurePaletteEntry(final PaletteEntry entry, final IFile file) {
 		entry.setType(null);
 		entry.setLabel(TypeLibrary.getTypeNameFromFile(file));
 		entry.setFile(file);
 	}
 
-	public static void refreshTypeLib(IFile file) {
-		TypeLibrary typeLib = TypeLibrary.getTypeLibrary(file.getProject());
+	public static void refreshTypeLib(final IFile file) {
+		final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(file.getProject());
 		typeLib.refresh();
 	}
 
 	private void refresh() {
 		try {
 			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 
@@ -282,15 +285,15 @@ public final class TypeLibrary implements TypeLibraryTags {
 		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes().values());
 	}
 
-	private static void checkDeletionsForTypeGroup(Collection<? extends PaletteEntry> typeEntries) {
+	private static void checkDeletionsForTypeGroup(final Collection<? extends PaletteEntry> typeEntries) {
 		typeEntries.removeIf(e -> (!e.getFile().exists()));
 	}
 
-	private void checkAdditions(IContainer container) {
+	private void checkAdditions(final IContainer container) {
 		try {
-			IResource[] members = container.members();
+			final IResource[] members = container.members();
 
-			for (IResource resource : members) {
+			for (final IResource resource : members) {
 				if (resource instanceof IFolder) {
 					checkAdditions((IFolder) resource);
 				}
@@ -299,13 +302,13 @@ public final class TypeLibrary implements TypeLibraryTags {
 					createPaletteEntry((IFile) resource);
 				}
 			}
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 
 	}
 
-	public boolean containsType(IFile file) {
+	public boolean containsType(final IFile file) {
 		return (null != getPaletteEntry(file));
 	}
 
@@ -315,13 +318,13 @@ public final class TypeLibrary implements TypeLibraryTags {
 	 * @return the tool library project of the 4diac-ide instance
 	 */
 	private static IProject getToolLibProject() {
-		IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		final IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		return myWorkspaceRoot.getProject(TOOL_LIBRARY_PROJECT_NAME);
 	}
 
 	public static IFolder getToolLibFolder() {
 
-		IProject toolLibProject = getToolLibProject();
+		final IProject toolLibProject = getToolLibProject();
 
 		if (!toolLibProject.exists()) {
 			createToolLibProject(toolLibProject);
@@ -336,23 +339,23 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return toolLibFolder;
 	}
 
-	private static void createToolLibProject(IProject toolLibProject) {
-		IProgressMonitor progressMonitor = new NullProgressMonitor();
+	private static void createToolLibProject(final IProject toolLibProject) {
+		final IProgressMonitor progressMonitor = new NullProgressMonitor();
 
 		try {
 			toolLibProject.create(progressMonitor);
 			toolLibProject.open(progressMonitor);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 
 		createToolLibLink(toolLibProject);
 	}
 
-	private static void createToolLibLink(IProject toolLibProject) {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+	private static void createToolLibLink(final IProject toolLibProject) {
+		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-		IFolder link = toolLibProject.getFolder(TOOL_LIBRARY_PROJECT_NAME);
+		final IFolder link = toolLibProject.getFolder(TOOL_LIBRARY_PROJECT_NAME);
 
 		final String typeLibPath = System.getProperty("4diac.typelib.path"); //$NON-NLS-1$
 
@@ -363,15 +366,15 @@ public final class TypeLibrary implements TypeLibraryTags {
 		} else {
 			location = new Path(Platform.getInstallLocation().getURL().getFile() + TypeLibraryTags.TYPE_LIBRARY);
 		}
-		if (workspace.validateLinkLocation(link, location).isOK()) {
+		if (workspace.validateLinkLocation(link, location).isOK()
+				&& location.toFile().isDirectory()) {
 			try {
 				link.createLink(location, IResource.NONE, null);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		} else {
 			// invalid location, throw an exception or warn user
 		}
 	}
-
 }

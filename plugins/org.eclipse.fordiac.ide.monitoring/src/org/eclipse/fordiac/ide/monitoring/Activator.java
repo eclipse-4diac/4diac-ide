@@ -27,12 +27,6 @@ public class Activator extends Abstract4DIACUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	/**
-	 * The constructor
-	 */
-	public Activator() {
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -42,7 +36,7 @@ public class Activator extends Abstract4DIACUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setPlugin(this);
 	}
 
 	/*
@@ -53,8 +47,12 @@ public class Activator extends Abstract4DIACUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		plugin = null;
+		setPlugin(null);
 		super.stop(context);
+	}
+
+	private static synchronized void setPlugin(Activator newPlugin) {
+		plugin = newPlugin;
 	}
 
 	/**

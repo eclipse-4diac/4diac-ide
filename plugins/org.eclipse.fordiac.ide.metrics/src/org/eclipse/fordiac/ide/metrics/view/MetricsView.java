@@ -17,7 +17,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.metrics.analyzers.AbstractCodeMetricAnalyzer;
@@ -26,9 +25,7 @@ import org.eclipse.fordiac.ide.metrics.analyzers.SpiderChartBFBMeasures;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -40,12 +37,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
@@ -53,18 +52,20 @@ import org.eclipse.ui.part.ViewPart;
 public class MetricsView extends ViewPart {
 	TableViewer viewer;
 	Label currentBlock;
-	private List<MetricResult> data = new ArrayList<>();
+	IPartListener2 pl;
+	IWorkbenchPage page;
+	private final List<MetricResult> data = new ArrayList<>();
 
 	public static class MetricsResultLabelProvider extends LabelProvider implements ITableLabelProvider {
 		private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00"); //$NON-NLS-1$
 
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
+		public Image getColumnImage(final Object element, final int columnIndex) {
 			return null;
 		}
 
 		@Override
-		public String getColumnText(Object element, int columnIndex) {
+		public String getColumnText(final Object element, final int columnIndex) {
 			if (element instanceof MetricResult) {
 				switch (columnIndex) {
 				case 0:
@@ -80,21 +81,21 @@ public class MetricsView extends ViewPart {
 
 	}
 
-	private void calculateMetrics(INamedElement element, List<MetricResult> result) {
-		AbstractCodeMetricAnalyzer analyzer = new SpiderChartBFBMeasures();
+	private static void calculateMetrics(final INamedElement element, final List<MetricResult> result) {
+		final AbstractCodeMetricAnalyzer analyzer = new SpiderChartBFBMeasures();
 		analyzer.calculateMetrics(element);
 		result.addAll(analyzer.getResults());
 
 	}
 
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 
 		parent.setLayout(new GridLayout(2, true));
 		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 
-		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
-		Composite composite = toolkit.createComposite(parent);
+		final FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		final Composite composite = toolkit.createComposite(parent);
 		composite.setLayout(new GridLayout(1, true));
 		composite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 
@@ -102,37 +103,48 @@ public class MetricsView extends ViewPart {
 
 	}
 
-	private void createSCBFBSection(Composite parent, FormToolkit toolkit) {
-		Composite composite = toolkit.createComposite(parent);
-		composite.setLayout(new GridLayout(3, false));
+	private void createSCBFBSection(final Composite parent, final FormToolkit toolkit) {
+		final Composite composite = toolkit.createComposite(parent);
+		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false));
 
-		Button button = toolkit.createButton(composite, "", SWT.PUSH);
 		toolkit.createLabel(composite, Messages.SpiderChartBFBMeasuresOf);
 		currentBlock = toolkit.createLabel(composite, null);
 
-		button.setImage(FordiacImage.ICON_REFRESH.getImage());
 		updateMetrics();
 
-		viewer = TableWidgetFactory.createPropertyTableViewer(parent,
-				SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, false).applyTo(viewer.getTable());
+		final Composite tableComposite = toolkit.createComposite(parent);
+		tableComposite.setLayout(new GridLayout(1, false));
+		tableComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, true));
+
+		viewer = TableWidgetFactory.createPropertyTableViewer(tableComposite,
+				SWT.BORDER | SWT.NO_SCROLL | SWT.MULTI);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, true).applyTo(viewer.getTable());
 		configureTableColumns(viewer.getTable());
 		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setLabelProvider(new MetricsResultLabelProvider());
 		viewer.setInput(data);
-		button.addListener(SWT.Selection, e -> {
-			updateMetrics();
-			viewer.setInput(data);
-		});
+		viewer.getTable().getVerticalBar().setVisible(false);
+
+		page = getSite().getPage();
+		pl = new IPartListener2() {
+			@Override
+			public void partActivated(final IWorkbenchPartReference ref) {
+				updateMetrics();
+				viewer.setInput(data);
+				composite.pack();
+				tableComposite.pack();
+			}
+		};
+		page.addPartListener(pl);
 	}
 
 	protected void updateMetrics() {
 		data.clear();
-		IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+		final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		if (activeEditor instanceof FBTypeEditor) {
-			FBType type = ((FBTypeEditor) activeEditor).getFBType();
+			final FBType type = ((FBTypeEditor) activeEditor).getFBType();
 
 			if ((type instanceof BasicFBType)) {
 				currentBlock.setText(type.getName());
@@ -141,17 +153,19 @@ public class MetricsView extends ViewPart {
 
 		}
 		if (data.isEmpty()) {
-			currentBlock.setText("Messages.SpiderChartBFBError");
+			currentBlock.setText(Messages.SpiderChartBFBError);
 		}
 	}
 
-	private static void configureTableColumns(Table table) {
+	private static void configureTableColumns(final Table table) {
+
 		new TableColumn(table, SWT.LEFT).setText(Messages.Measure);
 		new TableColumn(table, SWT.RIGHT).setText(Messages.Value);
 
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
+
 		layout.addColumnData(new ColumnWeightData(65, 100));
-		layout.addColumnData(new ColumnWeightData(25, 10));
+		layout.addColumnData(new ColumnWeightData(35, 30));
 		table.setLayout(layout);
 		table.setVisible(true);
 		table.setLinesVisible(true);
@@ -161,7 +175,13 @@ public class MetricsView extends ViewPart {
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
-
 	}
+
+	@Override
+	public void dispose() {
+		page.removePartListener(pl);
+		super.dispose();
+	}
+
 
 }

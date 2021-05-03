@@ -20,196 +20,177 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry;
 import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Entry</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Entry</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl#getValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String NAME_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String name = NAME_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getValue()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String VALUE_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getValue()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String value = VALUE_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	protected VirtualDNSEntryImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return VirtualDNSPackage.Literals.VIRTUAL_DNS_ENTRY;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME, oldName,
+					name));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public String getValue() {
 		return value;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public void setValue(String newValue) {
 		String oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE, oldValue, value));
+			eNotify(new ENotificationImpl(this, Notification.SET, VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE, oldValue,
+					value));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
-				return getName();
-			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
-				return getValue();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
+			return getName();
+		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
+			return getValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
-				setName((String)newValue);
-				return;
-			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
-				setValue((String)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
+			setName((String) newValue);
+			return;
+		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
+			setValue((String) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
-				setValue(VALUE_EDEFAULT);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
+			setValue(VALUE_EDEFAULT);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
-				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
-			default:
-				return super.eIsSet(featureID);
+		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
+			return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$

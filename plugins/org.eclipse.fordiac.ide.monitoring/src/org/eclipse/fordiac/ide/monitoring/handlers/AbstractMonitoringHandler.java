@@ -18,10 +18,9 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
-import org.eclipse.fordiac.ide.gef.DiagramEditor;
-import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -31,18 +30,16 @@ public abstract class AbstractMonitoringHandler extends AbstractHandler {
 	private RootEditPart rootEditPart = null;
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		setEditor(HandlerUtil.getActiveEditor(event));
 		return null;
 	}
 
-	protected void setEditor(IEditorPart activeEditor) {
-		if (activeEditor instanceof DiagramEditorWithFlyoutPalette) {
-			DiagramEditorWithFlyoutPalette editorW = (DiagramEditorWithFlyoutPalette) activeEditor;
-			rootEditPart = editorW.getViewer().getRootEditPart();
-		} else if (activeEditor instanceof CompositeInstanceViewer) {
-			DiagramEditor editor = (DiagramEditor) activeEditor;
-			rootEditPart = editor.getViewer().getRootEditPart();
+	protected void setEditor(final IEditorPart activeEditor) {
+
+		final GraphicalViewer viewer = BreadcrumbUtil.getViewer(activeEditor);
+		if (null != viewer) {
+			rootEditPart = viewer.getRootEditPart();
 		} else {
 			rootEditPart = null;
 		}
@@ -54,10 +51,10 @@ public abstract class AbstractMonitoringHandler extends AbstractHandler {
 		}
 	}
 
-	private static void refresh(RootEditPart rootEditPart) {
+	private static void refresh(final RootEditPart rootEditPart) {
 		rootEditPart.refresh();
 
-		List<?> children = rootEditPart.getChildren();
+		final List<?> children = rootEditPart.getChildren();
 		children.forEach(child -> ((EditPart) child).refresh());
 	}
 }

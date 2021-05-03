@@ -18,14 +18,13 @@
 package org.eclipse.fordiac.ide.model.commands.internal;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 /**
@@ -34,13 +33,13 @@ import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
  */
 public abstract class CreateVariableCommand extends AbstractCreationCommand {
 	/** The type that the variable is added to */
-	private LibraryElement type;
+	private final LibraryElement type;
 
 	/** The new variable declaration */
 	private VarDeclaration varDecl;
 	private DataType dataType;
 	private String name;
-	private int index;
+	private final int index;
 
 	/**
 	 * Instantiates a new create variable command.
@@ -52,24 +51,12 @@ public abstract class CreateVariableCommand extends AbstractCreationCommand {
 		this(type, 0, null, null);
 	}
 
-	protected CreateVariableCommand(final LibraryElement type, int index, String name, DataType dataType) {
+	protected CreateVariableCommand(final LibraryElement type, final int index, final String name, final DataType dataType) {
 		this.dataType = dataType;
 		if (null == this.dataType) {
-			DataTypeLibrary dataLib = type.getTypeLibrary().getDataTypeLibrary();
-			this.dataType = dataLib.getType(FordiacKeywords.BOOL);
+			this.dataType = IecTypes.ElementaryTypes.BOOL;
 		}
-		this.name = (null != name) ? name : getDefaultVarName();
-		this.index = index;
-		this.type = type;
-	}
-
-	protected CreateVariableCommand(final LibraryElement type, int index, String name, DataType dataType,
-			DataTypeLibrary dataTypeLibrary) {
-		this.dataType = dataType;
-		if (null == this.dataType) {
-			this.dataType = dataTypeLibrary.getType(FordiacKeywords.BOOL);
-		}
-		this.name = (null != name) ? name : getDefaultVarName();
+		this.name = name;
 		this.index = index;
 		this.type = type;
 	}
@@ -89,11 +76,6 @@ public abstract class CreateVariableCommand extends AbstractCreationCommand {
 	 */
 	protected abstract String getDefaultVarName();
 
-	protected int getLastIndex() {
-		EList<VarDeclaration> list = getVariableList();
-		return (list != null) ? (list.size() - 1) : 0;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -101,12 +83,16 @@ public abstract class CreateVariableCommand extends AbstractCreationCommand {
 	 */
 	@Override
 	public void execute() {
+		if (null == name) {
+			// if we haven't got a name proposal create a name now.
+			name = getDefaultVarName();
+		}
 		varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDecl.setType(dataType);
 		varDecl.setTypeName(dataType.getName());
 		varDecl.setComment(""); //$NON-NLS-1$
 		varDecl.setArraySize(0);
-		Value value = LibraryElementFactory.eINSTANCE.createValue();
+		final Value value = LibraryElementFactory.eINSTANCE.createValue();
 		value.setValue(""); //$NON-NLS-1$
 		varDecl.setValue(value);
 		redo();

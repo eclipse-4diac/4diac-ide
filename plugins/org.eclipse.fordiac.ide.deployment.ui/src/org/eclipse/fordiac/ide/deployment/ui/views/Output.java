@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -98,7 +99,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		Composite root = new Composite(parent, SWT.None);
+		final Composite root = new Composite(parent, SWT.None);
 		root.setLayout(new GridLayout());
 		createSourceViewer(root);
 		contributeToActionBars();
@@ -108,7 +109,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 	 * Contribute to action bars.
 	 */
 	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
+		final IActionBars bars = getViewSite().getActionBars();
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 
@@ -118,7 +119,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 	 * @param manager the manager
 	 */
 	private void fillLocalToolBar(final IToolBarManager manager) {
-		Action clearAction = new Action(Messages.Output_ClearActionLabel) {
+		final Action clearAction = new Action(Messages.Output_ClearActionLabel) {
 			@Override
 			public void run() {
 				clearOutput();
@@ -148,10 +149,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 */
 		@Override
 		public Color getColor(final RGB rgb) {
-			if (!rgbs.containsKey(rgb)) {
-				rgbs.put(rgb, new Color(Display.getDefault(), rgb));
-			}
-			return rgbs.get(rgb);
+			return rgbs.computeIfAbsent(rgb, newRGB -> new Color(Display.getDefault(), newRGB));
 		}
 
 		/*
@@ -161,7 +159,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 */
 		@Override
 		public void dispose() {
-			for (Entry<RGB, Color> entry : rgbs.entrySet()) {
+			for (final Entry<RGB, Color> entry : rgbs.entrySet()) {
 				if (!entry.getValue().isDisposed()) {
 					entry.getValue().dispose();
 				}
@@ -176,7 +174,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 	private static final int ANNOTATION_RULES_COLUMN_WIDTH = 16;
 
 	/** The annotation model. */
-	private AnnotationModel fAnnotationModel = new AnnotationModel();
+	private final AnnotationModel fAnnotationModel = new AnnotationModel();
 
 	/**
 	 * Creates the source viewer.
@@ -185,44 +183,42 @@ public class Output extends ViewPart implements IDeploymentListener {
 	 */
 	private void createSourceViewer(final Composite parent) {
 
-		AnnotationMarkerAccess annotationMarker = new AnnotationMarkerAccess();
-		//
-		ColorCache colorCache = new ColorCache();
+		final AnnotationMarkerAccess annotationMarker = new AnnotationMarkerAccess();
+		final ColorCache colorCache = new ColorCache();
 
-		CompositeRuler compositeRuler = new CompositeRuler();
-		OverviewRuler overviewRuler = new OverviewRuler(annotationMarker, OVERVIEW_RULER_WIDTH, colorCache);
-		AnnotationRulerColumn annotationRuler = new AnnotationRulerColumn(fAnnotationModel,
+		final CompositeRuler compositeRuler = new CompositeRuler();
+		final OverviewRuler overviewRuler = new OverviewRuler(annotationMarker, OVERVIEW_RULER_WIDTH, colorCache);
+		final AnnotationRulerColumn annotationRuler = new AnnotationRulerColumn(fAnnotationModel,
 				ANNOTATION_RULES_COLUMN_WIDTH, annotationMarker);
 		compositeRuler.setModel(fAnnotationModel);
 		overviewRuler.setModel(fAnnotationModel);
 
 		// annotation ruler is decorating our composite ruler
 		compositeRuler.addDecorator(0, annotationRuler);
-		//
-		// // add what types are show on the different rulers
+		// add what types are show on the different rulers
 		annotationRuler.addAnnotationType(ERROR_TYPE);
 		annotationRuler.addAnnotationType(WARNIGN_TYPE);
 		overviewRuler.addAnnotationType(ERROR_TYPE);
 		overviewRuler.addAnnotationType(WARNIGN_TYPE);
 		overviewRuler.addHeaderAnnotationType(ERROR_TYPE);
 		overviewRuler.addHeaderAnnotationType(WARNIGN_TYPE);
-		// // set what layer this type is on
+		// set what layer this type is on
 		overviewRuler.setAnnotationTypeLayer(ERROR_TYPE, 3);
 		overviewRuler.setAnnotationTypeLayer(WARNIGN_TYPE, 4);
-		// // set what color is used on the overview ruler for the type
+		// set what color is used on the overview ruler for the type
 		overviewRuler.setAnnotationTypeColor(ERROR_TYPE, colorCache.getColor(new RGB(255, 0, 0)));
 		overviewRuler.setAnnotationTypeColor(WARNIGN_TYPE, colorCache.getColor(new RGB(255, 255, 0)));
 
 		sv = new SourceViewer(parent, compositeRuler, overviewRuler, true, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 
-		GridData gd = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData gd = new GridData(GridData.FILL, GridData.FILL, true, true);
 		sv.getControl().setLayoutData(gd);
 
-		Document document = new Document();
+		final Document document = new Document();
 		sv.setDocument(document);
 		sv.setEditable(false);
 		document.addDocumentListener(new LogListener(fAnnotationModel));
-		IDocumentPartitioner partitioner = new FastPartitioner(new XMLPartitionScanner(),
+		final IDocumentPartitioner partitioner = new FastPartitioner(new XMLPartitionScanner(),
 				new String[] { XMLPartitionScanner.XML_TAG, XMLPartitionScanner.XML_COMMENT });
 		partitioner.connect(document);
 		document.setDocumentPartitioner(partitioner);
@@ -231,11 +227,11 @@ public class Output extends ViewPart implements IDeploymentListener {
 		sv.configure(new XMLConfiguration());
 
 		// hover manager that shows text when we hover
-		AnnotationBarHoverManager fAnnotationHoverManager = new AnnotationBarHoverManager(compositeRuler, sv,
+		final AnnotationBarHoverManager fAnnotationHoverManager = new AnnotationBarHoverManager(compositeRuler, sv,
 				new AnnotationHover(), new AnnotationConfiguration());
 		fAnnotationHoverManager.install(annotationRuler.getControl());
 
-		AnnotationPainter ap = new AnnotationPainter(sv, annotationMarker);
+		final AnnotationPainter ap = new AnnotationPainter(sv, annotationMarker);
 		ap.addAnnotationType(ERROR_TYPE, new AnnotationPainter.UnderlineStrategy(SWT.UNDERLINE_SQUIGGLE));
 		ap.setAnnotationTypeColor(ERROR_TYPE, colorCache.getColor(new RGB(255, 0, 0)));
 		// this will draw the squigglies under the text
@@ -260,12 +256,12 @@ public class Output extends ViewPart implements IDeploymentListener {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public String getHoverInfo(final ISourceViewer sourceViewer, final int lineNumber) {
 
-			Map annotations = new HashMap();
+			final Map annotations = new HashMap();
 
-			for (Iterator iterator = fAnnotationModel.getAnnotationIterator(); iterator.hasNext();) {
-				Annotation annotation = (Annotation) iterator.next();
+			for (final Iterator iterator = fAnnotationModel.getAnnotationIterator(); iterator.hasNext();) {
+				final Annotation annotation = (Annotation) iterator.next();
 				if (annotation instanceof ErrorAnnotation) {
-					ErrorAnnotation err = (ErrorAnnotation) annotation;
+					final ErrorAnnotation err = (ErrorAnnotation) annotation;
 					annotations.put(Integer.toString(err.getLine()), err.getText());
 				}
 
@@ -335,28 +331,32 @@ public class Output extends ViewPart implements IDeploymentListener {
 	 * @throws TransformerFactoryConfigurationError the transformer factory
 	 *                                              configuration error
 	 */
-	private String getFormattedXML(final String command) throws TransformerFactoryConfigurationError {
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+	private static String getFormattedXML(final String command) throws TransformerFactoryConfigurationError {
+		final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");  //$NON-NLS-1$
+		documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); //$NON-NLS-1$
 		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
-			org.w3c.dom.Document doc = documentBuilder.parse(new InputSource(new StringReader(command)));
+			final org.w3c.dom.Document doc = documentBuilder.parse(new InputSource(new StringReader(command)));
 
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
+			final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); //$NON-NLS-1$
+			transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); //$NON-NLS-1$
+			final Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); //$NON-NLS-1$
 
 			transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "2"); //$NON-NLS-1$ //$NON-NLS-2$
 
-			DOMSource domSource = new DOMSource(doc);
+			final DOMSource domSource = new DOMSource(doc);
 
-			OutputStream outputStream = new ByteArrayOutputStream();
-			StreamResult streamResult = new StreamResult(outputStream);
+			final OutputStream outputStream = new ByteArrayOutputStream();
+			final StreamResult streamResult = new StreamResult(outputStream);
 			transformer.transform(domSource, streamResult);
 			return outputStream.toString();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return MessageFormat.format(Messages.Output_FormattedXML, command, e.getMessage());
 		}
 	}
@@ -378,10 +378,10 @@ public class Output extends ViewPart implements IDeploymentListener {
 	}
 
 	@Override
-	public void postCommandSent(String info, String destination, String command) {
+	public void postCommandSent(final String info, final String destination, final String command) {
 		Display.getDefault().asyncExec(() -> {
 
-			String temp = MessageFormat.format(Messages.Output_Comment, info);
+			final String temp = MessageFormat.format(Messages.Output_Comment, info);
 			buffer.append("\n\n");//$NON-NLS-1$
 			buffer.append(temp);
 			buffer.append("\n");//$NON-NLS-1$
@@ -391,7 +391,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 	@Override
 	public void connectionClosed() {
-		IDocument document = sv.getDocument();
+		final IDocument document = sv.getDocument();
 		if (null != document) {
 			Display.getDefault().asyncExec(() -> document.set(buffer.toString()));
 		}

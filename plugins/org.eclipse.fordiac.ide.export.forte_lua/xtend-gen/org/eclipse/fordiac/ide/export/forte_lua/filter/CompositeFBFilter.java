@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.export.forte_lua.filter;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -42,7 +41,7 @@ public class CompositeFBFilter {
   
   private static final int ADAPTER_MARKER = 0x10000;
   
-  public CharSequence lua(final CompositeFBType type) {
+  public String lua(final CompositeFBType type) {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _luaEventConstants = LuaConstants.luaEventConstants(type.getInterfaceList());
     _builder.append(_luaEventConstants);
@@ -62,7 +61,7 @@ public class CompositeFBFilter {
     _builder.newLine();
     _builder.append("return {interfaceSpec = interfaceSpec, fbnSpec = fbnSpec}");
     _builder.newLine();
-    return _builder;
+    return _builder.toString();
   }
   
   public static CharSequence luaFbnSpec(final CompositeFBType type) {

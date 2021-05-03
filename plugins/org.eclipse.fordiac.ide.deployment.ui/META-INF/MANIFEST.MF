@@ -1,7 +1,9 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.deployment.ui.handlers,
- org.eclipse.fordiac.ide.deployment.ui.views
-Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.fordiac.ide.deployment.ui.views,
+ org.eclipse.fordiac.ide.deployment.ui.wizard
+Require-Bundle: org.eclipse.ui.ide,
+ org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.model,
@@ -16,7 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
   org.eclipse.gef
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.13.1.qualifier
+Bundle-Version: 1.14.0.qualifier
 Bundle-Name: %pluginName
 Bundle-Activator: org.eclipse.fordiac.ide.deployment.ui.Activator
 Bundle-ManifestVersion: 2

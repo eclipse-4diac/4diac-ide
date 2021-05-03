@@ -9,7 +9,42 @@
             contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="true"
             class="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor"
-            id="org.eclipse.fordiac.ide.datatypeeditor.editors.DTPFileEditor">
+            id="org.eclipse.fordiac.ide.datatypeeditor.editors.DTPFileEditor"
+            icon="fordiacimage://ICON_DATA_TYPE">
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+      <propertyContributor
+            contributorId="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor">
+         <propertyCategory
+               category="DataType">
+         </propertyCategory>
+      </propertyContributor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs
+            contributorId="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor">
+         <propertyTab
+               category="DataType"
+               id="org.eclipse.fordiac.ide.datatypeeditor.propertyDataTypeInfoTab"
+               label="TypeInfo">
+         </propertyTab>
+      </propertyTabs>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections
+            contributorId="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor">
+         <propertySection
+               class="org.eclipse.fordiac.ide.datatypeeditor.properties.DataTypeInfoSection"
+               id="org.eclipse.fordiac.ide.datatypeeditor.properties.DataTypeInfoSection"
+               tab="org.eclipse.fordiac.ide.datatypeeditor.propertyDataTypeInfoTab">
+   		<input
+                  type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite">
+        </input>  
+         </propertySection>
+      </propertySections>
    </extension>
 </plugin>

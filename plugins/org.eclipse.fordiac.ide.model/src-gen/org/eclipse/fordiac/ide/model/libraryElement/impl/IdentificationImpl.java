@@ -20,186 +20,147 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Identification</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Identification</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getApplicationDomain
- * <em>Application Domain</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getApplicationDomain <em>Application
+ * Domain</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getClassification
  * <em>Classification</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getDescription
  * <em>Description</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getFunction
- * <em>Function</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getStandard
- * <em>Standard</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getType
- * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getFunction <em>Function</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getStandard <em>Standard</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl#getType <em>Type</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class IdentificationImpl extends EObjectImpl implements Identification {
-	/**
-	 * The default value of the '{@link #getApplicationDomain() <em>Application
-	 * Domain</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getApplicationDomain() <em>Application Domain</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getApplicationDomain()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String APPLICATION_DOMAIN_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getApplicationDomain() <em>Application
-	 * Domain</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getApplicationDomain() <em>Application Domain</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getApplicationDomain()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String applicationDomain = APPLICATION_DOMAIN_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getClassification()
-	 * <em>Classification</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The default value of the '{@link #getClassification() <em>Classification</em>}' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getClassification()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String CLASSIFICATION_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getClassification()
-	 * <em>Classification</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getClassification() <em>Classification</em>}' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getClassification()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String classification = CLASSIFICATION_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getDescription() <em>Description</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getDescription() <em>Description</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @see #getDescription()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String DESCRIPTION_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getDescription() <em>Description</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDescription() <em>Description</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getDescription()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String description = DESCRIPTION_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getFunction() <em>Function</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getFunction() <em>Function</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getFunction()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String FUNCTION_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getFunction() <em>Function</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getFunction() <em>Function</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getFunction()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String function = FUNCTION_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getStandard() <em>Standard</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getStandard() <em>Standard</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getStandard()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String STANDARD_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getStandard() <em>Standard</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getStandard() <em>Standard</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getStandard()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String standard = STANDARD_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getType() <em>Type</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getType() <em>Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getType()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String TYPE_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getType()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String type = TYPE_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected IdentificationImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.IDENTIFICATION;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getApplicationDomain() {
 		return applicationDomain;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setApplicationDomain(String newApplicationDomain) {
 		String oldApplicationDomain = applicationDomain;
@@ -209,21 +170,17 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 					LibraryElementPackage.IDENTIFICATION__APPLICATION_DOMAIN, oldApplicationDomain, applicationDomain));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getClassification() {
 		return classification;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setClassification(String newClassification) {
 		String oldClassification = classification;
@@ -233,21 +190,17 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 					oldClassification, classification));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getDescription() {
 		return description;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setDescription(String newDescription) {
 		String oldDescription = description;
@@ -257,21 +210,17 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 					oldDescription, description));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getFunction() {
 		return function;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setFunction(String newFunction) {
 		String oldFunction = function;
@@ -281,21 +230,17 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 					oldFunction, function));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getStandard() {
 		return standard;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setStandard(String newStandard) {
 		String oldStandard = standard;
@@ -305,21 +250,17 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 					oldStandard, standard));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getType() {
 		return type;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setType(String newType) {
 		String oldType = type;
@@ -329,11 +270,9 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 					type));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -354,11 +293,9 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -386,11 +323,9 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -418,11 +353,9 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -445,11 +378,9 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

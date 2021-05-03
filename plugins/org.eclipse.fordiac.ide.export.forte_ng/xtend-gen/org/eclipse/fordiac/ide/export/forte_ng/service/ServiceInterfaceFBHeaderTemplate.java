@@ -31,7 +31,7 @@ public class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
   private ServiceInterfaceFBType type;
   
   public ServiceInterfaceFBHeaderTemplate(final ServiceInterfaceFBType type, final String name, final Path prefix) {
-    super(name, prefix);
+    super(name, prefix, "CFunctionBlock");
     this.type = type;
   }
   
@@ -50,10 +50,8 @@ public class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
     _builder.append(_generateHeaderIncludes);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
-    _builder.append("class ");
-    CharSequence _fBClassName = this.getFBClassName();
-    _builder.append(_fBClassName);
-    _builder.append(": public CFunctionBlock {");
+    CharSequence _generateFBClassHeader = this.generateFBClassHeader();
+    _builder.append(_generateFBClassHeader);
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
     CharSequence _generateFBDeclaration = this.generateFBDeclaration();
@@ -111,17 +109,24 @@ public class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
     _builder.newLine();
     _builder.append("public:");
     _builder.newLine();
-    _builder.append("  ");
-    _builder.append("FUNCTION_BLOCK_CTOR(");
-    CharSequence _fBClassName_1 = this.getFBClassName();
-    _builder.append(_fBClassName_1, "  ");
-    _builder.append(") {};");
+    _builder.append("   ");
+    CharSequence _fBClassName = this.getFBClassName();
+    _builder.append(_fBClassName, "   ");
+    _builder.append("(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :");
     _builder.newLineIfNotEmpty();
+    _builder.append("       ");
+    String _baseClass = this.baseClass();
+    _builder.append(_baseClass, "       ");
+    _builder.append("( pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, m_anFBConnData, m_anFBVarsData) {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("   ");
+    _builder.append("};");
+    _builder.newLine();
     _builder.newLine();
     _builder.append("  ");
     _builder.append("virtual ~");
-    CharSequence _fBClassName_2 = this.getFBClassName();
-    _builder.append(_fBClassName_2, "  ");
+    CharSequence _fBClassName_1 = this.getFBClassName();
+    _builder.append(_fBClassName_1, "  ");
     _builder.append("() = default;");
     _builder.newLineIfNotEmpty();
     _builder.append("};");

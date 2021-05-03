@@ -23,37 +23,29 @@ import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter
- * Type Palette Entry</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter Type Palette Entry</b></em>'. <!--
+ * end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements AdapterTypePaletteEntry {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected AdapterTypePaletteEntryImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return PalettePackage.Literals.ADAPTER_TYPE_PALETTE_ENTRY;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AdapterType getType() {
 		LibraryElement type = super.getType();
@@ -63,11 +55,9 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setType(final LibraryElement type) {
 		if (type instanceof AdapterType) {
@@ -82,11 +72,9 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public TypeImporter getTypeImporter() {
 		return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(getFile());

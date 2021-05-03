@@ -87,8 +87,7 @@ class StructuredTextValidator extends AbstractStructuredTextValidator {
 	}
 
 	def protected dispatch String extractTypeInformation(PrimaryVariable variable) {
-		if (null !== variable) variable.extractTypeInformation(variable.^var.extractTypeInformation)
-		else                   variable.^var.type.name
+		variable.extractTypeInformation(variable.^var.extractTypeInformation)
 	}
 
 	def protected dispatch String extractTypeInformation(VarDeclaration variable) {	variable.type.name }

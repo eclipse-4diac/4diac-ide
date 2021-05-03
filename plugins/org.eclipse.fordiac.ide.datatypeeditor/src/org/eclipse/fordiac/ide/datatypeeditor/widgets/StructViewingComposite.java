@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University, Linz
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Daniel Lindhuber, Bianca Wiesmayr
  *     - initial API and implementation and/or initial documentation
+ *   Alexander Lumplecker
+ *     - changed ChangeMemberVariableOrderCommand to ChangeVariableOrderCommand
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
@@ -20,10 +23,10 @@ import java.util.stream.Collectors;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeMemberVariableOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
@@ -46,7 +49,9 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -74,10 +79,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	private final CommandStack cmdStack;
 	private final IWorkbenchPart part;
 
-	private final DataType dataType;
+	private final StructuredType dataType;
 
-	public StructViewingComposite(Composite parent, int style, CommandStack cmdStack, DataType dataType,
-			DataTypeLibrary dataTypeLibrary, IWorkbenchPart part) {
+	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
+			final StructuredType dataType, final DataTypeLibrary dataTypeLibrary, final IWorkbenchPart part) {
 		super(parent, style);
 		this.cmdStack = cmdStack;
 		this.dataType = dataType;
@@ -85,7 +90,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		this.part = part;
 	}
 
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		final TabbedPropertySheetWidgetFactory widgetFactory = new TabbedPropertySheetWidgetFactory();
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -97,24 +102,22 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		showTable(parent);
 
 		buttons.bindToTableViewer(structViewer, this,
-				ref -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType(),
-						dataTypeLibrary),
+				ref -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType()),
 				ref -> new DeleteMemberVariableCommand(getType(), (VarDeclaration) ref),
-				ref -> new ChangeMemberVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, true),
-				ref -> new ChangeMemberVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref,
-						false));
+				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, true),
+				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, false));
 
 		part.getSite().setSelectionProvider(this);
 
 		createContextMenu(structViewer);
 	}
 
-	private static void showLabel(Composite parent) {
+	private static void showLabel(final Composite parent) {
 		final Label label = new Label(parent, SWT.CENTER);
 		label.setText(Messages.StructViewingComposite_Headline);
 	}
 
-	private void showTable(Composite parent) {
+	private void showTable(final Composite parent) {
 		structViewer = TableWidgetFactory.createPropertyTableViewer(parent);
 		configureTableLayout(structViewer.getTable());
 
@@ -124,15 +127,17 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		structViewer.setLabelProvider(new DataLabelProvider());
 		structViewer.setCellModifier(new StructCellModifier());
 
-		structViewer.setInput(((StructuredType) dataType).getMemberVariables());
+		structViewer.setInput(dataType.getMemberVariables());
 	}
 
 	private DataType getDataType() {
-		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getType() : null;
+		final VarDeclaration var = getLastSelectedVariable();
+		return (null != var) ? var.getType() : null;
 	}
 
 	private String getVarName() {
-		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getName() : null;
+		final VarDeclaration var = getLastSelectedVariable();
+		return (null != var) ? var.getName() : null;
 	}
 
 	private int getInsertionIndex() {
@@ -152,18 +157,14 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private StructuredType getType() {
-		if (dataType instanceof StructuredType) {
-			return (StructuredType) dataType;
-		}
-		return null;
+		return dataType;
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
 		typeDropDown = new DataTypeDropdown(dataTypeLibrary, structViewer) {
 			@Override
 			protected List<DataType> getDataTypesSorted() {
-				return super.getDataTypesSorted().stream()
-						.filter(Objects::nonNull)
+				return super.getDataTypesSorted().stream().filter(Objects::nonNull)
 						.filter(type -> !type.getName().equals(StructViewingComposite.this.getType().getName()))
 						.collect(Collectors.toList());
 			}
@@ -193,18 +194,18 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	@Override
-	public void executeCommand(Command cmd) {
+	public void executeCommand(final Command cmd) {
 		cmdStack.execute(cmd);
 	}
 
 	private final class StructCellModifier implements ICellModifier {
 		@Override
-		public boolean canModify(final Object element, String property) {
+		public boolean canModify(final Object element, final String property) {
 			return true;
 		}
 
 		@Override
-		public Object getValue(final Object element, String property) {
+		public Object getValue(final Object element, final String property) {
 			final VarDeclaration var = (VarDeclaration) element;
 			switch (property) {
 			case NAME:
@@ -236,7 +237,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				if (type == null) {
 					return;
 				}
-				cmd = new ChangeTypeCommand(data, type);
+				cmd = new ChangeDataTypeCommand(data, type);
 				break;
 			case COMMENT:
 				cmd = new ChangeCommentCommand(data, value.toString());
@@ -261,30 +262,40 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
-			cmd.add(new InsertVariableCommand(((StructuredType) dataType).getMemberVariables(), varEntry, index));
+			cmd.add(new InsertVariableCommand(dataType.getMemberVariables(), varEntry, index));
 		}
 	}
 
 	@Override
-	public void executeCompoundCommand(CompoundCommand cmd) {
+	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 	}
 
 	@Override
-	public Object removeEntry(int index, CompoundCommand cmd) {
+	public Object removeEntry(final int index, final CompoundCommand cmd) {
 		final VarDeclaration entry = (VarDeclaration) getEntry(index);
 		cmd.add(new DeleteMemberVariableCommand(getType(), entry));
 		return entry;
 	}
 
-	public Object getEntry(int index) {
+	public DataType getStruct() {
+		return dataType;
+	}
+
+	public Object getEntry(final int index) {
 		return getType().getMemberVariables().get(index);
 	}
 
-	private static void createContextMenu(TableViewer viewer) {
+	private static void createContextMenu(final TableViewer viewer) {
 		OpenStructMenu.addTo(viewer);
+	}
+
+	@Override
+	public ISelection getSelection() {
+		// for now return the whole object so that property sheets and otehr stuff can filter on it.
+		return new StructuredSelection(this);
 	}
 }

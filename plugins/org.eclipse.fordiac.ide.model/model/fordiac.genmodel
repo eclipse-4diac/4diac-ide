@@ -172,6 +172,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//IProject"/>
     <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
     <genDataTypes ecoreDataType="lib.ecore#//CommandStack"/>
+    <genDataTypes ecoreDataType="lib.ecore#//Point"/>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/paletteEntry"/>
@@ -209,13 +210,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Compiler/version"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//Connection">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/dx1"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/dx2"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/dy"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/resTypeConnection"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/brokenConnection"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Connection/source"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Connection/destination"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Connection/routingData"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/getSourceElement" body="return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/getDestinationElement"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);"/>
@@ -224,6 +223,16 @@
       <genOperations ecoreOperation="lib.ecore#//Connection/getFBNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/checkIfConnectionBroken"
           body="org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Connection/updateRoutingData" body="final ConnectionRoutingData newRoutingData = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createConnectionRoutingData();&#xA;newRoutingData.setDx1(dx1);&#xA;newRoutingData.setDy(dy);&#xA;newRoutingData.setDx2(dx2);&#xA;setRoutingData(newRoutingData);">
+        <genParameters ecoreParameter="lib.ecore#//Connection/updateRoutingData/dx1"/>
+        <genParameters ecoreParameter="lib.ecore#//Connection/updateRoutingData/dy"/>
+        <genParameters ecoreParameter="lib.ecore#//Connection/updateRoutingData/dx2"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ConnectionRoutingData">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx2"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dy"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Device">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Device/resource"/>
@@ -293,6 +302,12 @@
           body="org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isMapped" body="return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getType" body="//the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter) is a FBType. Therefore we can have this here.&#xA;&#xA;//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;&#xA;return super.getType() instanceof FBType ? (FBType)super.getType() : null;"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isNestedInSubApp"
+          body="final EObject parent = this.eContainer();if (parent == null) {return false;}final EObject grandParent = parent.eContainer();if (grandParent == null) {return false;}return grandParent instanceof org.eclipse.fordiac.ide.model.libraryElement.SubApp;"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getOuterFBNetworkElement"
+          body="&#x9;&#x9;if ((this.eContainer() == null) || !(this.eContainer().eContainer() instanceof FBNetworkElement)) {&#xA;&#x9;&#x9;&#x9;return null;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return (FBNetworkElement) this.eContainer().eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isContainedInTypedInstance"
+          body="return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SubApp">
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
@@ -351,9 +366,7 @@
     <genClasses ecoreClass="lib.ecore#//OtherAlgorithm">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OtherAlgorithm/language"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//OutputPrimitive">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OutputPrimitive/TestResult"/>
-    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//OutputPrimitive"/>
     <genClasses ecoreClass="lib.ecore#//Attribute">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Attribute/attributeDeclaration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Attribute/value"/>
@@ -383,13 +396,10 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceSequence">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceSequence/serviceTransaction"/>
-      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ServiceSequence/TestResult"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/inputPrimitive"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/outputPrimitive"/>
-      <genFeatures property="None" createChild="false" propertyCategory="" propertyDescription=""
-          ecoreFeature="ecore:EAttribute lib.ecore#//ServiceTransaction/TestResult"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceInterfaceFBType"/>
     <genClasses ecoreClass="lib.ecore#//STAlgorithm"/>
@@ -579,8 +589,21 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/interface"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//PositionableElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//PositionableElement/x"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//PositionableElement/y"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//PositionableElement/position"/>
+      <genOperations ecoreOperation="lib.ecore#//PositionableElement/updatePosition"
+          body="final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();&#xA;pos.setX(x);&#xA;pos.setY(y);&#xA;&#xA;setPosition(pos);">
+        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition/x"/>
+        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition/y"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//PositionableElement/updatePosition.1"
+          body="updatePosition(newPos.x, newPos.y);">
+        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition.1/newPos"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Position">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Position/x"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Position/y"/>
+      <genOperations ecoreOperation="lib.ecore#//Position/asPoint" body="return new org.eclipse.draw2d.geometry.Point(getX(), getY());"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Color">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Color/red"/>
@@ -607,6 +630,10 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
+      <genOperations ecoreOperation="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface"
+          body="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);">
+        <genParameters ecoreParameter="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface/newStruct"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Demultiplexer"/>
     <genClasses ecoreClass="lib.ecore#//Multiplexer"/>
@@ -650,7 +677,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//ArrayType/initialValues"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference data.ecore#//ArrayType/baseType"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="data.ecore#//DataType"/>
+    <genClasses image="false" ecoreClass="data.ecore#//DataType">
+      <genOperations ecoreOperation="data.ecore#//DataType/isCompatibleWith" body="return this == other;">
+        <genParameters ecoreParameter="data.ecore#//DataType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//DirectlyDerivedType"/>
     <genClasses ecoreClass="data.ecore#//EnumeratedType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//EnumeratedType/enumeratedValue"/>
@@ -661,6 +692,10 @@
     </genClasses>
     <genClasses ecoreClass="data.ecore#//StructuredType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/memberVariables"/>
+      <genOperations ecoreOperation="data.ecore#//StructuredType/isCompatibleWith"
+          body="return (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY)&#xA;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_DERIVED)&#xA;&#x9;&#x9;&#x9;&#x9;|| ((other instanceof StructuredType)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&amp;&amp; ((this == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (getName().equals(other.getName()))));">
+        <genParameters ecoreParameter="data.ecore#//StructuredType/isCompatibleWith/other"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//Subrange">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//Subrange/lowerLimit"/>
@@ -675,5 +710,198 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference data.ecore#//DerivedType/baseType"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//EventType"/>
+    <genClasses ecoreClass="data.ecore#//AnyType">
+      <genOperations ecoreOperation="data.ecore#//AnyType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyElementaryType">
+      <genOperations ecoreOperation="data.ecore#//AnyElementaryType/isCompatibleWith"
+          body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyElementaryCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyElementaryType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyMagnitudeType">
+      <genOperations ecoreOperation="data.ecore#//AnyMagnitudeType/isCompatibleWith"
+          body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyMagnitudeCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyMagnitudeType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyNumType">
+      <genOperations ecoreOperation="data.ecore#//AnyNumType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyNumCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyNumType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyRealType">
+      <genOperations ecoreOperation="data.ecore#//AnyRealType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyRealCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyRealType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//RealType">
+      <genOperations ecoreOperation="data.ecore#//RealType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isRealCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//RealType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//LrealType">
+      <genOperations ecoreOperation="data.ecore#//LrealType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLRealCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//LrealType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyIntType">
+      <genOperations ecoreOperation="data.ecore#//AnyIntType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyIntCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyIntType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyUnsignedType"/>
+    <genClasses ecoreClass="data.ecore#//UsintType">
+      <genOperations ecoreOperation="data.ecore#//UsintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUsintCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//UsintType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//UintType">
+      <genOperations ecoreOperation="data.ecore#//UintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUsintCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//UintType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//UdintType">
+      <genOperations ecoreOperation="data.ecore#//UdintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUdintCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//UdintType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//UlintType">
+      <genOperations ecoreOperation="data.ecore#//UlintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUlintCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//UlintType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnySignedType"/>
+    <genClasses ecoreClass="data.ecore#//SintType">
+      <genOperations ecoreOperation="data.ecore#//SintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isSintCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//SintType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//IntType">
+      <genOperations ecoreOperation="data.ecore#//IntType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isIntCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//IntType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//DintType">
+      <genOperations ecoreOperation="data.ecore#//DintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDintCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//DintType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//LintType">
+      <genOperations ecoreOperation="data.ecore#//LintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLintCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//LintType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyDurationType"/>
+    <genClasses ecoreClass="data.ecore#//TimeType">
+      <genOperations ecoreOperation="data.ecore#//TimeType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isTimeCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//TimeType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//LtimeType">
+      <genOperations ecoreOperation="data.ecore#//LtimeType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLtimeCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//LtimeType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyBitType">
+      <genOperations ecoreOperation="data.ecore#//AnyBitType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyBitCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyBitType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//BoolType">
+      <genOperations ecoreOperation="data.ecore#//BoolType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isBoolCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//BoolType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//ByteType">
+      <genOperations ecoreOperation="data.ecore#//ByteType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isByteCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//ByteType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//WordType">
+      <genOperations ecoreOperation="data.ecore#//WordType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isWordCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//WordType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//DwordType">
+      <genOperations ecoreOperation="data.ecore#//DwordType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDwordCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//DwordType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//LwordType">
+      <genOperations ecoreOperation="data.ecore#//LwordType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLwordCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//LwordType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyCharsType">
+      <genOperations ecoreOperation="data.ecore#//AnyCharsType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCharsCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyCharsType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyStringType">
+      <genOperations ecoreOperation="data.ecore#//AnyStringType/isCompatibleWith"
+          body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyStringCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyStringType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//StringType">
+      <genOperations ecoreOperation="data.ecore#//StringType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isStringCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//StringType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//WstringType">
+      <genOperations ecoreOperation="data.ecore#//WstringType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isWstringCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//WstringType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyCharType">
+      <genOperations ecoreOperation="data.ecore#//AnyCharType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCharCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyCharType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//CharType">
+      <genOperations ecoreOperation="data.ecore#//CharType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isCharCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//CharType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//WcharType">
+      <genOperations ecoreOperation="data.ecore#//WcharType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isWcharCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//WcharType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyDateType">
+      <genOperations ecoreOperation="data.ecore#//AnyDateType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyDateCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//AnyDateType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//DateAndTimeType">
+      <genOperations ecoreOperation="data.ecore#//DateAndTimeType/isCompatibleWith"
+          body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDateAndTimeCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//DateAndTimeType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//LdtType">
+      <genOperations ecoreOperation="data.ecore#//LdtType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLdtCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//LdtType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//DateType">
+      <genOperations ecoreOperation="data.ecore#//DateType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDateCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//DateType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//TimeOfDayType">
+      <genOperations ecoreOperation="data.ecore#//TimeOfDayType/isCompatibleWith"
+          body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isTimeOfDayCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//TimeOfDayType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//LtodType">
+      <genOperations ecoreOperation="data.ecore#//LtodType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLtodCompatibleWith(other);">
+        <genParameters ecoreParameter="data.ecore#//LtodType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

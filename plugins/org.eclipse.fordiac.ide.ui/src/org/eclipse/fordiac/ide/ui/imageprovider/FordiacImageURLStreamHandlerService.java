@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2016 fortiss GmbH, 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -43,16 +43,15 @@ public class FordiacImageURLStreamHandlerService extends AbstractURLStreamHandle
 	}
 
 	public void register() {
-		Bundle bundle = FrameworkUtil.getBundle(FordiacImageURLStreamHandlerService.class);
-		BundleContext bundleContext = bundle.getBundleContext();
+		final Bundle bundle = FrameworkUtil.getBundle(FordiacImageURLStreamHandlerService.class);
+		final BundleContext bundleContext = bundle.getBundleContext();
 		try {
-			Dictionary<String, String[]> properties = new Hashtable<>();
+			final Dictionary<String, String[]> properties = new Hashtable<>();
 			properties.put(URLConstants.URL_HANDLER_PROTOCOL, new String[] { FORDIAC_IMAGE_PROTOCOL });
 			iconUrlHandler = bundleContext.registerService(URLStreamHandlerService.class, this, properties);
-		} catch (Exception e) {
-			UIPlugin.getDefault().logError("Could not register icon URL handler.", e);
+		} catch (final Exception e) {
+			UIPlugin.getDefault().logError("Could not register icon URL handler.", e); //$NON-NLS-1$
 		}
-		UIPlugin.getDefault().logError("Icon URL handler registered.");
 	}
 
 	public void unregister() {
@@ -61,13 +60,13 @@ public class FordiacImageURLStreamHandlerService extends AbstractURLStreamHandle
 				iconUrlHandler.unregister();
 				iconUrlHandler = null;
 			}
-		} catch (Exception e) {
-			UIPlugin.getDefault().logError("Could not register icon URL handler.", e);
+		} catch (final Exception e) {
+			UIPlugin.getDefault().logError("Could not un-register icon URL handler.", e); //$NON-NLS-1$
 		}
 	}
 
 	@Override
-	public URLConnection openConnection(URL u) throws IOException {
+	public URLConnection openConnection(final URL u) throws IOException {
 		return new FordiacImageURLConnection(u);
 	}
 

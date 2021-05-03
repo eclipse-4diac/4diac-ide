@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
  */
 public class SubAppTImporter extends FBTImporter {
 
-	public SubAppTImporter(IFile typeFile) {
+	public SubAppTImporter(final IFile typeFile) {
 		super(typeFile);
 	}
 
@@ -39,7 +39,7 @@ public class SubAppTImporter extends FBTImporter {
 
 	@Override
 	protected FBType createRootModelElement() {
-		SubAppType newType = LibraryElementFactory.eINSTANCE.createSubAppType();
+		final SubAppType newType = LibraryElementFactory.eINSTANCE.createSubAppType();
 		newType.setService(LibraryElementFactory.eINSTANCE.createService());
 		return newType;
 	}
@@ -65,7 +65,7 @@ public class SubAppTImporter extends FBTImporter {
 				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getElement());
+				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
 				getElement().setInterfaceList(parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
@@ -74,8 +74,10 @@ public class SubAppTImporter extends FBTImporter {
 				parseService(getElement());
 				break;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
-				getElement().setFBNetwork(new SubAppNetworkImporter(this, getElement().getInterfaceList())
-						.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
+				final SubAppNetworkImporter subAppImporter = new SubAppNetworkImporter(this,
+						getElement().getInterfaceList());
+				getElement().setFBNetwork(subAppImporter.getFbNetwork());
+				subAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
 				break;
 			default:
 				return false;

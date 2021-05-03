@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 class BasicFBImplTemplate extends ForteFBTemplate {
 
@@ -37,7 +36,7 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 	extension STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
 
 	new(BasicFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CBasicFB")
 		this.type = type
 	}
 

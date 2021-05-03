@@ -17,65 +17,50 @@ package org.eclipse.fordiac.ide.model.data.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
-
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Any
- * Derived Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Any Derived Type</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl#getCompilerInfo
- * <em>Compiler Info</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl#getCompilerInfo <em>Compiler Info</em>}</li>
  * </ul>
  *
- * @generated
- */
-public class AnyDerivedTypeImpl extends DataTypeImpl implements AnyDerivedType {
-	/**
-	 * The cached value of the '{@link #getCompilerInfo() <em>Compiler Info</em>}'
-	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+ * @generated */
+public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
+	/** The cached value of the '{@link #getCompilerInfo() <em>Compiler Info</em>}' containment reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getCompilerInfo()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected CompilerInfo compilerInfo;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected AnyDerivedTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.ANY_DERIVED_TYPE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public CompilerInfo getCompilerInfo() {
 		if (compilerInfo != null && compilerInfo.eIsProxy()) {
@@ -99,20 +84,16 @@ public class AnyDerivedTypeImpl extends DataTypeImpl implements AnyDerivedType {
 		return compilerInfo;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public CompilerInfo basicGetCompilerInfo() {
 		return compilerInfo;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetCompilerInfo(CompilerInfo newCompilerInfo, NotificationChain msgs) {
 		CompilerInfo oldCompilerInfo = compilerInfo;
 		compilerInfo = newCompilerInfo;
@@ -127,11 +108,9 @@ public class AnyDerivedTypeImpl extends DataTypeImpl implements AnyDerivedType {
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setCompilerInfo(CompilerInfo newCompilerInfo) {
 		if (newCompilerInfo != compilerInfo) {
@@ -150,11 +129,9 @@ public class AnyDerivedTypeImpl extends DataTypeImpl implements AnyDerivedType {
 					newCompilerInfo, newCompilerInfo));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -165,11 +142,9 @@ public class AnyDerivedTypeImpl extends DataTypeImpl implements AnyDerivedType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -182,11 +157,9 @@ public class AnyDerivedTypeImpl extends DataTypeImpl implements AnyDerivedType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -199,11 +172,9 @@ public class AnyDerivedTypeImpl extends DataTypeImpl implements AnyDerivedType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -216,11 +187,9 @@ public class AnyDerivedTypeImpl extends DataTypeImpl implements AnyDerivedType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

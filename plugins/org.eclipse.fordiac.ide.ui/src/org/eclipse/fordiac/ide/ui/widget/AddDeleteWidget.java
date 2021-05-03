@@ -19,15 +19,17 @@ import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -38,8 +40,8 @@ public class AddDeleteWidget {
 	private Button deleteButton;
 	private Composite container;
 
-	public void createControls(Composite parent, FormToolkit widgetFactory) {
-		container = createContainer(parent);
+	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
+		container = createContainer(widgetFactory, parent);
 
 		createAddButton(widgetFactory, container);
 
@@ -49,62 +51,80 @@ public class AddDeleteWidget {
 		setButtonEnablement(false);
 	}
 
-	public void setVisible(boolean visible) {
-		container.setVisible(visible);
-		((GridData) container.getLayoutData()).exclude = !visible;
-		container.getParent().pack();
+	public void setVisible(final boolean visible) {
+		setVisible(visible, container);
 	}
 
-	protected void createDeleteButton(FormToolkit widgetFactory, Composite container) {
+	private static void setVisible(final boolean visible, final Control widget) {
+		widget.setVisible(visible);
+		if (null != widget.getLayoutData()) {
+			((GridData) widget.getLayoutData()).exclude = !visible;
+		} else {
+			widget.setLayoutData(GridDataFactory.fillDefaults().exclude(!visible).create());
+		}
+		widget.getParent().pack();
+	}
+
+	public void setVisibleCreateButton(final boolean visible) {
+		setVisible(visible, createButton);
+	}
+
+	public void setVisibleDeleteButton(final boolean visible) {
+		setVisible(visible, deleteButton);
+	}
+
+	protected void createDeleteButton(final FormToolkit widgetFactory, final Composite container) {
 		deleteButton = widgetFactory.createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		deleteButton.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
 		deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		deleteButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 	}
 
-	protected void createAddButton(FormToolkit widgetFactory, Composite container) {
+	protected void createAddButton(final FormToolkit widgetFactory, final Composite container) {
 		createButton = widgetFactory.createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		createButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createButton.setToolTipText("Create element");
+		createButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 	}
 
-	protected static Composite createContainer(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
+	protected static Composite createContainer(final FormToolkit widgetFactory, final Composite parent) {
+		final Composite container = widgetFactory.createComposite(parent, SWT.NONE);
+		final GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
 		container.setLayoutData(buttonCompLayoutData);
-		container.setLayout(new FillLayout(SWT.VERTICAL));
+		container.setLayout(new GridLayout(1, true));
 		return container;
 	}
 
-	public void setButtonEnablement(boolean enable) {
+	public void setButtonEnablement(final boolean enable) {
 		deleteButton.setEnabled(enable);
 		deleteButton
-				.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
-						: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+		.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
+				: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
-	public void setCreateButtonEnablement(boolean enable) {
+	public void setCreateButtonEnablement(final boolean enable) {
 		createButton.setEnabled(enable);
 	}
 
-	public void addCreateListener(Listener createListener) {
+	public void addCreateListener(final Listener createListener) {
 		createButton.addListener(SWT.Selection, createListener);
 	}
 
-	public void addDeleteListener(Listener deleteListener) {
+	public void addDeleteListener(final Listener deleteListener) {
 		deleteButton.addListener(SWT.Selection, deleteListener);
 	}
 
-	public void bindToTableViewer(TableViewer viewer, CommandExecutor executor, CreationCommandProvider addCommand,
-			CommandProvider deleteCommand) {
+	public void bindToTableViewer(final TableViewer viewer, final CommandExecutor executor, final CreationCommandProvider addCommand,
+			final CommandProvider deleteCommand) {
 
-		Listener createListener = getAddListener(viewer, executor, addCommand);
+		final Listener createListener = getAddListener(viewer, executor, addCommand);
 
-		Listener deleteListener = getDeleteListener(viewer, executor, deleteCommand);
+		final Listener deleteListener = getDeleteListener(viewer, executor, deleteCommand);
 
 		bindToTableViewer(viewer, createListener, deleteListener);
 	}
 
-	public void bindToTableViewer(TableViewer viewer, Listener createListener, Listener deleteListener) {
+	public void bindToTableViewer(final TableViewer viewer, final Listener createListener, final Listener deleteListener) {
 
 		addCreateListener(createListener);
 		addDeleteListener(deleteListener);
@@ -114,12 +134,12 @@ public class AddDeleteWidget {
 		viewer.getTable().addKeyListener(new KeyListener() {
 
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyReleased(final KeyEvent e) {
 				// Nothing to do here
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(final KeyEvent e) {
 				if ((e.keyCode == SWT.INSERT) && (e.stateMask == 0)) {
 					createListener.handleEvent(null);
 				} else if ((e.character == SWT.DEL) && (e.stateMask == 0)) {
@@ -129,9 +149,8 @@ public class AddDeleteWidget {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Listener getSelectionListener(TableViewer viewer, CommandExecutor executor,
-			CommandProvider commandProvider) {
+	public static Listener getSelectionListener(final TableViewer viewer, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
 		return ev -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
 				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
@@ -140,30 +159,28 @@ public class AddDeleteWidget {
 		};
 	}
 
-	protected static void executeCompoundCommandForList(TableViewer viewer, List<Object> selection,
-			CommandExecutor executor, CommandProvider commandProvider) {
-		CompoundCommand cmd = new CompoundCommand();
+	protected static void executeCompoundCommandForList(final TableViewer viewer, final List<Object> selection,
+			final CommandExecutor executor, final CommandProvider commandProvider) {
+		final CompoundCommand cmd = new CompoundCommand();
 		selection.stream().forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
 		executor.executeCommand(cmd);
 		viewer.refresh();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Listener getDeleteListener(TableViewer viewer, CommandExecutor executor,
-			CommandProvider commandProvider) {
+	public static Listener getDeleteListener(final TableViewer viewer, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
 		return ev -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
 				int pos = viewer.getTable().getSelectionIndices()[0];
 				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
 						commandProvider);
-				int itemCnt = viewer.getTable().getItemCount();
+				final int itemCnt = viewer.getTable().getItemCount();
 				if (pos <= itemCnt) {
 					if (pos == itemCnt) {
 						pos--;
 					}
 					viewer.getTable().forceFocus();
-					// the selection has to be set again via the table viewer for the widgets to
-					// recognize it
+					// the selection has to be set again via the table viewer for the widgets to recognize it
 					viewer.getTable().setSelection(pos);
 					viewer.setSelection(viewer.getSelection());
 				}
@@ -171,17 +188,17 @@ public class AddDeleteWidget {
 		};
 	}
 
-	private static Listener getAddListener(TableViewer viewer, CommandExecutor executor,
-			CreationCommandProvider commandProvider) {
+	private static Listener getAddListener(final TableViewer viewer, final CommandExecutor executor,
+			final CreationCommandProvider commandProvider) {
 		return ev -> {
-			AbstractCreationCommand cmd = commandProvider.getCommand(getReferencedElement(viewer));
+			final AbstractCreationCommand cmd = commandProvider.getCommand(getReferencedElement(viewer));
 			executor.executeCommand(cmd);
 			viewer.refresh();
 			viewer.setSelection(new StructuredSelection(cmd.getCreatedElement()));
 		};
 	}
 
-	private static Object getReferencedElement(TableViewer viewer) {
+	private static Object getReferencedElement(final TableViewer viewer) {
 		if (!viewer.getStructuredSelection().isEmpty()) {
 			return viewer.getStructuredSelection().toList().get(viewer.getStructuredSelection().size() - 1);
 		}

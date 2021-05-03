@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionFBParameter;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionOfFb;
@@ -111,8 +111,7 @@ public class ListFBCreateCommand extends FBCreateCommand {
 								}
 							} else {
 								// warning/info in statusline that fbtype can not be found
-								Abstract4DIACUIPlugin
-										.statusLineErrorMessage(Messages.ListFBCreateCommand_FBTypeNotFound);
+								ErrorMessenger.popUpErrorMessage(Messages.ListFBCreateCommand_FBTypeNotFound);
 							}
 						}
 

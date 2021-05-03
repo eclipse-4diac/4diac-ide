@@ -17,6 +17,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterValueTemplateTransfer;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -37,7 +38,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEdi
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.VirtualDNSTagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -257,7 +258,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				if (element instanceof VirtualDNSEntry) {
 
 					if (variableNameAlreadyExists((VirtualDNSEntry) element, value.toString())) {
-						Abstract4DIACUIPlugin.statusLineErrorMessage(
+						ErrorMessenger.popUpErrorMessage(
 								MessageFormat.format(Messages.virtualDNSSameVariableNameError, value.toString()));
 					} else {
 						((VirtualDNSEntry) element).setName(value.toString());
@@ -364,21 +365,15 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 	private void updateContents() {
 		if (null != system) {
-
 			setPartName(viewName + ": " + system.getName()); //$NON-NLS-1$
-			try {
-				provider = SystemManager.INSTANCE.getTagProvider(Class.forName(VirtualDNSTagProvider.class.getName()),
-						system);
-				if (provider != null) {
-					final Object object = provider.getModelObject();
-					if (object instanceof VirtualDNSManagement) {
-						management = (VirtualDNSManagement) object;
-						newConfiguration.setEnabled(true);
-						availableDNS.setEnabled(true);
-					}
+			provider = SystemManager.INSTANCE.getTagProvider(VirtualDNSTagProvider.class, system);
+			if (provider != null) {
+				final Object object = provider.getModelObject();
+				if (object instanceof VirtualDNSManagement) {
+					management = (VirtualDNSManagement) object;
+					newConfiguration.setEnabled(true);
+					availableDNS.setEnabled(true);
 				}
-			} catch (final ClassNotFoundException e) {
-				// ignore, just do not visualize anything
 			}
 		} else {
 			setPartName(viewName);
@@ -399,19 +394,22 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 
 		if ((null != sectionClient) && (!sectionClient.isDisposed())) {
-			AutomationSystem newSystem = null;
-			if (part instanceof SystemConfigurationEditor) {
-				newSystem = ((SystemConfigurationEditor) part).getSystem();
-			} else if (part instanceof FBNetworkEditor) {
-				newSystem = ((FBNetworkEditor) part).getSystem();
-			} else if (part instanceof ResourceDiagramEditor) {
-				newSystem = ((ResourceDiagramEditor) part).getSystem();
-			} else if (part instanceof CommonNavigator) {
-				if (selection instanceof TreeSelection) {
-					newSystem = handleSystemTreeSelection((TreeSelection) selection);
+			AutomationSystem newSystem = part.getAdapter(AutomationSystem.class);
+
+			if (null == newSystem) {
+				if (part instanceof SystemConfigurationEditor) {
+					newSystem = ((SystemConfigurationEditor) part).getSystem();
+				} else if (part instanceof FBNetworkEditor) {
+					newSystem = ((FBNetworkEditor) part).getSystem();
+				} else if (part instanceof ResourceDiagramEditor) {
+					newSystem = ((ResourceDiagramEditor) part).getSystem();
+				} else if (part instanceof CommonNavigator) {
+					if (selection instanceof TreeSelection) {
+						newSystem = handleSystemTreeSelection((TreeSelection) selection);
+					}
+				} else {
+					// TODO add type navigator
 				}
-			} else {
-				// TODO add type navigator
 			}
 
 			if (null != newSystem && system != newSystem) { // if no system is selected (normally when changing to
@@ -428,7 +426,9 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		AutomationSystem retval = null;
 		if (1 == selection.size()) {
 			final Object obj = selection.getFirstElement();
-			if (obj instanceof AutomationSystem) {
+			if ((obj instanceof IFile) && (SystemManager.isSystemFile(obj))) {
+				SystemManager.INSTANCE.getSystem((IFile) obj);
+			} else if (obj instanceof AutomationSystem) {
 				retval = (AutomationSystem) obj;
 			} else if (obj instanceof SystemConfiguration) {
 				retval = ((SystemConfiguration) obj).getAutomationSystem();

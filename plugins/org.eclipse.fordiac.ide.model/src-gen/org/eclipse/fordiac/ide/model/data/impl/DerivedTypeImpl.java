@@ -21,54 +21,42 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DerivedType;
 import org.eclipse.fordiac.ide.model.data.ElementaryType;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Derived
- * Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Derived Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl#getBaseType
- * <em>Base Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl#getBaseType <em>Base Type</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
-	/**
-	 * The cached value of the '{@link #getBaseType() <em>Base Type</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getBaseType() <em>Base Type</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getBaseType()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected ElementaryType baseType;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected DerivedTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.DERIVED_TYPE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ElementaryType getBaseType() {
 		if (baseType != null && baseType.eIsProxy()) {
@@ -83,20 +71,16 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 		return baseType;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public ElementaryType basicGetBaseType() {
 		return baseType;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setBaseType(ElementaryType newBaseType) {
 		ElementaryType oldBaseType = baseType;
@@ -106,11 +90,9 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 					baseType));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -123,11 +105,9 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -140,11 +120,9 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -157,11 +135,9 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

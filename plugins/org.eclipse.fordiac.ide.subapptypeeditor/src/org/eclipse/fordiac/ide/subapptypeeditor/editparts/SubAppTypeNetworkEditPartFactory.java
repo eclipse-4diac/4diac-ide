@@ -14,6 +14,8 @@
 package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentNetwork;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -22,20 +24,26 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SubAppTypeNetworkEditPartFactory extends CompositeNetworkEditPartFactory {
 
-	public SubAppTypeNetworkEditPartFactory(GraphicalEditor editor) {
+	public SubAppTypeNetworkEditPartFactory(final GraphicalEditor editor) {
 		super(editor);
 	}
 
 	@Override
-	protected EditPart getPartForElement(EditPart context, Object modelElement) {
-		if (modelElement instanceof FBNetwork) {
-			return new TypedSubAppNetworkEditPart();
+	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
+
+		if (modelElement instanceof UnfoldedSubappContentNetwork) {
+			return new UnfoldedSubappContentEditPart();
 		}
 
 		if (modelElement instanceof SubApp) {
 			return new SubAppForFBNetworkEditPart();
 		}
 		return super.getPartForElement(context, modelElement);
+	}
+
+	@Override
+	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
+		return new TypedSubAppNetworkEditPart();
 	}
 
 }

@@ -21,6 +21,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoredSystems;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -32,11 +33,11 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class MonitorSystemHandler extends AbstractHandler {
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 
 		if ((selection instanceof TreeSelection)) {
-			AutomationSystem system = SystemManager.INSTANCE
+			final AutomationSystem system = SystemManager.INSTANCE
 					.getSystem((IFile) ((TreeSelection) selection).getFirstElement());
 			if (!MonitoringManager.getInstance().isSystemMonitored(system)) {
 				MonitoringManager.getInstance().enableSystem(system);
@@ -50,14 +51,14 @@ public class MonitorSystemHandler extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		super.setEnabled(evaluationContext);
-		ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);
-		Command command = service.getCommand("org.eclipse.fordiac.ide.monitoring.MonitorSystem");
+		final ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);
+		final Command command = service.getCommand("org.eclipse.fordiac.ide.monitoring.MonitorSystem");
 		try {
 			HandlerUtil.toggleCommandState(command);
-		} catch (ExecutionException e) {
-			e.printStackTrace();
+		} catch (final ExecutionException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
 		}
 		setBaseEnabled(true);
 	}

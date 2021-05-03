@@ -49,6 +49,9 @@ public class ChangeArraySizeCommand extends Command {
 				newArraySize = 0;
 			}
 		}
+		if(newArraySize < 0) {
+			newArraySize = 0;
+		}
 		setArraySize(newArraySize);
 	}
 

@@ -29,7 +29,7 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) AdapterFBType type
 
 	new(AdapterFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CAdapter")
 		this.type = type
 	}
 
@@ -40,7 +40,7 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate {
 		
 		«generateHeaderIncludes»
 		
-		class «FBClassName»: public CAdapter {
+		«generateFBClassHeader»
 		  «generateFBDeclaration»
 		
 		private:
@@ -60,7 +60,9 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate {
 		  FORTE_ADAPTER_DATA_ARRAY(«type.interfaceList.eventInputs.size», «type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
 		
 		public:
-		  ADAPTER_CTOR(«FBClassName») {};
+		  «FBClassName»(CStringDictionary::TStringId pa_anAdapterInstanceName, CResource *pa_poSrcRes, bool pa_bIsPlug) :
+		      «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpecSocket, pa_anAdapterInstanceName, &scm_stFBInterfaceSpecPlug, pa_bIsPlug, m_anFBConnData, m_anFBVarsData) {	
+		   };
 		
 		  virtual ~«FBClassName»() = default;
 		};

@@ -9,80 +9,62 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *               - added check if subapp interface is selected and mark that in 
+ *               - added check if subapp interface is selected and mark that in
                    parent
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
+
+import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getViewer;
+import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.openEditor;
+import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.selectElement;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
-
 public class GotoParentHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		SubAppNetworkEditor editor = (SubAppNetworkEditor) HandlerUtil.getActiveEditor(event);
+		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 
-		EObject model = editor.getModel().eContainer().eContainer().eContainer();
+		final FBNetwork fbnetwork = editor.getAdapter(FBNetwork.class);
+		final EObject model = fbnetwork.eContainer().eContainer().eContainer();
 
-		FBNetworkEditor newEditor = (FBNetworkEditor) EditorUtils.openEditor(getEditorInput(model), getEditorId(model));
+		final IEditorPart newEditor = openEditor(model);
 		if (null != newEditor) {
-			handleSelection(newEditor, editor.getModel(), editor.getViewer().getSelection());
+			handleSelection(newEditor, fbnetwork, getViewer(editor).getSelection());
 		}
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public void setEnabled(Object evaluationContext) {
-		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_ID_NAME);
-		setBaseEnabled(SubAppNetworkEditor.class.getName().equals(selection));
+		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_EDITOR_NAME);
+		if (null != editor) {
+			final FBNetwork fbnetwork = editor.getAdapter(FBNetwork.class);
+			setBaseEnabled((null != fbnetwork) && fbnetwork.isSubApplicationNetwork());
+		}
 	}
 
-	private static IEditorInput getEditorInput(EObject model) {
-		if (model instanceof SubApp) {
-			return new SubApplicationEditorInput((SubApp) model);
-		}
-		if (model instanceof Application) {
-			return new ApplicationEditorInput((Application) model);
-		}
-		return null;
-	}
-
-	private static String getEditorId(EObject model) {
-		if (model instanceof SubApp) {
-			return SubAppNetworkEditor.class.getName();
-		}
-		if (model instanceof Application) {
-			return FBNetworkEditor.class.getName();
-		}
-		return null;
-	}
-
-	private static void handleSelection(FBNetworkEditor newEditor, FBNetwork model, ISelection selection) {
-		IInterfaceElement selIElement = getSelectedSubappInterfaceElement(selection);
+	private static void handleSelection(IEditorPart newEditor, FBNetwork model, ISelection selection) {
+		final IInterfaceElement selIElement = getSelectedSubappInterfaceElement(selection);
 
 		if ((null != selIElement) && (((SubApp) selIElement.getFBNetworkElement()).getSubAppNetwork().equals(model))) {
-			newEditor.selectElement(selIElement);
+			selectElement(selIElement, getViewer(newEditor));
 		} else {
-			newEditor.selectElement(model.eContainer());
+			selectElement(model.eContainer(), getViewer(newEditor));
 		}
 	}
 
@@ -92,9 +74,9 @@ public class GotoParentHandler extends AbstractHandler {
 	private static IInterfaceElement getSelectedSubappInterfaceElement(ISelection selection) {
 		if ((selection instanceof StructuredSelection) && (((StructuredSelection) selection).size() == 1)) {
 			// only one element is selected
-			Object selObj = ((StructuredSelection) selection).getFirstElement();
+			final Object selObj = ((StructuredSelection) selection).getFirstElement();
 			if ((selObj instanceof EditPart) && (((EditPart) selObj).getModel() instanceof IInterfaceElement)) {
-				IInterfaceElement elem = (IInterfaceElement) ((EditPart) selObj).getModel();
+				final IInterfaceElement elem = (IInterfaceElement) ((EditPart) selObj).getModel();
 				if (elem.getFBNetworkElement() instanceof SubApp) {
 					return elem;
 				}

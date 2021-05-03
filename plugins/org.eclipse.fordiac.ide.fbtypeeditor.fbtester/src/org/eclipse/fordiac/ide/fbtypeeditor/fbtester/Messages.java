@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 Profactor GmbH
  * 				 2020 Andrea Zoitl
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,7 +18,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.fbtester;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages extends NLS {
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.fbtester.messages"; //$NON-NLS-1$
 	public static String FBTester_AddTest;
 	public static String FBTester_CreateDataConnectionFailed;

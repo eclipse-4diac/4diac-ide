@@ -25,55 +25,44 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Enumerated Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Enumerated Type</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl#getEnumeratedValue
- * <em>Enumerated Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl#getEnumeratedValue <em>Enumerated
+ * Value</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType {
-	/**
-	 * The cached value of the '{@link #getEnumeratedValue() <em>Enumerated
-	 * Value</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getEnumeratedValue() <em>Enumerated Value</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getEnumeratedValue()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<EnumeratedValue> enumeratedValue;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected EnumeratedTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.ENUMERATED_TYPE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<EnumeratedValue> getEnumeratedValue() {
 		if (enumeratedValue == null) {
@@ -83,11 +72,9 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 		return enumeratedValue;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -98,11 +85,9 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -113,11 +98,9 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -132,11 +115,9 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -149,11 +130,9 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

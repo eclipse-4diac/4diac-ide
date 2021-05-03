@@ -26,29 +26,28 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPart;
 
 public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
-		DataType last = getLastUsedDataType(getType().getInterfaceList(), isInput, interfaceElement);
-		int pos = getInsertingIndex(interfaceElement, isInput);
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+		final DataType last = getLastUsedDataType(getType().getInterfaceList(), isInput, interfaceElement);
+		final int pos = getInsertingIndex(interfaceElement, isInput);
 		return new CreateInterfaceElementCommand(last, getCreationName(interfaceElement), getType().getInterfaceList(),
 				isInput, pos);
 	}
 
 	@Override
-	protected InsertInterfaceElementCommand newInsertCommand(IInterfaceElement interfaceElement, boolean isInput,
-			int index) {
-		DataType last = getLastUsedDataType(getType().getInterfaceList(), isInput, interfaceElement);
+	protected InsertInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+			final int index) {
+		final DataType last = getLastUsedDataType(getType().getInterfaceList(), isInput, interfaceElement);
 		return new InsertInterfaceElementCommand(interfaceElement, last, getType().getInterfaceList(), isInput, index);
 	}
 
 	@Override
-	protected FBType getInputType(Object input) {
+	protected FBType getInputType(final Object input) {
 		if (input instanceof EditPart) {
-			Object model = ((EditPart) input).getModel();
+			final Object model = ((EditPart) input).getModel();
 			if (model instanceof FBType) {
 				return (FBType) model;
 			}
@@ -60,23 +59,18 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
+	protected DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
 		return new DeleteInterfaceCommand(selection);
 	}
 
 	@Override
-	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp) {
+	protected ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
 		return new ChangeInterfaceOrderCommand(selection, moveUp);
 	}
 
 	@Override
 	protected FBType getType() {
 		return (FBType) type;
-	}
-
-	@Override
-	protected TypeLibrary getTypeLibrary() {
-		return getType().getTypeLibrary();
 	}
 
 }

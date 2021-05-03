@@ -18,14 +18,18 @@
  *   Daniel Lindhuber - added copy and paste
  *   Bianca Wiesmayr - extracted super class for simple and basic FB, added context menu
  *   Daniel Lindhuber - changed type selection to search field
+ *   Alexander Lumplecker
+ *     - changed AddDeleteWidget to AddDeleteReorderListWidget
+ *     - added ChangeVariableOrderCommand
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
@@ -37,7 +41,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
@@ -92,7 +96,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteWidget buttons = new AddDeleteWidget();
+		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
 		internalVarsViewer = TableWidgetFactory.createTableViewer(composite);
@@ -105,23 +109,27 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 
 		buttons.bindToTableViewer(internalVarsViewer, this,
 				ref -> new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),
-				ref -> new DeleteInternalVariableCommand(getType(), (VarDeclaration) ref));
+				ref -> new DeleteInternalVariableCommand(getType(), (VarDeclaration) ref),
+				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, true),
+				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, false));
 	}
 
 	private DataType getDataType() {
-		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getType() : null;
+		final VarDeclaration var = getLastSelectedVariable();
+		return (null != var) ? var.getType() : null;
 	}
 
 	private String getName() {
-		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getName() : null;
+		final VarDeclaration var = getLastSelectedVariable();
+		return (null != var) ? var.getName() : null;
 	}
 
 	private int getInsertionIndex() {
-		final VarDeclaration alg = getLastSelectedVariable();
-		if (null == alg) {
+		final VarDeclaration var = getLastSelectedVariable();
+		if (null == var) {
 			return getType().getInternalVars().size();
 		}
-		return getType().getInternalVars().indexOf(alg) + 1;
+		return getType().getInternalVars().indexOf(var) + 1;
 	}
 
 	private VarDeclaration getLastSelectedVariable() {
@@ -218,7 +226,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 				if (type == null) {
 					return;
 				}
-				cmd = new ChangeTypeCommand(data, type);
+				cmd = new ChangeDataTypeCommand(data, type);
 				break;
 			case IV_COMMENT:
 				cmd = new ChangeCommentCommand(data, value.toString());
@@ -241,12 +249,12 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 		return internalVarsViewer;
 	}
 
-	public Object getEntry(int index) {
+	public Object getEntry(final int index) {
 		return getType().getInternalVars().get(index);
 	}
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
 			cmd.add(new InsertVariableCommand(getType().getInternalVars(), varEntry, index));
@@ -254,14 +262,14 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	@Override
-	public Object removeEntry(int index, CompoundCommand cmd) {
+	public Object removeEntry(final int index, final CompoundCommand cmd) {
 		final VarDeclaration entry = (VarDeclaration) getEntry(index);
 		cmd.add(new DeleteInternalVariableCommand(getType(), entry));
 		return entry;
 	}
 
 	@Override
-	public void executeCompoundCommand(CompoundCommand cmd) {
+	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 		getViewer().refresh();
 	}

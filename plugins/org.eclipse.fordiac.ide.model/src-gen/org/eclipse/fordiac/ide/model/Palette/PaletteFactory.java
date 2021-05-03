@@ -15,101 +15,73 @@ package org.eclipse.fordiac.ide.model.Palette;
 
 import org.eclipse.emf.ecore.EFactory;
 
-/**
- * <!-- begin-user-doc --> The <b>Factory</b> for the model. It provides a
- * create method for each non-abstract class of the model. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> The <b>Factory</b> for the model. It provides a create method for each non-abstract class of
+ * the model. <!-- end-user-doc -->
  * 
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage
- * @generated
- */
+ * @generated */
 public interface PaletteFactory extends EFactory {
-	/**
-	 * The singleton instance of the factory. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The singleton instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	PaletteFactory eINSTANCE = org.eclipse.fordiac.ide.model.Palette.impl.PaletteFactoryImpl.init();
 
-	/**
-	 * Returns a new object of class '<em>Palette</em>'. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** Returns a new object of class '<em>Palette</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return a new object of class '<em>Palette</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	Palette createPalette();
 
-	/**
-	 * Returns a new object of class '<em>FB Type Palette Entry</em>'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns a new object of class '<em>FB Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return a new object of class '<em>FB Type Palette Entry</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	FBTypePaletteEntry createFBTypePaletteEntry();
 
-	/**
-	 * Returns a new object of class '<em>Device Type Palette Entry</em>'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns a new object of class '<em>Device Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @return a new object of class '<em>Device Type Palette Entry</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	DeviceTypePaletteEntry createDeviceTypePaletteEntry();
 
-	/**
-	 * Returns a new object of class '<em>Resource Type Entry</em>'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns a new object of class '<em>Resource Type Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return a new object of class '<em>Resource Type Entry</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	ResourceTypeEntry createResourceTypeEntry();
 
-	/**
-	 * Returns a new object of class '<em>Segment Type Palette Entry</em>'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns a new object of class '<em>Segment Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @return a new object of class '<em>Segment Type Palette Entry</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	SegmentTypePaletteEntry createSegmentTypePaletteEntry();
 
-	/**
-	 * Returns a new object of class '<em>Adapter Type Palette Entry</em>'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns a new object of class '<em>Adapter Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @return a new object of class '<em>Adapter Type Palette Entry</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	AdapterTypePaletteEntry createAdapterTypePaletteEntry();
 
-	/**
-	 * Returns a new object of class '<em>Data Type Palette Entry</em>'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns a new object of class '<em>Data Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return a new object of class '<em>Data Type Palette Entry</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	DataTypePaletteEntry createDataTypePaletteEntry();
 
-	/**
-	 * Returns a new object of class '<em>Sub Application Type Palette Entry</em>'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return a new object of class '<em>Sub Application Type Palette Entry</em>'.
-	 * @generated
-	 */
-	SubApplicationTypePaletteEntry createSubApplicationTypePaletteEntry();
-
-	/**
-	 * Returns the package supported by this factory. <!-- begin-user-doc --> <!--
+	/** Returns a new object of class '<em>Sub Application Type Palette Entry</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
+	 * @return a new object of class '<em>Sub Application Type Palette Entry</em>'.
+	 * @generated */
+	SubApplicationTypePaletteEntry createSubApplicationTypePaletteEntry();
+
+	/** Returns the package supported by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the package supported by this factory.
-	 * @generated
-	 */
+	 * @generated */
 	PalettePackage getPalettePackage();
 
 } // PaletteFactory

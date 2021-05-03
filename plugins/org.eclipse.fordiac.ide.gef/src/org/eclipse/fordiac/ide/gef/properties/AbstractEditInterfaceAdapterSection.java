@@ -40,19 +40,19 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 
 	@Override
 	protected String[] fillTypeCombo() {
-		List<String> list = new ArrayList<>();
+		final List<String> list = new ArrayList<>();
 		if (null != getType()) {
 			getPalette().getAdapterTypesSorted().forEach(adpType -> list.add(adpType.getLabel()));
 		}
 		return list.toArray(new String[list.size()]);
 	}
 
-	protected AdapterType getLastUsedAdapterType(InterfaceList interfaceList, IInterfaceElement interfaceElement,
-			boolean isInput) {
+	protected AdapterType getLastUsedAdapterType(final InterfaceList interfaceList, final IInterfaceElement interfaceElement,
+			final boolean isInput) {
 		if (null != interfaceElement) {
 			return (AdapterType) interfaceElement.getType();
 		}
-		EList<AdapterDeclaration> adapterList = getAdapterList(interfaceList, isInput);
+		final EList<AdapterDeclaration> adapterList = getAdapterList(interfaceList, isInput);
 		if (!adapterList.isEmpty()) {
 			return adapterList.get(adapterList.size() - 1).getType();
 		}
@@ -60,33 +60,33 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	}
 
 	@Override
-	protected int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput) {
+	protected int getInsertingIndex(final IInterfaceElement interfaceElement, final boolean isInput) {
 		if (null != interfaceElement) {
-			InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
+			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
 			return getInsertingIndex(interfaceElement, getAdapterList(interfaceList, isInput));
 		}
 		return -1;
 	}
 
-	private static EList<AdapterDeclaration> getAdapterList(InterfaceList interfaceList, boolean isInput) {
+	private static EList<AdapterDeclaration> getAdapterList(final InterfaceList interfaceList, final boolean isInput) {
 		return isInput ? interfaceList.getSockets() : interfaceList.getPlugs();
 	}
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof AdapterDeclaration) {
-			cmd.add(newInsertCommand((AdapterDeclaration) entry, getIsInputsViewer(), index));
+			cmd.add(newInsertCommand((AdapterDeclaration) entry, isInputsViewer(), index));
 		}
 	}
 
 	protected static class AdapterInterfaceContentProvider extends InterfaceContentProvider {
-		public AdapterInterfaceContentProvider(boolean inputs) {
+		public AdapterInterfaceContentProvider(final boolean inputs) {
 			super(inputs);
 		}
 
 		@Override
-		protected Object[] getInputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+		protected Object[] getInputs(final Object inputElement) {
+			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
 			if (null != interfaceList) {
 				return interfaceList.getSockets().toArray();
 			}
@@ -94,8 +94,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		}
 
 		@Override
-		protected Object[] getOutputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+		protected Object[] getOutputs(final Object inputElement) {
+			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
 			if (null != interfaceList) {
 				return interfaceList.getPlugs().toArray();
 			}

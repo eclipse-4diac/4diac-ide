@@ -15,41 +15,33 @@ package org.eclipse.fordiac.ide.model.data;
 
 import org.eclipse.emf.common.util.EList;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object
- * '<em><b>Enumerated Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Enumerated Type</b></em>'. <!-- end-user-doc
+ * -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue
- * <em>Enumerated Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue <em>Enumerated Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedType()
  * @model
- * @generated
- */
+ * @generated */
 public interface EnumeratedType extends ValueType {
-	/**
-	 * Returns the value of the '<em><b>Enumerated Value</b></em>' containment
-	 * reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.data.EnumeratedValue}. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Enumerated Value</b></em>' containment reference list. The list contents are of
+	 * type {@link org.eclipse.fordiac.ide.model.data.EnumeratedValue}. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Enumerated Value</em>' containment reference list
-	 * isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Enumerated Value</em>' containment reference list isn't clear, there really should be
+	 * more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
-	 * @return the value of the '<em>Enumerated Value</em>' containment reference
-	 *         list.
+	 * @return the value of the '<em>Enumerated Value</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedType_EnumeratedValue()
-	 * @model containment="true" required="true" extendedMetaData="kind='element'
-	 *        name='EnumeratedValue' namespace='##targetNamespace'"
-	 * @generated
-	 */
+	 * @model containment="true" required="true" extendedMetaData="kind='element' name='EnumeratedValue'
+	 *        namespace='##targetNamespace'"
+	 * @generated */
 	EList<EnumeratedValue> getEnumeratedValue();
 
 } // EnumeratedType

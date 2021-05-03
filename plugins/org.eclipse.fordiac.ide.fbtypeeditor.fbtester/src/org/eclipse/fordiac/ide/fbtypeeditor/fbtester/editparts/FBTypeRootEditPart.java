@@ -42,9 +42,9 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		IFigure figure = super.createFigure();
+		final IFigure figure = super.createFigure();
 		// Create the static router for the connection layer
-		ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
+		final ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
 		connLayer.setConnectionRouter(new ShortestPathConnectionRouter(figure));
 		return figure;
 	}
@@ -70,18 +70,13 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 			adapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(final Notification notification) {
-					int type = notification.getEventType();
+					final int type = notification.getEventType();
 					switch (type) {
 					case Notification.ADD:
 					case Notification.ADD_MANY:
 					case Notification.REMOVE:
 					case Notification.REMOVE_MANY:
-						Display.getDefault().asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								refreshChildren();
-							}
-						});
+						Display.getDefault().asyncExec(() -> refreshChildren());
 						break;
 					case Notification.SET:
 						break;
@@ -113,18 +108,17 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
 	@Override
 	protected List<?> getModelChildren() {
-		ArrayList<Object> children = new ArrayList<>();
-		FB fB = LibraryElementFactory.eINSTANCE.createFB();
+		final ArrayList<Object> children = new ArrayList<>();
+		final FB fB = LibraryElementFactory.eINSTANCE.createFB();
 		fB.setPaletteEntry(getPaletteEntry());
 		fB.setInterface(EcoreUtil.copy(getCastedFBTypeModel().getInterfaceList()));
 		fB.setName(getCastedFBTypeModel().getName());
-		fB.setX(10);
-		fB.setY(10);
+		fB.updatePosition(10, 10);
 
 		createValues(fB);
 		children.add(fB);
 
-		for (IInterfaceElement elem : fB.getInterface().getAllInterfaceElements()) {
+		for (final IInterfaceElement elem : fB.getInterface().getAllInterfaceElements()) {
 			children.add(createTestElement(fB, elem));
 
 		}
@@ -132,10 +126,11 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		return children;
 	}
 
-	private static TestElement createTestElement(FB fb, IInterfaceElement interfaceElement) {
+	private static TestElement createTestElement(final FB fb, final IInterfaceElement interfaceElement) {
 
-		TestElement element = new TestElement();
+		final TestElement element = new TestElement();
 		element.setFb(fb);
+		element.updatePosition(0, 0);
 
 		if (interfaceElement == null) {
 			// TODO ExceptionHandling
@@ -145,7 +140,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		return element;
 	}
 
-	protected static void createValues(FB fB) {
+	protected static void createValues(final FB fB) {
 		fB.getInterface().getInputVars().forEach(var -> var.setValue(LibraryElementFactory.eINSTANCE.createValue()));
 	}
 }

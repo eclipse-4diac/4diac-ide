@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.gef.policies;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -45,7 +46,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	 * @param arc    the arc
 	 * @param insets the insets
 	 */
-	public ModifiedNonResizeableEditPolicy(int arc, Insets insets) {
+	public ModifiedNonResizeableEditPolicy(final int arc, final Insets insets) {
 		super();
 		this.arc = arc;
 		this.insets = insets;
@@ -66,7 +67,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 
 	@Override
 	protected List<? extends IFigure> createSelectionHandles() {
-		List<ModifiedMoveHandle> list = new ArrayList<>(1);
+		final List<ModifiedMoveHandle> list = new ArrayList<>(1);
 		list.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), insets, arc));
 		removeSelectionFeedbackFigure();
 		return list;
@@ -75,12 +76,11 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	private RoundedRectangle selectionFeedback;
 
 	@Override
-	public void showTargetFeedback(Request request) {
+	public void showTargetFeedback(final Request request) {
 		super.showTargetFeedback(request);
 
-		if (isFeedbackRequest(request) && (null == selectionFeedback) && (null == handles)) { // we don't have already a
-																								// feedback showing and
-																								// we are not selected
+		if (isFeedbackRequest(request) && (null == selectionFeedback) && (null == handles)) {
+			// we don't have already a feedback showing and we are not selected
 			selectionFeedback = createSelectionFeedbackFigure();
 			if (null != selectionFeedback) {
 				addFeedback(selectionFeedback);
@@ -88,12 +88,12 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 		}
 	}
 
-	private boolean isFeedbackRequest(Request request) {
+	private boolean isFeedbackRequest(final Request request) {
 		return (REQ_SELECTION.equals(request.getType()))
 				|| (REQ_SELECTION_HOVER.equals(request.getType()) || isValidConnectionRequest(request));
 	}
 
-	private boolean isValidConnectionRequest(Request request) {
+	private boolean isValidConnectionRequest(final Request request) {
 		return (getHost() instanceof AbstractConnectableEditPart)
 				&& ((AbstractConnectableEditPart) getHost()).isConnectable()
 				&& (REQ_RECONNECT_SOURCE.equals(request.getType()) || REQ_RECONNECT_TARGET.equals(request.getType())
@@ -102,8 +102,8 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 
 	private RoundedRectangle createSelectionFeedbackFigure() {
 		if (getHost() instanceof GraphicalEditPart) {
-			GraphicalEditPart ep = ((GraphicalEditPart) getHost());
-			RoundedRectangle newSelFeedbackFigure = new RoundedRectangle();
+			final GraphicalEditPart ep = ((GraphicalEditPart) getHost());
+			final RoundedRectangle newSelFeedbackFigure = new RoundedRectangle();
 			newSelFeedbackFigure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 			newSelFeedbackFigure.setOutline(false);
 			newSelFeedbackFigure.setBounds(getSelectableFigureBounds(ep));
@@ -115,12 +115,12 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 		return null;
 	}
 
-	private static Rectangle getSelectableFigureBounds(GraphicalEditPart ep) {
+	private static Rectangle getSelectableFigureBounds(final GraphicalEditPart ep) {
 		return ep.getFigure().getBounds().getExpanded(2, 2);
 	}
 
 	@Override
-	public void eraseTargetFeedback(Request request) {
+	public void eraseTargetFeedback(final Request request) {
 		super.showTargetFeedback(request);
 		removeSelectionFeedbackFigure();
 	}
@@ -130,5 +130,15 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 			removeFeedback(selectionFeedback);
 			selectionFeedback = null;
 		}
+	}
+
+	@Override
+	protected IFigure createDragSourceFeedbackFigure() {
+		final Figure r = new Figure();
+		r.setBorder(new ModifiedMoveHandle.SelectionBorder(arc));
+		r.setBounds(getInitialFeedbackBounds());
+		r.validate();
+		addFeedback(r);
+		return r;
 	}
 }

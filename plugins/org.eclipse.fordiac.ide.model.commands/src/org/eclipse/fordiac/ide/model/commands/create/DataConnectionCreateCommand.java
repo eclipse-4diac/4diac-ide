@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 public class DataConnectionCreateCommand extends AbstractConnectionCreateCommand {
 
-	public DataConnectionCreateCommand(FBNetwork parent) {
+	public DataConnectionCreateCommand(final FBNetwork parent) {
 		super(parent);
 	}
 
@@ -47,11 +47,10 @@ public class DataConnectionCreateCommand extends AbstractConnectionCreateCommand
 	}
 
 	@Override
-	protected AbstractConnectionCreateCommand createMirroredConnectionCommand(FBNetwork fbNetwork) {
+	protected AbstractConnectionCreateCommand createMirroredConnectionCommand(final FBNetwork fbNetwork) {
 		return new DataConnectionCreateCommand(fbNetwork);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected Class getInterfaceType() {
 		return VarDeclaration.class;

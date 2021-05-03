@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2020 fortiss GmbH
+ 	         
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License 2.0 which is available at
+ http://www.eclipse.org/legal/epl-2.0.
+
+ SPDX-License-Identifier: EPL-2.0
+ 
+ Contributors:
+   Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Use the PLC01A1 Module from STM32</title>
+<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+<body>
+
+	<p id="topOfPage">This is the guide you need to have the PLC01A1 module working with stm32mp157* board. The module is <a href="https://www.st.com/en/ecosystems/x-nucleo-plc01a1.html" target="_blank">this one</a>.</p>
+
+	<ol>
+		<li><a href="#board">Run Linux on the Board</a></li>
+		<li><a href="#forte">Run FORTE on the Board</a></li>
+		<li><a href="#dts">Enable SPI in the board</a></li>
+		<li><a href="#misc">Some good info</a></li>
+	</ol>
+
+<!--********************************************************************************************-->
+
+	<h1 id="board">Run Linux on the Board</h1>
+
+	<ol>
+		<li>Follow the guide <a href="https://wiki.st.com/stm32mpu/wiki/Getting_started/STM32MP1_boards/STM32MP157C-DK2" target="_blank">here</a> so you have a running linux on your board and get to know the board by accessing it using the serial port first. To connect the NUCLEO PLC01A1 extension board, follow <a href="https://www.st.com/content/ccc/resource/technical/document/user_manual/group0/9c/25/64/62/4f/bc/4d/9f/DM00213568/files/DM00213568.pdf/jcr:content/translations/en.DM00213568.pdf" target="_blank">this tutorial</a>. Be careful that the extension board needs 24V which could damage the STM32 board. Read carefully the documentation to know where the 24V is used.</li>
+	</ol>
+
+
+
+	<h1 id="forte">Run FORTE on the Board</h1>
+
+
+	<ol>
+		<li>Follow the instruction <a href="https://wiki.st.com/stm32mpu/wiki/Getting_started/STM32MP1_boards/STM32MP157x-DK2/Develop_on_Arm%C2%AE_Cortex%C2%AE-A7" target="_blank">here</a> to download the SDK to a Ubuntu machine, and set the cross-compilers as default for the terminal session.</li>
+
+		<li>Clone the FORTE repository and compile as usual.</li>
+
+		<li>Change the IP of the board by executing:
+
+			<div class="code">ip addr add XXX.XXX.XXX.XXX/MM dev eth0</div>
+
+			which will set the ip according to what you use in the XXX and the YY, which is a two-digit number representing the mask.
+		</li>
+
+		<li>Test with a simple application without IOs, and monitor it from the IDE.</li>
+
+	</ol>	
+
+
+	<h1 id="dts">Enable SPI in the board</h1>
+
+	For some reason, the PLC01A1 module cannot be used directly with the board. You need to change the device tree of the linux. This is a long step, but you'll need to do it only once. The result will be a .dtb file that you need to update in your board. In the future, maybe stm32 will provide this.
+
+    <ol>
+		<li> Check the file being called when the board boots. For that, connect to it using the USB cable for serial communication to the stm32 board using 115200 for the speed. Establish a connection and reboot the board. You'll see something similar to:
+	   
+		    <div class="code">Found /mmc0_stm32mp157a-dk1_extlinux/extlinux.conf
+Retrieving file: /mmc0_stm32mp157a-dk1_extlinux/extlinux.conf</div>
+		      
+		    You see in this case that the board is <span class="specicificText">stm32mp157a-dk1</span> and the configuration file being used is <span class="specicificText">/mmc0_stm32mp157a-dk1_extlinux/extlinux.conf</span> or something similar. 
+  		</li>
+
+  		<li>Follow the guide <a href="https://wiki.st.com/stm32mpu/wiki/STM32MP1_Developer_Package#Installing_the_Linux_kernel" target="_blank">here</a> and  compile the Linux image. It's a big step.</li>
+
+  		<li>Once you are able to compile it, you need to change some things depending on your board. Go to the folder arch/arm/boot/dts of the linux source code and you will find some files stm32mp157* with a .dts extension. You need to edit the one you saw on your board when booting. (some users complained that the booting file didn't match the actual board they had, so checking at boot time is safer). In the file you'll see some blocks inside curly brackets {}. The first one has a slash / before opening it. After this whole block (it ends with "};") you need to add the following text in a new line:
+    
+		    <div class="code">&amp;spi4 {
+  pinctrl-names = &quot;default&quot;;
+  pinctrl-0 = &lt;&amp;spi4_pins_a&gt;;
+  status = &quot;okay&quot;;
+  cs-gpios = &lt;&amp;gpioh 6 GPIO_ACTIVE_LOW&gt;, &lt;&amp;gpioe 11 GPIO_ACTIVE_LOW&gt;; /* Usage of CS1 and CS2 */
+
+  CLT01-38SQ7@0 { /* INPUTS */
+    compatible = &quot;spidev&quot;;
+    reg = &lt;0&gt;; /* CS1 */
+    spi-max-frequency = &lt;6250000&gt;;
+  };
+
+  VNI8200XP@1 { /* OUTPUTS */
+    compatible = &quot;spidev&quot;;
+    reg = &lt;1&gt;;
+    spi-max-frequency = &lt;5000000&gt;;
+  };
+ };</div>
+		</li>		
+
+		<li>Recompile the Linux Image and you'll get a new .dtb file for your board.</li>
+    
+        <li>Put this file in the board in the folder <span class="specicificText">/boot</span>. You can use a scp client for it. Use a different name so you don't overwrite the original one, just in case.</li>
+
+    	<li>You need then to edit the booting file, which selects the .dtb file to be loaded. So you need to change the file <span class="specicificText">mmc0_stm32mp157a-dk1_extlinux/extlinux.conf</span> or  <span class="specicificText">mmc0_stm32mp157c-dk2_extlinux/
+    	extlinux.conf</span> inside the /boot folder depending on what you saw before</li>
+
+    	<li>There, you need to add a new LABEL at the end and its configuration. You can copy from the first one and change it accordingly. You need to change the LABEL to some desired name (for example FORTE_SPI) and the FDT name, which should point to the .dtb file you just copied. It should look something like the following (pay attention to the FDT field which should match the one you are using):
+
+		    <div class="code">LABEL FORTE_SPI
+  KERNEL /uImage
+  FDT /stm32mp157a-dk1-SPI4.dtb
+  APPEND root=/dev/mmcblk0p6 rootwait rw console=ttySTM0,115200</div>
+		    
+		    or 
+		    
+		    <div class="code">LABEL FORTE_SPI
+  KERNEL /uImage
+  FDT /stm32mp157c-dk2-SPI4.dtb
+  APPEND root=/dev/mmcblk0p6 rootwait rw console=ttySTM0,115200</div>
+    </li>
+
+    <li>In the same file, there's a line which says DEFAULT followed by some text. If there's none, add it before the first label. Change this text to FORTE_SPI (or whatever name you used in your LABEL). Be careful in leaving no blank space after your text. The line should look something like this:
+    
+   		 <div class="code">DEFAULT FORTE_SPI</div>
+    </li>
+
+    <li>Reboot the board.</li>
+
+    <li>You need then to enable the output directly, which should be done everytime the board boots, so you can put the following command in some script (the best idea is to have it in the same script that starts forte at boot)
+
+ 		<div class="code">gpioset gpiochip4 9=1</div>
+ 		That's it. You can check that you have enabled the spi by doing
+	 <div class="code">ls -l /sys/class/spidev</div>
+	 	 which should show two files.
+    </li>
+
+
+
+
+
+	 <li>To access the IOs, you need to use the special FB called PLC01A1 in the IDE.</li>
+
+</ol>
+
+	<h1 id="misc">Some good info</h1>
+
+	<ul>
+		<li>Start forte at boot: Make sure that you can start your forte manually, and then create a script file that executes it and put it in the folder <span class="specicificText">/usr/local/weston-start-at-startup</span> and give this file execution permissions.
+
+		An example of the script to start forte, assuming the forte file is in /home/root/
+
+		<div class="code">#!/bin/bash
+
+FOLDER=/home/root/
+
+sleep 5
+
+# Enable output
+gpioset gpiochip4 9=1
+
+# Execute forte
+cd ${FOLDER}
+
+if [ -f ./currentLog.txt ];
+then
+  mv ./currentLog.txt ./lastLog.txt
+fi
+
+./forte > ./currentLog.txt 2>&1 & 
+</div>
+
+	which saves the current log and the previous one, in case the board reboots.
+
+</li>
+
+
+	</ul>
+
+<!--********************************************************************************************-->
+
+	<h1>Where to go from here?</h1>
+
+	<p>You can see the supported protocols:</p>
+
+	<p>
+		<a href="../../html/communication/communicationIndex.html">Supported Communication Protocols</a>
+	</p>
+
+	<p>You can see the examples:</p>
+
+	<p>
+		<a href="../../html/examples/examplesIndex.html">4diac Examples</a>
+	</p>
+
+	<p>If you want to go back to the Where to Start page, we leave you here
+		a fast access</p>
+
+	<p>
+		<a href="../../html/startHere/startHere.html">Where to Start</a>
+	</p>
+
+	<p class="goToTop">
+		Or <a href="#topOfPage">Go to top</a>
+	</p>
+
+</body>
+</html>

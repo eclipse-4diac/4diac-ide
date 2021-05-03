@@ -15,9 +15,9 @@
 package org.eclipse.fordiac.ide.test.export.lua
 
 import org.eclipse.fordiac.ide.test.export.ExporterTestCompositeFBTypeBase
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.assertEquals
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteLuaCompositeFBTest extends ExporterTestCompositeFBTypeBase {

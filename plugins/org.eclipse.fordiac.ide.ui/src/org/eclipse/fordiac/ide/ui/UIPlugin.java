@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui;
 
+import org.eclipse.fordiac.ide.ui.handlers.ErrorMessageHandler;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -22,7 +23,12 @@ public class UIPlugin extends Abstract4DIACUIPlugin {
 
 	// The shared instance.
 	private static UIPlugin plugin;
+	private ErrorMessageHandler emh;
 
+	public ErrorMessageHandler getEMH() {
+		return emh;
+	}
+	
 	/**
 	 * The constructor.
 	 */
@@ -41,10 +47,18 @@ public class UIPlugin extends Abstract4DIACUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		setPlugin(this);
+		initEMH();
+		emh.start();
 	}
 
 	private static synchronized void setPlugin(UIPlugin uiPlugin) {
 		plugin = uiPlugin;
+	}
+
+	private void initEMH() {
+		if (null == emh) {
+			emh = new ErrorMessageHandler(getDefault().getBundle().getBundleContext());
+		}
 	}
 
 	/**
@@ -58,6 +72,7 @@ public class UIPlugin extends Abstract4DIACUIPlugin {
 	public void stop(final BundleContext context) throws Exception {
 		super.stop(context);
 		setPlugin(null);
+		emh.stop();
 	}
 
 	/**

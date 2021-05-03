@@ -24,27 +24,79 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
-  public ForteFBTemplate(final String name, final Path prefix) {
+  @Extension
+  private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
+  
+  private final String DEFAULT_BASE_CLASS;
+  
+  public ForteFBTemplate(final String name, final Path prefix, final String baseClass) {
     super(name, prefix);
+    this.DEFAULT_BASE_CLASS = baseClass;
   }
   
   @Override
   protected abstract FBType getType();
+  
+  protected String baseClass() {
+    String _xifexpression = null;
+    FBType _type = this.getType();
+    CompilerInfo _compilerInfo = null;
+    if (_type!=null) {
+      _compilerInfo=_type.getCompilerInfo();
+    }
+    String _classdef = null;
+    if (_compilerInfo!=null) {
+      _classdef=_compilerInfo.getClassdef();
+    }
+    boolean _tripleNotEquals = (_classdef != null);
+    if (_tripleNotEquals) {
+      String _xifexpression_1 = null;
+      boolean _isEmpty = this.getType().getCompilerInfo().getClassdef().trim().isEmpty();
+      if (_isEmpty) {
+        _xifexpression_1 = this.DEFAULT_BASE_CLASS;
+      } else {
+        _xifexpression_1 = this.getType().getCompilerInfo().getClassdef();
+      }
+      _xifexpression = _xifexpression_1;
+    } else {
+      _xifexpression = this.DEFAULT_BASE_CLASS;
+    }
+    return _xifexpression;
+  }
+  
+  protected CharSequence generateFBClassHeader() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("class ");
+    CharSequence _fBClassName = this.getFBClassName();
+    _builder.append(_fBClassName);
+    _builder.append(": public ");
+    String _baseClass = this.baseClass();
+    _builder.append(_baseClass);
+    _builder.append(" {");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
   
   protected CharSequence generateHeaderIncludes() {
     StringConcatenation _builder = new StringConcatenation();
@@ -69,6 +121,28 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     return _builder;
   }
   
+  protected ArrayList<VarDeclaration> generateVarTypesFromAlgorithms(final Iterable<Algorithm> algorithms) {
+    final ArrayList<VarDeclaration> vars = CollectionLiterals.<VarDeclaration>newArrayList();
+    for (final Algorithm alg : algorithms) {
+      if ((alg instanceof STAlgorithm)) {
+        vars.addAll(this.stAlgorithmFilter.generateLocalVariables(((STAlgorithm)alg)));
+      }
+    }
+    return vars;
+  }
+  
+  private List<Algorithm> getAlgorithmList(final FBType type) {
+    if ((type instanceof BasicFBType)) {
+      return ((BasicFBType)type).getAlgorithm();
+    } else {
+      if ((type instanceof SimpleFBType)) {
+        return List.<Algorithm>of(((SimpleFBType)type).getAlgorithm());
+      } else {
+        return List.<Algorithm>of();
+      }
+    }
+  }
+  
   protected CharSequence generateImplIncludes() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"");
@@ -86,6 +160,9 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     _builder.append("#endif");
     _builder.newLine();
     _builder.newLine();
+    CharSequence _generateImplTypeIncludes = this.generateImplTypeIncludes(this.generateVarTypesFromAlgorithms(this.getAlgorithmList(this.getType())));
+    _builder.append(_generateImplTypeIncludes);
+    _builder.newLineIfNotEmpty();
     CompilerInfo _compilerInfo = this.getType().getCompilerInfo();
     String _header = null;
     if (_compilerInfo!=null) {
@@ -93,6 +170,20 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     }
     _builder.append(_header);
     _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence generateImplTypeIncludes(final Iterable<VarDeclaration> vars) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _isEmpty = IterableExtensions.isEmpty(vars);
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        CharSequence _generateTypeIncludes = this.generateTypeIncludes(vars);
+        _builder.append(_generateTypeIncludes);
+        _builder.newLineIfNotEmpty();
+      }
+    }
     return _builder;
   }
   
@@ -658,7 +749,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     String _typeName = variable.getTypeName();
     if (_typeName != null) {
       switch (_typeName) {
-        case "STRING":
+        case FordiacKeywords.STRING:
           StringConcatenation _builder = new StringConcatenation();
           String _name = variable.getName();
           _builder.append(_name);
@@ -668,7 +759,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder.append("\";");
           _switchResult = _builder;
           break;
-        case "WSTRING":
+        case FordiacKeywords.WSTRING:
           StringConcatenation _builder_1 = new StringConcatenation();
           String _name_1 = variable.getName();
           _builder_1.append(_name_1);
@@ -688,7 +779,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_2.append("\");");
           _switchResult = _builder_2;
           break;
-        case "TIME":
+        case FordiacKeywords.TIME:
           StringConcatenation _builder_3 = new StringConcatenation();
           String _name_3 = variable.getName();
           _builder_3.append(_name_3);
@@ -698,7 +789,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_3.append("\");");
           _switchResult = _builder_3;
           break;
-        case "DATE":
+        case FordiacKeywords.DATE:
           StringConcatenation _builder_4 = new StringConcatenation();
           String _name_4 = variable.getName();
           _builder_4.append(_name_4);
@@ -708,7 +799,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_4.append("\");");
           _switchResult = _builder_4;
           break;
-        case "TIME:OF_DAY":
+        case FordiacKeywords.TIME_OF_DAY:
           StringConcatenation _builder_5 = new StringConcatenation();
           String _name_5 = variable.getName();
           _builder_5.append(_name_5);
@@ -718,7 +809,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_5.append("\");");
           _switchResult = _builder_5;
           break;
-        case "DATE_AND_TIME":
+        case FordiacKeywords.DATE_AND_TIME:
           StringConcatenation _builder_6 = new StringConcatenation();
           String _name_6 = variable.getName();
           _builder_6.append(_name_6);
@@ -728,7 +819,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_6.append("\");");
           _switchResult = _builder_6;
           break;
-        case "BOOL":
+        case FordiacKeywords.BOOL:
           StringConcatenation _builder_7 = new StringConcatenation();
           String _name_7 = variable.getName();
           _builder_7.append(_name_7);

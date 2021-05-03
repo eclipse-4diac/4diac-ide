@@ -18,7 +18,7 @@
          <propertyTab
                category="Device"
                id="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
-               label="Interface">
+               label="Instance">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
@@ -108,7 +108,7 @@
       </propertySections>
    </extension>
    <extension
-         point="org.eclipse.fordiac.ide.util.openListener">
+         point="org.eclipse.fordiac.ide.model.ui.openListener">
       <openListener
             class="org.eclipse.fordiac.ide.systemconfiguration.actions.OpenSystemConfEditorAction"
             icon="fordiacimage://ICON_SYSTEM_CONFIGURATION"

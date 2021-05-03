@@ -137,7 +137,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	@Override
 	public void executeCommand(Command cmd) {
-		if (null != type && null != commandStack && cmd.canExecute()) {
+		if (null != type && null != commandStack && null != cmd && cmd.canExecute()) {
 			blockRefresh = true;
 			commandStack.execute(cmd);
 			blockRefresh = false;

@@ -22,108 +22,84 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Primitive</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Primitive</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getEvent
- * <em>Event</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getParameters
- * <em>Parameters</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getInterface
- * <em>Interface</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getEvent <em>Event</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getParameters <em>Parameters</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getInterface <em>Interface</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class PrimitiveImpl extends EObjectImpl implements Primitive {
-	/**
-	 * The default value of the '{@link #getEvent() <em>Event</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getEvent() <em>Event</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getEvent()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String EVENT_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getEvent() <em>Event</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getEvent() <em>Event</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getEvent()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String event = EVENT_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getParameters() <em>Parameters</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getParameters() <em>Parameters</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getParameters()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String PARAMETERS_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getParameters() <em>Parameters</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getParameters()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String parameters = PARAMETERS_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getInterface() <em>Interface</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getInterface() <em>Interface</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getInterface()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected ServiceInterface interface_;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected PrimitiveImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.PRIMITIVE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getEvent() {
 		return event;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setEvent(String newEvent) {
 		String oldEvent = event;
@@ -133,21 +109,17 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 					event));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getParameters() {
 		return parameters;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setParameters(String newParameters) {
 		String oldParameters = parameters;
@@ -157,11 +129,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 					oldParameters, parameters));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ServiceInterface getInterface() {
 		if (interface_ != null && interface_.eIsProxy()) {
@@ -176,20 +146,16 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 		return interface_;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public ServiceInterface basicGetInterface() {
 		return interface_;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setInterface(ServiceInterface newInterface) {
 		ServiceInterface oldInterface = interface_;
@@ -199,11 +165,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 					oldInterface, interface_));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -220,11 +184,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -243,11 +205,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -266,11 +226,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -285,11 +243,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

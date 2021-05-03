@@ -13,20 +13,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.ui.wizard;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Activator;
 import org.eclipse.fordiac.ide.export.ui.Messages;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -102,46 +102,47 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 			return true;
 		}
 
-		IRunnableWithProgress op = new IRunnableWithProgress() {
+		IRunnableWithProgress op = monitor -> {
+			@SuppressWarnings("unchecked")
+			List<IFile> resources = page.getSelectedResources();
+			String outputDirectory = page.getDirectory();
 
-			@SuppressWarnings("rawtypes")
-			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				List resources = page.getSelectedResources();
-				String outputDirectory = page.getDirectory();
+			List<LibraryElement> exportees = resources.parallelStream().filter(object -> object instanceof IFile)
+					.map(exportee -> TypeLibrary.getPaletteEntryForFile(exportee).getType())
+					.collect(Collectors.toList());
 
-				monitor.beginTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingSelectedTypesUsingExporter,
-						conf.getAttribute("name")), resources.size()); //$NON-NLS-1$
+			if (page.enableCMakeLists()) {
+				exportees.add(new CMakeListsMarker());
+			}
 
-				for (Object object : resources) {
-					if (object instanceof IFile) {
-						IFile file = (IFile) object;
+			monitor.beginTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingSelectedTypesUsingExporter,
+					conf.getAttribute("name")), resources.size()); //$NON-NLS-1$
 
-						PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
-						LibraryElement type = entry.getType();
+			for (LibraryElement type : exportees) {
 
-						monitor.subTask(
-								MessageFormat.format(Messages.FordiacExportWizard_ExportingType, entry.getLabel()));
-
-						try {
-							if (null != type) {
-								filter.export(file, outputDirectory, page.overwriteWithoutWarning(), type);
-							} else {
-								filter.export(file, outputDirectory, page.overwriteWithoutWarning());
-							}
-						} catch (ExportException e) {
-							MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-							msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
-							msg.open();
-						}
-
-						monitor.worked(1);
+				try {
+					if (type instanceof CMakeListsMarker) {
+						monitor.subTask("Exporting CMakeLists.txt");
+						filter.export(null, outputDirectory, page.overwriteWithoutWarning(), type);
+					} else {
+						monitor.subTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingType,
+								type.getPaletteEntry().getLabel()));
+						filter.export(type.getPaletteEntry().getFile(), outputDirectory, page.overwriteWithoutWarning(),
+								type);
 					}
+
+				} catch (ExportException e) {
+					MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
+					msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
+					msg.open();
 				}
 
-				monitor.done();
+				monitor.worked(1);
 
 			}
+
+			monitor.done();
+
 		};
 
 		try {
@@ -165,10 +166,9 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
 	 * org.eclipse.jface.viewers.IStructuredSelection)
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection currentSelection) {
-		List selectedResources = IDE.computeSelectedResources(currentSelection);
+		List<IResource> selectedResources = IDE.computeSelectedResources(currentSelection);
 		this.selection = new StructuredSelection(selectedResources);
 	}
 

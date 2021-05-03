@@ -16,8 +16,8 @@
 
 package org.eclipse.fordiac.ide.test.export;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -49,8 +49,8 @@ import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetu
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -208,14 +208,14 @@ public abstract class ExporterTestBase<T extends FBType> {
 		return errors;
 	}
 
-	@BeforeClass
+	@BeforeAll
 	/** initialize the Equinox extension registry substitute */
 	public static void doSetup() {
 		FBTypeStandaloneSetup.doSetup();
 		StructuredTextStandaloneSetup.doSetup();
 	}
 
-	@Before
+	@BeforeEach
 	/** clear all the variables that are specific to a single test */
 	public void clearEnvironment() {
 		// prepare a function block object including an interface list
@@ -251,16 +251,17 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 *
 	 * @param errors list of errormessages */
 	protected static void assertNoErrors(final List<String> errors) {
-		assertTrue(MessageFormat.format("No error messages expected. First error message received: {0}.", //$NON-NLS-1$
-				(!errors.isEmpty() ? errors.get(0) : "")), //$NON-NLS-1$
-				errors.isEmpty());
+		assertTrue(errors.isEmpty(),
+				(MessageFormat.format("No error messages expected. First error message received: {0}.", //$NON-NLS-1$
+						(!errors.isEmpty() ? errors.get(0) : "")) //$NON-NLS-1$
+						));
 	}
 
 	/** check if an error-list is not empty and raise an assertion if empty
 	 *
 	 * @param errors list of errormessages */
 	protected static void assertErrors(final List<String> errors) {
-		assertFalse("Error messages expected.", errors.isEmpty()); //$NON-NLS-1$
+		assertFalse(errors.isEmpty(), "Error messages expected."); //$NON-NLS-1$
 	}
 
 	/** create a STAlgorithm with given name and content
@@ -308,11 +309,11 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param messages list of messages to check for */
 	protected static void assertErrorMessages(final List<String> errors, final String... messages) {
 		for (final String message : messages) {
-			Boolean contained = false;
+			boolean contained = false;
 			for (final String error : errors) {
 				contained = contained || error.contains(message);
 			}
-			assertTrue(MessageFormat.format("Missing error message: {0}", message), contained); //$NON-NLS-1$
+			assertTrue(contained, MessageFormat.format("Missing error message: {0}", message)); //$NON-NLS-1$
 		}
 	}
 

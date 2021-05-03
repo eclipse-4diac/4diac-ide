@@ -14,11 +14,12 @@
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.junit.Assume;
+import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -30,8 +31,8 @@ public abstract class CreateInternalVariableCommandTestBase extends FBNetworkTes
 	}
 
 	private static void verifyInitialState(State state, State oldState, TestFunction t) {
-		FBCreateCommandTest.verifyState(state, oldState, Assume::assumeTrue); // skip further tests if FB creation
-		// failed
+		FBCreateCommandTest.verifyState(state, oldState, assumption); // skip further tests if FB
+																	// creation failed
 
 	}
 
@@ -40,8 +41,8 @@ public abstract class CreateInternalVariableCommandTestBase extends FBNetworkTes
 		return (BaseFBType) state.getFbNetwork().getNetworkElements().get(0).getType();
 	}
 
-	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		final List<Object[]> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+		final Collection<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", //$NON-NLS-1$
 				CreateInternalVariableCommandTestBase::initializeState, //

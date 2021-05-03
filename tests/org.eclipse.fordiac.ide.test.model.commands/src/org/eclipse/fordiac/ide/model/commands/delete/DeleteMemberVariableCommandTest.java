@@ -14,15 +14,12 @@
 
 package org.eclipse.fordiac.ide.model.commands.delete;
 
-import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.commands.testinfra.DeleteMemberVariableCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -30,15 +27,13 @@ public class DeleteMemberVariableCommandTest extends DeleteMemberVariableCommand
 
 	private static State executeDeletion(State state, VarDeclaration var) {
 		state.setCommand(new DeleteMemberVariableCommand(state.getStructuredType(), var));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	private static void verifyDeletion(State state, State oldState, TestFunction t, VarDeclaration var) {
 		// verify that old variables are still there
-		t.test((oldState.getStructuredType().getMemberVariables().size() - 1) == state.getStructuredType()
+		t.test((oldState.getStructuredType().getMemberVariables().size() - 1), state.getStructuredType()
 				.getMemberVariables().size());
 		// verify that new variable is not in member variables anymore
 		for (final VarDeclaration member : state.getStructuredType().getMemberVariables()) {
@@ -46,11 +41,9 @@ public class DeleteMemberVariableCommandTest extends DeleteMemberVariableCommand
 		}
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> deletionExecutionDescriptions = ExecutionDescription.commandList(
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> deletionExecutionDescriptions = List.of(
 				new ExecutionDescription<>("Delete first member var", //$NON-NLS-1$
 						(State state) -> executeDeletion(state, varList.get(0)),
 						(State state, State oldState, TestFunction t) -> verifyDeletion(state, oldState, t,

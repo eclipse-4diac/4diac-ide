@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2013 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,17 +25,16 @@ import org.eclipse.ui.IWorkbenchPart;
 /**
  * This special delete object will sort the commands that way that first the
  * connections are added and then the other objects.
- * 
+ *
  */
 public class DeleteFBNetworkAction extends DeleteAction {
 
-	public DeleteFBNetworkAction(IWorkbenchPart part) {
+	public DeleteFBNetworkAction(final IWorkbenchPart part) {
 		super(part);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Command createDeleteCommand(List objects) {
+	public Command createDeleteCommand(final List objects) {
 		if (objects.isEmpty()) {
 			return null;
 		}
@@ -43,16 +42,16 @@ public class DeleteFBNetworkAction extends DeleteAction {
 			return null;
 		}
 
-		List<EditPart> list = new ArrayList<>();
+		final List<EditPart> list = new ArrayList<>();
 
 		// Resort list such that the connects are before any other edit parts
-		for (Object object : objects) {
+		for (final Object object : objects) {
 			if (object instanceof ConnectionEditPart) {
 				list.add((EditPart) object);
 			}
 		}
 
-		for (Object object : objects) {
+		for (final Object object : objects) {
 			if (!(object instanceof ConnectionEditPart)) {
 				list.add((EditPart) object);
 			}

@@ -43,10 +43,8 @@ import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 
 public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
@@ -61,7 +59,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
 		if (input instanceof FBTypeEditorInput) {
-			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
 			typeLib = untypedInput.getPaletteEntry().getTypeLibrary();
 		}
@@ -71,14 +69,14 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	protected void setModel(IEditorInput input) {
+	protected void setModel(final IEditorInput input) {
 		super.setModel(input);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
 	}
 
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		InterfaceContextMenuProvider.createInterfaceEditingActions(this, registry, getModel());
 		super.createActions();
 	}
@@ -86,12 +84,6 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	protected EditPartFactory getEditPartFactory() {
 		return new FBInterfaceEditPartFactory(this, typeLib);
-	}
-
-	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		super.selectionChanged(part, selection);
-		updateActions(getSelectionActions());
 	}
 
 	@Override
@@ -112,8 +104,8 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	public boolean outlineSelectionChanged(Object selectedElement) {
-		Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
+	public boolean outlineSelectionChanged(final Object selectedElement) {
+		final Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 		getGraphicalViewer().flush();
 		if (editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
 			getGraphicalViewer().select((EditPart) editpart);
@@ -123,7 +115,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	public void setCommonCommandStack(CommandStack commandStack) {
+	public void setCommonCommandStack(final CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
 
@@ -153,7 +145,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer, final ZoomManager zoomManager) {
 		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry(), typeLib.getDataTypeLibrary());
 	}
 
@@ -174,12 +166,12 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	public void gotoMarker(IMarker marker) {
+	public void gotoMarker(final IMarker marker) {
 		// For now we don't handle markers in this editor
 	}
 
 	@Override
-	public boolean isMarkerTarget(IMarker marker) {
+	public boolean isMarkerTarget(final IMarker marker) {
 		// For now we don't handle markers in this editor
 		return false;
 	}

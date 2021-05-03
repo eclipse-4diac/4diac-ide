@@ -24,6 +24,7 @@ import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -62,10 +63,10 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if ((!(LibraryElementPackage.eINSTANCE.getECAction_Algorithm().equals(feature))
 						&& !(LibraryElementPackage.eINSTANCE.getECAction_Output().equals(feature))
 						&& !(LibraryElementPackage.eINSTANCE.getECState().equals(feature)))) {
@@ -120,7 +121,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		} else {
 			stateChildren.clear();
 		}
-		for (ECAction ecAction : getModel().getECAction()) {
+		for (final ECAction ecAction : getModel().getECAction()) {
 			stateChildren.add(new ECActionAlgorithm(ecAction));
 			stateChildren.add(new ECActionOutputEvent(ecAction));
 		}
@@ -169,7 +170,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	protected void refreshVisuals() {
-		Rectangle rect = new Rectangle(getModel().getX(), getModel().getY(), -1, -1);
+		final Rectangle rect = new Rectangle(getModel().getPosition().asPoint(), new Dimension(-1, -1));
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rect);
 		getFigure().setHasAction(!getModel().getECAction().isEmpty());
 		refreshStateTooltip();
@@ -230,17 +231,17 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_TEXT_COLOR)) {
 			getNameLabel().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 			getFigure().getLine()
-					.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+			.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 		}
 	};
 
-	public void highlightTransitions(boolean highlight) {
-		for (Object obj : getSourceConnections()) {
+	public void highlightTransitions(final boolean highlight) {
+		for (final Object obj : getSourceConnections()) {
 			if (obj instanceof ECTransitionEditPart) {
 				((ECTransitionEditPart) obj).highlight(highlight);
 			}
 		}
-		for (Object obj : getTargetConnections()) {
+		for (final Object obj : getTargetConnections()) {
 			if (obj instanceof ECTransitionEditPart) {
 				((ECTransitionEditPart) obj).highlight(highlight);
 			}

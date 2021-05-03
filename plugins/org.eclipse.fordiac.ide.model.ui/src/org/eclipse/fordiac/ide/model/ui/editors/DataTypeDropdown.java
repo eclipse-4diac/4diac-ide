@@ -10,20 +10,19 @@
  * Contributors:
  *   Daniel Lindhuber - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - fix column traversal, add context menu
+ *   Michael Jaeger - replaced HashSet with ArrayList
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.ui.editors;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.Messages;
@@ -62,11 +61,11 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private ContentProposalAdapter adapter;
 	private Text textControl;
-	private DataTypeLibrary library;
+	private final DataTypeLibrary library;
 	private SimpleContentProposalProvider provider;
 	private List<DataType> types;
 	private String[] elementaryTypes;
-	private TableViewer viewer;
+	private final TableViewer viewer;
 	/*
 	 * A flag that indicates if the content proposals have been set to elementary
 	 * types (this is the case if the text field is empty) or all types. This means
@@ -78,7 +77,7 @@ public class DataTypeDropdown extends TextCellEditor {
 	private boolean isTraverseNextProcessActive;
 	private boolean isTraversePreviousProcessActive;
 
-	public DataTypeDropdown(DataTypeLibrary library, TableViewer viewer) {
+	public DataTypeDropdown(final DataTypeLibrary library, final TableViewer viewer) {
 		super(viewer.getTable());
 		this.library = library;
 		this.viewer = viewer;
@@ -89,12 +88,12 @@ public class DataTypeDropdown extends TextCellEditor {
 		loadContent();
 	}
 
-	public DataType getType(String value) {
+	public DataType getType(final String value) {
 		return types.stream().filter(type -> value.equals(type.getName())).findAny().orElse(null);
 	}
 
 	@Override
-	protected void doSetValue(Object value) {
+	protected void doSetValue(final Object value) {
 		if (value == null) {
 			textControl.setText(""); //$NON-NLS-1$
 		} else {
@@ -117,9 +116,9 @@ public class DataTypeDropdown extends TextCellEditor {
 	}
 
 	@Override
-	protected Control createControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		GridLayout contLayout = new GridLayout(2, false);
+	protected Control createControl(final Composite parent) {
+		final Composite container = new Composite(parent, SWT.NONE);
+		final GridLayout contLayout = new GridLayout(2, false);
 		contLayout.horizontalSpacing = 0;
 		contLayout.marginTop = 0;
 		contLayout.marginBottom = 0;
@@ -147,16 +146,16 @@ public class DataTypeDropdown extends TextCellEditor {
 			e.doit = false; // prevent the action from doing anything automatically
 			if ((e.detail == SWT.TRAVERSE_TAB_NEXT) && ((e.stateMask & SWT.CTRL) != 0)) {
 				// move within column down
-				int selIndex = viewer.getTable().getSelectionIndex() + 1;
+				final int selIndex = viewer.getTable().getSelectionIndex() + 1;
 				if (selIndex < viewer.getTable().getItemCount()) {
-					Object data = viewer.getTable().getItem(selIndex).getData();
+					final Object data = viewer.getTable().getItem(selIndex).getData();
 					viewer.editElement(data, 1); // type column
 				}
 			} else if ((e.detail == SWT.TRAVERSE_TAB_PREVIOUS) && ((e.stateMask & SWT.CTRL) != 0)) {
 				// move within column up
-				int selIndex = viewer.getTable().getSelectionIndex() - 1;
+				final int selIndex = viewer.getTable().getSelectionIndex() - 1;
 				if (selIndex >= 0) {
-					Object data = viewer.getTable().getItem(selIndex).getData();
+					final Object data = viewer.getTable().getItem(selIndex).getData();
 					viewer.editElement(data, 1); // type column
 				}
 			} else if (e.detail == SWT.TRAVERSE_TAB_NEXT) {
@@ -179,12 +178,12 @@ public class DataTypeDropdown extends TextCellEditor {
 		});
 	}
 
-	private void triggerEnterKeyEvent() {
+	private static void triggerEnterKeyEvent() {
 		Display display = Display.getCurrent();
 		if (display == null) {
 			display = Display.getDefault();
 		}
-		Event event = new Event();
+		final Event event = new Event();
 		event.keyCode = SWT.CR;
 		event.display = display;
 		event.type = SWT.KeyDown;
@@ -192,16 +191,16 @@ public class DataTypeDropdown extends TextCellEditor {
 	}
 
 	private void traverseToPreviousCell() {
-		int selIndex = viewer.getTable().getSelectionIndex();
-		Object data = viewer.getTable().getItem(selIndex).getData();
+		final int selIndex = viewer.getTable().getSelectionIndex();
+		final Object data = viewer.getTable().getItem(selIndex).getData();
 		adapter.setEnabled(false);
 		viewer.editElement(data, 0); // name column
 		adapter.setEnabled(true);
 	}
 
 	private void traverseToNextCell() {
-		int selIndex = viewer.getTable().getSelectionIndex();
-		Object data = viewer.getTable().getItem(selIndex).getData();
+		final int selIndex = viewer.getTable().getSelectionIndex();
+		final Object data = viewer.getTable().getItem(selIndex).getData();
 		adapter.setEnabled(false);
 		viewer.editElement(data, 2); // comment column
 		adapter.setEnabled(true);
@@ -221,17 +220,17 @@ public class DataTypeDropdown extends TextCellEditor {
 	}
 
 	private void createDialogButton() {
-		Button menuButton = new Button((Composite) getControl(), SWT.FLAT);
+		final Button menuButton = new Button((Composite) getControl(), SWT.FLAT);
 		menuButton.setText("..."); //$NON-NLS-1$
 		menuButton.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				openDialog();
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 				// no need to listen to the default selection
 			}
 		});
@@ -239,11 +238,11 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private void openDialog() {
 		loadContent(); // refresh content before opening
-		ITreeContentProvider treeProvider = createTreeContentProvider();
-		LabelProvider labelProvider = createTreeLabelProvider();
+		final ITreeContentProvider treeProvider = createTreeContentProvider();
+		final LabelProvider labelProvider = createTreeLabelProvider();
 
-		DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getControl().getShell(), labelProvider,
-				treeProvider);
+		final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getControl().getShell(),
+				labelProvider, treeProvider);
 		dialog.setInput(types);
 		dialog.setTitle(Messages.DataTypeDropdown_Type_Selection);
 		dialog.setMessage(Messages.DataTypeDropdown_Select_Type);
@@ -255,7 +254,7 @@ public class DataTypeDropdown extends TextCellEditor {
 			deactivate();
 			return;
 		}
-		Object result = dialog.getFirstResult();
+		final Object result = dialog.getFirstResult();
 		// check for DataType so that no VarDeclaration can be selected
 		if (result instanceof DataType) {
 			doSetValue(((DataType) result).getName());
@@ -266,55 +265,48 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 
-		public DataTypeTreeSelectionDialog(Shell parent, IBaseLabelProvider labelProvider,
-				ITreeContentProvider contentProvider) {
+		public DataTypeTreeSelectionDialog(final Shell parent, final IBaseLabelProvider labelProvider,
+				final ITreeContentProvider contentProvider) {
 			super(parent, labelProvider, contentProvider);
 		}
 
 		@Override
-		protected Control createDialogArea(Composite parent) {
-			Control control = super.createDialogArea(parent);
+		protected Control createDialogArea(final Composite parent) {
+			final Control control = super.createDialogArea(parent);
 			createContextMenu(getTreeViewer().getTree());
 			return control;
 		}
 
-		private void createContextMenu(Control control) {
-			Menu openEditorMenu = new Menu(control);
-			MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
-			openItem.addSelectionListener(new SelectionListener() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					StructuredType sel = getSelectedStructuredType(control);
-					if (sel != null) {
-						handleShellCloseEvent();
-						setResult(null); // discard selection, do not update type
-						OpenStructMenu.openStructEditor(sel.getPaletteEntry().getFile());
-					}
-				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-					widgetSelected(e);
+		private void createContextMenu(final Control control) {
+			final Menu openEditorMenu = new Menu(control);
+			final MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
+			openItem.addListener(SWT.Selection, e -> {
+				final StructuredType sel = getSelectedStructuredType(control);
+				if (sel != null) {
+					handleShellCloseEvent();
+					setResult(null); // discard selection, do not update type
+					OpenStructMenu.openStructEditor(sel.getPaletteEntry().getFile());
 				}
 			});
 			openItem.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
 
 			openEditorMenu.addMenuListener(new MenuListener() {
 				@Override
-				public void menuShown(MenuEvent e) {
-					openItem.setEnabled((getSelectedStructuredType(control) != null)
-							&& !getSelectedStructuredType(control).getName().contentEquals(FordiacKeywords.ANY_STRUCT));
+				public void menuShown(final MenuEvent e) {
+					final StructuredType type = getSelectedStructuredType(control);
+					openItem.setEnabled((type != null) && (type != IecTypes.GenericTypes.ANY_STRUCT));
 				}
 
 				@Override
-				public void menuHidden(MenuEvent e) {
+				public void menuHidden(final MenuEvent e) {
+					// nothing to be done here
 				}
 			});
 			control.setMenu(openEditorMenu);
 		}
 
-		private StructuredType getSelectedStructuredType(Control control) {
-			Object selected = ((TreeSelection) getTreeViewer().getSelection()).getFirstElement();
+		private StructuredType getSelectedStructuredType(final Control control) {
+			final Object selected = ((TreeSelection) getTreeViewer().getSelection()).getFirstElement();
 			if (selected instanceof StructuredType) {
 				return (StructuredType) selected;
 			}
@@ -322,11 +314,10 @@ public class DataTypeDropdown extends TextCellEditor {
 		}
 	}
 
-
 	private static LabelProvider createTreeLabelProvider() {
 		return new LabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				if (element instanceof DataType) {
 					return ((DataType) element).getName();
 				}
@@ -341,11 +332,11 @@ public class DataTypeDropdown extends TextCellEditor {
 		};
 	}
 
-	private ITreeContentProvider createTreeContentProvider() {
+	private static ITreeContentProvider createTreeContentProvider() {
 		return new ITreeContentProvider() {
 
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				if (element instanceof TypeNode) {
 					return !((TypeNode) element).getTypes().isEmpty();
 				}
@@ -353,7 +344,7 @@ public class DataTypeDropdown extends TextCellEditor {
 			}
 
 			@Override
-			public Object getParent(Object element) {
+			public Object getParent(final Object element) {
 				return null;
 			}
 
@@ -362,23 +353,25 @@ public class DataTypeDropdown extends TextCellEditor {
 			 * before displaying them in the tree
 			 */
 			@Override
-			public Object[] getElements(Object inputElement) {
-				Object[] arr = new Object[] { new TypeNode(Messages.DataTypeDropdown_Elementary_Types),
-						new TypeNode(Messages.DataTypeDropdown_STRUCT_Types) };
+			public Object[] getElements(final Object inputElement) {
+				final TypeNode elementaryType = new TypeNode(Messages.DataTypeDropdown_Elementary_Types);
+				final TypeNode structType = new TypeNode(Messages.DataTypeDropdown_STRUCT_Types);
+
 				if (inputElement instanceof List<?>) {
 					((List<?>) inputElement).forEach(type -> {
 						if (type instanceof StructuredType) {
-							((TypeNode) arr[1]).addType((DataType) type);
+							structType.addType((DataType) type);
 						} else if (type instanceof DataType) {
-							((TypeNode) arr[0]).addType((DataType) type);
+							elementaryType.addType((DataType) type);
 						}
 					});
 				}
-				return arr;
+
+				return new TypeNode[] { elementaryType, structType };
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				if (parentElement instanceof TypeNode) {
 					return ((TypeNode) parentElement).getTypes().toArray();
 				}
@@ -400,12 +393,12 @@ public class DataTypeDropdown extends TextCellEditor {
 		adapter.addContentProposalListener(new IContentProposalListener2() {
 
 			@Override
-			public void proposalPopupClosed(ContentProposalAdapter adapter) {
+			public void proposalPopupClosed(final ContentProposalAdapter adapter) {
 				// no need to listen to closing
 			}
 
 			@Override
-			public void proposalPopupOpened(ContentProposalAdapter adapter) {
+			public void proposalPopupOpened(final ContentProposalAdapter adapter) {
 				loadContent();
 			}
 
@@ -441,26 +434,27 @@ public class DataTypeDropdown extends TextCellEditor {
 		return false;
 	}
 
-	private class TypeNode {
-		private String name;
-		private Set<DataType> types;
+	private static class TypeNode {
+		private final String name;
+		private final List<DataType> types;
 
-		public TypeNode(String name) {
+		public TypeNode(final String name) {
 			this.name = name;
-			types = new HashSet<>();
+			types = new ArrayList<>();
 		}
 
 		public String getName() {
 			return name;
 		}
 
-		public Set<DataType> getTypes() {
+		public List<DataType> getTypes() {
 			return types;
 		}
 
-		public void addType(DataType type) {
+		public void addType(final DataType type) {
 			types.add(type);
 		}
+
 	}
 
 }

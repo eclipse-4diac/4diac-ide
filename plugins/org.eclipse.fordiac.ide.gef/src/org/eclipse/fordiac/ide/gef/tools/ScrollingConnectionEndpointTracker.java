@@ -19,9 +19,9 @@ import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditDomain;
@@ -40,8 +40,8 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	private static final class InlineConnectionDragCreationTool extends FordiacConnectionDragCreationTool {
 		private final EditPart originalSource;
 
-		private InlineConnectionDragCreationTool(EditPart originalSource, EditDomain editDomain,
-				EditPartViewer editPartViewer) {
+		private InlineConnectionDragCreationTool(final EditPart originalSource, final EditDomain editDomain,
+				final EditPartViewer editPartViewer) {
 			this.originalSource = originalSource;
 			super.setEditDomain(editDomain);
 			super.setViewer(editPartViewer);
@@ -68,21 +68,21 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 
 	private InlineConnectionDragCreationTool conCreationTool = null;
 
-	public ScrollingConnectionEndpointTracker(ConnectionEditPart cep) {
+	public ScrollingConnectionEndpointTracker(final ConnectionEditPart cep) {
 		super(cep);
 	}
 
 	@Override
-	public void mouseDrag(MouseEvent me, EditPartViewer viewer) {
+	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
 		if (isActive() && (viewer instanceof AdvancedScrollingGraphicalViewer)) {
-			Point oldViewPort = ((AdvancedScrollingGraphicalViewer) viewer).getViewLocation();
+			final Point oldViewPort = ((AdvancedScrollingGraphicalViewer) viewer).getViewLocation();
 			((AdvancedScrollingGraphicalViewer) viewer)
-					.checkScrollPositionDuringDragBounded(me,
-							new Point(
-									MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
-											+ ConnectionPreferenceValues.HANDLE_SIZE,
-									ConnectionPreferenceValues.HANDLE_SIZE));
-			Dimension delta = oldViewPort.getDifference(((AdvancedScrollingGraphicalViewer) viewer).getViewLocation());
+			.checkScrollPositionDuringDragBounded(me,
+					new Point(
+							MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
+							+ ConnectionPreferenceValues.HANDLE_SIZE,
+							ConnectionPreferenceValues.HANDLE_SIZE));
+			final Dimension delta = oldViewPort.getDifference(((AdvancedScrollingGraphicalViewer) viewer).getViewLocation());
 			// Compensate the moved scrolling in the start position for correct dropping of
 			// moved parts
 			setStartLocation(getStartLocation().getTranslated(delta));
@@ -98,7 +98,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	@Override
-	public void keyDown(KeyEvent keyEvent, EditPartViewer viewer) {
+	public void keyDown(final KeyEvent keyEvent, final EditPartViewer viewer) {
 		if ((null == conCreationTool) && (keyEvent.keyCode == SWT.MOD1)) {
 			// Ctrl or Command key was pressed and conn creation was not active
 			startConnCreation();
@@ -110,24 +110,24 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	private void startConnCreation() {
 		final EditPart target = (getCommandName().equals(RequestConstants.REQ_RECONNECT_SOURCE))
 				? getConnectionEditPart().getTarget()
-				: getConnectionEditPart().getSource();
+						: getConnectionEditPart().getSource();
 		conCreationTool = new InlineConnectionDragCreationTool(target, getDomain(), getCurrentViewer());
 		updateTarget(getStartLocation());
 	}
 
-	private void updateTarget(Point p) {
-		ReconnectRequest request = (ReconnectRequest) getTargetRequest();
+	private void updateTarget(final Point p) {
+		final ReconnectRequest request = (ReconnectRequest) getTargetRequest();
 		request.setLocation(p);
 		final EditPart target = (getCommandName().equals(RequestConstants.REQ_RECONNECT_SOURCE))
 				? getConnectionEditPart().getSource()
-				: getConnectionEditPart().getTarget();
+						: getConnectionEditPart().getTarget();
 		request.setTargetEditPart(target);
 		getConnectionEditPart().showSourceFeedback(request);
 		getConnectionEditPart().showTargetFeedback(request);
 	}
 
 	@Override
-	public void keyUp(KeyEvent keyEvent, EditPartViewer viewer) {
+	public void keyUp(final KeyEvent keyEvent, final EditPartViewer viewer) {
 		if ((null != conCreationTool) && (keyEvent.keyCode == SWT.MOD1)) {
 			// Ctrl or Command key was released
 			conCreationTool.deactivate();
@@ -138,7 +138,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	@Override
-	public void mouseMove(MouseEvent me, EditPartViewer viewer) {
+	public void mouseMove(final MouseEvent me, final EditPartViewer viewer) {
 		if (null != conCreationTool) {
 			conCreationTool.mouseMove(me, viewer);
 		} else {
@@ -147,7 +147,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	@Override
-	public void mouseUp(MouseEvent me, EditPartViewer viewer) {
+	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
 		if (null != conCreationTool) {
 			conCreationTool.mouseUp(me, viewer);
 			conCreationTool = null;
@@ -158,7 +158,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	@Override
-	public void setEditDomain(EditDomain domain) {
+	public void setEditDomain(final EditDomain domain) {
 		if (null != conCreationTool) {
 			conCreationTool.setEditDomain(domain);
 		}
@@ -166,7 +166,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	@Override
-	public void setViewer(EditPartViewer viewer) {
+	public void setViewer(final EditPartViewer viewer) {
 		if (null != conCreationTool) {
 			conCreationTool.setViewer(viewer);
 		}
@@ -174,7 +174,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	@Override
-	public void viewerEntered(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void viewerEntered(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		if (null != conCreationTool) {
 			conCreationTool.viewerEntered(mouseEvent, viewer);
 		}
@@ -182,7 +182,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	@Override
-	public void viewerExited(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void viewerExited(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		if (null != conCreationTool) {
 			conCreationTool.viewerExited(mouseEvent, viewer);
 		}
@@ -190,7 +190,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	@Override
-	public void setProperties(@SuppressWarnings("rawtypes") Map properties) {
+	public void setProperties(final Map properties) {
 		if (null != conCreationTool) {
 			conCreationTool.setProperties(properties);
 		}

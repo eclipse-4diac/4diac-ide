@@ -88,7 +88,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		return (FBNetworkElementFigure) super.getFigure();
 	}
 
-	private Adapter colorChangeListener = new AdapterImpl() {
+	private final Adapter colorChangeListener = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()) {
@@ -113,7 +113,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	protected void updateDeviceListener() {
-		Device device = findDevice();
+		final Device device = findDevice();
 		if (device != referencedDevice) {
 			if (referencedDevice != null) {
 				referencedDevice.eAdapters().remove(colorChangeListener);
@@ -151,7 +151,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	public boolean isOnlyThisOrNothingSelected() {
 		@SuppressWarnings("unchecked")
-		List<EditPart> selection = getViewer().getSelectedEditParts();
+		final List<EditPart> selection = getViewer().getSelectedEditParts();
 		if (selection.size() > 1) {
 			return false;
 		} else if (selection.size() == 1) {
@@ -190,7 +190,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 			@Override
 			protected Command getDirectEditCommand(DirectEditRequest request) {
-				Object value = request.getCellEditor().getValue();
+				final Object value = request.getCellEditor().getValue();
 				if (value instanceof PaletteEntry) {
 					return new UpdateFBTypeCommand(getModel(), (PaletteEntry) value);
 				}
@@ -236,7 +236,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	protected void backgroundColorChanged(IFigure figure) {
 		Color color = null;
 		if (getModel() != null) {
-			Device dev = findDevice();
+			final Device dev = findDevice();
 			if (dev != null) {
 				color = LibraryElementFactory.eINSTANCE.createColor();
 				color.setRed(dev.getColor().getRed());
@@ -257,9 +257,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceEditPart) {
-			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
 			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
 		} else {
 			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
@@ -292,7 +292,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	private int getInterfaceElementIndex(InterfaceEditPart interfaceEditPart) {
-		InterfaceList interfaceList = getModel().getInterface();
+		final InterfaceList interfaceList = getModel().getInterface();
 		if (interfaceEditPart.isInput()) {
 			if (interfaceEditPart.isEvent()) {
 				return interfaceList.getEventInputs().indexOf(interfaceEditPart.getModel());
@@ -319,9 +319,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceEditPart) {
-			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
 			getTargetFigure(interfaceEditPart).remove(child);
 		} else {
 			super.removeChildVisual(childEditPart);
@@ -330,7 +330,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	protected List<Object> getModelChildren() {
-		List<Object> elements = new ArrayList<>();
+		final List<Object> elements = new ArrayList<>();
 		elements.add(new InstanceName(getModel()));
 		elements.addAll(getModel().getInterface().getAllInterfaceElements());
 		return elements;
@@ -352,7 +352,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			// forward direct edit request to instance name
 			@SuppressWarnings("unchecked")
-			List<EditPart> children = getChildren();
+			final List<EditPart> children = getChildren();
 			children.stream().filter(e -> e instanceof InstanceNameEditPart)
 					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
@@ -362,16 +362,16 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	public void performDirectEdit() {
-		NewInstanceDirectEditManager directEditManager = getManager();
+		final NewInstanceDirectEditManager directEditManager = getManager();
 		directEditManager.updateRefPosition(getRefPoint());
 		directEditManager.show(getModel().getTypeName());
 	}
 
 	private Point getRefPoint() {
-		org.eclipse.draw2d.geometry.Point typeLabelTopLeft = getFigure().getTypeLabel().getBounds().getTopLeft()
+		final org.eclipse.draw2d.geometry.Point typeLabelTopLeft = getFigure().getTypeLabel().getBounds().getTopLeft()
 				.scale(getZoomManager().getZoom());
-		FigureCanvas viewerControl = (FigureCanvas) getViewer().getControl();
-		org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
+		final FigureCanvas viewerControl = (FigureCanvas) getViewer().getControl();
+		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
 		return new Point(typeLabelTopLeft.x - location.x, typeLabelTopLeft.y - location.y);
 	}
 
@@ -409,7 +409,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	public void setTransparency(int value) {
-		for (Object ep : getChildren()) {
+		for (final Object ep : getChildren()) {
 			if (ep instanceof AbstractViewEditPart) {
 				((AbstractViewEditPart) ep).setTransparency(value);
 			}

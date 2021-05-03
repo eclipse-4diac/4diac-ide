@@ -13,15 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import static org.junit.Assume.assumeTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
-import org.eclipse.gef.commands.Command;
+import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTestBase.State> {
 
@@ -34,23 +32,11 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 	private static final String SET_VERSION = "13.0"; //$NON-NLS-1$
 
 	// create a state description that fits our purpose
-	public static class State implements CommandTestBase.StateBase {
+	public static class State extends CommandTestBase.StateBase {
 		private final VersionInfo vInfo;
-
-		private Command cmd;
 
 		public VersionInfo getVersionInfo() {
 			return vInfo;
-		}
-
-		@Override
-		public Command getCommand() {
-			return cmd;
-		}
-
-		@Override
-		public void setCommand(Command cmd) {
-			this.cmd = cmd;
 		}
 
 		public State() {
@@ -67,24 +53,10 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 		}
 	}
 
-	protected static State undoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeTrue(state.getCommand().canUndo());
-		state.getCommand().undo();
-		return (state);
-	}
-
-	protected static State redoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeTrue(state.getCommand().canRedo());
-		state.getCommand().redo();
-		return (state);
-	}
-
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands) {
-		return describeCommand(description, initializer, initialVerifier, commands, VersionInfoTestBase::undoCommand,
-				VersionInfoTestBase::redoCommand);
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
+				CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
@@ -96,11 +68,11 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 		final String DEFAULT_REMARKS = vInfo.getRemarks();
 		final String DEFAULT_VERSION = vInfo.getVersion();
 
-		t.test(state.getVersionInfo().getAuthor().equals(DEFAULT_NAME));
-		t.test(state.getVersionInfo().getDate().equals(DEFAULT_DATE));
-		t.test(state.getVersionInfo().getOrganization().equals(DEFAULT_ORG));
-		t.test(state.getVersionInfo().getRemarks().equals(DEFAULT_REMARKS));
-		t.test(state.getVersionInfo().getVersion().equals(DEFAULT_VERSION));
+		t.test(state.getVersionInfo().getAuthor(), DEFAULT_NAME);
+		t.test(state.getVersionInfo().getDate(), DEFAULT_DATE);
+		t.test(state.getVersionInfo().getOrganization(), DEFAULT_ORG);
+		t.test(state.getVersionInfo().getRemarks(), DEFAULT_REMARKS);
+		t.test(state.getVersionInfo().getVersion(), DEFAULT_VERSION);
 	}
 
 	protected static State setInitialValues() {
@@ -114,15 +86,15 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 	}
 
 	protected static void verifySetInitialValues(State state, State oldState, TestFunction t) {
-		t.test(state.getVersionInfo().getAuthor().equals(SET_NAME));
-		t.test(state.getVersionInfo().getDate().equals(SET_DATE));
-		t.test(state.getVersionInfo().getOrganization().equals(SET_ORG));
-		t.test(state.getVersionInfo().getRemarks().equals(SET_REMARKS));
-		t.test(state.getVersionInfo().getVersion().equals(SET_VERSION));
+		t.test(state.getVersionInfo().getAuthor(), SET_NAME);
+		t.test(state.getVersionInfo().getDate(), SET_DATE);
+		t.test(state.getVersionInfo().getOrganization(), SET_ORG);
+		t.test(state.getVersionInfo().getRemarks(), SET_REMARKS);
+		t.test(state.getVersionInfo().getVersion(), SET_VERSION);
 	}
 
-	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		final List<Object[]> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+		final Collection<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //

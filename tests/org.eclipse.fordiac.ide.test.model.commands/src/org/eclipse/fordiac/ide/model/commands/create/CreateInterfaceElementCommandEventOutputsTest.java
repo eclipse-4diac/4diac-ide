@@ -13,100 +13,99 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
-
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInterfaceElementCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfaceElementCommandTestBase {
 
+	private static final String ELEMENT1_NAME = FordiacKeywords.EVENT_OUTPUT;
+	private static final String ELEMENT2_NAME = "MyOutput"; //$NON-NLS-1$
+	private static final String ELEMENT3_NAME = "EO2"; //$NON-NLS-1$
+
 	private static State executeCommandOutputWithoutName(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null),
-				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 0));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
+				getTypeInterfaceList(state), /* isInput */ false, /* index */ 0));
 
-		return state;
+		return commandExecution(state);
+	}
+
+	private static void verifyInterfaceListWithName(InterfaceList interfacelist, String element, TestFunction t) {
+		t.test(interfacelist.getInputVars().isEmpty());
+		t.test(interfacelist.getOutputVars().isEmpty());
+		t.test(interfacelist.getEventInputs().isEmpty());
+		t.test(!interfacelist.getEventOutputs().isEmpty());
+		t.test(interfacelist.getInterfaceElement(element));
+		t.test(interfacelist.getInterfaceElement(element).getTypeName(), EVENT_TYPE);
 	}
 
 	private static void verifyStateOutputWithoutName(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = state.getFbNetwork().getNetworkElements().get(0).getInterface();
-		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
+		InterfaceList interfacelist = getTypeInterfaceList(state);
+		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
-		t.test(interfacelist.getInputVars().isEmpty());
-		t.test(interfacelist.getOutputVars().isEmpty());
-		t.test(interfacelist.getEventInputs().isEmpty());
-		t.test(!interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getEventOutputs().size() == oldInterfacelist.getEventOutputs().size() + 1);
-		t.test(null != interfacelist.getInterfaceElement("EO1")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("EO1").getTypeName().equals("Event")); //$NON-NLS-1$ //$NON-NLS-2$
+		verifyInterfaceListWithName(interfacelist, ELEMENT1_NAME, t);
+		t.test(interfacelist.getEventOutputs().size(), oldInterfacelist.getEventOutputs().size() + 1);
 	}
 
 	private static State executeCommandOutputWithName(State state) {
-		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), "MyOutput", //$NON-NLS-1$
-				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 1));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
+		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), ELEMENT2_NAME,
+				getTypeInterfaceList(state), /* isInput */ false, /* index */ 1));
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateOutputWithName(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = state.getFbNetwork().getNetworkElements().get(0).getInterface();
-		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
+		InterfaceList interfacelist = getTypeInterfaceList(state);
+		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
-		t.test(interfacelist.getInputVars().isEmpty());
-		t.test(interfacelist.getOutputVars().isEmpty());
-		t.test(interfacelist.getEventInputs().isEmpty());
-		t.test(!interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getEventOutputs().size() == oldInterfacelist.getEventOutputs().size() + 1);
-		t.test(null != interfacelist.getInterfaceElement("MyOutput")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("MyOutput").getTypeName().equals("Event")); //$NON-NLS-1$ //$NON-NLS-2$
+		verifyInterfaceListWithName(interfacelist, ELEMENT2_NAME, t);
+		t.test(interfacelist.getEventOutputs().size(), oldInterfacelist.getEventOutputs().size() + 1);
+
 	}
 
 	private static State executeCommandOutputWithNameNull(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), null,
-				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 1));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
+				getTypeInterfaceList(state), /* isInput */ false, /* index */ 1));
 
-		return state;
+		final State result = commandExecution(state);
+
+		assertion.test(state.getCommand() instanceof CreateInterfaceElementCommand);
+		final CreateInterfaceElementCommand c = ((CreateInterfaceElementCommand) state.getCommand());
+		assertion.test(c.isInput(), false);
+		assertion.test(c.getInterfaceList(), getTypeInterfaceList(state));
+		assertion.test(c.getDataType(), EventTypeLibrary.getInstance().getType(null));
+		assertion.test(getTypeInterfaceList(state).getInterfaceElement(ELEMENT3_NAME), c.getInterfaceElement());
+		assertion.test(c.getCreatedElement(), c.getInterfaceElement());
+
+		return result;
 	}
 
 	private static void verifyStateOutputWithNameNull(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = state.getFbNetwork().getNetworkElements().get(0).getInterface();
-		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
+		InterfaceList interfacelist = getTypeInterfaceList(state);
+		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
-		t.test(interfacelist.getInputVars().isEmpty());
-		t.test(interfacelist.getOutputVars().isEmpty());
-		t.test(interfacelist.getEventInputs().isEmpty());
-		t.test(!interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getEventOutputs().size() == oldInterfacelist.getEventOutputs().size() + 1);
-		t.test(null != interfacelist.getInterfaceElement("EO2")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("EO2").getTypeName().equals("Event")); //$NON-NLS-1$ //$NON-NLS-2$
+		verifyInterfaceListWithName(interfacelist, ELEMENT3_NAME, t);
+		t.test(interfacelist.getEventOutputs().size(), oldInterfacelist.getEventOutputs().size() + 1);
+
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add Event Output without name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandEventOutputsTest::executeCommandOutputWithoutName, //
 						CreateInterfaceElementCommandEventOutputsTest::verifyStateOutputWithoutName //
 				), //
-				new ExecutionDescription<>("Add Event Output with name \"MyOutput\"", // //$NON-NLS-1$
+				new ExecutionDescription<>("Add Event Output with name \"" + ELEMENT2_NAME + "\"", // //$NON-NLS-1$ //$NON-NLS-2$
 						CreateInterfaceElementCommandEventOutputsTest::executeCommandOutputWithName, //
 						CreateInterfaceElementCommandEventOutputsTest::verifyStateOutputWithName //
 				), //
@@ -116,7 +115,25 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 				) //
 		);
 
-		return createCommands(executionDescriptions);
+		final Collection<ExecutionDescription<State>> reordering = createReordering(
+				(State s) -> getTypeInterfaceList(s).getEventOutputs(), ELEMENT1_NAME, ELEMENT3_NAME, ELEMENT2_NAME);
+
+		final Collection<ExecutionDescription<State>> updateFBandValidate = createUpdateAndValidate(
+				(State s, State o, TestFunction t) -> {
+					InterfaceList interfacelist = getInstanceInterfaceList(s);
+
+					verifyInterfaceListWithName(interfacelist, ELEMENT1_NAME, t);
+					verifyInterfaceListWithName(interfacelist, ELEMENT2_NAME, t);
+					verifyInterfaceListWithName(interfacelist, ELEMENT3_NAME, t);
+					t.test(interfacelist.getEventOutputs().size(), 3);
+				});
+
+		return createCommands(Stream.concat( //
+				Stream.concat( //
+						executionDescriptions.stream(), //
+						reordering.stream()), //
+				updateFBandValidate.stream() //
+		).collect(Collectors.toList()));
 	}
 
 }

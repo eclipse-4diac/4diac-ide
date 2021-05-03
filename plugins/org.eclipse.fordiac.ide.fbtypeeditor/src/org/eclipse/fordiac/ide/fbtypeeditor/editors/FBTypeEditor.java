@@ -79,28 +79,25 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class FBTypeEditor extends FormEditor
-		implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker {
+implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker {
 
 	private Collection<IFBTEditorPart> editors;
 	private PaletteEntry paletteEntry;
 	private FBType fbType;
 	private FBTypeContentOutline contentOutline = null;
-	private CommandStack commandStack = new CommandStack();
+	private final CommandStack commandStack = new CommandStack();
 
 	private final Adapter adapter = new AdapterImpl() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			Object feature = notification.getFeature();
+			final Object feature = notification.getFeature();
 			if (null != feature) {
 				if (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass())) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							if (null != paletteEntry) {
-								setPartName(paletteEntry.getLabel());
-							}
+					Display.getDefault().asyncExec(() -> {
+						if (null != paletteEntry) {
+							setPartName(paletteEntry.getLabel());
 						}
 					});
 
@@ -111,40 +108,38 @@ public class FBTypeEditor extends FormEditor
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		if (null != paletteEntry) {
-			if (checkTypeSaveAble()) {
-				performPresaveHooks();
-				// allow each editor to save back changes before saving to file
-				editors.forEach(editorPart -> editorPart.doSave(monitor));
+		if ((null != paletteEntry) && (checkTypeSaveAble())) {
+			performPresaveHooks();
+			// allow each editor to save back changes before saving to file
+			editors.forEach(editorPart -> editorPart.doSave(monitor));
 
-				getCommandStack().markSaveLocation();
-				AbstractBlockTypeExporter.saveType(paletteEntry);
-				firePropertyChange(IEditorPart.PROP_DIRTY);
-			}
+			getCommandStack().markSaveLocation();
+			AbstractBlockTypeExporter.saveType(paletteEntry);
+			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 	}
 
 	private void performPresaveHooks() {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] config = registry
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] config = registry
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorValidation"); //$NON-NLS-1$
 
-		for (IConfigurationElement e : config) {
+		for (final IConfigurationElement e : config) {
 			try {
 				final Object o = e.createExecutableExtension("class"); //$NON-NLS-1$
 				if (o instanceof IFBTValidation) {
 					((IFBTValidation) o).invokeValidation(fbType);
 				}
-			} catch (CoreException ex) {
+			} catch (final CoreException ex) {
 				Activator.getDefault().logError(ex.getMessage(), ex);
 			}
 		}
 	}
 
-	private boolean checkTypeSaveAble() {
+	protected boolean checkTypeSaveAble() {
 		if (fbType instanceof CompositeFBType) {
 			// only allow to save composite FBs if all contained FBs have types
-			for (FBNetworkElement fb : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
+			for (final FBNetworkElement fb : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
 				if (null == fb.getPaletteEntry()) {
 					MessageDialog.openInformation(getSite().getShell(),
 							Messages.FBTypeEditor_CompositeContainsFunctionBlockWithoutType,
@@ -174,7 +169,7 @@ public class FBTypeEditor extends FormEditor
 	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
 
 		if (editorInput instanceof FileEditorInput) {
-			IFile fbTypeFile = ((FileEditorInput) editorInput).getFile();
+			final IFile fbTypeFile = ((FileEditorInput) editorInput).getFile();
 			if (!fbTypeFile.exists()) {
 				throw new PartInitException(
 						new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.FBTypeEditor_TypeFileDoesnotExist));
@@ -203,7 +198,7 @@ public class FBTypeEditor extends FormEditor
 		super.init(site, editorInput);
 	}
 
-	protected FBType getFBType(PaletteEntry paletteEntry) {
+	protected FBType getFBType(final PaletteEntry paletteEntry) {
 		if (paletteEntry instanceof FBTypePaletteEntry) {
 			return ((FBTypePaletteEntry) paletteEntry).getFBType();
 		} else if (paletteEntry instanceof AdapterTypePaletteEntry) {
@@ -215,7 +210,7 @@ public class FBTypeEditor extends FormEditor
 	public FBType getFBType() {
 		return fbType;
 	}
-	
+
 	public CommandStack getCommandStack() {
 		return commandStack;
 	}
@@ -227,8 +222,8 @@ public class FBTypeEditor extends FormEditor
 		}
 
 		// get these values here before calling super dispose
-		boolean dirty = isDirty();
-		FBTypeEditorInput input = getFBTypeEditorInput();
+		final boolean dirty = isDirty();
+		final FBTypeEditorInput input = getFBTypeEditorInput();
 
 		if (null != getSite()) {
 			getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
@@ -254,42 +249,42 @@ public class FBTypeEditor extends FormEditor
 
 	@Override
 	protected void addPages() {
-		SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = new TreeMap<>();
+		final SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = new TreeMap<>();
 
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs"); //$NON-NLS-1$
-		IExtension[] extensions = point.getExtensions();
-		for (IExtension extension : extensions) {
-			IConfigurationElement[] elements = extension.getConfigurationElements();
-			for (IConfigurationElement element : elements) {
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs"); //$NON-NLS-1$
+		final IExtension[] extensions = point.getExtensions();
+		for (final IExtension extension : extensions) {
+			final IConfigurationElement[] elements = extension.getConfigurationElements();
+			for (final IConfigurationElement element : elements) {
 				try {
-					Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
+					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof IFBTEditorPart) {
-						String elementType = element.getAttribute("type"); //$NON-NLS-1$
-						Integer sortIndex = Integer.valueOf(element.getAttribute("sortIndex")); //$NON-NLS-1$
+						final String elementType = element.getAttribute("type"); //$NON-NLS-1$
+						final Integer sortIndex = Integer.valueOf(element.getAttribute("sortIndex")); //$NON-NLS-1$
 
 						if (checkTypeEditorType(fbType, elementType)) {
 							sortedEditorsMap.put(sortIndex, (IFBTEditorPart) obj);
 						}
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
 			}
 		}
 
 		editors = new ArrayList<>();
-		FBTypeEditorInput editorInput = getFBTypeEditorInput();
+		final FBTypeEditorInput editorInput = getFBTypeEditorInput();
 
-		for (IFBTEditorPart fbtEditorPart : sortedEditorsMap.values()) {
+		for (final IFBTEditorPart fbtEditorPart : sortedEditorsMap.values()) {
 			editors.add(fbtEditorPart);
 			try {
 				// setCommonCommandStack needs to be called before the editor is added as page
 				fbtEditorPart.setCommonCommandStack(commandStack);
-				int index = addPage(fbtEditorPart, editorInput);
+				final int index = addPage(fbtEditorPart, editorInput);
 				setPageText(index, fbtEditorPart.getTitle());
 				setPageImage(index, fbtEditorPart.getTitleImage());
-			} catch (PartInitException e) {
+			} catch (final PartInitException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 
@@ -303,7 +298,7 @@ public class FBTypeEditor extends FormEditor
 	 * @param editorType editor type string as defined the fBTEditorTabs.exsd
 	 * @return true if the editor should be shown otherwise false
 	 */
-	protected boolean checkTypeEditorType(FBType fbType, String editorType) {
+	protected boolean checkTypeEditorType(final FBType fbType, final String editorType) {
 		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterFBType)) || //$NON-NLS-1$
@@ -311,7 +306,7 @@ public class FBTypeEditor extends FormEditor
 				((fbType instanceof SimpleFBType) && editorType.equals("simple")) || //$NON-NLS-1$
 				((fbType instanceof ServiceInterfaceFBType) && editorType.equals("serviceInterface")) || //$NON-NLS-1$
 				((fbType instanceof CompositeFBType) && editorType.equals("composite")) //$NON-NLS-1$
-		);
+				);
 	}
 
 	private FBTypeEditorInput getFBTypeEditorInput() {
@@ -332,7 +327,7 @@ public class FBTypeEditor extends FormEditor
 	}
 
 	@Override
-	public <T> T getAdapter(Class<T> adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == IContentOutlinePage.class) {
 			if (null == contentOutline) {
 				contentOutline = new FBTypeContentOutline(fbType, this);
@@ -351,11 +346,11 @@ public class FBTypeEditor extends FormEditor
 		return super.getAdapter(adapter);
 	}
 
-	public void handleContentOutlineSelection(ISelection selection) {
+	public void handleContentOutlineSelection(final ISelection selection) {
 		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
-			Object selectedElement = ((IStructuredSelection) selection).getFirstElement();
+			final Object selectedElement = ((IStructuredSelection) selection).getFirstElement();
 			int i = 0;
-			for (IFBTEditorPart editorPart : editors) {
+			for (final IFBTEditorPart editorPart : editors) {
 				if (editorPart.outlineSelectionChanged(selectedElement)) {
 					setActivePage(i);
 					break;
@@ -370,7 +365,7 @@ public class FBTypeEditor extends FormEditor
 	}
 
 	@Override
-	public void stackChanged(CommandStackEvent event) {
+	public void stackChanged(final CommandStackEvent event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
@@ -380,9 +375,9 @@ public class FBTypeEditor extends FormEditor
 	}
 
 	@Override
-	public void gotoMarker(IMarker marker) {
+	public void gotoMarker(final IMarker marker) {
 		int i = 0;
-		for (IFBTEditorPart editorPart : editors) {
+		for (final IFBTEditorPart editorPart : editors) {
 			if (editorPart.isMarkerTarget(marker)) {
 				setActivePage(i);
 				editorPart.gotoMarker(marker);

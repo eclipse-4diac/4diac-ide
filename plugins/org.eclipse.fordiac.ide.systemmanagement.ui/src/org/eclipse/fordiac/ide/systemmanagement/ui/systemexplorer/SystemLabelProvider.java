@@ -41,7 +41,7 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	@Override
-	public String getText(Object object) {
+	public String getText(final Object object) {
 		if (object instanceof IFile) {
 			return getTextForFiles((IFile) object);
 		}
@@ -51,7 +51,7 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 		return super.getText(object);
 	}
 
-	private String getTextForFiles(IFile element) {
+	private static String getTextForFiles(final IFile element) {
 		String text = null;
 		if (TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.DEVICE_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
@@ -64,20 +64,14 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	@Override
-	public Image getImage(Object object) {
+	public Image getImage(final Object object) {
 		if (object instanceof IResource) {
 			return getImageForResource((IResource) object);
 		}
 		return super.getImage(object);
 	}
 
-	private static Image getImageForResource(IResource resource) {
-		if (FordiacProjectSorter.isSystemFile(resource)) {
-			// provide the icon for the system configuration file,
-			// TODO this should in the future provided by a dedicated editor
-			return FordiacImage.ICON_SYSTEM_PERSPECTIVE.getImage();
-		}
-
+	private static Image getImageForResource(final IResource resource) {
 		if (FordiacProjectSorter.isTypeLibFolder(resource)) {
 			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
 		}
@@ -86,13 +80,13 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	@Override
-	public String getDescription(Object anElement) {
+	public String getDescription(final Object anElement) {
 		// TODO provide descriptive tooltip text here
 		return super.getText(anElement);
 	}
 
 	private static List<AdapterFactory> createFactoryList() {
-		ArrayList<AdapterFactory> factories = new ArrayList<>();
+		final ArrayList<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new LibraryElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;

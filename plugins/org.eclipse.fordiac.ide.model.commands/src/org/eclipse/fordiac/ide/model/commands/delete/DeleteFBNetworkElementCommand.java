@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2016 fortiss GmbH
  * 				 2019 Johannes Keppler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *       - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.gef.commands.Command;
@@ -47,7 +46,6 @@ public class DeleteFBNetworkElementCommand extends Command {
 	@Override
 	public boolean canExecute() {
 		if ((element instanceof FB) && ((FB) element).isResourceTypeFB()) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.DeleteFBNetworkElement);
 			return false;
 		}
 		return null != element && null != element.getFbNetwork();

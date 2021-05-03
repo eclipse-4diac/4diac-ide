@@ -29,8 +29,8 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 	private Button downButton;
 
 	@Override
-	public void createControls(Composite parent, FormToolkit widgetFactory) {
-		Composite container = createContainer(parent);
+	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
+		final Composite container = createContainer(widgetFactory, parent);
 
 		createAddButton(widgetFactory, container);
 
@@ -47,34 +47,33 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 	}
 
 	@Override
-	public void setButtonEnablement(boolean enable) {
+	public void setButtonEnablement(final boolean enable) {
 		upButton.setEnabled(enable);
 		downButton.setEnabled(enable);
 		super.setButtonEnablement(enable);
 	}
 
-	public void addUpListener(Listener upListener) {
+	public void addUpListener(final Listener upListener) {
 		upButton.addListener(SWT.Selection, upListener);
 	}
 
-	public void addDownListener(Listener downListener) {
+	public void addDownListener(final Listener downListener) {
 		downButton.addListener(SWT.Selection, downListener);
 	}
 
-	public void bindToTableViewer(TableViewer viewer, CommandExecutor executor, CreationCommandProvider addCommand,
-			CommandProvider deleteCommand, CommandProvider moveUpCommand, CommandProvider moveDownCommand) {
+	public void bindToTableViewer(final TableViewer viewer, final CommandExecutor executor, final CreationCommandProvider addCommand,
+			final CommandProvider deleteCommand, final CommandProvider moveUpCommand, final CommandProvider moveDownCommand) {
 		super.bindToTableViewer(viewer, executor, addCommand, deleteCommand);
 		addUpListener(getSelectionListener(viewer, executor, moveUpCommand));
 		addDownListener(getReverseSelectionListener(viewer, executor, moveDownCommand));
 	}
 
 	// this is needed for correct execution of move down with multiselection
-	public static Listener getReverseSelectionListener(TableViewer viewer, CommandExecutor executor,
-			CommandProvider commandProvider) {
+	public static Listener getReverseSelectionListener(final TableViewer viewer, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
 		return ev -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
-				@SuppressWarnings("unchecked")
-				List<Object> bottomup = viewer.getStructuredSelection().toList();
+				final List<Object> bottomup = viewer.getStructuredSelection().toList();
 				Collections.reverse(bottomup);
 				executeCompoundCommandForList(viewer, bottomup, executor, commandProvider);
 			}

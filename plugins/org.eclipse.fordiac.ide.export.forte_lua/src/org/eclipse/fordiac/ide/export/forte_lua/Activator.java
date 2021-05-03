@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,20 +24,20 @@ public class Activator extends Abstract4DIACUIPlugin {
 		return plugin;
 	}
 
-	public Activator() {
-		// empty constructur
-	}
-
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setPlugin(this);
 	}
 
 	@Override
 	public void stop(final BundleContext context) throws Exception {
 		super.stop(context);
-		plugin = null;
+		setPlugin(null);
+	}
+
+	private static synchronized void setPlugin(Activator newPlugin) {
+		plugin = newPlugin;
 	}
 
 }

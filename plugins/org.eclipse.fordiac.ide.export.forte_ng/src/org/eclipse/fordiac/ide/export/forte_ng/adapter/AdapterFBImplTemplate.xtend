@@ -26,7 +26,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) AdapterFBType type
 
 	new(AdapterFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CAdapter")
 		this.type = type
 	}
 

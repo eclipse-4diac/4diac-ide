@@ -13,14 +13,12 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.data;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object
- * '<em><b>Elementary Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Elementary Type</b></em>'. <!-- end-user-doc
+ * -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getElementaryType()
  * @model
- * @generated
- */
+ * @generated */
 public interface ElementaryType extends ValueType {
 } // ElementaryType

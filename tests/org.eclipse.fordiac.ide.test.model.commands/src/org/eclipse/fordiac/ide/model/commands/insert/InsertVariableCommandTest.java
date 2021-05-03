@@ -13,9 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.insert;
 
-import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -24,7 +21,7 @@ import org.eclipse.fordiac.ide.model.commands.testinfra.InsertVariableCommandTes
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 
@@ -40,11 +37,8 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		final VarDeclaration varDec = createTestVarDec("first"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	// insert at the beginning
@@ -52,11 +46,8 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		final VarDeclaration varDec = createTestVarDec("second"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	// insert in the middle
@@ -64,11 +55,8 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		final VarDeclaration varDec = createTestVarDec("third"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 1));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	// insert at the end
@@ -76,16 +64,13 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		final VarDeclaration varDec = createTestVarDec("fourth"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 3));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateVarWithIndex(State state, State oldState, TestFunction t, int index) {
 		t.test(!state.getList().isEmpty());
-		t.test(state.getList().size() == (oldState.getList().size() + 1));
+		t.test(state.getList().size(), (oldState.getList().size() + 1));
 		t.test(validateVarDeclaration(state.getList().get(index), state.getVarDec()));
 	}
 
@@ -109,11 +94,9 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		verifyStateVarWithIndex(state, oldState, t, 3);
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<State>("Insert an internal variable into an empty list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar1, //
 						InsertVariableCommandTest::verifyStateVar1 //

@@ -72,6 +72,7 @@ import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 import org.eclipse.fordiac.ide.model.FordiacKeywords
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
+import java.text.MessageFormat
 
 class STAlgorithmFilter {
 
@@ -119,17 +120,31 @@ class STAlgorithmFilter {
 		throw new IllegalStateException()
 	}
 
-	def generate(STAlgorithm alg, List<String> errors) {
+	def parseAlgorithm(STAlgorithm alg) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		createFBResource(resourceSet, alg.rootContainer as BaseFBType)
 		// create resource for algorithm
 		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
 		resource.load(new LazyStringInputStream(alg.text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
+		val stalg = resource.parseResult.rootASTElement as StructuredTextAlgorithm
+		stalg.localVariables.forEach[v | createStructResource(resourceSet, v)]
+		return resource
+	}
+
+	def generateLocalVariables(STAlgorithm alg) {
+		val parseResult = alg.parseAlgorithm.parseResult
+		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
+		stalg.localVariables.forEach[v | v.typeName = v.type.name]
+		return stalg.localVariables
+	}
+
+	def generate(STAlgorithm alg, List<String> errors) {
+		val resource = alg.parseAlgorithm
 		val parseResult = resource.parseResult
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
 		if (!issues.empty) {
-			errors.addAll(issues.map[alg.name + ", Line " + Long.toString(it.lineNumber) + ": " + it.message])
+			errors.addAll(issues.map[MessageFormat.format("{0}, Line {1}: {2}", alg.name, Long.toString(it.lineNumber), it.message)])
 			return null
 		}
 		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
@@ -376,7 +391,7 @@ class STAlgorithmFilter {
 	}
 
 	def protected dispatch CharSequence generateExpression(AdapterRoot expr) {
-		'''«EXPORT_PREFIX»«expr.adapter.name»()'''
+		'''«expr.adapter.generateVarAccess»'''
 	}
 
 	def generateStructAdapterVarAccess(EList<VarDeclaration> list)

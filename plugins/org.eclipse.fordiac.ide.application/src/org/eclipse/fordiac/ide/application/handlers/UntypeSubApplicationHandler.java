@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2021 Johannes Kepler University Linz
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - reworked for breadcrumb editor
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -17,12 +19,13 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.commands.UntypeSubAppCommand;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -30,28 +33,28 @@ public class UntypeSubApplicationHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		SubApp subApp = getSelectedSubApp(selection);
+		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final SubApp subApp = getSelectedSubApp(selection);
 		if (null != subApp) {
-			editor.getCommandStack().execute(new UntypeSubAppCommand(subApp));
-			editor.getViewer().deselectAll();
-			editor.selectElement(subApp);
+			BreadcrumbUtil.getCommandStack(editor).execute(new UntypeSubAppCommand(subApp));
+			BreadcrumbUtil.getViewer(editor).deselectAll();
+			BreadcrumbUtil.selectElement(subApp, BreadcrumbUtil.getViewer(editor));
 		}
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public void setEnabled(Object evaluationContext) {
-		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		SubApp subApp = getSelectedSubApp(selection);
+		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		final SubApp subApp = getSelectedSubApp(selection);
 		setBaseEnabled((null != subApp) && (null != subApp.getType()));
 	}
 
 	private static SubApp getSelectedSubApp(Object selection) {
 		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structSel = ((IStructuredSelection) selection);
-			if (!structSel.isEmpty() && structSel.size() == 1) {
+			final IStructuredSelection structSel = ((IStructuredSelection) selection);
+			if (!structSel.isEmpty() && (structSel.size() == 1)) {
 				return getSubApp(structSel.getFirstElement());
 			}
 		}

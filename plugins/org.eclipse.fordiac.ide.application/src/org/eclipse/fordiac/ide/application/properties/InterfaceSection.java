@@ -16,20 +16,42 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IWorkbenchPart;
 
 public class InterfaceSection extends AbstractInterfaceSection {
 
 	@Override
 	protected FBNetworkElement getInputType(Object input) {
-		if (input instanceof AbstractFBNElementEditPart) {
-			return ((AbstractFBNElementEditPart) input).getModel();
-		} else if (input instanceof FBNetworkElement) {
+		if (input instanceof EditPart) {
+			input = ((EditPart) input).getModel();
+		}
+
+		if (input instanceof FBNetwork) {
+			input = ((FBNetwork) input).eContainer();
+		}
+
+		if (input instanceof FBNetworkElement) {
 			return (FBNetworkElement) input;
 		}
 		return null;
+	}
+
+	@Override
+	public void setInput(final IWorkbenchPart part, final ISelection selection) {
+		super.setInput(part, selection);
+		if (getType().isContainedInTypedInstance()) {
+			disableAllFields();
+		}
+	}
+
+	@Override
+	protected FBNetworkElement getType() {
+		return (FBNetworkElement) super.getType();
 	}
 
 }

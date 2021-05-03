@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017  Profactor GbmH, TU Wien ACIN, fortiss 
- * 
+ * Copyright (c) 2008 - 2017  Profactor GbmH, TU Wien ACIN, fortiss
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -33,25 +33,24 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 
 /**
  * The Class AbstractDiagramEditPart.
- * 
+ *
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
 public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart {
 
 	/**
 	 * Creates the <code>Figure</code> to be used as this part's <i>visuals</i>.
-	 * 
+	 *
 	 * @return a figure
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
 	 */
 	@Override
 	protected IFigure createFigure() {
-		IFigure newFigure = new FreeformLayer();
+		final IFigure newFigure = new FreeformLayer();
 		newFigure.setBorder(new MarginBorder(10));
 		newFigure.setLayoutManager(new FreeformLayout());
 		newFigure.setOpaque(false);
@@ -63,7 +62,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#refresh()
 	 */
 	@Override
@@ -81,7 +80,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
@@ -96,7 +95,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
 	 */
 	@Override
@@ -118,56 +117,51 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 
 	/**
 	 * Gets the preference change listener.
-	 * 
+	 *
 	 * @return the preference change listener
 	 */
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		if (listener == null) {
-			listener = new IPropertyChangeListener() {
-				@Override
-				public void propertyChange(final PropertyChangeEvent event) {
-					if (event.getProperty().equals(DiagramPreferences.SHOW_GRID)) {
-						showGrid();
-					}
-					if (event.getProperty().equals(DiagramPreferences.GRID_SPACING)) {
-						updateGrid();
-					}
-					if (event.getProperty().equals(DiagramPreferences.SHOW_RULERS)) {
-						updateRuler();
-					}
-					if (event.getProperty().equals(DiagramPreferences.CONNECTION_ROUTER)) {
-						updateRouter(getFigure());
-					}
+			listener = event -> {
+				if (event.getProperty().equals(DiagramPreferences.SHOW_GRID)) {
+					showGrid();
+				}
+				if (event.getProperty().equals(DiagramPreferences.GRID_SPACING)) {
+					updateGrid();
+				}
+				if (event.getProperty().equals(DiagramPreferences.SHOW_RULERS)) {
+					updateRuler();
+				}
+				if (event.getProperty().equals(DiagramPreferences.CONNECTION_ROUTER)) {
+					updateRouter(getFigure());
 				}
 			};
 		}
 		return listener;
 	}
 
-	protected void updateRouter(IFigure figure) {
-		ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
+	protected void updateRouter(final IFigure figure) {
+		final ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
 		connLayer.setConnectionRouter(RouterUtil.getConnectionRouter(figure));
 	}
 
 	protected void updateGrid() {
-		int gridSpacing = Activator.getDefault().getPreferenceStore().getInt(DiagramPreferences.GRID_SPACING);
+		final int gridSpacing = Activator.getDefault().getPreferenceStore().getInt(DiagramPreferences.GRID_SPACING);
 
 		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(gridSpacing, gridSpacing));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#getAdapter(java.lang
 	 * .Class)
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class key) {
 		if (key == SnapToHelper.class) {
-			List<SnapToGrid> snapStrategies = new ArrayList<>();
-			Boolean val = Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SNAP_TO_GRID);
-			if (val != null && val.booleanValue()) {
+			final List<SnapToGrid> snapStrategies = new ArrayList<>();
+			if (Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SNAP_TO_GRID)) {
 				snapStrategies.add(new SnapToGrid(this));
 			}
 
@@ -178,10 +172,8 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 				return snapStrategies.get(0);
 			}
 
-			SnapToHelper ss[] = new SnapToHelper[snapStrategies.size()];
-			for (int i = 0; i < snapStrategies.size(); i++) {
-				ss[i] = snapStrategies.get(i);
-			}
+			final SnapToHelper[] ss = new SnapToHelper[snapStrategies.size()];
+			snapStrategies.toArray(ss);
 			return new CompoundSnapToHelper(ss);
 		}
 		return super.getAdapter(key);

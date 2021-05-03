@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class RESImporter extends TypeImporter {
 
-	public RESImporter(IFile typeFile) {
+	public RESImporter(final IFile typeFile) {
 		super(typeFile);
 	}
 
@@ -60,10 +60,10 @@ public final class RESImporter extends TypeImporter {
 				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getElement());
+				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.VAR_DECLARATION_ELEMENT:
-				VarDeclaration v = parseVarDeclaration();
+				final VarDeclaration v = parseVarDeclaration();
 				v.setIsInput(true);
 				getElement().getVarDeclaration().add(v);
 				break;
@@ -71,8 +71,10 @@ public final class RESImporter extends TypeImporter {
 				// TODO __gebenh import "supported fbtypes"
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				getElement().setFBNetwork(new ResDevFBNetworkImporter(this, getElement().getVarDeclaration())
-						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
+				final ResDevFBNetworkImporter networkImporter = new ResDevFBNetworkImporter(this,
+						getElement().getVarDeclaration());
+				getElement().setFBNetwork(networkImporter.getFbNetwork());
+				networkImporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
 			default:
 				return false;

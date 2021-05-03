@@ -41,7 +41,7 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		Figure f = new FreeformLayer();
+		final Figure f = new FreeformLayer();
 		f.setBorder(new MarginBorder(10));
 		f.setLayoutManager(new FreeformLayout());
 		f.setOpaque(false);
@@ -70,7 +70,7 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 			adapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(final Notification notification) {
-					int type = notification.getEventType();
+					final int type = notification.getEventType();
 					switch (type) {
 					case Notification.ADD:
 					case Notification.ADD_MANY:
@@ -101,20 +101,19 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 		return (SystemConfiguration) super.getModel();
 	}
 
-	@SuppressWarnings({ "rawtypes" })
 	@Override
 	protected List getModelChildren() {
-		ArrayList<EObject> children = new ArrayList<>();
+		final ArrayList<EObject> children = new ArrayList<>();
 		children.addAll(getModel().getDevices());
 		children.addAll(getModel().getSegments());
 		children.addAll(getDeviceInputValues(getModel().getDevices()));
 		return children;
 	}
 
-	private static List<? extends EObject> getDeviceInputValues(EList<Device> devices) {
-		List<Value> children = new ArrayList<>();
-		for (Device dev : devices) {
-			for (VarDeclaration varDecl : dev.getVarDeclarations()) {
+	private static List<? extends EObject> getDeviceInputValues(final EList<Device> devices) {
+		final List<Value> children = new ArrayList<>();
+		for (final Device dev : devices) {
+			for (final VarDeclaration varDecl : dev.getVarDeclarations()) {
 				if (varDecl.getValue() != null) {
 					children.add(varDecl.getValue());
 				}

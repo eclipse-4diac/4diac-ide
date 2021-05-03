@@ -16,102 +16,77 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Compiler
- * Info</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Compiler Info</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getCompiler
- * <em>Compiler</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getClassdef
- * <em>Classdef</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getHeader
- * <em>Header</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getCompiler <em>Compiler</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getClassdef <em>Classdef</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getHeader <em>Header</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCompilerInfo()
  * @model
- * @generated
- */
+ * @generated */
 public interface CompilerInfo extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Compiler</b></em>' containment reference
-	 * list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Compiler}. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Compiler</b></em>' containment reference list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Compiler}. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Compiler</em>' containment reference list isn't
-	 * clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Compiler</em>' containment reference list isn't clear, there really should be more of
+	 * a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Compiler</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCompilerInfo_Compiler()
-	 * @model containment="true" extendedMetaData="kind='element' name='Compiler'
-	 *        namespace='##targetNamespace'"
-	 * @generated
-	 */
+	 * @model containment="true" extendedMetaData="kind='element' name='Compiler' namespace='##targetNamespace'"
+	 * @generated */
 	EList<org.eclipse.fordiac.ide.model.libraryElement.Compiler> getCompiler();
 
-	/**
-	 * Returns the value of the '<em><b>Classdef</b></em>' attribute. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Classdef</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Classdef</em>' attribute isn't clear, there really
-	 * should be more of a description here...
+	 * If the meaning of the '<em>Classdef</em>' attribute isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Classdef</em>' attribute.
 	 * @see #setClassdef(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCompilerInfo_Classdef()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        extendedMetaData="kind='attribute' name='classdef'"
-	 * @generated
-	 */
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" extendedMetaData="kind='attribute' name='classdef'"
+	 * @generated */
 	String getClassdef();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getClassdef
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getClassdef
 	 * <em>Classdef</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Classdef</em>' attribute.
 	 * @see #getClassdef()
-	 * @generated
-	 */
+	 * @generated */
 	void setClassdef(String value);
 
-	/**
-	 * Returns the value of the '<em><b>Header</b></em>' attribute. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Header</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Header</em>' attribute isn't clear, there really
-	 * should be more of a description here...
+	 * If the meaning of the '<em>Header</em>' attribute isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Header</em>' attribute.
 	 * @see #setHeader(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCompilerInfo_Header()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        extendedMetaData="kind='attribute' name='header'"
-	 * @generated
-	 */
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" extendedMetaData="kind='attribute' name='header'"
+	 * @generated */
 	String getHeader();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getHeader
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getHeader
 	 * <em>Header</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Header</em>' attribute.
 	 * @see #getHeader()
-	 * @generated
-	 */
+	 * @generated */
 	void setHeader(String value);
 
 } // CompilerInfo

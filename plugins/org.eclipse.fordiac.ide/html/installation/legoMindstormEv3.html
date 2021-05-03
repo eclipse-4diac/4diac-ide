@@ -1,8 +1,6 @@
 <!DOCTYPE HTML>
 <!--
- Copyright (c) 2016-2019 fortiss GmbH
-               2019 Johannes Kepler University Linz
-               2019 Andrea Zoitl
+ Copyright (c) 2016, 2021 fortiss GmbH, Johannes Kepler University Linz, Andrea Zoitl
   
  This program and the accompanying materials are made available under the
  terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +15,8 @@
      - adapting, restructuring and extending the installation tutorial
   Andrea Zoitl
      - fixed 4diac branding, corrected links, improved readability
+  Lisa Sonnleithner
+  	 - added more details so that it is easier for beginners to follow
 -->
 
 <html lang="en">
@@ -46,14 +46,16 @@
 	The ev3dev is a Debian Linux-based operating system that can run on the LMSEV3. 
 	More information about capabilities of ev3dev can be found on its <a href="http://www.ev3dev.org/" target="_blank">website</a>. 
 	The procedure to make ev3dev run in a LMSEV3 is similar to running a Linux operating system on a Raspberry Pi. 
-	The best and faster way to implement ev3dev in a LMSEV3 is following the instruction on its <a href="http://www.ev3dev.org/docs/getting-started/" target="_blank">getting started page</a>. 
-	Basically what must be done is to download the ev3dev image and write it on a mini SD card (yes, without an mini SD card you won't be able to run it), insert it in the LMSEV3 and boot it. You'll have to set the network configuration to connect to it.</p>
-
+	The best and fastest way to implement ev3dev in a LMSEV3 is following the instruction on its <a href="http://www.ev3dev.org/docs/getting-started/" target="_blank">getting started page</a>. 
+	Basically, what must be done is to download the ev3dev image and write it on a mini SD card (yes, without an mini SD card you won't be able to run it), insert it in the LMSEV3 and boot it. </p>
+	 
 	<p>So, what will you find in this special Linux version for LMSEV3? 
 	First, you'll find a menu in the screen of the LMSEV3 that can be accessed using the buttons. 
-	And secondly, you will be able to connect using SSH the same way you would do it on a Raspberry Pi, the BeagleBone Black or other Linux-based operating system and go through the folder system of the ev3dev that is prepared for the LMSEV3. 
-	To access all the I/O of the LMSEV3 (including the buttons, LED and the screen) there are specific explanations in <a href="http://www.ev3dev.org/docs/tutorials/" target="_blank">this</a> ev3dev webpage, but 4diac&nbsp;FORTE takes care of accessing them and you as user will only work with normal I/O Function Blocks as IX, QX, IW, QW and so on.</p>
+	And secondly, you will be able to connect using SSH the same way you would do it on a Raspberry Pi, the BeagleBone Black or any other Linux-based operating system and go through the folder system of the ev3dev that is prepared for the LMSEV3. 
+	To access all the I/O of the LMSEV3 (including the buttons, LED and the screen), there are specific explanations in <a href="http://www.ev3dev.org/docs/tutorials/" target="_blank">this</a> ev3dev webpage, but 4diac&nbsp;FORTE takes care of accessing them and you as user will only work with normal I/O Function Blocks as IX, QX, IW, QW and so on.</p>
 
+
+<p> To access the LMSEV3 via SSH you'll have to setup a network connection first. The easiest way is using a WiFi dongle that can be connected to the LMSEV3's USB port. A few compatible WiFi dongles are listed <a href="https://www.ev3dev.org/docs/networking/" target="_blank">here</a>. Once you have a WiFi dongle, you can connect to a WiFi network via "Wireless and Networks" on the start menu. Power on WiFi, scan for available networks and then connect to it. If you successfully connected to a WiFi network, the IP address of the LMSEV3 will be shown in the top left corner of the screen. To make life easier, setup your router to use static IP addresses. Now you can setup an SSH connection on your computer. How to setup a connection with PuTTY or WinSCP is explained <a href="https://www.ev3dev.org/docs/tutorials/connecting-to-ev3dev-with-ssh/" target="_blank">here</a></p>
 	<p> With the LMSEV3 running the ev3dev and it being accessible through SSH, the next thing to do is to install and run 4diac&nbsp;FORTE in it. 
 	    Similar to other platforms, you have two possibilities. 
 	    The first one is to transfer
@@ -61,29 +63,66 @@
 		The second option is to use a cross-compiler. 
 		This means that you will code and compile in your desktop machine, and then send the executable to the LMSEV3 and run it there. 
 		The first option is easier to implement but is slower to compile. 
-		The second one is much faster but the setup of the environment in your desktop machine is difficult and takes time. 
-		If you are compiling just once or just to try it, use the first option. 
-		If you will be compiling several times, you should try the second option. 
-		As said, getting your desktop machine to cross-compile for the ev3dev is not easy, but a complete step by step guide is presented <a href="http://www.ev3dev.org/docs/tutorials/using-brickstrap-to-cross-compile/" target="_blank">here</a>.
+		The second one is much faster but you will have to setup of the environment on your desktop machine. 
+		With Docker, it's much easier to do the second option. The first option should be used only when installing Docker is not possible.
+		 Especially if you will be compiling several times, you should try the second option. 
+		Getting your desktop machine to cross-compile for the ev3dev is not easy, but a complete step by step guide is presented <a href="https://www.ev3dev.org/docs/tutorials/using-docker-to-cross-compile/" target="_blank">here</a>.
 	</p>
-	
-	<p>To install the the necessary tools to compile in the ev3dev, run the following commands:</p>
+	<p> To set up the cross-compiler, the following steps must be done:</p>
+	<p><strong>NOTE:</strong> all commands starting with <code>docker</code> are run in the command prompt of your host computer, all other commands are run inside of your docker container (if you cross-compile) or inside of your EV3!</p>
+	<ol>
+		<li> Install <a href="https://www.docker.com/" target="_blank">Docker</a>. A detailed installation guide can be found <a href="https://docs.docker.com/engine/install/" target="_blank">here</a>. Docker will be used to run the ev3dev image on your computer. This allows you to build a EV3 specific 4diac&nbsp;FORTE with the power of your computer. </li>
+		<li> Follow the steps <a href="https://www.ev3dev.org/docs/tutorials/using-docker-to-cross-compile/" target="_blank">here</a> to download the ev3dev cross-compiler image. 
+		<li> After setting up the image, run a Docker container with the following command: 
+		<div class="code"> docker run --rm -it -v $(pwd):/src -w /src ev3cc</div>
+		Let's break it down: 
+		<ul>
+		<li> <code> run </code> runs a new container</li>
+		<li> <code> --rm </code> this will make sure, that the container is thrown away once you are done. </li>
+		<li> <code> -it </code> this will make the command prompt available inside of your container.</li>
+		<li> <code> -v &lt;host-path&gt;:&lt;container-path&gt;</code> this will make a directory of your host computer accessible from within the container. Make sure to specify the host path according to your OS. On Windows hosts, you might experience some problems with file paths, e.g. when using git bash on Windows you need to use double backslash as file separator.</li> 
+		<li> <code> -w &lt;container-path&gt;</code> this will specifiy the working directory within your container.</li>  
+		<li> <code> ev3cc</code> this is the name of your Docker image.</li>
+		</ul>
+		
+		
+		<li> Now, that the container is running, you need to install the necessary tools that you need to compile a 4diac&nbsp;FORTE in your container.
+	 Run the following commands:
 	<div class="code">sudo apt-get update
 sudo apt-get install build-essential
 sudo apt-get install cmake</div>
+To save time the next time, you can create a new Docker image from your current container. This will save all the changes and you won't have to do it again. Use the following command:
+	<div class="code">docker commit [CONTAINER_ID] [new_image_name]</div>
+	To see all your currently running containers (and their ID), use:
+	<div class="code">docker ps -a</div>
+	and to see whether it worked and you saved a new image use:
+	<div class="code">docker images</div>
+</li>
 
-	<p>This will install the necessary tools. Then, you just need to go to the
-	4diac&nbsp;FORTE folder you transferred, and execute: </p>
-	 
-	 <div class="code">. setup_posix.sh</div>
-
-	<p>which is going to setup everything in the bin/posix folder. 
-	Next, you should go into the bin/posix folder and simply execute "make" to start the compilation.</p>
-
-	<p> Remember, when you create your own FB, you should add these to the 4diac&nbsp;FORTE folder, adjust the CMakefiles.txt and compile again. 
+<li>If you haven't done so yet, transfer a 4diac&nbsp;FORTE folder to the folder that you are sharing with your container, or transfer it directly to your EV3 with WinSCP if you are compiling there. </li>
+<li>Next, navigate to the transferred 4diac&nbsp;FORTE folder (in the command prompt within your container) and execute: 
+<div class="code">. setup_lmsEv3.sh</div>
+which is going to setup everything in the bin/ev3dev folder. 
+	Next, you should go into the bin/ev3dev folder and simply execute "make" to start the compilation.</li>
+<li>Now you have compiled a 4diac&nbsp;FORTE that can run inside of your brick! If you already set up the network connection to your brick, you can send <code>forte</code> to your brick using WinSCP. Check, whether execution rights are enabled for <code>forte</code>. </li>
+	</ol>
+	
+If you want to compile directly in your EV3, then start at step 4 and perform everything with the command prompt of your EV3 (to get the command prompt inside of your EV3, connect to it with PuTTY).
+<p> Remember, when you create your own FBs, you should add these to the 4diac&nbsp;FORTE folder, adjust the CMakefiles.txt and compile again. 
 	In the <a href="../../html/installation/install.html#ownFORTE">example</a> section, it is explained how to do this.</p>
 
-	
+<h1>Troubleshooting</h1>
+<p>If you have  limited rights on your host computer (e.g. your company manages certain settings) and therefore can't use Docker, you can install a Linux distribution in a virtual machine and run your Docker container there. If you are having trouble setting up a virtual machine on your windows machine, try to disable "Hyper-V". You can follow the instructions <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v">here</a>.  
+</p>
+
+<p>If you are having problems connecting to your EV3, try whether the network connection is working and ping your EV3. If your EV3 is connected, the IP address should be shown an the top of the screen. 
+<div class="code">ping [IP ADRESS]</div>
+</p>
+
+<p>If you are having problems including external modules, add this to your <code>setup_lmsEv3.sh file</code> and run it again. 
+<div class="code">-DFORTE_EXTERNAL_MODULES_DIRECTORY=&rdquo;/src/forte/ext_mod&rdquo; -DFORTE_MODULE_EV3=ON</div>
+You must have a folder <code>ext_mod</code> within your <code>forte</code> folder. Your modules are then added as subfolders to <code>ext_mod</code>. In this case, a module called "EV3" is added. 
+</p>	
 <h1 id="whereToGoFromHere">Where to go from here?</h1>
 
 <p>If you want to build a 4diac&nbsp;FORTE, here is a quick link back:</p>

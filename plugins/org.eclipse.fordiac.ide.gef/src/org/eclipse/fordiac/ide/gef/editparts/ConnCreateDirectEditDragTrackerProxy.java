@@ -32,10 +32,10 @@ import org.eclipse.swt.widgets.Event;
 
 public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 
-	private ConnectionDragCreationTool connectionTool;
-	private SelectEditPartTracker editPartTracker;
+	private final ConnectionDragCreationTool connectionTool;
+	private final SelectEditPartTracker editPartTracker;
 
-	public ConnCreateDirectEditDragTrackerProxy(EditPart editPart) {
+	public ConnCreateDirectEditDragTrackerProxy(final EditPart editPart) {
 		this.connectionTool = new FordiacConnectionDragCreationTool();
 		this.editPartTracker = new SelectEditPartTracker(editPart);
 	}
@@ -57,115 +57,115 @@ public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 	}
 
 	@Override
-	public void focusGained(FocusEvent event, EditPartViewer viewer) {
+	public void focusGained(final FocusEvent event, final EditPartViewer viewer) {
 		connectionTool.focusGained(event, viewer);
 		editPartTracker.focusGained(event, viewer);
 	}
 
 	@Override
-	public void focusLost(FocusEvent event, EditPartViewer viewer) {
+	public void focusLost(final FocusEvent event, final EditPartViewer viewer) {
 		connectionTool.focusLost(event, viewer);
 		editPartTracker.focusLost(event, viewer);
 	}
 
 	@Override
-	public void keyDown(KeyEvent keyEvent, EditPartViewer viewer) {
+	public void keyDown(final KeyEvent keyEvent, final EditPartViewer viewer) {
 		connectionTool.keyDown(keyEvent, viewer);
 		editPartTracker.keyDown(keyEvent, viewer);
 	}
 
 	@Override
-	public void keyTraversed(TraverseEvent event, EditPartViewer viewer) {
+	public void keyTraversed(final TraverseEvent event, final EditPartViewer viewer) {
 		connectionTool.keyTraversed(event, viewer);
 		editPartTracker.keyTraversed(event, viewer);
 	}
 
 	@Override
-	public void keyUp(KeyEvent keyEvent, EditPartViewer viewer) {
+	public void keyUp(final KeyEvent keyEvent, final EditPartViewer viewer) {
 		connectionTool.keyUp(keyEvent, viewer);
 		editPartTracker.keyUp(keyEvent, viewer);
 	}
 
 	@Override
-	public void mouseDoubleClick(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void mouseDoubleClick(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		connectionTool.mouseDoubleClick(mouseEvent, viewer);
 		editPartTracker.mouseDoubleClick(mouseEvent, viewer);
 	}
 
 	@Override
-	public void mouseDown(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void mouseDown(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		connectionTool.mouseDown(mouseEvent, viewer);
 		editPartTracker.mouseDown(mouseEvent, viewer);
 	}
 
 	@Override
-	public void mouseDrag(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void mouseDrag(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		connectionTool.mouseDrag(mouseEvent, viewer);
 		editPartTracker.mouseDrag(mouseEvent, viewer);
 	}
 
 	@Override
-	public void mouseHover(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void mouseHover(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		connectionTool.mouseHover(mouseEvent, viewer);
 		editPartTracker.mouseHover(mouseEvent, viewer);
 	}
 
 	@Override
-	public void mouseMove(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void mouseMove(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		connectionTool.mouseMove(mouseEvent, viewer);
 		editPartTracker.mouseMove(mouseEvent, viewer);
 	}
 
 	@Override
-	public void mouseUp(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void mouseUp(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		connectionTool.mouseUp(mouseEvent, viewer);
 		editPartTracker.mouseUp(mouseEvent, viewer);
 	}
 
 	@Override
-	public void mouseWheelScrolled(Event event, EditPartViewer viewer) {
+	public void mouseWheelScrolled(final Event event, final EditPartViewer viewer) {
 		connectionTool.mouseWheelScrolled(event, viewer);
 		editPartTracker.mouseWheelScrolled(event, viewer);
 	}
 
 	@Override
-	public void nativeDragFinished(DragSourceEvent event, EditPartViewer viewer) {
+	public void nativeDragFinished(final DragSourceEvent event, final EditPartViewer viewer) {
 		connectionTool.nativeDragFinished(event, viewer);
 		editPartTracker.nativeDragFinished(event, viewer);
 	}
 
 	@Override
-	public void nativeDragStarted(DragSourceEvent event, EditPartViewer viewer) {
+	public void nativeDragStarted(final DragSourceEvent event, final EditPartViewer viewer) {
 		connectionTool.nativeDragStarted(event, viewer);
 		editPartTracker.nativeDragStarted(event, viewer);
 	}
 
 	@Override
-	public void setEditDomain(EditDomain domain) {
+	public void setEditDomain(final EditDomain domain) {
 		connectionTool.setEditDomain(domain);
 		editPartTracker.setEditDomain(domain);
 	}
 
 	@Override
-	public void setViewer(EditPartViewer viewer) {
+	public void setViewer(final EditPartViewer viewer) {
 		connectionTool.setViewer(viewer);
 		editPartTracker.setViewer(viewer);
 	}
 
 	@Override
-	public void viewerEntered(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void viewerEntered(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		connectionTool.viewerEntered(mouseEvent, viewer);
 		editPartTracker.viewerEntered(mouseEvent, viewer);
 	}
 
 	@Override
-	public void viewerExited(MouseEvent mouseEvent, EditPartViewer viewer) {
+	public void viewerExited(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		connectionTool.viewerExited(mouseEvent, viewer);
 		editPartTracker.viewerExited(mouseEvent, viewer);
 	}
 
 	@Override
-	public void setProperties(@SuppressWarnings("rawtypes") Map properties) {
+	public void setProperties(final Map properties) {
 		connectionTool.setProperties(properties);
 		editPartTracker.setProperties(properties);
 	}

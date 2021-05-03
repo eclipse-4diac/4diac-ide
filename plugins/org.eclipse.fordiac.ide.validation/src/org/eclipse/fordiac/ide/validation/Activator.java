@@ -22,27 +22,30 @@ public class Activator extends Abstract4DIACUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.validation"; //$NON-NLS-1$
 
 	private static Activator plugin;
-	
+
 	private OCL oclInstance;
-	
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;	
+		setPlugin(this);
 		oclInstance = OCL.newInstance(EcoreEnvironmentFactory.INSTANCE);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		plugin = null;
+		setPlugin(null);
 		super.stop(context);
+	}
+
+	private static synchronized void setPlugin(Activator newPlugin) {
+		plugin = newPlugin;
 	}
 
 	public static Activator getDefault() {
 		return plugin;
 	}
-	
+
 	public OCL getOclInstance() {
 		return oclInstance;
 	}

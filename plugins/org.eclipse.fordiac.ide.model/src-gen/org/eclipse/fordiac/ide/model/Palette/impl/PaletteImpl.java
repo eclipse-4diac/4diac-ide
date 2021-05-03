@@ -36,156 +36,120 @@ import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>Palette</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>Palette</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getTypeLibrary
- * <em>Type Library</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAdapterTypes
- * <em>Adapter Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getDeviceTypes
- * <em>Device Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getFbTypes
- * <em>Fb Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getResourceTypes
- * <em>Resource Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getSegmentTypes
- * <em>Segment Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getSubAppTypes
- * <em>Sub App Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getTypeLibrary <em>Type Library</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAdapterTypes <em>Adapter Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getDeviceTypes <em>Device Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getFbTypes <em>Fb Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getResourceTypes <em>Resource Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getSegmentTypes <em>Segment Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getSubAppTypes <em>Sub App Types</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class PaletteImpl extends EObjectImpl implements Palette {
-	/**
-	 * The default value of the '{@link #getTypeLibrary() <em>Type Library</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getTypeLibrary() <em>Type Library</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @see #getTypeLibrary()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final TypeLibrary TYPE_LIBRARY_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getTypeLibrary() <em>Type Library</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTypeLibrary() <em>Type Library</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @see #getTypeLibrary()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected TypeLibrary typeLibrary = TYPE_LIBRARY_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getAdapterTypes() <em>Adapter Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getAdapterTypes() <em>Adapter Types</em>}' map. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getAdapterTypes()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EMap<String, AdapterTypePaletteEntry> adapterTypes;
 
-	/**
-	 * The cached value of the '{@link #getDeviceTypes() <em>Device Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDeviceTypes() <em>Device Types</em>}' map. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getDeviceTypes()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EMap<String, DeviceTypePaletteEntry> deviceTypes;
 
-	/**
-	 * The cached value of the '{@link #getFbTypes() <em>Fb Types</em>}' map. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getFbTypes() <em>Fb Types</em>}' map. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getFbTypes()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EMap<String, FBTypePaletteEntry> fbTypes;
 
-	/**
-	 * The cached value of the '{@link #getResourceTypes() <em>Resource Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getResourceTypes() <em>Resource Types</em>}' map. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getResourceTypes()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EMap<String, ResourceTypeEntry> resourceTypes;
 
-	/**
-	 * The cached value of the '{@link #getSegmentTypes() <em>Segment Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getSegmentTypes() <em>Segment Types</em>}' map. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getSegmentTypes()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EMap<String, SegmentTypePaletteEntry> segmentTypes;
 
-	/**
-	 * The cached value of the '{@link #getSubAppTypes() <em>Sub App Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getSubAppTypes() <em>Sub App Types</em>}' map. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getSubAppTypes()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EMap<String, SubApplicationTypePaletteEntry> subAppTypes;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected PaletteImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return PalettePackage.Literals.PALETTE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public IProject getProject() {
 		return getTypeLibrary().getProject();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return typeLibrary;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setTypeLibrary(TypeLibrary newTypeLibrary) {
 		TypeLibrary oldTypeLibrary = typeLibrary;
@@ -195,11 +159,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 					typeLibrary));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EMap<String, FBTypePaletteEntry> getFbTypes() {
 		if (fbTypes == null) {
@@ -210,11 +172,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return fbTypes;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EMap<String, ResourceTypeEntry> getResourceTypes() {
 		if (resourceTypes == null) {
@@ -225,11 +185,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return resourceTypes;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EMap<String, DeviceTypePaletteEntry> getDeviceTypes() {
 		if (deviceTypes == null) {
@@ -240,11 +198,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return deviceTypes;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EMap<String, SegmentTypePaletteEntry> getSegmentTypes() {
 		if (segmentTypes == null) {
@@ -255,11 +211,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return segmentTypes;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EMap<String, SubApplicationTypePaletteEntry> getSubAppTypes() {
 		if (subAppTypes == null) {
@@ -270,11 +224,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return subAppTypes;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EMap<String, AdapterTypePaletteEntry> getAdapterTypes() {
 		if (adapterTypes == null) {
@@ -285,101 +237,81 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return adapterTypes;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<AdapterTypePaletteEntry> getAdapterTypesSorted() {
 		return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypesSorted(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AdapterTypePaletteEntry getAdapterTypeEntry(final String typeName) {
 		return getAdapterTypes().get(typeName);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public DeviceTypePaletteEntry getDeviceTypeEntry(final String typeName) {
 		return getDeviceTypes().get(typeName);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBTypePaletteEntry getFBTypeEntry(final String typeName) {
 		return getFbTypes().get(typeName);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ResourceTypeEntry getResourceTypeEntry(final String typeName) {
 		return getResourceTypes().get(typeName);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SegmentTypePaletteEntry getSegmentTypeEntry(final String typeName) {
 		return getSegmentTypes().get(typeName);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SubApplicationTypePaletteEntry getSubAppTypeEntry(final String typeName) {
 		return getSubAppTypes().get(typeName);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void addPaletteEntry(final PaletteEntry entry) {
 		org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.addTypeEntry(this, entry);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void removePaletteEntry(final PaletteEntry entry) {
 		org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.removeTypeEntry(this, entry);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -400,11 +332,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -445,11 +375,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -480,11 +408,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -515,11 +441,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -542,11 +466,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

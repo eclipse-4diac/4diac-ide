@@ -27,7 +27,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) CompositeFBType type
 
 	new(CompositeFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CCompositeFB")
 		this.type = type
 	}
 
@@ -38,7 +38,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate {
 		
 		«generateHeaderIncludes»
 		
-		class «FBClassName»: public CCompositeFB {
+		«generateFBClassHeader»
 		  «generateFBDeclaration»
 		
 		private:
@@ -55,7 +55,9 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate {
 		  FORTE_FB_DATA_ARRAY(«type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
 		
 		public:
-		  COMPOSITE_FUNCTION_BLOCK_CTOR(«FBClassName») {};
+		  «FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+		      «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, &scm_stFBNData, m_anFBConnData, m_anFBVarsData) {
+		  };
 		
 		  virtual ~«FBClassName»() = default;
 		};

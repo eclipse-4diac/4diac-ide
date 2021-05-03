@@ -13,18 +13,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class ChangeSubAppIETypeCommand extends ChangeTypeCommand {
-	private ChangeTypeCommand mirroredElement = null;
+public class ChangeSubAppIETypeCommand extends ChangeDataTypeCommand {
+	private ChangeDataTypeCommand mirroredElement = null;
 
 	public ChangeSubAppIETypeCommand(VarDeclaration interfaceElement, DataType dataType) {
 		super(interfaceElement, dataType);
 
 		if (interfaceElement.getFBNetworkElement().isMapped()) {
-			mirroredElement = new ChangeTypeCommand((VarDeclaration) interfaceElement.getFBNetworkElement()
+			mirroredElement = new ChangeDataTypeCommand((VarDeclaration) interfaceElement.getFBNetworkElement()
 					.getOpposite().getInterfaceElement(interfaceElement.getName()), dataType);
 		}
 	}

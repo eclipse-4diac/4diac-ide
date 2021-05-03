@@ -27,7 +27,7 @@ class AdapterFilter {
 	@Accessors(PUBLIC_GETTER)
 	List<String> errors = new ArrayList<String>;
 
-	def lua(AdapterType type) '''
+	def String lua(AdapterType type) '''
 		«type.interfaceList.luaEventDataInterfaceSpec»
 		
 		return {interfaceSpec = interfaceSpec}

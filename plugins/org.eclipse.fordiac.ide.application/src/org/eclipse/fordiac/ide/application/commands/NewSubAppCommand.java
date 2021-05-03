@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -28,34 +27,49 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.EditPart;
-import org.eclipse.ui.IEditorInput;
 
 public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
-	/** The input for reopening subApp. */
-	private IEditorInput input;
+	private final List<?> parts;
 	private final AddElementsToSubAppCommand addElements;
 	private MapToCommand mapSubappCmd; // can not be in the compound command as it needs to be performed when
-										// subapp interface is finished
+	// subapp interface is finished
 
-	public NewSubAppCommand(FBNetwork fbNetwork, List<?> selection, int x, int y) {
+	public NewSubAppCommand(final FBNetwork fbNetwork, final List<?> selection, final int x, final int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
 		getSubApp().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
 		addElements = new AddElementsToSubAppCommand(getSubApp(), selection);
 		checkMapping(selection);
+		parts = selection;
+	}
+
+	@Override
+	public boolean canExecute() {
+		return super.canExecute() && allElementsInSameFBnetwork();
+	}
+
+	private boolean allElementsInSameFBnetwork() {
+		for (final Object o : parts) {
+			if (o instanceof EditPart) {
+				final Object model = ((EditPart) o).getModel();
+				if ((model instanceof FBNetworkElement)
+						&& (((FBNetworkElement) model).getFbNetwork() != getFBNetwork())) {
+					// an element is not in the target fbnetwork
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	@Override
 	public void execute() {
 		super.execute();
-		// We can not call redo here as the unmap and map commands would not be handled
-		// correctly
 		addElements.execute();
 		if (null != mapSubappCmd) {
 			mapSubappCmd.execute();
 		}
-		openClosedEditor();
 	}
 
 	@Override
@@ -65,25 +79,24 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 		if (null != mapSubappCmd) {
 			mapSubappCmd.redo();
 		}
-		openClosedEditor();
 	}
 
 	@Override
 	public void undo() {
+		closeOpenedSubApp();
 		if (null != mapSubappCmd) {
 			mapSubappCmd.undo();
 		}
 		addElements.undo(); // this has to be done bevor super.undo() as otherwise addElements does not have
-							// the correct networks.
+		// the correct networks.
 		super.undo();
-		closeOpenedSubApp();
 	}
 
-	private void checkMapping(List<?> selection) {
+	private void checkMapping(final List<?> selection) {
 		Resource res = null;
-		for (Object ne : selection) {
+		for (final Object ne : selection) {
 			if ((ne instanceof EditPart) && (((EditPart) ne).getModel() instanceof FBNetworkElement)) {
-				FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
+				final FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
 				if (element.isMapped()) {
 					if (null == res) {
 						// this is the first element
@@ -112,16 +125,10 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private void closeOpenedSubApp() {
-		input = CommandUtil.closeOpenedSubApp(getSubApp().getSubAppNetwork());
+		BreadcrumbUtil.openParentEditor(getSubApp());
 	}
 
 	private SubApp getSubApp() {
 		return (SubApp) getElement();
-	}
-
-	private void openClosedEditor() {
-		if (null != input) {
-			EditorUtils.openEditor(input, SubAppNetworkEditor.class.getName());
-		}
 	}
 }

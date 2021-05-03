@@ -11,6 +11,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - added support for structured types
+ *   Ernst Blecha - added support for exporting CMakeLists.txt
  */
 package org.eclipse.fordiac.ide.export.forte_ng;
 
@@ -25,6 +26,7 @@ import org.eclipse.fordiac.ide.export.forte_ng.adapter.AdapterFBHeaderTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.adapter.AdapterFBImplTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.basic.BasicFBHeaderTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.basic.BasicFBImplTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.cmake.CMakeListsTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBHeaderTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBImplTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.service.ServiceInterfaceFBHeaderTemplate;
@@ -42,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
@@ -157,6 +160,16 @@ public class ForteNgExportFilter extends TemplateExportFilter {
         Path _get_1 = Paths.get("");
         StructuredTypeImplTemplate _structuredTypeImplTemplate = new StructuredTypeImplTemplate(((StructuredType)type), _builder_1.toString(), _get_1);
         _switchResult = Collections.<IExportTemplate>unmodifiableSet(CollectionLiterals.<IExportTemplate>newHashSet(_structuredTypeHeaderTemplate, _structuredTypeImplTemplate));
+      }
+    }
+    if (!_matched) {
+      if (type instanceof CMakeListsMarker) {
+        _matched=true;
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("CMakeLists.txt");
+        Path _get = Paths.get("");
+        CMakeListsTemplate _cMakeListsTemplate = new CMakeListsTemplate(_builder.toString(), _get);
+        _switchResult = Collections.<IExportTemplate>unmodifiableSet(CollectionLiterals.<IExportTemplate>newHashSet(_cMakeListsTemplate));
       }
     }
     if (!_matched) {

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019, 2020 Johannes Kepler University Linz
+ *               2020, 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,22 +17,19 @@
  *       cells behavior
  *     - extracted helper for ComboCellEditors that unfold on activation
  *   Daniel Lindhuber
- *     - added enableCopyPasteCut method
+ *     - added copy/paste/cut for tables
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.ui.actions.Clipboard;
+import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
@@ -39,10 +37,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageBookViewPage;
+import org.eclipse.ui.part.IPageSite;
+import org.eclipse.ui.views.properties.tabbed.ISection;
 import org.eclipse.ui.views.properties.tabbed.TabContents;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -55,8 +58,8 @@ public final class TableWidgetFactory {
 	}
 
 	public static TableViewer createTableViewer(final Composite parent, int style) {
-		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-		TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
+		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
 
 		gridData.heightHint = 150;
 		gridData.widthHint = 80;
@@ -69,8 +72,8 @@ public final class TableWidgetFactory {
 	}
 
 	public static TableViewer createPropertyTableViewer(final Composite parent, int style) {
-		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-		TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
+		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
 
 		gridData.minimumHeight = 80;
 		gridData.heightHint = 4;
@@ -80,10 +83,10 @@ public final class TableWidgetFactory {
 	}
 
 	private static TableViewer createGenericTableViewer(GridData gridData, final Composite parent, int style) {
-		TableViewer tableViewer = new TableViewer(parent,
+		final TableViewer tableViewer = new TableViewer(parent,
 				SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | style);
 
-		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
+		final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
 			@Override
 			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
 				return (event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL)
@@ -109,139 +112,91 @@ public final class TableWidgetFactory {
 		throw new UnsupportedOperationException("Widget Factory should not be instantiated"); //$NON-NLS-1$
 	}
 
+	/** @param part can be of type:
+	 *             <ul>
+	 *             <li>TabbedPropertySheetPage</li>
+	 *             <li>IWorkbenchPart</li>
+	 *             </ul>
+	 */
 	public static void enableCopyPasteCut(final Object part) {
-		if (part instanceof IWorkbenchPart) {
-			IWorkbenchSite site = ((IWorkbenchPart) part).getSite();
-			if (checkHandlers(site)) {
-				activateWorkbenchHandlers(part, false);
-				handledSites.add(site);
-			}
-		} else if (part instanceof IPageBookViewPage) {
-			IWorkbenchSite site = ((IPageBookViewPage) part).getSite();
-			if (checkHandlers(site)) {
-				activateWorkbenchHandlers(part, true);
-				handledSites.add(site);
-			}
-		}
-	}
+		final IWorkbenchSite site = getSite(part);
+		if (site != null) {
 
-	private static boolean checkHandlers(IWorkbenchSite site) {
-		for (IWorkbenchSite v : handledSites) {
-			if (v == site) {
-				if (site.hasService(IHandlerService.class)) {
-					return false;
+			for (final IWorkbenchSite s : handledSites) {
+				if (s == site) {
+					return;
 				}
-				handledSites.remove(site);
-				return true;
 			}
+			final ActionRegistry registry = new ActionRegistry();
+			registerActions(part, registry);
+			setActionHandlers(site, registry);
+			handledSites.add(site);
 		}
-		return true;
 	}
 
-	private static I4diacTableUtil getView(Object obj) {
-		if (obj instanceof I4diacTableUtil) {
-			return (I4diacTableUtil) obj;
+	private static void registerActions(Object part, ActionRegistry registry) {
+		IAction action = new TableCopyAction(part);
+		registry.registerAction(action);
+
+		action = new TablePasteAction(part);
+		registry.registerAction(action);
+
+		action = new TableCutAction(part);
+		registry.registerAction(action);
+	}
+
+	private static void setActionHandlers(IWorkbenchSite site, ActionRegistry registry) {
+		final IActionBars bars = getActionBars(site);
+		if (bars != null) {
+			String id = ActionFactory.COPY.getId();
+			bars.setGlobalActionHandler(id, registry.getAction(id));
+			id = ActionFactory.PASTE.getId();
+			bars.setGlobalActionHandler(id, registry.getAction(id));
+			id = ActionFactory.CUT.getId();
+			bars.setGlobalActionHandler(id, registry.getAction(id));
+			bars.updateActionBars();
+		}
+	}
+
+	private static IActionBars getActionBars(IWorkbenchSite site) {
+		if (site instanceof IEditorSite) {
+			return ((IEditorSite) site).getActionBars();
+		} else if (site instanceof IPageSite) {
+			return ((IPageSite) site).getActionBars();
 		}
 		return null;
 	}
 
-	private static I4diacTableUtil getTab(Object part) {
-		TabContents content = (((TabbedPropertySheetPage) part).getCurrentTab());
-		return getView(content.getSectionAtIndex(0));
-	}
-
-	public static void activateWorkbenchHandlers(Object part, boolean isTabbed) {
-		IWorkbenchSite site;
-		if (isTabbed) {
-			site = ((IPageBookViewPage) part).getSite();
-		} else {
-			site = ((IWorkbenchPart) part).getSite();
+	private static IWorkbenchSite getSite(Object part) {
+		if (part instanceof IWorkbenchPart) {
+			return ((IWorkbenchPart) part).getSite();
+		} else if (part instanceof IPageBookViewPage) {
+			return ((TabbedPropertySheetPage) part).getSite();
 		}
-		IHandlerService serv = site.getService(IHandlerService.class);
-		Clipboard cb = Clipboard.getDefault();
-
-		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_COPY, new AbstractHandler() {
-			@Override
-			public Object execute(ExecutionEvent event) throws ExecutionException {
-				I4diacTableUtil view = isTabbed ? getTab(part) : getView(site.getSelectionProvider());
-				if (view == null) {
-					return Status.CANCEL_STATUS;
-				}
-				Object[] selection = ((StructuredSelection) view.getViewer().getSelection()).toArray();
-				cb.setContents(selection);
-				return Status.OK_STATUS;
-			}
-		});
-
-		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_PASTE, new AbstractHandler() {
-			@Override
-			public Object execute(ExecutionEvent event) throws ExecutionException {
-				I4diacTableUtil view = isTabbed ? getTab(part) : getView(site.getSelectionProvider());
-				if (view == null) {
-					return Status.CANCEL_STATUS;
-				}
-				Table table = view.getViewer().getTable();
-				Object[] entries;
-				try {
-					entries = (Object[]) cb.getContents();
-				} catch (Exception e) {
-					return Status.CANCEL_STATUS;
-				}
-				if (cb.getContents() == null) {
-					return Status.CANCEL_STATUS;
-				}
-				int[] pasteIndices = table.getSelectionIndices();
-				int index;
-				if (pasteIndices.length == 0) {
-					if (table.getItemCount() > 0) {
-						// no entry is selected -> insert at the bottom of the table
-						index = table.getItemCount();
-					} else {
-						// no entries in the table
-						index = 0;
-					}
-				} else {
-					// use the last entry for multi selections
-					index = pasteIndices[pasteIndices.length - 1] + 1;
-				}
-				CompoundCommand cmpCommand = new CompoundCommand();
-				int[] selectionIndices = new int[entries.length];
-				for (int i = 0; i < entries.length; i++) {
-					selectionIndices[i] = index;
-					view.addEntry(entries[i], index++, cmpCommand);
-				}
-				view.executeCompoundCommand(cmpCommand);
-				table.forceFocus();
-				// the selection has to be set again via the table viewer for the widgets to
-				// recognize it
-				table.setSelection(selectionIndices);
-				TableViewer tableViewer = view.getViewer();
-				tableViewer.setSelection(tableViewer.getSelection());
-				return Status.OK_STATUS;
-			}
-		});
-
-		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_CUT, new AbstractHandler() {
-			@Override
-			public Object execute(ExecutionEvent event) throws ExecutionException {
-				I4diacTableUtil view = isTabbed ? getTab(part) : getView(site.getSelectionProvider());
-				if (view == null) {
-					return Status.CANCEL_STATUS;
-				}
-				Table table = view.getViewer().getTable();
-				int[] indices = table.getSelectionIndices();
-				if (indices.length == 0) {
-					return Status.CANCEL_STATUS;
-				}
-				Object[] entries = new Object[indices.length];
-				CompoundCommand cmpCommand = new CompoundCommand();
-				for (int i = 0; i < indices.length; i++) {
-					entries[i] = view.removeEntry(indices[i], cmpCommand);
-				}
-				view.executeCompoundCommand(cmpCommand);
-				cb.setContents(entries);
-				return Status.OK_STATUS;
-			}
-		});
+		return null;
 	}
+
+	public static I4diacTableUtil getTableEditor(Object part) {
+		if (part instanceof IWorkbenchPart) {
+			return getTableEditorFromWorkbenchPart((IWorkbenchPart) part);
+		} else if (part instanceof IPageBookViewPage) {
+			return getTableEditorFromPropertySheet((TabbedPropertySheetPage) part);
+		}
+		return null;
+	}
+
+	private static I4diacTableUtil getTableEditorFromWorkbenchPart(IWorkbenchPart part) {
+		final IWorkbenchWindow window = part.getSite().getWorkbenchWindow();
+		final ISelection sel = window.getSelectionService().getSelection();
+		final Object editor = (sel instanceof StructuredSelection) ? ((StructuredSelection) sel).getFirstElement()
+				: null;
+		return (editor instanceof I4diacTableUtil) ? (I4diacTableUtil) editor : null;
+	}
+
+	private static I4diacTableUtil getTableEditorFromPropertySheet(TabbedPropertySheetPage part) {
+		final TabContents content = part.getCurrentTab();
+		final ISection section = content.getSectionAtIndex(0);
+		return (section instanceof I4diacTableUtil) ? (I4diacTableUtil) section : null;
+	}
+
 }

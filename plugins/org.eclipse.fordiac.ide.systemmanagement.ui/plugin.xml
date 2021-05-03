@@ -62,9 +62,9 @@
       <editor
             name="%SystemEditor.name"
             extensions="sys"
-            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
+            contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
             default="true"
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.SystemEditor"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
             icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"
             id="org.eclipse.fordiac.ide.editors.SystemEditor">
       </editor>
@@ -285,7 +285,7 @@
             <propertyTab
                   category="systemInfo"
                   id="property.tab.system.deviceInfo"
-                  label="Interface">
+                  label="Instance">
             </propertyTab>
             <propertyTab
                   afterTab="property.tab.system.deviceInfo"
@@ -531,7 +531,7 @@
          </enablement>
       </actionProvider>
       <actionProvider
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.Open4DIACElementActionProvider"
+            class="org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementActionProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.OpenActionProvider">
             <enablement>
             <or>

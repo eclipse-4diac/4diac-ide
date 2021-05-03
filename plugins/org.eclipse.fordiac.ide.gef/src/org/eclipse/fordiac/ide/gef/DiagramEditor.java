@@ -19,13 +19,15 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.handles.AdvancedGraphicalViewerKeyHandler;
+import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -36,6 +38,7 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -47,8 +50,10 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -66,7 +71,9 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditor extends GraphicalEditor
-		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+
+	public static final int INITIAL_SCROLL_OFFSET = 5;
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
@@ -80,7 +87,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	/**
 	 * Instantiates a new diagram editor.
 	 */
-	public DiagramEditor() {
+	protected DiagramEditor() {
 	}
 
 	/*
@@ -101,23 +108,48 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		@SuppressWarnings("unchecked") // method returns child editparts
-		List<EditPart> children = getGraphicalViewer().getRootEditPart().getChildren();
+		final List<EditPart> children = getGraphicalViewer().getRootEditPart().getChildren();
 		children.forEach(EditPart::refresh);
 	}
 
 	@Override
-	protected void createGraphicalViewer(final Composite parent) {
-		RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
 
-		GraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
+		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
+		if (viewer.getControl() instanceof FigureCanvas) {
+			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+			final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
+					.getRootEditPart();
+			Display.getDefault().asyncExec(() -> {
+				viewer.flush();
+				// if an editpart is selected then the viewer has bee created with something to be shown centered
+				// therefore we will not show the initial position
+				// do not use getSelection() here because it will return always at least one element
+				if (viewer.getSelectedEditParts().isEmpty()) {
+					final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
+					canvas.scrollTo(drawingAreaBounds.x - INITIAL_SCROLL_OFFSET,
+							drawingAreaBounds.y - INITIAL_SCROLL_OFFSET);
+				} else {
+					// if we have a selected edit part we want to show it in the middle
+					viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
+				}
+			});
+		}
+	}
+
+	@Override
+	protected void createGraphicalViewer(final Composite parent) {
+		final RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
+
+		final GraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
 		viewer.createControl(rulerComp);
 		setGraphicalViewer(viewer);
 		configureGraphicalViewer();
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
 
-		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
+		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}
 
 	/**
@@ -138,11 +170,11 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		AdvancedScrollingGraphicalViewer viewer = (AdvancedScrollingGraphicalViewer) getGraphicalViewer();
+		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 
-		ScalableFreeformRootEditPart root = createRootEditPart();
+		final ScalableFreeformRootEditPart root = createRootEditPart();
 
-		ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
+		final ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
 		if (null != cmp) {
 			viewer.setContextMenu(cmp);
 			getSite().registerContextMenu("org.eclipse.fordiac.ide.gef.contextmenu", //$NON-NLS-1$
@@ -152,7 +184,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditPartFactory());
 
-		AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
+		final AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
 		keyHandler.setParent(getCommonKeyHandler());
 		viewer.setKeyHandler(keyHandler);
 
@@ -195,10 +227,10 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 */
 	@Override
 	protected void initializeGraphicalViewer() {
-		GraphicalViewer viewer = getGraphicalViewer();
+		final GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(getModel());
 		// listen for dropped parts
-		TransferDropTargetListener listener = createTransferDropTargetListener();
+		final TransferDropTargetListener listener = createTransferDropTargetListener();
 		if (listener != null) {
 			viewer.addDropTargetListener(createTransferDropTargetListener());
 		}
@@ -305,7 +337,6 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
 	 * java.lang.Class)
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class type) {
 		if (type == ZoomManager.class) {
@@ -335,10 +366,9 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		IAction action;
 
 		action = new DirectEditAction((IWorkbenchPart) this);
@@ -379,25 +409,10 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionActions()
-	 */
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected List getSelectionActions() {
-		return super.getSelectionActions();
-	}
-
-	/**
-	 * Gets the sel actions.
-	 *
-	 * @return the sel actions
-	 */
-	@SuppressWarnings("rawtypes")
-	public List getSelActions() {
-		return getSelectionActions();
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		super.selectionChanged(part, selection);
+		updateActions(getSelectionActions());
 	}
 
 	/*
@@ -431,6 +446,11 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@Override
 	public String getContributorId() {
 		return PROPERTY_CONTRIBUTOR_ID;
+	}
+
+	@Override
+	protected AdvancedScrollingGraphicalViewer getGraphicalViewer() {
+		return (AdvancedScrollingGraphicalViewer) super.getGraphicalViewer();
 	}
 
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,7 +15,8 @@ package org.eclipse.fordiac.ide.resourceediting;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages extends NLS {
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.resourceediting.messages"; //$NON-NLS-1$
 	public static String OpenResourceEditorAction_Name;
 	static {
@@ -24,5 +25,6 @@ public class Messages extends NLS {
 	}
 
 	private Messages() {
+		// empty private constructor
 	}
 }

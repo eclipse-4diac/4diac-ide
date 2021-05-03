@@ -23,7 +23,6 @@ import java.util.Set;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -31,10 +30,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class FocusOnPredecessor extends AbstractHandler {
@@ -43,17 +43,15 @@ public class FocusOnPredecessor extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		Set<ConfigurableObject> elementToHighlight = new HashSet<>();
+		final Set<ConfigurableObject> elementToHighlight = new HashSet<>();
 		getPredecessorFBNetworkElements(getSelectedFBElement(event), elementToHighlight);
 
-		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
-		GraphicalViewer viewer = editor.getViewer();
-
-		Map<?, ?> map = viewer.getEditPartRegistry();
-		for (Entry<?, ?> entry : map.entrySet()) {
-			Object obj = entry.getKey();
-			Object editPartAsObject = entry.getValue();
-			int transparency = (elementToHighlight.contains(obj)) ? NON_TRANSPARENT : HALF_TRANSPERENT;
+		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
+		final Map<?, ?> map = BreadcrumbUtil.getViewer(editor).getEditPartRegistry();
+		for (final Entry<?, ?> entry : map.entrySet()) {
+			final Object obj = entry.getKey();
+			final Object editPartAsObject = entry.getValue();
+			final int transparency = (elementToHighlight.contains(obj)) ? NON_TRANSPARENT : HALF_TRANSPERENT;
 			if (editPartAsObject instanceof AbstractViewEditPart) {
 				((AbstractViewEditPart) editPartAsObject).setTransparency(transparency);
 			} else if (editPartAsObject instanceof ConnectionEditPart) {
@@ -67,11 +65,11 @@ public class FocusOnPredecessor extends AbstractHandler {
 			Set<ConfigurableObject> elementToHighlight) {
 		if (null != element) {
 			elementToHighlight.add(element);
-			for (VarDeclaration inVar : element.getInterface().getInputVars()) {
-				for (Connection con : inVar.getInputConnections()) {
-					IInterfaceElement source = con.getSource();
+			for (final VarDeclaration inVar : element.getInterface().getInputVars()) {
+				for (final Connection con : inVar.getInputConnections()) {
+					final IInterfaceElement source = con.getSource();
 					if (source != null) {
-						FBNetworkElement sourceElement = source.getFBNetworkElement();
+						final FBNetworkElement sourceElement = source.getFBNetworkElement();
 						if (null != sourceElement) {
 							elementToHighlight.add(con);
 							if (!elementToHighlight.contains(sourceElement)) {
@@ -85,7 +83,7 @@ public class FocusOnPredecessor extends AbstractHandler {
 	}
 
 	private static FBNetworkElement getSelectedFBElement(ExecutionEvent event) {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
 			Object selObj = ((StructuredSelection) selection).getFirstElement();
 			if (selObj instanceof EditPart) {

@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
  * 				 2019 - 2020 Johannes Kepler University
+ *               2020        Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,8 @@
  *   Alois Zoitl - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
  *   Bianca Wiesmayr - added struct
+ *   Alois Zoitl, Bianca Wiesmayr - unfolded subapp
+ *   Daniel Lindhuber - InstanceComment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -37,7 +40,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  */
 public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 
-	public ElementEditPartFactory(GraphicalEditor editor) {
+	public ElementEditPartFactory(final GraphicalEditor editor) {
 		super(editor);
 	}
 
@@ -49,13 +52,10 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		EditPart part = null;
-
-		if (modelElement instanceof FBNetwork) {
-			if (((FBNetwork) modelElement).eContainer() instanceof SubApp) {
-				part = new UISubAppNetworkEditPart();
-			} else {
-				part = new FBNetworkEditPart();
-			}
+		if (modelElement instanceof UnfoldedSubappContentNetwork) {
+			part = new UnfoldedSubappContentEditPart();
+		} else if (modelElement instanceof FBNetwork) {
+			part = getPartForFBNetwork((FBNetwork) modelElement);
 		} else if (modelElement instanceof FB) {
 			if (null != ((FB) modelElement).getType()) {
 				if (((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
@@ -67,12 +67,14 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			part = new FBEditPart();
 		} else if (modelElement instanceof InstanceName) {
 			part = new InstanceNameEditPart();
+		} else if (modelElement instanceof InstanceComment) {
+			part = new InstanceCommentEditPart();
 		} else if (modelElement instanceof Connection) {
 			part = new ConnectionEditPart();
 		} else if (modelElement instanceof SubApp) {
 			part = new SubAppForFBNetworkEditPart();
 		} else if (modelElement instanceof IInterfaceElement) {
-			part = createInterfaceEditPart(modelElement);
+			part = createInterfaceEditPart(modelElement, context);
 		} else if (modelElement instanceof Value) {
 			part = new ValueEditPart();
 		} else {
@@ -81,9 +83,17 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		return part;
 	}
 
-	private static EditPart createInterfaceEditPart(final Object modelElement) {
+	@SuppressWarnings("static-method")  // not static to allow subclasses to provide own elements
+	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
+		if (fbNetwork.eContainer() instanceof SubApp) {
+			return new UISubAppNetworkEditPart();
+		}
+		return new FBNetworkEditPart();
+	}
+
+	private static EditPart createInterfaceEditPart(final Object modelElement, final EditPart context) {
 		EditPart part;
-		IInterfaceElement element = (IInterfaceElement) modelElement;
+		final IInterfaceElement element = (IInterfaceElement) modelElement;
 		if ((element.getFBNetworkElement() instanceof StructManipulator)
 				&& (element.getType() instanceof StructuredType)) {
 			if (isMuxOutput(element)) {
@@ -101,11 +111,11 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		return part;
 	}
 
-	private static boolean isDemuxInput(IInterfaceElement element) {
+	private static boolean isDemuxInput(final IInterfaceElement element) {
 		return (element.getFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput());
 	}
 
-	private static boolean isMuxOutput(IInterfaceElement element) {
+	private static boolean isMuxOutput(final IInterfaceElement element) {
 		return (element.getFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput());
 	}
 

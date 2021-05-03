@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.st;
 
 import com.google.common.base.Objects;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -168,46 +169,62 @@ public class STAlgorithmFilter {
     throw new IllegalStateException();
   }
   
-  public CharSequence generate(final STAlgorithm alg, final List<String> errors) {
+  public XtextResource parseAlgorithm(final STAlgorithm alg) {
     try {
-      CharSequence _xblockexpression = null;
-      {
-        ResourceSet _get = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
-        final XtextResourceSet resourceSet = ((XtextResourceSet) _get);
-        EObject _rootContainer = EcoreUtil.getRootContainer(alg);
-        this.createFBResource(resourceSet, ((BaseFBType) _rootContainer));
-        Resource _createResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.ST_URI_EXTENSION));
-        final XtextResource resource = ((XtextResource) _createResource);
-        String _text = alg.getText();
-        LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(_text);
-        Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
-        resource.load(_lazyStringInputStream, Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
-        final IParseResult parseResult = resource.getParseResult();
-        final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
-        final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
-        boolean _isEmpty = issues.isEmpty();
-        boolean _not = (!_isEmpty);
-        if (_not) {
-          final Function1<Issue, String> _function = (Issue it) -> {
-            String _name = alg.getName();
-            String _plus = (_name + ", Line ");
-            String _string = Long.toString((it.getLineNumber()).intValue());
-            String _plus_1 = (_plus + _string);
-            String _plus_2 = (_plus_1 + ": ");
-            String _message = it.getMessage();
-            return (_plus_2 + _message);
-          };
-          errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
-          return null;
-        }
-        EObject _rootASTElement = parseResult.getRootASTElement();
-        final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
-        _xblockexpression = this.generateStructuredTextAlgorithm(stalg);
-      }
-      return _xblockexpression;
+      ResourceSet _get = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
+      final XtextResourceSet resourceSet = ((XtextResourceSet) _get);
+      EObject _rootContainer = EcoreUtil.getRootContainer(alg);
+      this.createFBResource(resourceSet, ((BaseFBType) _rootContainer));
+      Resource _createResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.ST_URI_EXTENSION));
+      final XtextResource resource = ((XtextResource) _createResource);
+      String _text = alg.getText();
+      LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(_text);
+      Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+      resource.load(_lazyStringInputStream, Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
+      EObject _rootASTElement = resource.getParseResult().getRootASTElement();
+      final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
+      final Consumer<VarDeclaration> _function = (VarDeclaration v) -> {
+        this.createStructResource(resourceSet, v);
+      };
+      stalg.getLocalVariables().forEach(_function);
+      return resource;
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
+  }
+  
+  public EList<VarDeclaration> generateLocalVariables(final STAlgorithm alg) {
+    final IParseResult parseResult = this.parseAlgorithm(alg).getParseResult();
+    EObject _rootASTElement = parseResult.getRootASTElement();
+    final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
+    final Consumer<VarDeclaration> _function = (VarDeclaration v) -> {
+      v.setTypeName(v.getType().getName());
+    };
+    stalg.getLocalVariables().forEach(_function);
+    return stalg.getLocalVariables();
+  }
+  
+  public CharSequence generate(final STAlgorithm alg, final List<String> errors) {
+    CharSequence _xblockexpression = null;
+    {
+      final XtextResource resource = this.parseAlgorithm(alg);
+      final IParseResult parseResult = resource.getParseResult();
+      final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
+      final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+      boolean _isEmpty = issues.isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        final Function1<Issue, String> _function = (Issue it) -> {
+          return MessageFormat.format("{0}, Line {1}: {2}", alg.getName(), Long.toString((it.getLineNumber()).intValue()), it.getMessage());
+        };
+        errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
+        return null;
+      }
+      EObject _rootASTElement = parseResult.getRootASTElement();
+      final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
+      _xblockexpression = this.generateStructuredTextAlgorithm(stalg);
+    }
+    return _xblockexpression;
   }
   
   public CharSequence generate(final String expression, final BasicFBType fb, final List<String> errors) {
@@ -1082,10 +1099,8 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateExpression(final AdapterRoot expr) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
-    String _name = expr.getAdapter().getName();
-    _builder.append(_name);
-    _builder.append("()");
+    CharSequence _generateVarAccess = this.generateVarAccess(expr.getAdapter());
+    _builder.append(_generateVarAccess);
     return _builder;
   }
   

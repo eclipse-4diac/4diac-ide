@@ -13,14 +13,11 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.data;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Event
- * Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Event Type</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEventType()
  * @model
- * @generated
- */
+ * @generated */
 public interface EventType extends DataType {
 } // EventType

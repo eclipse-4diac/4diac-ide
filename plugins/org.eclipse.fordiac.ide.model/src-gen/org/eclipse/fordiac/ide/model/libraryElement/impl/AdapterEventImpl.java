@@ -21,54 +21,43 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter
- * Event</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter Event</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl#getAdapterDeclaration
- * <em>Adapter Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl#getAdapterDeclaration <em>Adapter
+ * Declaration</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class AdapterEventImpl extends EventImpl implements AdapterEvent {
-	/**
-	 * The cached value of the '{@link #getAdapterDeclaration() <em>Adapter
-	 * Declaration</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getAdapterDeclaration() <em>Adapter Declaration</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getAdapterDeclaration()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected AdapterDeclaration adapterDeclaration;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected AdapterEventImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.ADAPTER_EVENT;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AdapterDeclaration getAdapterDeclaration() {
 		if (adapterDeclaration != null && adapterDeclaration.eIsProxy()) {
@@ -84,20 +73,16 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 		return adapterDeclaration;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public AdapterDeclaration basicGetAdapterDeclaration() {
 		return adapterDeclaration;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setAdapterDeclaration(AdapterDeclaration newAdapterDeclaration) {
 		AdapterDeclaration oldAdapterDeclaration = adapterDeclaration;
@@ -108,11 +93,9 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 					adapterDeclaration));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -125,11 +108,9 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -142,11 +123,9 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -159,11 +138,9 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

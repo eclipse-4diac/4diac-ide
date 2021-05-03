@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -21,12 +22,11 @@ import org.eclipse.gef.GraphicalEditPart;
 
 public abstract class AbstractPositionableElementEditPart extends AbstractViewEditPart {
 
-	private Adapter contentAdapter = new AdapterImpl() {
+	private final Adapter contentAdapter = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
-			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature)) {
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)) {
 				refreshPosition();
 			}
 		}
@@ -40,8 +40,9 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 	}
 
 	protected void refreshPosition() {
-		Rectangle bounds = new Rectangle(getPositionableElement().getX(), getPositionableElement().getY(), -1, -1);
 		if (getParent() != null) {
+			final Rectangle bounds = new Rectangle(getPositionableElement().getPosition().asPoint(),
+					new Dimension(-1, -1));
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}
@@ -52,7 +53,7 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			PositionableElement posElement = getPositionableElement();
+			final PositionableElement posElement = getPositionableElement();
 			if (null != posElement) {
 				posElement.eAdapters().add(contentAdapter);
 			}
@@ -63,7 +64,7 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			PositionableElement posElement = getPositionableElement();
+			final PositionableElement posElement = getPositionableElement();
 			if (null != posElement) {
 				posElement.eAdapters().remove(contentAdapter);
 			}

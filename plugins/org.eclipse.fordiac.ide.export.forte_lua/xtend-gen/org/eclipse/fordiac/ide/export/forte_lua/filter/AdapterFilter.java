@@ -16,8 +16,6 @@ package org.eclipse.fordiac.ide.export.forte_lua.filter;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants;
-import org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -34,7 +32,7 @@ public class AdapterFilter {
   @Accessors(AccessorType.PUBLIC_GETTER)
   private List<String> errors = new ArrayList<String>();
   
-  public CharSequence lua(final AdapterType type) {
+  public String lua(final AdapterType type) {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _luaEventDataInterfaceSpec = AdapterFilter.luaEventDataInterfaceSpec(type.getInterfaceList());
     _builder.append(_luaEventDataInterfaceSpec);
@@ -42,7 +40,7 @@ public class AdapterFilter {
     _builder.newLine();
     _builder.append("return {interfaceSpec = interfaceSpec}");
     _builder.newLine();
-    return _builder;
+    return _builder.toString();
   }
   
   public static CharSequence luaEventDataInterfaceSpec(final InterfaceList ifl) {

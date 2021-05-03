@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Require-Bundle: org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.ui.ide,
+ org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.model,
  org.eclipse.jface.text,
@@ -11,7 +12,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.swt
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.13.1.qualifier
+Bundle-Version: 1.14.0.qualifier
 Bundle-Name: FMU exporter
 Bundle-Activator: org.eclipse.fordiac.ide.fmu.Activator
 Bundle-ManifestVersion: 2

@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
@@ -31,7 +32,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	private DeleteConnectionCommand deleteConnectionCmd;
 	private AbstractConnectionCreateCommand connectionCreateCmd;
 
-	public AbstractReconnectConnectionCommand(String label, final ReconnectRequest request, final FBNetwork parent) {
+	public AbstractReconnectConnectionCommand(final String label, final ReconnectRequest request, final FBNetwork parent) {
 		super(label);
 		this.request = request;
 		this.parent = parent;
@@ -57,16 +58,21 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 			target = request.getConnectionEditPart().getTarget();
 		}
 		if ((source instanceof InterfaceEditPart) && (target instanceof InterfaceEditPart)) {
-			IInterfaceElement sourceIE = ((InterfaceEditPart) source).getModel();
-			IInterfaceElement targetIE = ((InterfaceEditPart) target).getModel();
+			final IInterfaceElement sourceIE = ((InterfaceEditPart) source).getModel();
+			final IInterfaceElement targetIE = ((InterfaceEditPart) target).getModel();
 			return checkSourceAndTarget(sourceIE, targetIE);
+		}
+		if (source instanceof SubAppForFBNetworkEditPart) {
+			final boolean unfoldedSource = ((SubAppForFBNetworkEditPart) source).getModel().isUnfolded();
+			// TODO check for the specific connections in unfolded subapps (contained
+			// elements with parent interface)
 		}
 		return false;
 	}
 
 	@Override
 	public void execute() {
-		Connection con = (Connection) request.getConnectionEditPart().getModel();
+		final Connection con = (Connection) request.getConnectionEditPart().getModel();
 		deleteConnectionCmd = new DeleteConnectionCommand(con);
 		connectionCreateCmd = createConnectionCreateCommand(parent);
 
@@ -77,7 +83,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 			doReconnectSource();
 		}
 
-		connectionCreateCmd.setArrangementConstraints(con.getDx1(), con.getDx2(), con.getDy());
+		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
 
 		deleteConnectionCmd.execute();
 		connectionCreateCmd.execute();
@@ -86,7 +92,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	protected void doReconnectSource() {
 		connectionCreateCmd.setSource(((InterfaceEditPart) request.getTarget()).getModel());
 		connectionCreateCmd
-				.setDestination(((InterfaceEditPart) request.getConnectionEditPart().getTarget()).getModel());
+		.setDestination(((InterfaceEditPart) request.getConnectionEditPart().getTarget()).getModel());
 	}
 
 	protected void doReconnectTarget() {
