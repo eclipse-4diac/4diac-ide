@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuilder;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionState;
@@ -326,8 +327,13 @@ class FBNetworkImporter extends CommonElementImporter {
 			return;
 		}
 
+		DataType type = oppositeEndpoint.getType();
+		if (type == null) {
+			type = IecTypes.GenericTypes.ANY;
+		}
+
 		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper
-				.createErrorMarkerInterface(oppositeEndpoint.getType(),
+				.createErrorMarkerInterface(type,
 						pinName, isInput, ieList);
 		e.setErrorMarkerIe(errorMarkerInterface);
 		final IInterfaceElement repairedEndpoint = ConnectionHelper.createRepairInterfaceElement(oppositeEndpoint,
