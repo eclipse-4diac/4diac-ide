@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.listeners.EditorTabCommandStackListener;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
@@ -77,6 +78,11 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	public AutomationSystem system;
 	private DiagramOutlinePage outlinePage;
+	private final EditorTabCommandStackListener subEditorCommandStackListener;
+
+	public AutomationSystemEditor() {
+		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
+	}
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -110,6 +116,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			// method
 			if (null != system) {
 				getCommandStack().addCommandStackEventListener(this);
+				getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
 				setPartName(system.getName());
 			}
 		}
@@ -356,6 +363,14 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	@Override
 	public IFile getFile() {
 		return system.getSystemFile();
+	}
+
+	@Override
+	public void dispose() {
+		if (null != getCommandStack()) {
+			getCommandStack().removeCommandStackEventListener(subEditorCommandStackListener);
+		}
+		super.dispose();
 	}
 
 	@Override
