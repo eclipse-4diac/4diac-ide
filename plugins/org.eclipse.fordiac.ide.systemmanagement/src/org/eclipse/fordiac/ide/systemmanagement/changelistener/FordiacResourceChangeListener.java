@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -137,9 +138,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	public static int openFileChangedDialog(final IEditorFileChangeListener editor) {
 		final IFile file = editor.getFile();
-		final String info = Messages.AutomationSystemEditor_Info.replace("{placeholder}", //$NON-NLS-1$
-				file.getFullPath().toOSString());
-
+		final String info = MessageFormat.format(Messages.AutomationSystemEditor_Info, file.getFullPath().toOSString());
 		final MessageDialog dialog = new MessageDialog(((IEditorPart) editor).getSite().getShell(),
 				Messages.AutomationSystemEditor_Title,
 				null, info, MessageDialog.INFORMATION, new String[] { Messages.FordiacResourceChangeListener_0, Messages.FordiacResourceChangeListener_1, Messages.FordiacResourceChangeListener_2, Messages.FordiacResourceChangeListener_3 }, 0);
@@ -391,6 +390,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		} else {
 			handleTypeRename(delta, src, file);
 		}
+		systemManager.notifyListeners();
 	}
 
 	private static void handleTypeRename(final IResourceDelta delta, final IFile src, final IFile file) {
