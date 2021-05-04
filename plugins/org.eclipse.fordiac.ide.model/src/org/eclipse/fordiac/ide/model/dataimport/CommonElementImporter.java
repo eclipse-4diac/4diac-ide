@@ -124,7 +124,7 @@ public abstract class CommonElementImporter {
 		return variable;
 	}
 
-	protected XMLStreamReader reader;
+	private XMLStreamReader reader;
 	private final IFile file;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
@@ -195,7 +195,7 @@ public abstract class CommonElementImporter {
 		final Map<String, Object> attrs = new HashMap<>();
 		attrs.put(IMarker.MESSAGE, message);
 		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarkerBuilder(attrs,
-				reader.getLocation().getLineNumber());
+				getLineNumber());
 		errorMarkerAttributes.add(e);
 		return e;
 	}
@@ -244,6 +244,10 @@ public abstract class CommonElementImporter {
 
 	protected XMLStreamReader getReader() {
 		return reader;
+	}
+
+	public int getLineNumber() {
+		return reader.getLocation().getLineNumber();
 	}
 
 	protected void proceedToStartElementNamed(final String elementName) throws XMLStreamException {

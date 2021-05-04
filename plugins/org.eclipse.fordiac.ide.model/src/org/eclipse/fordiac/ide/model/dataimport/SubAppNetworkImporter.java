@@ -84,7 +84,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
 					MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", typeName, //$NON-NLS-1$
 							subApp.getName()),
-					subApp, reader.getLocation().getLineNumber());
+					subApp, getLineNumber());
 			errorMarkerAttributes.add(e);
 
 			// put an empty interface list so that the system can load

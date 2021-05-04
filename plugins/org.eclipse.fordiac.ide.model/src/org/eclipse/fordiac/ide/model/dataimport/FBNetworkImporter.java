@@ -133,7 +133,7 @@ class FBNetworkImporter extends CommonElementImporter {
 			// so that the error marker can determine the location!
 			final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
 					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
-					fb, reader.getLocation().getLineNumber());
+					fb, getLineNumber());
 			errorMarkerAttributes.add(e);
 		}
 
@@ -267,7 +267,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
 				Messages.FBNetworkImporter_ConnectionSourceMissing,
 				getFbNetwork(),
-				builder.getSource(), builder.getDestination(), reader.getLocation().getLineNumber());
+				builder.getSource(), builder.getDestination(), getLineNumber());
 		errorMarkerAttributes.add(e);
 		final FBNetworkElement sourceFB = ConnectionHelper.createErrorMarkerFB(builder.getSourceFbName());
 		builder.setSrcInterfaceList(sourceFB.getInterface());
@@ -279,7 +279,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	protected void handleMissingConnectionSourceEndpoint(final Connection connection, final ConnectionBuilder builder) {
 		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
 				Messages.FBNetworkImporter_ConnectionSourceNotFound + builder.getSource(),
-				getFbNetwork(), builder.getSource(), builder.getDestination(), reader.getLocation().getLineNumber());
+				getFbNetwork(), builder.getSource(), builder.getDestination(), getLineNumber());
 		errorMarkerAttributes.add(e);
 		createErrorMarkerInterface(connection, builder, false, e);
 	}
@@ -289,7 +289,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
 				Messages.FBNetworkImporter_ConnectionDestinationMissing, getFbNetwork(),
-				connectionBuilder.getSource(), null, reader.getLocation().getLineNumber());
+				connectionBuilder.getSource(), null, getLineNumber());
 		errorMarkerAttributes.add(e);
 		// check if there is already one
 		final FBNetworkElement destinationFb = ConnectionHelper.createErrorMarkerFB(connectionBuilder.getDestFbName());
@@ -356,7 +356,7 @@ class FBNetworkImporter extends CommonElementImporter {
 			final ConnectionBuilder builder) {
 		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
 				Messages.FBNetworkImporter_ConnectionDestinationNotFound + builder.getDestination(),
-				getFbNetwork(), builder.getSource(), builder.getDestination(), reader.getLocation().getLineNumber());
+				getFbNetwork(), builder.getSource(), builder.getDestination(), getLineNumber());
 		errorMarkerAttributes.add(e);
 		createErrorMarkerInterface(connection, builder, true, e);
 	}
