@@ -156,7 +156,7 @@ public final class FordiacMarkerHelper {
 		Assert.isNotNull(file);
 		try {
 			final IMarker marker = file.createMarker(IMarker.PROBLEM, errorMarker.getAttributes());
-			if (marker.exists()) {
+			if (marker.exists() && errorMarker.getErrorMarkerRef() != null) {
 				markers.put(marker.getId(), errorMarker.getErrorMarkerRef());
 				errorMarker.addId(marker.getId());
 			}
