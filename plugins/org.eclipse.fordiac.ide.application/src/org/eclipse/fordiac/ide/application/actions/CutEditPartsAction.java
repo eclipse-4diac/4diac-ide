@@ -12,17 +12,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
 import org.eclipse.fordiac.ide.application.commands.CutAndPasteFromSubAppCommand;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
@@ -50,12 +49,12 @@ public class CutEditPartsAction extends CopyEditPartsAction {
 	public void run() {
 		final List<Object> templates = getSelectedTemplates();
 		final CopyPasteMessage message = new CopyPasteMessage(CopyStatus.CUT, templates);
-		final CompoundCommand cutAndPasteFromSubAppCommand = isCutFromSubapp(templates);
+		final CutAndPasteFromSubAppCommand cutAndPasteFromSubAppCommand = isCutFromSubapp(templates);
 		final Command fbDeleteCommands = getFBDeleteCommands(templates);
 		message.setDeleteCommandos(new CompoundCommand());
 		message.getDeleteCommandos().add(fbDeleteCommands);
 
-		if (!cutAndPasteFromSubAppCommand.isEmpty()) {
+		if (cutAndPasteFromSubAppCommand != null) {
 			execute(cutAndPasteFromSubAppCommand);
 			message.setCutAndPasteFromSubAppCommandos(cutAndPasteFromSubAppCommand);
 			message.setCopyInfo(CopyStatus.CUT_FROM_SUBAPP);
@@ -78,22 +77,20 @@ public class CutEditPartsAction extends CopyEditPartsAction {
 		return cmd;
 	}
 
-	private static CompoundCommand isCutFromSubapp(final List<Object> templates) {
-		final CompoundCommand cmd = new CompoundCommand();
+	private static CutAndPasteFromSubAppCommand isCutFromSubapp(final List<Object> templates) {
 		FBNetworkElement parent = null;
+		final List<FBNetworkElement> elements = new ArrayList<>();
 		for (final Object obj : templates) {
 			if (obj instanceof FBNetworkElement) {
 				final FBNetworkElement fbNetworkElement = (FBNetworkElement) obj;
 				if (isNotPartOfSameSubapp(parent, fbNetworkElement)) {
-					return new CompoundCommand();
+					return null;
 				}
-				final CutAndPasteFromSubAppCommand moveElementFromSubAppCommand = createCutAndPasteCommand(
-						fbNetworkElement);
-				cmd.add(moveElementFromSubAppCommand);
+				elements.add(fbNetworkElement);
 				parent = fbNetworkElement.getOuterFBNetworkElement();
 			}
 		}
-		return cmd;
+		return createCutAndPasteCommand(elements);
 	}
 
 	protected static boolean isNotPartOfSameSubapp(final FBNetworkElement parent,
@@ -102,10 +99,9 @@ public class CutEditPartsAction extends CopyEditPartsAction {
 				|| parent != null && !parent.equals(fbNetworkElement.getOuterFBNetworkElement());
 	}
 
-	protected static CutAndPasteFromSubAppCommand createCutAndPasteCommand(final FBNetworkElement fbNetworkElement) {
-		final GraphicalViewer adapter = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
-		final AbstractFBNElementEditPart fbEditPart = (AbstractFBNElementEditPart) adapter.getEditPartRegistry()
-				.get(fbNetworkElement);
-		return new CutAndPasteFromSubAppCommand(fbNetworkElement, fbEditPart.getFigure().getBounds());
+	protected static CutAndPasteFromSubAppCommand createCutAndPasteCommand(
+			final List<FBNetworkElement> fbNetworkElements) {
+		return new CutAndPasteFromSubAppCommand(fbNetworkElements,
+				FBNetworkHelper.getTopLeftCornerOfFBNetwork(fbNetworkElements));
 	}
 }

@@ -50,7 +50,7 @@ import org.eclipse.swt.graphics.Point;
 public class MoveElementsFromSubAppCommand extends Command {
 
 	protected final SubApp sourceSubApp;
-	private final Point destination;
+	private Point destination;
 	private final FBNetwork destinationNetwork;
 	protected final List<FBNetworkElement> elements;
 	private final Map<FBNetworkElement, org.eclipse.fordiac.ide.model.libraryElement.Position> oldPos = new HashMap<>(); // for
@@ -60,7 +60,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 	private final CompoundCommand unmappingCmds = new CompoundCommand(); // stores all needed unmap commands
 	private final CompoundCommand deleteConnectionsAndInterfaceElements = new CompoundCommand();
 	private final CompoundCommand createConnectionsCommands = new CompoundCommand();
-	private final CompoundCommand createSubAppInterfaceElementCommands = new CompoundCommand();
+	protected final CompoundCommand createSubAppInterfaceElementCommands = new CompoundCommand();
 	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private final Set<Connection> connsMovedToParent = new HashSet<>();
 
@@ -320,5 +320,9 @@ public class MoveElementsFromSubAppCommand extends Command {
 			cmd = new DataConnectionCreateCommand(fbNetwork);
 		}
 		return cmd;
+	}
+
+	protected void setDestination(final Point destination) {
+		this.destination = destination;
 	}
 }

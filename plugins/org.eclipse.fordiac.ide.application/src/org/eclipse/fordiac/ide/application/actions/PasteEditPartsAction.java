@@ -128,6 +128,9 @@ public class PasteEditPartsAction extends SelectionAction {
 	public void run() {
 		if (Clipboard.getDefault().getContents() instanceof CopyPasteMessage) {
 			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) Clipboard.getDefault().getContents();
+			if (pasteRefPosition != null && copyPasteMessage.getCutAndPasteFromSubAppCommandos() != null) {
+				copyPasteMessage.getCutAndPasteFromSubAppCommandos().setPastePos(pasteRefPosition);
+			}
 			if (isCutFromSubappToParentSubapp(copyPasteMessage)) {
 				handleCutFromSubappToParentSubapp(copyPasteMessage);
 			} else if (isCutFromRootToSubapp(copyPasteMessage)) {
@@ -135,7 +138,6 @@ public class PasteEditPartsAction extends SelectionAction {
 			} else if (isCutFromSubappToSubapp(copyPasteMessage)) {
 				handleCutFromSubapToSubapp(copyPasteMessage);
 			} else {
-
 				if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) {
 					copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
 					execute(copyPasteMessage.getDeleteCommandos());
@@ -206,9 +208,8 @@ public class PasteEditPartsAction extends SelectionAction {
 			return false;
 		}
 
-		final CompoundCommand catAndPasteFromSubAppCommand = copyPasteMessage.getCutAndPasteFromSubAppCommandos();
-		final CutAndPasteFromSubAppCommand cutAndPasteFromSubAppCommand = (CutAndPasteFromSubAppCommand) catAndPasteFromSubAppCommand
-				.getChildren()[0];
+		final CutAndPasteFromSubAppCommand cutAndPasteFromSubAppCommand = copyPasteMessage
+				.getCutAndPasteFromSubAppCommandos();
 		final SubApp sourceSubApp = cutAndPasteFromSubAppCommand.getSourceSubApp();
 
 		if (selectedObjects.get(0) instanceof FBNetworkEditPart) {
