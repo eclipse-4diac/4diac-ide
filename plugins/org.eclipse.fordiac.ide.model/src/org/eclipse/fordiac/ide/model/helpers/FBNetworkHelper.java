@@ -136,8 +136,8 @@ public final class FBNetworkHelper {
 
 	public static Point removeXYOffsetForFBNetwork(final List<FBNetworkElement> fbNetwork) {
 		final Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
-		moveFBNetworkByOffset(fbNetwork, offset.x - X_OFFSET_FROM_TOP_LEFT_CORNER,
-				offset.y - Y_OFFSET_FROM_TOP_LEFT_CORNER);
+		moveFBNetworkByOffset(fbNetwork, -offset.x + X_OFFSET_FROM_TOP_LEFT_CORNER,
+				-offset.y + Y_OFFSET_FROM_TOP_LEFT_CORNER);
 		return offset;
 	}
 
