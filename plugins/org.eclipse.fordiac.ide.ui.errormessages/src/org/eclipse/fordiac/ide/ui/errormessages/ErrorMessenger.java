@@ -13,10 +13,11 @@ package org.eclipse.fordiac.ide.ui.errormessages;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
 
-public class ErrorMessenger {
+public final class ErrorMessenger {
 
 	private static boolean messagesPaused = false;
 	private static List<ErrorMessage> pausedMessages = List.of();
@@ -33,7 +34,7 @@ public class ErrorMessenger {
 	}
 
 	public static void hashCleared(final int hash) {
-		if(lastHash instanceof Integer && hash == lastHash) {
+		if (lastHash != null && hash == lastHash.intValue()) {
 			lastHash = null;
 		}
 	}
@@ -51,13 +52,13 @@ public class ErrorMessenger {
 
 	public static void popUpErrorMessage(final String errorMsg, final int timeout) {
 		final ErrorMessage m = new ErrorMessage(errorMsg, timeout);
-		if(!(lastHash instanceof Integer && m.hashCode() == lastHash)) {
-			lastHash = m.hashCode();
+		if (!(lastHash != null && m.hashCode() == lastHash.intValue())) {
+			lastHash = Integer.valueOf(m.hashCode());
 			if (messagesPaused) {
 				pausedMessages.add(m);
 				return;
 			}
-	
+
 			if (null != eventBroker) {
 				eventBroker.send(TOPIC_ERRORMESSAGES, m);
 			}

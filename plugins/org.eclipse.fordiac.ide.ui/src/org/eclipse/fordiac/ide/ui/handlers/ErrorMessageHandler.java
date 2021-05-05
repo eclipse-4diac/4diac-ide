@@ -91,7 +91,7 @@ public class ErrorMessageHandler {
 
 	private final Set<ErrorMessage> messages = new HashSet<>();
 
-	private static class ErrorMessageDialog extends PopupDialog {
+	private static final class ErrorMessageDialog extends PopupDialog {
 
 		private static final int MOUSE_CURSOR_OFFSET_Y = 10;
 		private static final int MOUSE_CURSOR_OFFSET_X = 5;
@@ -144,14 +144,14 @@ public class ErrorMessageHandler {
 			getShell().setBounds(boundingBox);
 		}
 
-		private boolean isTextInput(final Control focused) {
+		private static boolean isTextInput(final Control focused) {
 			return focused instanceof Text && ((Text) focused).getEditable();
 		}
 
-		private boolean isTableInput(final Control focused) {
+		private static boolean isTableInput(final Control focused) {
 			if (focused instanceof Table) {
 				final Table table = (Table) focused;
-				return table.getSelectionCount() != 0 && table.getItem(table.getSelectionIndex()) instanceof TableItem;
+				return table.getSelectionCount() != 0 && table.getItem(table.getSelectionIndex()) != null;
 			}
 			return false;
 		}
@@ -248,6 +248,7 @@ public class ErrorMessageHandler {
 
 	}
 
+	@SuppressWarnings("squid:S3398")
 	private synchronized void clearDialog(final Composite dialogArea) {
 		// This method is not inside ErrorMessageDialog because this would use a
 		// different synchronization reference than used in closeDialog
