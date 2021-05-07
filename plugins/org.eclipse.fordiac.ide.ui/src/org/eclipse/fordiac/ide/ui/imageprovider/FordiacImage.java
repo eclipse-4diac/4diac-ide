@@ -131,14 +131,11 @@ public enum FordiacImage {
 	}
 
 	public InputStream getImageAsInputStream() throws IOException {
-		InputStream ret = null;
 		final URL fileLocation = getImageURL(this.name());
 		if (null != fileLocation) {
-			ret = fileLocation.openConnection().getInputStream();
-		} else {
-			ret = MISSING.getImageAsInputStream();
+			return fileLocation.openConnection().getInputStream();
 		}
-		return ret;
+		return MISSING.getImageAsInputStream();
 	}
 
 	private static boolean addImageDescriptor(final String name) {
