@@ -27,27 +27,22 @@ public class PrintPreviewAction extends Action {
 
 	private GraphicalViewer viewer;
 
-	/**
-	 * Instantiates a new prints the preview action.
+	/** Instantiates a new prints the preview action.
 	 *
-	 * @param viewer the viewer
-	 */
-	public PrintPreviewAction(GraphicalViewer viewer) {
+	 * @param viewer the viewer */
+	public PrintPreviewAction(final GraphicalViewer viewer) {
 		super();
 		this.viewer = viewer;
 		setId(ActionFactory.PRINT.getId());
 		setText(Messages.PrintPreviewAction_LABEL_Print);
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		final ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_ETOOL_PRINT_EDIT));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_ETOOL_PRINT_EDIT_DISABLED));
 	}
 
-	/**
-	 * returns true if editor is either an applicationEditor or a
-	 * PhysicalViewEditor.
+	/** returns true if editor is either an applicationEditor or a PhysicalViewEditor.
 	 *
-	 * @return true, if checks if is enabled
-	 */
+	 * @return true, if checks if is enabled */
 	@Override
 	public boolean isEnabled() {
 		if (null == viewer) {
@@ -57,22 +52,20 @@ public class PrintPreviewAction extends Action {
 	}
 
 	private static GraphicalViewer getViewer() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		IEditorPart editor = window.getActivePage().getActiveEditor();
+		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		final IEditorPart editor = window.getActivePage().getActiveEditor();
 		if (null != editor) {
 			return editor.getAdapter(GraphicalViewer.class);
 		}
 		return null;
 	}
 
-	/**
-	 * opens the IEC61499PrintDialog.
-	 */
+	/** opens the IEC61499PrintDialog. */
 	@Override
 	public void run() {
 		if (null != viewer) {
-			Shell shell = viewer.getControl().getShell();
-			PrintPreview preview = new PrintPreview(shell, viewer, Messages.PrintPreviewAction_LABEL_PrintPreview);
+			final Shell shell = viewer.getControl().getShell();
+			final PrintPreview preview = new PrintPreview(shell, viewer, Messages.PrintPreviewAction_LABEL_PrintPreview);
 			preview.setBlockOnOpen(true);
 			preview.open();
 		}
