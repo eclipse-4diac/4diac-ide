@@ -71,6 +71,7 @@
         </topic>
         <topic label="4diac FORTE for Windows and Unix based systems">
           <topic href="html/installation/visualStudio.html" label="Use Visual Studio"/>
+          <topic href="html/installation/visualStudioCode.html" label="Use Visual Studio Code"/>
           <topic href="html/installation/eclipse.html" label="Use Eclipse"/>
           <topic href="html/installation/cygwin.html" label="Windows - Cygwin compiler"/>
           <topic href="html/installation/minGW.html" label="Windows - MinGW-w64 compiler"/>
