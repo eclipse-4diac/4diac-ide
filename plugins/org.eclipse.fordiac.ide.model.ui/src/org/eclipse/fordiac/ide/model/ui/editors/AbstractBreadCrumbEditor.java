@@ -51,7 +51,6 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPersistableEditor;
-import org.eclipse.ui.NavigationLocation;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
@@ -290,79 +289,4 @@ INavigationLocationProvider, IPersistableEditor {
 	 *                 model element should be provided
 	 * @return the model element for which the first editor should be shown. */
 	protected abstract Object getInitialModel(String itemPath);
-
-	private static class BreadcrumbNavigationLocation extends NavigationLocation {
-
-		private final Object model;
-		private final AdapterFactoryContentProvider contentProvider;
-		private final AdapterFactoryLabelProvider labelProvider;
-
-		protected BreadcrumbNavigationLocation(final AbstractBreadCrumbEditor editorPart, final Object model) {
-			super(editorPart);
-			this.model = model;
-			contentProvider = editorPart.getBreadcrumb().getContentProvider();
-			labelProvider = editorPart.getBreadcrumb().getLabelProvider();
-		}
-
-		@Override
-		public String getText() {
-			final StringBuilder sb = new StringBuilder();
-			generateItemPath(sb, model, contentProvider, labelProvider);
-			return sb.substring(1);
-		}
-
-		public static void generateItemPath(final StringBuilder sb, final Object model,
-				final AdapterFactoryContentProvider adapterFactoryContentProvider,
-				final AdapterFactoryLabelProvider adapterFactoryLabelProvider) {
-			if (model == null) {
-				return;
-			}
-			generateItemPath(sb, adapterFactoryContentProvider.getParent(model), adapterFactoryContentProvider,
-					adapterFactoryLabelProvider);
-			sb.append("."); //$NON-NLS-1$
-			sb.append(adapterFactoryLabelProvider.getText(model));
-		}
-
-		private Object getModel() {
-			return model;
-		}
-
-		@Override
-		protected AbstractBreadCrumbEditor getEditorPart() {
-			return (AbstractBreadCrumbEditor) super.getEditorPart();
-		}
-
-		@Override
-		public void saveState(final IMemento memento) {
-			// TODO consider if and how editor state can be saved
-		}
-
-		@Override
-		public void restoreState(final IMemento memento) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void restoreLocation() {
-			final IEditorPart part= getEditorPart();
-			if (part instanceof AbstractBreadCrumbEditor) {
-				final AbstractBreadCrumbEditor editor= getEditorPart();
-				editor.getBreadcrumb().setInput(model);
-			}
-		}
-
-		@Override
-		public boolean mergeInto(final INavigationLocation currentLocation) {
-			if (currentLocation instanceof BreadcrumbNavigationLocation) {
-				return this.model == ((BreadcrumbNavigationLocation) currentLocation).getModel();
-			}
-			return false;
-		}
-
-		@Override
-		public void update() {
-			// TODO Auto-generated method stub
-		}
-
-	}
 }
