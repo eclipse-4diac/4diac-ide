@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getFileMarkerId <em>File Marker Id</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getErrorMessage <em>Error Message</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getErrorMarkerRef()

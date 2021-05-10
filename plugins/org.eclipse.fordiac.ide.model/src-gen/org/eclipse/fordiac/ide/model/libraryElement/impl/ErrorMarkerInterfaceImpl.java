@@ -56,6 +56,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * Name</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getFileMarkerId <em>File Marker
  * Id</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getErrorMessage <em>Error
+ * Message</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getRepairedEndpoint
  * <em>Repaired Endpoint</em>}</li>
  * </ul>
@@ -413,6 +415,8 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 			return getTypeName();
 		case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
 			return getFileMarkerId();
+		case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
+			return getErrorMessage();
 		case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
 			if (resolve)
 				return getRepairedEndpoint();
@@ -449,6 +453,9 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 		case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
 			setFileMarkerId((Long) newValue);
 			return;
+		case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
+			setErrorMessage((String) newValue);
+			return;
 		case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
 			setRepairedEndpoint((IInterfaceElement) newValue);
 			return;
@@ -482,6 +489,9 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 		case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
 			setFileMarkerId(FILE_MARKER_ID_EDEFAULT);
 			return;
+		case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
+			setErrorMessage(ERROR_MESSAGE_EDEFAULT);
+			return;
 		case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
 			setRepairedEndpoint((IInterfaceElement) null);
 			return;
@@ -509,6 +519,8 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 			return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 		case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
 			return fileMarkerId != FILE_MARKER_ID_EDEFAULT;
+		case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
+			return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 		case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
 			return repairedEndpoint != null;
 		default:
@@ -525,6 +537,8 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 			switch (derivedFeatureID) {
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
 				return LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID;
+			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
+				return LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE;
 			default:
 				return -1;
 			}
@@ -541,6 +555,8 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 			switch (baseFeatureID) {
 			case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
 				return LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID;
+			case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
+				return LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE;
 			default:
 				return -1;
 			}
@@ -563,6 +579,8 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 		result.append(typeName);
 		result.append(", fileMarkerId: "); //$NON-NLS-1$
 		result.append(fileMarkerId);
+		result.append(", errorMessage: "); //$NON-NLS-1$
+		result.append(errorMessage);
 		result.append(')');
 		return result.toString();
 	}

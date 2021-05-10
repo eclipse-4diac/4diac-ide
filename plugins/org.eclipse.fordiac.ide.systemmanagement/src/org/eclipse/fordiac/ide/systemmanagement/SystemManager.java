@@ -173,7 +173,7 @@ public enum SystemManager {
 				e.setFile(sysFile);
 				return e;
 			});
-			return entry.getSystem();
+			return (AutomationSystem) entry.getType();
 		}
 		return null;
 	}

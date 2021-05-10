@@ -51,7 +51,7 @@ public class ErrorMarkerBuilder {
 		return errorMarkerRef;
 	}
 
-	public void setErrorMarkerIe(final ErrorMarkerRef errorMarkerRef) {
+	public void setErrorMarkerRef(final ErrorMarkerRef errorMarkerRef) {
 		this.errorMarkerRef = errorMarkerRef;
 	}
 

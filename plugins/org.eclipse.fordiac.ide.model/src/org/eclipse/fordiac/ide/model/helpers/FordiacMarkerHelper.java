@@ -28,19 +28,24 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public final class FordiacMarkerHelper {
 
@@ -238,6 +243,32 @@ public final class FordiacMarkerHelper {
 		FordiacMarkerHelper.addLocation(errorLocation, attrs);
 		FordiacMarkerHelper.addTargetIdentifier(errorLocation, attrs);
 		return createErrorMarkerBuilder(attrs, lineNumber);
+	}
+
+	public static ErrorMarkerFBNElement createErrorMarkerFB(final String name) {
+		final ErrorMarkerFBNElement createErrorMarkerFBNElement = LibraryElementFactory.eINSTANCE
+				.createErrorMarkerFBNElement();
+		createErrorMarkerFBNElement.setName(name);
+		createErrorMarkerFBNElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		final Position position = LibraryElementFactory.eINSTANCE.createPosition();
+		position.setX(0);
+		position.setY(0);
+		createErrorMarkerFBNElement.setPosition(position);
+		return createErrorMarkerFBNElement;
+	}
+
+	public static FBNetworkElement createTypeErrorMarkerFB(final String typeFbElement, final TypeLibrary typeLibrary) {
+		final ErrorMarkerFBNElement errorFb = FordiacMarkerHelper.createErrorMarkerFB(typeFbElement);
+		final FBType type = LibraryElementFactory.eINSTANCE.createFBType();
+		final FBTypePaletteEntry entry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
+		entry.setType(type);
+		type.setPaletteEntry(entry);
+		type.setName(typeFbElement);
+		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		errorFb.setInterface(type.getInterfaceList().copy());
+		errorFb.setPaletteEntry(entry);
+		typeLibrary.addPaletteEntry(entry);
+		return errorFb;
 	}
 
 }

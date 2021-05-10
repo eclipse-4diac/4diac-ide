@@ -16,10 +16,12 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -27,6 +29,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Error Marker FBN Element</b></em>'. <!--
  * end-user-doc -->
+ * <p>
+ * The following features are implemented:
+ * </p>
+ * <ul>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl#getFileMarkerId <em>File
+ * Marker Id</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl#getErrorMessage <em>Error
+ * Message</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl#getRepairedElement
+ * <em>Repaired Element</em>}</li>
+ * </ul>
  *
  * @generated */
 public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements ErrorMarkerFBNElement {
@@ -37,6 +50,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	 * @generated
 	 * @ordered */
 	protected static final long FILE_MARKER_ID_EDEFAULT = 0L;
+
 	/** The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * 
@@ -44,6 +58,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	 * @generated
 	 * @ordered */
 	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
+
 	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * 
@@ -51,6 +66,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	 * @generated
 	 * @ordered */
 	protected static final String ERROR_MESSAGE_EDEFAULT = null;
+
 	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * 
@@ -58,6 +74,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	 * @generated
 	 * @ordered */
 	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
+
 	/** The cached value of the '{@link #getRepairedElement() <em>Repaired Element</em>}' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
 	 * 

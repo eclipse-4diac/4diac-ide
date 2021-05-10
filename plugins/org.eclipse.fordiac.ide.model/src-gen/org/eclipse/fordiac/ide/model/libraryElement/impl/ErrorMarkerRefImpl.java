@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * <ul>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl#getFileMarkerId <em>File Marker
  * Id</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl#getErrorMessage <em>Error
+ * Message</em>}</li>
  * </ul>
  *
  * @generated */
@@ -132,6 +134,8 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 		switch (featureID) {
 		case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
 			return getFileMarkerId();
+		case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
+			return getErrorMessage();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -145,6 +149,9 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 		switch (featureID) {
 		case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
 			setFileMarkerId((Long) newValue);
+			return;
+		case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
+			setErrorMessage((String) newValue);
 			return;
 		default:
 			super.eSet(featureID, newValue);
@@ -161,6 +168,9 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 		case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
 			setFileMarkerId(FILE_MARKER_ID_EDEFAULT);
 			return;
+		case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
+			setErrorMessage(ERROR_MESSAGE_EDEFAULT);
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -175,6 +185,8 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 		switch (featureID) {
 		case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
 			return fileMarkerId != FILE_MARKER_ID_EDEFAULT;
+		case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
+			return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 		default:
 			return super.eIsSet(featureID);
 		}
@@ -191,6 +203,8 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (fileMarkerId: "); //$NON-NLS-1$
 		result.append(fileMarkerId);
+		result.append(", errorMessage: "); //$NON-NLS-1$
+		result.append(errorMessage);
 		result.append(')');
 		return result.toString();
 	}

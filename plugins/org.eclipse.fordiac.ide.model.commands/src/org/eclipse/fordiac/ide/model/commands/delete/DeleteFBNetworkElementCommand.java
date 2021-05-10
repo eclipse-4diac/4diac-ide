@@ -18,7 +18,10 @@ package org.eclipse.fordiac.ide.model.commands.delete;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -32,7 +35,8 @@ import org.eclipse.gef.commands.CompoundCommand;
 public class DeleteFBNetworkElementCommand extends Command {
 	private FBNetwork fbParent;
 	private final FBNetworkElement element;
-	private CompoundCommand cmds = new CompoundCommand();
+	private final CompoundCommand cmds = new CompoundCommand();
+	private ErrorMarkerBuilder errorMarker;
 
 	public DeleteFBNetworkElementCommand(final FBNetworkElement element) {
 		super(Messages.DeleteFBNetworkElementCommand_DeleteFBOrSubapplication);
@@ -53,6 +57,10 @@ public class DeleteFBNetworkElementCommand extends Command {
 
 	@Override
 	public void execute() {
+		if (element instanceof ErrorMarkerRef) {
+			errorMarker = FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) element);
+		}
+
 		fbParent = element.getFbNetwork();
 		if (element.isMapped()) {
 			cmds.add(new UnmapCommand(element));
@@ -67,6 +75,8 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (element instanceof SubApp) {
 			closeSubApplicationEditor((SubApp) element);
 		}
+
+
 	}
 
 	@Override
@@ -74,6 +84,9 @@ public class DeleteFBNetworkElementCommand extends Command {
 		fbParent.getNetworkElements().add(element);
 		if (cmds.canUndo()) {
 			cmds.undo();
+		}
+		if (element instanceof ErrorMarkerRef && errorMarker != null) {
+			FordiacMarkerHelper.createMarker(errorMarker);
 		}
 	}
 
@@ -83,10 +96,14 @@ public class DeleteFBNetworkElementCommand extends Command {
 			cmds.redo();
 		}
 		fbParent.getNetworkElements().remove(element);
+		
+		if (element instanceof ErrorMarkerRef) {
+			errorMarker = FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) element);
+		}
 	}
 
 	private void getDeleteConnections(final FBNetworkElement element) {
-		for (IInterfaceElement intElement : element.getInterface().getAllInterfaceElements()) {
+		for (final IInterfaceElement intElement : element.getInterface().getAllInterfaceElements()) {
 			EList<Connection> connList = null;
 			if (intElement.isIsInput()) {
 				connList = intElement.getInputConnections();
@@ -94,12 +111,12 @@ public class DeleteFBNetworkElementCommand extends Command {
 				connList = intElement.getOutputConnections();
 			}
 			if (null != connList) {
-				connList.forEach((Connection con) -> cmds.add(new DeleteConnectionCommand(con)));
+				connList.forEach((final Connection con) -> cmds.add(new DeleteConnectionCommand(con)));
 			}
 		}
 	}
 
-	private static void closeSubApplicationEditor(SubApp subapp) {
+	private static void closeSubApplicationEditor(final SubApp subapp) {
 		EditorUtils.closeEditorsFiltered(editor -> ((editor instanceof I4diacModelEditor)
 				&& (subapp.getSubAppNetwork() == ((I4diacModelEditor) editor).getModel())));
 	}

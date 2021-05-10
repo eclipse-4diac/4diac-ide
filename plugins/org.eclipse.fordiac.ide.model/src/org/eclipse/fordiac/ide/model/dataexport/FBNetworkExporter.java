@@ -89,7 +89,8 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
 		if (!(fbnElement.getType() instanceof AdapterFBType)) {
-			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)) {
+			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)
+					|| fbnElement instanceof ErrorMarkerFBNElement) {
 				return LibraryElementTags.FB_ELEMENT;
 			}
 			if (fbnElement instanceof SubApp) {

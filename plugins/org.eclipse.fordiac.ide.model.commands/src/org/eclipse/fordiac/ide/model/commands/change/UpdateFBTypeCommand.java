@@ -16,6 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -45,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -80,6 +83,8 @@ public class UpdateFBTypeCommand extends Command {
 
 	private MapToCommand mapCmd = null;
 	private UnmapCommand unmapCmd = null;
+
+	private ErrorMarkerBuilder errorMarker;
 
 	public UpdateFBTypeCommand(final FBNetworkElement fbnElement, final PaletteEntry entry) {
 		this.oldElement = fbnElement;
@@ -121,6 +126,9 @@ public class UpdateFBTypeCommand extends Command {
 
 		network.getNetworkElements().add(newElement);
 		// Find connections which should be reconnected
+
+		handleErrorMarker();
+
 		handleApplicationConnections();
 		network.getNetworkElements().remove(oldElement);
 
@@ -137,6 +145,17 @@ public class UpdateFBTypeCommand extends Command {
 		}
 	}
 
+	private void handleErrorMarker() {
+		if ((!(oldElement instanceof ErrorMarkerFBNElement)) && newElement instanceof ErrorMarkerFBNElement) {
+			final String errorMessage = MessageFormat.format("Type File: {0} could not be loaded for FB", //$NON-NLS-1$
+					entry.getFile() != null ? entry.getFile().getFullPath() : "null type"); //$NON-NLS-1$
+			errorMarker = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement, 0);
+			errorMarker.setErrorMarkerRef((ErrorMarkerRef) newElement);
+			((ErrorMarkerRef) newElement).setErrorMessage(errorMessage);
+			FordiacMarkerHelper.createMarker(errorMarker);
+		}
+	}
+
 	/* (non-Javadoc)
 	 *
 	 * @see org.eclipse.gef.commands.Command#redo() */
@@ -147,7 +166,9 @@ public class UpdateFBTypeCommand extends Command {
 		}
 
 		deleteConnCmds.redo();
-		replaceFBs(oldElement, newElement);
+		network.getNetworkElements().remove(oldElement);
+		handleErrorMarker();
+		network.getNetworkElements().add(newElement);
 		connCreateCmds.redo();
 
 		if (mapCmd != null) {
@@ -169,6 +190,9 @@ public class UpdateFBTypeCommand extends Command {
 		}
 
 		connCreateCmds.undo();
+		if (errorMarker != null && newElement instanceof ErrorMarkerRef) {
+			FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) newElement);
+		}
 		replaceFBs(newElement, oldElement);
 		deleteConnCmds.undo();
 
@@ -237,11 +261,11 @@ public class UpdateFBTypeCommand extends Command {
 	private static IInterfaceElement createErrorMarker(final FBNetworkElement newElement,
 			final IInterfaceElement oldInterface) {
 		IInterfaceElement interfaceElement;
-		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(),
-				oldInterface.getName(), oldInterface.isIsInput(), newElement.getInterface());
-		final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper.createErrorMarker(
-				"Pin " + interfaceElement.getName() + " not found after Type update", newElement, 0); //$NON-NLS-1$ //$NON-NLS-2$
-		createErrorMarker.setErrorMarkerIe((ErrorMarkerRef) interfaceElement);
+		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(), oldInterface.getName(),
+				oldInterface.isIsInput(), newElement.getInterface());
+		final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper
+				.createErrorMarker("Pin " + interfaceElement.getName() + " not found after Type update", newElement, 0); //$NON-NLS-1$ //$NON-NLS-2$
+		createErrorMarker.setErrorMarkerRef((ErrorMarkerRef) interfaceElement);
 		FordiacMarkerHelper.createMarker(createErrorMarker);
 		return interfaceElement;
 	}
@@ -303,15 +327,19 @@ public class UpdateFBTypeCommand extends Command {
 
 	private void copyFB() {
 		newElement = createCopiedFBEntry(oldElement);
+
 		newElement.setInterface(newElement.getType().getInterfaceList().copy());
+
 		newElement.setName(oldElement.getName());
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
+
 		createValues();
 
 	}
 
 	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
 		FBNetworkElement copy;
+
 		if (entry instanceof SubApplicationTypePaletteEntry) {
 			copy = LibraryElementFactory.eINSTANCE.createSubApp();
 		} else if (entry instanceof AdapterTypePaletteEntry) {
@@ -319,9 +347,24 @@ public class UpdateFBTypeCommand extends Command {
 			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
 		} else if (entry.getType() instanceof CompositeFBType) {
 			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else {
+		}else if(oldElement instanceof ErrorMarkerFBNElement && entry instanceof FBTypePaletteEntry){
+			final TypeLibrary typeLibrary = oldElement.getPaletteEntry().getTypeLibrary();
+			final FBTypePaletteEntry fbTypeEntry = typeLibrary.getBlockTypeLib()
+					.getFBTypeEntry(oldElement.getType().getName());
+			if(fbTypeEntry!=null) {
+				copy = LibraryElementFactory.eINSTANCE.createFB();
+				copy.setPaletteEntry(fbTypeEntry);
+				return copy;
+			}
+			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
+		} else if (entry.getFile() == null || !entry.getFile().exists()) {
+			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
+		}
+		else {
 			copy = LibraryElementFactory.eINSTANCE.createFB();
 		}
+
+
 		copy.setPaletteEntry(entry);
 		return copy;
 	}
