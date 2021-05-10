@@ -203,7 +203,7 @@ public class PasteEditPartsAction extends SelectionAction {
 			return false;
 		}
 
-		final List selectedObjects = getSelectedObjects();
+		final List<?> selectedObjects = getSelectedObjects();
 		if (selectedObjects.size() > 1) {
 			return false;
 		}

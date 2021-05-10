@@ -34,7 +34,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class CreateStructFromInterfaceElementsCommandTest
-		extends CommandTestBase<CreateStructFromInterfaceElementsCommandTest.State> {
+extends CommandTestBase<CreateStructFromInterfaceElementsCommandTest.State> {
 	private static final String SET_STRUCT_NAME = "setStruct"; //$NON-NLS-1$
 
 	public static class State extends CommandTestBase.StateBase {
@@ -62,15 +62,15 @@ public class CreateStructFromInterfaceElementsCommandTest
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
-				new ExecutionDescription<State>("Prepare Functionblocks", //$NON-NLS-1$
+				new ExecutionDescription<>("Prepare Functionblocks", //$NON-NLS-1$
 						CreateStructFromInterfaceElementsCommandTest::createInterfaceElements, //
 						CreateStructFromInterfaceElementsCommandTest::verifyFBCreation //
-				), //
-				new ExecutionDescription<State>("Replace first element", //$NON-NLS-1$
+						), //
+				new ExecutionDescription<>("Replace first element", //$NON-NLS-1$
 						CreateStructFromInterfaceElementsCommandTest::testWithOneElement, //
 						CreateStructFromInterfaceElementsCommandTest::verifyTestWithOneElement //
-				) //
-		);
+						) //
+				);
 		final Collection<Arguments> a = new ArrayList<>();
 		a.addAll(describeCommand("FB with two inputs and outputs", State::new, //$NON-NLS-1$
 				(StateVerifier<State>) CreateStructFromInterfaceElementsCommandTest::verifyInitalValues,
@@ -78,13 +78,13 @@ public class CreateStructFromInterfaceElementsCommandTest
 		return a;
 	}
 
-	private static void verifyInitalValues(State s, State o, TestFunction t) {
+	private static void verifyInitalValues(final State s, final State o, final TestFunction t) {
 		t.test(s.getSubApp());
 		t.test(s.getSubApp().getInterface());
 		t.test(s.getSubApp().getInterface().getAllInterfaceElements().isEmpty());
 	}
 
-	private static State createInterfaceElements(State state) {
+	private static State createInterfaceElements(final State state) {
 		final CompoundCommand c = new CompoundCommand();
 		final SubApp subApp = state.getSubApp();
 
@@ -103,12 +103,12 @@ public class CreateStructFromInterfaceElementsCommandTest
 		return commandExecution(state);
 	}
 
-	private static void verifyFBCreation(State state, State oldState, TestFunction t) {
+	private static void verifyFBCreation(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getSubApp().getInterface().getInputVars().size(), 2);
 		t.test(state.getSubApp().getInterface().getOutputVars().size(), 2);
 	}
 
-	private static State testWithOneElement(State state) {
+	private static State testWithOneElement(final State state) {
 		final VarDeclaration dataInput = state.getSubApp().getInterface().getInputVars().get(0);
 		final StructuredType structuredType = DataFactory.eINSTANCE.createStructuredType();
 		structuredType.setName(SET_STRUCT_NAME);
@@ -120,7 +120,7 @@ public class CreateStructFromInterfaceElementsCommandTest
 		return commandExecution(state);
 	}
 
-	private static void verifyTestWithOneElement(State state, State oldState, TestFunction t) {
+	private static void verifyTestWithOneElement(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getSubApp().getInterface().getOutputVars().size(),
 				oldState.getSubApp().getInterface().getOutputVars().size());
 		t.test(state.getSubApp().getInterface().getOutputVars().size(), 2);

@@ -114,8 +114,8 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 
 	private List<AutomationSystem> getSelectedSystems() {
 		final SystemManager manager = SystemManager.INSTANCE;
-		return (List<AutomationSystem>) getSelectedResources().stream().filter(SystemManager::isSystemFile)
-				.map(el -> manager.getSystem((IFile) el)).filter(Objects::nonNull).collect(Collectors.toList());
+		return ((List<IFile>) getSelectedResources()).stream().filter(SystemManager::isSystemFile)
+				.map(manager::getSystem).filter(Objects::nonNull).collect(Collectors.toList());
 	}
 
 	@Override
