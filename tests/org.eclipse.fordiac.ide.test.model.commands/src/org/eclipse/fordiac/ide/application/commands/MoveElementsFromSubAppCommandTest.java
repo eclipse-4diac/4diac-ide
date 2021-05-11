@@ -14,11 +14,10 @@
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand.MoveOperation;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.ConnectionCommandsTest;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
@@ -29,9 +28,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.swt.graphics.Point;
 import org.junit.jupiter.params.provider.Arguments;
 
-public class MoveElementFromSubAppCommandTest extends FBNetworkTestBase {
+public class MoveElementsFromSubAppCommandTest extends FBNetworkTestBase {
 
 	private static final String SUBAPP = "SubApp"; //$NON-NLS-1$
 	private static final String FB1 = "functionblock"; //$NON-NLS-1$
@@ -63,7 +63,7 @@ public class MoveElementFromSubAppCommandTest extends FBNetworkTestBase {
 		final SubApp sub = (SubApp) s.getFbNetwork().getNetworkElements().get(0);
 		final FBNetworkElement elem = sub.getSubAppNetwork().getNetworkElements().get(0);
 		s.setCommand(
-				new MoveElementFromSubAppCommand(elem, new Rectangle(0, 0, 0, 0), MoveOperation.CONTEXT_MENU));
+				new MoveElementsFromSubAppCommand(Arrays.asList(elem), new Point(0, 0)));
 		return commandExecution(s);
 	}
 
@@ -141,30 +141,30 @@ public class MoveElementFromSubAppCommandTest extends FBNetworkTestBase {
 		final Collection<Arguments> a = new ArrayList<>();
 
 		a.addAll(describeCommand("Start with two FBs in SubAppNetwork", //$NON-NLS-1$
-				MoveElementFromSubAppCommandTest::initState, //
-				(StateVerifier<State>) MoveElementFromSubAppCommandTest::verifyInitialState, //
+				MoveElementsFromSubAppCommandTest::initState, //
+				(StateVerifier<State>) MoveElementsFromSubAppCommandTest::verifyInitialState, //
 				List.of( //
 						new ExecutionDescription<>("move Functionblock from SubApp", //$NON-NLS-1$
-								MoveElementFromSubAppCommandTest::moveFB, //
-								MoveElementFromSubAppCommandTest::verifyMoveFB //
+								MoveElementsFromSubAppCommandTest::moveFB, //
+								MoveElementsFromSubAppCommandTest::verifyMoveFB //
 								)) //
 				));
 
 		a.addAll(describeCommand("Start with two FBs in SubAppNetwork", //$NON-NLS-1$
-				MoveElementFromSubAppCommandTest::initState, //
-				(StateVerifier<State>) MoveElementFromSubAppCommandTest::verifyInitialState, //
+				MoveElementsFromSubAppCommandTest::initState, //
+				(StateVerifier<State>) MoveElementsFromSubAppCommandTest::verifyInitialState, //
 				List.of( //
 						new ExecutionDescription<>("Create Data Connections", //$NON-NLS-1$
-								MoveElementFromSubAppCommandTest::addDataConnection, //
-								MoveElementFromSubAppCommandTest::verifyDataConnection //
+								MoveElementsFromSubAppCommandTest::addDataConnection, //
+								MoveElementsFromSubAppCommandTest::verifyDataConnection //
 								), //
 						new ExecutionDescription<>("Create Event Connections", //$NON-NLS-1$
-								MoveElementFromSubAppCommandTest::addEventConnection, //
-								MoveElementFromSubAppCommandTest::verifyEventConnection //
+								MoveElementsFromSubAppCommandTest::addEventConnection, //
+								MoveElementsFromSubAppCommandTest::verifyEventConnection //
 								), //
 						new ExecutionDescription<>("move Functionblock from SubApp", //$NON-NLS-1$
-								MoveElementFromSubAppCommandTest::moveFB, //
-								MoveElementFromSubAppCommandTest::verifyMoveFBwithConnections //
+								MoveElementsFromSubAppCommandTest::moveFB, //
+								MoveElementsFromSubAppCommandTest::verifyMoveFBwithConnections //
 								)) //
 				));
 
