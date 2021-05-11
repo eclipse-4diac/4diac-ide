@@ -457,6 +457,12 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated */
 	CFBInstance createCFBInstance();
 
+	/** Returns a new object of class '<em>Error Marker Ref</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Error Marker Ref</em>'.
+	 * @generated */
+	ErrorMarkerRef createErrorMarkerRef();
+
 	/** Returns the package supported by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return the package supported by this factory.

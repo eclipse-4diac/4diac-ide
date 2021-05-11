@@ -250,7 +250,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		};
 		commentContainer.setBorder(border);
 		final ToolbarLayout layout = new ToolbarLayout();
-		layout.setMinorAlignment(ToolbarLayout.ALIGN_CENTER);
+		layout.setMinorAlignment(OrderedLayout.ALIGN_CENTER);
 		layout.setStretchMinorAxis(false);
 		commentContainer.setOpaque(true);
 

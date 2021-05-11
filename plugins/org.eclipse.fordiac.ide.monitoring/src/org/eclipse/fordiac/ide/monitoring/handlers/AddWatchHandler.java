@@ -157,11 +157,11 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		for (final Event event : fb.getType().getInterfaceList().getEventOutputs()) {
 			interfaceList.getEventOutputs().add(EcoreUtil.copy(event));
 		}
-		for (final VarDeclaration var : fb.getType().getInterfaceList().getInputVars()) {
-			interfaceList.getInputVars().add(EcoreUtil.copy(var));
+		for (final VarDeclaration inVar : fb.getType().getInterfaceList().getInputVars()) {
+			interfaceList.getInputVars().add(EcoreUtil.copy(inVar));
 		}
-		for (final VarDeclaration var : fb.getType().getInterfaceList().getOutputVars()) {
-			interfaceList.getOutputVars().add(EcoreUtil.copy(var));
+		for (final VarDeclaration outVar : fb.getType().getInterfaceList().getOutputVars()) {
+			interfaceList.getOutputVars().add(EcoreUtil.copy(outVar));
 		}
 		// currently IEC 61499 does not allow adapters in adapters.
 		// If this changes here also plugs and sockets need to be added

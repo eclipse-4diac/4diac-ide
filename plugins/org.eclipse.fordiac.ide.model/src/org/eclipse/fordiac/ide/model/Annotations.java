@@ -128,9 +128,8 @@ public final class Annotations {
 
 	public static boolean isResourceConnection(final Connection c) {
 		// if source element is null it is a connection from a CFB interface element
-		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork()))
-				? (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource)
-						: false;
+		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork())
+				&& (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource));
 	}
 
 	public static FBNetwork getFBNetwork(final Connection c) {
@@ -273,14 +272,14 @@ public final class Annotations {
 	}
 
 	public static VarDeclaration getVariable(final InterfaceList il, final String name) {
-		for (final VarDeclaration var : il.getInputVars()) {
-			if (var.getName().equals(name)) {
-				return var;
+		for (final VarDeclaration inVar : il.getInputVars()) {
+			if (inVar.getName().equals(name)) {
+				return inVar;
 			}
 		}
-		for (final VarDeclaration var : il.getOutputVars()) {
-			if (var.getName().equals(name)) {
-				return var;
+		for (final VarDeclaration outVar : il.getOutputVars()) {
+			if (outVar.getName().equals(name)) {
+				return outVar;
 			}
 		}
 		return null;
@@ -294,6 +293,12 @@ public final class Annotations {
 		if (element == null) {
 			element = il.getAdapter(name);
 		}
+
+		if (element == null) {
+			element = il.getErrorMarker().stream().filter(e -> e.getName().equals(name)).findAny()
+					.orElse(null);
+		}
+
 		return element;
 	}
 

@@ -59,9 +59,6 @@ public class ServiceSection extends AbstractServiceSection {
 	private Text leftCommentText;
 	private Text rightCommentText;
 
-	public ServiceSection() {
-	}
-
 	@Override
 	protected FBType getType() {
 		return (FBType) type;

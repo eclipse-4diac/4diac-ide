@@ -34,7 +34,7 @@ class DeviceMonitoringHandler implements Runnable {
 
 	private boolean running = true;
 
-	private synchronized void setRunning(boolean val) {
+	private synchronized void setRunning(final boolean val) {
 		running = val;
 	}
 
@@ -42,7 +42,7 @@ class DeviceMonitoringHandler implements Runnable {
 		return running;
 	}
 
-	public DeviceMonitoringHandler(Device device, SystemMonitoringData systemMonData) {
+	public DeviceMonitoringHandler(final Device device, final SystemMonitoringData systemMonData) {
 		this.device = device;
 		devInteractor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device);
 		this.systemMonData = systemMonData;
@@ -69,20 +69,21 @@ class DeviceMonitoringHandler implements Runnable {
 	@Override
 	public void run() {
 		if (devInteractor != null) {
-			int pollingIntervall = PreferenceConstants.getPollingInterval();
+			final int pollingIntervall = PreferenceConstants.getPollingInterval();
 			while (isRunning()) {
 				try {
 					Thread.sleep(pollingIntervall);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
+					Thread.currentThread().interrupt();  // mark interruption
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
 				if (devInteractor.isConnected()) {
 					try {
-						Response resp = devInteractor.readWatches();
+						final Response resp = devInteractor.readWatches();
 						if (null != resp) {
 							updateWatches(resp);
 						}
-					} catch (DeploymentException e) {
+					} catch (final DeploymentException e) {
 						handleDeviceIssue();
 					}
 				} else {
@@ -93,15 +94,15 @@ class DeviceMonitoringHandler implements Runnable {
 		}
 	}
 
-	private void updateWatches(Response resp) {
+	private void updateWatches(final Response resp) {
 		if (resp.getWatches() != null) {
-			for (org.eclipse.fordiac.ide.deployment.devResponse.Resource res : resp.getWatches().getResources()) {
-				String resName = device.getName() + "." + res.getName() + "."; //$NON-NLS-1$ //$NON-NLS-2$
+			for (final org.eclipse.fordiac.ide.deployment.devResponse.Resource res : resp.getWatches().getResources()) {
+				final String resName = device.getName() + "." + res.getName() + "."; //$NON-NLS-1$ //$NON-NLS-2$
 
-				for (FB fb : res.getFbs()) {
-					String fbName = resName + fb.getName() + "."; //$NON-NLS-1$
+				for (final FB fb : res.getFbs()) {
+					final String fbName = resName + fb.getName() + "."; //$NON-NLS-1$
 
-					for (Port p : fb.getPorts()) {
+					for (final Port p : fb.getPorts()) {
 						final MonitoringBaseElement element = systemMonData
 								.getMonitoringElementByPortString(fbName + p.getName());
 						if (element instanceof MonitoringElement) {
@@ -113,12 +114,12 @@ class DeviceMonitoringHandler implements Runnable {
 		}
 	}
 
-	private static void updateMonitoringElement(MonitoringElement monitoringElement, Port p) {
-		for (Data d : p.getDataValues()) {
+	private static void updateMonitoringElement(final MonitoringElement monitoringElement, final Port p) {
+		for (final Data d : p.getDataValues()) {
 			long timeAsLong = 0;
 			try {
 				timeAsLong = Long.parseLong(d.getTime());
-			} catch (NumberFormatException nfe) {
+			} catch (final NumberFormatException nfe) {
 				timeAsLong = 0;
 			}
 			monitoringElement.setSec(timeAsLong / 1000);
@@ -134,12 +135,12 @@ class DeviceMonitoringHandler implements Runnable {
 		// we have an issue with this device close connection clear monitoring values
 		try {
 			devInteractor.disconnect();
-		} catch (DeploymentException e) {
+		} catch (final DeploymentException e) {
 			// we don't need to do anything here
 		}
 		systemMonData.getMonitoredElements().stream()
-				.filter(el -> (el.getPort().getDevice().equals(device) && (el instanceof MonitoringElement)))
-				.forEach(el -> ((MonitoringElement) el).setCurrentValue("")); //$NON-NLS-1$
+		.filter(el -> (el.getPort().getDevice().equals(device) && (el instanceof MonitoringElement)))
+		.forEach(el -> ((MonitoringElement) el).setCurrentValue("")); //$NON-NLS-1$
 	}
 
 }

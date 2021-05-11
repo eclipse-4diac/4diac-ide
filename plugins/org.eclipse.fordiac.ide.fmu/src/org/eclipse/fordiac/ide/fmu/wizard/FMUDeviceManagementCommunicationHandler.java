@@ -533,13 +533,13 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		return ""; //$NON-NLS-1$
 	}
 
-	private void handlePubSubVars(FBNetwork fbNetwork, String fbName, String previousNames, EList<VarDeclaration> var,
+	private void handlePubSubVars(FBNetwork fbNetwork, String fbName, String previousNames, EList<VarDeclaration> vars,
 			boolean isInput) {
-		for (int i = 2; i < var.size(); i++) { // skip two first variables
+		for (int i = 2; i < vars.size(); i++) { // skip two first variables
 			for (DataConnection con : fbNetwork.getDataConnections()) { // If an SD or RD has no connected endpoint and
 																		// therefore the type is unknown, the variable
 																		// shouldn't be added
-				if (isItsConnection(isInput, con, fbName, var.get(i))) {
+				if (isItsConnection(isInput, con, fbName, vars.get(i))) {
 					IInterfaceElement otherEndpoint = (isInput) ? con.getSource() : con.getDestination();
 					FMUInputOutput.variableType varType = FMUInputOutput
 							.getTypeFromString(otherEndpoint.getType().getName());
@@ -646,15 +646,15 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			return;
 		}
 
-		for (VarDeclaration var : basic.getInternalVars()) {
+		for (VarDeclaration varInternal : basic.getInternalVars()) {
 			// store internal variables
-			FMUInputOutput.variableType varType = FMUInputOutput.getTypeFromString(var.getTypeName());
+			FMUInputOutput.variableType varType = FMUInputOutput.getTypeFromString(varInternal.getTypeName());
 			if (FMUInputOutput.variableType.UNKNOWN == varType) {
 				continue;
 			}
-			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, //$NON-NLS-1$
+			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + varInternal.getName(), false, //$NON-NLS-1$
 					FMUInputOutput.variableScope.INTERNAL, varType,
-					(null != var.getValue()) ? var.getValue().getValue() : null));
+					(null != varInternal.getValue()) ? varInternal.getValue().getValue() : null));
 		}
 		// store ECC
 		inputsAndOutputs
@@ -690,34 +690,34 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		interfaceLists.add(fbInterface.getEventOutputs());
 
 		for (EList<? extends IInterfaceElement> list : interfaceLists) {
-			for (IInterfaceElement var : list) {
+			for (IInterfaceElement variable : list) {
 				FMUInputOutput varInfo = new FMUInputOutput();
-				if (var instanceof VarDeclaration) {
-					varInfo = getInfoFromVar(paFBNetwork, fbName, (VarDeclaration) var);
+				if (variable instanceof VarDeclaration) {
+					varInfo = getInfoFromVar(paFBNetwork, fbName, (VarDeclaration) variable);
 					if (FMUInputOutput.variableType.UNKNOWN == varInfo.getVarType()) {
 						continue;
 					}
 				} else {// event: don't do anything
 
 				}
-				inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, //$NON-NLS-1$
+				inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + variable.getName(), false, //$NON-NLS-1$
 						varInfo.getScope(), varInfo.getVarType(), varInfo.getInitialValue()));
 			}
 		}
 	}
 
-	private FMUInputOutput getInfoFromVar(FBNetwork paFBNetwork, String fbName, VarDeclaration var) {
+	private FMUInputOutput getInfoFromVar(FBNetwork paFBNetwork, String fbName, VarDeclaration variable) {
 		FMUInputOutput returnValue = new FMUInputOutput();
 		FB commFB = paFBNetwork.getFBNamed(fbName);
 		FMUInputOutput.variableType type;
-		Value value = var.getValue();
+		Value value = variable.getValue();
 		String initialValue = ""; //$NON-NLS-1$
 
-		type = FMUInputOutput.getTypeFromString(commFB.getInterface().getVariable(var.getName()).getTypeName());
+		type = FMUInputOutput.getTypeFromString(commFB.getInterface().getVariable(variable.getName()).getTypeName());
 
 		if (FMUInputOutput.variableType.UNKNOWN == type) { // It's an abstract type, check the other side of the
 															// connection
-			returnValue.setType(getInfoFromConnectedFB(commFB, paFBNetwork, fbName, var));
+			returnValue.setType(getInfoFromConnectedFB(commFB, paFBNetwork, fbName, variable));
 		}
 
 		if (value != null && !value.getValue().isEmpty()) { // has some literal
@@ -743,11 +743,11 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	}
 
 	private FMUInputOutput.variableType getInfoFromConnectedFB(FB commFB, FBNetwork paFBNetwork, String fbName,
-			IInterfaceElement var) {
+			IInterfaceElement variable) {
 		FMUInputOutput.variableType returnValue = FMUInputOutput.variableType.UNKNOWN;
-		boolean isInput = commFB.getInterface().getVariable(var.getName()).isIsInput();
+		boolean isInput = commFB.getInterface().getVariable(variable.getName()).isIsInput();
 		for (DataConnection con : paFBNetwork.getDataConnections()) {
-			if (isItsConnection(isInput, con, fbName, var)) {
+			if (isItsConnection(isInput, con, fbName, variable)) {
 				String destinationType = isInput ? con.getSource().getTypeName() : con.getDestination().getTypeName();
 				if (null != destinationType) {
 					returnValue = FMUInputOutput.getTypeFromString(destinationType);
@@ -758,12 +758,12 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		return returnValue;
 	}
 
-	private boolean isItsConnection(boolean isInput, DataConnection con, String fbName, IInterfaceElement var) {
+	private boolean isItsConnection(boolean isInput, DataConnection con, String fbName, IInterfaceElement variable) {
 		if (isInput) {
 			return (con.getDestinationElement().getName().equals(fbName)
-					&& con.getDestination().getName().equals(var.getName()));
+					&& con.getDestination().getName().equals(variable.getName()));
 		} else {
-			return (con.getSourceElement().getName().equals(fbName) && con.getSource().getName().equals(var.getName()));
+			return (con.getSourceElement().getName().equals(fbName) && con.getSource().getName().equals(variable.getName()));
 		}
 	}
 

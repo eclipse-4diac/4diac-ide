@@ -87,8 +87,8 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 			add(nameLabel);
 
 			transactionContainer = new Layer();
-			GridLayout containerLayout;
-			transactionContainer.setLayoutManager(containerLayout = new GridLayout());
+			final GridLayout containerLayout = new GridLayout();
+			transactionContainer.setLayoutManager(containerLayout);
 			containerLayout.verticalSpacing = 0;
 			final GridData containerData = new GridData();
 			containerData.grabExcessHorizontalSpace = true;

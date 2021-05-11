@@ -21,6 +21,7 @@ import java.util.List;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.tools.CellEditorLocator;
@@ -66,9 +67,10 @@ public class ComboDirectEditManager extends DirectEditManager {
 	@Override
 	protected CellEditor createCellEditorOn(final Composite composite) {
 		try {
-			Constructor constructor = editorType.getConstructor(new Class[] { Composite.class, String[].class });
+			final Constructor constructor = editorType.getConstructor(Composite.class, String[].class);
 			return (CellEditor) constructor.newInstance(composite, new String[] {});
-		} catch (Exception e) {
+		} catch (final Exception e) {
+			Activator.getDefault().logError(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -99,7 +101,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 		if (getEditPart() instanceof AbstractViewEditPart) {
 			((AbstractViewEditPart) getEditPart()).refreshName();
 		}
-		Font disposeFont = scaledFont;
+		final Font disposeFont = scaledFont;
 		scaledFont = null;
 		super.bringDown();
 		if (disposeFont != null) {
@@ -109,7 +111,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 
 	@Override
 	protected void initCellEditor() {
-		CCombo combo = getComboBox();
+		final CCombo combo = getComboBox();
 		combo.setEditable(false);
 		combo.addModifyListener(e -> setDirty(true));
 		ComboBoxWidgetFactory.configureTypeaheadHandling(combo);
@@ -119,30 +121,30 @@ public class ComboDirectEditManager extends DirectEditManager {
 			setSelectedItem(selectedItem);
 		}
 
-		IFigure figure = getEditPart().getFigure();
+		final IFigure figure = getEditPart().getFigure();
 		scaledFont = figure.getFont();
-		FontData data = scaledFont.getFontData()[0];
-		Dimension fontSize = new Dimension(0, data.getHeight());
+		final FontData data = scaledFont.getFontData()[0];
+		final Dimension fontSize = new Dimension(0, data.getHeight());
 		label.translateToAbsolute(fontSize);
 		data.setHeight(fontSize.height);
 		scaledFont = new Font(null, data);
 		combo.setFont(scaledFont);
 	}
 
-	public void updateComboData(List<String> comboData) {
+	public void updateComboData(final List<String> comboData) {
 		this.comboData = comboData;
-		CCombo combo = getComboBox();
+		final CCombo combo = getComboBox();
 		if ((null != combo) && (!combo.isDisposed())) {
 			combo.removeAll();
-			for (String string : comboData) {
+			for (final String string : comboData) {
 				combo.add(string);
 			}
 		}
 	}
 
-	public void setSelectedItem(int newVal) {
+	public void setSelectedItem(final int newVal) {
 		selectedItem = newVal;
-		CCombo combo = getComboBox();
+		final CCombo combo = getComboBox();
 		if ((null != combo) && (!combo.isDisposed())) {
 			combo.select(newVal);
 		}

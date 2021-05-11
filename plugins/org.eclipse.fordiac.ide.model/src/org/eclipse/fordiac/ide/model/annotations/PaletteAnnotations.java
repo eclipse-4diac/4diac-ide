@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.annotations;
 
 import java.text.Collator;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.ECollections;
@@ -28,20 +29,20 @@ import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
-import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public final class PaletteAnnotations {
 
 	public static EList<AdapterTypePaletteEntry> getAdapterTypesSorted(final Palette palette) {
-		EMap<String, AdapterTypePaletteEntry> adapterList = palette.getAdapterTypes();
+		final EMap<String, AdapterTypePaletteEntry> adapterList = palette.getAdapterTypes();
 
-		return ECollections.asEList(adapterList.entrySet().stream().map(entry -> entry.getValue())
+		return ECollections.asEList(adapterList.entrySet().stream().map(Entry::getValue)
 				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getLabel(), o2.getLabel()))
 				.collect(Collectors.toList()));
 	}
 
-	public static void addTypeEntry(Palette palette, PaletteEntry entry) {
+	public static void addTypeEntry(final Palette palette, final PaletteEntry entry) {
 		entry.setPalette(palette);
 		if (entry instanceof AdapterTypePaletteEntry) {
 			palette.getAdapterTypes().put(entry.getLabel(), (AdapterTypePaletteEntry) entry);
@@ -57,11 +58,11 @@ public final class PaletteAnnotations {
 			palette.getSubAppTypes().put(entry.getLabel(), (SubApplicationTypePaletteEntry) entry);
 		} else {
 			Activator.getDefault()
-					.logError("Unknown pallet entry to be added to palette: " + entry.getClass().getName()); //$NON-NLS-1$
+			.logError("Unknown pallet entry to be added to palette: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
-	public static void removeTypeEntry(Palette palette, PaletteEntry entry) {
+	public static void removeTypeEntry(final Palette palette, final PaletteEntry entry) {
 		if (entry instanceof AdapterTypePaletteEntry) {
 			palette.getAdapterTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof DeviceTypePaletteEntry) {
@@ -76,14 +77,14 @@ public final class PaletteAnnotations {
 			palette.getSubAppTypes().removeKey(entry.getLabel());
 		} else {
 			Activator.getDefault()
-					.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName()); //$NON-NLS-1$
+			.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
-	public static LibraryElement loadType(PaletteEntryImpl paletteEntryImpl) {
-		TypeImporter importer = paletteEntryImpl.getTypeImporter();
+	public static LibraryElement loadType(final PaletteEntryImpl paletteEntryImpl) {
+		final CommonElementImporter importer = paletteEntryImpl.getImporter();
 		importer.loadElement();
-		LibraryElement retval = importer.getElement();
+		final LibraryElement retval = importer.getElement();
 
 		if (null == retval) {
 			Activator.getDefault().logError("Error loading type: " + paletteEntryImpl.getFile().getName()); //$NON-NLS-1$

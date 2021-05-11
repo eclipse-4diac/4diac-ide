@@ -91,29 +91,29 @@ public class ToolTipFigure extends Figure {
 
 	}
 
-	private void addVarDefaultValue(VarDeclaration var) {
-		VarDeclaration typeVar = getTypevariable(var);
+	private void addVarDefaultValue(VarDeclaration variable) {
+		VarDeclaration typeVar = getTypevariable(variable);
 		if (null != typeVar && null != typeVar.getValue()) {
 			String initvalue = FordiacMessages.InitialValue + ": "; //$NON-NLS-1$
 			if (!typeVar.getValue().getValue().isEmpty()) {
-				initvalue += var.getValue().getValue();
+				initvalue += variable.getValue().getValue();
 			}
 			line.add(new Label(initvalue));
 		}
 	}
 
-	private static VarDeclaration getTypevariable(VarDeclaration var) {
-		if (var.eContainer() instanceof Device) {
-			Device dev = (Device) var.eContainer();
+	private static VarDeclaration getTypevariable(VarDeclaration variable) {
+		if (variable.eContainer() instanceof Device) {
+			Device dev = (Device) variable.eContainer();
 			if (null != dev.getType()) {
 				for (VarDeclaration typeVar : dev.getType().getVarDeclaration()) {
-					if (typeVar.getName().equals(var.getName())) {
+					if (typeVar.getName().equals(variable.getName())) {
 						return typeVar;
 					}
 				}
 			}
-		} else if (null != var.getFBNetworkElement() && null != var.getFBNetworkElement().getType()) {
-			return var.getFBNetworkElement().getType().getInterfaceList().getVariable(var.getName());
+		} else if (null != variable.getFBNetworkElement() && null != variable.getFBNetworkElement().getType()) {
+			return variable.getFBNetworkElement().getType().getInterfaceList().getVariable(variable.getName());
 		}
 		return null;
 	}

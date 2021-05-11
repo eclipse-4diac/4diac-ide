@@ -249,7 +249,7 @@
                label="%contributions.menus.debug.watch"
                tooltip="%contributions.menus.debug.watchToolTip">
             <visibleWhen checkEnabled="false">
-				<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
+            	<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
             </visibleWhen>
          </command>
          <command
@@ -337,7 +337,10 @@
 		<definition id="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor">
 			<and>
 				<with variable="activeEditor">
-					<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
+					<or>
+						<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
+						<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement"/>
+					</or>
 				</with>
 				<not>
 					<with variable="activeEditorId">

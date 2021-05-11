@@ -20,7 +20,9 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
@@ -68,7 +70,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 /**
  * The Class CommonElementImporter.
  */
-abstract class CommonElementImporter {
+public abstract class CommonElementImporter {
 
 	private static class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
@@ -111,21 +113,22 @@ abstract class CommonElementImporter {
 
 	private static VarDeclaration createVarDecl(final InterfaceList interfaceList, final String varName,
 			final boolean input) {
-		final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		var.setName(varName);
-		var.setIsInput(input);
+		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		variable.setName(varName);
+		variable.setIsInput(input);
 		if (input) {
-			interfaceList.getInputVars().add(var);
+			interfaceList.getInputVars().add(variable);
 		} else {
-			interfaceList.getOutputVars().add(var);
+			interfaceList.getOutputVars().add(variable);
 		}
-		return var;
+		return variable;
 	}
 
 	private XMLStreamReader reader;
 	private final IFile file;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
+	protected final List<ErrorMarkerBuilder> errorMarkerAttributes;
 
 	protected IFile getFile() {
 		return file;
@@ -162,6 +165,7 @@ abstract class CommonElementImporter {
 		Assert.isNotNull(file);
 		this.file = file;
 		typeLibrary = TypeLibrary.getTypeLibrary(file.getProject());
+		errorMarkerAttributes = new ArrayList<>();
 	}
 
 	protected CommonElementImporter(final CommonElementImporter importer) {
@@ -169,6 +173,7 @@ abstract class CommonElementImporter {
 		reader = importer.reader;
 		file = importer.file;
 		typeLibrary = importer.typeLibrary;
+		errorMarkerAttributes = importer.errorMarkerAttributes;
 	}
 
 	public void loadElement() {
@@ -181,45 +186,30 @@ abstract class CommonElementImporter {
 		} catch (final Exception e) {
 			Activator.getDefault().logWarning("Type Loading issue", e);
 			createErrorMarker(e.getMessage());
+		}finally {
+			buildErrorMarker(file);
 		}
 	}
 
-	protected void createErrorMarker(final String message) {
-		final Map<String, String> attrs = new HashMap<>();
+	protected ErrorMarkerBuilder createErrorMarker(final String message) {
+		final Map<String, Object> attrs = new HashMap<>();
 		attrs.put(IMarker.MESSAGE, message);
-		createErrorMarker(attrs);
+		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarkerBuilder(attrs,
+				getLineNumber());
+		errorMarkerAttributes.add(e);
+		return e;
 	}
 
-	protected void createErrorMarker(final String message, final INamedElement errorLocation) {
-		final Map<String, String> attrs = new HashMap<>();
-		attrs.put(IMarker.MESSAGE, message);
-		FordiacMarkerHelper.addLocation(errorLocation, attrs);
-		FordiacMarkerHelper.addTargetIdentifier(errorLocation, attrs);
-		createErrorMarker(attrs);
-	}
-
-	protected void createErrorMarker(final Map<String, String> attrs) {
-		final int lineNumber = reader.getLocation().getLineNumber();
-		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) {
+	private void buildErrorMarker(final IFile file) {
+		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) { //$NON-NLS-1$
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				try {
-					final IMarker marker = file.createMarker(IMarker.PROBLEM);
-					if (marker.exists()) {
-						marker.setAttributes(attrs);
-						marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-						marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-					}
-				} catch (final CoreException e) {
-					Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
-				}
+				errorMarkerAttributes.stream().forEach(a -> FordiacMarkerHelper.createMarker(a, file));
 				return Status.OK_STATUS;
 			}
 		};
 		job.setRule(file.getProject());
 		job.schedule();
-
 	}
 
 	protected abstract LibraryElement createRootModelElement();
@@ -254,6 +244,10 @@ abstract class CommonElementImporter {
 
 	protected XMLStreamReader getReader() {
 		return reader;
+	}
+
+	public int getLineNumber() {
+		return reader.getLocation().getLineNumber();
 	}
 
 	protected void proceedToStartElementNamed(final String elementName) throws XMLStreamException {
@@ -445,11 +439,11 @@ abstract class CommonElementImporter {
 	}
 
 	protected VarDeclaration parseParameter() throws TypeImportException, XMLStreamException {
-		final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (null != name) {
-			var.setName(name);
+			variable.setName(name);
 		} else {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
@@ -458,16 +452,16 @@ abstract class CommonElementImporter {
 		if (null != value) {
 			final Value val = LibraryElementFactory.eINSTANCE.createValue();
 			val.setValue(value);
-			var.setValue(val);
+			variable.setValue(val);
 		} else {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterValueNotSet);
 		}
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
-			var.setComment(comment);
+			variable.setComment(comment);
 		}
 		proceedToEndElementNamed(LibraryElementTags.PARAMETER_ELEMENT);
-		return var;
+		return variable;
 	}
 
 	protected String getAttributeValue(final String attributeName) {

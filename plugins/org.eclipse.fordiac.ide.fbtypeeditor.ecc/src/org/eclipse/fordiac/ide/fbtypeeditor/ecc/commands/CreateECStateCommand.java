@@ -55,7 +55,7 @@ public class CreateECStateCommand extends Command {
 	@Override
 	public void execute() {
 		ecState.updatePosition(location);
-		if (parent.getECState().size() == 0) {
+		if (parent.getECState().isEmpty()) {
 			parent.setStart(ecState);
 		}
 		parent.getECState().add(ecState);

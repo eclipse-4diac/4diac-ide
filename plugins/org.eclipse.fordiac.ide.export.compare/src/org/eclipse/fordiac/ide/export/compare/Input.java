@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 - 2014 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -33,20 +33,20 @@ import org.eclipse.ui.Saveable;
 class Input implements IEditableContent, ITypedElement, IStreamContentAccessor, ISaveablesSource {
 
 	/** The content. */
-	private File fContent;
+	private final File fContent;
 
 	/**
 	 * Instantiates a new input.
-	 * 
+	 *
 	 * @param f the f
 	 */
-	public Input(File f) {
+	public Input(final File f) {
 		fContent = f;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.compare.ITypedElement#getName()
 	 */
 	@Override
@@ -56,7 +56,7 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor, 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.compare.ITypedElement#getImage()
 	 */
 	@Override
@@ -66,7 +66,7 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor, 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.compare.ITypedElement#getType()
 	 */
 	@Override
@@ -76,14 +76,14 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor, 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.compare.IStreamContentAccessor#getContents()
 	 */
 	@Override
 	public InputStream getContents() throws CoreException {
 		try {
 			return new FileInputStream(fContent);
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 		return null;
@@ -91,7 +91,7 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor, 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.compare.IEditableContent#isEditable()
 	 */
 	@Override
@@ -101,47 +101,47 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor, 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.compare.IEditableContent#replace(org.eclipse.compare.
 	 * ITypedElement, org.eclipse.compare.ITypedElement)
 	 */
 	@Override
-	public ITypedElement replace(ITypedElement dest, ITypedElement src) {
+	public ITypedElement replace(final ITypedElement dest, final ITypedElement src) {
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.compare.IEditableContent#setContent(byte[])
 	 */
 	@Override
-	public void setContent(byte[] newContent) {
+	public void setContent(final byte[] newContent) {
 		try (FileOutputStream fo = new FileOutputStream(fContent);) {
 			fo.write(newContent);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.ISaveablesSource#getActiveSaveables()
 	 */
 	@Override
 	public Saveable[] getActiveSaveables() {
-		return null;
+		return new Saveable[0];
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.ISaveablesSource#getSaveables()
 	 */
 	@Override
 	public Saveable[] getSaveables() {
-		return null;
+		return new Saveable[0];
 	}
 
 }

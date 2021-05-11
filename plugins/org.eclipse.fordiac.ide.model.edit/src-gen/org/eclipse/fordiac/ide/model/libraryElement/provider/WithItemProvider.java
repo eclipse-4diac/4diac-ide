@@ -85,10 +85,10 @@ public class WithItemProvider extends ItemProviderAdapter implements IEditingDom
 	@Override
 	public String getText(Object object) {
 		String varName = null;
-		VarDeclaration var = ((With) object).getVariables();
+		VarDeclaration variable = ((With) object).getVariables();
 
-		if (null != var) {
-			varName = var.getName();
+		if (null != variable) {
+			varName = variable.getName();
 		}
 		return varName == null || varName.length() == 0 ? getString("_UI_With_type") //$NON-NLS-1$
 				: getString("_UI_With_type") + " " + varName; //$NON-NLS-1$ //$NON-NLS-2$

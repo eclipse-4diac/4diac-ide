@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -26,25 +26,19 @@ public class CreateInputPrimitiveCommand extends Command {
 	private final ServiceTransaction element;
 	private InputPrimitive newPrimitive;
 
-	public CreateInputPrimitiveCommand(String type, ServiceTransaction element) {
+	public CreateInputPrimitiveCommand(final String type, final ServiceTransaction element) {
 		this.type = type;
 		this.element = element;
 	}
 
 	@Override
 	public boolean canExecute() {
-		if (type == null || element == null) {
-			return false;
-		}
-		if (element.getInputPrimitive() != null) {
-			return false;
-		}
-		return true;
+		return (type != null) && (element != null) && (element.getInputPrimitive() != null);
 	}
 
 	@Override
 	public void execute() {
-		Service service = (Service) element.eContainer().eContainer();
+		final Service service = (Service) element.eContainer().eContainer();
 		newPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
 		newPrimitive.setEvent("INIT"); //$NON-NLS-1$
 		if (type.equals(ServiceInterfacePaletteFactory.LEFT_INPUT_PRIMITIVE)) {

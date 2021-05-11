@@ -38,8 +38,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.systemmanagement.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 
 public class SystemContentProvider extends AdapterFactoryContentProvider implements DistributedSystemListener {

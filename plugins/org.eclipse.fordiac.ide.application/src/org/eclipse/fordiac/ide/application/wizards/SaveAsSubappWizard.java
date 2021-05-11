@@ -99,10 +99,12 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		if (perform()) {
 			final File[] fileList = getFilesFromTemplateFolder();
 			if (null == fileList) {
-				return false;
+				MessageDialog.openError(getShell(), Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorTitle,
+						Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage);
+			} else {
+				createSubAppTemplateCopy(fileList);
+				createSupApplication();
 			}
-			createSubAppTemplateCopy(fileList);
-			createSupApplication();
 		}
 		return true;
 	}

@@ -11,15 +11,20 @@
  *   Michael Oberlehner
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement;
+package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
 import org.eclipse.core.resources.IFile;
 
-public interface AutomationSystemListener {
+public interface IEditorFileChangeListener {
 
-	/**
-	 * Distributed system workspace changed.
-	 */
-	void automationSystemChanged(IFile file);
+	int INIT = -1;
+	int YES = 0;
+	int YES_TO_ALL = 1;
+	int NO = 2;
+	int NO_TO_ALL = 3;
+
+	void reloadFile();
+
+	IFile getFile();
 
 }

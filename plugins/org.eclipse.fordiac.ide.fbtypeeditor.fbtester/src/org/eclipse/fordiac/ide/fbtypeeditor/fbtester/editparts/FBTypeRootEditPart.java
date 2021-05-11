@@ -141,6 +141,6 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	}
 
 	protected static void createValues(final FB fB) {
-		fB.getInterface().getInputVars().forEach(var -> var.setValue(LibraryElementFactory.eINSTANCE.createValue()));
+		fB.getInterface().getInputVars().forEach(inputVar -> inputVar.setValue(LibraryElementFactory.eINSTANCE.createValue()));
 	}
 }

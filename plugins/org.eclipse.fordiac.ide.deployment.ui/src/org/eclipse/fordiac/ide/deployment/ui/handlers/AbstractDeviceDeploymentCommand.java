@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,12 +21,12 @@ import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
 
 public abstract class AbstractDeviceDeploymentCommand extends AbstractDeploymentCommand {
 
-	public AbstractDeviceDeploymentCommand() {
+	protected AbstractDeviceDeploymentCommand() {
 		super();
 	}
 
 	@Override
-	protected boolean prepareParametersToExecute(Object element) {
+	protected boolean prepareParametersToExecute(final Object element) {
 		if (element instanceof Device) {
 			setDevice((Device) element);
 			return true;

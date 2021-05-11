@@ -184,10 +184,10 @@ class DownloadRunnable implements IRunnableWithProgress {
 			throws DeploymentException {
 		if (!devData.getSelectedDevParams().isEmpty()) {
 			Device device = devData.getDevice();
-			for (VarDeclaration var : devData.getSelectedDevParams()) {
-				String value = DeploymentHelper.getVariableValue(var, device.getAutomationSystem());
+			for (VarDeclaration devVar : devData.getSelectedDevParams()) {
+				String value = DeploymentHelper.getVariableValue(devVar, device.getAutomationSystem());
 				if (null != value) {
-					executor.writeDeviceParameter(device, var.getName(), value);
+					executor.writeDeviceParameter(device, devVar.getName(), value);
 				}
 				curMonitor.worked(1);
 			}

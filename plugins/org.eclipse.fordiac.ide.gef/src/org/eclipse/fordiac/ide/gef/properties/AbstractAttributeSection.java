@@ -82,8 +82,8 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		createNewDeleteButton(parent);
 	}
 
-	private void createNewDeleteButton(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	private void createNewDeleteButton(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 		attributeNew = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
@@ -91,7 +91,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		attributeNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		attributeNew.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				if (type instanceof ConfigurableObject) {
 					executeCommand(new AttributeCreateCommand((ConfigurableObject) type));
 					attributeViewer.refresh();
@@ -112,12 +112,12 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	}
 
 	private static String[] getDataTypes() {
-		List<BaseType1> list = Arrays.asList(BaseType1.values());
+		final List<BaseType1> list = Arrays.asList(BaseType1.values());
 		// collects names of all base data types into a String array
 		return list.stream().map(BaseType1::getName).collect(Collectors.toList()).toArray(new String[0]);
 	}
 
-	private void createInputInfoGroup(Composite parent) {
+	private void createInputInfoGroup(final Composite parent) {
 		attributeViewer = TableWidgetFactory.createPropertyTableViewer(parent, 0);
 
 		configureTableLayout();
@@ -133,15 +133,15 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	}
 
 	private void configureTableLayout() {
-		TableColumn column1 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
+		final TableColumn column1 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
 		column1.setText(NAME_COL);
-		TableColumn column2 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
+		final TableColumn column2 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
 		column2.setText(TYPE_COL);
-		TableColumn column3 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
+		final TableColumn column3 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
 		column3.setText(VALUE_COL);
-		TableColumn column4 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
+		final TableColumn column4 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
 		column4.setText(COMMENT_COL);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 70));
 		layout.addColumnData(new ColumnWeightData(30, 70));
 		layout.addColumnData(new ColumnWeightData(30, 70));
@@ -172,11 +172,8 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	public class AttributeCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(final Object element, final String property) {
-			if (element instanceof Attribute && TYPE_COL.equals(property)
-					&& null != ((Attribute) element).getAttributeDeclaration()) {
-				return false;
-			}
-			return true;
+			return !(element instanceof Attribute && TYPE_COL.equals(property)
+					&& null != ((Attribute) element).getAttributeDeclaration());
 		}
 
 		@Override
@@ -197,7 +194,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
-			Attribute data = (Attribute) ((TableItem) element).getData();
+			final Attribute data = (Attribute) ((TableItem) element).getData();
 			AttributeChangeCommand cmd = null;
 			switch (property) {
 			case NAME_COL:

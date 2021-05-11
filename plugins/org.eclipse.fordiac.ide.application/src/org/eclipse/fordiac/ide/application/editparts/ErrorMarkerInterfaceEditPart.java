@@ -23,12 +23,11 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 
 	public ErrorMarkerInterfaceEditPart() {
 		super();
-		// changeBackgroundColor();
 	}
 
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
-		// TODO Auto-generated method stub
+		// we don't want to allow any connection additions here therefore return null
 		return null;
 	}
 

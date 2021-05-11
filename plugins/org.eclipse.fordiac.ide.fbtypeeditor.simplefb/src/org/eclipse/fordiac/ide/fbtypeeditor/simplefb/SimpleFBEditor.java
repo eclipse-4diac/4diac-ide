@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -43,18 +44,18 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 	}
 
 	@Override
-	public void createPartControl(Composite parent) {
-		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+	public void createPartControl(final Composite parent) {
+		final FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		baseAlgorithm.createControls(parent, toolkit);
 		baseAlgorithm.initialize(fbType, commandStack);
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
 		if (input instanceof FBTypeEditorInput) {
-			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			if (untypedInput.getContent() instanceof SimpleFBType) {
 				fbType = (SimpleFBType) untypedInput.getContent();
 			}
@@ -67,7 +68,7 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 	}
 
 	@Override
-	public void doSave(IProgressMonitor monitor) {
+	public void doSave(final IProgressMonitor monitor) {
 		commandStack.markSaveLocation();
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 
@@ -98,19 +99,19 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
 
 	}
 
 	@Override
-	public boolean outlineSelectionChanged(Object selectedElement) {
+	public boolean outlineSelectionChanged(final Object selectedElement) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void setCommonCommandStack(CommandStack commandStack) {
+	public void setCommonCommandStack(final CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
 
@@ -121,14 +122,23 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 	}
 
 	@Override
-	public void gotoMarker(IMarker marker) {
+	public void gotoMarker(final IMarker marker) {
 		// For now we don't handle markers in this editor
 	}
 
 	@Override
-	public boolean isMarkerTarget(IMarker marker) {
+	public boolean isMarkerTarget(final IMarker marker) {
 		// For now we don't handle markers in this editor
 		return false;
+	}
+
+	@Override
+	public void reloadType(final FBType type) {
+		if (type instanceof SimpleFBType) {
+			fbType = (SimpleFBType) type;
+			baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
+		}
+
 	}
 
 }

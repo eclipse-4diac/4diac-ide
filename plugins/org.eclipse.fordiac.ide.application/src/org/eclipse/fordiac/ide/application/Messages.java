@@ -143,6 +143,10 @@ public final class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_WizardOverrideMessage;
 
+	public static String SaveAsSubApplicationTypeAction_TemplateMissingErrorTitle;
+
+	public static String SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage;
+
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
 
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_NAME;

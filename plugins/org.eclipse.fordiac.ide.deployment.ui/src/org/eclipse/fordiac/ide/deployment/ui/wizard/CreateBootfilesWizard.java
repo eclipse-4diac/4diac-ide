@@ -87,14 +87,21 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, iop);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();  // mark interruption
+			showExceptionErrorDialog(e);
 		} catch (final Exception e) {
-			final MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
-			msg.setMessage(Messages.CreateBootfilesWizard_BootFileCreationError + e.getMessage());
-			msg.open();
-			Activator.getDefault().logError(msg.getMessage(), e);
+			showExceptionErrorDialog(e);
 		}
 
 		return true;
+	}
+
+	protected void showExceptionErrorDialog(final Exception e) {
+		final MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
+		msg.setMessage(Messages.CreateBootfilesWizard_BootFileCreationError + e.getMessage());
+		msg.open();
+		Activator.getDefault().logError(msg.getMessage(), e);
 	}
 
 	private Map<Device, List<Object>> prepareWorkload() {

@@ -20,24 +20,26 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand.MoveOperation;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 /** This policy creates an AddFBToSubAppCommand when user moves selected FBs over a subapp. When this is possible the
@@ -46,52 +48,51 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
 	private Figure moveHandle;
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected Command getAddCommand(Request request) {
 
 		if (isDragAndDropRequestFromSubAppToSubApp(request, getTargetEditPart(request))) {
-			final List editParts = ((ChangeBoundsRequest) request).getEditParts();
-			final SubAppForFBNetworkEditPart dropEditPart = (SubAppForFBNetworkEditPart) getTargetEditPart(request);
-			final CompoundCommand commandos = new CompoundCommand();
-			for (final Object editPart : editParts) {
-				if (((editPart instanceof EditPart)
-						&& (((EditPart) editPart).getModel() instanceof FBNetworkElement))) {
-					final FBNetworkElement dragEditPartModel = (FBNetworkElement) ((EditPart) editPart).getModel();
+			@SuppressWarnings("unchecked")
+			final List<EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
+			final SubApp dropSubApp = (SubApp) getTargetEditPart(request).getModel();
+			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, dropSubApp);
+			final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 
-					if (dragEditPartModel.isNestedInSubApp()
-							&& isChildFromDropTarget(dragEditPartModel, dropEditPart)) {
-						final Rectangle bounds = getOuterSubappEditPart(editPart).getFigure().getBounds();
-						commandos.add(new MoveElementFromSubAppCommand(dragEditPartModel, bounds,
-								MoveOperation.DRAG_AND_DROP_TO_SUBAPP));
-					}
-				}
+			if (!fbEls.isEmpty()) {
+				return new MoveElementsFromSubAppCommand(fbEls,
+						new org.eclipse.swt.graphics.Point(destination.x, destination.y));
 			}
-
-			if (commandos.isEmpty()) {
-				return new AddElementsToSubAppCommand(dropEditPart.getModel(), editParts);
-			}
-			return commandos;
+			return new AddElementsToSubAppCommand(dropSubApp, editParts);
 		}
 		return super.getAddCommand(request);
 	}
 
-	private static SubAppForFBNetworkEditPart getOuterSubappEditPart(final Object editPart) {
-		return (SubAppForFBNetworkEditPart) ((AbstractFBNElementEditPart) editPart).getParent().getParent();
+	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts,
+			SubApp dropSubApp) {
+		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
+				.map(ep -> (FBNetworkElement) ep.getModel())
+				.filter(el -> el.isNestedInSubApp() && isChildFromDropTarget(el, dropSubApp))
+				.collect(Collectors.toList());
 	}
 
 	public static boolean isDragAndDropRequestFromSubAppToSubApp(Request generic, EditPart targetEditPart) {
 		return (generic instanceof ChangeBoundsRequest) && (targetEditPart instanceof SubAppForFBNetworkEditPart);
 	}
 
-	private static boolean isChildFromDropTarget(FBNetworkElement dragEditPartModel,
-			SubAppForFBNetworkEditPart dropEditPart) {
-		if ((dragEditPartModel.getOuterFBNetworkElement() == null)
-				|| (dragEditPartModel.getOuterFBNetworkElement().getOuterFBNetworkElement() == null)) {
+	private static boolean isChildFromDropTarget(FBNetworkElement draggedFB, SubApp dropTarget) {
+		if ((draggedFB.getOuterFBNetworkElement() == null)
+				|| (draggedFB.getOuterFBNetworkElement().getOuterFBNetworkElement() == null)) {
 			return false;
 
 		}
-		return dragEditPartModel.getOuterFBNetworkElement().getOuterFBNetworkElement().equals(dropEditPart.getModel());
+		return draggedFB.getOuterFBNetworkElement().getOuterFBNetworkElement().equals(dropTarget);
+	}
+
+	private org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(ChangeBoundsRequest request) {
+		final FigureCanvas viewerControl = (FigureCanvas) getTargetEditPart(request).getViewer().getControl();
+		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
+		return new org.eclipse.draw2d.geometry.Point(request.getLocation().x + location.x,
+				request.getLocation().y + location.y).scale(1.0 / getZoomManager().getZoom());
 	}
 
 	@Override
@@ -102,6 +103,10 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 					DiagramPreferences.CORNER_DIM_HALF);
 			addFeedback(moveHandle);
 		}
+	}
+
+	private ZoomManager getZoomManager() {
+		return ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
 	}
 
 	@Override

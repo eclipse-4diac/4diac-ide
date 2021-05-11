@@ -64,7 +64,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	private static final String VALUE_PROPERTY = "value"; //$NON-NLS-1$
 	private static final String COMMENT_PROPERTY = "comment"; //$NON-NLS-1$
 
-	public AbstractInterfaceSection() {
+	protected AbstractInterfaceSection() {
 	}
 
 	@Override

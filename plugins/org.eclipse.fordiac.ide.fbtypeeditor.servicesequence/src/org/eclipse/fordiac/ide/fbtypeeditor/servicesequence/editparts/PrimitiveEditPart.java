@@ -33,11 +33,11 @@ import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 
 public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart
-		implements NodeEditPart, IChangeStringEditPart {
+implements NodeEditPart, IChangeStringEditPart {
 
 	private final PrimitiveConnection connection;
 
-	private Adapter adapter = new AdapterImpl() {
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -47,7 +47,7 @@ public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart
 		}
 	};
 
-	public PrimitiveEditPart(PrimitiveConnection connection) {
+	protected PrimitiveEditPart(final PrimitiveConnection connection) {
 		super();
 		this.connection = connection;
 	}
@@ -75,7 +75,7 @@ public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		PrimitiveFigure figure = (PrimitiveFigure) getFigure();
+		final PrimitiveFigure figure = (PrimitiveFigure) getFigure();
 		if (null != getCastedModel()) {
 			figure.setLabelText(getCastedModel().getEvent());
 			figure.setInterfaceDirection(isLeftInterface());

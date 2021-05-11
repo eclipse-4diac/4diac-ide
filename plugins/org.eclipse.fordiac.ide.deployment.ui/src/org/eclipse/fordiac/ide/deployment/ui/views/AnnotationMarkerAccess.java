@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 Profactor GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -37,7 +37,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess, IAnnotationAcc
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#getTypeLabel(org.
 	 * eclipse.jface.text.source.Annotation)
@@ -55,7 +55,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess, IAnnotationAcc
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#getLayer(org.eclipse
 	 * .jface.text.source.Annotation)
@@ -71,7 +71,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess, IAnnotationAcc
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#paint(org.eclipse.
 	 * jface.text.source.Annotation, org.eclipse.swt.graphics.GC,
@@ -91,7 +91,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess, IAnnotationAcc
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#isPaintable(org.
 	 * eclipse.jface.text.source.Annotation)
@@ -110,24 +110,19 @@ public class AnnotationMarkerAccess implements IAnnotationAccess, IAnnotationAcc
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#isSubtype(java.lang.
 	 * Object, java.lang.Object)
 	 */
 	@Override
 	public boolean isSubtype(final Object annotationType, final Object potentialSupertype) {
-		if (annotationType.equals(potentialSupertype)) {
-			return true;
-		}
-
-		return false;
-
+		return annotationType.equals(potentialSupertype);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#getSupertypes(java.
 	 * lang.Object)
@@ -139,7 +134,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess, IAnnotationAcc
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.source.IAnnotationAccess#getType(org.eclipse.jface.
 	 * text.source.Annotation)
@@ -151,7 +146,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess, IAnnotationAcc
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.source.IAnnotationAccess#isMultiLine(org.eclipse.jface
 	 * .text.source.Annotation)
@@ -163,7 +158,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess, IAnnotationAcc
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.source.IAnnotationAccess#isTemporary(org.eclipse.jface
 	 * .text.source.Annotation)

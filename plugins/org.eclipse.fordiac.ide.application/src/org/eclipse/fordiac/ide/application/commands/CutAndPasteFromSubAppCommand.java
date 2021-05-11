@@ -12,10 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
-import org.eclipse.draw2d.geometry.Rectangle;
+import java.util.Collection;
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-public class CutAndPasteFromSubAppCommand extends MoveElementFromSubAppCommand {
+import org.eclipse.swt.graphics.Point;
+
+public class CutAndPasteFromSubAppCommand extends MoveElementsFromSubAppCommand {
 
 	private CopyStatus copyStatus;
 
@@ -27,10 +31,15 @@ public class CutAndPasteFromSubAppCommand extends MoveElementFromSubAppCommand {
 		BEFORE_REMOVED_FROM_SUBAPP, REMOVED_FROM_SUBAPP, INSERTED
 	}
 
-	public CutAndPasteFromSubAppCommand(final FBNetworkElement element, final Rectangle targetRect) {
-		super(element, targetRect, MoveOperation.CONTEXT_MENU);
+	public CutAndPasteFromSubAppCommand(final Collection<FBNetworkElement> elements, final Point destination) {
+		super(elements, destination);
 		this.copyStatus = CopyStatus.BEFORE_REMOVED_FROM_SUBAPP;
 
+	}
+
+	@Override
+	public boolean canExecute() {
+		return copyStatus == CopyStatus.REMOVED_FROM_SUBAPP || super.canExecute();
 	}
 
 	@Override
@@ -39,12 +48,12 @@ public class CutAndPasteFromSubAppCommand extends MoveElementFromSubAppCommand {
 		case BEFORE_REMOVED_FROM_SUBAPP:
 			break;
 		case REMOVED_FROM_SUBAPP:
-			undoRemoveFromSubApp();
+			undoRemoveElementsFromSubapp();
 			copyStatus = CopyStatus.INSERTED;
 			break;
 		case INSERTED:
-			undoRemoveFromSubApp();
-			undoMoveToParent();
+			undoRemoveElementsFromSubapp();
+			undoAddElementsToDestination();
 			copyStatus = CopyStatus.BEFORE_REMOVED_FROM_SUBAPP;
 			break;
 		default:
@@ -56,16 +65,16 @@ public class CutAndPasteFromSubAppCommand extends MoveElementFromSubAppCommand {
 	public void redo() {
 		switch (copyStatus) {
 		case BEFORE_REMOVED_FROM_SUBAPP:
-			redoMoveToParent();
-			redoRemoveFromSubapp();
+			redoAddElementsToDestination();
+			redoRemoveElementsFromSubapp();
 			copyStatus = CopyStatus.INSERTED;
 			break;
 		case REMOVED_FROM_SUBAPP:
-			redoMoveToParent();
+			redoAddElementsToDestination();
 			copyStatus = CopyStatus.INSERTED;
 			break;
 		case INSERTED:
-			redoRemoveFromSubapp();
+			redoRemoveElementsFromSubapp();
 			copyStatus = CopyStatus.REMOVED_FROM_SUBAPP;
 			break;
 		default:
@@ -77,11 +86,17 @@ public class CutAndPasteFromSubAppCommand extends MoveElementFromSubAppCommand {
 	public void execute() {
 		switch (copyStatus) {
 		case BEFORE_REMOVED_FROM_SUBAPP:
-			removeElementFromSubapp();
+			removeElementsFromSubapp();
+			if (!createSubAppInterfaceElementCommands.isEmpty()) {
+				createSubAppInterfaceElementCommands.undo();
+			}
 			copyStatus = CopyStatus.REMOVED_FROM_SUBAPP;
 			break;
 		case REMOVED_FROM_SUBAPP:
-			moveElementToParent();
+			if (!createSubAppInterfaceElementCommands.isEmpty()) {
+				createSubAppInterfaceElementCommands.redo();
+			}
+			addElementsToDestination();
 			copyStatus = CopyStatus.INSERTED;
 			break;
 		default:
@@ -94,7 +109,11 @@ public class CutAndPasteFromSubAppCommand extends MoveElementFromSubAppCommand {
 	}
 
 	@Override
-	public FBNetworkElement getElement() {
-		return element;
+	public List<FBNetworkElement> getElements() {
+		return elements;
+	}
+
+	public void setPastePos(final Point pasteRefPosition) {
+		setDestination(pasteRefPosition);
 	}
 }

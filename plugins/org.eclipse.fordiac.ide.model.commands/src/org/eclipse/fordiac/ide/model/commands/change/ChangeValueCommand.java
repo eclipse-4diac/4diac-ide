@@ -26,19 +26,19 @@ import org.eclipse.gef.commands.Command;
 public class ChangeValueCommand extends Command {
 
 	private static final String CHANGE = Messages.ChangeValueCommand_LABEL_ChangeValue;
-	private VarDeclaration var;
+	private VarDeclaration variable;
 	private VarDeclaration mirroredVar; // the variable of the mapped entity
 	private String newValue;
 	private String oldValue;
 
-	public ChangeValueCommand(VarDeclaration var, String value) {
-		this.var = var;
+	public ChangeValueCommand(VarDeclaration variable, String value) {
+		this.variable = variable;
 		newValue = (null == value) ? "" : value; //$NON-NLS-1$ //always ensure a valid value
 	}
 
 	@Override
 	public boolean canExecute() {
-		if ((null != var) && (null != var.getType()) && ("ANY".equals(var.getTypeName())) //$NON-NLS-1$
+		if ((null != variable) && (null != variable.getType()) && ("ANY".equals(variable.getTypeName())) //$NON-NLS-1$
 				&& (null != newValue)) {
 			if ((!newValue.equals("")) && (!newValue.contains("#"))) { //$NON-NLS-1$ //$NON-NLS-2$
 				ErrorMessenger.popUpErrorMessage("Constant Values are not allowed on ANY Input!"); //$NON-NLS-1$
@@ -55,36 +55,36 @@ public class ChangeValueCommand extends Command {
 	@Override
 	public void execute() {
 		mirroredVar = getMirroredVariable();
-		if (null == var.getValue()) {
-			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
+		if (null == variable.getValue()) {
+			variable.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			if (null != mirroredVar) {
 				mirroredVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 			oldValue = ""; //$NON-NLS-1$
 		} else {
-			oldValue = var.getValue().getValue();
+			oldValue = variable.getValue().getValue();
 		}
-		var.getValue().setValue(newValue);
+		variable.getValue().setValue(newValue);
 		setMirroredVar(newValue);
 	}
 
 	@Override
 	public void undo() {
-		var.getValue().setValue(oldValue);
+		variable.getValue().setValue(oldValue);
 		setMirroredVar(oldValue);
 	}
 
 	@Override
 	public void redo() {
-		var.getValue().setValue(newValue);
+		variable.getValue().setValue(newValue);
 		setMirroredVar(newValue);
 	}
 
 	private VarDeclaration getMirroredVariable() {
-		if (null != var.getFBNetworkElement() && var.getFBNetworkElement().isMapped()) {
-			FBNetworkElement opposite = var.getFBNetworkElement().getOpposite();
+		if (null != variable.getFBNetworkElement() && variable.getFBNetworkElement().isMapped()) {
+			FBNetworkElement opposite = variable.getFBNetworkElement().getOpposite();
 			if (null != opposite) {
-				IInterfaceElement element = opposite.getInterfaceElement(var.getName());
+				IInterfaceElement element = opposite.getInterfaceElement(variable.getName());
 				if (element instanceof VarDeclaration) {
 					return (VarDeclaration) element;
 				}

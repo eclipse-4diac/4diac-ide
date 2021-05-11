@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
-public class FBNetworkElementHelper {
+public final class FBNetworkElementHelper {
 
 	public static boolean isContainedInTypedInstance(final FBNetworkElement element) {
 		EObject obj = element;

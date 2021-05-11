@@ -62,8 +62,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected Object getTypeValue(final Object element, final TableViewer viewer, final int TYPE_COLUMN_INDEX) {
-		final VarDeclaration var = (VarDeclaration) element;
-		return var.getTypeName();
+		final VarDeclaration variable = (VarDeclaration) element;
+		return variable.getTypeName();
 	}
 
 	@Override

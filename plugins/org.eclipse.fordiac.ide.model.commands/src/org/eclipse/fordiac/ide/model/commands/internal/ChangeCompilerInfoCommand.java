@@ -27,7 +27,7 @@ import org.eclipse.gef.commands.Command;
 public abstract class ChangeCompilerInfoCommand extends Command {
 
 	/** The identification of the type. */
-	private CompilerInfo compilerInfo;
+	private final CompilerInfo compilerInfo;
 
 	public CompilerInfo getCompilerInfo() {
 		return compilerInfo;
@@ -39,7 +39,7 @@ public abstract class ChangeCompilerInfoCommand extends Command {
 	 * @param type    which identification information is about to change
 	 * @param comment the comment
 	 */
-	public ChangeCompilerInfoCommand(final CompilableType type) {
+	protected ChangeCompilerInfoCommand(final CompilableType type) {
 		super();
 
 		if (type.getCompilerInfo() == null) {

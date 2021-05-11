@@ -43,35 +43,35 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 	private static final class OpenTypeListener implements MouseListener {
 		private final AbstractFBNElementEditPart editPart;
 
-		public OpenTypeListener(AbstractFBNElementEditPart editPart) {
+		public OpenTypeListener(final AbstractFBNElementEditPart editPart) {
 			this.editPart = editPart;
 		}
 
 		@Override
-		public void mousePressed(MouseEvent me) {
+		public void mousePressed(final MouseEvent me) {
 			if ((0 != (me.getState() & SWT.CONTROL)) && editPart.isOnlyThisOrNothingSelected()) {
 				openTypeInEditor(editPart.getModel());
 			}
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent me) {
+		public void mouseReleased(final MouseEvent me) {
 			// nothing to be done here
 		}
 
 		@Override
-		public void mouseDoubleClicked(MouseEvent me) {
+		public void mouseDoubleClicked(final MouseEvent me) {
 			// nothing to be done here
 		}
 
 	}
 
 	// TODO model refactoring - look for a better place for this function
-	public static void openTypeInEditor(FBNetworkElement element) {
+	public static void openTypeInEditor(final FBNetworkElement element) {
 		// open the default editor for the adapter file
-		PaletteEntry entry = element.getPaletteEntry();
+		final PaletteEntry entry = element.getPaletteEntry();
 		if (null != entry) {
-			IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+			final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 					.getDefaultEditor(entry.getFile().getName());
 			EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 		}
@@ -103,30 +103,30 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 		getMiddle().addMouseMotionListener(new MouseMotionListener() {
 
 			@Override
-			public void mouseDragged(MouseEvent me) {
+			public void mouseDragged(final MouseEvent me) {
 				// nothing to bo done here
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent me) {
+			public void mouseEntered(final MouseEvent me) {
 				if ((0 != (me.getState() & SWT.CONTROL)) && editPart.isOnlyThisOrNothingSelected()) {
 					getTypeLabel().setDrawUnderline(true);
 				}
 			}
 
 			@Override
-			public void mouseExited(MouseEvent me) {
+			public void mouseExited(final MouseEvent me) {
 				getTypeLabel().setDrawUnderline(false);
 			}
 
 			@Override
-			public void mouseHover(MouseEvent me) {
+			public void mouseHover(final MouseEvent me) {
 				// currently mouseHover should be the same as mouse moved
 				mouseMoved(me);
 			}
 
 			@Override
-			public void mouseMoved(MouseEvent me) {
+			public void mouseMoved(final MouseEvent me) {
 				if ((0 != (me.getState() & SWT.CONTROL)) && editPart.isOnlyThisOrNothingSelected()) {
 					if (!getTypeLabel().isDrawUnderline()) {
 						getTypeLabel().setDrawUnderline(true);
@@ -156,31 +156,26 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 	}
 
 	@Override
-	public void setTransparency(int value) {
+	public void setTransparency(final int value) {
 		setAlpha(value);
 	}
 
 	@Override
 	public int getTransparency() {
-		return getAlpha();
-	}
-
-	@Override
-	public Rectangle getBounds() {
-		return super.getBounds();
+		return getAlpha().intValue();
 	}
 
 	public Rectangle getFBBounds() {
-		int x = getTop().getBounds().x();
-		int y = getLabelBounds().y();
-		int width = getTop().getBounds().width;
-		int height = getTop().getBounds().height() + getMiddle().getBounds().height() + getBottom().getBounds().height()
+		final int x = getTop().getBounds().x();
+		final int y = getLabelBounds().y();
+		final int width = getTop().getBounds().width;
+		final int height = getTop().getBounds().height() + getMiddle().getBounds().height() + getBottom().getBounds().height()
 				+ getLabelBounds().height();
 		return new Rectangle(x, y, width, height);
 	}
 
 	public Rectangle getLabelBounds() {
-		for (Object figure : getChildren()) {
+		for (final Object figure : getChildren()) {
 			if (figure instanceof InstanceNameFigure) {
 				return ((InstanceNameFigure) figure).getBounds();
 			}

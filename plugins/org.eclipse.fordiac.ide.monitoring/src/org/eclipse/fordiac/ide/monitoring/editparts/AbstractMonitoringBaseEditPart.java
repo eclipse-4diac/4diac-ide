@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler 
+ * Copyright (c) 2012 - 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler
  * 							 University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -39,7 +39,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 
 public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPart implements SpecificLayerEditPart {
 
@@ -53,41 +52,41 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	@Override
 	public void activate() {
 		super.activate();
-		for (Object object : getViewer().getEditPartRegistry().keySet()) {
+		for (final Object object : getViewer().getEditPartRegistry().keySet()) {
 			if (object instanceof IInterfaceElement) {
-				IInterfaceElement interfaceElement = (IInterfaceElement) object;
+				final IInterfaceElement interfaceElement = (IInterfaceElement) object;
 				if (interfaceElement.equals(getInterfaceElement())) {
-					EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
+					final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
 					if (part instanceof InterfaceEditPart) {
 						parentPart = (InterfaceEditPart) part;
-						IFigure f = parentPart.getFigure();
+						final IFigure f = parentPart.getFigure();
 						f.addAncestorListener(new AncestorListener() {
 
 							@Override
-							public void ancestorRemoved(IFigure ancestor) {
+							public void ancestorRemoved(final IFigure ancestor) {
 								// nothing to do
 							}
 
 							@Override
-							public void ancestorMoved(IFigure ancestor) {
+							public void ancestorMoved(final IFigure ancestor) {
 								refreshVisuals();
 							}
 
 							@Override
-							public void ancestorAdded(IFigure ancestor) {
+							public void ancestorAdded(final IFigure ancestor) {
 								// nothing to do
 							}
 						});
 					}
 				} else if (interfaceElement instanceof AdapterDeclaration) {
 					IInterfaceElement subInterfaceElement = null;
-					InterfaceList interfaceList = ((AdapterDeclaration) interfaceElement).getType().getInterfaceList();
-					List<IInterfaceElement> list = new ArrayList<>();
+					final InterfaceList interfaceList = ((AdapterDeclaration) interfaceElement).getType().getInterfaceList();
+					final List<IInterfaceElement> list = new ArrayList<>();
 					list.addAll(interfaceList.getEventInputs());
 					list.addAll(interfaceList.getEventOutputs());
 					list.addAll(interfaceList.getInputVars());
 					list.addAll(interfaceList.getOutputVars());
-					for (IInterfaceElement element : list) {
+					for (final IInterfaceElement element : list) {
 						if (element.equals(getInterfaceElement())
 								&& interfaceElement.eContainer().eContainer() == getModel().getPort().getFb()) {
 							subInterfaceElement = element;
@@ -97,11 +96,11 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 
 					if (subInterfaceElement != null) {
 						Object subObject = null;
-						for (Object obj : getViewer().getEditPartRegistry().values()) {
+						for (final Object obj : getViewer().getEditPartRegistry().values()) {
 							if (obj instanceof MonitoringAdapterEditPart) {
-								MonitoringAdapterEditPart part = (MonitoringAdapterEditPart) obj;
+								final MonitoringAdapterEditPart part = (MonitoringAdapterEditPart) obj;
 								if (part.getModel().getPort().getInterfaceElement() == interfaceElement) {
-									for (Object subView : part.getModelChildren()) {
+									for (final Object subView : part.getModelChildren()) {
 										if (((IInterfaceElement) subView).getName()
 												.equals(subInterfaceElement.getName())) {
 											subObject = subView;
@@ -116,26 +115,26 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 						}
 
 						if (subObject != null) {
-							EditPart part = (EditPart) getViewer().getEditPartRegistry().get(subObject);
+							final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(subObject);
 							if (part instanceof InterfaceEditPart) {
 								parentPart = (InterfaceEditPart) part;
-								IFigure f = parentPart.getFigure();
+								final IFigure f = parentPart.getFigure();
 								f.addAncestorListener(new AncestorListener() {
 
 									@Override
-									public void ancestorRemoved(IFigure ancestor) {
+									public void ancestorRemoved(final IFigure ancestor) {
 										// nothing to do
 									}
 
 									@Override
-									public void ancestorMoved(IFigure ancestor) {
+									public void ancestorMoved(final IFigure ancestor) {
 										// calculatePos()
 										refreshVisuals();
 
 									}
 
 									@Override
-									public void ancestorAdded(IFigure ancestor) {
+									public void ancestorAdded(final IFigure ancestor) {
 										// nothing to do
 									}
 								});
@@ -146,7 +145,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			}
 		}
 		org.eclipse.fordiac.ide.monitoring.Activator.getDefault().getPreferenceStore()
-				.addPropertyChangeListener(getPreferenceChangeListener());
+		.addPropertyChangeListener(getPreferenceChangeListener());
 		refreshVisuals();
 	}
 
@@ -163,15 +162,12 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	@Override
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		if (listener == null) {
-			listener = new IPropertyChangeListener() {
-				@Override
-				public void propertyChange(final PropertyChangeEvent event) {
-					if (event.getProperty()
-							.equals(org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_WATCH_COLOR)
-							|| event.getProperty().equals(
-									org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_FORCE_COLOR)) {
-						setBackgroundColor(getFigure());
-					}
+			listener = event -> {
+				if (event.getProperty()
+						.equals(org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_WATCH_COLOR)
+						|| event.getProperty().equals(
+								org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_FORCE_COLOR)) {
+					setBackgroundColor(getFigure());
 				}
 			};
 		}
@@ -190,7 +186,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	}
 
 	@Override
-	public boolean understandsRequest(Request request) {
+	public boolean understandsRequest(final Request request) {
 		if (request.getType() == RequestConstants.REQ_MOVE) {
 			return false;
 		}
@@ -199,17 +195,16 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 
 	private Point calculatePos() {
 		if (parentPart != null) {
-			Rectangle bounds = parentPart.getFigure().getBounds();
+			final Rectangle bounds = parentPart.getFigure().getBounds();
 			int x = 0;
 			if (isInput()) {
-				int width = 40;
-				width = getFigure().getBounds().width;
+				int width = getFigure().getBounds().width;
 				width = Math.max(40, width);
 				x = bounds.x - 2 - width;
 			} else {
 				x = bounds.x + bounds.width + 2;
 			}
-			int y = bounds.y;
+			final int y = bounds.y;
 			return new Point(x, y);
 		}
 		return new Point(0, 0);
@@ -226,7 +221,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	protected void refreshPosition() {
 		if (getParent() != null) {
 			Rectangle bounds = null;
-			Point p = calculatePos();
+			final Point p = calculatePos();
 			int width = getFigure().getPreferredSize().width;
 			width = Math.max(40, width);
 			bounds = new Rectangle(p.x, p.y, width, -1);
@@ -235,13 +230,13 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 		}
 	}
 
-	protected void setBackgroundColor(IFigure l) {
+	protected void setBackgroundColor(final IFigure l) {
 		l.setBackgroundColor(PreferenceGetter.getColor(Activator.getDefault().getPreferenceStore(),
 				org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_WATCH_COLOR));
 	}
 
 	@Override
-	protected void backgroundColorChanged(IFigure figure) {
+	protected void backgroundColorChanged(final IFigure figure) {
 		setBackgroundColor(figure);
 	}
 

@@ -211,6 +211,11 @@ public final class Messages extends NLS {
 
 	public static String TypeLibrary_ERROR_ReferencedTypeNotFound;
 
+	public static String FBNetworkImporter_ConnectionDestinationMissing;
+	public static String FBNetworkImporter_ConnectionDestinationNotFound;
+	public static String FBNetworkImporter_ConnectionSourceMissing;
+	public static String FBNetworkImporter_ConnectionSourceNotFound;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 - 2018 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -63,6 +63,7 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	 * blocks needed to manipulate various types of preferences. Each field editor
 	 * knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, Messages.FMUPreferencePage_BinariesLocation,
@@ -71,8 +72,8 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 		librariesGroup = new Group(getFieldEditorParent(), SWT.NONE);
 		librariesGroup.setText(Messages.FMUPreferencePage_IncludeTheFollowingLibrariesInExportedFMU);
 
-		GridLayout gridLayout = new GridLayout(2, false);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		final GridLayout gridLayout = new GridLayout(2, false);
+		final GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalSpan = 2;
 
@@ -104,13 +105,13 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent event) {
+	public void propertyChange(final PropertyChangeEvent event) {
 		if (event.getSource() instanceof DirectoryFieldEditor
 				&& ((DirectoryFieldEditor) event.getSource()).getPreferenceName().equals(PreferenceConstants.P_PATH)) {
 			if (event.getNewValue() instanceof String) {
 				updateEnabledLibraries(true, (String) event.getNewValue());
 			} else if (event.getNewValue() instanceof Boolean) {// When directory doesn't exists, the event is a false
-																// boolean
+				// boolean
 				updateEnabledLibraries(false, null);
 			}
 
@@ -120,14 +121,15 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
-	public void init(IWorkbench workbench) {
+	@Override
+	public void init(final IWorkbench workbench) {
 		setDescription(Messages.FMUPreferencePage_InsideTheSelectedPathTheFilesSearchedFor);
 	}
 
-	private void updateEnabledLibraries(Boolean validPath, String pathString) {
+	private void updateEnabledLibraries(final boolean validPath, final String pathString) {
 
 		if (validPath) {
 			win32Field.setEnabled(new File(pathString + File.separatorChar + "win32Forte.dll"). //$NON-NLS-1$
@@ -148,8 +150,8 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	}
 
 	public static List<String> getFoundLibraries() {
-		List<String> found = new ArrayList<>();
-		String pathString = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH);
+		final List<String> found = new ArrayList<>();
+		final String pathString = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH);
 		if ((new File(pathString + File.separatorChar + "win32Forte.dll").exists())) { //$NON-NLS-1$
 			found.add(PreferenceConstants.P_FMU_WIN32);
 		}

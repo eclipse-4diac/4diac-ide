@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
@@ -49,5 +50,7 @@ public interface IFBTEditorPart extends ISelectionListener, IEditorPart, IGotoMa
 	 * @return true if the marker targets elements shown in this IFBTEditorPart
 	 */
 	boolean isMarkerTarget(IMarker marker);
+
+	void reloadType(FBType type);
 
 }

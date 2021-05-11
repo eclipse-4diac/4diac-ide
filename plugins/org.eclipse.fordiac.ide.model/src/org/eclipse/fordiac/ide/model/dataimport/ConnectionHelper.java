@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class ConnectionHelper {
+public final class ConnectionHelper {
 
 	public static class ConnectionBuilder {
 
@@ -94,11 +94,6 @@ public class ConnectionHelper {
 			if (qualNames.length == 0) {
 				return null;
 			}
-
-			/* final EObject parent = fbNetwork.eContainer();
-			 *
-			 * if (parent instanceof SubApp || ((FBNetworkElement) parent).getType() instanceof CompositeFBType) {
-			 * return (FBNetworkElement) parent; } */
 
 			final FBNetworkElement fbNetworkElement = fbNetwork.getElementNamed(qualNames[0]);
 			if (fbNetworkElement == null) {
@@ -275,7 +270,6 @@ public class ConnectionHelper {
 		final ErrorMarkerFBNElement createErrorMarkerFBNElement = LibraryElementFactory.eINSTANCE
 				.createErrorMarkerFBNElement();
 		createErrorMarkerFBNElement.getTypeLibrary();
-		// String createUniqueName = NameRepository.createUniqueName(createErrorMarkerFBNElement, name);
 		createErrorMarkerFBNElement.setName(name);
 		createErrorMarkerFBNElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		final Position position = LibraryElementFactory.eINSTANCE.createPosition();
@@ -305,13 +299,24 @@ public class ConnectionHelper {
 	}
 
 	public static ErrorMarkerInterface createErrorMarkerInterface(final DataType type, final String name,
-			final boolean isInput) {
+			final boolean isInput, final InterfaceList ieList) {
+		return (ErrorMarkerInterface) ieList.getErrorMarker().stream().filter(e -> e.getName().equals(name)).findAny()
+				.orElseGet(() -> createErrorMarker(type, name, isInput, ieList));
+	}
+
+	private static ErrorMarkerInterface createErrorMarker(final DataType type, final String name, final boolean isInput,
+			final InterfaceList ieList) {
 		final ErrorMarkerInterface errorMarkerInterface = LibraryElementFactory.eINSTANCE.createErrorMarkerInterface();
 		errorMarkerInterface.setName(name);
 		errorMarkerInterface.setIsInput(isInput);
 		errorMarkerInterface.setType(type);
 		errorMarkerInterface.setTypeName(type.getName());
+		ieList.getErrorMarker().add(errorMarkerInterface);
 		return errorMarkerInterface;
+	}
+
+	private ConnectionHelper() {
+		throw new UnsupportedOperationException();
 	}
 
 }

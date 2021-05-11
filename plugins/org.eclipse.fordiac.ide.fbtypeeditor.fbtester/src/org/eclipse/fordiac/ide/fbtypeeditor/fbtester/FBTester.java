@@ -118,7 +118,6 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private FBType type;
 	private String path;
 	private KeyHandler sharedKeyHandler;
-	private StackLayout stack;
 	private TypeLibrary typeLib;
 	private final Map<String, IFBTestConfiguration> configurations = new HashMap<>();
 	private Composite configurationParent;
@@ -184,6 +183,9 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		configurationCombo.setItems(getTestConfigurations().toArray(new String[0]));
 		final GridData configurationComboData = new GridData(SWT.FILL, SWT.TOP, false, false);
 		configurationCombo.setLayoutData(configurationComboData);
+
+		final StackLayout stack = new StackLayout();
+
 		configurationCombo.addListener(SWT.Selection, event -> {
 			final IFBTestConfiguration testConfiguration = configurations.get(configurationCombo.getText());
 			stack.topControl = testConfiguration.getControl();
@@ -193,7 +195,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		final GridData configurationParentData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		configurationParentData.horizontalSpan = 2;
 		configurationParent = new Group(interfaceEditing, SWT.NONE);
-		configurationParent.setLayout(stack = new StackLayout());
+		configurationParent.setLayout(stack);
 		configurationParent.setLayoutData(configurationParentData);
 		createTestConfigurations(configurationParent);
 
@@ -526,8 +528,8 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 			dataLine.append(event.getWith().size()).append(";");//$NON-NLS-1$ // nr of inputs are the number of
 			// connected withs
 			for (final With with : event.getWith()) {
-				final VarDeclaration var = with.getVariables();
-				dataLine.append(var.getName()).append(";val;"); //$NON-NLS-1$
+				final VarDeclaration variable = with.getVariables();
+				dataLine.append(variable.getName()).append(";val;"); //$NON-NLS-1$
 			}
 			dataLine.append(event.getName()).append(";"); //$NON-NLS-1$
 		}
@@ -541,8 +543,8 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		if (!type.getInterfaceList().getOutputVars().isEmpty()) {
 			dataLine.append(type.getInterfaceList().getOutputVars().size());
 			dataLine.append(";"); //$NON-NLS-1$
-			for (final VarDeclaration var : type.getInterfaceList().getOutputVars()) {
-				dataLine.append(var.getName()).append(";val;"); //$NON-NLS-1$
+			for (final VarDeclaration variable : type.getInterfaceList().getOutputVars()) {
+				dataLine.append(variable.getName()).append(";val;"); //$NON-NLS-1$
 			}
 		}
 		final TestData testData = createTestData(dataLine.toString());
@@ -593,6 +595,14 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	public boolean isMarkerTarget(final IMarker marker) {
 		// For now we don't handle markers in this editor
 		return false;
+	}
+
+	@Override
+	public void reloadType(final FBType type) {
+		this.type = type;
+		final FBTypeEditorInput fbTypeEditorInput = (FBTypeEditorInput) getEditorInput();
+		fbTypeEditorInput.setFbType(type);
+		getGraphicalViewer().setContents(fbTypeEditorInput);
 	}
 
 }

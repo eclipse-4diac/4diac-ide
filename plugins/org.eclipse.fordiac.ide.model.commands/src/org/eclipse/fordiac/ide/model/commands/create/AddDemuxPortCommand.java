@@ -45,7 +45,7 @@ public class AddDemuxPortCommand extends Command {
 	private ChangeStructCommand cmd;
 
 
-	public AddDemuxPortCommand(Demultiplexer type, String name) {
+	public AddDemuxPortCommand(final Demultiplexer type, final String name) {
 		this.type = type;
 		this.varName = name;
 		struct = type.getTypeLibrary().getDataTypeLibrary().getStructuredType(type.getStructType().getName());
@@ -56,7 +56,7 @@ public class AddDemuxPortCommand extends Command {
 		if (null == oldVisibleChildren) { // default configuration
 			final StringBuilder sb = new StringBuilder();
 			type.getStructType().getMemberVariables()
-			.forEach(var -> sb.append(var.getName() + VARIABLE_SEPARATOR));
+					.forEach(memVar -> sb.append(memVar.getName() + VARIABLE_SEPARATOR));
 			if (!type.getStructType().getMemberVariables().isEmpty()) {
 				sb.deleteCharAt(sb.length() - 1);
 			}
@@ -86,10 +86,10 @@ public class AddDemuxPortCommand extends Command {
 				.asList(newVisibleChildren.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
 		final List<VarDeclaration> varDecls = new ArrayList<>();
 		for (final VarDeclaration varDeclaration : getVarDeclarations(visibleChildrenNames)) {
-			final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			var.setName(varDeclaration.getName());
-			var.setType(varDeclaration.getType());
-			varDecls.add(var);
+			final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			variable.setName(varDeclaration.getName());
+			variable.setType(varDeclaration.getType());
+			varDecls.add(variable);
 		}
 		configuredStruct.getMemberVariables().addAll(varDecls);
 		cmd = new ChangeStructCommand(type, configuredStruct);
@@ -121,11 +121,11 @@ public class AddDemuxPortCommand extends Command {
 		}
 	}
 
-	private void setVisibleChildrenAttribute(String value) {
+	private void setVisibleChildrenAttribute(final String value) {
 		type.setAttribute(DEMUX_VISIBLE_CHILDREN, FordiacKeywords.STRING, value, ""); //$NON-NLS-1$
 	}
 
-	private List<VarDeclaration> getVarDeclarations(List<String> varDeclNames) {
+	private List<VarDeclaration> getVarDeclarations(final List<String> varDeclNames) {
 		final List<VarDeclaration> vars = new ArrayList<>();
 		varDeclNames.forEach(name -> {
 			final VarDeclaration varDecl = EcoreUtil

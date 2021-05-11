@@ -48,7 +48,6 @@ public class AddElementsToSubAppCommand extends Command {
 	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private org.eclipse.swt.graphics.Point offset;
 
-
 	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection) {
 		this.targetSubApp = targetSubApp;
 		fillElementList(selection);
@@ -115,16 +114,17 @@ public class AddElementsToSubAppCommand extends Command {
 	}
 
 	private int getOriginalPositionX() {
-		return -offset.x + FBNetworkHelper.X_OFFSET_FROM_TOP_LEFT_CORNER;
+		return offset.x - FBNetworkHelper.X_OFFSET_FROM_TOP_LEFT_CORNER;
 	}
 
 	private int getOriginalPositionY() {
-		return -offset.y + FBNetworkHelper.Y_OFFSET_FROM_TOP_LEFT_CORNER;
+		return offset.y - FBNetworkHelper.Y_OFFSET_FROM_TOP_LEFT_CORNER;
 	}
 
 	private void fillElementList(final List<?> selection) {
 		for (final Object fbNetworkElement : selection) {
-			if ((fbNetworkElement instanceof EditPart) && (((EditPart) fbNetworkElement).getModel() instanceof FBNetworkElement)) {
+			if ((fbNetworkElement instanceof EditPart)
+					&& (((EditPart) fbNetworkElement).getModel() instanceof FBNetworkElement)) {
 				addElement((FBNetworkElement) ((EditPart) fbNetworkElement).getModel());
 			} else if (fbNetworkElement instanceof FBNetworkElement) {
 				addElement((FBNetworkElement) fbNetworkElement);
@@ -154,7 +154,8 @@ public class AddElementsToSubAppCommand extends Command {
 
 	}
 
-	private void checkConnection(final Connection con, final IInterfaceElement opposite, final IInterfaceElement ownIE) {
+	private void checkConnection(final Connection con, final IInterfaceElement opposite,
+			final IInterfaceElement ownIE) {
 		if ((opposite.getFBNetworkElement() != null) && elementsToAdd.contains(opposite.getFBNetworkElement())) {
 			moveConIntoSubApp(con);
 		} else if ((opposite.getFBNetworkElement() != null) && targetSubApp.equals(opposite.getFBNetworkElement())) {
@@ -227,7 +228,8 @@ public class AddElementsToSubAppCommand extends Command {
 		return ie.getFBNetworkElement().getName() + "_" + ie.getName(); //$NON-NLS-1$
 	}
 
-	void createConnModificationCommands(final Connection con, final IInterfaceElement subAppIE, final boolean addInternalCon) {
+	void createConnModificationCommands(final Connection con, final IInterfaceElement subAppIE,
+			final boolean addInternalCon) {
 		modifiedConns.add(new DeleteConnectionCommand(con));
 
 		final AbstractConnectionCreateCommand connectionCreateCmd = getCreateConnectionCommand(

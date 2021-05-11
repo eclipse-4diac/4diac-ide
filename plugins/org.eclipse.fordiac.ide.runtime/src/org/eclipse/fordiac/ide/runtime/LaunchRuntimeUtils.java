@@ -62,11 +62,10 @@ public final class LaunchRuntimeUtils {
 			config = wc.doSave();
 			launcht = config.launch(ILaunchManager.RUN_MODE, null);
 
-			final var attributes = launcht.getLaunchConfiguration().getAttributes();
-
 			try {
 				Thread.sleep(1000);
 			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();  // mark interruption
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		} catch (final CoreException e) {

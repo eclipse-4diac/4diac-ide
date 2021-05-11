@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -57,14 +57,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * <em> Type</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The default value of the '{@link #getTestName() <em>Test Name</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getTestName()
 	 * @generated
 	 * @ordered
@@ -74,7 +74,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The cached value of the '{@link #getTestName() <em>Test Name</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getTestName()
 	 * @generated
 	 * @ordered
@@ -84,7 +84,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The cached value of the '{@link #getEvent() <em>Event</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getEvent()
 	 * @generated
 	 * @ordered
@@ -94,7 +94,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The default value of the '{@link #getTestIntstance() <em>Test
 	 * Intstance</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getTestIntstance()
 	 * @generated
 	 * @ordered
@@ -104,7 +104,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The cached value of the '{@link #getTestIntstance() <em>Test Intstance</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getTestIntstance()
 	 * @generated
 	 * @ordered
@@ -114,7 +114,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The cached value of the '{@link #getEventOutputs() <em>Event Outputs</em>}'
 	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getEventOutputs()
 	 * @generated
 	 * @ordered
@@ -124,7 +124,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The cached value of the '{@link #getValues() <em>Values</em>}' reference
 	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getValues()
 	 * @generated
 	 * @ordered
@@ -134,7 +134,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The cached value of the '{@link #getResults() <em>Results</em>}' reference
 	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getResults()
 	 * @generated
 	 * @ordered
@@ -144,7 +144,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The default value of the '{@link #getLine() <em>Line</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getLine()
 	 * @generated
 	 * @ordered
@@ -154,7 +154,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The cached value of the '{@link #getLine() <em>Line</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getLine()
 	 * @generated
 	 * @ordered
@@ -164,7 +164,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -173,7 +173,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected TestDataImpl() {
@@ -182,7 +182,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -192,7 +192,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -202,7 +202,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -217,7 +217,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -237,7 +237,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public Event basicGetEvent() {
@@ -246,7 +246,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -260,7 +260,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -270,7 +270,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -285,7 +285,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -299,7 +299,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -313,7 +313,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -327,7 +327,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -337,7 +337,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated NOT
 	 */
 	@Override
@@ -352,7 +352,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -372,7 +372,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public FBType basicGetType() {
@@ -381,7 +381,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -395,7 +395,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -429,7 +429,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -469,7 +469,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -505,7 +505,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -517,7 +517,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 			return event != null;
 		case TestdataPackage.TEST_DATA__TEST_INTSTANCE:
 			return TEST_INTSTANCE_EDEFAULT == null ? testIntstance != null
-					: !TEST_INTSTANCE_EDEFAULT.equals(testIntstance);
+			: !TEST_INTSTANCE_EDEFAULT.equals(testIntstance);
 		case TestdataPackage.TEST_DATA__EVENT_OUTPUTS:
 			return eventOutputs != null && !eventOutputs.isEmpty();
 		case TestdataPackage.TEST_DATA__VALUES:
@@ -534,7 +534,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -598,10 +598,10 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 					final VarDeclaration outputVar = type.getInterfaceList().getVariable(lineArray[currentPos]);
 					currentPos++;
 					final String result = lineArray[currentPos];
-					final ValuedVarDecl var = TestdataFactory.eINSTANCE.createValuedVarDecl();
-					var.setValue(result);
-					var.setVarDeclaration(outputVar);
-					getResults().add(var);
+					final ValuedVarDecl variable = TestdataFactory.eINSTANCE.createValuedVarDecl();
+					variable.setValue(result);
+					variable.setVarDeclaration(outputVar);
+					getResults().add(variable);
 				}
 			}
 
@@ -670,7 +670,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		dataLine += type.getName();
 		dataLine += ";"; //$NON-NLS-1$
 		Event event = null;
-		if (type.getInterfaceList().getEventInputs().size() > 0) {
+		if (!type.getInterfaceList().getEventInputs().isEmpty()) {
 			event = type.getInterfaceList().getEventInputs().get(0);
 		}
 
@@ -678,23 +678,23 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		// of connected withs
 
 		for (final With with : event.getWith()) {
-			final VarDeclaration var = with.getVariables();
-			dataLine += var.getName() + ";" + getValueFor(var.getName()) + ";"; //$NON-NLS-1$ //$NON-NLS-2$
+			final VarDeclaration variable = with.getVariables();
+			dataLine += variable.getName() + ";" + getValueFor(variable.getName()) + ";"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		dataLine += event.getName() + ";"; //$NON-NLS-1$
 
-		if (type.getInterfaceList().getEventOutputs().size() > 0) {
+		if (!type.getInterfaceList().getEventOutputs().isEmpty()) {
 			dataLine += "1;"; //$NON-NLS-1$
 			dataLine += type.getInterfaceList().getEventOutputs().get(0).getName();
 			dataLine += ";"; //$NON-NLS-1$
 		} else {
 			dataLine += "0;"; //$NON-NLS-1$
 		}
-		if (type.getInterfaceList().getOutputVars().size() > 0) {
+		if (!type.getInterfaceList().getOutputVars().isEmpty()) {
 			dataLine += type.getInterfaceList().getOutputVars().size();
 			dataLine += ";"; //$NON-NLS-1$
-			for (final VarDeclaration var : type.getInterfaceList().getOutputVars()) {
-				dataLine += var.getName() + ";" + getResultFor(var.getName()) + ";"; //$NON-NLS-1$//$NON-NLS-2$
+			for (final VarDeclaration outVar : type.getInterfaceList().getOutputVars()) {
+				dataLine += outVar.getName() + ";" + getResultFor(outVar.getName()) + ";"; //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}
 

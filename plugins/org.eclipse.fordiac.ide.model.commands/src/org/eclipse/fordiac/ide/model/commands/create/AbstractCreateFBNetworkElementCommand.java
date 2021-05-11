@@ -27,7 +27,8 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command {
 	private int x;
 	private int y;
 
-	public AbstractCreateFBNetworkElementCommand(final FBNetwork fbNetwork, final FBNetworkElement element, final int x, final int y) {
+	protected AbstractCreateFBNetworkElementCommand(final FBNetwork fbNetwork, final FBNetworkElement element,
+			final int x, final int y) {
 		this.fbNetwork = fbNetwork;
 		this.element = element;
 		this.x = x;

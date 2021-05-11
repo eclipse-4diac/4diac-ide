@@ -56,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -538,6 +539,11 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseCFBInstance(CFBInstance object) {
 			return createCFBInstanceAdapter();
+		}
+
+		@Override
+		public Adapter caseErrorMarkerRef(ErrorMarkerRef object) {
+			return createErrorMarkerRefAdapter();
 		}
 
 		@Override
@@ -1492,6 +1498,18 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CFBInstance
 	 * @generated */
 	public Adapter createCFBInstanceAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef
+	 * <em>Error Marker Ref</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can
+	 * easily ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef
+	 * @generated */
+	public Adapter createErrorMarkerRefAdapter() {
 		return null;
 	}
 

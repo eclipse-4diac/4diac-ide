@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 - 2016 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
 
 /**
  * Implements the CompareEditorOpener extension point.
- * 
+ *
  * @author gebenh
  */
 public class DefaultCompareEditorOpener implements ICompareEditorOpener {
@@ -41,16 +41,20 @@ public class DefaultCompareEditorOpener implements ICompareEditorOpener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.fodiac.ide.export.util.ICompareEditorOpener#hasDifferences()
 	 */
 	@Override
 	public boolean hasDifferences() {
-		EditorInput input = createInput();
+		final EditorInput input = createInput();
 
 		try {
 			input.run(new NullProgressMonitor());
-		} catch (Exception e) {
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();  // mark interruption
+			Activator.getDefault().logError(e.getMessage(), e);
+			return false;
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			return false;
 		}
@@ -58,24 +62,24 @@ public class DefaultCompareEditorOpener implements ICompareEditorOpener {
 	}
 
 	private EditorInput createInput() {
-		CompareConfiguration compareConfig = new CompareConfiguration();
+		final CompareConfiguration compareConfig = new CompareConfiguration();
 		compareConfig.setLeftEditable(true);
 		compareConfig.setLeftLabel(Messages.DefaultCompareEditorOpener_NEWLY_Exported + name);
 		compareConfig.setRightEditable(false);
 		compareConfig.setRightLabel(Messages.DefaultCompareEditorOpener_ORIGINAL_FILE + name);
-		EditorInput input = new EditorInput(compareConfig, original, newlyGenerated);
+		final EditorInput input = new EditorInput(compareConfig, original, newlyGenerated);
 		input.setTitle(title);
 		return input;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.fodiac.ide.export.util.ICompareEditorOpener#openCompareEditor()
 	 */
 	@Override
 	public void openCompareEditor() {
-		EditorInput input = createInput();
+		final EditorInput input = createInput();
 		// run the merge editor
 		CompareUI.openCompareEditor(input);
 
@@ -83,45 +87,45 @@ public class DefaultCompareEditorOpener implements ICompareEditorOpener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.fodiac.ide.export.util.ICompareEditorOpener#setName(java.lang.String)
 	 */
 	@Override
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.fodiac.ide.export.util.ICompareEditorOpener#setTitle(java.lang.String)
 	 */
 	@Override
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.fodiac.ide.export.util.ICompareEditorOpener#setNewFile(java.io.File)
 	 */
 	@Override
-	public void setNewFile(File newFile) {
+	public void setNewFile(final File newFile) {
 		this.newlyGenerated = newFile;
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.fodiac.ide.export.util.ICompareEditorOpener#setOriginalFile(java.io.File)
 	 */
 	@Override
-	public void setOriginalFile(File original) {
+	public void setOriginalFile(final File original) {
 		this.original = original;
 	}
 

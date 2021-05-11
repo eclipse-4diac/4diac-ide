@@ -14,10 +14,11 @@
  *   Ernst Blecha
  *     - update test to JUnit Jupiter
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util;
+package org.eclipse.fordiac.ide.util.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.junit.jupiter.api.Test;
@@ -41,13 +42,17 @@ import org.junit.jupiter.api.Test;
 
 class ColorHelperTest {
 
+	@SuppressWarnings("static-method") // JUnit needs this as a non-static method
 	@Test
-	public void Lighter() {
-		RGB colorRGB = new RGB(128, 128, 128);
-		Color originalColor = new Color(null, colorRGB);
-		Color lighterColor = ColorHelper.lighter(originalColor);
+	public void lighter() {
+		final int MEDIUM = 128;
+		final int LIGHT = 213;
 
-		assertEquals(lighterColor.getRGB(), new RGB(213, 213, 213));
+		final RGB colorRGB = new RGB(MEDIUM, MEDIUM, MEDIUM);
+		final Color originalColor = new Color(null, colorRGB);
+		final Color lighterColor = ColorHelper.lighter(originalColor);
+
+		assertEquals(lighterColor.getRGB(), new RGB(LIGHT, LIGHT, LIGHT));
 	}
 
 }

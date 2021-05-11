@@ -86,21 +86,4 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 		t.test(state.getList().isEmpty());
 	}
 
-	protected static boolean validateVarDeclaration(final VarDeclaration newVar, final VarDeclaration oldVar) {
-		/*
-		 * can not check the name because if it is already taken a unique one will be
-		 * generated
-		 */
-		if (!newVar.getType().getName().equals(oldVar.getType().getName())) {
-			return false;
-		}
-		if (!newVar.getComment().equals(oldVar.getComment())) {
-			return false;
-		}
-		if (newVar.getArraySize() != oldVar.getArraySize()) {
-			return false;
-		}
-		return true;
-	}
-
 }

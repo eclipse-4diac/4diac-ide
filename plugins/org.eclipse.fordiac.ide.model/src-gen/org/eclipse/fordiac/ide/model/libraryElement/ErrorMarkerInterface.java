@@ -29,7 +29,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getErrorMarkerInterface()
  * @model
  * @generated */
-public interface ErrorMarkerInterface extends IInterfaceElement {
+public interface ErrorMarkerInterface extends IInterfaceElement, ErrorMarkerRef {
 	/** Returns the value of the '<em><b>Repaired Endpoint</b></em>' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 

@@ -192,8 +192,8 @@ public class StructManipulatorSection extends AbstractSection {
 		openEditorMenu.addMenuListener(new MenuListener() {
 			@Override
 			public void menuShown(final MenuEvent e) {
-				openItem.setEnabled((getSelectedStructuredType() != null)
-						&& !getSelectedStructuredType().getName().contentEquals("ANY_STRUCT")); //$NON-NLS-1$
+				final StructuredType type = getSelectedStructuredType();
+				openItem.setEnabled((null != type) && !type.getName().contentEquals("ANY_STRUCT")); //$NON-NLS-1$
 			}
 
 			@Override
@@ -273,7 +273,7 @@ public class StructManipulatorSection extends AbstractSection {
 		}
 
 		private static Object[] getMemberVariableNodes(final StructuredType struct, final String path) {
-			return struct.getMemberVariables().stream().map(var -> new TreeNode(var, var.getName(), path)).toArray();
+			return struct.getMemberVariables().stream().map(memVar -> new TreeNode(memVar, memVar.getName(), path)).toArray();
 		}
 
 		@Override
@@ -303,14 +303,14 @@ public class StructManipulatorSection extends AbstractSection {
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
 			if (element instanceof TreeNode) {
-				final VarDeclaration var = ((TreeNode) element).getVariable();
+				final VarDeclaration memVar = ((TreeNode) element).getVariable();
 				switch (columnIndex) {
 				case 0:
-					return var.getName();
+					return memVar.getName();
 				case 1:
-					return var.getTypeName();
+					return memVar.getTypeName();
 				case 2:
-					return var.getComment();
+					return memVar.getComment();
 				default:
 					break;
 				}

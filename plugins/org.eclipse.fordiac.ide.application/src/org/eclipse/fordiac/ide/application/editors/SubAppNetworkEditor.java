@@ -18,6 +18,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPartFactory;
@@ -29,8 +30,8 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 
 		@Override
 		public void notifyChanged(final Notification notification) {
-			int type = notification.getEventType();
-			int featureId = notification.getFeatureID(Application.class);
+			final int type = notification.getEventType();
+			final int featureId = notification.getFeatureID(Application.class);
 
 			if ((Notification.SET == type) && (LibraryElementPackage.SUB_APP__NAME == featureId)) {
 				updateEditorTitle(getSubApp().getName());
@@ -54,7 +55,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 	@Override
 	protected void setModel(final IEditorInput input) {
 		if (input instanceof SubApplicationEditorInput) {
-			SubApplicationEditorInput subAppInput = (SubApplicationEditorInput) input;
+			final SubApplicationEditorInput subAppInput = (SubApplicationEditorInput) input;
 			setModel(subAppInput.getSubApp().getSubAppNetwork());
 			// register Adapter to be informed on changes of the subapplication name
 			getSubApp().eAdapters().add(adapter);
@@ -69,5 +70,13 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 
 	private SubApp getSubApp() {
 		return (SubApp) getModel().eContainer();
+	}
+
+	@Override
+	public Object getAdapter(final Class adapter) {
+		if (FBNetworkElement.class == adapter) {
+			return getSubApp();
+		}
+		return super.getAdapter(adapter);
 	}
 }

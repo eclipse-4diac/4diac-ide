@@ -75,40 +75,38 @@ public final class InterfaceListCopier {
 	}
 
 	public static void copyVarList(final Collection<VarDeclaration> destVars, final Collection<VarDeclaration> srcVars) {
-		srcVars.forEach(var -> destVars.add(copyVar(var, false)));
+		srcVars.forEach(variable -> destVars.add(copyVar(variable, false)));
 	}
 
 	private static void copyVarList(final EList<VarDeclaration> destVars, final EList<VarDeclaration> srcVars,
 			final boolean copyValues) {
-		srcVars.forEach(var -> destVars.add(copyVar(var, copyValues)));
+		srcVars.forEach(variable -> destVars.add(copyVar(variable, copyValues)));
 	}
 
-	public static VarDeclaration copyVar(final VarDeclaration var, final boolean copyValues) {
+	public static VarDeclaration copyVar(final VarDeclaration variable, final boolean copyValues) {
 		final VarDeclaration copy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		copy.setArraySize(var.getArraySize());
-		copy.setComment(var.getComment());
-		copy.setIsInput(var.isIsInput());
-		copy.setName(var.getName());
-		copy.setType(var.getType());
-		copy.setTypeName(var.getTypeName());
+		copy.setArraySize(variable.getArraySize());
+		copy.setComment(variable.getComment());
+		copy.setIsInput(variable.isIsInput());
+		copy.setName(variable.getName());
+		copy.setType(variable.getType());
+		copy.setTypeName(variable.getTypeName());
 
 		final Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
-		if ((copyValues) && (null != var.getValue())) {
-			varInitialization.setValue(var.getValue().getValue());
+		if ((copyValues) && (null != variable.getValue())) {
+			varInitialization.setValue(variable.getValue().getValue());
 		}
 		copy.setValue(varInitialization); // ensure that all vars have a value, reduces null checks
 
 		return copy;
 	}
 
-	/**
-	 * copy a list of events with the associated with constructs
+	/** copy a list of events with the associated with constructs
 	 *
 	 * @param destEvents the list of the copied events
 	 * @param copyVars   the list of the data points for the new withs
 	 * @param srcEvents  the source event list
-	 * @param srcVars    the source vars used in the withs
-	 */
+	 * @param srcVars    the source vars used in the withs */
 	private static void copyEventList(final EList<Event> destEvents, final EList<VarDeclaration> copyVars,
 			final EList<Event> srcEvents, final EList<VarDeclaration> srcVars) {
 		srcEvents.forEach(srcEvent -> {
@@ -138,7 +136,8 @@ public final class InterfaceListCopier {
 		}
 	}
 
-	private static void copyAdapterList(final EList<AdapterDeclaration> destAdapters, final EList<AdapterDeclaration> srcAdapters) {
+	private static void copyAdapterList(final EList<AdapterDeclaration> destAdapters,
+			final EList<AdapterDeclaration> srcAdapters) {
 		srcAdapters.forEach(adapter -> {
 			final AdapterDeclaration copy = copyAdapter(adapter);
 			destAdapters.add(copy);

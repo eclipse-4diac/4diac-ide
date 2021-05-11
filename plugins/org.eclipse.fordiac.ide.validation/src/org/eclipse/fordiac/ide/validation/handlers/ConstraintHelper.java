@@ -14,11 +14,15 @@ package org.eclipse.fordiac.ide.validation.handlers;
 
 import java.util.ResourceBundle;
 
-public class ConstraintHelper {
-	private static final String FORDIAC_CONSTRAINT_PROPERTIES = "constraints";
+public final class ConstraintHelper {
+	private static final String FORDIAC_CONSTRAINT_PROPERTIES = "constraints"; //$NON-NLS-1$
 	private static ResourceBundle fordiacConstraintProperties = ResourceBundle.getBundle(FORDIAC_CONSTRAINT_PROPERTIES);
 
-	public static String[] getConstraintProperties(String name) {
-		return fordiacConstraintProperties.getString(name).split(";");
+	public static String[] getConstraintProperties(final String name) {
+		return fordiacConstraintProperties.getString(name).split(";"); //$NON-NLS-1$
+	}
+
+	private ConstraintHelper() {
+		throw new UnsupportedOperationException();
 	}
 }

@@ -52,7 +52,7 @@ public final class PreferenceConstants {
 	 */
 	public static final String DIAGRAM_FONT = "org.eclipse.fordiac.ide.preferences.diagramFontDefinition"; //$NON-NLS-1$
 
-	public static boolean isDataConnectorProperty(String property) {
+	public static boolean isDataConnectorProperty(final String property) {
 		return P_BOOL_CONNECTOR_COLOR.equals(property) || P_ANY_BIT_CONNECTOR_COLOR.equals(property)
 				|| P_ANY_INT_CONNECTOR_COLOR.equals(property) || P_ANY_REAL_CONNECTOR_COLOR.equals(property)
 				|| P_ANY_STRING_CONNECTOR_COLOR.equals(property) || P_REMAINING_DATA_CONNECTOR_COLOR.equals(property);
@@ -68,5 +68,9 @@ public final class PreferenceConstants {
 	public static final int P_ALLOCATION_SIZE_DEFAULT_VALUE = 100;
 	public static final int P_ALLOCATION_SIZE_MIN_VALUE = 50;
 	public static final int P_ALLOCATION_SIZE_MAX_VALUE = 1000;
+
+	private PreferenceConstants() {
+		throw new UnsupportedOperationException();
+	}
 
 }

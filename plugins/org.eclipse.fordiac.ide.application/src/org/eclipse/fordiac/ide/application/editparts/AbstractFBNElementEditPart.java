@@ -81,7 +81,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private DiagramFontChangeListener fontChangeListener;
 
-	public AbstractFBNElementEditPart() {
+	protected AbstractFBNElementEditPart() {
 		super();
 	}
 

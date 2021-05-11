@@ -252,8 +252,8 @@ public class InterfaceElementSection extends AbstractSection {
 
 	protected String setParameterAndType() {
 		String itype;
-		final VarDeclaration var = (VarDeclaration) getType();
-		itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
+		final VarDeclaration varDecl = (VarDeclaration) getType();
+		itype = varDecl.getType() != null ? varDecl.getType().getName() : ""; //$NON-NLS-1$
 		if (getType().isIsInput()) {
 			if (null != getType().getFBNetworkElement().getType()) {
 				final IInterfaceElement ie = getType().getFBNetworkElement().getType().getInterfaceList()
@@ -267,7 +267,7 @@ public class InterfaceElementSection extends AbstractSection {
 					}
 				}
 			}
-			currentParameterText.setText((var.getValue() != null) ? var.getValue().getValue() : ""); //$NON-NLS-1$
+			currentParameterText.setText((varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""); //$NON-NLS-1$
 		}
 		return itype;
 	}

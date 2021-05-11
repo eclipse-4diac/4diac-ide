@@ -73,14 +73,18 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 		try {
-			WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
+			final WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 				@Override
-				protected void execute(IProgressMonitor monitor) {
+				protected void execute(final IProgressMonitor monitor) {
 					createProject(monitor != null ? monitor : new NullProgressMonitor());
 				}
 			};
 			getContainer().run(false, true, op);
-		} catch (InvocationTargetException | InterruptedException x) {
+		} catch (final InvocationTargetException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+			return false;
+		} catch (final InterruptedException x) {
+			Thread.currentThread().interrupt();  // mark interruption
 			return false;
 		}
 		// everything worked fine
@@ -95,23 +99,23 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	private void createProject(final IProgressMonitor monitor) {
 		try {
 
-			IProject newProject = SystemManager.INSTANCE.createNew4diacProject(page.getProjectName(),
+			final IProject newProject = SystemManager.INSTANCE.createNew4diacProject(page.getProjectName(),
 					page.getLocationPath(), page.importDefaultPalette(), monitor);
-			AutomationSystem system = SystemManager.INSTANCE.createNewSystem(newProject, page.getInitialSystemName());
+			final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(newProject, page.getInitialSystemName());
 			TypeManagementPreferencesHelper.setupVersionInfo(system);
 			createInitialApplication(monitor, system);
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		} finally {
 			monitor.done();
 		}
 	}
 
-	private void createInitialApplication(final IProgressMonitor monitor, AutomationSystem system) {
-		NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), ""); //$NON-NLS-1$
+	private void createInitialApplication(final IProgressMonitor monitor, final AutomationSystem system) {
+		final NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), ""); //$NON-NLS-1$
 		cmd.execute(monitor, null);
 
-		Application app = cmd.getApplication();
+		final Application app = cmd.getApplication();
 		if (page.getOpenApplication() && null != app) {
 			OpenListenerManager.openEditor(app);
 		}

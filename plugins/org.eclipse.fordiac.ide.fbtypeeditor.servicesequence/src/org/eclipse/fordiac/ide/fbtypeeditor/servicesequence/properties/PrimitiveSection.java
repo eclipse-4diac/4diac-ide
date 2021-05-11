@@ -207,14 +207,14 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	protected boolean containsQI() {
 		if (type instanceof InputPrimitive) {
-			for (final VarDeclaration var : getFB().getInterfaceList().getInputVars()) {
-				if (var.getName().equals("QI")) { //$NON-NLS-1$
+			for (final VarDeclaration inVar : getFB().getInterfaceList().getInputVars()) {
+				if ("QI".equals(inVar.getName())) { //$NON-NLS-1$
 					return true;
 				}
 			}
 		} else if (type instanceof OutputPrimitive) {
-			for (final VarDeclaration var : getFB().getInterfaceList().getOutputVars()) {
-				if (var.getName().equals("QO")) { //$NON-NLS-1$
+			for (final VarDeclaration outVar : getFB().getInterfaceList().getOutputVars()) {
+				if ("QO".equals(outVar.getName())) { //$NON-NLS-1$
 					return true;
 				}
 			}
@@ -241,10 +241,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 	}
 
 	protected boolean isLeftInterfaceSelected() {
-		if (serviceInterfaceCombo.getText().equals(serviceInterfaceCombo.getItem(0))) {
-			return true;
-		}
-		return false;
+		return (serviceInterfaceCombo.getText().equals(serviceInterfaceCombo.getItem(0)));
 	}
 
 	public void setServiceInterfaceDropdown() {

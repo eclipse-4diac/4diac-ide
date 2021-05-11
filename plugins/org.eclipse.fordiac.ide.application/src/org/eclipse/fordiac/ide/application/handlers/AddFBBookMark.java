@@ -48,7 +48,7 @@ public class AddFBBookMark extends AbstractHandler {
 		if (null != element) {
 			final String description = getDescription(element, event);
 			if (null != description) {
-				final Map<String, String> attrs = new HashMap<>();
+				final Map<String, Object> attrs = new HashMap<>();
 				attrs.put(IMarker.MESSAGE, description);
 				FordiacMarkerHelper.addTargetIdentifier(element, attrs);
 				FordiacMarkerHelper.addLocation(element, attrs);

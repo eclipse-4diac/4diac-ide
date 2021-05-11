@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009  Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -32,23 +32,21 @@ class EditorInput extends CompareEditorInput {
 
 	/**
 	 * Instantiates a new editor input.
-	 * 
+	 *
 	 * @param configuration the configuration
 	 * @param original      the original
 	 * @param generated     the generated
 	 */
-	public EditorInput(CompareConfiguration configuration, File original, File generated) {
+	public EditorInput(final CompareConfiguration configuration, final File original, final File generated) {
 		super(configuration);
 		this.original = original;
 		this.generated = generated;
 	}
 
 	@Override
-	protected Object prepareInput(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		Differencer d = new Differencer();
-		Object diff = d.findDifferences(false, new NullProgressMonitor(), null, null, new Input(generated),
+	protected Object prepareInput(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		final Differencer d = new Differencer();
+		return d.findDifferences(false, new NullProgressMonitor(), null, null, new Input(generated),
 				new Input(original));
-
-		return diff;
 	}
 }

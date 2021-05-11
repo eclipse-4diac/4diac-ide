@@ -36,8 +36,10 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.ECCItemProvider;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DragTracker;
@@ -281,7 +283,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	public void gotoMarker(final IMarker marker) {
 		final Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
 		final String lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, "Unknown");
-		if (!lineNumber.equals("Unknown")) {
+		if (!"Unknown".equals(lineNumber)) {
 			final int hashCode = Integer.parseInt(lineNumber);
 			for (final Object key : map.keySet()) {
 				if (key.hashCode() == hashCode) {
@@ -297,9 +299,17 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-		if (marker.getAttribute(IMarker.LOCATION, "Unknown").startsWith("ECC")) {
-			return true;
+		return marker.getAttribute(IMarker.LOCATION, "Unknown").startsWith("ECC"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	@Override
+	public void reloadType(final FBType type) {
+		if (type instanceof BasicFBType) {
+			fbType = (BasicFBType) type;
+			getGraphicalViewer().setContents(type);
+		} else {
+			EditorUtils.CloseEditor.run(this);
 		}
-		return false;
+
 	}
 }

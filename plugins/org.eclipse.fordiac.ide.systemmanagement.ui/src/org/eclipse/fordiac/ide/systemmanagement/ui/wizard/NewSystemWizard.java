@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -55,32 +56,36 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 		try {
-			WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
+			final WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 				@Override
-				protected void execute(IProgressMonitor monitor) {
-					IProgressMonitor monitorToUse = (null == monitor) ? new NullProgressMonitor() : monitor;
+				protected void execute(final IProgressMonitor monitor) {
+					final IProgressMonitor monitorToUse = (null == monitor) ? new NullProgressMonitor() : monitor;
 
-					IPath targetPath = ResourcesPlugin.getWorkspace().getRoot().getLocation()
+					final IPath targetPath = ResourcesPlugin.getWorkspace().getRoot().getLocation()
 							.append(page.getContainerFullPath());
-					IContainer location = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(targetPath);
-					AutomationSystem system = SystemManager.INSTANCE.createNewSystem(location, page.getSystemName());
+					final IContainer location = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(targetPath);
+					final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(location, page.getSystemName());
 					TypeManagementPreferencesHelper.setupVersionInfo(system);
 					createInitialApplication(monitorToUse, system);
 				}
 			};
 			getContainer().run(false, true, op);
-		} catch (InvocationTargetException | InterruptedException x) {
+		} catch (final InvocationTargetException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+			return false;
+		} catch (final InterruptedException x) {
+			Thread.currentThread().interrupt();  // mark interruption
 			return false;
 		}
 		// everything worked fine
 		return true;
 	}
 
-	private void createInitialApplication(final IProgressMonitor monitor, AutomationSystem system) {
-		NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), ""); //$NON-NLS-1$
+	private void createInitialApplication(final IProgressMonitor monitor, final AutomationSystem system) {
+		final NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), ""); //$NON-NLS-1$
 		cmd.execute(monitor, null);
 
-		Application app = cmd.getApplication();
+		final Application app = cmd.getApplication();
 		if (page.getOpenApplication() && null != app) {
 			OpenListenerManager.openEditor(app);
 		}

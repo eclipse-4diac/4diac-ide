@@ -119,6 +119,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		@Override
 		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
 			if (notification.getEventType() == Notification.REMOVE) {
 				if ((notification.getOldValue() == getModel().getConditionEvent())
 						|| ((getModel().getConditionEvent() instanceof AdapterEvent)

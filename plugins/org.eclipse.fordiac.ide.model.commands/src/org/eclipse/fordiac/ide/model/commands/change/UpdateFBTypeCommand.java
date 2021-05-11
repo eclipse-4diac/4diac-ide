@@ -29,10 +29,15 @@ import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateComm
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -43,9 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-/**
- * UpdateFBTypeCommand triggers an update of the type for an FB instance
- */
+/** UpdateFBTypeCommand triggers an update of the type for an FB instance */
 public class UpdateFBTypeCommand extends Command {
 
 	// Helper data class for storing connection data of resource connection as the
@@ -61,10 +64,10 @@ public class UpdateFBTypeCommand extends Command {
 	}
 
 	/** The FBNetworkElement which should be updated */
-	private FBNetworkElement fbnElement;
+	private FBNetworkElement oldElement;
 
 	/** The updated version of the FBNetworkElement */
-	private FBNetworkElement updatedElement;
+	private FBNetworkElement newElement;
 
 	/** If not null this entry should be used for the type of the updated FB */
 	private PaletteEntry entry;
@@ -79,7 +82,7 @@ public class UpdateFBTypeCommand extends Command {
 	private UnmapCommand unmapCmd = null;
 
 	public UpdateFBTypeCommand(final FBNetworkElement fbnElement, final PaletteEntry entry) {
-		this.fbnElement = fbnElement;
+		this.oldElement = fbnElement;
 		network = fbnElement.getFbNetwork();
 		if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
 			this.entry = entry;
@@ -90,43 +93,43 @@ public class UpdateFBTypeCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return (null != entry) && (null != fbnElement) && (null != network);
+		return (null != entry) && (null != oldElement) && (null != network);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
+	 * @see org.eclipse.gef.commands.Command#execute() */
 	@Override
 	public void execute() {
 		Resource resource = null;
 		List<ConnData> resourceConns = null; // buffer for the resource specific connections from the mapped fb that
 		// needs to be recreated
-		if (fbnElement.isMapped()) {
-			if (network.equals(fbnElement.getResource().getFBNetwork())) {
+		if (oldElement.isMapped()) {
+			if (network.equals(oldElement.getResource().getFBNetwork())) {
 				// this is the resource fb we need to use the opposite for a correct update
-				fbnElement = fbnElement.getOpposite();
-				network = fbnElement.getFbNetwork();
+				oldElement = oldElement.getOpposite();
+				network = oldElement.getFbNetwork();
 			}
-			resource = fbnElement.getResource();
+			resource = oldElement.getResource();
 			resourceConns = getResourceCons();
-			unmapCmd = new UnmapCommand(fbnElement);
+			unmapCmd = new UnmapCommand(oldElement);
 			unmapCmd.execute();
 		}
 
 		// Create new FB
 		copyFB();
 
+		network.getNetworkElements().add(newElement);
 		// Find connections which should be reconnected
 		handleApplicationConnections();
+		network.getNetworkElements().remove(oldElement);
 
 		// Change name
-		updatedElement.setName(fbnElement.getName());
+		newElement.setName(oldElement.getName());
 
 		// Map FB
 		if (resource != null) {
-			mapCmd = new MapToCommand(updatedElement, resource);
+			mapCmd = new MapToCommand(newElement, resource);
 			if (mapCmd.canExecute()) {
 				mapCmd.execute();
 				recreateResourceConns(resourceConns);
@@ -134,11 +137,9 @@ public class UpdateFBTypeCommand extends Command {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
+	 * @see org.eclipse.gef.commands.Command#redo() */
 	@Override
 	public void redo() {
 		if (unmapCmd != null) {
@@ -146,7 +147,7 @@ public class UpdateFBTypeCommand extends Command {
 		}
 
 		deleteConnCmds.redo();
-		replaceFBs(fbnElement, updatedElement);
+		replaceFBs(oldElement, newElement);
 		connCreateCmds.redo();
 
 		if (mapCmd != null) {
@@ -156,11 +157,9 @@ public class UpdateFBTypeCommand extends Command {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
+	 * @see org.eclipse.gef.commands.Command#undo() */
 	@Override
 	public void undo() {
 		if (mapCmd != null) {
@@ -170,7 +169,7 @@ public class UpdateFBTypeCommand extends Command {
 		}
 
 		connCreateCmds.undo();
-		replaceFBs(updatedElement, fbnElement);
+		replaceFBs(newElement, oldElement);
 		deleteConnCmds.undo();
 
 		if (unmapCmd != null) {
@@ -187,38 +186,64 @@ public class UpdateFBTypeCommand extends Command {
 	}
 
 	private void handleApplicationConnections() {
-		for (final Connection conn : getAllConnections(fbnElement)) {
-			doReconnect(conn, findUpdatedInterfaceElement(updatedElement, fbnElement, conn.getSource()),
-					findUpdatedInterfaceElement(updatedElement, fbnElement, conn.getDestination()));
+		for (final Connection connection : getAllConnections(oldElement)) {
+
+			final IInterfaceElement source = findUpdatedInterfaceElement(newElement, oldElement,
+					connection.getSource());
+
+			final IInterfaceElement dest = findUpdatedInterfaceElement(newElement, oldElement,
+					connection.getDestination());
+
+			if (source instanceof ErrorMarkerInterface) {
+				((ErrorMarkerInterface) source).setRepairedEndpoint(dest);
+			}
+
+			if (dest instanceof ErrorMarkerInterface) {
+				((ErrorMarkerInterface) dest).setRepairedEndpoint(source);
+			}
+
+			doReconnect(connection, source, dest);
+
 		}
 	}
 
 	private static List<Connection> getAllConnections(final FBNetworkElement element) {
-		final List<Connection> retVal = new ArrayList<>();
+		final List<Connection> connections = new ArrayList<>();
 		for (final IInterfaceElement ifEle : element.getInterface().getAllInterfaceElements()) {
 			if (ifEle.isIsInput()) {
-				retVal.addAll(ifEle.getInputConnections());
+				connections.addAll(ifEle.getInputConnections());
 			} else {
-				retVal.addAll(ifEle.getOutputConnections());
+				connections.addAll(ifEle.getOutputConnections());
 			}
 		}
-		return retVal;
+		return connections;
 	}
 
-	private static IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement copiedElement,
-			final FBNetworkElement orgElement, final IInterfaceElement orig) {
-		if (orig == null) {
-			// this happens when a connection has already been reconnected,
-			// i.e., a connection from an output to an input of the same FB
-			return null;
-		}
-		IInterfaceElement retval = orig;
-		if (orig.getFBNetworkElement() == orgElement) {
+	private static IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement newElement,
+			final FBNetworkElement oldElement, final IInterfaceElement oldInterface) {
+		if (oldInterface != null && oldInterface.getFBNetworkElement() == oldElement) {
 			// origView is an interface of the original FB => find same interface on copied
 			// FB
-			retval = copiedElement.getInterfaceElement(orig.getName());
+			IInterfaceElement interfaceElement = newElement.getInterfaceElement(oldInterface.getName());
+			if (interfaceElement == null) {
+				interfaceElement = createErrorMarker(newElement, oldInterface);
+			}
+
+			return interfaceElement;
 		}
-		return retval;
+		return oldInterface;
+	}
+
+	private static IInterfaceElement createErrorMarker(final FBNetworkElement newElement,
+			final IInterfaceElement oldInterface) {
+		IInterfaceElement interfaceElement;
+		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(),
+				oldInterface.getName(), oldInterface.isIsInput(), newElement.getInterface());
+		final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper.createErrorMarker(
+				"Pin " + interfaceElement.getName() + " not found after Type update", newElement, 0); //$NON-NLS-1$ //$NON-NLS-2$
+		createErrorMarker.setErrorMarkerIe((ErrorMarkerRef) interfaceElement);
+		FordiacMarkerHelper.createMarker(createErrorMarker);
+		return interfaceElement;
 	}
 
 	private void doReconnect(final Connection oldConn, final IInterfaceElement source, final IInterfaceElement dest) {
@@ -229,7 +254,6 @@ public class UpdateFBTypeCommand extends Command {
 			final DeleteConnectionCommand cmd = new DeleteConnectionCommand(oldConn);
 			cmd.execute();
 			deleteConnCmds.add(cmd);
-
 			if ((source != null) && (dest != null)) {
 				// if source or dest is null it means that an interface element is not available
 				// any more
@@ -237,26 +261,30 @@ public class UpdateFBTypeCommand extends Command {
 				if (null != dccc) {
 					dccc.setSource(source);
 					dccc.setDestination(dest);
-					if (dccc.canExecute()) {
-						dccc.setArrangementConstraints(oldConn.getRoutingData());
-						dccc.execute();
-						connCreateCmds.add(dccc);
-					}
+					dccc.setArrangementConstraints(oldConn.getRoutingData());
+					dccc.execute();
+					connCreateCmds.add(dccc);
 				}
 			}
 		}
 	}
 
-	private static AbstractConnectionCreateCommand createConnCreateCMD(final IInterfaceElement refIE, final FBNetwork fbn) {
-		AbstractConnectionCreateCommand retVal = null;
-		if (refIE instanceof Event) {
-			retVal = new EventConnectionCreateCommand(fbn);
-		} else if (refIE instanceof AdapterDeclaration) {
-			retVal = new AdapterConnectionCreateCommand(fbn);
-		} else if (refIE instanceof VarDeclaration) {
-			retVal = new DataConnectionCreateCommand(fbn);
+	private static AbstractConnectionCreateCommand createConnCreateCMD(IInterfaceElement interfaceElement,
+			final FBNetwork fbn) {
+		if (interfaceElement instanceof ErrorMarkerInterface) {
+			interfaceElement = ((ErrorMarkerInterface) interfaceElement).getRepairedEndpoint();
 		}
-		return retVal;
+		if (interfaceElement instanceof Event) {
+			return new EventConnectionCreateCommand(fbn);
+		}
+		if (interfaceElement instanceof AdapterDeclaration) {
+			return new AdapterConnectionCreateCommand(fbn);
+		}
+		if (interfaceElement instanceof VarDeclaration) {
+			return new DataConnectionCreateCommand(fbn);
+		}
+		return null;
+
 	}
 
 	private boolean isInDeleteConnList(final Connection conn) {
@@ -274,12 +302,12 @@ public class UpdateFBTypeCommand extends Command {
 	}
 
 	private void copyFB() {
-		updatedElement = createCopiedFBEntry(fbnElement);
-		updatedElement.setInterface(updatedElement.getType().getInterfaceList().copy());
-		updatedElement.setName(fbnElement.getName());
-		updatedElement.setPosition(EcoreUtil.copy(fbnElement.getPosition()));
+		newElement = createCopiedFBEntry(oldElement);
+		newElement.setInterface(newElement.getType().getInterfaceList().copy());
+		newElement.setName(oldElement.getName());
+		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
 		createValues();
-		replaceFBs(fbnElement, updatedElement);
+
 	}
 
 	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
@@ -299,22 +327,22 @@ public class UpdateFBTypeCommand extends Command {
 	}
 
 	private void createValues() {
-		for (final VarDeclaration var : updatedElement.getInterface().getInputVars()) {
-			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			checkSourceParam(var);
+		for (final VarDeclaration inVar : newElement.getInterface().getInputVars()) {
+			inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			checkSourceParam(inVar);
 		}
 	}
 
-	private void checkSourceParam(final VarDeclaration var) {
-		final VarDeclaration srcVar = fbnElement.getInterface().getVariable(var.getName());
+	private void checkSourceParam(final VarDeclaration variable) {
+		final VarDeclaration srcVar = oldElement.getInterface().getVariable(variable.getName());
 		if ((null != srcVar) && (null != srcVar.getValue())) {
-			var.getValue().setValue(srcVar.getValue().getValue());
+			variable.getValue().setValue(srcVar.getValue().getValue());
 		}
 	}
 
 	private List<ConnData> getResourceCons() {
 		final List<ConnData> retVal = new ArrayList<>();
-		final FBNetworkElement resElement = fbnElement.getOpposite();
+		final FBNetworkElement resElement = oldElement.getOpposite();
 		for (final Connection conn : getAllConnections(resElement)) {
 			final IInterfaceElement source = conn.getSource();
 			final IInterfaceElement dest = conn.getDestination();
@@ -323,9 +351,9 @@ public class UpdateFBTypeCommand extends Command {
 				// restored
 				retVal.add(new ConnData(conn.getSource(), conn.getDestination()));
 			} else if (((source.getFBNetworkElement() == resElement)
-					&& (dest.getFBNetworkElement().getOpposite().getFbNetwork() != fbnElement.getFbNetwork()))
+					&& (dest.getFBNetworkElement().getOpposite().getFbNetwork() != oldElement.getFbNetwork()))
 					|| ((dest.getFBNetworkElement() == resElement) && (source.getFBNetworkElement().getOpposite()
-							.getFbNetwork() != fbnElement.getFbNetwork()))) {
+							.getFbNetwork() != oldElement.getFbNetwork()))) {
 				// one of both ends is a FB coming from a different fb network and therefore
 				// this is also a resource specific connection
 				retVal.add(new ConnData(conn.getSource(), conn.getDestination()));
@@ -337,15 +365,17 @@ public class UpdateFBTypeCommand extends Command {
 
 	private void recreateResourceConns(final List<ConnData> resourceConns) {
 		final FBNetworkElement orgMappedElement = unmapCmd.getMappedFBNetworkElement();
-		final FBNetworkElement copiedMappedElement = updatedElement.getOpposite();
+		final FBNetworkElement copiedMappedElement = newElement.getOpposite();
 		for (final ConnData connData : resourceConns) {
 			final IInterfaceElement source = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement,
 					connData.source);
-			final IInterfaceElement dest = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement, connData.dest);
+			final IInterfaceElement dest = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement,
+					connData.dest);
 			if ((source != null) && (dest != null)) {
 				// if source or dest is null it means that an interface element is not available
 				// any more
-				final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, copiedMappedElement.getFbNetwork());
+				final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source,
+						copiedMappedElement.getFbNetwork());
 				if (null != dccc) {
 					dccc.setSource(source);
 					dccc.setDestination(dest);

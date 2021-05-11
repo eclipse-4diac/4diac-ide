@@ -173,13 +173,13 @@ public class ResourceCreateCommand extends Command {
 					copyDataCon.setResTypeConnection(true);
 					resourceFBNetwork.getDataConnections().add(copyDataCon);
 				} else {
-					final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-					var.setName(dataCon.getSource().getName());
-					var.setIsInput(true);
+					final VarDeclaration devVar = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+					devVar.setName(dataCon.getSource().getName());
+					devVar.setIsInput(true);
 					final Value value = LibraryElementFactory.eINSTANCE.createValue();
 					value.setValue(dataCon.getDataSource().getValue().getValue());
-					var.setValue(value);
-					device.getVarDeclarations().add(var);
+					devVar.setValue(value);
+					device.getVarDeclarations().add(devVar);
 				}
 			} else {
 				// TODO error log -> no valid data connection

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2013, 2016, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,14 +21,13 @@ public class EventContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 		if (inputElement instanceof VarDeclaration) {
-			VarDeclaration var = (VarDeclaration) inputElement;
-			FBType fbtype = (FBType) var.eContainer().eContainer();
-			if (var.isIsInput()) {
+			final VarDeclaration variable = (VarDeclaration) inputElement;
+			final FBType fbtype = (FBType) variable.eContainer().eContainer();
+			if (variable.isIsInput()) {
 				return fbtype.getInterfaceList().getEventInputs().toArray();
-			} else {
-				return fbtype.getInterfaceList().getEventOutputs().toArray();
 			}
+			return fbtype.getInterfaceList().getEventOutputs().toArray();
 		}
-		return null;
+		return new Object[0];
 	}
 }

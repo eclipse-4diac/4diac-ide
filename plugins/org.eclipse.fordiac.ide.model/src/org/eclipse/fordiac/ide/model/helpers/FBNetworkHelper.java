@@ -128,17 +128,23 @@ public final class FBNetworkHelper {
 	public static void moveFBNetworkByOffset(final Iterable<FBNetworkElement> fbNetwork, final int xOffset, final int yOffset) {
 		for (final FBNetworkElement el : fbNetwork) {
 			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
-			pos.setX(el.getPosition().getX() - xOffset);
-			pos.setY(el.getPosition().getY() - xOffset);
+			pos.setX(el.getPosition().getX() + xOffset);
+			pos.setY(el.getPosition().getY() + yOffset);
 			el.setPosition(pos);
 		}
 	}
 
 	public static Point removeXYOffsetForFBNetwork(final List<FBNetworkElement> fbNetwork) {
 		final Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
-		moveFBNetworkByOffset(fbNetwork, offset.x - X_OFFSET_FROM_TOP_LEFT_CORNER,
-				offset.y - Y_OFFSET_FROM_TOP_LEFT_CORNER);
+		moveFBNetworkByOffset(fbNetwork, -offset.x + X_OFFSET_FROM_TOP_LEFT_CORNER,
+				-offset.y + Y_OFFSET_FROM_TOP_LEFT_CORNER);
 		return offset;
+	}
+
+	public static void moveFBNetworkToDestination(final List<FBNetworkElement> fbnetwork, final Point destination) {
+		final Point current = getTopLeftCornerOfFBNetwork(fbnetwork);
+		final Point offset = new Point(destination.x - current.x, destination.y - current.y);
+		moveFBNetworkByOffset(fbnetwork, offset);
 	}
 
 	public static void moveFBNetworkByOffset(final List<FBNetworkElement> fbNetwork, final Point offset) {

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2013, 2017 Profactor GbmH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,7 +20,7 @@ import org.eclipse.ui.IEditorInput;
  * An EditorInput for opening IEC 61499 Editors with specified content. The
  * equals method is adapted that EditorInput is equal to another EditorInput if
  * the content is equal.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class UntypedEditorInput implements IEditorInput {
@@ -31,19 +31,19 @@ public abstract class UntypedEditorInput implements IEditorInput {
 
 	/**
 	 * Constructor of UntypedEditorInput.
-	 * 
+	 *
 	 * @param content the content
 	 * @param name    the name
 	 * @param toolTip the tool tip
 	 */
-	public UntypedEditorInput(final Object content, final String name) {
+	protected UntypedEditorInput(final Object content, final String name) {
 		this.content = content;
 		this.name = name;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IEditorInput#exists()
 	 */
 	@Override
@@ -53,7 +53,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IEditorInput#getImageDescriptor()
 	 */
 	@Override
@@ -63,7 +63,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IEditorInput#getName()
 	 */
 	@Override
@@ -71,7 +71,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 		return name == null ? "" : name; //$NON-NLS-1$
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -86,7 +86,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
 	@Override
@@ -97,7 +97,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 
 	/**
 	 * Gets the content.
-	 * 
+	 *
 	 * @return the content
 	 */
 	public Object getContent() {
@@ -106,15 +106,15 @@ public abstract class UntypedEditorInput implements IEditorInput {
 
 	/**
 	 * Equals.
-	 * 
+	 *
 	 * @param obj the obj
-	 * 
+	 *
 	 * @return <code>true</code> if <code>content</code> is equal.
 	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj instanceof UntypedEditorInput && content != null) {
-			UntypedEditorInput input = (UntypedEditorInput) obj;
+			final UntypedEditorInput input = (UntypedEditorInput) obj;
 			return content.equals(input.getContent());
 		}
 		return false;
@@ -122,7 +122,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override

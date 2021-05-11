@@ -41,7 +41,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 
 	private static class MgrInformation {
 		private String iP;
-		private Integer port;
+		private int port;
 
 		@Override
 		public String toString() {
@@ -55,17 +55,17 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 	}
 
 	@Override
-	public void connect(String address) throws DeploymentException {
+	public void connect(final String address) throws DeploymentException {
 		mgrInfo = getValidMgrInformation(address);
 		socket = new Socket();
-		int timeout = HoloblocDeploymentPreferences.getConnectionTimeout();
-		SocketAddress sockaddr = new InetSocketAddress(mgrInfo.iP, mgrInfo.port);
+		final int timeout = HoloblocDeploymentPreferences.getConnectionTimeout();
+		final SocketAddress sockaddr = new InetSocketAddress(mgrInfo.iP, mgrInfo.port);
 		try {
 			socket.connect(sockaddr, timeout); // 3s as timeout
 			socket.setSoTimeout(timeout);
 			outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new DeploymentException(Messages.EthernetDeviceManagementCommunicationHandler_CouldNotConnectToDevice,
 					e);
 		}
@@ -78,26 +78,28 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 			inputStream.close();
 			socket.close();
 			Thread.sleep(MS_SLEEP_IN_DISCONNECT); // TODO check this sleep!
-		} catch (IOException e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_DisconnectFailed, new Object[] {}), e);
-		} catch (InterruptedException e) {
+		} catch (final IOException e) {
+			throw new DeploymentException(Messages.DeploymentExecutor_DisconnectFailed, e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();  // mark interruption
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
 
-	private String handleResponse(String destination) throws IOException {
+	private String handleResponse(final String destination) throws IOException {
 		@SuppressWarnings("unused")
+		final
 		byte b = inputStream.readByte();
-		short size = inputStream.readShort();
-		StringBuilder response = new StringBuilder(size);
+		final short size = inputStream.readShort();
+		final StringBuilder response = new StringBuilder(size);
 		for (int i = 0; i < size; i++) {
 			response.append((char) inputStream.readByte());
 		}
 		return response.toString();
 	}
 
-	public String getInfo(String destination) {
+	@Override
+	public String getInfo(final String destination) {
 		String info = mgrInfo.toString();
 		if (!destination.equals("")) { //$NON-NLS-1$
 			info += ": " + destination; //$NON-NLS-1$
@@ -106,7 +108,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 	}
 
 	@Override
-	public String sendREQ(String destination, String request) throws IOException {
+	public String sendREQ(final String destination, final String request) throws IOException {
 		String response = ""; //$NON-NLS-1$
 		if (outputStream != null && inputStream != null) {
 			outputStream.writeByte(ASN1_TAG_IECSTRING);
@@ -125,22 +127,22 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 	 * returns a valid MgrInformation if the mgrID contains valid destination string
 	 * (e.g. localhost:61499) else null is returned valid ports are between 1024 -
 	 * 65535
-	 * 
+	 *
 	 * @param mgrID the mgr id
-	 * 
+	 *
 	 * @return the valid mgr information
 	 * @throws InvalidMgmtID when the given ide is no valid ip address port
 	 *                       compbination
 	 */
 	private static MgrInformation getValidMgrInformation(final String mgrID) throws DeploymentException {
 		if (null != mgrID) {
-			String id = trimQuoutes(mgrID);
-			String[] splitID = id.split(":"); //$NON-NLS-1$
-			Integer port;
-			MgrInformation mgrInfo = new MgrInformation();
+			final String id = trimQuoutes(mgrID);
+			final String[] splitID = id.split(":"); //$NON-NLS-1$
+			int port;
+			final MgrInformation mgrInfo = new MgrInformation();
 			if (splitID.length == 2) {
 				try {
-					InetAddress adress = InetAddress.getByName(splitID[0]);
+					final InetAddress adress = InetAddress.getByName(splitID[0]);
 					mgrInfo.iP = adress.getHostAddress();
 					port = Integer.parseInt(splitID[1]);
 				} catch (NumberFormatException | UnknownHostException e) {

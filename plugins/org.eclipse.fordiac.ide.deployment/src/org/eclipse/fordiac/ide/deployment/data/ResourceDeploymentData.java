@@ -37,7 +37,7 @@ public class ResourceDeploymentData {
 
 	public static class ParameterData {
 		private final String value;
-		private final VarDeclaration var;
+		private final VarDeclaration variable;
 		private final String prefix;
 
 		public String getValue() {
@@ -45,17 +45,17 @@ public class ResourceDeploymentData {
 		}
 
 		public VarDeclaration getVar() {
-			return var;
+			return variable;
 		}
 
 		public String getPrefix() {
 			return prefix;
 		}
 
-		public ParameterData(final String value, final String prefix, final VarDeclaration var) {
+		public ParameterData(final String value, final String prefix, final VarDeclaration variable) {
 			super();
 			this.value = value;
-			this.var = var;
+			this.variable = variable;
 			this.prefix = prefix;
 		}
 	}
@@ -86,7 +86,7 @@ public class ResourceDeploymentData {
 
 	public ResourceDeploymentData(final Resource res) {
 		this.res = res;
-		addFBNetworkElements(new ArrayDeque<SubApp>(), res.getFBNetwork(), ""); //$NON-NLS-1$
+		addFBNetworkElements(new ArrayDeque<>(), res.getFBNetwork(), ""); //$NON-NLS-1$
 	}
 
 	private void addFBNetworkElements(final Deque<SubApp> subAppHierarchy, final FBNetwork fbNetwork, final String prefix) {

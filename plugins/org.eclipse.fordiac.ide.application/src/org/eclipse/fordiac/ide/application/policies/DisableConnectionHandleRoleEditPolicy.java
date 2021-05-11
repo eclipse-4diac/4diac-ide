@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -32,14 +32,14 @@ public class DisableConnectionHandleRoleEditPolicy extends FeedbackConnectionEnd
 	protected void addSelectionHandles() {
 		super.addSelectionHandles();
 		if (getHost() instanceof ConnectionEditPart) {
-			ConnectionEditPart cep = (ConnectionEditPart) getHost();
+			final ConnectionEditPart cep = (ConnectionEditPart) getHost();
 
-			EditPart source = cep.getSource();
-			EditPart dest = cep.getTarget();
-			if (source != null && source instanceof IDeactivatableConnectionHandleRoleEditPart) {
+			final EditPart source = cep.getSource();
+			final EditPart dest = cep.getTarget();
+			if (source instanceof IDeactivatableConnectionHandleRoleEditPart) {
 				sourcePart = (InterfaceEditPart) source;
 			}
-			if (dest != null && dest instanceof IDeactivatableConnectionHandleRoleEditPart) {
+			if (dest instanceof IDeactivatableConnectionHandleRoleEditPart) {
 				destPart = (InterfaceEditPart) dest;
 			}
 			if (sourcePart != null && destPart != null) {

@@ -56,11 +56,11 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		super();
 	}
 
-	public NewInstanceCellEditor(Composite parent) {
+	public NewInstanceCellEditor(final Composite parent) {
 		this(parent, SWT.NONE);
 	}
 
-	public NewInstanceCellEditor(Composite parent, int style) {
+	public NewInstanceCellEditor(final Composite parent, final int style) {
 		super(parent, style | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
 	}
 
@@ -68,14 +68,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		return menuButton;
 	}
 
-	public void setPalette(Palette palette) {
+	public void setPalette(final Palette palette) {
 		paletteFilter = new PaletteFilter(palette);
 	}
 
 	@Override
-	protected Control createControl(Composite parent) {
+	protected Control createControl(final Composite parent) {
 		container = createContainer(parent);
-		Text textControl = (Text) super.createControl(container);
+		final Text textControl = (Text) super.createControl(container);
 		configureTextControl(textControl);
 		createTypeMenuButton(container);
 		createPopUpList(container);
@@ -113,7 +113,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	}
 
 	@Override
-	protected void handleDefaultSelection(SelectionEvent event) {
+	protected void handleDefaultSelection(final SelectionEvent event) {
 		if (!((Text) event.getSource()).getText().isEmpty()) {
 			super.handleDefaultSelection(event);
 		}
@@ -128,19 +128,19 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	}
 
 	private boolean insideAnyEditorArea() {
-		Point cursorLocation = popupShell.getDisplay().getCursorLocation();
-		Point containerRelativeCursor = container.getParent().toControl(cursorLocation);
+		final Point cursorLocation = popupShell.getDisplay().getCursorLocation();
+		final Point containerRelativeCursor = container.getParent().toControl(cursorLocation);
 		return container.getBounds().contains(containerRelativeCursor)
 				|| popupShell.getBounds().contains(cursorLocation);
 	}
 
-	private Composite createContainer(Composite parent) {
-		Composite newContainer = new Composite(parent, SWT.NONE) {
+	private Composite createContainer(final Composite parent) {
+		final Composite newContainer = new Composite(parent, SWT.NONE) {
 			@Override
-			public void setBounds(int x, int y, int width, int height) {
+			public void setBounds(final int x, final int y, final int width, final int height) {
 				super.setBounds(x, y, width, height);
-				Point screenPos = getParent().toDisplay(getLocation());
-				Rectangle compositeBounds = getBounds();
+				final Point screenPos = getParent().toDisplay(getLocation());
+				final Rectangle compositeBounds = getBounds();
 				popupShell.setBounds(screenPos.x, screenPos.y + compositeBounds.height, compositeBounds.width, 150);
 				if (!popupShell.isVisible()) {
 					popupShell.setVisible(true);
@@ -151,7 +151,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		newContainer.setForeground(parent.getForeground());
 
 		// set layout with minimal space to keep the cell editor compact
-		GridLayout contLayout = new GridLayout(2, false);
+		final GridLayout contLayout = new GridLayout(2, false);
 		contLayout.horizontalSpacing = 0;
 		contLayout.marginTop = 0;
 		contLayout.marginBottom = 0;
@@ -166,9 +166,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	private void configureTextControl(final Text textControl) {
 		textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		textControl.setMessage(Messages.NewInstanceCellEditor_SearchForType);
-		textControl.addListener(SWT.Modify, event -> {
-			updateSelectionList(textControl.getText());
-		});
+		textControl.addListener(SWT.Modify, event -> updateSelectionList(textControl.getText()));
 		textControl.addListener(SWT.KeyDown, event -> {
 			switch (event.keyCode) {
 			case SWT.ARROW_DOWN:
@@ -198,10 +196,10 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		});
 	}
 
-	private void updateSelectionList(String searchString) {
+	private void updateSelectionList(final String searchString) {
 		blockTableSelection = true;
 		if (searchString.length() >= 2) {
-			List<PaletteEntry> entries = paletteFilter.findFBAndSubappTypes(searchString);
+			final List<PaletteEntry> entries = paletteFilter.findFBAndSubappTypes(searchString);
 			tableViewer.setInput(entries);
 			if (!entries.isEmpty()) {
 				selectItemAtIndex(0);
@@ -212,14 +210,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		blockTableSelection = false;
 	}
 
-	private void selectItemAtIndex(int index) {
+	private void selectItemAtIndex(final int index) {
 		blockTableSelection = true;
-		Object element = tableViewer.getElementAt(index);
+		final Object element = tableViewer.getElementAt(index);
 		tableViewer.setSelection(new StructuredSelection(element), true);
 		blockTableSelection = false;
 	}
 
-	private void createPopUpList(Composite container) {
+	private void createPopUpList(final Composite container) {
 		popupShell = new Shell(container.getShell(), SWT.ON_TOP | SWT.NO_FOCUS | SWT.NO_TRIM);
 		popupShell.setLayout(new FillLayout());
 
@@ -229,7 +227,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		tableViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new ResultListLabelProvider()));
 
 		new TableColumn(tableViewer.getTable(), SWT.NONE);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(100));
 		tableViewer.getTable().setLayout(layout);
 
@@ -247,7 +245,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		});
 	}
 
-	private void createTypeMenuButton(Composite container) {
+	private void createTypeMenuButton(final Composite container) {
 		menuButton = new Button(container, SWT.FLAT);
 		menuButton.setImage(FordiacImage.ICON_TYPE_NAVIGATOR.getImage());
 	}

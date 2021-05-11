@@ -38,9 +38,9 @@ class ResDevFBNetworkImporter extends SubAppNetworkImporter {
 	@Override
 	protected IInterfaceElement getContainingInterfaceElement(String interfaceElement, EClass conType,
 			boolean isInput) {
-		for (VarDeclaration var : varInputs) {
-			if (var.getName().equals(interfaceElement)) {
-				return var;
+		for (VarDeclaration inVar : varInputs) {
+			if (inVar.getName().equals(interfaceElement)) {
+				return inVar;
 			}
 		}
 		return null;

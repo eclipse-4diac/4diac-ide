@@ -158,7 +158,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	protected void createEditPolicies() {
 		// Selection handle edit policy.
 		// Makes the connection show a feedback, when selected by the user.
-		// installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new DisableConnectionHandleRoleEditPolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new FeedbackConnectionEndpointEditPolicy() {
 			@Override
 			protected ConnectionEndpointHandle createConnectionEndPointHandle(

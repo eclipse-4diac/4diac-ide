@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.commands.CutAndPasteFromSubAppCommand;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class CopyPasteMessage {
@@ -21,7 +22,7 @@ public class CopyPasteMessage {
 	private CopyStatus copyStatus;
 
 	private final List<Object> data;
-	private CompoundCommand cutAndPasteFromSubAppCommandos;
+	private CutAndPasteFromSubAppCommand cutAndPasteFromSubAppCommandos;
 	private CompoundCommand deleteCommandos;
 
 	public enum CopyStatus {
@@ -46,14 +47,14 @@ public class CopyPasteMessage {
 	}
 
 	public boolean isCutFromSubApp() {
-		return getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP && !cutAndPasteFromSubAppCommandos.isEmpty();
+		return getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP && cutAndPasteFromSubAppCommandos != null;
 	}
 
-	public CompoundCommand getCutAndPasteFromSubAppCommandos() {
+	public CutAndPasteFromSubAppCommand getCutAndPasteFromSubAppCommandos() {
 		return cutAndPasteFromSubAppCommandos;
 	}
 
-	public void setCutAndPasteFromSubAppCommandos(final CompoundCommand cutAndPasteFromSubAppCommandos) {
+	public void setCutAndPasteFromSubAppCommandos(final CutAndPasteFromSubAppCommand cutAndPasteFromSubAppCommandos) {
 		this.cutAndPasteFromSubAppCommandos = cutAndPasteFromSubAppCommandos;
 	}
 
