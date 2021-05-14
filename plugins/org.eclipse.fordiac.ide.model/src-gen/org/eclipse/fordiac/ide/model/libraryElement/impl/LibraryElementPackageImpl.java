@@ -2973,7 +2973,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		eventConnectionEClass.getESuperTypes().add(this.getConnection());
 		adapterConnectionEClass.getESuperTypes().add(this.getConnection());
 		serviceInterfaceEClass.getESuperTypes().add(this.getINamedElement());
-		iInterfaceElementEClass.getESuperTypes().add(this.getINamedElement());
+		iInterfaceElementEClass.getESuperTypes().add(this.getConfigurableObject());
 		resourceTypeFBEClass.getESuperTypes().add(this.getFB());
 		segmentTypeEClass.getESuperTypes().add(this.getCompilableType());
 		adapterFBTypeEClass.getESuperTypes().add(this.getFBType());

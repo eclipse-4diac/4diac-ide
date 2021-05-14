@@ -85,6 +85,40 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int INAMED_ELEMENT_FEATURE_COUNT = 2;
 
+	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
+	 * <em>Configurable Object</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConfigurableObject()
+	 * @generated */
+	int CONFIGURABLE_OBJECT = 44;
+
+	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONFIGURABLE_OBJECT__NAME = INAMED_ELEMENT__NAME;
+
+	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONFIGURABLE_OBJECT__COMMENT = INAMED_ELEMENT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONFIGURABLE_OBJECT__ATTRIBUTES = INAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/** The number of structural features of the '<em>Configurable Object</em>' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONFIGURABLE_OBJECT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
+
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement <em>IInterface
 	 * Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -97,52 +131,59 @@ public interface LibraryElementPackage extends EPackage {
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__NAME = INAMED_ELEMENT__NAME;
+	int IINTERFACE_ELEMENT__NAME = CONFIGURABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__COMMENT = INAMED_ELEMENT__COMMENT;
+	int IINTERFACE_ELEMENT__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int IINTERFACE_ELEMENT__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__IS_INPUT = INAMED_ELEMENT_FEATURE_COUNT + 0;
+	int IINTERFACE_ELEMENT__IS_INPUT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Input Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__INPUT_CONNECTIONS = INAMED_ELEMENT_FEATURE_COUNT + 1;
+	int IINTERFACE_ELEMENT__INPUT_CONNECTIONS = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Output Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS = INAMED_ELEMENT_FEATURE_COUNT + 2;
+	int IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__TYPE = INAMED_ELEMENT_FEATURE_COUNT + 3;
+	int IINTERFACE_ELEMENT__TYPE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/** The feature id for the '<em><b>Type Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__TYPE_NAME = INAMED_ELEMENT_FEATURE_COUNT + 4;
+	int IINTERFACE_ELEMENT__TYPE_NAME = CONFIGURABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/** The number of structural features of the '<em>IInterface Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 5;
+	int IINTERFACE_ELEMENT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl <em>Var
 	 * Declaration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -163,6 +204,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__COMMENT = IINTERFACE_ELEMENT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int VAR_DECLARATION__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -241,6 +289,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__COMMENT = VAR_DECLARATION__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ADAPTER_DECLARATION__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -439,40 +494,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ALGORITHM_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
-	 * <em>Configurable Object</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConfigurableObject()
-	 * @generated */
-	int CONFIGURABLE_OBJECT = 44;
-
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONFIGURABLE_OBJECT__NAME = INAMED_ELEMENT__NAME;
-
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONFIGURABLE_OBJECT__COMMENT = INAMED_ELEMENT__COMMENT;
-
-	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONFIGURABLE_OBJECT__ATTRIBUTES = INAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/** The number of structural features of the '<em>Configurable Object</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONFIGURABLE_OBJECT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl
 	 * <em>Application</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1435,6 +1456,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int EVENT__COMMENT = IINTERFACE_ELEMENT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int EVENT__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -3318,6 +3346,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ADAPTER_EVENT__COMMENT = EVENT__COMMENT;
 
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ADAPTER_EVENT__ATTRIBUTES = EVENT__ATTRIBUTES;
+
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
@@ -3938,6 +3973,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int LOCAL_VARIABLE__COMMENT = VAR_DECLARATION__COMMENT;
 
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int LOCAL_VARIABLE__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
+
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
@@ -4086,6 +4128,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__COMMENT = IINTERFACE_ELEMENT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_INTERFACE__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 

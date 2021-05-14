@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement()
  * @model interface="true" abstract="true"
  * @generated */
-public interface IInterfaceElement extends INamedElement {
+public interface IInterfaceElement extends ConfigurableObject {
 	/** Returns the value of the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Is Input</em>' attribute isn't clear, there really should be more of a description
