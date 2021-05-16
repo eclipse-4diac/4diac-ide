@@ -140,12 +140,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	@Override
 	protected IFigure createFigure() {
 
-		final IFigure figure = new Figure() {
-			@Override
-			public Dimension getPreferredSize(final int wHint, final int hHint) {
-				return super.getPreferredSize(wHint, hHint);
-			}
-		};
+		final IFigure figure = new Figure();
 
 		figure.setOpaque(false);
 		figure.setBorder(new MarginBorder(BORDER_INSET));

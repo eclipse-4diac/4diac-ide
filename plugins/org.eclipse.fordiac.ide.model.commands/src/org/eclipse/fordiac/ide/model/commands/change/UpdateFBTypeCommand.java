@@ -320,9 +320,9 @@ public class UpdateFBTypeCommand extends Command {
 		return false;
 	}
 
-	private void replaceFBs(final FBNetworkElement oldElement, final FBNetworkElement newElement) {
-		network.getNetworkElements().remove(oldElement);
-		network.getNetworkElements().add(newElement);
+	private void replaceFBs(final FBNetworkElement remElement, final FBNetworkElement addElement) {
+		network.getNetworkElements().remove(remElement);
+		network.getNetworkElements().add(addElement);
 	}
 
 	private void copyFB() {

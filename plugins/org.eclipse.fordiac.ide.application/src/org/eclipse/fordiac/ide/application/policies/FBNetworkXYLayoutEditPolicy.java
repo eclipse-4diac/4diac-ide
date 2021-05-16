@@ -52,13 +52,13 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	private ZoomManager zoomManager;
 
 	@Override
-	public void setHost(EditPart host) {
+	public void setHost(final EditPart host) {
 		super.setHost(host);
 		zoomManager = ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
 	}
 
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
 		return new ModifiedNonResizeableEditPolicy();
 
 	}
@@ -120,7 +120,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	private org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(ChangeBoundsRequest request) {
+	private org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
 		final FigureCanvas viewerControl = (FigureCanvas) getTargetEditPart(request).getViewer().getControl();
 		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
 		return new org.eclipse.draw2d.geometry.Point(request.getLocation().x + location.x,
@@ -129,24 +129,23 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts) {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
-				.map(ep -> (FBNetworkElement) ep.getModel()).filter(el -> el.isNestedInSubApp())
+				.map(ep -> (FBNetworkElement) ep.getModel()).filter(FBNetworkElement::isNestedInSubApp)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	protected Command getCloneCommand(ChangeBoundsRequest request) {
+	protected Command getCloneCommand(final ChangeBoundsRequest request) {
 		final List<EObject> elements = ((Stream<?>) (request.getEditParts()).stream())
 				.map(n -> (EObject) (((EditPart) n).getModel())).collect(Collectors.toList());
 		final Point scaledPoint = getDestinationPoint(request);
 		return new PasteCommand(elements, (FBNetwork) getHost().getModel(), scaledPoint.x, scaledPoint.y);
 	}
 
-	private Point getDestinationPoint(ChangeBoundsRequest request) {
-		final Point scaledPoint = request.getMoveDelta().getScaled(1.0 / zoomManager.getZoom());
-		return scaledPoint;
+	private Point getDestinationPoint(final ChangeBoundsRequest request) {
+		return request.getMoveDelta().getScaled(1.0 / zoomManager.getZoom());
 	}
 
-	public static boolean isDragAndDropRequestFromSubAppToRoot(Request generic, EditPart targetEditPart) {
+	public static boolean isDragAndDropRequestFromSubAppToRoot(final Request generic, final EditPart targetEditPart) {
 		return (generic instanceof ChangeBoundsRequest)
 				&& ((targetEditPart instanceof FBNetworkEditPart)
 						|| (targetEditPart instanceof UISubAppNetworkEditPart))

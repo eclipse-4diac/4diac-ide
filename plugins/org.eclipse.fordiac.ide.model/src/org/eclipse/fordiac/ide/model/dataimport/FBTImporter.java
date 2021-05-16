@@ -553,7 +553,7 @@ public class FBTImporter extends TypeImporter {
 		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
 	}
 
-	private void parseAlgorithmText(final TextAlgorithm alg) throws TypeImportException, XMLStreamException {
+	private void parseAlgorithmText(final TextAlgorithm alg) throws XMLStreamException {
 		final String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
 		if (null != text) {
 			alg.setText(text);

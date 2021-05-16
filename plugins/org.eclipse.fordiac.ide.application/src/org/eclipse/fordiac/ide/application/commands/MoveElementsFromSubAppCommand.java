@@ -297,12 +297,12 @@ public class MoveElementsFromSubAppCommand extends Command {
 		final CreateSubAppInterfaceElementCommand createSubAppInterfaceElementCommand = new CreateSubAppInterfaceElementCommand(
 				ie.getType(), sourceSubApp.getInterface(), isInput, -1);
 		createSubAppInterfaceElementCommand.execute();
-		createSubAppInterfaceElementCommand.getInterfaceElement().setName(subAppIEName);
+		createSubAppInterfaceElementCommand.getCreatedElement().setName(subAppIEName);
 		if (null != createSubAppInterfaceElementCommand.getMirroredElement()) {
-			createSubAppInterfaceElementCommand.getMirroredElement().getInterfaceElement().setName(subAppIEName);
+			createSubAppInterfaceElementCommand.getMirroredElement().getCreatedElement().setName(subAppIEName);
 		}
 		createSubAppInterfaceElementCommands.add(createSubAppInterfaceElementCommand);
-		return createSubAppInterfaceElementCommand.getInterfaceElement();
+		return createSubAppInterfaceElementCommand.getCreatedElement();
 	}
 
 	private static String generateSubAppIEName(final IInterfaceElement ie) {

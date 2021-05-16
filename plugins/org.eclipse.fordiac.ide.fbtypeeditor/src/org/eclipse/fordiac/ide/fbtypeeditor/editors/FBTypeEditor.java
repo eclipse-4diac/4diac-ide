@@ -225,7 +225,6 @@ IEditorFileChangeListener {
 
 		// get these values here before calling super dispose
 		final boolean dirty = isDirty();
-		final FBTypeEditorInput input = getFBTypeEditorInput();
 
 		if (null != getSite()) {
 			getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
@@ -236,8 +235,8 @@ IEditorFileChangeListener {
 		if (dirty) {
 			// purge from typelib after super.dispose() so that no notifiers
 			// will be called
-			if (null != input) {
-				input.getPaletteEntry().setType(null);
+			if (null != paletteEntry) {
+				paletteEntry.setType(null);
 			}
 		}
 

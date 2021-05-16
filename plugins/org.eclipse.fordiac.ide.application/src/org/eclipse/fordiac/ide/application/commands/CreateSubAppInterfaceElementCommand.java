@@ -21,13 +21,13 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 
 	private CreateInterfaceElementCommand mirroredElement = null;
 
-	public CreateSubAppInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput,
-			int index) {
+	public CreateSubAppInterfaceElementCommand(final DataType dataType, final InterfaceList interfaceList, final boolean isInput,
+			final int index) {
 		super(dataType, interfaceList, isInput, index);
 	}
 
-	public CreateSubAppInterfaceElementCommand(DataType dataType, String name, InterfaceList interfaceList,
-			boolean isInput, int index) {
+	public CreateSubAppInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
+			final boolean isInput, final int index) {
 		super(dataType, name, interfaceList, isInput, index);
 	}
 
@@ -45,7 +45,7 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 					getInterfaceList().getFBNetworkElement().getOpposite().getInterface(), isInput(), getIndex());
 			mirroredElement.execute();
 			// Set the same name as the one we have also on the mirrored
-			mirroredElement.getInterfaceElement().setName(getInterfaceElement().getName());
+			mirroredElement.getCreatedElement().setName(getCreatedElement().getName());
 		}
 	}
 

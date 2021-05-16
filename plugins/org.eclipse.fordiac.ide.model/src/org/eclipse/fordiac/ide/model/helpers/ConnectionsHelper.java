@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class ConnectionsHelper {
+public final class ConnectionsHelper {
 
 	public static EList<Connection> getConnections(final IInterfaceElement oppositeIE) {
 		final IInterfaceElement fbOppostiteIE = oppositeIE.getFBNetworkElement().getOpposite()
@@ -46,5 +46,9 @@ public class ConnectionsHelper {
 
 		}
 		return null;
+	}
+
+	private ConnectionsHelper() {
+		throw new UnsupportedOperationException("Helper class ConnectionsHelper should not be instantiated!"); //$NON-NLS-1$
 	}
 }

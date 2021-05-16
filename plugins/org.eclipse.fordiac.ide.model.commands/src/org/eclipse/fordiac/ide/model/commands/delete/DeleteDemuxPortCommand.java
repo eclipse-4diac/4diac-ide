@@ -37,11 +37,10 @@ public class DeleteDemuxPortCommand extends Command {
 	private final String name;
 	private String oldVisibleChildren;
 	private String newVisibleChildren;
-	private StructuredType configuredStruct; // contains the required ports
 	private ChangeStructCommand cmd;
 	private Demultiplexer oldMux;
 
-	public DeleteDemuxPortCommand(Demultiplexer type, String name) {
+	public DeleteDemuxPortCommand(final Demultiplexer type, final String name) {
 		this.type = type;
 		this.name = name;
 		this.variable = (VarDeclaration) type.getInterfaceElement(name);
@@ -88,7 +87,7 @@ public class DeleteDemuxPortCommand extends Command {
 	}
 
 	private void createChangeStructCommand() {
-		configuredStruct = DataFactory.eINSTANCE.createStructuredType();
+		final StructuredType configuredStruct = DataFactory.eINSTANCE.createStructuredType();
 		configuredStruct.setName(type.getStructType().getName());
 		final List<String> visibleChildrenNames = Arrays
 				.asList(newVisibleChildren.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
@@ -115,11 +114,11 @@ public class DeleteDemuxPortCommand extends Command {
 		setVisibleChildrenAttribute(oldVisibleChildren);
 	}
 
-	private void setVisibleChildrenAttribute(String value) {
+	private void setVisibleChildrenAttribute(final String value) {
 		type.setAttribute(DEMUX_VISIBLE_CHILDREN, FordiacKeywords.STRING, value, ""); //$NON-NLS-1$
 	}
 
-	private Collection<VarDeclaration> getVarDeclarations(List<String> varDeclNames) {
+	private Collection<VarDeclaration> getVarDeclarations(final List<String> varDeclNames) {
 		final List<VarDeclaration> vars = new ArrayList<>();
 		varDeclNames.forEach(name -> {
 			final VarDeclaration varDecl = EcoreUtil

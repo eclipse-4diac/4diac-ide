@@ -65,11 +65,6 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command createChangeConstraintCommand(final EditPart child, final Object constraint) {
-		return null;
-	}
-
-	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
 		if (request.getNewObjectType().equals(ECState.class) && getHost().getModel() instanceof ECC) {
 			final Point point = request.getLocation().getCopy();
