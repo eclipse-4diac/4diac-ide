@@ -22,5 +22,24 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getErrorMarkerFBNElement()
  * @model
  * @generated */
-public interface ErrorMarkerFBNElement extends FBNetworkElement {
+public interface ErrorMarkerFBNElement extends FBNetworkElement, ErrorMarkerRef {
+
+	/** Returns the value of the '<em><b>Repaired Element</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
+	 * @return the value of the '<em>Repaired Element</em>' reference.
+	 * @see #setRepairedElement(FBNetworkElement)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getErrorMarkerFBNElement_RepairedElement()
+	 * @model
+	 * @generated */
+	FBNetworkElement getRepairedElement();
+
+	/** Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement#getRepairedElement <em>Repaired
+	 * Element</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value the new value of the '<em>Repaired Element</em>' reference.
+	 * @see #getRepairedElement()
+	 * @generated */
+	void setRepairedElement(FBNetworkElement value);
 } // ErrorMarkerFBNElement

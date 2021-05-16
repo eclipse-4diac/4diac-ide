@@ -2463,6 +2463,14 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
+	public EReference getErrorMarkerFBNElement_RepairedElement() {
+		return (EReference) errorMarkerFBNElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public EClass getErrorMarkerInterface() {
 		return errorMarkerInterfaceEClass;
 	}
@@ -2505,6 +2513,14 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EAttribute getErrorMarkerRef_FileMarkerId() {
 		return (EAttribute) errorMarkerRefEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getErrorMarkerRef_ErrorMessage() {
+		return (EAttribute) errorMarkerRefEClass.getEStructuralFeatures().get(1);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2875,6 +2891,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(localVariableEClass, LOCAL_VARIABLE__ARRAY_STOP);
 
 		errorMarkerFBNElementEClass = createEClass(ERROR_MARKER_FBN_ELEMENT);
+		createEReference(errorMarkerFBNElementEClass, ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT);
 
 		errorMarkerInterfaceEClass = createEClass(ERROR_MARKER_INTERFACE);
 		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT);
@@ -2884,6 +2901,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		errorMarkerRefEClass = createEClass(ERROR_MARKER_REF);
 		createEAttribute(errorMarkerRefEClass, ERROR_MARKER_REF__FILE_MARKER_ID);
+		createEAttribute(errorMarkerRefEClass, ERROR_MARKER_REF__ERROR_MESSAGE);
 
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
@@ -2989,6 +3007,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		multiplexerEClass.getESuperTypes().add(this.getStructManipulator());
 		localVariableEClass.getESuperTypes().add(this.getVarDeclaration());
 		errorMarkerFBNElementEClass.getESuperTypes().add(this.getFBNetworkElement());
+		errorMarkerFBNElementEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		errorMarkerInterfaceEClass.getESuperTypes().add(this.getIInterfaceElement());
 		errorMarkerInterfaceEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		cfbInstanceEClass.getESuperTypes().add(this.getFB());
@@ -3893,6 +3912,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(errorMarkerFBNElementEClass, ErrorMarkerFBNElement.class, "ErrorMarkerFBNElement", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getErrorMarkerFBNElement_RepairedElement(), this.getFBNetworkElement(), null, "repairedElement", //$NON-NLS-1$
+				null, 0, 1, ErrorMarkerFBNElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(errorMarkerInterfaceEClass, ErrorMarkerInterface.class, "ErrorMarkerInterface", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3913,6 +3935,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(errorMarkerRefEClass, ErrorMarkerRef.class, "ErrorMarkerRef", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getErrorMarkerRef_FileMarkerId(), ecorePackage.getELong(), "fileMarkerId", null, 0, 1, //$NON-NLS-1$
+				ErrorMarkerRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getErrorMarkerRef_ErrorMessage(), theXMLTypePackage.getString(), "errorMessage", null, 0, 1, //$NON-NLS-1$
 				ErrorMarkerRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
 

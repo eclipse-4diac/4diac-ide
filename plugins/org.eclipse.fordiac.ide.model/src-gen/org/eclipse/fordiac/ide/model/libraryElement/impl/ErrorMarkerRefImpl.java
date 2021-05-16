@@ -53,6 +53,22 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 	 * @ordered */
 	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
 
+	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @see #getErrorMessage()
+	 * @generated
+	 * @ordered */
+	protected static final String ERROR_MESSAGE_EDEFAULT = null;
+
+	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @see #getErrorMessage()
+	 * @generated
+	 * @ordered */
+	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
+
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
@@ -86,6 +102,26 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID, oldFileMarkerId, fileMarkerId));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public void setErrorMessage(String newErrorMessage) {
+		String oldErrorMessage = errorMessage;
+		errorMessage = newErrorMessage;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE,
+					oldErrorMessage, errorMessage));
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

@@ -1021,6 +1021,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseFBNetworkElement(errorMarkerFBNElement);
 			if (result == null)
+				result = caseErrorMarkerRef(errorMarkerFBNElement);
+			if (result == null)
 				result = caseTypedConfigureableObject(errorMarkerFBNElement);
 			if (result == null)
 				result = casePositionableElement(errorMarkerFBNElement);

@@ -134,6 +134,22 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	 * @ordered */
 	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
 
+	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @see #getErrorMessage()
+	 * @generated
+	 * @ordered */
+	protected static final String ERROR_MESSAGE_EDEFAULT = null;
+
+	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @see #getErrorMessage()
+	 * @generated
+	 * @ordered */
+	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
+
 	/** The cached value of the '{@link #getRepairedEndpoint() <em>Repaired Endpoint</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -277,6 +293,26 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID, oldFileMarkerId, fileMarkerId));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public void setErrorMessage(String newErrorMessage) {
+		String oldErrorMessage = errorMessage;
+		errorMessage = newErrorMessage;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE, oldErrorMessage, errorMessage));
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

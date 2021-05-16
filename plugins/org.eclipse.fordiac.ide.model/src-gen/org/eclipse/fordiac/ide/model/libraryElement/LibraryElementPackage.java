@@ -4102,12 +4102,31 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
 
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+
+	/** The feature id for the '<em><b>Repaired Element</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 2;
+
 	/** The number of structural features of the '<em>Error Marker FBN Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
+	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 3;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl
 	 * <em>Error Marker Interface</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -4174,19 +4193,25 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__FILE_MARKER_ID = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_INTERFACE__ERROR_MESSAGE = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+
 	/** The feature id for the '<em><b>Repaired Endpoint</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
 
 	/** The number of structural features of the '<em>Error Marker Interface</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
+	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB
 	 * Instance</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -4268,12 +4293,18 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ERROR_MARKER_REF__FILE_MARKER_ID = 0;
 
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_REF__ERROR_MESSAGE = 1;
+
 	/** The number of structural features of the '<em>Error Marker Ref</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int ERROR_MARKER_REF_FEATURE_COUNT = 1;
+	int ERROR_MARKER_REF_FEATURE_COUNT = 2;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'
 	 * enum. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -6431,6 +6462,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	EClass getErrorMarkerFBNElement();
 
+	/** Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement#getRepairedElement <em>Repaired
+	 * Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the reference '<em>Repaired Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement#getRepairedElement()
+	 * @see #getErrorMarkerFBNElement()
+	 * @generated */
+	EReference getErrorMarkerFBNElement_RepairedElement();
+
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface
 	 * <em>Error Marker Interface</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -6484,6 +6525,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see #getErrorMarkerRef()
 	 * @generated */
 	EAttribute getErrorMarkerRef_FileMarkerId();
+
+	/** Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getErrorMessage <em>Error Message</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the attribute '<em>Error Message</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getErrorMessage()
+	 * @see #getErrorMarkerRef()
+	 * @generated */
+	EAttribute getErrorMarkerRef_ErrorMessage();
 
 	/** Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language
 	 * <em>Language</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -8095,6 +8146,12 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated */
 		EClass ERROR_MARKER_FBN_ELEMENT = eINSTANCE.getErrorMarkerFBNElement();
 
+		/** The meta object literal for the '<em><b>Repaired Element</b></em>' reference feature. <!-- begin-user-doc
+		 * --> <!-- end-user-doc -->
+		 * 
+		 * @generated */
+		EReference ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = eINSTANCE.getErrorMarkerFBNElement_RepairedElement();
+
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl <em>Error Marker
 		 * Interface</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -8137,6 +8194,12 @@ public interface LibraryElementPackage extends EPackage {
 		 * 
 		 * @generated */
 		EAttribute ERROR_MARKER_REF__FILE_MARKER_ID = eINSTANCE.getErrorMarkerRef_FileMarkerId();
+
+		/** The meta object literal for the '<em><b>Error Message</b></em>' attribute feature. <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * 
+		 * @generated */
+		EAttribute ERROR_MARKER_REF__ERROR_MESSAGE = eINSTANCE.getErrorMarkerRef_ErrorMessage();
 
 		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language
 		 * <em>Language</em>}' enum. <!-- begin-user-doc --> <!-- end-user-doc -->

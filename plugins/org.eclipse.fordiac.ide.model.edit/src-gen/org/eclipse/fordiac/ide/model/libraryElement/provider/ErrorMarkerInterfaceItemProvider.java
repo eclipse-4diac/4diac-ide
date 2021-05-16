@@ -176,6 +176,19 @@ public class ErrorMarkerInterfaceItemProvider extends ItemProviderAdapter implem
 						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
 	}
 
+	/** This adds a property descriptor for the Error Message feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	protected void addErrorMessagePropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_ErrorMarkerRef_errorMessage_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_errorMessage_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_ErrorMarkerRef_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.ERROR_MARKER_REF__ERROR_MESSAGE, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
 	/** This adds a property descriptor for the Repaired Endpoint feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
