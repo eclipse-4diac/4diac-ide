@@ -61,10 +61,10 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements 
 				FordiacMessages.FordiacPreferencePage_LABEL_DataConnectorColor, getFieldEditorParent()));
 	}
 
-	private String[][] getSupportedProfiles() {
+	private static String[][] getSupportedProfiles() {
 		// FIXME return installed/supported profiles
 		return new String[][] { { "HOLOBLOC", "HOLOBLOC" }, { "FBDK2", "FBDK2" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				{ "DynamicTypeLoad", "DynamicTypeLoad" } }; //$NON-NLS-1$ //$NON-NLS-2$
+			{ "DynamicTypeLoad", "DynamicTypeLoad" } }; //$NON-NLS-1$ //$NON-NLS-2$
 
 	}
 

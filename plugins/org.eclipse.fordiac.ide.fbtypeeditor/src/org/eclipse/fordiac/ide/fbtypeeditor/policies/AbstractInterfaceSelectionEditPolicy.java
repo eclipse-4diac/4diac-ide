@@ -103,7 +103,7 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 		return (IInterfaceElement) getInterfaceEditPart().getModel();
 	}
 
-	private PlusHandle createHandle(final InterfaceEditPart part, final int direction) {
+	private static PlusHandle createHandle(final InterfaceEditPart part, final int direction) {
 		return new PlusHandle(part, new RelativeHandleLocator(part.getFigure(), direction) {
 			@Override
 			public void relocate(final IFigure target) {

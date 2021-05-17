@@ -40,7 +40,7 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 		metrics = removeDuplicates(metrics);
 	}
 
-	private List<MetricResult> removeDuplicates(final List<MetricResult> list) {
+	private static List<MetricResult> removeDuplicates(final List<MetricResult> list) {
 		final List<MetricResult> newList = new ArrayList<>();
 		boolean dupl = false;
 		for (final MetricResult m : list) {

@@ -299,7 +299,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 *
 	 * @return the cast algorithm-object */
 	protected STAlgorithm castAlgorithm(final Algorithm algorithm) {
-		assert (algorithm instanceof STAlgorithm);
+		assertTrue(algorithm instanceof STAlgorithm);
 		return (STAlgorithm) algorithm;
 	}
 

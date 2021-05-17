@@ -40,20 +40,20 @@ public class InterfaceEditPart extends org.eclipse.fordiac.ide.gef.editparts.Int
 	}
 
 	@Override
-	public boolean understandsRequest(Request req) {
+	public boolean understandsRequest(final Request req) {
 		// should be readonly for tester
 		return false;
 	}
 
 	@Override
-	public void performRequest(Request request) {
+	public void performRequest(final Request request) {
 		// should be readonly for tester
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editparts.AbstractGraphicalEditPart#getModelSourceConnections
 	 * ()
@@ -69,7 +69,7 @@ public class InterfaceEditPart extends org.eclipse.fordiac.ide.gef.editparts.Int
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editparts.AbstractGraphicalEditPart#getModelTargetConnections
 	 * ()
@@ -85,7 +85,7 @@ public class InterfaceEditPart extends org.eclipse.fordiac.ide.gef.editparts.Int
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
 	 * ConnectionEditPart)
 	 */
@@ -100,28 +100,28 @@ public class InterfaceEditPart extends org.eclipse.fordiac.ide.gef.editparts.Int
 		return new OutputWithAnchor(getFigure(), pos, this);
 	}
 
-	private int calculateInputWithPos(final ConnectionEditPart connection) {
+	private static int calculateInputWithPos(final ConnectionEditPart connection) {
 		int pos;
-		With with = (With) connection.getModel();
-		Event event = (Event) with.eContainer();
-		InterfaceList interfaceList = (InterfaceList) event.eContainer();
+		final With with = (With) connection.getModel();
+		final Event event = (Event) with.eContainer();
+		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		pos = interfaceList.getEventInputs().indexOf(event) + 1;
 		return pos;
 	}
 
-	private int calculateOutputWithPos(final ConnectionEditPart connection) {
+	private static int calculateOutputWithPos(final ConnectionEditPart connection) {
 		int pos;
-		With with = (With) connection.getModel();
-		Event event = (Event) with.eContainer();
+		final With with = (With) connection.getModel();
+		final Event event = (Event) with.eContainer();
 
-		InterfaceList interfaceList = (InterfaceList) event.eContainer();
+		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		pos = interfaceList.getEventOutputs().indexOf(event) + 1;
 		return pos;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
 	 * Request)
 	 */
@@ -132,7 +132,7 @@ public class InterfaceEditPart extends org.eclipse.fordiac.ide.gef.editparts.Int
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
 	 * ConnectionEditPart)
 	 */
@@ -149,7 +149,7 @@ public class InterfaceEditPart extends org.eclipse.fordiac.ide.gef.editparts.Int
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
 	 * Request)
 	 */
