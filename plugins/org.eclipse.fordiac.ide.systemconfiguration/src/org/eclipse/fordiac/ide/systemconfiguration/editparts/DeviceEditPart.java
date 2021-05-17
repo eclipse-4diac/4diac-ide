@@ -100,8 +100,8 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	protected Adapter createContentAdapter() {
 		return new AdapterImpl() {
 			@Override
-			public void notifyChanged(Notification notification) {
-				Object feature = notification.getFeature();
+			public void notifyChanged(final Notification notification) {
+				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
 					backgroundColorChanged(getFigure());
 				} else {
@@ -130,7 +130,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof DeviceInterfaceEditPart) {
 			getFigure().getDataInputs().add(child);
 		} else if (childEditPart instanceof ResourceContainerEditPart) {
@@ -142,7 +142,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof DeviceInterfaceEditPart) {
 			getFigure().getDataInputs().remove(child);
 		} else if (childEditPart instanceof ResourceContainerEditPart) {
@@ -153,7 +153,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	public void setModel(Object model) {
+	public void setModel(final Object model) {
 		super.setModel(model);
 		resContainer = new ResourceContainer((Device) model);
 	}
@@ -161,7 +161,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected List getModelChildren() {
-		ArrayList elements = new ArrayList();
+		final ArrayList elements = new ArrayList();
 		elements.addAll(getModel().getVarDeclarations());
 		elements.add(resContainer);
 		return elements;
@@ -191,7 +191,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	protected void backgroundColorChanged(IFigure figure) {
+	protected void backgroundColorChanged(final IFigure figure) {
 		// TODO model refactoring - default value for colors if not persisted
 		org.eclipse.fordiac.ide.model.libraryElement.Color fordiacColor = getModel().getColor();
 		if (fordiacColor == null) {
@@ -202,7 +202,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	private final class DeviceConnectionAnchor extends ChopboxAnchor {
-		DeviceConnectionAnchor(IFigure owner) {
+		DeviceConnectionAnchor(final IFigure owner) {
 			super(owner);
 		}
 
@@ -210,8 +210,8 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		protected Rectangle getBox() {
 			// calculate a bounding box which consist of device main part and
 			// name label
-			Rectangle main = getFigure().getConnectionReferenceFigure().getBounds().getCopy();
-			Rectangle top = getFigure().getName().getBounds();
+			final Rectangle main = getFigure().getConnectionReferenceFigure().getBounds().getCopy();
+			final Rectangle top = getFigure().getName().getBounds();
 
 			main.setHeight(main.height + top.height());
 			main.y = top.y();
@@ -225,20 +225,20 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 		private final Label instanceNameLabel = new Label();
 		private Label typeLabel;
-		private Figure dataInputs = new Figure();
+		private final Figure dataInputs = new Figure();
 		private Figure contentPane;
 		private AdvancedLineBorder upperSeparator;
-		private AdvancedLineBorder lowerSeparator;
+		private final AdvancedLineBorder lowerSeparator;
 
 		@Override
-		public int getIntersectionStyle(Point location) {
+		public int getIntersectionStyle(final Point location) {
 			if (instanceNameLabel.intersects(new Rectangle(location, new Dimension(1, 1)))) {
 				return InteractionStyleFigure.REGION_DRAG; // move/drag
 			}
 			return InteractionStyleFigure.REGION_CONNECTION; // connection
 		}
 
-		private RoundedRectangle deviceRectangle = new RoundedRectangle();
+		private final RoundedRectangle deviceRectangle = new RoundedRectangle();
 
 		public DeviceFigure() {
 			setLayoutManager(new ToolbarLayout());
@@ -246,7 +246,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 			deviceRectangle
 					.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
-			ToolbarLayout bottomLayout = new ToolbarLayout();
+			final ToolbarLayout bottomLayout = new ToolbarLayout();
 			bottomLayout.setStretchMinorAxis(true);
 			deviceRectangle.setLayoutManager(bottomLayout);
 			deviceRectangle.setOutline(DEVICE_HAS_OUTER_BORDER);
@@ -254,7 +254,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 			createDeviceInfoSection(deviceRectangle);
 
-			ToolbarLayout bottomInputsLayout = new ToolbarLayout(false);
+			final ToolbarLayout bottomInputsLayout = new ToolbarLayout(false);
 			bottomInputsLayout.setStretchMinorAxis(true);
 
 			dataInputs.setLayoutManager(bottomInputsLayout);
@@ -267,28 +267,28 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			setInstanceAndTypeLabelFonts();
 		}
 
-		private void createInstanceNameLabel(Figure parent) {
+		private void createInstanceNameLabel(final Figure parent) {
 			instanceNameLabel.setText(getINamedElement().getName());
 			instanceNameLabel.setTextAlignment(PositionConstants.CENTER);
 			parent.add(instanceNameLabel);
 		}
 
 		@Override
-		public void setBackgroundColor(Color bg) {
-			Color deviceColor = ColorHelper.darker(bg);
+		public void setBackgroundColor(final Color bg) {
+			final Color deviceColor = ColorHelper.darker(bg);
 			upperSeparator.setColor(deviceColor);
 			lowerSeparator.setColor(deviceColor);
 			super.setBackgroundColor(bg);
 		}
 
-		private void createDeviceInfoSection(Figure parent) {
-			ToolbarLayout deviceInfoLayout = new ToolbarLayout();
+		private void createDeviceInfoSection(final Figure parent) {
+			final ToolbarLayout deviceInfoLayout = new ToolbarLayout();
 			deviceInfoLayout.setStretchMinorAxis(true);
 
-			Figure deviceInfo = new Figure();
+			final Figure deviceInfo = new Figure();
 			deviceInfo.setLayoutManager(deviceInfoLayout);
-			LibraryElement type = getModel().getType();
-			String typeName = (null != type) ? type.getName() : "Type not set!";
+			final LibraryElement type = getModel().getType();
+			final String typeName = (null != type) ? type.getName() : "Type not set!";
 			typeLabel = new Label(typeName);
 			deviceInfo.add(typeLabel);
 			typeLabel.setTextAlignment(PositionConstants.CENTER);
@@ -299,7 +299,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			deviceInfo.setBorder(upperSeparator);
 		}
 
-		private void createContentPane(RoundedRectangle container) {
+		private void createContentPane(final RoundedRectangle container) {
 			contentPane = new Figure();
 			contentPane.setLayoutManager(new ToolbarLayout());
 			container.add(contentPane);
@@ -364,10 +364,9 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		return new DeviceConnectionAnchor(getFigure().getConnectionReferenceFigure());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected List<?> getModelTargetConnections() {
-		List<Object> connections = new ArrayList<>();
+		final List<Object> connections = new ArrayList<>();
 		connections.addAll(getModel().getInConnections());
 		connections.addAll(super.getModelTargetConnections());
 		return connections;

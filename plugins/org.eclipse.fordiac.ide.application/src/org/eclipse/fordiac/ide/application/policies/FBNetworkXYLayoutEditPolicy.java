@@ -108,7 +108,6 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command getAddCommand(final Request request) {
 		if (isDragAndDropRequestFromSubAppToRoot(request, getTargetEditPart(request))) {
-			@SuppressWarnings("unchecked")
 			final List<EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
 			final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts);

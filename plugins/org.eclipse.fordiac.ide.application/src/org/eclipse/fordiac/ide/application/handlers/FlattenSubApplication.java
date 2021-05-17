@@ -44,7 +44,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class FlattenSubApplication extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 
 		final CompoundCommand mainCmd = checkSelection(event, editor);
@@ -54,7 +54,7 @@ public class FlattenSubApplication extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
-	private static CompoundCommand checkSelection(ExecutionEvent event, IEditorPart editor) {
+	private static CompoundCommand checkSelection(final ExecutionEvent event, final IEditorPart editor) {
 		final CompoundCommand mainCmd = new CompoundCommand();
 		for (final Object currentElement : getSelectionList(event)) {
 			final SubApp subApp = getSubApp(currentElement);
@@ -70,14 +70,14 @@ public class FlattenSubApplication extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
 
 		setBaseEnabled(HandlerHelper.isEditableSubApp(subApp));
 	}
 
-	private static SubApp getSubApp(Object currentElement) {
+	private static SubApp getSubApp(final Object currentElement) {
 		if (currentElement instanceof SubApp) {
 			return (SubApp) currentElement;
 		} else if (currentElement instanceof SubAppForFBNetworkEditPart) {
@@ -88,7 +88,7 @@ public class FlattenSubApplication extends AbstractHandler {
 		return null;
 	}
 
-	private static SubApp getSelectedSubApp(Object selection) {
+	private static SubApp getSelectedSubApp(final Object selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structSel = ((IStructuredSelection) selection);
 			if (!structSel.isEmpty() && (structSel.size() == 1)) {
@@ -98,8 +98,7 @@ public class FlattenSubApplication extends AbstractHandler {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static List<Object> getSelectionList(ExecutionEvent event) {
+	private static List<Object> getSelectionList(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
 			return ((StructuredSelection) selection).toList();
@@ -107,7 +106,7 @@ public class FlattenSubApplication extends AbstractHandler {
 		return Collections.emptyList();
 	}
 
-	private static void checkCurrentEditor(SubApp subApp, IEditorPart editor) {
+	private static void checkCurrentEditor(final SubApp subApp, final IEditorPart editor) {
 		if (editor.getAdapter(FBNetwork.class).equals(subApp.getSubAppNetwork())) {
 			// we are invoking the method from within the subapp, switch to the parent
 			// editor

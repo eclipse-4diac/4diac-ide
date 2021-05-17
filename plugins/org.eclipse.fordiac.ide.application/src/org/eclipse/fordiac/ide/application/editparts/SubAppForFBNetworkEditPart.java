@@ -84,7 +84,6 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 				backgroundColorChanged(getFigure());
 			}
 
-			@SuppressWarnings("unchecked")
 			private void refreshInterfaceEditParts() {
 				getChildren().forEach(ep -> {
 					if (ep instanceof InterfaceEditPart) {

@@ -24,15 +24,14 @@ public class ChangeIdentificationTypeCommandTest extends FBNetworkTestBase {
 
 	private static final String IDENTIFICATION_TYPE_STRING = "new value"; //$NON-NLS-1$
 
-	public static State executeCommand(State state, String setValue) {
+	public static State executeCommand(final State state, final String setValue) {
 		state.setCommand(new ChangeIdentifcationTypeCommand(state.getFbNetwork().getNetworkElements().get(0).getType(),
 				setValue));
 
 		return commandExecution(state);
 	}
 
-	@SuppressWarnings("unused")
-	public static void verifyState(State state, State oldState, TestFunction t, String expectedValue) {
+	public static void verifyState(final State state, final TestFunction t, final String expectedValue) {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getType(), expectedValue);
 	}
 
@@ -42,16 +41,17 @@ public class ChangeIdentificationTypeCommandTest extends FBNetworkTestBase {
 				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						FBCreateCommandTest::verifyState //
-				), //
+						), //
 				new ExecutionDescription<>("Change Identification Type", //$NON-NLS-1$
-						(State state) -> executeCommand(state, IDENTIFICATION_TYPE_STRING), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, IDENTIFICATION_TYPE_STRING) //
-				), //
+						(final State state) -> executeCommand(state, IDENTIFICATION_TYPE_STRING), //
+						(final State s, final State o, final TestFunction t) -> verifyState(s, t,
+								IDENTIFICATION_TYPE_STRING) //
+						), //
 				new ExecutionDescription<>("Change Identification Type to null", //$NON-NLS-1$
-						(State state) -> executeCommand(state, null), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, "") //$NON-NLS-1$
-				) //
-		);
+						(final State state) -> executeCommand(state, null), //
+						(final State s, final State o, final TestFunction t) -> verifyState(s, t, "") //$NON-NLS-1$
+						) //
+				);
 
 		return createCommands(executionDescriptions);
 	}

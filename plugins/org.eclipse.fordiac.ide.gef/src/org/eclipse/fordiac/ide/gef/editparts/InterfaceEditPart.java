@@ -147,7 +147,6 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 	protected abstract GraphicalNodeEditPolicy getNodeEditPolicy();
 
-	@SuppressWarnings("unchecked")
 	public void setInOutConnectionsWidth(final int width) {
 		getSourceConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
 		getTargetConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));

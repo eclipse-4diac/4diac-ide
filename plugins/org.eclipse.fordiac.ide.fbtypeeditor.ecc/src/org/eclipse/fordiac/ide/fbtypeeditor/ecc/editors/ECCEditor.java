@@ -165,7 +165,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
 		final ActionRegistry registry = getActionRegistry();

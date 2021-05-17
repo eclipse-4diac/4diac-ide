@@ -59,7 +59,6 @@ public class AppearancePropertySection extends AbstractPropertySection {
 		initializeControls(composite);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);

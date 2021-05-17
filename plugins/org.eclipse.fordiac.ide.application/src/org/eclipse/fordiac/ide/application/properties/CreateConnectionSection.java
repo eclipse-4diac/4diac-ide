@@ -61,7 +61,6 @@ public class CreateConnectionSection extends AbstractSection {
 		return (type instanceof List<?>) ? (List<IInterfaceElement>) type : Collections.emptyList();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected List<IInterfaceElement> getInputType(final Object input) {
 		final List<IInterfaceElement> editParts = new ArrayList<>();
