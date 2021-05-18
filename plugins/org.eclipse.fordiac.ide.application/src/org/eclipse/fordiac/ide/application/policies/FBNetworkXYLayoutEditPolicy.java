@@ -21,7 +21,6 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.commands.ListFBCreateCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
@@ -36,7 +35,6 @@ import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionOfFb;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -84,20 +82,10 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 					final FBTypePaletteEntry type = (FBTypePaletteEntry) childClass;
 					return new FBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
 				}
-				if (childClass instanceof FBTypePaletteEntry[]) {
-					final FBTypePaletteEntry[] type = (FBTypePaletteEntry[]) childClass;
-					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x,
-							constraint.getLocation().y);
-				}
 				if (childClass instanceof SubApplicationTypePaletteEntry) {
 					final SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request
 							.getNewObjectType();
 					return new CreateSubAppInstanceCommand(type, fbNetwork, constraint.getLocation().x,
-							constraint.getLocation().y);
-				}
-				if (childClass instanceof TransferDataSelectionOfFb[]) {
-					final TransferDataSelectionOfFb[] type = (TransferDataSelectionOfFb[]) childClass;
-					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x,
 							constraint.getLocation().y);
 				}
 			}
