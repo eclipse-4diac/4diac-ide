@@ -24,8 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.window.IShellProvider;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.CloseResourceAction;
 import org.eclipse.ui.ide.IDEActionFactory;
@@ -38,27 +36,20 @@ public class CloseSystemActionProvider extends CommonActionProvider {
 	private CloseResourceAction closeProjectAction;
 
 	@Override
-	public void init(ICommonActionExtensionSite aSite) {
+	public void init(final ICommonActionExtensionSite aSite) {
 		super.init(aSite);
-
-		IShellProvider sp = new IShellProvider() {
-			@Override
-			public Shell getShell() {
-				return getActionSite().getViewSite().getShell();
-			}
-		};
-		closeProjectAction = new CloseResourceAction(sp);
+		closeProjectAction = new CloseResourceAction(() -> getActionSite().getViewSite().getShell());
 	}
 
 	@Override
-	public void fillActionBars(IActionBars actionBars) {
+	public void fillActionBars(final IActionBars actionBars) {
 		actionBars.setGlobalActionHandler(IDEActionFactory.CLOSE_PROJECT.getId(), closeProjectAction);
 		updateActionBars();
 	}
 
 	@Override
-	public void fillContextMenu(IMenuManager menu) {
-		IStructuredSelection selection = getSelectedProjects();
+	public void fillContextMenu(final IMenuManager menu) {
+		final IStructuredSelection selection = getSelectedProjects();
 		if (!selection.isEmpty()) {
 			closeProjectAction.selectionChanged(selection);
 			menu.appendToGroup(ICommonMenuConstants.GROUP_BUILD, closeProjectAction);
@@ -71,10 +62,10 @@ public class CloseSystemActionProvider extends CommonActionProvider {
 	}
 
 	private IStructuredSelection getSelectedProjects() {
-		IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
-		List<IProject> projectSelection = new ArrayList<>();
+		final IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
+		final List<IProject> projectSelection = new ArrayList<>();
 
-		for (Object element : selection.toList()) {
+		for (final Object element : selection.toList()) {
 			if (element instanceof AutomationSystem) {
 				projectSelection.add(((AutomationSystem) element).getSystemFile().getProject());
 			} else if (element instanceof IProject) {

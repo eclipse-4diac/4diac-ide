@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.utilities.CreationPopupDialog;
-import org.eclipse.fordiac.ide.application.utilities.ICreationExecutor;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -33,9 +32,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 public class ListFBCreateCommand extends FBCreateCommand {
-	private FBTypePaletteEntry[] typeList;
-	private TransferDataSelectionOfFb[] selectionList;
-	private AutomationSystem system;
+	private final FBTypePaletteEntry[] typeList;
+	private final TransferDataSelectionOfFb[] selectionList;
+	private final AutomationSystem system;
 
 	/**
 	 * Instantiates a new fB create command.
@@ -44,14 +43,14 @@ public class ListFBCreateCommand extends FBCreateCommand {
 	 * @param parent the parent
 	 * @param bounds the bounds
 	 */
-	public ListFBCreateCommand(final FBTypePaletteEntry[] type, final FBNetwork parent, int x, int y) {
+	public ListFBCreateCommand(final FBTypePaletteEntry[] type, final FBNetwork parent, final int x, final int y) {
 		super(null, parent, x, y); // values will be set in execute()
 		typeList = type.clone();
 		selectionList = null;
 		system = parent.getAutomationSystem();
 	}
 
-	public ListFBCreateCommand(final TransferDataSelectionOfFb[] fbList, final FBNetwork parent, int x, int y) {
+	public ListFBCreateCommand(final TransferDataSelectionOfFb[] fbList, final FBNetwork parent, final int x, final int y) {
 		super(null, parent, x, y); // values will be set in execute()
 		typeList = null;
 		selectionList = fbList.clone();
@@ -70,91 +69,79 @@ public class ListFBCreateCommand extends FBCreateCommand {
 
 	private void executeTransferData() {
 
-		CreationPopupDialog pd = new CreationPopupDialog(Display.getCurrent().getActiveShell(),
+		final CreationPopupDialog pd = new CreationPopupDialog(Display.getCurrent().getActiveShell(),
 				PopupDialog.HOVER_SHELLSTYLE, true, false, false, false, false, null, null, typeList,
 				new LabelProvider() {
-					@Override
-					public String getText(Object element) {
-						if (element instanceof FBTypePaletteEntry) {
-							return ((FBTypePaletteEntry) element).getLabel();
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof FBTypePaletteEntry) {
+					return ((FBTypePaletteEntry) element).getLabel();
+				}
+				return super.getText(element);
+			}
+
+			@Override
+			public Image getImage(final Object element) {
+				if (element instanceof FBTypePaletteEntry) {
+					return FordiacImage.ICON_FB.getImage();
+				}
+				return super.getImage(element);
+			}
+		}, res -> {
+			if (res instanceof TransferDataSelectionOfFb) {
+				final TransferDataSelectionOfFb element = ((TransferDataSelectionOfFb) res);
+				// get PaletteEntry for fbTypeName
+				final FBTypePaletteEntry entry = system.getPalette().getFBTypeEntry(element.getFbTypeName());
+				if (null != entry) {
+					element.setTypePaletteEntry(entry);
+					ListFBCreateCommand.this.setPaletteEntry(element.getTypePaletteEntry());
+					ListFBCreateCommand.super.execute();
+
+					for (final TransferDataSelectionFBParameter fbParametert : element.getFbParameters()) {
+						final IInterfaceElement fbInterfaceElement = ListFBCreateCommand.this.getElement()
+								.getInterfaceElement(fbParametert.getName());
+						if (fbInterfaceElement instanceof VarDeclaration) {
+							final Value val = ((VarDeclaration) fbInterfaceElement).getValue();
+							val.setValue(fbParametert.getValue());
 						}
-						return super.getText(element);
 					}
+				} else {
+					// warning/info in statusline that fbtype can not be found
+					ErrorMessenger.popUpErrorMessage(Messages.ListFBCreateCommand_FBTypeNotFound);
+				}
+			}
 
-					@Override
-					public Image getImage(Object element) {
-						if (element instanceof FBTypePaletteEntry) {
-							return FordiacImage.ICON_FB.getImage();
-						}
-						return super.getImage(element);
-					}
-				}, new ICreationExecutor() {
-
-					@Override
-					public void execute(Object res) {
-						if (res instanceof TransferDataSelectionOfFb) {
-							TransferDataSelectionOfFb element = ((TransferDataSelectionOfFb) res);
-							// get PaletteEntry for fbTypeName
-							FBTypePaletteEntry entry = system.getPalette().getFBTypeEntry(element.getFbTypeName());
-							if (null != entry) {
-								element.setTypePaletteEntry(entry);
-								ListFBCreateCommand.this.setPaletteEntry(element.getTypePaletteEntry());
-								ListFBCreateCommand.super.execute();
-
-								for (TransferDataSelectionFBParameter fbParametert : element.getFbParameters()) {
-									IInterfaceElement fbInterfaceElement = ListFBCreateCommand.this.getElement()
-											.getInterfaceElement(fbParametert.getName());
-									if (fbInterfaceElement instanceof VarDeclaration) {
-										Value val = ((VarDeclaration) fbInterfaceElement).getValue();
-										val.setValue(fbParametert.getValue());
-									}
-								}
-							} else {
-								// warning/info in statusline that fbtype can not be found
-								ErrorMessenger.popUpErrorMessage(Messages.ListFBCreateCommand_FBTypeNotFound);
-							}
-						}
-
-					}
-				}) {
-
-		};
+		});
 		pd.open();
 
 	}
 
 	private void executeFBTypePalette() {
 
-		CreationPopupDialog pd = new CreationPopupDialog(Display.getCurrent().getActiveShell(),
+		final CreationPopupDialog pd = new CreationPopupDialog(Display.getCurrent().getActiveShell(),
 				PopupDialog.HOVER_SHELLSTYLE, true, false, false, false, false, null, null, typeList,
 				new LabelProvider() {
-					@Override
-					public String getText(Object element) {
-						if (element instanceof FBTypePaletteEntry) {
-							return ((FBTypePaletteEntry) element).getLabel();
-						}
-						return super.getText(element);
-					}
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof FBTypePaletteEntry) {
+					return ((FBTypePaletteEntry) element).getLabel();
+				}
+				return super.getText(element);
+			}
 
-					@Override
-					public Image getImage(Object element) {
-						if (element instanceof FBTypePaletteEntry) {
-							return FordiacImage.ICON_FB.getImage();
-						}
-						return super.getImage(element);
-					}
-				}, new ICreationExecutor() {
-
-					@Override
-					public void execute(Object res) {
-						if (res instanceof FBTypePaletteEntry) {
-							ListFBCreateCommand.this.setPaletteEntry((FBTypePaletteEntry) res);
-							ListFBCreateCommand.super.execute();
-						}
-					}
-				}) {
-
-		};
+			@Override
+			public Image getImage(final Object element) {
+				if (element instanceof FBTypePaletteEntry) {
+					return FordiacImage.ICON_FB.getImage();
+				}
+				return super.getImage(element);
+			}
+		}, res -> {
+			if (res instanceof FBTypePaletteEntry) {
+				ListFBCreateCommand.this.setPaletteEntry((FBTypePaletteEntry) res);
+				ListFBCreateCommand.super.execute();
+			}
+				});
 		pd.open();
 
 	}

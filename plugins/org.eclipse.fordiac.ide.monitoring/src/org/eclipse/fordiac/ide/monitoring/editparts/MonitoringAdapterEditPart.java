@@ -49,16 +49,8 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				Display.getDefault().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						refreshVisuals();
-
-					}
-				});
+				Display.getDefault().asyncExec(MonitoringAdapterEditPart.this::refreshVisuals);
 			}
-
 		};
 	}
 
@@ -76,7 +68,7 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 	}
 
 	@Override
-	public boolean understandsRequest(Request request) {
+	public boolean understandsRequest(final Request request) {
 		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			// no direct edit for the monitored adapter fb
 			return false;
@@ -85,7 +77,7 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 	}
 
 	@Override
-	public void performRequest(Request request) {
+	public void performRequest(final Request request) {
 		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			// no direct edit for the monitored adapter fb
 		} else {
@@ -95,9 +87,9 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceEditPart) {
-			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
 			if (interfaceEditPart.isInput()) {
 				if (interfaceEditPart.isEvent()) {
 					getFigure().getEventInputs().add(child);
@@ -127,9 +119,9 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceEditPart) {
-			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
 			if (interfaceEditPart.isInput()) {
 				if (interfaceEditPart.isEvent()) {
 					getFigure().getEventInputs().remove(child);
@@ -159,7 +151,7 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 
 	@Override
 	protected List<Object> getModelChildren() {
-		ArrayList<Object> elements = new ArrayList<>();
+		final ArrayList<Object> elements = new ArrayList<>();
 		elements.addAll(getFB().getInterface().getAllInterfaceElements());
 		return elements;
 	}
