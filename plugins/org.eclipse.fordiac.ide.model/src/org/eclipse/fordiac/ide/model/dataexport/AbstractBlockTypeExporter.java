@@ -70,7 +70,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		if (null != exporter) {
 			try {
 				exporter.createXMLEntries();
-			} catch (XMLStreamException e) {
+			} catch (final XMLStreamException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 			exporter.writeToFile(entry.getFile());
@@ -117,7 +117,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 			throws XMLStreamException {
 		if (!adapterList.isEmpty()) {
 			addStartElement(elementName);
-			for (AdapterDeclaration adapter : adapterList) {
+			for (final AdapterDeclaration adapter : adapterList) {
 				addAdapterDeclaration(adapter);
 			}
 			addEndElement();
@@ -125,10 +125,21 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	}
 
 	private void addAdapterDeclaration(final AdapterDeclaration adapterDecl) throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
+		final boolean hasAttributes = !adapterDecl.getAttributes().isEmpty();
+		if (hasAttributes) {
+			addStartElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
+		}
+
 		addNameTypeCommentAttribute(adapterDecl, adapterDecl.getType());
 		if (null != adapterDecl.getAdapterFB()) {
 			addXYAttributes(adapterDecl.getAdapterFB());
+		}
+
+		if (hasAttributes) {
+			addAttributes(adapterDecl.getAttributes());
+			addEndElement();
 		}
 	}
 
@@ -143,7 +154,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	protected void addVarList(final List<VarDeclaration> varList, final String elementName) throws XMLStreamException {
 		if (!varList.isEmpty()) {
 			addStartElement(elementName);
-			for (VarDeclaration varDecl : varList) {
+			for (final VarDeclaration varDecl : varList) {
 				if (!(varDecl instanceof AdapterDeclaration)) {
 					addVarDeclaration(varDecl);
 				}
@@ -164,12 +175,12 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 			final String elementName) throws XMLStreamException {
 		if (!varList.isEmpty() || !fbList.isEmpty()) {
 			addStartElement(elementName);
-			for (VarDeclaration varDecl : varList) {
+			for (final VarDeclaration varDecl : varList) {
 				if (!(varDecl instanceof AdapterDeclaration)) {
 					addVarDeclaration(varDecl);
 				}
 			}
-			for (FB fb : fbList) {
+			for (final FB fb : fbList) {
 				addStartElement(LibraryElementTags.FB_ELEMENT);
 				addNameAttribute(fb.getName());
 				if (null != fb.getType()) {
@@ -195,7 +206,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	private void addEventList(final List<Event> eventList, final String elementName) throws XMLStreamException {
 		if (!eventList.isEmpty()) {
 			addStartElement(elementName);
-			for (Event event : eventList) {
+			for (final Event event : eventList) {
 				addEvent(event);
 			}
 			addEndElement();
@@ -224,6 +235,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, "Event"); //$NON-NLS-1$
 		addCommentAttribute(event);
 		addWith(event);
+		addAttributes(event.getAttributes());
 		addEndElement();
 	}
 
@@ -239,9 +251,9 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addWith(final Event event) throws XMLStreamException {
-		for (With with : event.getWith()) {
+		for (final With with : event.getWith()) {
 			addEmptyStartElement(LibraryElementTags.WITH_ELEMENT);
-			VarDeclaration varDecl = with.getVariables();
+			final VarDeclaration varDecl = with.getVariables();
 			getWriter().writeAttribute(LibraryElementTags.VAR_ATTRIBUTE,
 					(null != varDecl.getName()) ? varDecl.getName() : ""); //$NON-NLS-1$
 		}
@@ -278,7 +290,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addServiceSequences(final List<ServiceSequence> sequences) throws XMLStreamException {
-		for (ServiceSequence seq : sequences) {
+		for (final ServiceSequence seq : sequences) {
 			addStartElement(LibraryElementTags.SERVICE_SEQUENCE_ELEMENT);
 
 			addNameAttribute(seq.getName());
@@ -295,7 +307,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addServiceTransactions(final List<ServiceTransaction> transactions) throws XMLStreamException {
-		for (ServiceTransaction transaction : transactions) {
+		for (final ServiceTransaction transaction : transactions) {
 			addStartElement(LibraryElementTags.SERVICE_TRANSACTION_ELEMENT);
 
 			if (transaction.getInputPrimitive() != null) {
@@ -328,7 +340,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addOutputPrimitives(final ServiceTransaction transaction) throws XMLStreamException {
-		for (OutputPrimitive primitive : transaction.getOutputPrimitive()) {
+		for (final OutputPrimitive primitive : transaction.getOutputPrimitive()) {
 			addPrimitive(primitive, LibraryElementTags.OUTPUT_PRIMITIVE_ELEMENT);
 		}
 	}

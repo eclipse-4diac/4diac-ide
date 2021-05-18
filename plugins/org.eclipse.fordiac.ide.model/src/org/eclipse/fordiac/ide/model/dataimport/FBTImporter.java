@@ -932,6 +932,16 @@ public class FBTImporter extends TypeImporter {
 		final PositionableElement pos = LibraryElementFactory.eINSTANCE.createPositionableElement();
 		getXandY(pos);
 		adapterPositions.put(a.getName(), pos);
+
+		processChildren(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT, name -> {
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
+				parseGenericAttributeNode(a);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			}
+			return false;
+		});
+
 		proceedToEndElementNamed(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
 		return a;
 	}
@@ -991,15 +1001,21 @@ public class FBTImporter extends TypeImporter {
 		final List<String> withVars = new ArrayList<>();
 
 		processChildren(eventName, name -> {
-			if (LibraryElementTags.WITH_ELEMENT.equals(name)) {
+			switch (name) {
+			case LibraryElementTags.WITH_ELEMENT:
 				final String val = getAttributeValue(LibraryElementTags.VAR_ATTRIBUTE);
 				if (null != val) {
 					withVars.add(val);
 				}
 				proceedToEndElementNamed(LibraryElementTags.WITH_ELEMENT);
 				return true;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(e);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			default:
+				return false;
 			}
-			return false;
 		});
 
 		if (!withVars.isEmpty()) {
