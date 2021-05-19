@@ -262,6 +262,7 @@ public final class FordiacMarkerHelper {
 		final FBType type = LibraryElementFactory.eINSTANCE.createFBType();
 		final FBTypePaletteEntry entry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
 		entry.setType(type);
+		entry.setLabel(typeFbElement);
 		type.setPaletteEntry(entry);
 		type.setName(typeFbElement);
 		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
