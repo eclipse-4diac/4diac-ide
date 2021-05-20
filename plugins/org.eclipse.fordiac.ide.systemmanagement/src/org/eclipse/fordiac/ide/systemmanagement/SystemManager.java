@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -129,6 +130,11 @@ public enum SystemManager {
 		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(location.getProject());
 		final AutomationSystem system = projectSystems.computeIfAbsent(systemFile,
 				SystemImporter::createAutomationSystem);
+		final SystemPaletteEntry entry = PaletteFactory.eINSTANCE.createSystemPaletteEntry();
+		entry.setFile(systemFile);
+		entry.setType(system);
+		system.setPaletteEntry(entry);
+		automationSystemEntries.put(systemFile, entry);
 		saveSystem(system);
 		return system;
 	}
@@ -205,6 +211,7 @@ public enum SystemManager {
 	}
 
 	public static void saveSystem(final AutomationSystem system, final IFile file) {
+		Assert.isNotNull(system.getPaletteEntry()); // there should be no system without palette entry
 		system.getPaletteEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);
