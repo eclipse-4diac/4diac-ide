@@ -56,6 +56,12 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 				}
 				return null;
 			}
+
+			@Override
+			protected void revertOldEditValue(final DirectEditRequest request) {
+				getNameLabel().setText(getModel().getName());
+				super.revertOldEditValue(request);
+			}
 		});
 		// allow delete of a subapp's interface element
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteSubAppInterfaceElementPolicy());
