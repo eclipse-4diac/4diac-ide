@@ -131,6 +131,11 @@ public class HideableConnection extends PolylineConnection {
 		}
 	}
 
+	@Override
+	public Rectangle getBounds() {
+		final int CLIPPING_BUFFER = 2;
+		return super.getBounds().getExpanded(CLIPPING_BUFFER, CLIPPING_BUFFER);
+	}
 
 	@Override
 	public void setLineWidth(final int w) {
