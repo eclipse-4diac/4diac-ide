@@ -36,34 +36,34 @@ public class ECTransitionDirectEditManager extends TextDirectEditManager {
 	private static final AbstractBorder BORDER = new AbstractBorder() {
 
 		@Override
-		public Insets getInsets(IFigure figure) {
+		public Insets getInsets(final IFigure figure) {
 			return BORDER_INSETS;
 		}
 
 		@Override
-		public void paint(IFigure figure, Graphics graphics, Insets insets) {
+		public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
 			// don't draw any border to make the direct editor smaller
 		}
 	};
 
 	public static class ECTransitionCellEditorLocator implements CellEditorLocator {
 		private Point refPoint = new Point(0, 0);
-		private Label label;
-		private ZoomManager zoomManager;
-		private FigureCanvas fc;
+		private final Label label;
+		private final ZoomManager zoomManager;
+		private final FigureCanvas fc;
 
-		public ECTransitionCellEditorLocator(Label label, ZoomManager zoomManager, FigureCanvas fc) {
+		public ECTransitionCellEditorLocator(final Label label, final ZoomManager zoomManager, final FigureCanvas fc) {
 			this.label = label;
 			this.zoomManager = zoomManager;
 			this.fc = fc;
 		}
 
 		@Override
-		public void relocate(CellEditor celleditor) {
+		public void relocate(final CellEditor celleditor) {
 			if (null != celleditor) {
-				Control control = celleditor.getControl();
+				final Control control = celleditor.getControl();
 				updateRefPoint();
-				Point pref = new Point(control.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
+				final Point pref = new Point(control.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
 						control.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 				control.setBounds(refPoint.x - pref.x / 2, refPoint.y - pref.y / 2, pref.x + 1, pref.y + 1);
 			}
@@ -75,7 +75,7 @@ public class ECTransitionDirectEditManager extends TextDirectEditManager {
 			refPoint = new Point(typeLabelTopLeft.x - location.x, typeLabelTopLeft.y - location.y);
 		}
 
-		public void setRefPoint(Point refPoint) {
+		public void setRefPoint(final Point refPoint) {
 			this.refPoint = refPoint;
 		}
 
@@ -86,8 +86,8 @@ public class ECTransitionDirectEditManager extends TextDirectEditManager {
 
 	private ECTransition transition = null;
 
-	public ECTransitionDirectEditManager(GraphicalEditPart source, ECTransition transition, Label label,
-			ZoomManager zoomManager, FigureCanvas fc) {
+	public ECTransitionDirectEditManager(final GraphicalEditPart source, final ECTransition transition, final Label label,
+			final ZoomManager zoomManager, final FigureCanvas fc) {
 		super(source, ECTransitionCellEditor.class, new ECTransitionCellEditorLocator(label, zoomManager, fc));
 		this.transition = transition;
 	}
@@ -97,9 +97,9 @@ public class ECTransitionDirectEditManager extends TextDirectEditManager {
 		super.initCellEditor();
 		if (null != transition) {
 			getCellEditor().setValue(transition);
-			CCombo combo = getComboBox();
+			final CCombo combo = getComboBox();
 			combo.addModifyListener(e -> setDirty(true));
-			Text text = getText();
+			final Text text = getText();
 			text.addModifyListener(e -> setDirty(true));
 		}
 
@@ -115,27 +115,27 @@ public class ECTransitionDirectEditManager extends TextDirectEditManager {
 		return (ECTransitionCellEditor) super.getCellEditor();
 	}
 
-	public void updateRefPosition(Point refPoint) {
+	public void updateRefPosition(final Point refPoint) {
 		getLocator().setRefPoint(refPoint);
 	}
 
 	@Override
 	protected IFigure getCellEditorFrame() {
-		IFigure cellEditorFrame = super.getCellEditorFrame();
+		final IFigure cellEditorFrame = super.getCellEditorFrame();
 		cellEditorFrame.setBorder(BORDER);
 		return cellEditorFrame;
 	}
 
 	public CCombo getComboBox() {
-		if (getCellEditor() instanceof ECTransitionCellEditor) {
-			return ((ECTransitionCellEditor) getCellEditor()).getCCombo();
+		if (getCellEditor() != null) {
+			return getCellEditor().getCCombo();
 		}
 		return null;
 	}
 
 	public Text getText() {
-		if (getCellEditor() instanceof ECTransitionCellEditor) {
-			return ((ECTransitionCellEditor) getCellEditor()).getText();
+		if (getCellEditor() != null) {
+			return getCellEditor().getText();
 		}
 		return null;
 	}
