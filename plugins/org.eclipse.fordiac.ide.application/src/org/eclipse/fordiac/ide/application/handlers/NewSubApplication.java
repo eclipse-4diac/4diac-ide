@@ -40,7 +40,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class NewSubApplication extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
+	public Object execute(final ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
 		final IEditorPart activeEditor = HandlerUtil.getActiveEditor(event);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final GraphicalViewer viewer = getViewer(activeEditor);
@@ -55,34 +55,32 @@ public class NewSubApplication extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
-	private static FBNetwork getFBNetwork(StructuredSelection selection, ExecutionEvent event) {
+	private static FBNetwork getFBNetwork(final StructuredSelection selection, final ExecutionEvent event) {
 		if (createNewEmptySubapp(selection)) {
 			return HandlerUtil.getActiveEditor(event).getAdapter(FBNetwork.class);
-		} else {
-			for (final Object o : selection) {
-				if (o instanceof EditPart) {
-					final Object model = ((EditPart) o).getModel();
-					if (model instanceof FBNetworkElement) {
-						return ((FBNetworkElement) model).getFbNetwork();
-					}
+		}
+		for (final Object o : selection) {
+			if (o instanceof EditPart) {
+				final Object model = ((EditPart) o).getModel();
+				if (model instanceof FBNetworkElement) {
+					return ((FBNetworkElement) model).getFbNetwork();
 				}
 			}
-			return null;
 		}
+		return null;
 	}
 
 	public static Point getInsertPos(final EditPartViewer viewer, final StructuredSelection selection) {
 		if (createNewEmptySubapp(selection)) {
 			// new empty subapp at mouse cursor location
 			return ((FBNetworkContextMenuProvider) viewer.getContextMenu()).getTranslatedAndZoomedPoint();
-		} else {
-			final org.eclipse.swt.graphics.Point swtPos1 = FBNetworkHelper
-					.getTopLeftCornerOfFBNetwork(selection.toList());
-			return new Point(swtPos1.x, swtPos1.y);
 		}
+		final org.eclipse.swt.graphics.Point swtPos1 = FBNetworkHelper
+				.getTopLeftCornerOfFBNetwork(selection.toList());
+		return new Point(swtPos1.x, swtPos1.y);
 	}
 
-	private static boolean createNewEmptySubapp(StructuredSelection selection) {
+	private static boolean createNewEmptySubapp(final StructuredSelection selection) {
 		return (selection.size() == 1)
 				&& !(((EditPart) selection.getFirstElement()).getModel() instanceof FBNetworkElement);
 	}

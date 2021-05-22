@@ -40,12 +40,12 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 	private final List<FBNetworkElement> selectedNetworkElements = new ArrayList<>();
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		CompoundCommand cmd = new CompoundCommand();
-		CommandStack stack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final CompoundCommand cmd = new CompoundCommand();
+		final CommandStack stack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
 
-		for (FBNetworkElement element : selectedNetworkElements) {
-			Command updateFBTypeCmd = getUpdateCommand(element);
+		for (final FBNetworkElement element : selectedNetworkElements) {
+			final Command updateFBTypeCmd = getUpdateCommand(element);
 			if (updateFBTypeCmd.canExecute()) {
 				cmd.add(updateFBTypeCmd);
 			}
@@ -56,26 +56,25 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
-	public static Command getUpdateCommand(FBNetworkElement element) {
+	public static Command getUpdateCommand(final FBNetworkElement element) {
 		if (element instanceof StructManipulator) {
-			StructManipulator mux = (StructManipulator) element;
-			DataTypeLibrary lib = mux.getType().getTypeLibrary().getDataTypeLibrary();
-			StructuredType updated = (StructuredType) lib.getType(mux.getStructType().getName());
+			final StructManipulator mux = (StructManipulator) element;
+			final DataTypeLibrary lib = mux.getType().getTypeLibrary().getDataTypeLibrary();
+			final StructuredType updated = (StructuredType) lib.getType(mux.getStructType().getName());
 			return new ChangeStructCommand(mux, updated);
-		} else {
-			return new UpdateFBTypeCommand(element, null);
 		}
+		return new UpdateFBTypeCommand(element, null);
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		updateSelection(evaluationContext);
 		setBaseEnabled(!selectedNetworkElements.isEmpty());
 	}
 
-	protected void updateSelection(Object evaluationContext) {
+	protected void updateSelection(final Object evaluationContext) {
 		selectedNetworkElements.clear();
-		ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
+		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof StructuredSelection) {
 			for (Object element : ((StructuredSelection) selection).toList()) {

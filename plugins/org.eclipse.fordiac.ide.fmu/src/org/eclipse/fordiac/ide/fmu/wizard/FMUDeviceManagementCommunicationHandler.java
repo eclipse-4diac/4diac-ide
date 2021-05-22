@@ -332,11 +332,10 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			if (binariesDirectory.exists() && binariesDirectory.isDirectory()) {
 				if (createTempFoldersAndFiles(tempFolder, outputName, librariesToAdd, shell)) {
 					return tempFolder;
-				} else {
-					IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
-							Messages.FMUDeviceManagementCommunicationHandler_CouldNotCreateTheComponentsInsideTheTemporaryFolder,
-							tempFolder), shell);
 				}
+				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
+						Messages.FMUDeviceManagementCommunicationHandler_CouldNotCreateTheComponentsInsideTheTemporaryFolder,
+						tempFolder), shell);
 			} else {
 				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
 						Messages.FMUDeviceManagementCommunicationHandler_BinaryDirectoryDoesNotExist,
@@ -383,13 +382,12 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	private static boolean deleteFileOrFolder(final File file) {
 		if (file.isDirectory()) {
 			return deleteFolder(file.getAbsolutePath());
-		} else {
-			try {
-				Files.delete(Paths.get(file.getAbsolutePath()));
-			} catch (final IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-				return false;
-			}
+		}
+		try {
+			Files.delete(Paths.get(file.getAbsolutePath()));
+		} catch (final IOException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+			return false;
 		}
 		return true;
 	}

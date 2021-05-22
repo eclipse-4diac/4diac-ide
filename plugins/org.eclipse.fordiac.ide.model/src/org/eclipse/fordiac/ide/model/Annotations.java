@@ -470,10 +470,9 @@ public final class Annotations {
 					.filter(attr -> attributeName.equals(attr.getName())).collect(Collectors.toList());
 			if (toDelete.isEmpty()) {
 				return false;
-			} else {
-				toDelete.forEach(attr -> object.getAttributes().remove(attr));
-				return true;
 			}
+			toDelete.forEach(attr -> object.getAttributes().remove(attr));
+			return true;
 		}
 		return false;
 	}

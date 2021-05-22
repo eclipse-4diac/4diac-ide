@@ -61,18 +61,14 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 
 	@Override
 	public Object getParent(final Object element) {
-		Object retVal = null;
 		if (element instanceof IFile) {
 			return ((IResource) element).getParent();
-		} else {
-			retVal = super.getParent(element);
-			// FIXME check for the correct elements and return the IFile for them
-			//			if(retval instanceof FBType){
-			//
-			//			}
-
 		}
-		return retVal;
+		return super.getParent(element);
+		// FIXME check for the correct elements and return the IFile for them
+		//			if(retval instanceof FBType){
+		//
+		//			}
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -36,10 +36,10 @@ public class CommentTypeField {
 
 	/**
 	 * Helper object to display type and comment of an in/output.
-	 * 
+	 *
 	 * @param referencedElement the referenced element
 	 */
-	public CommentTypeField(IInterfaceElement referencedElement) {
+	public CommentTypeField(final IInterfaceElement referencedElement) {
 		this.referencedElement = referencedElement;
 		this.commentField = new CommentField(referencedElement);
 		this.separator = new CommentTypeSeparator();
@@ -49,14 +49,13 @@ public class CommentTypeField {
 	public String getLabel() {
 		if (getReferencedElement().isIsInput()) {
 			return commentField.getLabel() + separator.getLabel() + typeField.getArrayLabel();
-		} else {
-			return typeField.getArrayLabel() + separator.getLabel() + commentField.getLabel();
 		}
+		return typeField.getArrayLabel() + separator.getLabel() + commentField.getLabel();
 	}
 
 	@SuppressWarnings("rawtypes")
 	public List getChildren() {
-		List<Object> children = new ArrayList<>();
+		final List<Object> children = new ArrayList<>();
 		if (getReferencedElement().isIsInput()) {
 			children.add(commentField);
 			children.add(separator);

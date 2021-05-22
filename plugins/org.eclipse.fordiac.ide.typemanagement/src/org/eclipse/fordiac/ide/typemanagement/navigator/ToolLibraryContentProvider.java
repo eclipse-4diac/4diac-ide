@@ -61,13 +61,12 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 			}
 
 			return retval;
-		} else {
-			if (inputElement instanceof IContainer) {
-				try {
-					return ((IContainer) inputElement).members();
-				} catch (final CoreException e) {
-					Activator.getDefault().logError(e.getMessage(), e);
-				}
+		}
+		if (inputElement instanceof IContainer) {
+			try {
+				return ((IContainer) inputElement).members();
+			} catch (final CoreException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		}
 
