@@ -11,7 +11,7 @@
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed analysis result to key value pairs
- *   Lisa Sonnleithner - Adjustments to change calculation method to average 
+ *   Lisa Sonnleithner - Adjustments to change calculation method to average
  *   				   - extracted superclass
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.handlers;
@@ -25,8 +25,9 @@ import org.eclipse.fordiac.ide.metrics.analyzers.HalsteadMetric;
 
 public class CalculateCodeMetrics extends AbstractCodeMetricHandler {
 
+	@Override
 	protected List<AbstractCodeMetricAnalyzer> getAnalyzers() {
-		List<AbstractCodeMetricAnalyzer> analyzers = new ArrayList<>();
+		final List<AbstractCodeMetricAnalyzer> analyzers = new ArrayList<>();
 		analyzers.add(new CyclomaticComplexity());
 		analyzers.add(new HalsteadMetric());
 		return analyzers;
