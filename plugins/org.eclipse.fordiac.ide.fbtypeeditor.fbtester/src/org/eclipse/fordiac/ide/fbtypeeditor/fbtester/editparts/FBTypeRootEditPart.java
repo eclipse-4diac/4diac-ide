@@ -80,6 +80,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 						break;
 					case Notification.SET:
 						break;
+					default:
 					}
 				}
 			};

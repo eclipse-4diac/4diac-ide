@@ -111,6 +111,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 					break;
 				case UNKNOWN:
 					break;
+				default:
 				}
 			}
 		}

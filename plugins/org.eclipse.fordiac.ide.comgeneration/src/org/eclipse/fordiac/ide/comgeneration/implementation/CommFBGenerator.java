@@ -102,6 +102,7 @@ public class CommFBGenerator {
 			}
 			withPorts = destination.getDestinationPorts().keySet();
 			break;
+		default:
 		}
 		final MediaSpecificGenerator specificGenerator = specificGeneratorFactory
 				.getForProtocolId(destination.getSelectedProtocolId());

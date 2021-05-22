@@ -209,6 +209,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 			case COMMENT_COL:
 				cmd = new AttributeChangeCommand(data, null, null, null, value.toString());
 				break;
+			default:
 			}
 			executeCommand(cmd);
 			attributeViewer.refresh(data);
