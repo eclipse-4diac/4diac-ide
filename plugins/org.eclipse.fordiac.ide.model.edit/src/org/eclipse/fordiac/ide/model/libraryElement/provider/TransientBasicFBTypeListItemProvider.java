@@ -23,37 +23,36 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 
 public class TransientBasicFBTypeListItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 
-	public TransientBasicFBTypeListItemProvider(AdapterFactory adapterFactory, BasicFBType basicFBType) {
+	public TransientBasicFBTypeListItemProvider(final AdapterFactory adapterFactory, final BasicFBType basicFBType) {
 		super(adapterFactory);
 		basicFBType.eAdapters().add(this);
 	}
 
 	@Override
-	public Collection<?> getChildren(Object object) {
+	public Collection<?> getChildren(final Object object) {
 		return super.getChildren(target);
 	}
 
 	@Override
-	public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain, Object sibling) {
+	public Collection<?> getNewChildDescriptors(final Object object, final EditingDomain editingDomain, final Object sibling) {
 		return super.getNewChildDescriptors(target, editingDomain, sibling);
 	}
 
 	@Override
-	public Object getParent(Object object) {
+	public Object getParent(final Object object) {
 		return target;
 	}
 
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(final Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBType")); //$NON-NLS-1$
 	}
 

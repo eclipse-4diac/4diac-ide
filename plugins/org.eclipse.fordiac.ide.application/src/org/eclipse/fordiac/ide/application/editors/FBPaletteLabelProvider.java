@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.application.editors;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
@@ -29,12 +28,12 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  * For the images we'll use the default images for folders and FB type files.
  * For type file names we hide the extension to make the palette look clearer.
  */
-public class FBPaletteLabelProvider extends LabelProvider implements ILabelProvider {
+public class FBPaletteLabelProvider extends LabelProvider {
 
 	private final WorkbenchLabelProvider wbLabelProvider = new WorkbenchLabelProvider();
 
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 		if (element instanceof IFile) {
 			// we want to hide the extension of the fb type
 			return TypeLibrary.getTypeNameFromFile((IFile) element);
@@ -43,7 +42,7 @@ public class FBPaletteLabelProvider extends LabelProvider implements ILabelProvi
 	}
 
 	@Override
-	public Image getImage(Object element) {
+	public Image getImage(final Object element) {
 		if (element instanceof IFile) {
 			return FBTypeLabelProvider.getImageForFile((IFile) element);
 		}
