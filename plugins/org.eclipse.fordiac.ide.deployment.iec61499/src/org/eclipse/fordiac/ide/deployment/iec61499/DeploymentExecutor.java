@@ -210,7 +210,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startResource(final Resource res) throws DeploymentException {
-		final String request = MessageFormat.format(START, id++);
+		final String request = MessageFormat.format(START, Integer.valueOf(id));
+		id++;
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -221,7 +222,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startDevice(final Device dev) throws DeploymentException {
-		final String request = MessageFormat.format(START, id++);
+		final String request = MessageFormat.format(START, Integer.valueOf(id));
+		id++;
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {
@@ -232,7 +234,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void writeDeviceParameter(final Device device, final String parameter, final String value) throws DeploymentException {
-		final String request = MessageFormat.format(getWriteParameterMessage(), id++, value, parameter);
+		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(id), value, parameter);
+		id++;
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {

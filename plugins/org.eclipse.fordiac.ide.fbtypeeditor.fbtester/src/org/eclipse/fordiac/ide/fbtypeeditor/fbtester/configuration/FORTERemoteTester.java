@@ -236,7 +236,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	private void addWatch(final TestElement element, final DataOutputStream outputStream, final DataInputStream inputStream) {
 		if (outputStream != null && inputStream != null) {
 			final String request = MessageFormat.format(DeploymentExecutor.ADD_WATCH,
-					0, element.getFBString() + "." + element.getPortString(), "*"); //$NON-NLS-1$ //$NON-NLS-2$
+					Integer.valueOf(0), element.getFBString() + "." + element.getPortString(), "*"); //$NON-NLS-1$ //$NON-NLS-2$
 			sendRequest(SendType.addWatch, element.getResourceString(), request, outputStream, inputStream);
 		}
 	}
@@ -268,7 +268,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					Thread.currentThread().interrupt();  // mark interruption
 					setRunning(false);
 				}
-				final String request = MessageFormat.format(DeploymentExecutor.READ_WATCHES, i);
+				final String request = MessageFormat.format(DeploymentExecutor.READ_WATCHES, Integer.valueOf(i));
 
 				if (running) {
 					sendRequest(SendType.REQ, "", request, outputStream, inputStream); //$NON-NLS-1$
@@ -375,7 +375,8 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 				inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
-				final String request = MessageFormat.format(DeploymentExecutor.FORCE_VALUE, 0, element.getValue(), element.getFBString() + "." + element.getPortString(), "true"); //$NON-NLS-1$ //$NON-NLS-2$
+				final String request = MessageFormat.format(DeploymentExecutor.FORCE_VALUE, Integer.valueOf(0),
+						element.getValue(), element.getFBString() + "." + element.getPortString(), "true"); //$NON-NLS-1$ //$NON-NLS-2$
 				sendRequest(SendType.forceValue, element.getResourceString(), request, outputStream, inputStream);
 			} catch (final IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
@@ -393,7 +394,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 				if (element != null) {
 					final String request = MessageFormat.format(DeploymentExecutor.WRITE_PARAMETER,
-							0, "$e", element.getFBString() + "." + element.getPortString()); //$NON-NLS-1$ //$NON-NLS-2$
+							Integer.valueOf(0), "$e", element.getFBString() + "." + element.getPortString()); //$NON-NLS-1$ //$NON-NLS-2$
 					sendRequest(SendType.triggerEvent, element.getResourceString(), request, outputStream, inputStream);
 				}
 			} catch (final IOException e) {

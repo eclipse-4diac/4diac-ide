@@ -62,17 +62,21 @@ public final class Utils {
 			// create monitoring resource
 
 			// create test resource
-			String request = MessageFormat.format(Messages.FBTester_CreateResourceInstance, id++,
+			String request = MessageFormat.format(Messages.FBTester_CreateResourceInstance, Integer.valueOf(id),
 					"_" + type.getName() + "_RES", "EMB_RES"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			id++;
 			sendREQ("", request, outputStream, inputStream); //$NON-NLS-1$
 
-			request = MessageFormat.format(Messages.FBTester_CreateFBInstance, id++, "_" + type.getName(), //$NON-NLS-1$
+			request = MessageFormat.format(Messages.FBTester_CreateFBInstance, Integer.valueOf(id),
+					"_" + type.getName(), //$NON-NLS-1$
 					type.getName());
+			id++;
 			sendREQ("_" + type.getName() + "_RES", request, outputStream, //$NON-NLS-1$ //$NON-NLS-2$
 					inputStream);
 
 			// start test resource
-			request = MessageFormat.format(Messages.FBTester_Start, id++);
+			request = MessageFormat.format(Messages.FBTester_Start, Integer.valueOf(id));
+			id++;
 			sendREQ("_" + type.getName() + "_RES", request, outputStream, //$NON-NLS-1$ //$NON-NLS-2$
 					inputStream);
 
@@ -106,8 +110,12 @@ public final class Utils {
 
 			socketToUse.setSoTimeout(10000);
 
-			final String kill = MessageFormat.format(Messages.FBTester_KillFB, id++, "_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
-			final String delete = MessageFormat.format(Messages.FBTester_DeleteFB, id++, "_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
+			final String kill = MessageFormat.format(Messages.FBTester_KillFB, Integer.valueOf(id),
+					"_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
+			id++;
+			final String delete = MessageFormat.format(Messages.FBTester_DeleteFB, Integer.valueOf(id),
+					"_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
+			id++;
 
 			sendREQ("", kill, outputStream, inputStream); //$NON-NLS-1$
 			sendREQ("", delete, outputStream, inputStream); //$NON-NLS-1$

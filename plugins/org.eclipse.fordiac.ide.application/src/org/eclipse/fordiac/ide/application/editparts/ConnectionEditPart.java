@@ -146,11 +146,11 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			getFigure().setForegroundColor(getDataConnectioncolor());
 		}
 		if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON) && (getModel() instanceof DataConnection)) {
-			getFigure().setVisible(!((Boolean) event.getNewValue()));
+			getFigure().setVisible(!((Boolean) event.getNewValue()).booleanValue());
 		}
 		if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON)
 				&& (getModel() instanceof EventConnection)) {
-			getFigure().setVisible(!((Boolean) event.getNewValue()));
+			getFigure().setVisible(!((Boolean) event.getNewValue()).booleanValue());
 		}
 	};
 

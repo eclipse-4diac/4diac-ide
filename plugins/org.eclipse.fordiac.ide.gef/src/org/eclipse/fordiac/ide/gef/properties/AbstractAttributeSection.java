@@ -184,7 +184,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 			case VALUE_COL:
 				return ((Attribute) element).getValue();
 			case TYPE_COL:
-				return ((Attribute) element).getType().getValue();
+				return Integer.valueOf(((Attribute) element).getType().getValue());
 			case COMMENT_COL:
 				return ((Attribute) element).getComment();
 			default:
@@ -204,7 +204,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 				cmd = new AttributeChangeCommand(data, null, value.toString(), null, null);
 				break;
 			case TYPE_COL:
-				cmd = new AttributeChangeCommand(data, null, null, BaseType1.get((Integer) value), null);
+				cmd = new AttributeChangeCommand(data, null, null, BaseType1.get(((Integer) value).intValue()), null);
 				break;
 			case COMMENT_COL:
 				cmd = new AttributeChangeCommand(data, null, null, null, value.toString());

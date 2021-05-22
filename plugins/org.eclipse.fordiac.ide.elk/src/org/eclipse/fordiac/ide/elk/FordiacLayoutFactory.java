@@ -52,7 +52,7 @@ public class FordiacLayoutFactory {
 		return graph;
 	}
 
-	public static ElkNode createFordiacLayoutNode(AbstractFBNElementEditPart editPart, ElkNode parent) {
+	public static ElkNode createFordiacLayoutNode(final AbstractFBNElementEditPart editPart, final ElkNode parent) {
 		final ElkNode node = ElkGraphUtil.createNode(parent);
 		configureNode(node);
 		if (editPart instanceof SubAppForFBNetworkEditPart) {
@@ -65,58 +65,58 @@ public class FordiacLayoutFactory {
 		return node;
 	}
 
-	public static ElkEdge createFordiacLayoutEdge(ConnectionEditPart editPart, ElkNode parent, ElkConnectableShape source, ElkConnectableShape target) {
+	public static ElkEdge createFordiacLayoutEdge(final ConnectionEditPart editPart, final ElkNode parent, final ElkConnectableShape source, final ElkConnectableShape target) {
 		return ElkGraphUtil.createSimpleEdge(source, target);
 	}
 
-	public static ElkPort createFordiacLayoutPort(InterfaceEditPart editPart, ElkNode parent, Point point) {
+	public static ElkPort createFordiacLayoutPort(final InterfaceEditPart editPart, final ElkNode parent, final Point point) {
 		final ElkPort port = ElkGraphUtil.createPort(parent);
 		port.setDimensions(0, 0);
 		if (editPart.getParent() instanceof EditorWithInterfaceEditPart) {
 			/* "FIXED_ORDER" port constraint, needs an index and the side */
 			port.setProperty(CoreOptions.PORT_SIDE, editPart.isInput() ? PortSide.EAST : PortSide.WEST);
-			port.setProperty(CoreOptions.PORT_INDEX, getLayoutInterfaceIndex(editPart));
+			port.setProperty(CoreOptions.PORT_INDEX, Integer.valueOf(getLayoutInterfaceIndex(editPart)));
 		} else {
 			/* "FIXED_POS" port constraint, needs the absolute position */
 			port.setLocation(point.preciseX() - parent.getX(), point.preciseY() - parent.getY());
 		}
 		return port;
 	}
-	
-	private static void configureGraph(ElkNode graph) {
+
+	private static void configureGraph(final ElkNode graph) {
 		graph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.layered") //$NON-NLS-1$
-			.setProperty(CoreOptions.EDGE_ROUTING, EdgeRouting.ORTHOGONAL)
-			.setProperty(CoreOptions.DIRECTION, Direction.RIGHT)
-			.setProperty(CoreOptions.SEPARATE_CONNECTED_COMPONENTS, false)
-			.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_STRATEGY, NodePlacementStrategy.NETWORK_SIMPLEX)
-			.setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_STRATEGY,CrossingMinimizationStrategy.INTERACTIVE)
-			.setProperty(LayeredMetaDataProvider.THOROUGHNESS, 10)
-			.setProperty(CoreOptions.PADDING, new ElkPadding(100.0, 19.0)) // specific height padding to compensate for instance comment
-			.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_ORDER);
+		.setProperty(CoreOptions.EDGE_ROUTING, EdgeRouting.ORTHOGONAL)
+		.setProperty(CoreOptions.DIRECTION, Direction.RIGHT)
+		.setProperty(CoreOptions.SEPARATE_CONNECTED_COMPONENTS, Boolean.FALSE)
+		.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_STRATEGY, NodePlacementStrategy.NETWORK_SIMPLEX)
+		.setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_STRATEGY,CrossingMinimizationStrategy.INTERACTIVE)
+		.setProperty(LayeredMetaDataProvider.THOROUGHNESS, Integer.valueOf(10))
+		.setProperty(CoreOptions.PADDING, new ElkPadding(100.0, 19.0)) // specific height padding to compensate for instance comment
+		.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_ORDER);
 		configureSpacing(graph);
-		
-	}
-	
-	private static void configureNode(ElkNode node) {
-		node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);	
+
 	}
 
-	private static void configureSubapp(ElkNode node) {
+	private static void configureNode(final ElkNode node) {
+		node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
+	}
+
+	private static void configureSubapp(final ElkNode node) {
 		// nothing to do for now. Allows for a finer configuration if necessary.
 	}
 
-	private static void configureUnfoldedSubapp(ElkNode node) {
+	private static void configureUnfoldedSubapp(final ElkNode node) {
 		node.setProperty(CoreOptions.PADDING, new ElkPadding(50.0));
 		configureSpacing(node);
 	}
 
-	private static void configureSpacing(ElkNode node) {
-		node.setProperty(CoreOptions.SPACING_NODE_NODE, 25.0)
-			.setProperty(CoreOptions.SPACING_EDGE_NODE, 25.0)
-			.setProperty(CoreOptions.SPACING_EDGE_EDGE, 20.0)
-			.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, 80.0)
-			.setProperty(LayeredMetaDataProvider.SPACING_EDGE_NODE_BETWEEN_LAYERS, 20.0)
-			.setProperty(LayeredMetaDataProvider.SPACING_EDGE_EDGE_BETWEEN_LAYERS, 15.0);
+	private static void configureSpacing(final ElkNode node) {
+		node.setProperty(CoreOptions.SPACING_NODE_NODE, Double.valueOf(25.0))
+		.setProperty(CoreOptions.SPACING_EDGE_NODE, Double.valueOf(25.0))
+		.setProperty(CoreOptions.SPACING_EDGE_EDGE, Double.valueOf(20.0))
+		.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, Double.valueOf(80.0))
+		.setProperty(LayeredMetaDataProvider.SPACING_EDGE_NODE_BETWEEN_LAYERS, Double.valueOf(20.0))
+		.setProperty(LayeredMetaDataProvider.SPACING_EDGE_EDGE_BETWEEN_LAYERS, Double.valueOf(15.0));
 	}
 
 	public static DiagramLayoutEngine.Parameters createLayoutParams() {
@@ -133,7 +133,7 @@ public class FordiacLayoutFactory {
 	/** @param ep InterfaceEditPart of the Editor
 	 * @return index of the InterfaceElement in the editors sidebar, goes clockwise starting at the top right interface
 	 *         element */
-	public static int getLayoutInterfaceIndex(InterfaceEditPart ep) {
+	public static int getLayoutInterfaceIndex(final InterfaceEditPart ep) {
 		final InterfaceList ifList = (InterfaceList) ep.getModel().eContainer();
 		int index = 0;
 		if (ep.getModel().isIsInput()) { // use model isInput! because EditPart.isInput treats inputs as
