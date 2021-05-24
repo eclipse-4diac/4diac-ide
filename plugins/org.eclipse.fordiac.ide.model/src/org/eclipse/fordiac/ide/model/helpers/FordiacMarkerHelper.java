@@ -40,11 +40,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public final class FordiacMarkerHelper {
@@ -53,6 +55,7 @@ public final class FordiacMarkerHelper {
 
 	private static final String FB_NETWORK_ELEMENT_TARGET = "FBNetworkElement"; //$NON-NLS-1$
 	private static final String CONNECTION_TARGET = "Connection"; //$NON-NLS-1$
+	private static final String VALUE_TARGET = "Connection"; //$NON-NLS-1$
 
 	private static final Map<Long, ErrorMarkerRef> markers = new ConcurrentHashMap<>();
 
@@ -68,7 +71,7 @@ public final class FordiacMarkerHelper {
 		return CONNECTION_TARGET.equals(attrs.get(TARGET_TYPE));
 	}
 
-	public static void addTargetIdentifier(final INamedElement element, final Map<String, Object> attrs) {
+	public static void addTargetIdentifier(final EObject element, final Map<String, Object> attrs) {
 		final String targetIdentifier = getTargetIdentifier(element);
 		if (null != targetIdentifier) {
 			attrs.put(TARGET_TYPE, targetIdentifier);
@@ -82,12 +85,15 @@ public final class FordiacMarkerHelper {
 		}
 	}
 
-	public static String getTargetIdentifier(final INamedElement element) {
+	public static String getTargetIdentifier(final EObject element) {
 		if (element instanceof FBNetworkElement) {
 			return FB_NETWORK_ELEMENT_TARGET;
 		}
 		if (element instanceof Connection) {
 			return CONNECTION_TARGET;
+		}
+		if (element instanceof Value) {
+			return VALUE_TARGET;
 		}
 		return null;
 	}
@@ -234,6 +240,20 @@ public final class FordiacMarkerHelper {
 		attrs.put(IMarker.LOCATION, location);
 		return createErrorMarkerBuilder(attrs, lineNumber);
 
+	}
+
+	public static ErrorMarkerBuilder createValueErrorMarkerBuilder(final String message, final Value value,
+			final int lineNumber) {
+		final Map<String, Object> attrs = new HashMap<>();
+		attrs.put(IMarker.MESSAGE, message);
+
+		FordiacMarkerHelper.addTargetIdentifier(value, attrs);
+		final IInterfaceElement ie = (IInterfaceElement) value.eContainer();
+		final String location = FordiacMarkerHelper.getLocation(ie.getFBNetworkElement()) + "." + ie.getName(); //$NON-NLS-1$
+		attrs.put(IMarker.LOCATION, location);
+		final ErrorMarkerBuilder builder = createErrorMarkerBuilder(attrs, lineNumber);
+		builder.setErrorMarkerRef(value);
+		return builder;
 	}
 
 	public static ErrorMarkerBuilder createErrorMarker(final String message, final INamedElement errorLocation,

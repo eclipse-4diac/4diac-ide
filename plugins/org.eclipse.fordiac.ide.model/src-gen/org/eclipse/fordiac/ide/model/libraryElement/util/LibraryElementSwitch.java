@@ -731,6 +731,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			Value value = (Value) theEObject;
 			T result = caseValue(value);
 			if (result == null)
+				result = caseErrorMarkerRef(value);
+			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
 		}

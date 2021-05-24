@@ -3084,6 +3084,33 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SERVICE_INTERFACE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
+	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
+	 * <em>Error Marker Ref</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerRef()
+	 * @generated */
+	int ERROR_MARKER_REF = 79;
+
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_REF__FILE_MARKER_ID = 0;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_REF__ERROR_MESSAGE = 1;
+
+	/** The number of structural features of the '<em>Error Marker Ref</em>' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_REF_FEATURE_COUNT = 2;
+
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl <em>Value</em>}'
 	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -3092,17 +3119,29 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	int VALUE = 52;
 
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int VALUE__FILE_MARKER_ID = ERROR_MARKER_REF__FILE_MARKER_ID;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int VALUE__ERROR_MESSAGE = ERROR_MARKER_REF__ERROR_MESSAGE;
+
 	/** The feature id for the '<em><b>Value</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int VALUE__VALUE = 0;
+	int VALUE__VALUE = ERROR_MARKER_REF_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Value</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int VALUE_FEATURE_COUNT = 1;
+	int VALUE_FEATURE_COUNT = ERROR_MARKER_REF_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl
 	 * <em>System Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -4293,33 +4332,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
-
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
-	 * <em>Error Marker Ref</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerRef()
-	 * @generated */
-	int ERROR_MARKER_REF = 79;
-
-	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int ERROR_MARKER_REF__FILE_MARKER_ID = 0;
-
-	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int ERROR_MARKER_REF__ERROR_MESSAGE = 1;
-
-	/** The number of structural features of the '<em>Error Marker Ref</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int ERROR_MARKER_REF_FEATURE_COUNT = 2;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'
 	 * enum. <!-- begin-user-doc --> <!-- end-user-doc -->
