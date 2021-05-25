@@ -23,6 +23,11 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
@@ -43,11 +48,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 
-	protected AbstractBlockTypeExporter(FBType type) {
+	protected AbstractBlockTypeExporter(final FBType type) {
 		super(type);
 	}
 
-	protected AbstractBlockTypeExporter(CommonElementExporter parent) {
+	protected AbstractBlockTypeExporter(final CommonElementExporter parent) {
 		super(parent);
 	}
 
@@ -56,16 +61,8 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		return (FBType) super.getType();
 	}
 
-	public static void saveType(PaletteEntry entry) {
-		AbstractBlockTypeExporter exporter = null;
-
-		if (entry instanceof FBTypePaletteEntry) {
-			exporter = new FbtExporter((FBTypePaletteEntry) entry);
-		} else if (entry instanceof AdapterTypePaletteEntry) {
-			exporter = new AdapterExporter((AdapterTypePaletteEntry) entry);
-		} else if (entry instanceof SubApplicationTypePaletteEntry) {
-			exporter = new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
-		}
+	public static void saveType(final PaletteEntry entry) {
+		final AbstractBlockTypeExporter exporter = getTypeExporter(entry);
 
 		if (null != exporter) {
 			try {
@@ -73,12 +70,31 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 			} catch (final XMLStreamException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
-			exporter.writeToFile(entry.getFile());
-			// "reset" the modification timestamp in the PaletteEntry
-			// to avoid reload - as for this timestamp it is not necessary
-			// as the data is in memory
-			entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
+
+			final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
+				@Override
+				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+					exporter.writeToFile(entry.getFile());
+					// "reset" the modification timestamp in the PaletteEntry to avoid reload - as for this timestamp it
+					// is not necessary as the data is in memory
+					entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
+					return Status.OK_STATUS;
+				}
+			};
+			job.setRule(entry.getFile());
+			job.schedule();
 		}
+	}
+
+	private static AbstractBlockTypeExporter getTypeExporter(final PaletteEntry entry) {
+		if (entry instanceof FBTypePaletteEntry) {
+			return new FbtExporter((FBTypePaletteEntry) entry);
+		} else if (entry instanceof AdapterTypePaletteEntry) {
+			return new AdapterExporter((AdapterTypePaletteEntry) entry);
+		} else if (entry instanceof SubApplicationTypePaletteEntry) {
+			return new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
+		}
+		return null;
 	}
 
 	@Override
@@ -324,7 +340,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addEmptyStartElement(primNodeName);
 		getWriter().writeAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE,
 				((null != prim.getInterface()) && (null != prim.getInterface().getName()))
-						? prim.getInterface().getName()
+				? prim.getInterface().getName()
 						: ""); //$NON-NLS-1$
 		getWriter().writeAttribute(LibraryElementTags.EVENT_ELEMENT, (null != prim.getEvent()) ? prim.getEvent() : ""); //$NON-NLS-1$
 		if ((null != prim.getParameters()) && (!prim.getParameters().equals(" "))) { //$NON-NLS-1$
