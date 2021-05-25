@@ -261,8 +261,8 @@ public class InterfaceElementSection extends AbstractSection {
 					}
 				}
 			}
-			currentParameterText.setText((var.getValue() != null) ? var.getValue().getValue() : ""); //$NON-NLS-1$
 		}
+		currentParameterText.setText((var.getValue() != null) ? var.getValue().getValue() : ""); //$NON-NLS-1$
 		return itype;
 	}
 
