@@ -378,7 +378,8 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	}
 
 	public void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
-		final IFigure child = childEditPart.getFigure();
+		// we need to get the parent here for handling the padding figure
+		final IFigure child = childEditPart.getFigure().getParent();
 		final IFigure container = getChildVisualContainer(childEditPart);
 		if (child.getParent() == container) {
 			container.remove(child);
