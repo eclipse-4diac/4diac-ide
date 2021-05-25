@@ -71,13 +71,13 @@ public final class ValidationHelper {
 		final IMarker imarker = iresource.createMarker(IValidationMarker.TYPE);
 		imarker.setAttribute(IMarker.MESSAGE, message);
 		switch (severity) {
-		case "ERROR":
+		case "ERROR": //$NON-NLS-1$
 			imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 			break;
-		case "WARNING":
+		case "WARNING": //$NON-NLS-1$
 			imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
 			break;
-		case "INFO":
+		case "INFO": //$NON-NLS-1$
 			imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
 			break;
 		default:
@@ -127,18 +127,18 @@ public final class ValidationHelper {
 			return builder.toString();
 		} else if (object instanceof ECState) {
 			final ECState state = (ECState) object;
-			final StringBuilder builder = new StringBuilder("ECC");
+			final StringBuilder builder = new StringBuilder("ECC"); //$NON-NLS-1$
 			builder.append('.');
 			builder.append(state.getName());
 			return builder.toString();
 		} else if (object instanceof ECC) {
-			final StringBuilder builder = new StringBuilder("ECC");
+			final StringBuilder builder = new StringBuilder("ECC"); //$NON-NLS-1$
 			return builder.toString();
 		} else if (object instanceof ECTransition) {
 			final ECTransition transition = (ECTransition) object;
-			final StringBuilder builder = new StringBuilder("ECC");
+			final StringBuilder builder = new StringBuilder("ECC"); //$NON-NLS-1$
 			builder.append('.');
-			builder.append("Transition X:" + transition.getPosition().getX() + " Y:" + transition.getPosition().getY());
+			builder.append("Transition X:" + transition.getPosition().getX() + " Y:" + transition.getPosition().getY()); //$NON-NLS-1$ //$NON-NLS-2$
 			return builder.toString();
 		} else {
 			return object.toString();

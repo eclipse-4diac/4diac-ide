@@ -149,7 +149,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 
 		private static String orString(final String... strings) {
-			return String.join("|", strings);
+			return String.join("|", strings); //$NON-NLS-1$
 		}
 
 		static variableType getTypeFromString(final String text) {

@@ -184,7 +184,7 @@ public abstract class CommonElementImporter {
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
 		} catch (final Exception e) {
-			Activator.getDefault().logWarning("Type Loading issue", e);
+			Activator.getDefault().logWarning("Type Loading issue", e);//$NON-NLS-1$
 			createErrorMarker(e.getMessage());
 		}finally {
 			buildErrorMarker(file);

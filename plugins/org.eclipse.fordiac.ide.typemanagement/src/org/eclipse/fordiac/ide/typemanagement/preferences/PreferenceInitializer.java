@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,12 +24,13 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seeorg.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
 	 * initializeDefaultPreferences()
 	 */
+	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.P_STANDARD, "");//$NON-NLS-1$
 		store.setDefault(PreferenceConstants.P_CLASSIFICATION, ""); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.P_APPLICATION_DOMAIN, ""); //$NON-NLS-1$

@@ -230,14 +230,18 @@ public final class NameRepository {
 				}
 
 				return temp.substring(0, temp.length() - digits.length())
-						+ String.format("%0" + digits.length() + "d", //$NON-NLS-1$
-								Long.valueOf(newNumber));
+						+ zeroPrefixedNumber(newNumber, digits.length());
 			} catch (final NumberFormatException e) {
 				return createFallbackProposal(nameProposal);
 			}
 
 		}
 		return createFallbackProposal(nameProposal);
+	}
+
+	private static String zeroPrefixedNumber(final long number, final int digits) {
+		final String zeroPrefixedDecimal = "%0" + digits + "d"; //$NON-NLS-1$ //$NON-NLS-2$
+		return String.format(zeroPrefixedDecimal, Long.valueOf(number));
 	}
 
 	private static String createFallbackProposal(final String nameProposal) {

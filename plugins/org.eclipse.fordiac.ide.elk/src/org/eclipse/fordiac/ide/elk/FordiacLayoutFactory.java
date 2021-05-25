@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 public class FordiacLayoutFactory {
 
 	private FordiacLayoutFactory() {
-		throw new IllegalStateException("Factory class");
+		throw new IllegalStateException("Factory class"); //$NON-NLS-1$
 	}
 
 	public static ElkNode createFordiacLayoutGraph() {

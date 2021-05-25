@@ -54,7 +54,7 @@ public class MonitorSystemHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		super.setEnabled(evaluationContext);
 		final ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);
-		final Command command = service.getCommand("org.eclipse.fordiac.ide.monitoring.MonitorSystem");
+		final Command command = service.getCommand("org.eclipse.fordiac.ide.monitoring.MonitorSystem"); //$NON-NLS-1$
 		try {
 			HandlerUtil.toggleCommandState(command);
 		} catch (final ExecutionException e) {
