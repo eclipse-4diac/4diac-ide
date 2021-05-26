@@ -86,7 +86,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request request) {
+	public DragTracker getDragTracker(final Request request) {
 		return new ConnCreateDirectEditDragTrackerProxy(this);
 	}
 
@@ -117,7 +117,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
