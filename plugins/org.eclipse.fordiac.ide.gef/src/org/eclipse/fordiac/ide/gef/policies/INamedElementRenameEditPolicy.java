@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 Profactor GbmH, fortiss GmbH 
- * 
+ * Copyright (c) 2008, 2015 Profactor GbmH, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,7 +24,7 @@ public class INamedElementRenameEditPolicy extends DirectEditPolicy {
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
 		if (getHost() instanceof AbstractDirectEditableEditPart) {
-			AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
+			final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
 			return new ChangeNameCommand(viewEditPart.getINamedElement(), (String) request.getCellEditor().getValue());
 		}
 		return null;
@@ -32,9 +32,9 @@ public class INamedElementRenameEditPolicy extends DirectEditPolicy {
 
 	@Override
 	protected void showCurrentEditValue(final DirectEditRequest request) {
-		String value = (String) request.getCellEditor().getValue();
+		final String value = (String) request.getCellEditor().getValue();
 		if (getHost() instanceof AbstractDirectEditableEditPart) {
-			AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
+			final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
 			viewEditPart.getNameLabel().setText(value);
 		}
 	}
