@@ -43,16 +43,16 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 public final class ECCContentAndLabelProvider {
 
 	public static final String EMPTY_FIELD = FordiacMessages.EmptyField; // drop-down menu entry for
-																			// selecting nothing
+	// selecting nothing
 	public static final String ONE_CONDITION = "1"; //$NON-NLS-1$
 
-	public static List<Event> getOutputEvents(BasicFBType type) {
-		List<Event> events = new ArrayList<>();
+	public static List<Event> getOutputEvents(final BasicFBType type) {
+		final List<Event> events = new ArrayList<>();
 		if (null != type) {
 			events.addAll(type.getInterfaceList().getEventOutputs());
 			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
-					.forEach(socket -> events.addAll(
-							createAdapterEventList(socket.getType().getInterfaceList().getEventInputs(), socket)));
+			.forEach(socket -> events.addAll(
+					createAdapterEventList(socket.getType().getInterfaceList().getEventInputs(), socket)));
 			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType())).forEach(plug -> events
 					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventOutputs(), plug)));
 			Collections.sort(events, NamedElementComparator.INSTANCE);
@@ -61,36 +61,36 @@ public final class ECCContentAndLabelProvider {
 		return events;
 	}
 
-	public static List<String> getOutputEventNames(BasicFBType type) {
-		List<String> eventNames = getOutputEvents(type).stream().map(ev -> ev.getName()).collect(Collectors.toList());
+	public static List<String> getOutputEventNames(final BasicFBType type) {
+		final List<String> eventNames = getOutputEvents(type).stream().map(Event::getName).collect(Collectors.toList());
 		eventNames.add(EMPTY_FIELD);
 		return eventNames;
 	}
 
-	public static List<Event> getInputEvents(BasicFBType type) {
-		List<Event> transitionConditions = new ArrayList<>();
+	public static List<Event> getInputEvents(final BasicFBType type) {
+		final List<Event> transitionConditions = new ArrayList<>();
 		if (null != type) {
 			transitionConditions.addAll(type.getInterfaceList().getEventInputs());
 			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
-					.forEach(socket -> transitionConditions.addAll(
-							createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
+			.forEach(socket -> transitionConditions.addAll(
+					createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
 			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType()))
-					.forEach(plug -> transitionConditions
-							.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
+			.forEach(plug -> transitionConditions
+					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
 			Collections.sort(transitionConditions, NamedElementComparator.INSTANCE);
 		}
 		return transitionConditions;
 	}
 
-	public static List<String> getInputEventNames(BasicFBType type) {
-		List<String> inputEventNames = getInputEvents(type).stream().map(tc -> tc.getName())
+	public static List<String> getInputEventNames(final BasicFBType type) {
+		final List<String> inputEventNames = getInputEvents(type).stream().map(Event::getName)
 				.collect(Collectors.toList());
 		inputEventNames.add(EMPTY_FIELD);
 		return inputEventNames;
 	}
 
-	public static List<String> getTransitionConditionEventNames(BasicFBType type) {
-		List<String> transitionConditionEvents = new ArrayList<>();
+	public static List<String> getTransitionConditionEventNames(final BasicFBType type) {
+		final List<String> transitionConditionEvents = new ArrayList<>();
 		transitionConditionEvents.add(ONE_CONDITION);
 		transitionConditionEvents.addAll(getInputEventNames(type));
 		return transitionConditionEvents;
@@ -98,11 +98,11 @@ public final class ECCContentAndLabelProvider {
 
 	// TODO move to a utility class as same function is used in
 	// ECTransitionEditPart
-	public static List<Event> createAdapterEventList(EList<Event> events, AdapterDeclaration adapter) {
-		List<Event> adapterEvents = new ArrayList<>();
+	public static List<Event> createAdapterEventList(final EList<Event> events, final AdapterDeclaration adapter) {
+		final List<Event> adapterEvents = new ArrayList<>();
 
-		for (Event event : events) {
-			AdapterEvent ae = LibraryElementFactory.eINSTANCE.createAdapterEvent();
+		for (final Event event : events) {
+			final AdapterEvent ae = LibraryElementFactory.eINSTANCE.createAdapterEvent();
 			ae.setName(event.getName());
 			ae.setComment(event.getComment());
 			ae.setAdapterDeclaration(adapter);
@@ -111,32 +111,32 @@ public final class ECCContentAndLabelProvider {
 		return adapterEvents;
 	}
 
-	public static List<Algorithm> getAlgorithms(BasicFBType type) {
-		List<Algorithm> algorithms = new ArrayList<>();
+	public static List<Algorithm> getAlgorithms(final BasicFBType type) {
+		final List<Algorithm> algorithms = new ArrayList<>();
 		algorithms.addAll(type.getAlgorithm());
 
 		Collections.sort(algorithms, NamedElementComparator.INSTANCE);
 		return algorithms;
 	}
 
-	public static List<String> getAlgorithmNames(BasicFBType type) {
-		List<String> algNames = getAlgorithms(type).stream().map(alg -> alg.getName()).collect(Collectors.toList());
+	public static List<String> getAlgorithmNames(final BasicFBType type) {
+		final List<String> algNames = getAlgorithms(type).stream().map(Algorithm::getName).collect(Collectors.toList());
 		algNames.add(EMPTY_FIELD);
 		return algNames;
 	}
 
-	public static BasicFBType getFBType(ECAction action) {
+	public static BasicFBType getFBType(final ECAction action) {
 		if ((null != action.getECState()) && (null != action.getECState().getECC())) {
 			return action.getECState().getECC().getBasicFBType();
 		}
 		return null;
 	}
 
-	public static List<ECState> getStates(BasicFBType type) {
+	public static List<ECState> getStates(final BasicFBType type) {
 		return type.getECC().getECState();
 	}
 
-	public static List<String> getStateNames(BasicFBType type) {
+	public static List<String> getStateNames(final BasicFBType type) {
 		return getStates(type).stream().map(ECState::getName).collect(Collectors.toList());
 	}
 

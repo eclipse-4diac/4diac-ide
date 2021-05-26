@@ -548,7 +548,7 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException
 	 */
-	private void parseST(final STAlgorithm st) throws TypeImportException, XMLStreamException {
+	private void parseST(final STAlgorithm st) throws XMLStreamException {
 		parseAlgorithmText(st);
 		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
 	}

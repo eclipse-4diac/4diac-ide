@@ -34,48 +34,47 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 class AlgorithmGroup extends AlgorithmEditingComposite {
 
-	private Group algorithmGroup;
+	private Group group;
 
 	@Override
 	public void createControls(final Composite parent, final FormToolkit toolkit) {
 		if (toolkit instanceof TabbedPropertySheetWidgetFactory) {
-			algorithmGroup = ((TabbedPropertySheetWidgetFactory) toolkit).createGroup(parent,
+			group = ((TabbedPropertySheetWidgetFactory) toolkit).createGroup(parent,
 					MessageFormat.format(Messages.ECAlgorithmGroup_Title, "")); //$NON-NLS-1$
 		} else {
-			algorithmGroup = new Group(parent, SWT.SHADOW_NONE);
-			algorithmGroup.setText(MessageFormat.format(Messages.ECAlgorithmGroup_Title, "")); //$NON-NLS-1$
+			group = new Group(parent, SWT.SHADOW_NONE);
+			group.setText(MessageFormat.format(Messages.ECAlgorithmGroup_Title, "")); //$NON-NLS-1$
 		}
-		GridData algorithmGroupLayoutData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData algorithmGroupLayoutData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		algorithmGroupLayoutData.horizontalSpan = 2;
-		algorithmGroup.setLayoutData(algorithmGroupLayoutData);
-		algorithmGroup.setLayout(new GridLayout(1, true));
+		group.setLayoutData(algorithmGroupLayoutData);
+		group.setLayout(new GridLayout(1, true));
 
-		super.createControls(algorithmGroup, toolkit);
+		super.createControls(group, toolkit);
 	}
 
 	@Override
 	protected void enableAllFields() {
-		algorithmGroup.setEnabled(true);
+		group.setEnabled(true);
 		super.enableAllFields();
 	}
 
 	@Override
 	protected void disableAllFields() {
-		algorithmGroup.setEnabled(false);
+		group.setEnabled(false);
 		super.disableAllFields();
 	}
 
 	@Override
 	protected void updateAlgFields() {
-		Algorithm alg = getAlgorithm();
-		algorithmGroup
-				.setText(MessageFormat.format(Messages.ECAlgorithmGroup_Title, (null != alg) ? alg.getName() : "")); //$NON-NLS-1$
+		final Algorithm alg = getAlgorithm();
+		group.setText(MessageFormat.format(Messages.ECAlgorithmGroup_Title, (null != alg) ? alg.getName() : "")); //$NON-NLS-1$
 		super.updateAlgFields();
 	}
 
 	@Override
-	protected AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(BaseFBType fbType,
-			Algorithm oldAlgorithm, String algorithmType) {
+	protected AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(final BaseFBType fbType,
+			final Algorithm oldAlgorithm, final String algorithmType) {
 		return new ChangeAlgorithmTypeCommand(fbType, oldAlgorithm, algorithmType);
 	}
 

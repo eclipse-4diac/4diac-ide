@@ -134,7 +134,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return (IInterfaceElement) getModel();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void setInOutConnectionsWith(final int with) {
 		for (final Object element : getSourceConnections()) {
 			final ConnectionEditPart cep = (ConnectionEditPart) element;

@@ -30,7 +30,8 @@ import org.eclipse.gef.requests.CreateRequest;
 public class TransactionLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
 	@Override
-	protected Command createAddCommand(final EditPart child, final Object constraint) {
+	protected Command createAddCommand(final ChangeBoundsRequest request, final EditPart child,
+			final Object constraint) {
 		//		ServiceTransaction target = (ServiceTransaction)getHost().getModel();
 		//		EditPart after = (EditPart) getHost().getChildren().get(getHost().getChildren().indexOf(child) - 1);
 		//		if((child instanceof OutputPrimitiveEditPart) &&  ((after != null) || //we are out in the first place or if we are put in the first place there is no inputprimitive

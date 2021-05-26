@@ -29,12 +29,12 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
-		// currently nothing todo here
+		// currently nothing to do here
 	}
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-		// currently nothing todo here
+		// currently nothing to do here
 	}
 
 	@Override

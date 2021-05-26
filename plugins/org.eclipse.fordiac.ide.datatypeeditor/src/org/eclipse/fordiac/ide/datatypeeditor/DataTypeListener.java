@@ -24,24 +24,23 @@ public class DataTypeListener implements IResourceChangeListener {
 	IPath file;
 	DataTypeEditor editor;
 
-	public DataTypeListener(IFile file, DataTypeEditor editor) {
+	public DataTypeListener(final IFile file, final DataTypeEditor editor) {
 		this.file = file.getFullPath();
 		this.editor = editor;
 	}
 
 	@Override
-	public void resourceChanged(IResourceChangeEvent event) {
+	public void resourceChanged(final IResourceChangeEvent event) {
 		IResourceDelta delta = event.getDelta();
 
 		// Look for change to our file
 
 		delta = delta.findMember(file);
 		// renaming: kind REMOVED, flag MOVED_TO
-		if ((delta != null) && (delta.getKind() == IResourceDelta.REMOVED)) {
-			if ((delta.getFlags() & IResourceDelta.MOVED_TO) != 0) {
-				file = delta.getMovedToPath();
-				Display.getDefault().asyncExec(() -> editor.updateDataType(file));
-			}
+		if ((delta != null) && (delta.getKind() == IResourceDelta.REMOVED)
+				&& ((delta.getFlags() & IResourceDelta.MOVED_TO) != 0)) {
+			file = delta.getMovedToPath();
+			Display.getDefault().asyncExec(() -> editor.updateDataType(file));
 		}
 	}
 

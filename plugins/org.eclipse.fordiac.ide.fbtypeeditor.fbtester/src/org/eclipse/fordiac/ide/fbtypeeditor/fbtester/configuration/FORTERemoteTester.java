@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +75,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	private final ResponseMapping data = new ResponseMapping();
 
 	private enum SendType {
-		REQ, addWatch, removeWatch, triggerEvent, startEventCnt, forceValue
+		REQ, ADD_WATCH, REMOVE_WATCH, TRIGGER_EVENT, START_EVENT_COUNT, FORCE_VALUE
 	}
 
 	public FORTERemoteTester() {
@@ -147,8 +146,6 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 						final Thread t = new Thread(new TriggerRequestRunnable(socket, thread));
 						t.start();
 						Thread.sleep(500);
-					} catch (final UnknownHostException e1) {
-						Activator.getDefault().logError(e1.getMessage(), e1);
 					} catch (final IOException e1) {
 						Activator.getDefault().logError(e1.getMessage(), e1);
 					} catch (final InterruptedException ex) {
@@ -237,7 +234,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 		if (outputStream != null && inputStream != null) {
 			final String request = MessageFormat.format(DeploymentExecutor.ADD_WATCH,
 					Integer.valueOf(0), element.getFBString() + "." + element.getPortString(), "*"); //$NON-NLS-1$ //$NON-NLS-2$
-			sendRequest(SendType.addWatch, element.getResourceString(), request, outputStream, inputStream);
+			sendRequest(SendType.ADD_WATCH, element.getResourceString(), request, outputStream, inputStream);
 		}
 	}
 
@@ -323,20 +320,20 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 						}
 					}
 
-				} else if (type.equals(SendType.addWatch)) {
+				} else if (type.equals(SendType.ADD_WATCH)) {
 					// TODO evaluate responses
 					inputStream.available();
 					inputStream.read();
 
-				} else if (type.equals(SendType.triggerEvent)) {
+				} else if (type.equals(SendType.TRIGGER_EVENT)) {
 					// normally nothing to do - as no response expected
-				} else if (type.equals(SendType.removeWatch)) {
-					// normally nothing to do - as no response expected
-
-				} else if (type.equals(SendType.startEventCnt)) {
+				} else if (type.equals(SendType.REMOVE_WATCH)) {
 					// normally nothing to do - as no response expected
 
-				} else if (type.equals(SendType.forceValue)) {
+				} else if (type.equals(SendType.START_EVENT_COUNT)) {
+					// normally nothing to do - as no response expected
+
+				} else if (type.equals(SendType.FORCE_VALUE)) {
 					final String forceResp = parseResponse(inputStream);
 					Activator.getDefault()
 					.logInfo(MessageFormat.format(Messages.FORTERemoteTester_ForceResponse, forceResp));
@@ -377,7 +374,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 
 				final String request = MessageFormat.format(DeploymentExecutor.FORCE_VALUE, Integer.valueOf(0),
 						element.getValue(), element.getFBString() + "." + element.getPortString(), "true"); //$NON-NLS-1$ //$NON-NLS-2$
-				sendRequest(SendType.forceValue, element.getResourceString(), request, outputStream, inputStream);
+				sendRequest(SendType.FORCE_VALUE, element.getResourceString(), request, outputStream, inputStream);
 			} catch (final IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
@@ -395,7 +392,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				if (element != null) {
 					final String request = MessageFormat.format(DeploymentExecutor.WRITE_PARAMETER,
 							Integer.valueOf(0), "$e", element.getFBString() + "." + element.getPortString()); //$NON-NLS-1$ //$NON-NLS-2$
-					sendRequest(SendType.triggerEvent, element.getResourceString(), request, outputStream, inputStream);
+					sendRequest(SendType.TRIGGER_EVENT, element.getResourceString(), request, outputStream, inputStream);
 				}
 			} catch (final IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);

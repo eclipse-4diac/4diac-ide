@@ -120,11 +120,11 @@ public class DeleteDemuxPortCommand extends Command {
 
 	private Collection<VarDeclaration> getVarDeclarations(final List<String> varDeclNames) {
 		final List<VarDeclaration> vars = new ArrayList<>();
-		varDeclNames.forEach(name -> {
+		varDeclNames.forEach(varName -> {
 			final VarDeclaration varDecl = EcoreUtil
-					.copy(StructManipulation.findVarDeclarationInStruct(type.getStructType(), name));
+					.copy(StructManipulation.findVarDeclarationInStruct(type.getStructType(), varName));
 			if (null != varDecl) {
-				varDecl.setName(name);
+				varDecl.setName(varName);
 				vars.add(varDecl);
 			}
 		});

@@ -38,7 +38,7 @@ public class GenerateCommAction implements IObjectActionDelegate {
 
 	@Override
 	public void setActivePart(final IAction action, final IWorkbenchPart targetPart) {
-		// currently nothing todo here
+		// currently nothing to do here
 	}
 
 	@Override

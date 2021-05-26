@@ -214,12 +214,10 @@ public class PasteEditPartsAction extends SelectionAction {
 
 		if (selectedObjects.get(0) instanceof FBNetworkEditPart) {
 			final FBNetworkEditPart networkEdit = (FBNetworkEditPart) selectedObjects.get(0);
-			if (networkEdit.getParent() instanceof FBNetworkRootEditPart) {
-				if (sourceSubApp.eContainer().equals(networkEdit.getModel())) {
-					return true;
-				}
+			if ((networkEdit.getParent() instanceof FBNetworkRootEditPart)
+					&& (sourceSubApp.eContainer().equals(networkEdit.getModel()))) {
+				return true;
 			}
-
 		}
 
 		if (!isSelectionSubapp()) {

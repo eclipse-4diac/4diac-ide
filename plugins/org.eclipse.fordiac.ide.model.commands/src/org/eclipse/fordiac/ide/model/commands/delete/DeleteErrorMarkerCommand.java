@@ -20,13 +20,11 @@ public class DeleteErrorMarkerCommand extends Command {
 
 	private final DeleteInterfaceCommand deleteErrorMarkerIECmd;
 	private final DeleteFBNetworkElementCommand deleteErrorMarkerFBN;
-	private final ErrorMarkerInterface errorIe;
 
 	public DeleteErrorMarkerCommand(final ErrorMarkerInterface errorIe) {
 		super();
 		deleteErrorMarkerIECmd = new DeleteInterfaceCommand(errorIe);
 		deleteErrorMarkerFBN = createDeleteFBNCommand(errorIe);
-		this.errorIe = errorIe;
 	}
 
 	@Override

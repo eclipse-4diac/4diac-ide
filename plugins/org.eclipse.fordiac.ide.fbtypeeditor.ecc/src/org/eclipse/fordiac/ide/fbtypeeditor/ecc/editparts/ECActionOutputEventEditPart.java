@@ -74,24 +74,36 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getEventType() == Notification.REMOVE) {
-				if ((notification.getOldValue() == getAction().getOutput())
+			switch (notification.getEventType()) {
+			case Notification.REMOVE:
+				handleRemove(notification);
+				break;
+			case Notification.SET:
+				handleSet(notification);
+				break;
+			default:
+				break;
+			}
+		}
+
+		private void handleSet(final Notification notification) {
+			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)) {
+				if ((getAction().getOutput().getName().equals(notification.getNewValue()))
 						|| ((getAction().getOutput() instanceof AdapterEvent)
-								&& (notification.getOldValue() instanceof AdapterDeclaration)
-								&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification
-								.getOldValue()))) {
-					executeCommand(new ChangeOutputCommand(getAction(), null));
+								&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration().getName()
+										.equals(notification.getNewValue())))) {
+					refreshEventLabel();
 				}
-			} else if (notification.getEventType() == Notification.SET) {
-				if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)) {
-					if (getAction().getOutput().getName().equals(notification.getNewValue())) {
-						refreshEventLabel();
-					} else if ((getAction().getOutput() instanceof AdapterEvent)
-							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration().getName()
-									.equals(notification.getNewValue()))) {
-						refreshEventLabel();
-					}
-				}
+			}
+		}
+
+		private void handleRemove(final Notification notification) {
+			if ((notification.getOldValue() == getAction().getOutput())
+					|| ((getAction().getOutput() instanceof AdapterEvent)
+							&& (notification.getOldValue() instanceof AdapterDeclaration)
+							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification
+							.getOldValue()))) {
+				executeCommand(new ChangeOutputCommand(getAction(), null));
 			}
 		}
 	};

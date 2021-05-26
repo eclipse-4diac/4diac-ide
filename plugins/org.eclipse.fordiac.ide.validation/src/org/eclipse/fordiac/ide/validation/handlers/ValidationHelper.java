@@ -51,15 +51,14 @@ public final class ValidationHelper {
 			for (final TreeIterator<?> iterator = namedElement.eAllContents(); iterator.hasNext();) {
 				final EObject object = (EObject) iterator.next();
 				final String objectName = object.eClass().getName();
-				if (contextName.equals(objectName)) {
-					if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
-						try {
-							final String[] properties = ConstraintHelper.getConstraintProperties(constraint.getName());
-							addValidationMarker(iresource, properties[0], properties[1], createHierarchicalName(object),
-									object.hashCode());
-						} catch (final CoreException e) {
-							Activator.getDefault().logError(e.getMessage(), e);
-						}
+				if ((contextName.equals(objectName))
+						&& (!Activator.getDefault().getOclInstance().check(object, constraint))) {
+					try {
+						final String[] properties = ConstraintHelper.getConstraintProperties(constraint.getName());
+						addValidationMarker(iresource, properties[0], properties[1], createHierarchicalName(object),
+								object.hashCode());
+					} catch (final CoreException e) {
+						Activator.getDefault().logError(e.getMessage(), e);
 					}
 				}
 			}
