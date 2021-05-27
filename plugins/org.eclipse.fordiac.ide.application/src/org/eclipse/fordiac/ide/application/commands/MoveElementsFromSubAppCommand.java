@@ -68,7 +68,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		this.elements = new ArrayList<>(elements);
 		this.destination = destination;
 		this.sourceSubApp = getSourceSubapp();
-		this.destinationNetwork = sourceSubApp.getFbNetwork();
+		this.destinationNetwork = sourceSubApp != null ? sourceSubApp.getFbNetwork() : null;
 	}
 
 	private SubApp getSourceSubapp() {

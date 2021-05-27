@@ -41,7 +41,9 @@ public final class ValidationHelper {
 		final List<Constraint> constraints = OCLParser.loadOCLConstraints(namedElement);
 		final IResource iresource = getFile(namedElement);
 		try {
-			iresource.deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
+			if (iresource != null) {
+				iresource.deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
+			}
 		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e); // $NON-NLS-1$
 		}
@@ -67,6 +69,10 @@ public final class ValidationHelper {
 
 	private static void addValidationMarker(final IResource iresource, final String message, final String severity, final String location,
 			final int lineNumber) throws CoreException {
+		if (iresource == null) {
+			return;
+		}
+
 		final IMarker imarker = iresource.createMarker(IValidationMarker.TYPE);
 		imarker.setAttribute(IMarker.MESSAGE, message);
 		switch (severity) {

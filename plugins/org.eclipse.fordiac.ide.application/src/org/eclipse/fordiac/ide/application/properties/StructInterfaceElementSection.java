@@ -80,7 +80,8 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 	}
 
 	private StructuredType getStructuredType() {
-		return getStructManipulator().getStructType();
+		final var structManipulator = getStructManipulator();
+		return structManipulator != null ? structManipulator.getStructType() : null;
 	}
 
 	private void createStructSpecificElements() {
@@ -102,7 +103,9 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 				final int index = typeCombo.getSelectionIndex();
 				final String newStructName = typeCombo.getItem(index);
 				disableButtonForAnyType();
-				final boolean newStructSelected = !newStructName.contentEquals(getStructuredType().getName());
+				final var structuredType = getStructuredType();
+				final var typeName = structuredType != null ? structuredType.getName() : null;
+				final boolean newStructSelected = !newStructName.contentEquals(typeName);
 				if (newStructSelected) {
 					final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
 					final ChangeStructCommand cmd = new ChangeStructCommand(getStructManipulator(), newStruct);
@@ -117,8 +120,11 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 	private void openStructEditor(final IWorkbenchWindow activeWorkbenchWindow) {
 		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
 
-		final IFile file = getStructuredType().getPaletteEntry().getFile();
-		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+		final var structuredType = getStructuredType();
+		final var paletteEntry = structuredType != null ? structuredType.getPaletteEntry() : null;
+		final IFile file = paletteEntry != null ? paletteEntry.getFile() : null;
+		final var fileName = file != null ? file.getName() : null;
+		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(fileName);
 		try {
 			activePage.openEditor(new FileEditorInput(file), desc.getId());
 		} catch (final PartInitException e) {
@@ -190,7 +196,9 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 	}
 
 	private void disableButtonForAnyType() {
-		openEditorButton.setEnabled(!"ANY_STRUCT".contentEquals(getStructuredType().getName())); //$NON-NLS-1$
+		final var structuredType = getStructuredType();
+		final var typeName = structuredType != null ? structuredType.getName() : ""; //$NON-NLS-1$
+		openEditorButton.setEnabled(!"ANY_STRUCT".contentEquals(typeName)); //$NON-NLS-1$
 	}
 
 	private void fillTypeCombobox() {
