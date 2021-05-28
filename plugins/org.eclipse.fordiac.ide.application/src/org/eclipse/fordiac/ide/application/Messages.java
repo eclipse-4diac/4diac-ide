@@ -92,6 +92,10 @@ public final class Messages extends NLS {
 
 	public static String MapToContributionItem_No_FB_Or_SubApp_Selected;
 
+	public static String MonitoringEditPart_Not_Available;
+
+	public static String MonitoringEditPart_Forced_ValueDisplay;
+
 	public static String NewInstanceCellEditor_SearchForType;
 
 	/** The New sub application action_ new subapplication text. */
