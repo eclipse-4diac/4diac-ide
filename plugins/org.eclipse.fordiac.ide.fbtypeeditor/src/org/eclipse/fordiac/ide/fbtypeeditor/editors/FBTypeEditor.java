@@ -68,6 +68,8 @@ import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.INavigationLocation;
+import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -79,9 +81,8 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class FBTypeEditor extends FormEditor
-implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker,
-IEditorFileChangeListener {
+public class FBTypeEditor extends FormEditor implements ISelectionListener, CommandStackEventListener,
+ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
 
 	private Collection<IFBTEditorPart> editors;
 	private PaletteEntry paletteEntry;
@@ -403,5 +404,21 @@ IEditorFileChangeListener {
 	@Override
 	public IFile getFile() {
 		return paletteEntry != null ? paletteEntry.getFile() : null;
+	}
+
+	@Override
+	protected void pageChange(final int newPageIndex) {
+		super.pageChange(newPageIndex);
+		getSite().getPage().getNavigationHistory().markLocation(this);
+	}
+
+	@Override
+	public INavigationLocation createEmptyNavigationLocation() {
+		return null;
+	}
+
+	@Override
+	public INavigationLocation createNavigationLocation() {
+		return new FBTypeNavigationLocation(this);
 	}
 }
