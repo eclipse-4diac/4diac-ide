@@ -251,6 +251,27 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 
 	@Override
 	protected void addPages() {
+		final SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = getEditorsSorted();
+
+		editors = new ArrayList<>();
+		final FBTypeEditorInput editorInput = getFBTypeEditorInput();
+
+		for (final IFBTEditorPart fbtEditorPart : sortedEditorsMap.values()) {
+			editors.add(fbtEditorPart);
+			try {
+				// setCommonCommandStack needs to be called before the editor is added as page
+				fbtEditorPart.setCommonCommandStack(commandStack);
+				final int index = addPage(fbtEditorPart, editorInput);
+				setPageText(index, fbtEditorPart.getTitle());
+				setPageImage(index, fbtEditorPart.getTitleImage());
+			} catch (final PartInitException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+			}
+
+		}
+	}
+
+	private SortedMap<Integer, IFBTEditorPart> getEditorsSorted() {
 		final SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = new TreeMap<>();
 
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -274,23 +295,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 				}
 			}
 		}
-
-		editors = new ArrayList<>();
-		final FBTypeEditorInput editorInput = getFBTypeEditorInput();
-
-		for (final IFBTEditorPart fbtEditorPart : sortedEditorsMap.values()) {
-			editors.add(fbtEditorPart);
-			try {
-				// setCommonCommandStack needs to be called before the editor is added as page
-				fbtEditorPart.setCommonCommandStack(commandStack);
-				final int index = addPage(fbtEditorPart, editorInput);
-				setPageText(index, fbtEditorPart.getTitle());
-				setPageImage(index, fbtEditorPart.getTitleImage());
-			} catch (final PartInitException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
-
-		}
+		return sortedEditorsMap;
 	}
 
 	/**
