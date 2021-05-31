@@ -111,7 +111,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	@Override
 	public void refresh() {
 		super.refresh();
-		getNameLabel().setText(getModel().getName());
+		getNameLabel().setText(getLabelText());
 		refreshToolTip();
 	}
 
