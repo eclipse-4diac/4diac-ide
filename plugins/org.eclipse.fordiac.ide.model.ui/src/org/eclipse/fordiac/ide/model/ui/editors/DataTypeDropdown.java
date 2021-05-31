@@ -350,9 +350,7 @@ public class DataTypeDropdown extends TextCellEditor {
 						final StructuredType structuredType = (StructuredType) type;
 						// some files are created at runtime and do not have a path
 						if (null != structuredType.getPaletteEntry()) {
-							final String parentPath = structuredType.getPaletteEntry().getFile().getParent()
-									.getProjectRelativePath().toOSString();
-							createSubdirectories(structures, structuredType, parentPath);
+							createSubdirectories(structures, structuredType);
 						} else {
 							final TypeNode runtimeNode = new TypeNode(structuredType.getName(), structuredType);
 							runtimeNode.setParent(structures);
@@ -369,10 +367,10 @@ public class DataTypeDropdown extends TextCellEditor {
 			return new TypeNode[] { elementaries, structures };
 		}
 
-		private static void createSubdirectories(TypeNode node, final StructuredType structuredType,
-				final String parentPath) {
+		private static void createSubdirectories(TypeNode node, final StructuredType structuredType) {
 			// split up the path in subdirectories
-			final String[] paths = parentPath.split("\\\\"); //$NON-NLS-1$
+			final String[] paths = structuredType.getPaletteEntry().getFile().getParent().getProjectRelativePath()
+					.segments();
 
 			// start after Type Library
 			for (int i = 1; i < paths.length; i++) {
