@@ -60,20 +60,22 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	protected abstract void setInputInit();
 
-	protected void setType(Object input) {
+	protected void setType(final Object input) {
+		// as the property sheet is reused for different selection first remove listening to the old element
+		removeContentAdapter();
 		type = getInputType(input);
 		addContentAdapter();
 	}
 
 	@SuppressWarnings("static-method") // this method should be overrideable by subclasses
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
+	protected CommandStack getCommandStack(final IWorkbenchPart part, final Object input) {
 		return part.getAdapter(CommandStack.class);
 	}
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
+		final Object input = ((IStructuredSelection) selection).getFirstElement();
 		commandStack = getCommandStack(part, input);
 		if (null == commandStack) { // disable all fields
 			setInputCode();
@@ -84,8 +86,9 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	private final Adapter contentAdapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(Notification notification) {
-			if (null != getType() && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			if ((null != getType()) && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
 				leftComposite.getDisplay().asyncExec(() -> {
 					if (!leftComposite.isDisposed()) {
 						refresh();
@@ -102,13 +105,13 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	protected void removeContentAdapter() {
-		if (getType() != null && getType().eAdapters().contains(contentAdapter)) {
+		if ((getType() != null) && getType().eAdapters().contains(contentAdapter)) {
 			getType().eAdapters().remove(contentAdapter);
 		}
 	}
 
 	protected void addContentAdapter() {
-		if (null != getType() && !getType().eAdapters().contains(contentAdapter)) {
+		if ((null != getType()) && !getType().eAdapters().contains(contentAdapter)) {
 			getType().eAdapters().add(contentAdapter);
 		}
 	}
@@ -129,23 +132,23 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	private Composite createComposite(final Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		return composite;
 	}
 
 	@Override
-	public void executeCommand(Command cmd) {
-		if (null != type && null != commandStack && null != cmd && cmd.canExecute()) {
+	public void executeCommand(final Command cmd) {
+		if ((null != type) && (null != commandStack) && (null != cmd) && cmd.canExecute()) {
 			blockRefresh = true;
 			commandStack.execute(cmd);
 			blockRefresh = false;
 		}
 	}
 
-	protected Text createGroupText(Composite group, boolean editable) {
-		Text text = getWidgetFactory().createText(group, "", SWT.BORDER); //$NON-NLS-1$
+	protected Text createGroupText(final Composite group, final boolean editable) {
+		final Text text = getWidgetFactory().createText(group, "", SWT.BORDER); //$NON-NLS-1$
 		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		text.setEditable(editable);
 		text.setEnabled(editable);
@@ -168,7 +171,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return leftComposite;
 	}
 
-	protected void setLeftComposite(Composite leftComposite) {
+	protected void setLeftComposite(final Composite leftComposite) {
 		this.leftComposite = leftComposite;
 	}
 
@@ -176,7 +179,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return rightComposite;
 	}
 
-	protected void setRightComposite(Composite rightComposite) {
+	protected void setRightComposite(final Composite rightComposite) {
 		this.rightComposite = rightComposite;
 	}
 }
