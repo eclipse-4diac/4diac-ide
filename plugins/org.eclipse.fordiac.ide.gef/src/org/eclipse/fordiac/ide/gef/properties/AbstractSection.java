@@ -67,6 +67,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	protected abstract void setInputInit();
 
 	protected void setType(final Object input) {
+		removeContentAdapter();
 		type = getInputType(input);
 		addContentAdapter();
 	}
@@ -112,7 +113,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (null != getType() && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
+			if ((null != getType()) && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
 				leftComposite.getDisplay().asyncExec(() -> {
 					if (!leftComposite.isDisposed()) {
 						refresh();
@@ -129,13 +130,13 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	protected void removeContentAdapter() {
-		if (getType() != null && getType().eAdapters().contains(contentAdapter)) {
+		if ((getType() != null) && getType().eAdapters().contains(contentAdapter)) {
 			getType().eAdapters().remove(contentAdapter);
 		}
 	}
 
 	protected void addContentAdapter() {
-		if (null != getType() && !getType().eAdapters().contains(contentAdapter)) {
+		if ((null != getType()) && !getType().eAdapters().contains(contentAdapter)) {
 			getType().eAdapters().add(contentAdapter);
 		}
 	}
@@ -164,7 +165,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	@Override
 	public void executeCommand(final Command cmd) {
-		if (null != type && null != commandStack && null != cmd && cmd.canExecute()) {
+		if ((null != type) && (null != commandStack) && (null != cmd) && cmd.canExecute()) {
 			blockRefresh = true;
 			commandStack.execute(cmd);
 			blockRefresh = false;
