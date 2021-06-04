@@ -15,7 +15,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor.simplefb;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
@@ -23,6 +25,7 @@ import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
@@ -31,9 +34,8 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.part.EditorPart;
 
-public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
+public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
 
 	private final AlgorithmEditingCompositeSimpleFB baseAlgorithm = new AlgorithmEditingCompositeSimpleFB();
 	private SimpleFBType fbType;
@@ -49,10 +51,13 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 		baseAlgorithm.createControls(parent, toolkit);
 		baseAlgorithm.initialize(fbType, commandStack);
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
+		super.createPartControl(baseAlgorithm.getCodeEditors());
 	}
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		super.init(site, input);
+		setEditDomain(new FBTypeEditDomain(this, commandStack));
 		setInput(input);
 		if (input instanceof FBTypeEditorInput) {
 			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
@@ -76,26 +81,22 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 
 	@Override
 	public void doSaveAs() {
-		// TODO Auto-generated method stub
-
+		// do nothing
 	}
 
 	@Override
 	public boolean isDirty() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isSaveAsAllowed() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
-
+		// do nothing
 	}
 
 	@Override
@@ -106,7 +107,6 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -139,6 +139,18 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 			baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
 		}
 
+	}
+
+	@Override
+	protected void initializeGraphicalViewer() {
+		final var viewer = getGraphicalViewer();
+		viewer.setEditPartFactory(new FBInterfaceEditPartFactory(this, fbType.getTypeLibrary()));
+		viewer.setContents(fbType);
+	}
+
+	@Override
+	protected CommandStack getCommandStack() {
+		return commandStack;
 	}
 
 }
