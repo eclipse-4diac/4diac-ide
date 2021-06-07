@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- * 				 2018 - 2019 Johannes Kepler University
+ * 				 2018 - 2019 Johannes Kepler University,
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *   Alois Zoitl - allowed resource drop on on whole interfaces
  *   Alois Zoitl - extracted interface selection policy and added connection
  *   			   creation feedback
+ *   Daniel Lindhuber - added source comment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -44,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
@@ -120,15 +123,21 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 			if (conn instanceof Connection) {
 				final FBNetworkElement source = ((Connection) conn).getSourceElement();
 				final String pinName = ((Connection) conn).getSource().getName();
-				if (source != null) {
+				if (source != null && !isSubAppPin(source)) {
 					final String elementName = source.getName();
 					return elementName + "." + pinName; //$NON-NLS-1$
-				} else {
-					return pinName;
 				}
+				return pinName;
 			}
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	private boolean isSubAppPin(FBNetworkElement connSource) {
+		if (connSource instanceof SubApp) {
+			return ((SubApp) connSource).getSubAppNetwork() == getModel().getFBNetworkElement().getFbNetwork();
+		}
+		return false;
 	}
 
 	public class InterfaceFigure extends SetableAlphaLabel {
