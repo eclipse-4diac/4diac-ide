@@ -67,6 +67,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	protected abstract void setInputInit();
 
 	protected void setType(final Object input) {
+		// as the property sheet is reused for different selection first remove listening to the old element
 		removeContentAdapter();
 		type = getInputType(input);
 		addContentAdapter();
