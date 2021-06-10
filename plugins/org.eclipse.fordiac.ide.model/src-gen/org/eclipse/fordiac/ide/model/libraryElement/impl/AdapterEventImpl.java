@@ -102,6 +102,18 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 	 * 
 	 * @generated */
 	@Override
+	public String getName() {
+		if (getAdapterDeclaration() == null) {
+			return super.getName();
+		}
+		return getAdapterDeclaration().getName() + "." + super.getName(); //$NON-NLS-1$
+
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case LibraryElementPackage.ADAPTER_EVENT__ADAPTER_DECLARATION:

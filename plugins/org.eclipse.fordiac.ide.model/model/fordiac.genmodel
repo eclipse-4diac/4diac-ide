@@ -576,6 +576,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterEvent/adapterDeclaration"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterEvent/getName" body="if (getAdapterDeclaration() == null) {&#xA;&#x9;return super.getName();&#xA;}&#xA;return getAdapterDeclaration().getName() + &quot;.&quot; + super.getName(); //$NON-NLS-1$&#xA;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Service">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/rightInterface"/>
