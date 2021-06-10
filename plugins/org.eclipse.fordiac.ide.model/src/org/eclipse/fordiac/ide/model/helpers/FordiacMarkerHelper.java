@@ -288,7 +288,7 @@ public final class FordiacMarkerHelper {
 		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		errorFb.setInterface(type.getInterfaceList().copy());
 		errorFb.setPaletteEntry(entry);
-		typeLibrary.addPaletteEntry(entry);
+		typeLibrary.getErrorTypeLib().addPaletteEntry(entry);
 		return errorFb;
 	}
 

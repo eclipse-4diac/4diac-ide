@@ -349,9 +349,13 @@ public class UpdateFBTypeCommand extends Command {
 			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
 		}else if(oldElement instanceof ErrorMarkerFBNElement && entry instanceof FBTypePaletteEntry){
 			final TypeLibrary typeLibrary = oldElement.getPaletteEntry().getTypeLibrary();
-			final FBTypePaletteEntry fbTypeEntry = typeLibrary.getBlockTypeLib()
+			FBTypePaletteEntry fbTypeEntry = typeLibrary.getErrorTypeLib()
 					.getFBTypeEntry(oldElement.getType().getName());
-			if(fbTypeEntry!=null) {
+			if (fbTypeEntry == null) {
+				fbTypeEntry = typeLibrary.getBlockTypeLib().getFBTypeEntry(oldElement.getType().getName());
+			}
+
+			if (fbTypeEntry != null && fbTypeEntry.getFile() != null) {
 				copy = LibraryElementFactory.eINSTANCE.createFB();
 				copy.setPaletteEntry(fbTypeEntry);
 				return copy;
