@@ -26,7 +26,7 @@ public class CopyPasteMessage {
 	private CompoundCommand deleteCommandos;
 
 	public enum CopyStatus {
-		CUT_FROM_SUBAPP, COPY, CUT
+		CUT_FROM_SUBAPP, COPY, CUT, CUT_PASTED
 	}
 
 	public CopyPasteMessage(final CopyStatus copyInfo, final List<Object> templates) {
@@ -47,7 +47,7 @@ public class CopyPasteMessage {
 	}
 
 	public boolean isCutFromSubApp() {
-		return getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP && cutAndPasteFromSubAppCommandos != null;
+		return (getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) && (cutAndPasteFromSubAppCommandos != null);
 	}
 
 	public CutAndPasteFromSubAppCommand getCutAndPasteFromSubAppCommandos() {

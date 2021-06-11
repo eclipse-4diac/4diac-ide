@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2021 Profactor GbmH, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added a default implementation for revertOldEditValue
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.policies;
 
@@ -36,6 +38,14 @@ public class INamedElementRenameEditPolicy extends DirectEditPolicy {
 		if (getHost() instanceof AbstractDirectEditableEditPart) {
 			final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
 			viewEditPart.getNameLabel().setText(value);
+		}
+	}
+
+	@Override
+	protected void revertOldEditValue(final DirectEditRequest request) {
+		if (getHost() instanceof AbstractDirectEditableEditPart) {
+			final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
+			viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getName());
 		}
 	}
 }

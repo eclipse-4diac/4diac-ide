@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -113,6 +114,7 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIEditPartCreator(adapterMonitoringEvent);
 				if (result == null) result = caseEvent(adapterMonitoringEvent);
 				if (result == null) result = caseIInterfaceElement(adapterMonitoringEvent);
+				if (result == null) result = caseConfigurableObject(adapterMonitoringEvent);
 				if (result == null) result = caseINamedElement(adapterMonitoringEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -123,6 +125,7 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIEditPartCreator(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseVarDeclaration(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseIInterfaceElement(adapterMonitoringVarDeclaration);
+				if (result == null) result = caseConfigurableObject(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseINamedElement(adapterMonitoringVarDeclaration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -266,6 +269,21 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseINamedElement(INamedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConfigurableObject(ConfigurableObject object) {
 		return null;
 	}
 

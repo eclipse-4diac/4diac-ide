@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.export.ui.Messages;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -81,17 +82,14 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		final IConfigurationElement[] elems = registry
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.export.exportFilter"); //$NON-NLS-1$
 		Arrays.sort(elems, (o1, o2) -> {
-			int sortIndex1 = 0;
 			try {
-				sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
-			} catch (final NumberFormatException e1) {
-			}
-			int sortIndex2 = 0;
-			try {
-				sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
+				final int sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
+				final int sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
+				return sortIndex1 - sortIndex2;
 			} catch (final NumberFormatException e2) {
+				Activator.getDefault().logError(e2.getMessage(), e2);
 			}
-			return sortIndex1 - sortIndex2;
+			return 0;
 		});
 		exportFilters.clear();
 		exportFilters.addAll(Arrays.asList(elems));

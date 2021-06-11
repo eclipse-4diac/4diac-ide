@@ -25,9 +25,9 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class ECCSelectAllAction extends SelectAllAction {
 
-	private IWorkbenchPart part;
+	private final IWorkbenchPart part;
 
-	public ECCSelectAllAction(IWorkbenchPart part) {
+	public ECCSelectAllAction(final IWorkbenchPart part) {
 		super(part);
 		this.part = part;
 	}
@@ -37,19 +37,18 @@ public class ECCSelectAllAction extends SelectAllAction {
 	 */
 	@Override
 	public void run() {
-		GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
+		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
 			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer)));
 		}
 	}
 
-	@SuppressWarnings("unchecked") // GEF methods return children editparts
-	private static List<EditPart> getSelectableEditParts(GraphicalViewer viewer) {
-		List<EditPart> selectableChildren = new ArrayList<>();
+	private static List<EditPart> getSelectableEditParts(final GraphicalViewer viewer) {
+		final List<EditPart> selectableChildren = new ArrayList<>();
 
-		List<EditPart> children = viewer.getContents().getChildren();
+		final List<EditPart> children = viewer.getContents().getChildren();
 
-		for (EditPart child : children) {
+		for (final EditPart child : children) {
 			if ((child instanceof ECStateEditPart) && child.isSelectable()) {
 				selectableChildren.add(child);
 				selectableChildren.addAll(((ECStateEditPart) child).getSourceConnections());

@@ -40,10 +40,8 @@ public final class MonitoringManagerUtils {
 	public static boolean canBeMonitored(final FBNetworkElement obj) {
 		// As a first solution try to find the first interface element and see if we
 		// can monitor it
-		for (final IInterfaceElement child : obj.getInterface().getAllInterfaceElements()) {
-			return canBeMonitored(child);
-		}
-		return false;
+		final var ies = obj.getInterface().getAllInterfaceElements();
+		return !ies.isEmpty() && canBeMonitored(ies.get(0));
 	}
 
 	public static PortElement createPortElement(

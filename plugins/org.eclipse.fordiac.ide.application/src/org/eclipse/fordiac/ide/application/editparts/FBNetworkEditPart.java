@@ -71,7 +71,7 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 			adapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(final Notification notification) {
-					int type = notification.getEventType();
+					final int type = notification.getEventType();
 					switch (type) {
 					case Notification.ADD:
 					case Notification.ADD_MANY:
@@ -81,6 +81,7 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 						break;
 					case Notification.SET:
 						break;
+					default:
 					}
 				}
 			};
@@ -96,7 +97,7 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 	@Override
 	public void refresh() {
 		super.refresh();
-		for (Object ep : getChildren()) {
+		for (final Object ep : getChildren()) {
 			if (ep instanceof SubAppForFBNetworkEditPart) {
 				((EditPart) ep).refresh();
 			}
@@ -118,12 +119,12 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 	}
 
 	@Override
-	protected void addChildVisual(EditPart childEditPart, int index) {
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof SpecificLayerEditPart) {
-			String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			IFigure layerFig = getLayer(layer);
+			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
+			final IFigure layerFig = getLayer(layer);
 			if (layerFig != null) {
-				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 				layerFig.add(child);
 				return;
 			}
@@ -135,12 +136,12 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 	}
 
 	@Override
-	protected void removeChildVisual(EditPart childEditPart) {
+	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof SpecificLayerEditPart) {
-			String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			IFigure layerFig = getLayer(layer);
+			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
+			final IFigure layerFig = getLayer(layer);
 			if (layerFig != null) {
-				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 				layerFig.remove(child);
 				return;
 			}

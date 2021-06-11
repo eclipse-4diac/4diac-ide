@@ -62,11 +62,11 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 *
 	 * @return the monitoring element
 	 */
-	public MonitoringBaseElement getMonitoringElement(IInterfaceElement port) {
+	public MonitoringBaseElement getMonitoringElement(final IInterfaceElement port) {
 		if (port != null) {
 			// TODO model refactoring - add way to get system from port
-			for (SystemMonitoringData data : systemMonitoringData.values()) {
-				MonitoringBaseElement element = data.getMonitoredElement(port);
+			for (final SystemMonitoringData data : systemMonitoringData.values()) {
+				final MonitoringBaseElement element = data.getMonitoredElement(port);
 				if (null != element) {
 					return element;
 				}
@@ -80,9 +80,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 *
 	 * @param elemeent the monitoring element
 	 */
-	public void addMonitoringElement(MonitoringBaseElement element) {
-		PortElement port = element.getPort();
-		SystemMonitoringData data = getSystemMonitoringData(port.getSystem());
+	public void addMonitoringElement(final MonitoringBaseElement element) {
+		final PortElement port = element.getPort();
+		final SystemMonitoringData data = getSystemMonitoringData(port.getSystem());
 
 		data.addMonitoringElement(element);
 
@@ -98,8 +98,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 *
 	 * @param element the monitoring element
 	 */
-	public void removeMonitoringElement(MonitoringBaseElement element) {
-		SystemMonitoringData data = getSystemMonitoringData(element.getPort().getSystem());
+	public void removeMonitoringElement(final MonitoringBaseElement element) {
+		final SystemMonitoringData data = getSystemMonitoringData(element.getPort().getSystem());
 
 		data.removeMonitoringElement(element);
 
@@ -116,7 +116,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 *
 	 * @return true, if successful
 	 */
-	public boolean containsPort(IInterfaceElement interfaceElement) {
+	public boolean containsPort(final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
 			return (null != getMonitoringElement(interfaceElement));
 		}
@@ -124,9 +124,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	}
 
 	public Collection<MonitoringBaseElement> getElementsToMonitor() {
-		List<MonitoringBaseElement> elements = new ArrayList<>();
+		final List<MonitoringBaseElement> elements = new ArrayList<>();
 
-		for (SystemMonitoringData data : systemMonitoringData.values()) {
+		for (final SystemMonitoringData data : systemMonitoringData.values()) {
 			elements.addAll(data.getMonitoredElements());
 		}
 		return elements;
@@ -138,12 +138,12 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 * @param system the system
 	 */
 	@Override
-	public void enableSystem(AutomationSystem system) {
+	public void enableSystem(final AutomationSystem system) {
 		getSystemMonitoringData(system).enableSystem();
 	}
 
 	@Override
-	public void enableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+	public void enableSystemSynch(final AutomationSystem system, final IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
 		getSystemMonitoringData(system).enableSystemSynch(monitor);
 	}
@@ -154,24 +154,24 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 * @param system the system
 	 */
 	@Override
-	public void disableSystem(AutomationSystem system) {
-		SystemMonitoringData data = systemMonitoringData.remove(system);
+	public void disableSystem(final AutomationSystem system) {
+		final SystemMonitoringData data = systemMonitoringData.remove(system);
 		if (null != data) {
 			data.disableSystem();
 		}
 	}
 
 	@Override
-	public void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+	public void disableSystemSynch(final AutomationSystem system, final IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
-		SystemMonitoringData data = systemMonitoringData.remove(system);
+		final SystemMonitoringData data = systemMonitoringData.remove(system);
 		if (null != data) {
 			data.disableSystemSynch(monitor);
 		}
 	}
 
 	@Override
-	public boolean isSystemMonitored(AutomationSystem system) {
+	public boolean isSystemMonitored(final AutomationSystem system) {
 		return systemMonitoringData.containsKey(system);
 	}
 
@@ -184,41 +184,41 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 *
 	 * @param port the port
 	 */
-	public void triggerEvent(IInterfaceElement interfaceElement) {
-		MonitoringBaseElement element = getMonitoringElement(interfaceElement);
+	public void triggerEvent(final IInterfaceElement interfaceElement) {
+		final MonitoringBaseElement element = getMonitoringElement(interfaceElement);
 
 		if (element instanceof MonitoringElement) {
-			MonitoringElement monitoringElement = (MonitoringElement) element;
+			final MonitoringElement monitoringElement = (MonitoringElement) element;
 
-			SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
-			IDeviceManagementInteractor devMgmInteractor = data
+			final SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
+			final IDeviceManagementInteractor devMgmInteractor = data
 					.getDevMgmInteractor(monitoringElement.getPort().getDevice());
 			if (devMgmInteractor != null) {
 				try {
 					devMgmInteractor.triggerEvent(monitoringElement);
-				} catch (DeploymentException e) {
+				} catch (final DeploymentException e) {
 					// TODO think if error should be shown to the user
-					Activator.getDefault().logError("Could not trigger event for " + element.getQualifiedString(), e);
+					Activator.getDefault().logError("Could not trigger event for " + element.getQualifiedString(), e); //$NON-NLS-1$
 				}
 				notifyTriggerEvent(monitoringElement.getPort());
 			}
 		}
 	}
 
-	public void writeValue(MonitoringElement element, String value) {
-		AutomationSystem automationSystem = element.getPort().getSystem();
+	public void writeValue(final MonitoringElement element, final String value) {
+		final AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
 			showSystemNotFoundErrorMsg(element);
 			return;
 		}
-		Device device = element.getPort().getDevice();
+		final Device device = element.getPort().getDevice();
 		if (device == null) {
 			showDeviceNotFounderroMsg(element);
 			return;
 		}
 
-		IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem)
+		final IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem)
 				.getDevMgmInteractor(device);
 
 		if (devMgmInteractor != null) {
@@ -226,32 +226,32 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			fullName = fullName.substring(0, fullName.lastIndexOf('.')); // strip interface name
 			fullName = fullName.substring(0, fullName.lastIndexOf('.') + 1); // strip fbName
 
-			FBDeploymentData data = new FBDeploymentData(fullName, element.getPort().getFb());
+			final FBDeploymentData data = new FBDeploymentData(fullName, element.getPort().getFb());
 			try {
 				devMgmInteractor.writeFBParameter(element.getPort().getResource(), value, data,
 						(VarDeclaration) element.getPort().getInterfaceElement());
-			} catch (DeploymentException e) {
+			} catch (final DeploymentException e) {
 				// TODO think if error should be shown to the user
-				Activator.getDefault().logError("Could not write value to " + element.getQualifiedString(), e);
+				Activator.getDefault().logError("Could not write value to " + element.getQualifiedString(), e); //$NON-NLS-1$
 			}
 		}
 	}
 
-	public void forceValue(MonitoringElement element, String value) {
-		AutomationSystem automationSystem = element.getPort().getSystem();
+	public void forceValue(final MonitoringElement element, final String value) {
+		final AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
 			showSystemNotFoundErrorMsg(element);
 			return;
 		}
-		Device device = element.getPort().getDevice();
+		final Device device = element.getPort().getDevice();
 		if (device == null) {
 			showDeviceNotFounderroMsg(element);
 			return;
 		}
 
 		element.forceValue(value);
-		IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem)
+		final IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem)
 				.getDevMgmInteractor(device);
 
 		if (devMgmInteractor != null) {
@@ -261,24 +261,24 @@ public class MonitoringManager extends AbstractMonitoringManager {
 				} else {
 					devMgmInteractor.clearForce(element);
 				}
-			} catch (DeploymentException e) {
+			} catch (final DeploymentException e) {
 				// TODO think if error should be shown to the user
 				Activator.getDefault()
-						.logError("Could not force value of " + element.getQualifiedString() + "to " + value, e);
+				.logError("Could not force value of " + element.getQualifiedString() + "to " + value, e); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
 
-	public SystemMonitoringData getSystemMonitoringData(AutomationSystem system) {
+	public SystemMonitoringData getSystemMonitoringData(final AutomationSystem system) {
 		return systemMonitoringData.computeIfAbsent(system, SystemMonitoringData::new);
 	}
 
-	private static void showDeviceNotFounderroMsg(MonitoringElement element) {
+	private static void showDeviceNotFounderroMsg(final MonitoringElement element) {
 		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
 				"Device could not be found for FB port: " + element.getPort() + ".");
 	}
 
-	private static void showSystemNotFoundErrorMsg(MonitoringElement element) {
+	private static void showSystemNotFoundErrorMsg(final MonitoringElement element) {
 		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
 				"System could not be found for FB port: " + element.getPort() + ".");
 	}

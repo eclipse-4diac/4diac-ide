@@ -115,7 +115,7 @@ public class SystemMonitoringData {
 				devMgmInteractor.removeWatch(element);
 			} catch (final DeploymentException e) {
 				// TODO think if error should be shown to the user
-				Activator.getDefault().logError("Could not remove watch for " + element.getQualifiedString(), e);
+				Activator.getDefault().logError("Could not remove watch for " + element.getQualifiedString(), e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -127,7 +127,7 @@ public class SystemMonitoringData {
 				devMgmInteractor.addWatch(element);
 			} catch (final DeploymentException e) {
 				// TODO think if error should be shown to the user
-				Activator.getDefault().logError("Could not add watch for " + element.getQualifiedString(), e);
+				Activator.getDefault().logError("Could not add watch for " + element.getQualifiedString(), e); //$NON-NLS-1$
 			}
 		}
 	}

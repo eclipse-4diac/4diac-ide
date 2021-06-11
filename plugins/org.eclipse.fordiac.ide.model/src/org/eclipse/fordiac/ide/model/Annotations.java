@@ -248,10 +248,10 @@ public final class Annotations {
 	public static EList<IInterfaceElement> getAllInterfaceElements(final InterfaceList il) {
 		final EList<IInterfaceElement> retVal = new BasicEList<>();
 		retVal.addAll(il.getEventInputs());
-		retVal.addAll(il.getEventOutputs());
 		retVal.addAll(il.getInputVars());
-		retVal.addAll(il.getOutputVars());
 		retVal.addAll(il.getPlugs());
+		retVal.addAll(il.getEventOutputs());
+		retVal.addAll(il.getOutputVars());
 		retVal.addAll(il.getSockets());
 		retVal.addAll(il.getErrorMarker());
 		return retVal;
@@ -470,10 +470,9 @@ public final class Annotations {
 					.filter(attr -> attributeName.equals(attr.getName())).collect(Collectors.toList());
 			if (toDelete.isEmpty()) {
 				return false;
-			} else {
-				toDelete.forEach(attr -> object.getAttributes().remove(attr));
-				return true;
 			}
+			toDelete.forEach(attr -> object.getAttributes().remove(attr));
+			return true;
 		}
 		return false;
 	}

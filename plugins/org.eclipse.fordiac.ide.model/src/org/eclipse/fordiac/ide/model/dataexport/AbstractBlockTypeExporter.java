@@ -23,6 +23,11 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
@@ -43,11 +48,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 
-	protected AbstractBlockTypeExporter(FBType type) {
+	protected AbstractBlockTypeExporter(final FBType type) {
 		super(type);
 	}
 
-	protected AbstractBlockTypeExporter(CommonElementExporter parent) {
+	protected AbstractBlockTypeExporter(final CommonElementExporter parent) {
 		super(parent);
 	}
 
@@ -56,29 +61,40 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		return (FBType) super.getType();
 	}
 
-	public static void saveType(PaletteEntry entry) {
-		AbstractBlockTypeExporter exporter = null;
-
-		if (entry instanceof FBTypePaletteEntry) {
-			exporter = new FbtExporter((FBTypePaletteEntry) entry);
-		} else if (entry instanceof AdapterTypePaletteEntry) {
-			exporter = new AdapterExporter((AdapterTypePaletteEntry) entry);
-		} else if (entry instanceof SubApplicationTypePaletteEntry) {
-			exporter = new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
-		}
+	public static void saveType(final PaletteEntry entry) {
+		final AbstractBlockTypeExporter exporter = getTypeExporter(entry);
 
 		if (null != exporter) {
 			try {
 				exporter.createXMLEntries();
-			} catch (XMLStreamException e) {
+			} catch (final XMLStreamException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
-			exporter.writeToFile(entry.getFile());
-			// "reset" the modification timestamp in the PaletteEntry
-			// to avoid reload - as for this timestamp it is not necessary
-			// as the data is in memory
-			entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
+
+			final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
+				@Override
+				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+					exporter.writeToFile(entry.getFile());
+					// "reset" the modification timestamp in the PaletteEntry to avoid reload - as for this timestamp it
+					// is not necessary as the data is in memory
+					entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
+					return Status.OK_STATUS;
+				}
+			};
+			job.setRule(entry.getFile());
+			job.schedule();
 		}
+	}
+
+	private static AbstractBlockTypeExporter getTypeExporter(final PaletteEntry entry) {
+		if (entry instanceof FBTypePaletteEntry) {
+			return new FbtExporter((FBTypePaletteEntry) entry);
+		} else if (entry instanceof AdapterTypePaletteEntry) {
+			return new AdapterExporter((AdapterTypePaletteEntry) entry);
+		} else if (entry instanceof SubApplicationTypePaletteEntry) {
+			return new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
+		}
+		return null;
 	}
 
 	@Override
@@ -117,7 +133,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 			throws XMLStreamException {
 		if (!adapterList.isEmpty()) {
 			addStartElement(elementName);
-			for (AdapterDeclaration adapter : adapterList) {
+			for (final AdapterDeclaration adapter : adapterList) {
 				addAdapterDeclaration(adapter);
 			}
 			addEndElement();
@@ -125,10 +141,21 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	}
 
 	private void addAdapterDeclaration(final AdapterDeclaration adapterDecl) throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
+		final boolean hasAttributes = !adapterDecl.getAttributes().isEmpty();
+		if (hasAttributes) {
+			addStartElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
+		}
+
 		addNameTypeCommentAttribute(adapterDecl, adapterDecl.getType());
 		if (null != adapterDecl.getAdapterFB()) {
 			addXYAttributes(adapterDecl.getAdapterFB());
+		}
+
+		if (hasAttributes) {
+			addAttributes(adapterDecl.getAttributes());
+			addEndElement();
 		}
 	}
 
@@ -143,7 +170,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	protected void addVarList(final List<VarDeclaration> varList, final String elementName) throws XMLStreamException {
 		if (!varList.isEmpty()) {
 			addStartElement(elementName);
-			for (VarDeclaration varDecl : varList) {
+			for (final VarDeclaration varDecl : varList) {
 				if (!(varDecl instanceof AdapterDeclaration)) {
 					addVarDeclaration(varDecl);
 				}
@@ -164,12 +191,12 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 			final String elementName) throws XMLStreamException {
 		if (!varList.isEmpty() || !fbList.isEmpty()) {
 			addStartElement(elementName);
-			for (VarDeclaration varDecl : varList) {
+			for (final VarDeclaration varDecl : varList) {
 				if (!(varDecl instanceof AdapterDeclaration)) {
 					addVarDeclaration(varDecl);
 				}
 			}
-			for (FB fb : fbList) {
+			for (final FB fb : fbList) {
 				addStartElement(LibraryElementTags.FB_ELEMENT);
 				addNameAttribute(fb.getName());
 				if (null != fb.getType()) {
@@ -195,7 +222,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	private void addEventList(final List<Event> eventList, final String elementName) throws XMLStreamException {
 		if (!eventList.isEmpty()) {
 			addStartElement(elementName);
-			for (Event event : eventList) {
+			for (final Event event : eventList) {
 				addEvent(event);
 			}
 			addEndElement();
@@ -224,6 +251,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, "Event"); //$NON-NLS-1$
 		addCommentAttribute(event);
 		addWith(event);
+		addAttributes(event.getAttributes());
 		addEndElement();
 	}
 
@@ -239,9 +267,9 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addWith(final Event event) throws XMLStreamException {
-		for (With with : event.getWith()) {
+		for (final With with : event.getWith()) {
 			addEmptyStartElement(LibraryElementTags.WITH_ELEMENT);
-			VarDeclaration varDecl = with.getVariables();
+			final VarDeclaration varDecl = with.getVariables();
 			getWriter().writeAttribute(LibraryElementTags.VAR_ATTRIBUTE,
 					(null != varDecl.getName()) ? varDecl.getName() : ""); //$NON-NLS-1$
 		}
@@ -278,7 +306,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addServiceSequences(final List<ServiceSequence> sequences) throws XMLStreamException {
-		for (ServiceSequence seq : sequences) {
+		for (final ServiceSequence seq : sequences) {
 			addStartElement(LibraryElementTags.SERVICE_SEQUENCE_ELEMENT);
 
 			addNameAttribute(seq.getName());
@@ -295,7 +323,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addServiceTransactions(final List<ServiceTransaction> transactions) throws XMLStreamException {
-		for (ServiceTransaction transaction : transactions) {
+		for (final ServiceTransaction transaction : transactions) {
 			addStartElement(LibraryElementTags.SERVICE_TRANSACTION_ELEMENT);
 
 			if (transaction.getInputPrimitive() != null) {
@@ -312,7 +340,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addEmptyStartElement(primNodeName);
 		getWriter().writeAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE,
 				((null != prim.getInterface()) && (null != prim.getInterface().getName()))
-						? prim.getInterface().getName()
+				? prim.getInterface().getName()
 						: ""); //$NON-NLS-1$
 		getWriter().writeAttribute(LibraryElementTags.EVENT_ELEMENT, (null != prim.getEvent()) ? prim.getEvent() : ""); //$NON-NLS-1$
 		if ((null != prim.getParameters()) && (!prim.getParameters().equals(" "))) { //$NON-NLS-1$
@@ -328,7 +356,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addOutputPrimitives(final ServiceTransaction transaction) throws XMLStreamException {
-		for (OutputPrimitive primitive : transaction.getOutputPrimitive()) {
+		for (final OutputPrimitive primitive : transaction.getOutputPrimitive()) {
 			addPrimitive(primitive, LibraryElementTags.OUTPUT_PRIMITIVE_ELEMENT);
 		}
 	}

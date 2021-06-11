@@ -85,6 +85,40 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int INAMED_ELEMENT_FEATURE_COUNT = 2;
 
+	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
+	 * <em>Configurable Object</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConfigurableObject()
+	 * @generated */
+	int CONFIGURABLE_OBJECT = 44;
+
+	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONFIGURABLE_OBJECT__NAME = INAMED_ELEMENT__NAME;
+
+	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONFIGURABLE_OBJECT__COMMENT = INAMED_ELEMENT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONFIGURABLE_OBJECT__ATTRIBUTES = INAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/** The number of structural features of the '<em>Configurable Object</em>' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONFIGURABLE_OBJECT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
+
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement <em>IInterface
 	 * Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -97,52 +131,59 @@ public interface LibraryElementPackage extends EPackage {
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__NAME = INAMED_ELEMENT__NAME;
+	int IINTERFACE_ELEMENT__NAME = CONFIGURABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__COMMENT = INAMED_ELEMENT__COMMENT;
+	int IINTERFACE_ELEMENT__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int IINTERFACE_ELEMENT__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__IS_INPUT = INAMED_ELEMENT_FEATURE_COUNT + 0;
+	int IINTERFACE_ELEMENT__IS_INPUT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Input Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__INPUT_CONNECTIONS = INAMED_ELEMENT_FEATURE_COUNT + 1;
+	int IINTERFACE_ELEMENT__INPUT_CONNECTIONS = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Output Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS = INAMED_ELEMENT_FEATURE_COUNT + 2;
+	int IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__TYPE = INAMED_ELEMENT_FEATURE_COUNT + 3;
+	int IINTERFACE_ELEMENT__TYPE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/** The feature id for the '<em><b>Type Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT__TYPE_NAME = INAMED_ELEMENT_FEATURE_COUNT + 4;
+	int IINTERFACE_ELEMENT__TYPE_NAME = CONFIGURABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/** The number of structural features of the '<em>IInterface Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int IINTERFACE_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 5;
+	int IINTERFACE_ELEMENT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl <em>Var
 	 * Declaration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -163,6 +204,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__COMMENT = IINTERFACE_ELEMENT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int VAR_DECLARATION__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -241,6 +289,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__COMMENT = VAR_DECLARATION__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ADAPTER_DECLARATION__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -439,40 +494,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ALGORITHM_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
-	 * <em>Configurable Object</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConfigurableObject()
-	 * @generated */
-	int CONFIGURABLE_OBJECT = 44;
-
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONFIGURABLE_OBJECT__NAME = INAMED_ELEMENT__NAME;
-
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONFIGURABLE_OBJECT__COMMENT = INAMED_ELEMENT__COMMENT;
-
-	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONFIGURABLE_OBJECT__ATTRIBUTES = INAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/** The number of structural features of the '<em>Configurable Object</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONFIGURABLE_OBJECT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl
 	 * <em>Application</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1060,7 +1081,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int DEVICE__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1296,7 +1318,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int EC_STATE__COMMENT = INAMED_ELEMENT__COMMENT;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1344,7 +1367,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	int POSITIONABLE_ELEMENT = 63;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1365,7 +1389,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	int EC_TRANSITION = 14;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1435,6 +1460,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int EVENT__COMMENT = IINTERFACE_ELEMENT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int EVENT__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -1514,7 +1546,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int FB_NETWORK_ELEMENT__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1573,7 +1606,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int FB__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1631,7 +1665,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SUB_APP__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -2276,7 +2311,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SEGMENT__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3048,6 +3084,33 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SERVICE_INTERFACE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
+	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
+	 * <em>Error Marker Ref</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerRef()
+	 * @generated */
+	int ERROR_MARKER_REF = 79;
+
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_REF__FILE_MARKER_ID = 0;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_REF__ERROR_MESSAGE = 1;
+
+	/** The number of structural features of the '<em>Error Marker Ref</em>' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_REF_FEATURE_COUNT = 2;
+
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl <em>Value</em>}'
 	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -3056,17 +3119,29 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	int VALUE = 52;
 
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int VALUE__FILE_MARKER_ID = ERROR_MARKER_REF__FILE_MARKER_ID;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int VALUE__ERROR_MESSAGE = ERROR_MARKER_REF__ERROR_MESSAGE;
+
 	/** The feature id for the '<em><b>Value</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int VALUE__VALUE = 0;
+	int VALUE__VALUE = ERROR_MARKER_REF_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Value</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int VALUE_FEATURE_COUNT = 1;
+	int VALUE_FEATURE_COUNT = ERROR_MARKER_REF_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl
 	 * <em>System Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -3137,7 +3212,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int RESOURCE_TYPE_FB__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3318,6 +3394,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ADAPTER_EVENT__COMMENT = EVENT__COMMENT;
 
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ADAPTER_EVENT__ATTRIBUTES = EVENT__ATTRIBUTES;
+
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
@@ -3439,7 +3522,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ADAPTER_FB__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3756,7 +3840,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int STRUCT_MANIPULATOR__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3821,7 +3906,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int DEMULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3886,7 +3972,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int MULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3937,6 +4024,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__COMMENT = VAR_DECLARATION__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int LOCAL_VARIABLE__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -4041,7 +4135,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -4060,12 +4155,31 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
 
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+
+	/** The feature id for the '<em><b>Repaired Element</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 2;
+
 	/** The number of structural features of the '<em>Error Marker FBN Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
+	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 3;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl
 	 * <em>Error Marker Interface</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -4086,6 +4200,13 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__COMMENT = IINTERFACE_ELEMENT__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_INTERFACE__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -4125,19 +4246,25 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__FILE_MARKER_ID = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ERROR_MARKER_INTERFACE__ERROR_MESSAGE = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+
 	/** The feature id for the '<em><b>Repaired Endpoint</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
 
 	/** The number of structural features of the '<em>Error Marker Interface</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
+	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB
 	 * Instance</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -4172,7 +4299,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int CFB_INSTANCE__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -4204,27 +4332,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
-
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
-	 * <em>Error Marker Ref</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerRef()
-	 * @generated */
-	int ERROR_MARKER_REF = 79;
-
-	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int ERROR_MARKER_REF__FILE_MARKER_ID = 0;
-
-	/** The number of structural features of the '<em>Error Marker Ref</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int ERROR_MARKER_REF_FEATURE_COUNT = 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'
 	 * enum. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -6123,11 +6230,11 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	EClass getPositionableElement();
 
-	/** Returns the meta object for the reference
+	/** Returns the meta object for the containment reference
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition <em>Position</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @return the meta object for the reference '<em>Position</em>'.
+	 * @return the meta object for the containment reference '<em>Position</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition()
 	 * @see #getPositionableElement()
 	 * @generated */
@@ -6382,6 +6489,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	EClass getErrorMarkerFBNElement();
 
+	/** Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement#getRepairedElement <em>Repaired
+	 * Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the reference '<em>Repaired Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement#getRepairedElement()
+	 * @see #getErrorMarkerFBNElement()
+	 * @generated */
+	EReference getErrorMarkerFBNElement_RepairedElement();
+
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface
 	 * <em>Error Marker Interface</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -6435,6 +6552,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see #getErrorMarkerRef()
 	 * @generated */
 	EAttribute getErrorMarkerRef_FileMarkerId();
+
+	/** Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getErrorMessage <em>Error Message</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the attribute '<em>Error Message</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getErrorMessage()
+	 * @see #getErrorMarkerRef()
+	 * @generated */
+	EAttribute getErrorMarkerRef_ErrorMessage();
 
 	/** Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language
 	 * <em>Language</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -7842,8 +7969,8 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated */
 		EClass POSITIONABLE_ELEMENT = eINSTANCE.getPositionableElement();
 
-		/** The meta object literal for the '<em><b>Position</b></em>' reference feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
+		/** The meta object literal for the '<em><b>Position</b></em>' containment reference feature. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
 		 * 
 		 * @generated */
 		EReference POSITIONABLE_ELEMENT__POSITION = eINSTANCE.getPositionableElement_Position();
@@ -8046,6 +8173,12 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated */
 		EClass ERROR_MARKER_FBN_ELEMENT = eINSTANCE.getErrorMarkerFBNElement();
 
+		/** The meta object literal for the '<em><b>Repaired Element</b></em>' reference feature. <!-- begin-user-doc
+		 * --> <!-- end-user-doc -->
+		 * 
+		 * @generated */
+		EReference ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = eINSTANCE.getErrorMarkerFBNElement_RepairedElement();
+
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl <em>Error Marker
 		 * Interface</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -8088,6 +8221,12 @@ public interface LibraryElementPackage extends EPackage {
 		 * 
 		 * @generated */
 		EAttribute ERROR_MARKER_REF__FILE_MARKER_ID = eINSTANCE.getErrorMarkerRef_FileMarkerId();
+
+		/** The meta object literal for the '<em><b>Error Message</b></em>' attribute feature. <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * 
+		 * @generated */
+		EAttribute ERROR_MARKER_REF__ERROR_MESSAGE = eINSTANCE.getErrorMarkerRef_ErrorMessage();
 
 		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language
 		 * <em>Language</em>}' enum. <!-- begin-user-doc --> <!-- end-user-doc -->

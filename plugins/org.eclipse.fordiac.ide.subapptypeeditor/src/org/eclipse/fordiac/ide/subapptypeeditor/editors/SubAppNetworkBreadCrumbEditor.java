@@ -95,9 +95,10 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			final TypedSubAppNetworkEditor initialEditor = new TypedSubAppNetworkEditor();
 			initialEditor.setCommonCommandStack(getCommandStack());
 			final int pagenum = addPage(initialEditor, getEditorInput());
-			getModelToEditorNumMapping().put(getSubAppType(), pagenum); // need to use the file as reference as
-			// this is
-			// provided by the content providers
+			getModelToEditorNumMapping().put(getSubAppType(), Integer.valueOf(pagenum)); // need to use the file as
+			// reference as this is
+			// provided by the content
+			// providers
 		} catch (final PartInitException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}

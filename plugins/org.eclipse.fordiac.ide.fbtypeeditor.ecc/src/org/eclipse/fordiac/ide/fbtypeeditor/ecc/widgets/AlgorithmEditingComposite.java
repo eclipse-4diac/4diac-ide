@@ -258,4 +258,8 @@ public abstract class AlgorithmEditingComposite {
 	private void setCommandStack(final CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
+
+	public Composite getCodeEditors() {
+		return codeEditors;
+	}
 }

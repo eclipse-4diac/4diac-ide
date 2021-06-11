@@ -96,7 +96,13 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	 * @throws XMLStreamException
 	 */
 	protected void addVarDeclaration(final VarDeclaration varDecl) throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
+		final boolean hasAttributes = !varDecl.getAttributes().isEmpty();
+		if (hasAttributes) {
+			addStartElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
+		}
+
 		addNameTypeCommentAttribute(varDecl, varDecl.getType());
 		if (varDecl.isArray()) {
 			getWriter().writeAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE,
@@ -104,6 +110,11 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		}
 		if ((null != varDecl.getValue()) && (!varDecl.getValue().getValue().isEmpty())) {
 			getWriter().writeAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getValue().getValue());
+		}
+
+		if (hasAttributes) {
+			addAttributes(varDecl.getAttributes());
+			addEndElement();
 		}
 	}
 

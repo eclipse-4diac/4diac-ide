@@ -27,6 +27,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
 /**
@@ -62,7 +63,7 @@ public abstract class OpenListener implements IOpenListener {
 		openEditor(new FileEditorInput(file), editorId);
 		final IEditorPart openedEditor = getOpenedEditor();
 		if (null != openedEditor) {
-			final AbstractBreadCrumbEditor breadCrumbEditor = openedEditor.getAdapter(AbstractBreadCrumbEditor.class);
+			final AbstractBreadCrumbEditor breadCrumbEditor = getBreadCrumbEditor(openedEditor);
 			if (null != breadCrumbEditor) {
 				breadCrumbEditor.getBreadcrumb().setInput(element);
 			}
@@ -75,6 +76,26 @@ public abstract class OpenListener implements IOpenListener {
 
 	protected void openInFBTypeEditor(final FBType root, final EObject element) {
 		openInBreadCrumbEditor(root.getPaletteEntry().getFile(), FB_TYPE_EDITOR, element);
+	}
+
+	private static AbstractBreadCrumbEditor getBreadCrumbEditor(final IEditorPart openedEditor) {
+		AbstractBreadCrumbEditor breadCrumbEditor = openedEditor.getAdapter(AbstractBreadCrumbEditor.class);
+		if ((breadCrumbEditor == null) && (openedEditor instanceof FormEditor)) {
+			breadCrumbEditor = getBreadCrumbFromMultiPageEditor((FormEditor) openedEditor);
+		}
+		return breadCrumbEditor;
+	}
+
+	private static AbstractBreadCrumbEditor getBreadCrumbFromMultiPageEditor(final FormEditor openedEditor) {
+		final IEditorInput input = openedEditor.getActiveEditor().getEditorInput();
+
+		for (final IEditorPart subEditor : openedEditor.findEditors(input)) {
+			if (subEditor instanceof AbstractBreadCrumbEditor) {
+				openedEditor.setActiveEditor(subEditor);
+				return (AbstractBreadCrumbEditor) subEditor;
+			}
+		}
+		return null;
 	}
 
 }

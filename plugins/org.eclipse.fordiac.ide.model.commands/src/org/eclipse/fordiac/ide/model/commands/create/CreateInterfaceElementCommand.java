@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  *               2019 Johannes Kepler University Linz
@@ -14,6 +13,7 @@
  *   Bianca Wiesmayr - command now contains newly created element
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NameRepository;
@@ -28,58 +28,62 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
+
 public class CreateInterfaceElementCommand extends AbstractCreationCommand {
-	private boolean isInput;
-	private DataType dataType;
+	private final boolean isInput;
+	private final DataType dataType;
 	private IInterfaceElement interfaceElement;
 	private EList<? extends IInterfaceElement> interfaces;
-	private int index;
-	private InterfaceList interfaceList;
+	private final int index;
+	private final InterfaceList interfaceList;
 	private AdapterCreateCommand cmd;
-	private String name;
-	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index) {
+	private final String name;
+
+	public CreateInterfaceElementCommand(final DataType dataType, final InterfaceList interfaceList, final boolean isInput, final int index) {
 		this(dataType, getNameProposal(dataType, isInput), interfaceList, isInput, index);
 	}
-	public CreateInterfaceElementCommand(DataType dataType, String name, InterfaceList interfaceList, boolean isInput,
-			int index) {
+
+	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList, final boolean isInput,
+			final int index) {
 		this.isInput = isInput;
 		this.dataType = dataType;
 		this.index = index;
 		this.interfaceList = interfaceList;
 		this.name = (null != name) ? name : getNameProposal(dataType, isInput);
 	}
-	private static String getNameProposal(DataType dataType, boolean isInput) {
+
+	private static String getNameProposal(final DataType dataType, final boolean isInput) {
 		if (dataType instanceof EventType) {
 			return isInput ? FordiacKeywords.EVENT_INPUT : FordiacKeywords.EVENT_OUTPUT;
 		}
 		if (dataType instanceof AdapterType) {
 			return isInput ? FordiacKeywords.ADAPTER_SOCKET : FordiacKeywords.ADAPTER_PLUG;
 		}
-		if (dataType instanceof DataType) {
-			return isInput ? FordiacKeywords.DATA_INPUT : FordiacKeywords.DATA_OUTPUT;
-		}
-		return ""; //$NON-NLS-1$
+		return isInput ? FordiacKeywords.DATA_INPUT : FordiacKeywords.DATA_OUTPUT;
 	}
+
 	protected boolean isInput() {
 		return isInput;
 	}
+
 	protected DataType getDataType() {
 		return dataType;
 	}
+
 	protected InterfaceList getInterfaceList() {
 		return interfaceList;
 	}
+
 	protected int getIndex() {
 		return index;
 	}
-	public IInterfaceElement getInterfaceElement() {
-		return interfaceElement;
-	}
+
 	@Override
 	public boolean canExecute() {
 		return (null != dataType) && (null != interfaceList);
 	}
-	private void setInterfaces(InterfaceList interfaceList) {
+
+	private void setInterfaces(final InterfaceList interfaceList) {
 		if (isInput) {
 			if (dataType instanceof EventType) {
 				this.interfaces = interfaceList.getEventInputs();
@@ -102,6 +106,7 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 			}
 		}
 	}
+
 	@Override
 	public void execute() {
 		if (dataType instanceof EventType) {
@@ -127,6 +132,7 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 		}
 		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, name));
 	}
+
 	@Override
 	public void redo() {
 		insertElement();
@@ -134,20 +140,25 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 			cmd.redo();
 		}
 	}
+
 	@Override
 	public void undo() {
 		@SuppressWarnings("unchecked")
+		final
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
 		temp.remove(interfaceElement);
 		if ((null != cmd) && cmd.canExecute()) {
 			cmd.undo();
 		}
 	}
+
 	private void insertElement() {
 		@SuppressWarnings("unchecked")
+		final
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
 		temp.add(index == -1 ? temp.size() : index, interfaceElement);
 	}
+
 	private void createAdapterCreateCommand() {
 		if ((dataType instanceof AdapterType) && (interfaceList.eContainer() instanceof CompositeFBType)
 				&& !(interfaceList.eContainer() instanceof SubAppType)) { // only show the internal adapter FBs for
@@ -156,8 +167,9 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 					(CompositeFBType) interfaceList.eContainer());
 		}
 	}
+
 	@Override
-	public Object getCreatedElement() {
+	public IInterfaceElement getCreatedElement() {
 		return interfaceElement;
 	}
 }

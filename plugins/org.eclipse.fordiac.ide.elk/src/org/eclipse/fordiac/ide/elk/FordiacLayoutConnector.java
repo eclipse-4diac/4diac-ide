@@ -54,6 +54,8 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.EditPart;
@@ -162,8 +164,13 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 				processSubApp(mapping, (SubAppForFBNetworkEditPart) child, parentLayoutNode);
 			}
 			if (child instanceof InterfaceEditPart) {
-				((InterfaceEditPart) child).getTargetConnections().forEach(conn -> saveConnection(mapping, conn));
-				((InterfaceEditPart) child).getSourceConnections().forEach(conn -> saveConnection(mapping, conn));
+				final InterfaceEditPart ep = ((InterfaceEditPart) child);
+				ep.getTargetConnections().forEach(conn -> saveConnection(mapping, conn));
+				ep.getSourceConnections().forEach(conn -> saveConnection(mapping, conn));
+				if (ep.getParent() instanceof EditorWithInterfaceEditPart) {
+					/* add all editor interfaces to the elk graph to ensure the right order in the sidebar */
+					getPort(new Point(0, 0), ep, mapping); /* point is irrelevant since the interface element gets moved along the graph border (sidebar) */
+				}
 			}
 			if (child instanceof ValueEditPart) {
 				createValueLabels(mapping, (ValueEditPart) child);
@@ -235,7 +242,9 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 	private static ElkPort createPort(final Point point, final InterfaceEditPart interfaceEditPart, final LayoutMapping mapping) {
 		final EditPart parent = interfaceEditPart.getParent();
 		final ElkNode parentNode = (ElkNode) mapping.getProperty(REVERSE_MAPPING).get(parent);
-		return FordiacLayoutFactory.createFordiacLayoutPort(interfaceEditPart, parentNode, point);
+		final ElkPort port = FordiacLayoutFactory.createFordiacLayoutPort(interfaceEditPart, parentNode, point);
+		mapping.getGraphMap().put(port, interfaceEditPart.getModel());
+		return port;
 	}
 
 	private static void createValueLabels(final LayoutMapping mapping, final ValueEditPart valueEditPart) {
@@ -253,11 +262,36 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 	@Override
 	public void applyLayout(final LayoutMapping mapping, final IPropertyHolder settings) {
 		clear();
-		final ElkNode graph = mapping.getLayoutGraph();
-		calculateNodePositionsRecursively(mapping, graph, 0, 0);
+		calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, 0);
 
-		final Command layoutCommand = new LayoutCommand(positions, connPoints, fbFigures);
+		final Map<IInterfaceElement, Integer> pins = createPinOffsetData(mapping);
+		final Command layoutCommand = new LayoutCommand(positions, connPoints, fbFigures, pins);
 		mapping.getProperty(COMMAND_STACK).execute(layoutCommand);
+	}
+
+	private static Map<IInterfaceElement, Integer> createPinOffsetData(final LayoutMapping mapping) {
+		final Map<IInterfaceElement, Integer> pins = new HashMap<>();
+
+		if (!mapping.getLayoutGraph().getPorts().isEmpty()) {
+			final InterfaceList interfaceList = (InterfaceList) ((IInterfaceElement) mapping.getGraphMap()
+					.get(mapping.getLayoutGraph().getPorts().get(0))).eContainer();
+
+			final List<IInterfaceElement> allIEs = interfaceList.getAllInterfaceElements();
+
+			mapping.getLayoutGraph().getPorts().forEach(port -> {
+				final IInterfaceElement pin = (IInterfaceElement) mapping.getGraphMap().get(port);
+				final int index = allIEs.indexOf(pin);
+				int padding = (int) port.getY();
+				if (index > 0 && pin.isIsInput() == allIEs.get(index - 1).isIsInput()) {
+					final IInterfaceElement abovePin = allIEs.get(index - 1);
+					final ElkPort abovePort = (ElkPort) mapping.getGraphMap().inverse().get(abovePin);
+					padding -= (int) abovePort.getY();
+				}
+				pins.put(pin, Integer.valueOf(padding));
+			});
+		}
+
+		return pins;
 	}
 
 	private void calculateNodePositionsRecursively(final LayoutMapping mapping, final ElkNode node, final double parentX, final double parentY) {

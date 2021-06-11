@@ -76,7 +76,8 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 					workLoad.size());
 			for (final Entry<Device, List<Object>> entry : workLoad.entrySet()) {
 				final String fileName = MessageFormat.format(Messages.CreateBootfilesWizard_IProgressMonitorMonitor,
-						outputDirectory, File.separatorChar, entry.getKey().getAutomationSystem().getName(),
+						outputDirectory, Character.valueOf(File.separatorChar),
+						entry.getKey().getAutomationSystem().getName(),
 						entry.getKey().getName());
 
 				BootFileDeviceManagementCommunicationHandler.createBootFile(entry.getValue(), fileName, getShell());

@@ -189,7 +189,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	public boolean isOnlyThisOrNothingSelected() {
-		@SuppressWarnings("unchecked")
 		final List<EditPart> selection = getViewer().getSelectedEditParts();
 		if (selection.size() > 1) {
 			return false;
@@ -412,7 +411,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			// forward direct edit request to instance name
-			@SuppressWarnings("unchecked")
 			final List<EditPart> children = getChildren();
 			children.stream().filter(e -> e instanceof InstanceNameEditPart)
 			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));

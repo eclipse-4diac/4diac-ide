@@ -29,14 +29,14 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 
 	private final SystemMonitoringData systemMonitoringData;
 
-	public EnableSystemMonitoringRunnable(SystemMonitoringData systemMonitoringData) {
+	public EnableSystemMonitoringRunnable(final SystemMonitoringData systemMonitoringData) {
 		this.systemMonitoringData = systemMonitoringData;
 	}
 
 	@Override
-	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		List<Device> devices = this.systemMonitoringData.getSystem().getSystemConfiguration().getDevices();
+		final List<Device> devices = this.systemMonitoringData.getSystem().getSystemConfiguration().getDevices();
 		int count = devices.size() * 2; // the * 2 is for creating the polling threads
 		count += this.systemMonitoringData.getMonitoredElements().size();
 
@@ -47,26 +47,26 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 		monitor.done();
 	}
 
-	private void connectToDevices(List<Device> devices, IProgressMonitor monitor) {
+	private void connectToDevices(final List<Device> devices, final IProgressMonitor monitor) {
 		monitor.subTask("Connecting to the devices");
-		for (Device dev : devices) {
+		for (final Device dev : devices) {
 			if (monitor.isCanceled()) {
 				break;
 			}
-			IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(dev);
+			final IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(dev);
 			try {
 				devMgmInteractor.connect();
-			} catch (DeploymentException e) {
+			} catch (final DeploymentException e) {
 				systemMonitoringData.removeDeviceMonitoringHandler(dev);
-				Activator.getDefault().logError("Monitoring: Cann  not connect to device " + dev.getName(), e);
+				Activator.getDefault().logError("Monitoring: Cannot connect to device " + dev.getName(), e); //$NON-NLS-1$
 			}
 			monitor.worked(1);
 		}
 	}
 
-	private void addWatches(IProgressMonitor monitor) {
+	private void addWatches(final IProgressMonitor monitor) {
 		monitor.subTask("Adding the watches");
-		for (MonitoringBaseElement element : systemMonitoringData.getMonitoredElements()) {
+		for (final MonitoringBaseElement element : systemMonitoringData.getMonitoredElements()) {
 			if (monitor.isCanceled()) {
 				break;
 			}
@@ -78,9 +78,9 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	private void startPollingThreads(IProgressMonitor monitor) {
+	private void startPollingThreads(final IProgressMonitor monitor) {
 		monitor.subTask("Enabling the polling threads");
-		for (Entry<Device, DeviceMonitoringHandler> runner : systemMonitoringData.getDevMonitoringHandlers()
+		for (final Entry<Device, DeviceMonitoringHandler> runner : systemMonitoringData.getDevMonitoringHandlers()
 				.entrySet()) {
 			if (monitor.isCanceled()) {
 				break;
@@ -90,11 +90,11 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	private IDeviceManagementInteractor getDevMgmInteractor(Device dev) {
+	private IDeviceManagementInteractor getDevMgmInteractor(final Device dev) {
 		return getOrCreateDevMonitoringHandler(dev).getDevMgmInteractor();
 	}
 
-	private DeviceMonitoringHandler getOrCreateDevMonitoringHandler(Device dev) {
+	private DeviceMonitoringHandler getOrCreateDevMonitoringHandler(final Device dev) {
 		DeviceMonitoringHandler retVal = systemMonitoringData.getDevMonitoringHandler(dev);
 		if (null == retVal) {
 			retVal = new DeviceMonitoringHandler(dev, systemMonitoringData);

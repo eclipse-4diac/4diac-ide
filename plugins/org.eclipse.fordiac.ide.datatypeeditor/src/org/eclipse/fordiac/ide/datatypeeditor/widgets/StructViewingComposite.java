@@ -295,7 +295,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	@Override
 	public ISelection getSelection() {
-		// for now return the whole object so that property sheets and otehr stuff can filter on it.
+		// for now return the whole object so that property sheets and other stuff can filter on it.
 		return new StructuredSelection(this);
 	}
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2009, 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 
 public final class EventTypeLibrary {
+	private static final String EVENT = "Event"; //$NON-NLS-1$
 	private Map<String, DataType> typeMap;
 	private static EventTypeLibrary instance;
 
@@ -41,9 +42,9 @@ public final class EventTypeLibrary {
 		if (typeMap == null) {
 			typeMap = new HashMap<>();
 		}
-		EventType type = DataFactory.eINSTANCE.createEventType();
-		type.setName("Event"); //$NON-NLS-1$
-		typeMap.put("Event", type); //$NON-NLS-1$
+		final EventType type = DataFactory.eINSTANCE.createEventType();
+		type.setName(EVENT);
+		typeMap.put(EVENT, type);
 	}
 
 	public Collection<DataType> getEventTypes() {
@@ -53,20 +54,20 @@ public final class EventTypeLibrary {
 	/**
 	 * FIXME only return type if it really exists! --> after parsing/importing of
 	 * types is implemented --> planned for V0.3
-	 * 
+	 *
 	 * @param name the name
-	 * 
+	 *
 	 * @return the type
 	 */
 	public DataType getType(final String name) {
 		if (name == null) {
-			return typeMap.get("Event"); //$NON-NLS-1$
+			return typeMap.get(EVENT);
 		}
-		Object value = typeMap.get(name.toUpperCase());
+		final Object value = typeMap.get(name.toUpperCase());
 		if (value != null) {
 			return (DataType) value;
 		}
-		EventType type = DataFactory.eINSTANCE.createEventType();
+		final EventType type = DataFactory.eINSTANCE.createEventType();
 		type.setName(name);
 		typeMap.put(name, type);
 		return type;

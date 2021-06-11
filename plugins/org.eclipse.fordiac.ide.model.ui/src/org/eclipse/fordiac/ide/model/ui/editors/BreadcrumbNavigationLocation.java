@@ -19,57 +19,32 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
-import java.util.Objects;
-
-import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.NavigationLocation;
 
 public class BreadcrumbNavigationLocation extends NavigationLocation {
 
-	private static class GraphicalViewerData {
-		public double zoom = 1.0;
-		public Point location = new Point(0, 0);
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(location, Double.valueOf(zoom));
-		}
-
-		@Override
-		public boolean equals(final Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (!(obj instanceof GraphicalViewerData)) {
-				return false;
-			}
-			final GraphicalViewerData other = (GraphicalViewerData) obj;
-			return location.equals(other.location) && (0 == Double.compare(zoom, other.zoom));
-		}
-	}
-
+	// we need to explicitly store the breadcrumb editor as getEditorPart my provide the wrong editor when we are inside
+	// a type editor
+	private final AbstractBreadCrumbEditor breadCrumbEditor;
 	private final Object model;
-	private GraphicalViewerData viewerData = null;
+	private GraphicalViewerNavigationLocationData viewerData = null;
 	private final AdapterFactoryContentProvider contentProvider;
 	private final AdapterFactoryLabelProvider labelProvider;
 
 	protected BreadcrumbNavigationLocation(final AbstractBreadCrumbEditor editorPart, final Object model) {
 		super(editorPart);
+		this.breadCrumbEditor = editorPart;
 		this.model = model;
 		contentProvider = editorPart.getBreadcrumb().getContentProvider();
 		labelProvider = editorPart.getBreadcrumb().getLabelProvider();
 		final GraphicalViewer viewer = editorPart.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
-			captureGraphicalViewerData(viewer);
+			viewerData = new GraphicalViewerNavigationLocationData(viewer);
 		}
 	}
 
@@ -97,11 +72,6 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 	}
 
 	@Override
-	protected AbstractBreadCrumbEditor getEditorPart() {
-		return (AbstractBreadCrumbEditor) super.getEditorPart();
-	}
-
-	@Override
 	public void saveState(final IMemento memento) {
 		// currently we are not saveing the state
 	}
@@ -113,14 +83,10 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 
 	@Override
 	public void restoreLocation() {
-		final IEditorPart part= getEditorPart();
-		if (part instanceof AbstractBreadCrumbEditor) {
-			final AbstractBreadCrumbEditor editor= getEditorPart();
-			editor.getBreadcrumb().setInput(model);
-			final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
-			if ((viewer != null) && (viewerData != null)) {
-				restoreGraphicalViewerData(viewer);
-			}
+		breadCrumbEditor.getBreadcrumb().setInput(model);
+		final GraphicalViewer viewer = breadCrumbEditor.getAdapter(GraphicalViewer.class);
+		if ((viewer != null) && (viewerData != null)) {
+			viewerData.restoreGraphicalViewerData(viewer);
 		}
 	}
 
@@ -128,11 +94,12 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 	public boolean mergeInto(final INavigationLocation currentLocation) {
 		if (currentLocation instanceof BreadcrumbNavigationLocation) {
 			final BreadcrumbNavigationLocation currentBreadCrumbLocation = ((BreadcrumbNavigationLocation) currentLocation);
-			if (viewerData != null) {
-				return this.model == currentBreadCrumbLocation.getModel()
-						&& viewerData.equals(currentBreadCrumbLocation.viewerData);
+			if (this.model == currentBreadCrumbLocation.getModel()) {
+				if (viewerData != null) {
+					return viewerData.equals(currentBreadCrumbLocation.viewerData);
+				}
+				return true;
 			}
-			return this.model == currentBreadCrumbLocation.getModel();
 		}
 		return false;
 	}
@@ -140,33 +107,6 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 	@Override
 	public void update() {
 		// currently not supported
-	}
-
-	private void captureGraphicalViewerData(final GraphicalViewer viewer) {
-		viewerData = new GraphicalViewerData();
-		if (viewer.getRootEditPart() instanceof ScalableFreeformRootEditPart) {
-			viewerData.zoom = ((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager().getZoom();
-		}
-
-		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-			viewerData.location = canvas.getViewport().getViewLocation();
-		}
-	}
-
-	private void restoreGraphicalViewerData(final GraphicalViewer viewer) {
-		if (viewer.getRootEditPart() instanceof ScalableFreeformRootEditPart) {
-			((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager().setZoom(viewerData.zoom);
-		}
-
-		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-			final int xLocation = viewerData.location.x;
-			final int yLocation = viewerData.location.y;
-			// we have to wait to set the scroll position until the editor is drawn and the canvas is setup
-			Display.getDefault().asyncExec(() -> canvas.scrollTo(xLocation, yLocation));
-		}
-
 	}
 
 }

@@ -31,11 +31,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
-import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -48,8 +45,6 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
@@ -139,7 +134,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return (IInterfaceElement) getModel();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void setInOutConnectionsWith(final int with) {
 		for (final Object element : getSourceConnections()) {
 			final ConnectionEditPart cep = (ConnectionEditPart) element;
@@ -158,22 +152,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					return new ChangeNameCommand(getCastedModel(), (String) request.getCellEditor().getValue());
-				}
-				return null;
-			}
-
-			@Override
-			protected void revertOldEditValue(final DirectEditRequest request) {
-				getNameLabel().setText(getCastedModel().getName());
-				super.revertOldEditValue(request);
-			}
-
-		});
 
 		// allow delete of a FB
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());

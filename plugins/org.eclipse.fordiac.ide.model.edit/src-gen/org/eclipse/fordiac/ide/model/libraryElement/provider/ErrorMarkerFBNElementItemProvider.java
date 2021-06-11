@@ -21,9 +21,12 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement}
  * object. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -47,6 +50,45 @@ public class ErrorMarkerFBNElementItemProvider extends FBNetworkElementItemProvi
 
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/** This adds a property descriptor for the File Marker Id feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	protected void addFileMarkerIdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_ErrorMarkerRef_fileMarkerId_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_fileMarkerId_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_ErrorMarkerRef_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.ERROR_MARKER_REF__FILE_MARKER_ID, true, false, false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/** This adds a property descriptor for the Error Message feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	protected void addErrorMessagePropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_ErrorMarkerRef_errorMessage_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_errorMessage_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_ErrorMarkerRef_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.ERROR_MARKER_REF__ERROR_MESSAGE, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/** This adds a property descriptor for the Repaired Element feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	protected void addRepairedElementPropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_ErrorMarkerFBNElement_repairedElement_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", //$NON-NLS-1$
+								"_UI_ErrorMarkerFBNElement_repairedElement_feature", "_UI_ErrorMarkerFBNElement_type"),  //$NON-NLS-1$ //$NON-NLS-2$
+						LibraryElementPackage.Literals.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT, true, false, true,
+						null, null, null));
 	}
 
 	/** This returns ErrorMarkerFBNElement.gif. <!-- begin-user-doc --> <!-- end-user-doc -->

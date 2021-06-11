@@ -40,9 +40,8 @@ public abstract class AbstractInterfaceContainerLayoutEditPolicy extends FlowLay
 	private int createMoveChildCondition(final EditPart after) {
 		if (null == after) {
 			return getHost().getChildren().size();
-		} else {
-			return getHost().getChildren().indexOf(after);
 		}
+		return getHost().getChildren().indexOf(after);
 	}
 
 	protected abstract boolean canReorder(IInterfaceElement childEP, IInterfaceElement afterEP);
@@ -50,13 +49,13 @@ public abstract class AbstractInterfaceContainerLayoutEditPolicy extends FlowLay
 	@Override
 	protected Command createMoveChildCommand(final EditPart child, final EditPart after) {
 		if (null != child && child.getModel() instanceof IInterfaceElement) {
-			IInterfaceElement childEl = (IInterfaceElement) child.getModel();
+			final IInterfaceElement childEl = (IInterfaceElement) child.getModel();
 			IInterfaceElement afterEl = null;
 			if (null != after) {
 				afterEl = (IInterfaceElement) after.getModel();
 			}
 			if (canReorder(childEl, afterEl)) {
-				int newIndex = createMoveChildCondition(after);
+				final int newIndex = createMoveChildCondition(after);
 				return new ChangeInterfaceOrderCommand(childEl, newIndex);
 			}
 		}

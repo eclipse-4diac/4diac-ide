@@ -97,7 +97,7 @@ public enum FordiacImage {
 					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR),
 					IDecoration.TOP_LEFT);
 			count++;
-			UIPlugin.getDefault().logInfo("createErrorOverlayImage " + count);
+			UIPlugin.getDefault().logInfo("createErrorOverlayImage " + count); //$NON-NLS-1$
 			errorImages.put(image, overlay.createImage());
 		}
 		return errorImages.get(image);

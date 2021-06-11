@@ -41,7 +41,6 @@ public class AddDemuxPortCommand extends Command {
 	private Demultiplexer oldMux;
 
 	private final StructuredType struct;
-	private StructuredType configuredStruct; // contains the required ports
 	private ChangeStructCommand cmd;
 
 
@@ -56,7 +55,7 @@ public class AddDemuxPortCommand extends Command {
 		if (null == oldVisibleChildren) { // default configuration
 			final StringBuilder sb = new StringBuilder();
 			type.getStructType().getMemberVariables()
-					.forEach(memVar -> sb.append(memVar.getName() + VARIABLE_SEPARATOR));
+			.forEach(memVar -> sb.append(memVar.getName() + VARIABLE_SEPARATOR));
 			if (!type.getStructType().getMemberVariables().isEmpty()) {
 				sb.deleteCharAt(sb.length() - 1);
 			}
@@ -80,7 +79,7 @@ public class AddDemuxPortCommand extends Command {
 	}
 
 	private void createChangeStructCommand() {
-		configuredStruct = DataFactory.eINSTANCE.createStructuredType();
+		final StructuredType configuredStruct = DataFactory.eINSTANCE.createStructuredType();
 		configuredStruct.setName(type.getStructType().getName());
 		final List<String> visibleChildrenNames = Arrays
 				.asList(newVisibleChildren.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));

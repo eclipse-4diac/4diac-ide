@@ -165,7 +165,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
 		final ActionRegistry registry = getActionRegistry();
@@ -279,11 +278,13 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		// nothing to do here
 	}
 
+	private static final String UNKNOWN_LINE = "Unknown"; //$NON-NLS-1$
+
 	@Override
 	public void gotoMarker(final IMarker marker) {
 		final Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
-		final String lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, "Unknown");
-		if (!"Unknown".equals(lineNumber)) {
+		final String lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, UNKNOWN_LINE);
+		if (!UNKNOWN_LINE.equals(lineNumber)) {
 			final int hashCode = Integer.parseInt(lineNumber);
 			for (final Object key : map.keySet()) {
 				if (key.hashCode() == hashCode) {
@@ -299,7 +300,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-		return marker.getAttribute(IMarker.LOCATION, "Unknown").startsWith("ECC"); //$NON-NLS-1$ //$NON-NLS-2$
+		return marker.getAttribute(IMarker.LOCATION, UNKNOWN_LINE).startsWith("ECC"); //$NON-NLS-1$
 	}
 
 	@Override

@@ -17,19 +17,18 @@ import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 
-public class WithNodeEditPolicy extends GraphicalNodeEditPolicy implements EditPolicy {
+public class WithNodeEditPolicy extends GraphicalNodeEditPolicy {
 
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
 		if (request.getStartCommand() instanceof WithCreateCommand) {
-			WithCreateCommand command = (WithCreateCommand) request.getStartCommand();
-			Object model = getHost().getModel();
+			final WithCreateCommand command = (WithCreateCommand) request.getStartCommand();
+			final Object model = getHost().getModel();
 			if (command.isForwardCreation()) {
 				if (model instanceof Event) {
 					command.setVarDeclaration(null);
@@ -51,9 +50,9 @@ public class WithNodeEditPolicy extends GraphicalNodeEditPolicy implements EditP
 
 	@Override
 	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {
-		WithCreateCommand cmd = new WithCreateCommand();
+		final WithCreateCommand cmd = new WithCreateCommand();
 		if (getHost().getModel() instanceof IInterfaceElement) {
-			IInterfaceElement model = (IInterfaceElement) getHost().getModel();
+			final IInterfaceElement model = (IInterfaceElement) getHost().getModel();
 			if (model instanceof Event) {
 				cmd.setEvent((Event) model);
 				cmd.setForwardCreation(true);

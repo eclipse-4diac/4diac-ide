@@ -27,14 +27,14 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 
 	private final SystemMonitoringData systemMonitoringData;
 
-	public DisableSystemMonitoringRunnable(SystemMonitoringData systemMonitoringData) {
+	public DisableSystemMonitoringRunnable(final SystemMonitoringData systemMonitoringData) {
 		this.systemMonitoringData = systemMonitoringData;
 	}
 
 	@Override
-	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		List<Device> devices = this.systemMonitoringData.getSystem().getSystemConfiguration().getDevices();
+		final List<Device> devices = this.systemMonitoringData.getSystem().getSystemConfiguration().getDevices();
 		int count = devices.size() * 2; // the * 2 is for creating the polling threads
 		count += this.systemMonitoringData.getMonitoredElements().size();
 
@@ -45,9 +45,9 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 		monitor.done();
 	}
 
-	private void disconnectFromDevices(IProgressMonitor monitor) {
+	private void disconnectFromDevices(final IProgressMonitor monitor) {
 		monitor.subTask("Disconnecting the devices");
-		for (Entry<Device, DeviceMonitoringHandler> runner : systemMonitoringData.getDevMonitoringHandlers()
+		for (final Entry<Device, DeviceMonitoringHandler> runner : systemMonitoringData.getDevMonitoringHandlers()
 				.entrySet()) {
 			if (monitor.isCanceled()) {
 				break;
@@ -56,18 +56,18 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 				if (runner.getValue().getDevMgmInteractor().isConnected()) {
 					runner.getValue().getDevMgmInteractor().disconnect();
 				}
-			} catch (DeploymentException e) {
+			} catch (final DeploymentException e) {
 				// TODO think if error should be shown to the user
-				Activator.getDefault().logError("Could not disconnect from device", e);
+				Activator.getDefault().logError("Could not disconnect from device", e); //$NON-NLS-1$
 			}
 			monitor.worked(1);
 		}
 		systemMonitoringData.getDevMonitoringHandlers().clear();
 	}
 
-	private void removeWatches(IProgressMonitor monitor) {
+	private void removeWatches(final IProgressMonitor monitor) {
 		monitor.subTask("Connecting to the devices");
-		for (MonitoringBaseElement element : systemMonitoringData.getMonitoredElements()) {
+		for (final MonitoringBaseElement element : systemMonitoringData.getMonitoredElements()) {
 			if (monitor.isCanceled()) {
 				break;
 			}
@@ -81,9 +81,9 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	private void stopPollingThreads(IProgressMonitor monitor) {
+	private void stopPollingThreads(final IProgressMonitor monitor) {
 		monitor.subTask("Enabling the polling threads");
-		for (Entry<Device, DeviceMonitoringHandler> runner : systemMonitoringData.getDevMonitoringHandlers()
+		for (final Entry<Device, DeviceMonitoringHandler> runner : systemMonitoringData.getDevMonitoringHandlers()
 				.entrySet()) {
 			if (monitor.isCanceled()) {
 				break;

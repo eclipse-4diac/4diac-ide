@@ -90,18 +90,19 @@ public class CommFBGenerator {
 			numberDataPorts = destination.getCommunicationChannel().getNumberOfDataPorts();
 			final HashSet<Integer> allWithPorts = new HashSet<>();
 			for (int i = 0; i < destination.getCommunicationChannel().getSourceEvent().getWith().size(); i++) {
-				allWithPorts.add(i);
+				allWithPorts.add(Integer.valueOf(i));
 			}
 			withPorts = allWithPorts;
 			break;
 		case EXACT:
 			numberDataPorts = destination.getDestinationPorts().keySet().size();
 			// if it includes the event, reduce number of dataports
-			if (destination.getDestinationPorts().keySet().contains(-1)) {
+			if (destination.getDestinationPorts().keySet().contains(Integer.valueOf(-1))) {
 				numberDataPorts--;
 			}
 			withPorts = destination.getDestinationPorts().keySet();
 			break;
+		default:
 		}
 		final MediaSpecificGenerator specificGenerator = specificGeneratorFactory
 				.getForProtocolId(destination.getSelectedProtocolId());
@@ -184,7 +185,8 @@ public class CommFBGenerator {
 		// TODO annotation
 		int targetDataIndex = 0;
 		for (int i = 0; i < channel.getSourceEvent().getWith().size(); i++) {
-			if (generatedFBInfo.getWithPorts() != null && !generatedFBInfo.getWithPorts().contains(i)) {
+			if (generatedFBInfo.getWithPorts() != null
+					&& !generatedFBInfo.getWithPorts().contains(Integer.valueOf(i))) {
 				continue;
 			}
 			final With with = channel.getSourceEvent().getWith().get(i);
@@ -204,7 +206,7 @@ public class CommFBGenerator {
 		// destinations must have only one fb generated for them...
 		final CommunicationChannelDestination destination = generatedFBInfo.getDestinations().iterator().next();
 		for (final Integer withIndex : destination.getDestinationPorts().keySet()) {
-			if (withIndex == -1) {
+			if (withIndex.intValue() == -1) {
 				for (final IInterfaceElement interfaceElement : destination.getDestinationPorts().get(withIndex)) {
 					final EventConnectionCreateCommand eventCreateCommand = new EventConnectionCreateCommand(
 							generatedFBInfo.getResource().getFBNetwork());
@@ -214,12 +216,12 @@ public class CommFBGenerator {
 					eventCreateCommand.execute();
 					// TODO annotation
 				}
-			} else if (withIndex >= 0) {
+			} else if (withIndex.intValue() >= 0) {
 				// calculated the index of port on the generated FB adding 1 for each with port
 				// used for generation which has smaller index than current with port
 				int generatedPortIndex = 0;
 				for (final Integer generatedWithPort : generatedFBInfo.getWithPorts()) {
-					if (generatedWithPort >= 0 && generatedWithPort < withIndex) {
+					if (generatedWithPort.intValue() >= 0 && generatedWithPort.intValue() < withIndex.intValue()) {
 						generatedPortIndex++;
 					}
 				}

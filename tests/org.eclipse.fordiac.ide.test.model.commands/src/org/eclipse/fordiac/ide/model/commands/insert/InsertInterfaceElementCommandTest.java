@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 
-	private static final String INTERFACE_ELEMENT = "InterfaceElement";
+	private static final String INTERFACE_ELEMENT = "InterfaceElement"; //$NON-NLS-1$
 
 	public static State executeCommand(final State state, final String typeName, final boolean isInput) {
 		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
@@ -107,7 +107,7 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 		t.test(c.getEntry());
 		t.test(c.getInterfaceElement());
 	}
-	
+
 	public static void verifyStateHasDataOutput(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getOutputVars().size(), 1);
 	}
@@ -155,7 +155,7 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 							verifyStateHasEventInput(s, t);
 							verifyStateHasEventOutput(s, t);
 						}) //
-		);
+				);
 
 		final Collection<Arguments> commands = new ArrayList<>();
 
@@ -169,26 +169,26 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 					verifyStateNoEventOutput(s, t);
 				}, //
 				executionDescriptions //
-		));
+				));
 
 		final List<ExecutionDescription<?>> unexecutableDescriptions = List.of( //
 				new ExecutionDescription<>("Add Interface Element without type", //$NON-NLS-1$
 						(final State s) -> executeCommandWithoutType(s, true), //
 						CommandTestBase::verifyNothing //
-				), //
+						), //
 				new ExecutionDescription<>("Add Interface Element without interface list", //$NON-NLS-1$
 						(final State s) -> executeCommandWithoutInterfaceList(s, FordiacKeywords.DWORD, true), //
 						CommandTestBase::verifyNothing //
-				), //
+						), //
 				new ExecutionDescription<>("Add Interface Element without type", //$NON-NLS-1$
 						(final State s) -> executeCommandWithoutType(s, false), //
 						CommandTestBase::verifyNothing //
-				), //
+						), //
 				new ExecutionDescription<>("Add Interface Element without interface list", //$NON-NLS-1$
 						(final State s) -> executeCommandWithoutInterfaceList(s, FordiacKeywords.DWORD, false), //
 						CommandTestBase::verifyNothing //
-				) //
-		);
+						) //
+				);
 
 		commands.addAll(describeCommand("Start with Functionblock, disabled undo&redo", // //$NON-NLS-1$
 				() -> FBCreateCommandTest.executeCommand(new State()), //
@@ -196,7 +196,7 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 				unexecutableDescriptions, //
 				CommandTestBase::disabledUndoCommand, //
 				CommandTestBase::disabledRedoCommand //
-		));
+				));
 
 		return commands;
 	}

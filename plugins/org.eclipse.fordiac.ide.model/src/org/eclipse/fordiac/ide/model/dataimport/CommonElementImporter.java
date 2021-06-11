@@ -66,6 +66,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 
 /**
  * The Class CommonElementImporter.
@@ -184,7 +185,7 @@ public abstract class CommonElementImporter {
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
 		} catch (final Exception e) {
-			Activator.getDefault().logWarning("Type Loading issue", e);
+			Activator.getDefault().logWarning("Type Loading issue", e);//$NON-NLS-1$
 			createErrorMarker(e.getMessage());
 		}finally {
 			buildErrorMarker(file);
@@ -542,11 +543,7 @@ public abstract class CommonElementImporter {
 		processChildren(parentNodeName, name -> {
 			switch (name) {
 			case LibraryElementTags.PARAMETER_ELEMENT:
-				final VarDeclaration parameter = parseParameter();
-				final VarDeclaration vInput = getVarNamed(block.getInterface(), parameter.getName(), true);
-				if (null != vInput) {
-					vInput.setValue(parameter.getValue());
-				}
+				parseParameter(block);
 				return true;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseGenericAttributeNode(block);
@@ -556,6 +553,24 @@ public abstract class CommonElementImporter {
 				return false;
 			}
 		});
+	}
+
+	protected void parseParameter(final FBNetworkElement block) throws TypeImportException, XMLStreamException {
+		final VarDeclaration parameter = parseParameter();
+		final VarDeclaration vInput = getVarNamed(block.getInterface(), parameter.getName(), true);
+		if (null != vInput) {
+			vInput.setValue(parameter.getValue());
+			validateValue(vInput);
+		}
+	}
+
+	protected void validateValue(final VarDeclaration vInput) {
+		final String validation = ValueValidator.validateValue(vInput.getType(), vInput.getValue().getValue());
+		if ((validation != null) && (!validation.trim().isEmpty())) {
+			final ErrorMarkerBuilder e = FordiacMarkerHelper.createValueErrorMarkerBuilder(validation,
+					vInput.getValue(), getLineNumber());
+			errorMarkerAttributes.add(e);
+		}
 	}
 
 	protected boolean isProfileAttribute() {

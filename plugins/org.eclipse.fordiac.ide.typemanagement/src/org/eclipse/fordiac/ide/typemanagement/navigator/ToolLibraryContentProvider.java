@@ -29,12 +29,12 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
-		// currently nothing todo here
+		// currently nothing to do here
 	}
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-		// currently nothing todo here
+		// currently nothing to do here
 	}
 
 	@Override
@@ -61,13 +61,12 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 			}
 
 			return retval;
-		} else {
-			if (inputElement instanceof IContainer) {
-				try {
-					return ((IContainer) inputElement).members();
-				} catch (final CoreException e) {
-					Activator.getDefault().logError(e.getMessage(), e);
-				}
+		}
+		if (inputElement instanceof IContainer) {
+			try {
+				return ((IContainer) inputElement).members();
+			} catch (final CoreException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		}
 

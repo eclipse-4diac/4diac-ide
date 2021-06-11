@@ -22,8 +22,9 @@ import org.eclipse.fordiac.ide.metrics.analyzers.SpiderChartBFBMeasures;
 
 public class CalculateSpiderChartBFBMeasures extends AbstractCodeMetricHandler {
 
+	@Override
 	protected List<AbstractCodeMetricAnalyzer> getAnalyzers() {
-		List<AbstractCodeMetricAnalyzer> analyzers = new ArrayList<>();
+		final List<AbstractCodeMetricAnalyzer> analyzers = new ArrayList<>();
 		analyzers.add(new SpiderChartBFBMeasures());
 		return analyzers;
 	}

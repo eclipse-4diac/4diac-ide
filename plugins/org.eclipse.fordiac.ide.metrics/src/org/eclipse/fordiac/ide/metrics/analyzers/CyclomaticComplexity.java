@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.metrics.analyzers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -27,7 +28,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
-	static final String[] CONDITIONS = { "IF", "FOR", "WHILE", "REPEAT" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	static final String[] CONDITIONS = { FordiacKeywords.IF, FordiacKeywords.FOR, FordiacKeywords.WHILE,
+			FordiacKeywords.REPEAT };
 
 	List<MetricResult> metrics = new ArrayList<>();
 	double ccapp = 0.0;
@@ -40,7 +42,7 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 		metrics = removeDuplicates(metrics);
 	}
 
-	private List<MetricResult> removeDuplicates(final List<MetricResult> list) {
+	private static List<MetricResult> removeDuplicates(final List<MetricResult> list) {
 		final List<MetricResult> newList = new ArrayList<>();
 		boolean dupl = false;
 		for (final MetricResult m : list) {
@@ -89,10 +91,10 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 		for (final String cond : CONDITIONS) {
 			int lastIndex = 0;
 			while (-1 != lastIndex) {
-				if (cond.equals("REPEAT")) {
-					saveIndex = algText.indexOf(cond + "\r\n", lastIndex);
+				if (cond.equals(FordiacKeywords.REPEAT)) {
+					saveIndex = algText.indexOf(cond + "\r\n", lastIndex); //$NON-NLS-1$
 				} else {
-					saveIndex = algText.indexOf(cond + " ", lastIndex);
+					saveIndex = algText.indexOf(cond + " ", lastIndex); //$NON-NLS-1$
 				}
 				if (0 != saveIndex) {
 					lastIndex = saveIndex;

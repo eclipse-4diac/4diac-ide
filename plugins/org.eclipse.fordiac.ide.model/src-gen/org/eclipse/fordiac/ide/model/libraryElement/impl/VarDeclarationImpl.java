@@ -1,30 +1,37 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -38,8 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getName <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getComment <em>Comment</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#isIsInput <em>Is Input</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getInputConnections <em>Input
  * Connections</em>}</li>
@@ -54,39 +59,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * </ul>
  *
  * @generated */
-public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
-	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
-	 * @see #getName()
-	 * @generated
-	 * @ordered */
-	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
-
-	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
-	 * @see #getName()
-	 * @generated
-	 * @ordered */
-	protected String name = NAME_EDEFAULT;
-
-	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @see #getComment()
-	 * @generated
-	 * @ordered */
-	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
-
-	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @see #getComment()
-	 * @generated
-	 * @ordered */
-	protected String comment = COMMENT_EDEFAULT;
-
+public class VarDeclarationImpl extends ConfigurableObjectImpl implements VarDeclaration {
 	/** The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
@@ -105,7 +78,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/** The cached value of the '{@link #getInputConnections() <em>Input Connections</em>}' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getInputConnections()
 	 * @generated
 	 * @ordered */
@@ -113,7 +86,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/** The cached value of the '{@link #getOutputConnections() <em>Output Connections</em>}' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getOutputConnections()
 	 * @generated
 	 * @ordered */
@@ -121,7 +94,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/** The cached value of the '{@link #getType() <em>Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 *
+	 * 
 	 * @see #getType()
 	 * @generated
 	 * @ordered */
@@ -194,66 +167,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * 
 	 * @generated */
 	@Override
-	public int getArraySize() {
-		return arraySize;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
-	public void setArraySize(int newArraySize) {
-		int oldArraySize = arraySize;
-		arraySize = newArraySize;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE,
-					oldArraySize, arraySize));
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
-	public String getComment() {
-		return comment;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
-	public void setComment(String newComment) {
-		String oldComment = comment;
-		comment = newComment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__COMMENT,
-					oldComment, comment));
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__NAME, oldName,
-					name));
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
 	public boolean isIsInput() {
 		return isInput;
 	}
@@ -268,6 +181,32 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__IS_INPUT,
 					oldIsInput, isInput));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EList<Connection> getInputConnections() {
+		if (inputConnections == null) {
+			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
+					LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS,
+					LibraryElementPackage.CONNECTION__DESTINATION);
+		}
+		return inputConnections;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EList<Connection> getOutputConnections() {
+		if (outputConnections == null) {
+			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
+					LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS,
+					LibraryElementPackage.CONNECTION__SOURCE);
+		}
+		return outputConnections;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -330,28 +269,32 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * 
 	 * @generated */
 	@Override
+	public int getArraySize() {
+		return arraySize;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public void setArraySize(int newArraySize) {
+		int oldArraySize = arraySize;
+		arraySize = newArraySize;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE,
+					oldArraySize, arraySize));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public EList<With> getWiths() {
 		if (withs == null) {
 			withs = new EObjectWithInverseResolvingEList<With>(With.class, this,
 					LibraryElementPackage.VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
 		}
 		return withs;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
-	public boolean isArray() {
-		return org.eclipse.fordiac.ide.model.Annotations.isArray(this);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
-	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -429,26 +372,16 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * 
 	 * @generated */
 	@Override
-	public EList<Connection> getInputConnections() {
-		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
-					LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS,
-					LibraryElementPackage.CONNECTION__DESTINATION);
-		}
-		return inputConnections;
+	public boolean isArray() {
+		return org.eclipse.fordiac.ide.model.Annotations.isArray(this);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
 	@Override
-	public EList<Connection> getOutputConnections() {
-		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
-					LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS,
-					LibraryElementPackage.CONNECTION__SOURCE);
-		}
-		return outputConnections;
+	public FBNetworkElement getFBNetworkElement() {
+		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -495,10 +428,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.VAR_DECLARATION__NAME:
-			return getName();
-		case LibraryElementPackage.VAR_DECLARATION__COMMENT:
-			return getComment();
 		case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
 			return isIsInput();
 		case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
@@ -531,12 +460,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.VAR_DECLARATION__NAME:
-			setName((String) newValue);
-			return;
-		case LibraryElementPackage.VAR_DECLARATION__COMMENT:
-			setComment((String) newValue);
-			return;
 		case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
 			setIsInput((Boolean) newValue);
 			return;
@@ -576,12 +499,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.VAR_DECLARATION__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case LibraryElementPackage.VAR_DECLARATION__COMMENT:
-			setComment(COMMENT_EDEFAULT);
-			return;
 		case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
 			setIsInput(IS_INPUT_EDEFAULT);
 			return;
@@ -618,10 +535,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.VAR_DECLARATION__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case LibraryElementPackage.VAR_DECLARATION__COMMENT:
-			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 		case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
 			return isInput != IS_INPUT_EDEFAULT;
 		case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
@@ -652,11 +565,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (name: "); //$NON-NLS-1$
-		result.append(name);
-		result.append(", comment: "); //$NON-NLS-1$
-		result.append(comment);
-		result.append(", isInput: "); //$NON-NLS-1$
+		result.append(" (isInput: "); //$NON-NLS-1$
 		result.append(isInput);
 		result.append(", typeName: "); //$NON-NLS-1$
 		result.append(typeName);

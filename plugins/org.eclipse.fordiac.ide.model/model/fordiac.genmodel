@@ -576,6 +576,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterEvent/adapterDeclaration"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterEvent/getName" body="if (getAdapterDeclaration() == null) {&#xA;&#x9;return super.getName();&#xA;}&#xA;return getAdapterDeclaration().getName() + &quot;.&quot; + super.getName(); //$NON-NLS-1$&#xA;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Service">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/rightInterface"/>
@@ -657,7 +658,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStop"/>
       <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySize" body="return arrayStop-arrayStart+1;"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement"/>
+    <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerFBNElement/repairedElement"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerInterface">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/repairedEndpoint"/>
     </genClasses>
@@ -668,6 +671,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerRef">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/fileMarkerId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/errorMessage"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"

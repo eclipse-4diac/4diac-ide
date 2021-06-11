@@ -73,7 +73,7 @@ public class MapToCommand extends Command {
 		return supports;
 	}
 
-	private boolean deviceSupportsType() {
+	private static boolean deviceSupportsType() {
 		return true;
 	}
 
@@ -252,7 +252,7 @@ public class MapToCommand extends Command {
 		}
 	}
 
-	private boolean isSelfConnection(final Connection connection) {
+	private static boolean isSelfConnection(final Connection connection) {
 		return connection.getSourceElement() == connection.getDestinationElement();
 	}
 

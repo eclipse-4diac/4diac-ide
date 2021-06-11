@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -118,22 +119,25 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	protected void parseFB() throws TypeImportException, XMLStreamException {
 		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final FB fb = createFBInstance(typeFbElement);
+		final FBNetworkElement fb = createFBInstance(typeFbElement);
 
 		readNameCommentAttributes(fb);
 		getXandY(fb);
-		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 
+		// add FB to FBnetwork so that parameter parsing can create error markers correctly.
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
 
-		if (null == fb.getPaletteEntry()) {
+		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
+
+		if (null == fb.getPaletteEntry() || fb instanceof ErrorMarkerRef) {
 			// we don't have a type create error marker.
 			// This can only be done after fb has been added to FB network,
 			// so that the error marker can determine the location!
 			final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
 					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
 					fb, getLineNumber());
+			e.setErrorMarkerRef((ErrorMarkerRef) fb);
 			errorMarkerAttributes.add(e);
 		}
 
@@ -144,7 +148,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		}
 	}
 
-	private FB createFBInstance(final String typeFbElement) {
+	private FBNetworkElement createFBInstance(final String typeFbElement) {
 		FB fb = LibraryElementFactory.eINSTANCE.createFB();
 		final FBTypePaletteEntry entry = getTypeEntry(typeFbElement);
 
@@ -161,35 +165,10 @@ class FBNetworkImporter extends CommonElementImporter {
 			}
 			fb.setInterface(type.getInterfaceList().copy());
 		} else {
-			// as we don't have type information we create an empty interface list
-			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-			// TODO add attribute value for missing instance name and
-			// indicate that FB is missing for usage in outline views
+			return FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary());
 		}
 		fb.setPaletteEntry(entry);
 		return fb;
-	}
-
-	@Override
-	protected void parseFBChildren(final FBNetworkElement block, final String parentNodeName)
-			throws TypeImportException, XMLStreamException {
-		processChildren(parentNodeName, name -> {
-			switch (name) {
-			case LibraryElementTags.PARAMETER_ELEMENT:
-				final VarDeclaration parameter = parseParameter();
-				final VarDeclaration vInput = getVarNamed(block.getInterface(), parameter.getName(), true);
-				if (null != vInput) {
-					vInput.setValue(parameter.getValue());
-				}
-				return true;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
-				parseGenericAttributeNode(block);
-				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				return true;
-			default:
-				return false;
-			}
-		});
 	}
 
 	protected <T extends Connection> void parseConnectionList(final EClass conType, final EList<T> connectionlist,
@@ -262,14 +241,12 @@ class FBNetworkImporter extends CommonElementImporter {
 		return connection;
 	}
 
-	protected <T extends Connection> void handleMissingConnectionSource(final T connection,
-			final ConnectionBuilder builder) {
+	protected void handleMissingConnectionSource(final Connection connection, final ConnectionBuilder builder) {
 		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
-				Messages.FBNetworkImporter_ConnectionSourceMissing,
-				getFbNetwork(),
-				builder.getSource(), builder.getDestination(), getLineNumber());
+				Messages.FBNetworkImporter_ConnectionSourceMissing, getFbNetwork(), builder.getSource(),
+				builder.getDestination(), getLineNumber());
 		errorMarkerAttributes.add(e);
-		final FBNetworkElement sourceFB = ConnectionHelper.createErrorMarkerFB(builder.getSourceFbName());
+		final FBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(builder.getSourceFbName());
 		builder.setSrcInterfaceList(sourceFB.getInterface());
 		getFbNetwork().getNetworkElements().add(sourceFB);
 		createErrorMarkerInterface(connection, builder, false, e);
@@ -284,7 +261,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		createErrorMarkerInterface(connection, builder, false, e);
 	}
 
-	protected <T extends Connection> void handleMissingConnectionDestination(final Connection connection,
+	protected void handleMissingConnectionDestination(final Connection connection,
 			final ConnectionBuilder connectionBuilder) {
 
 		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
@@ -292,7 +269,8 @@ class FBNetworkImporter extends CommonElementImporter {
 				connectionBuilder.getSource(), null, getLineNumber());
 		errorMarkerAttributes.add(e);
 		// check if there is already one
-		final FBNetworkElement destinationFb = ConnectionHelper.createErrorMarkerFB(connectionBuilder.getDestFbName());
+		final FBNetworkElement destinationFb = FordiacMarkerHelper
+				.createErrorMarkerFB(connectionBuilder.getDestFbName());
 		connectionBuilder.setDestInterfaceList(destinationFb.getInterface());
 		getFbNetwork().getNetworkElements().add(destinationFb);
 		createErrorMarkerInterface(connection, connectionBuilder, true,e);
@@ -335,7 +313,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper
 				.createErrorMarkerInterface(type,
 						pinName, isInput, ieList);
-		e.setErrorMarkerIe(errorMarkerInterface);
+		e.setErrorMarkerRef(errorMarkerInterface);
 		final IInterfaceElement repairedEndpoint = ConnectionHelper.createRepairInterfaceElement(oppositeEndpoint,
 				pinName);
 		if (repairedEndpoint != null) {

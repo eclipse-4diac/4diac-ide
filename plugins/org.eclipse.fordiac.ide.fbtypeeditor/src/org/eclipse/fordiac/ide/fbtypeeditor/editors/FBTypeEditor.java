@@ -68,6 +68,8 @@ import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.INavigationLocation;
+import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -79,9 +81,8 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class FBTypeEditor extends FormEditor
-implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker,
-IEditorFileChangeListener {
+public class FBTypeEditor extends FormEditor implements ISelectionListener, CommandStackEventListener,
+ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
 
 	private Collection<IFBTEditorPart> editors;
 	private PaletteEntry paletteEntry;
@@ -225,7 +226,6 @@ IEditorFileChangeListener {
 
 		// get these values here before calling super dispose
 		final boolean dirty = isDirty();
-		final FBTypeEditorInput input = getFBTypeEditorInput();
 
 		if (null != getSite()) {
 			getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
@@ -236,8 +236,8 @@ IEditorFileChangeListener {
 		if (dirty) {
 			// purge from typelib after super.dispose() so that no notifiers
 			// will be called
-			if (null != input) {
-				input.getPaletteEntry().setType(null);
+			if (null != paletteEntry) {
+				paletteEntry.setType(null);
 			}
 		}
 
@@ -251,6 +251,27 @@ IEditorFileChangeListener {
 
 	@Override
 	protected void addPages() {
+		final SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = getEditorsSorted();
+
+		editors = new ArrayList<>();
+		final FBTypeEditorInput editorInput = getFBTypeEditorInput();
+
+		for (final IFBTEditorPart fbtEditorPart : sortedEditorsMap.values()) {
+			editors.add(fbtEditorPart);
+			try {
+				// setCommonCommandStack needs to be called before the editor is added as page
+				fbtEditorPart.setCommonCommandStack(commandStack);
+				final int index = addPage(fbtEditorPart, editorInput);
+				setPageText(index, fbtEditorPart.getTitle());
+				setPageImage(index, fbtEditorPart.getTitleImage());
+			} catch (final PartInitException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+			}
+
+		}
+	}
+
+	private SortedMap<Integer, IFBTEditorPart> getEditorsSorted() {
 		final SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = new TreeMap<>();
 
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -274,23 +295,7 @@ IEditorFileChangeListener {
 				}
 			}
 		}
-
-		editors = new ArrayList<>();
-		final FBTypeEditorInput editorInput = getFBTypeEditorInput();
-
-		for (final IFBTEditorPart fbtEditorPart : sortedEditorsMap.values()) {
-			editors.add(fbtEditorPart);
-			try {
-				// setCommonCommandStack needs to be called before the editor is added as page
-				fbtEditorPart.setCommonCommandStack(commandStack);
-				final int index = addPage(fbtEditorPart, editorInput);
-				setPageText(index, fbtEditorPart.getTitle());
-				setPageImage(index, fbtEditorPart.getTitleImage());
-			} catch (final PartInitException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
-
-		}
+		return sortedEditorsMap;
 	}
 
 	/**
@@ -404,5 +409,21 @@ IEditorFileChangeListener {
 	@Override
 	public IFile getFile() {
 		return paletteEntry != null ? paletteEntry.getFile() : null;
+	}
+
+	@Override
+	protected void pageChange(final int newPageIndex) {
+		super.pageChange(newPageIndex);
+		getSite().getPage().getNavigationHistory().markLocation(this);
+	}
+
+	@Override
+	public INavigationLocation createEmptyNavigationLocation() {
+		return null;
+	}
+
+	@Override
+	public INavigationLocation createNavigationLocation() {
+		return new FBTypeNavigationLocation(this);
 	}
 }

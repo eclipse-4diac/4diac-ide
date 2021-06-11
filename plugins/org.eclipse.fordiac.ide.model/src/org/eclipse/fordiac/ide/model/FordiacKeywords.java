@@ -224,6 +224,8 @@ public final class FordiacKeywords {
 	@ModelString
 	public static final String ADAPTER_PLUG = "PLUG1"; //$NON-NLS-1$
 
+	@ModelString
+	public static final String INTERFACE_Y_POSITION = "YPOSITION"; //$NON-NLS-1$
 
 
 	private FordiacKeywords() {

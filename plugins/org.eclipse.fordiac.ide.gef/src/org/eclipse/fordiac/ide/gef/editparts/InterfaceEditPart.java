@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- * 				 2018 - 2019 Johannes Kepler University
+ * 				 2018 - 2019 Johannes Kepler University,
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *   Alois Zoitl - allowed resource drop on on whole interfaces
  *   Alois Zoitl - extracted interface selection policy and added connection
  *   			   creation feedback
+ *   Daniel Lindhuber - added source comment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -29,6 +31,7 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
@@ -36,10 +39,14 @@ import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.DataInterfaceLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.InterfaceElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
@@ -50,6 +57,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
+import org.eclipse.jface.util.IPropertyChangeListener;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
@@ -58,8 +66,17 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 	private Adapter contentAdapter = null;
 
+	private boolean showInstanceName = Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_COMMENT_AT_PIN);
+	private final IPropertyChangeListener preferenceListener = event -> {
+		if (event.getProperty().equals(DiagramPreferences.SHOW_COMMENT_AT_PIN)) {
+			showInstanceName = ((Boolean) event.getNewValue()).booleanValue();
+			refreshLabelText();
+		}
+	};
+
 	protected InterfaceEditPart() {
 		setConnectable(true);
+		addPreferenceListener();
 	}
 
 	@Override
@@ -77,10 +94,50 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		if (getReferencedValueEditPart() != null) {
 			getReferencedValueEditPart().refreshValue();
 		}
+		refreshLabelText();
 	}
 
 	protected String getLabelText() {
+		final String comment = getSourcePinInstanceName();
+		if (isShowInput() && !comment.isBlank()) {
+			return comment;
+		}
 		return getModel().getName();
+	}
+
+	private void refreshLabelText() {
+		((InterfaceFigure) getFigure()).setText(getLabelText());
+	}
+
+	private boolean isShowInput() {
+		return showInstanceName && isInput() && !getModelTargetConnections().isEmpty();
+	}
+
+	private void addPreferenceListener() {
+		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+	}
+
+	private String getSourcePinInstanceName() {
+		if (!getModelTargetConnections().isEmpty()) {
+			final Object conn = getModelTargetConnections().get(0);
+			if (conn instanceof Connection) {
+				final FBNetworkElement source = ((Connection) conn).getSourceElement();
+				final String pinName = ((Connection) conn).getSource().getName();
+				if (source != null && !isSubAppPin(source)) {
+					final String elementName = source.getName();
+					return elementName + "." + pinName; //$NON-NLS-1$
+				}
+				return pinName;
+			}
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	private boolean isSubAppPin(FBNetworkElement connSource) {
+		if (connSource instanceof SubApp) {
+			return ((SubApp) connSource).getSubAppNetwork() == getModel().getFBNetworkElement().getFbNetwork();
+		}
+		return false;
 	}
 
 	public class InterfaceFigure extends SetableAlphaLabel {
@@ -147,7 +204,6 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 	protected abstract GraphicalNodeEditPolicy getNodeEditPolicy();
 
-	@SuppressWarnings("unchecked")
 	public void setInOutConnectionsWidth(final int width) {
 		getSourceConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
 		getTargetConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
@@ -253,6 +309,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		if (isActive()) {
 			super.deactivate();
 			getModel().eAdapters().remove(getContentAdapter());
+			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(preferenceListener);
 		}
 		referencedPart = null;
 	}
@@ -322,4 +379,5 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		}
 		return referencedPart;
 	}
+
 }

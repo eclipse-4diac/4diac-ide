@@ -31,23 +31,19 @@ public class CreateAlgorithmCommand extends AbstractCreationCommand {
 	private STAlgorithm newAlgorithm;
 	private Algorithm oldAlgorithm;
 	private ECAction action;
-	private int index;
-	private String name;
+	private final int index;
+	private final String name;
 
 	public CreateAlgorithmCommand(final BasicFBType fbType) {
 		this(fbType, fbType.getAlgorithm().size() - 1, null);
 	}
 
-	public Algorithm getNewAlgorithm() {
-		return newAlgorithm;
-	}
-
-	public CreateAlgorithmCommand(final BasicFBType fbType, ECAction action) {
+	public CreateAlgorithmCommand(final BasicFBType fbType, final ECAction action) {
 		this(fbType);
 		this.action = action;
 	}
 
-	public CreateAlgorithmCommand(final BasicFBType fbType, int index, String name) {
+	public CreateAlgorithmCommand(final BasicFBType fbType, final int index, final String name) {
 		this.fbType = fbType;
 		this.index = index;
 		this.name = (null != name) ? name : DEFAULT_ALGORITHM_NAME;
@@ -61,7 +57,7 @@ public class CreateAlgorithmCommand extends AbstractCreationCommand {
 		newAlgorithm = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		newAlgorithm.setComment(""); //$NON-NLS-1$
 		newAlgorithm.setText(""); // especially the xtext editor requires at least an empty //$NON-NLS-1$
-									// algorithm text
+		// algorithm text
 		redo();
 		newAlgorithm.setName(NameRepository.createUniqueName(newAlgorithm, name));
 	}
@@ -83,7 +79,7 @@ public class CreateAlgorithmCommand extends AbstractCreationCommand {
 	}
 
 	@Override
-	public Object getCreatedElement() {
+	public Algorithm getCreatedElement() {
 		return newAlgorithm;
 	}
 }

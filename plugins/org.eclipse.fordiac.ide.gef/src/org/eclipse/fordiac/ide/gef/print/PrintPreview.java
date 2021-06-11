@@ -222,14 +222,16 @@ public class PrintPreview extends Dialog {
 	}
 
 	private org.eclipse.draw2d.geometry.Point getClipRectLocationForPage(int page, final double scale) {
-
 		final org.eclipse.draw2d.geometry.Rectangle bounds = figure.getBounds();
 		final double scaledPageWidth = margin.getWidth() / scale;
+		final double scaledPageHeight = margin.getHeight() / scale;
 		page -= 1;
 
 		final int cols = (int) Math.ceil((bounds.width()) / scaledPageWidth);
-		return new org.eclipse.draw2d.geometry.Point((int) (bounds.x + (page % cols) * scaledPageWidth),
-				(int) (bounds.y + (page / cols) * margin.getHeight() / scale));
+		final int currentColumn = page % cols;
+		final int currentRow = page / cols;
+		return new org.eclipse.draw2d.geometry.Point((int) (bounds.x + currentColumn * scaledPageWidth),
+				(int) (bounds.y + currentRow * scaledPageHeight));
 	}
 
 	private void updatePageNumbers() {

@@ -40,7 +40,6 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -52,6 +51,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
+import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
@@ -74,24 +74,36 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getEventType() == Notification.REMOVE) {
-				if ((notification.getOldValue() == getAction().getOutput())
+			switch (notification.getEventType()) {
+			case Notification.REMOVE:
+				handleRemove(notification);
+				break;
+			case Notification.SET:
+				handleSet(notification);
+				break;
+			default:
+				break;
+			}
+		}
+
+		private void handleSet(final Notification notification) {
+			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)) {
+				if ((getAction().getOutput().getName().equals(notification.getNewValue()))
 						|| ((getAction().getOutput() instanceof AdapterEvent)
-								&& (notification.getOldValue() instanceof AdapterDeclaration)
-								&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification
-								.getOldValue()))) {
-					executeCommand(new ChangeOutputCommand(getAction(), null));
+								&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration().getName()
+										.equals(notification.getNewValue())))) {
+					refreshEventLabel();
 				}
-			} else if (notification.getEventType() == Notification.SET) {
-				if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)) {
-					if (getAction().getOutput().getName().equals(notification.getNewValue())) {
-						refreshEventLabel();
-					} else if ((getAction().getOutput() instanceof AdapterEvent)
-							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration().getName()
-									.equals(notification.getNewValue()))) {
-						refreshEventLabel();
-					}
-				}
+			}
+		}
+
+		private void handleRemove(final Notification notification) {
+			if ((notification.getOldValue() == getAction().getOutput())
+					|| ((getAction().getOutput() instanceof AdapterEvent)
+							&& (notification.getOldValue() instanceof AdapterDeclaration)
+							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification
+							.getOldValue()))) {
+				executeCommand(new ChangeOutputCommand(getAction(), null));
 			}
 		}
 	};
@@ -138,7 +150,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 				return new DeleteECActionCommand(getAction());
 			}
 		});
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {

@@ -26,13 +26,13 @@ public class PaletteFilter {
 	private final Palette palette;
 	private final SearchPattern matcher = new SearchPattern();
 
-	public PaletteFilter(Palette palette) {
+	public PaletteFilter(final Palette palette) {
 		this.palette = palette;
 
 	}
 
 	public List<PaletteEntry> findFBAndSubappTypes(final String searchString) {
-		Stream<Entry<String, ? extends PaletteEntry>> stream = Stream.concat(palette.getFbTypes().entrySet().stream(),
+		final Stream<Entry<String, ? extends PaletteEntry>> stream = Stream.concat(palette.getFbTypes().entrySet().stream(),
 				palette.getSubAppTypes().entrySet().stream());
 		return findTypes(searchString, stream);
 	}
@@ -42,8 +42,8 @@ public class PaletteFilter {
 		setSearchPattern(searchString);
 		return stream.filter(entry -> matcher.matches(entry.getKey()))
 				.filter(entry -> (null != entry.getValue().getType())). // only forward types that can be loaded
-																		// correctly
-				map(entry -> entry.getValue()).collect(Collectors.toList());
+				// correctly
+				map(Entry<String, ? extends PaletteEntry>::getValue).collect(Collectors.toList());
 	}
 
 	private void setSearchPattern(final String searchString) {

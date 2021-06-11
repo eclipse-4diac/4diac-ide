@@ -48,7 +48,7 @@ public class DeviceInterfaceEditPart extends InterfaceEditPart {
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request request) {
+	public DragTracker getDragTracker(final Request request) {
 		return new SelectEditPartTracker(this);
 	}
 
@@ -66,26 +66,25 @@ public class DeviceInterfaceEditPart extends InterfaceEditPart {
 	protected LayoutEditPolicy getLayoutPolicy() {
 		return new DataInterfaceLayoutEditPolicy() {
 			@Override
-			protected Command getCreateCommand(CreateRequest request) {
+			protected Command getCreateCommand(final CreateRequest request) {
 				if (((getHost() instanceof InterfaceEditPart)
 						&& (request.getNewObjectType() instanceof ResourceTypeEntry))) {
-					ResourceTypeEntry type = (ResourceTypeEntry) request.getNewObjectType();
-					Device dev = (Device) ((InterfaceEditPart) getHost()).getModel().eContainer();
+					final ResourceTypeEntry type = (ResourceTypeEntry) request.getNewObjectType();
+					final Device dev = (Device) ((InterfaceEditPart) getHost()).getModel().eContainer();
 					return new ResourceCreateCommand(type, dev, false);
 				}
 				return super.getCreateCommand(request);
 			}
 
 			@Override
-			protected Command getAddCommand(Request generic) {
-				ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
-				@SuppressWarnings("unchecked")
-				List<EditPart> editParts = request.getEditParts();
-				CompoundCommand command = new CompoundCommand();
+			protected Command getAddCommand(final Request generic) {
+				final ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
+				final List<EditPart> editParts = request.getEditParts();
+				final CompoundCommand command = new CompoundCommand();
 
-				for (EditPart child : editParts) {
+				for (final EditPart child : editParts) {
 					if (child instanceof ResourceEditPart) {
-						Device targetDevice = (Device) ((InterfaceEditPart) getHost()).getModel().eContainer();
+						final Device targetDevice = (Device) ((InterfaceEditPart) getHost()).getModel().eContainer();
 						return new ResourceMoveCommand(((ResourceEditPart) child).getModel(), targetDevice,
 								targetDevice.getResource().size());
 					}

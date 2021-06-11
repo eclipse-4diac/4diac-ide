@@ -19,6 +19,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.elk.core.service.DiagramLayoutEngine;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutFactory;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -27,7 +28,9 @@ public class LayoutHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-		DiagramLayoutEngine.invokeLayout(workbenchPart, null, FordiacLayoutFactory.createLayoutParams());
+		if (workbenchPart instanceof IEditorPart) {
+			DiagramLayoutEngine.invokeLayout(workbenchPart, null, FordiacLayoutFactory.createLayoutParams());
+		}
 		return null;
 	}
 

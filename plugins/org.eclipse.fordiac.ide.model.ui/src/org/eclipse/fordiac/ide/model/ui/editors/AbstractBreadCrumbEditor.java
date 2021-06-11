@@ -123,12 +123,20 @@ INavigationLocationProvider, IPersistableEditor {
 		return pageContainer;
 	}
 
-	void handleBreadCrumbSelection(final Object element) {
+	protected void handleBreadCrumbSelection(final Object element) {
 		final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor).intValue();
 		if (-1 != pagenum) {
 			setActivePage(pagenum);
-			getSite().getPage().getNavigationHistory().markLocation(this);
+			getSite().getPage().getNavigationHistory().markLocation(getNavigationLocationProvider());
 		}
+	}
+
+	protected IEditorPart getNavigationLocationProvider() {
+		// if the breadcrumb editor is embedded into an other editor part this should help
+		if (getSite().getPart() instanceof IEditorPart) {
+			return (IEditorPart) getSite().getPart();
+		}
+		return this;
 	}
 
 	private int createEditor(final Object model) {
@@ -157,7 +165,7 @@ INavigationLocationProvider, IPersistableEditor {
 			return adapter.cast(getCommandStack());
 		}
 		if (adapter == IGotoMarker.class) {
-			return adapter.cast(this);
+			return adapter.cast(getNavigationLocationProvider());
 		}
 		return super.getAdapter(adapter);
 	}

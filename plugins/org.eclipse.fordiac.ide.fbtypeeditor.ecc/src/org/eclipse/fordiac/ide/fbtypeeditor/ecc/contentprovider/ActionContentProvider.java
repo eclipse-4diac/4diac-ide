@@ -46,10 +46,8 @@ public class ActionContentProvider implements ITreeContentProvider {
 		if (element instanceof ECState) {
 			return ((ECState) element).getECC();
 		}
-		if (element instanceof ECAction) {
-			if (null != ((ECAction) element).getECState()) {
-				return ((ECAction) element).getECState().getECC().getBasicFBType();
-			}
+		if ((element instanceof ECAction) && (null != ((ECAction) element).getECState())) {
+			return ((ECAction) element).getECState().getECC().getBasicFBType();
 		}
 		return null;
 	}

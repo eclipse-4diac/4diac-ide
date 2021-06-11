@@ -1,5 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH,
+ *                          Primetals Technologies Austria GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,8 +11,10 @@
  *
  * Contributors:
  *   Daniel Lindhuber - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr - fix column traversal, add context menu
- *   Michael Jaeger - replaced HashSet with ArrayList
+ *   Bianca Wiesmayr  - fix column traversal, add context menu
+ *   Michael Jaeger   - replaced HashSet with ArrayList
+ *   Lukas Wais		  - implemented tree menu for structured types
+ *   Alois Zoitl	  - fixed fokus checking for linux.
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.ui.editors;
@@ -24,11 +28,11 @@ import java.util.stream.Collectors;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposalListener2;
 import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
@@ -45,6 +49,8 @@ import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -56,6 +62,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 public class DataTypeDropdown extends TextCellEditor {
@@ -67,12 +75,9 @@ public class DataTypeDropdown extends TextCellEditor {
 	private List<DataType> types;
 	private String[] elementaryTypes;
 	private final TableViewer viewer;
-	/*
-	 * A flag that indicates if the content proposals have been set to elementary
-	 * types (this is the case if the text field is empty) or all types. This means
-	 * that the ModifyListener of the textControl does not have to set the types for
-	 * the proposal provider with every modify event but only when its necessary.
-	 */
+	/* A flag that indicates if the content proposals have been set to elementary types (this is the case if the text
+	 * field is empty) or all types. This means that the ModifyListener of the textControl does not have to set the
+	 * types for the proposal provider with every modify event but only when its necessary. */
 	private boolean isElementary;
 
 	private boolean isTraverseNextProcessActive;
@@ -95,17 +100,14 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	@Override
 	protected void doSetValue(final Object value) {
-		if (value == null) {
+		if (null == value) {
 			textControl.setText(""); //$NON-NLS-1$
 		} else {
 			super.doSetValue(value);
 		}
 	}
 
-	/*
-	 * is called with every opening of the content proposal popup, may lead to
-	 * performance issues
-	 */
+	/* is called with every opening of the content proposal popup, may lead to performance issues */
 	private void loadContent() {
 		types = getDataTypesSorted(); // get sorted types for convenient order in dialog
 		provider.setProposals(getTypesAsStringArray());
@@ -113,7 +115,7 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	// can be overridden to filter the list differently
 	protected List<DataType> getDataTypesSorted() {
-		if (library != null) {
+		if (null != library) {
 			return library.getDataTypesSorted().stream().filter(Objects::nonNull).collect(Collectors.toList());
 		}
 		return Collections.emptyList();
@@ -212,7 +214,7 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private String[] getElementaryTypes() {
 		// only load elementary types once because they do not change
-		if (elementaryTypes == null) {
+		if (null == elementaryTypes) {
 			elementaryTypes = types.stream().filter(type -> !(type instanceof StructuredType)).map(DataType::getName)
 					.toArray(String[]::new);
 		}
@@ -259,10 +261,13 @@ public class DataTypeDropdown extends TextCellEditor {
 			return;
 		}
 		final Object result = dialog.getFirstResult();
-		// check for DataType so that no VarDeclaration can be selected
-		if (result instanceof DataType) {
-			doSetValue(((DataType) result).getName());
-			fireApplyEditorValue();
+		// check for DataType so that no VarDeclaration or directories can be selected
+		if (result instanceof TypeNode) {
+			final TypeNode node = (TypeNode) result;
+			if (!node.isDirectory()) { // nodes without types are directories
+				doSetValue(node.getName());
+				fireApplyEditorValue();
+			}
 		}
 		deactivate();
 	}
@@ -311,8 +316,11 @@ public class DataTypeDropdown extends TextCellEditor {
 
 		private StructuredType getSelectedStructuredType(final Control control) {
 			final Object selected = ((TreeSelection) getTreeViewer().getSelection()).getFirstElement();
-			if (selected instanceof StructuredType) {
-				return (StructuredType) selected;
+			if (selected instanceof TypeNode) {
+				final DataType dtp = ((TypeNode) selected).getType();
+				if (dtp instanceof StructuredType) {
+					return (StructuredType) dtp;
+				}
 			}
 			return null;
 		}
@@ -322,16 +330,23 @@ public class DataTypeDropdown extends TextCellEditor {
 		return new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof DataType) {
-					return ((DataType) element).getName();
-				}
-				if (element instanceof VarDeclaration) {
-					return ((VarDeclaration) element).getName();
-				}
 				if (element instanceof TypeNode) {
 					return ((TypeNode) element).getName();
 				}
 				return element.toString();
+			}
+
+			@Override
+			public Image getImage(final Object element) {
+				if (element instanceof TypeNode) {
+					final TypeNode node = (TypeNode) element;
+					if (node.isDirectory()) {
+						return PlatformUI.getWorkbench().getSharedImages()
+								.getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER).createImage();
+					}
+					return FordiacImage.ICON_DATA_TYPE.getImage();
+				}
+				return super.getImage(element);
 			}
 		};
 	}
@@ -342,44 +357,80 @@ public class DataTypeDropdown extends TextCellEditor {
 			@Override
 			public boolean hasChildren(final Object element) {
 				if (element instanceof TypeNode) {
-					return !((TypeNode) element).getTypes().isEmpty();
+					return !((TypeNode) element).getChildren().isEmpty();
 				}
 				return false;
 			}
 
-			@Override
-			public Object getParent(final Object element) {
-				return null;
-			}
-
-			/*
-			 * This method separates elementary types and structs into different type nodes
-			 * before displaying them in the tree
-			 */
+			/* This method separates elementary types and structs into different type nodes before displaying them in
+			 * the tree */
 			@Override
 			public Object[] getElements(final Object inputElement) {
-				final TypeNode elementaryType = new TypeNode(Messages.DataTypeDropdown_Elementary_Types);
-				final TypeNode structType = new TypeNode(Messages.DataTypeDropdown_STRUCT_Types);
+				final TypeNode elementaries = new TypeNode(Messages.DataTypeDropdown_Elementary_Types);
+				final TypeNode structures = new TypeNode(Messages.DataTypeDropdown_STRUCT_Types);
 
 				if (inputElement instanceof List<?>) {
 					((List<?>) inputElement).forEach(type -> {
 						if (type instanceof StructuredType) {
-							structType.addType((DataType) type);
+							final StructuredType structuredType = (StructuredType) type;
+							// some files are created at runtime and do not have a path
+							if (null != structuredType.getPaletteEntry()) {
+								final String parentPath = structuredType.getPaletteEntry().getFile().getParent()
+										.getProjectRelativePath().toOSString();
+								createSubdirectories(structures, structuredType, parentPath);
+							} else {
+								final TypeNode runtimeNode = new TypeNode(structuredType.getName(), structuredType);
+								runtimeNode.setParent(structures);
+								structures.addChild(runtimeNode);
+							}
 						} else if (type instanceof DataType) {
-							elementaryType.addType((DataType) type);
+							final DataType simpleType = (DataType) type;
+							final TypeNode newNode = new TypeNode(simpleType.getName(), simpleType);
+							elementaries.addChild(newNode);
 						}
 					});
 				}
 
-				return new TypeNode[] { elementaryType, structType };
+				return new TypeNode[] { elementaries, structures };
+			}
+
+			private void createSubdirectories(TypeNode node, final StructuredType structuredType,
+					final String parentPath) {
+				// split up the path in subdirectories
+				final String[] paths = parentPath.split("\\\\"); //$NON-NLS-1$
+
+				// start after Type Library
+				for (int i = 1; i < paths.length; i++) {
+					final TypeNode current = new TypeNode(paths[i]);
+					// check if we already have a parent node
+					final int index = node.getChildren().indexOf(current);
+					if (-1 != index) {
+						node = node.getChildren().get(index);
+					} else {
+						current.setParent(node);
+						node.addChild(current);
+						node = current;
+					}
+				}
+				final TypeNode actualType = new TypeNode(structuredType.getName(), structuredType);
+				actualType.setParent(node);
+				node.addChild(actualType);
 			}
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
 				if (parentElement instanceof TypeNode) {
-					return ((TypeNode) parentElement).getTypes().toArray();
+					return ((TypeNode) parentElement).getChildren().toArray();
 				}
 				return new Object[0];
+			}
+
+			@Override
+			public Object getParent(final Object element) {
+				if (element instanceof TypeNode) {
+					return ((TypeNode) element).getParent();
+				}
+				return null;
 			}
 		};
 	}
@@ -426,39 +477,107 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	@Override
 	protected void focusLost() {
-		deactivate();
+		if (!insideAnyEditorArea()) {
+			deactivate();
+		}
 	}
+	private boolean insideAnyEditorArea() {
+		final Point cursorLocation = getControl().getDisplay().getCursorLocation();
+		final Point containerRelativeCursor = getControl().getParent().toControl(cursorLocation);
+		return getControl().getBounds().contains(containerRelativeCursor);
+	}
+
 
 	@Override
 	protected boolean dependsOnExternalFocusListener() {
-		/*
-		 * if true, a separate focus listener is created and the whole cell editor
-		 * looses focus when the proposal popup is opened
-		 */
+		/* if true, a separate focus listener is created and the whole cell editor looses focus when the proposal popup
+		 * is opened */
 		return false;
 	}
 
-	private static class TypeNode {
+	private static class TypeNode implements Comparable<TypeNode> {
 		private final String name;
-		private final List<DataType> types;
+		private final List<TypeNode> children;
+		private TypeNode parent;
+		private DataType type;
 
-		public TypeNode(final String name) {
+		private TypeNode(final String name) {
 			this.name = name;
-			types = new ArrayList<>();
+			children = new ArrayList<>();
 		}
 
-		public String getName() {
+		public boolean isDirectory() {
+			return null == type;
+		}
+
+		private TypeNode(final String name, final DataType type) {
+			this.name = name;
+			this.type = type;
+			children = new ArrayList<>();
+		}
+
+		private String getName() {
 			return name;
 		}
 
-		public List<DataType> getTypes() {
-			return types;
+		private List<TypeNode> getChildren() {
+			return children;
 		}
 
-		public void addType(final DataType type) {
-			types.add(type);
+		// inserting in place
+		private void addChild(final TypeNode child) {
+			final int index = Collections.binarySearch(children, child);
+			if (index < 0) {
+				children.add(-index - 1, child);
+			}
 		}
 
+		private TypeNode getParent() {
+			return parent;
+		}
+
+		private void setParent(final TypeNode parent) {
+			this.parent = parent;
+		}
+
+		public DataType getType() {
+			return type;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = (prime * result) + ((name == null) ? 0 : name.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(final Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (null == obj) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final TypeNode other = (TypeNode) obj;
+			if (null == name) {
+				if (null != other.name) {
+					return false;
+				}
+			} else if (!name.equals(other.name)) {
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		public int compareTo(final TypeNode other) {
+			// otherwise lower case would be after upper case names
+			return this.name.toLowerCase().compareTo(other.getName().toLowerCase());
+		}
 	}
-
 }

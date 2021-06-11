@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTestBase {
 
-	protected static final String EVENT_TYPE = "Event";
+	protected static final String EVENT_TYPE = "Event"; //$NON-NLS-1$
 
 	protected static State initializeState() {
 		final State state = new State();
@@ -131,7 +131,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 
 	protected static Collection<ExecutionDescription<State>> createUpdateAndValidate(final StateVerifier<State> v) {
 		return List.of( //
-				new ExecutionDescription<>("validate missing entries before update FB", //
+				new ExecutionDescription<>("validate missing entries before update FB", // //$NON-NLS-1$
 						CreateInterfaceElementCommandTestBase::executeNOP, //
 						(final State s, final State oldState, final TestFunction t) -> {
 							final InterfaceList interfacelist = getInstanceInterfaceList(s);
@@ -140,7 +140,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 							t.test(interfacelist.getEventInputs().isEmpty());
 							t.test(interfacelist.getEventOutputs().isEmpty());
 						}), //
-				new ExecutionDescription<>("update FB", //
+				new ExecutionDescription<>("update FB", // //$NON-NLS-1$
 						CreateInterfaceElementCommandTestBase::executeUpdate, //
 						v) //
 				);

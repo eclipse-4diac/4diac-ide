@@ -22,9 +22,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -47,6 +50,7 @@ import org.eclipse.gef.EditPart;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getAttributes <em>Attributes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#isIsInput <em>Is Input</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getOutputConnections <em>Output Connections</em>}</li>
@@ -97,6 +101,16 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @ordered
 	 */
 	protected String comment = COMMENT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAttributes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Attribute> attributes;
 
 	/**
 	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
@@ -259,6 +273,19 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 		comment = newComment;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT, oldComment, comment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<Attribute> getAttributes() {
+		if (attributes == null) {
+			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES);
+		}
+		return attributes;
 	}
 
 	/**
@@ -480,6 +507,46 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Attribute getAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getAttributeValue(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean deleteAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -505,6 +572,8 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
+				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
 				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
@@ -529,6 +598,8 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				return getName();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
 				return getComment();
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
+				return getAttributes();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
 				return isIsInput();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
@@ -565,6 +636,10 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
 				setComment((String)newValue);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
+				getAttributes().clear();
+				getAttributes().addAll((Collection<? extends Attribute>)newValue);
 				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
 				setIsInput((Boolean)newValue);
@@ -612,6 +687,9 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
+				getAttributes().clear();
+				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
 				setIsInput(IS_INPUT_EDEFAULT);
 				return;
@@ -653,6 +731,8 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
+				return attributes != null && !attributes.isEmpty();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
 				return isInput != IS_INPUT_EDEFAULT;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
@@ -687,6 +767,12 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				default: return -1;
 			}
 		}
+		if (baseClass == ConfigurableObject.class) {
+			switch (derivedFeatureID) {
+				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
+				default: return -1;
+			}
+		}
 		if (baseClass == IInterfaceElement.class) {
 			switch (derivedFeatureID) {
 				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT: return LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT;
@@ -718,6 +804,12 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			switch (baseFeatureID) {
 				case LibraryElementPackage.INAMED_ELEMENT__NAME: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME;
 				case LibraryElementPackage.INAMED_ELEMENT__COMMENT: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT;
+				default: return -1;
+			}
+		}
+		if (baseClass == ConfigurableObject.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES;
 				default: return -1;
 			}
 		}

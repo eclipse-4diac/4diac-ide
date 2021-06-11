@@ -42,7 +42,11 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart.InterfaceFigure;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -374,7 +378,8 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	}
 
 	public void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
-		final IFigure child = childEditPart.getFigure();
+		// we need to get the parent here for handling the padding figure
+		final IFigure child = childEditPart.getFigure().getParent();
 		final IFigure container = getChildVisualContainer(childEditPart);
 		if (child.getParent() == container) {
 			container.remove(child);
@@ -425,8 +430,32 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			}
 		}
 		final int containerSize = targetFigure.getChildren().size();
-		targetFigure.add(child, (index >= containerSize) ? containerSize : index);
+		targetFigure.add(createSideBarFigure(childEditPart), (index >= containerSize) ? containerSize : index);
 		child.setVisible(isVarVisible(childEditPart));
+	}
+
+	private static IFigure createSideBarFigure(final InterfaceEditPart ep) {
+		final IFigure container = new Figure();
+		container.setLayoutManager(new ToolbarLayout());
+
+		final int textHeight = ((InterfaceFigure) ep.getFigure()).getTextBounds().height();
+		final IFigure paddingFigure = new MinSizeFigure();
+		paddingFigure.setMinimumSize(new Dimension(-1, getYPositionFromAttribute(ep.getModel()) - textHeight));
+
+		container.add(paddingFigure);
+		container.add(ep.getFigure());
+
+		return container;
+	}
+
+	private static int getYPositionFromAttribute(final IInterfaceElement ie) {
+		final Attribute attribute = ie.getAttribute(FordiacKeywords.INTERFACE_Y_POSITION);
+
+		if (attribute != null) {
+			return Integer.parseInt(attribute.getValue());
+		}
+
+		return 0;
 	}
 
 	@SuppressWarnings("static-method") // this method can be overridden so that editors can hide certain interface

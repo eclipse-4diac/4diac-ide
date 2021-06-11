@@ -42,11 +42,9 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 
 	@Override
 	public void dispose() {
-		if (adapter != null && getModel() != null) {
-			if (getSubApp().eAdapters().contains(adapter)) {
-				getSubApp().eAdapters().remove(adapter);
-				adapter = null;
-			}
+		if ((adapter != null) && (getModel() != null) && (getSubApp().eAdapters().contains(adapter))) {
+			getSubApp().eAdapters().remove(adapter);
+			adapter = null;
 		}
 		super.dispose();
 		getEditDomain().setPaletteViewer(null);

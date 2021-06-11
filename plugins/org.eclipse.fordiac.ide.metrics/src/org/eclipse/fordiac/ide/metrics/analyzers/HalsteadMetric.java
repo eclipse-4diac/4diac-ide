@@ -11,7 +11,7 @@
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed analysis result to key value pairs
- *   Lisa Sonnleithner - Adjustments to change calculation method to average 
+ *   Lisa Sonnleithner - Adjustments to change calculation method to average
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
@@ -43,7 +43,7 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 				analyzeAction(action, data);
 			}
 		}
-		
+
 		data.uniqueOperands += data.uniqueTrans;
 		data.uniqueOperator += data.uniqueTrans;
 		data.operators +=data. actions.size() + data.transCond.size();
@@ -61,7 +61,7 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 		return data;
 	}
 
-	private void analyzeAction(final ECAction action, final HalsteadData data) {
+	private static void analyzeAction(final ECAction action, final HalsteadData data) {
 		if (!data.actions.contains("Action " + data.actionCount)) {
 			data.uniqueOperator += 1;
 		}
@@ -80,7 +80,7 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 		data.actionCount++;
 	}
 
-	private void analyzeAlgorithm(final Algorithm algorithm, final HalsteadData data) {
+	private static void analyzeAlgorithm(final Algorithm algorithm, final HalsteadData data) {
 		if (!data.alg.contains(algorithm.getName())) {
 			data.uniqueOperands += 1;
 		}
@@ -103,22 +103,22 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 			count++;
 		}
 	}
-	
 
-	
+
+
 
 	@Override
 	public List<MetricResult> getResults() {
 
 		final List<MetricResult> results = new ArrayList<>();
-		
+
 		final HalsteadData hData= (HalsteadData) this.data;
-		
+
 		results.add(new MetricResult("Distinct operators n1 ",hData.n1));
 		results.add(new MetricResult("Distinct operands n2", hData.n2));
 		results.add(new MetricResult("Total number of operators N1", hData.n1Major));
 		results.add(new MetricResult("Total number of operands N2", hData.n2Major));
-		
+
 		final double nMAjor = hData.n1Major + hData.n2Major;
 		final double n = hData.n1 + hData.n2;
 		final double nHat = (hData.n1 * Math.log(hData.n1) / Math.log(2) + hData.n2 * Math.log(hData.n2) / Math.log(2));
@@ -140,7 +140,7 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 
 	@Override
 	protected MetricData createDataType() {
-	
+
 		return new HalsteadData();
 	}
 

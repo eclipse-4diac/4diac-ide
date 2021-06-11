@@ -28,11 +28,10 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
-class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart {
+class CommentTypeEditPart extends AbstractGraphicalEditPart {
 
 	private static final int WITH_SIZE = 10;
 	private static final int DISTANCE_TO_FB_BORDER = 15;

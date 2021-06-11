@@ -166,7 +166,7 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		}
 	}
 
-	private static String getDatatypeNameFromFile(IFile file) {
+	private static String getDatatypeNameFromFile(final IFile file) {
 		return file.getName().substring(0, file.getName().lastIndexOf('.'));
 	}
 
@@ -294,12 +294,11 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		return actionRegistry;
 	}
 
-	public void updateDataType(IPath path) {
+	public void updateDataType(final IPath path) {
 		this.file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 		final String name = getDatatypeNameFromFile(file);
 		dataType.setName(name);
 		setPartName(name);
-		setTitle(name);
 		setInput(new FileEditorInput(file));
 	}
 

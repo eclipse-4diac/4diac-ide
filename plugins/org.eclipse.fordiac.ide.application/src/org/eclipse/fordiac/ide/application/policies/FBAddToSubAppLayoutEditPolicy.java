@@ -49,10 +49,9 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 	private Figure moveHandle;
 
 	@Override
-	protected Command getAddCommand(Request request) {
+	protected Command getAddCommand(final Request request) {
 
 		if (isDragAndDropRequestFromSubAppToSubApp(request, getTargetEditPart(request))) {
-			@SuppressWarnings("unchecked")
 			final List<EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
 			final SubApp dropSubApp = (SubApp) getTargetEditPart(request).getModel();
 			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, dropSubApp);
@@ -68,18 +67,18 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 	}
 
 	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts,
-			SubApp dropSubApp) {
+			final SubApp dropSubApp) {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
 				.map(ep -> (FBNetworkElement) ep.getModel())
 				.filter(el -> el.isNestedInSubApp() && isChildFromDropTarget(el, dropSubApp))
 				.collect(Collectors.toList());
 	}
 
-	public static boolean isDragAndDropRequestFromSubAppToSubApp(Request generic, EditPart targetEditPart) {
+	public static boolean isDragAndDropRequestFromSubAppToSubApp(final Request generic, final EditPart targetEditPart) {
 		return (generic instanceof ChangeBoundsRequest) && (targetEditPart instanceof SubAppForFBNetworkEditPart);
 	}
 
-	private static boolean isChildFromDropTarget(FBNetworkElement draggedFB, SubApp dropTarget) {
+	private static boolean isChildFromDropTarget(final FBNetworkElement draggedFB, final SubApp dropTarget) {
 		if ((draggedFB.getOuterFBNetworkElement() == null)
 				|| (draggedFB.getOuterFBNetworkElement().getOuterFBNetworkElement() == null)) {
 			return false;
@@ -88,7 +87,7 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 		return draggedFB.getOuterFBNetworkElement().getOuterFBNetworkElement().equals(dropTarget);
 	}
 
-	private org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(ChangeBoundsRequest request) {
+	private org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
 		final FigureCanvas viewerControl = (FigureCanvas) getTargetEditPart(request).getViewer().getControl();
 		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
 		return new org.eclipse.draw2d.geometry.Point(request.getLocation().x + location.x,
@@ -96,7 +95,7 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 	}
 
 	@Override
-	protected void showLayoutTargetFeedback(Request request) {
+	protected void showLayoutTargetFeedback(final Request request) {
 		if (REQ_ADD.equals(request.getType()) && (null == moveHandle)) {
 
 			moveHandle = new ModifiedMoveHandle((GraphicalEditPart) getTargetEditPart(request), new Insets(1),
@@ -110,7 +109,7 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 	}
 
 	@Override
-	protected void eraseLayoutTargetFeedback(Request request) {
+	protected void eraseLayoutTargetFeedback(final Request request) {
 		if (moveHandle != null) {
 			removeFeedback(moveHandle);
 			moveHandle = null;

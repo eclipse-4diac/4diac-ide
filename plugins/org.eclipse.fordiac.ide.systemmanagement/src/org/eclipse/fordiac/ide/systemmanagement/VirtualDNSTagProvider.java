@@ -46,7 +46,7 @@ public class VirtualDNSTagProvider implements ITagProvider {
 		virtualResSet.getAdapterFactories().add(new VirtualDNSAdapterFactory());
 
 		options.put(XMLResource.OPTION_ENCODING, ENCODING_UTF_8);
-		options.put(XMLResource.OPTION_DISABLE_NOTIFY, true);
+		options.put(XMLResource.OPTION_DISABLE_NOTIFY, Boolean.TRUE);
 		options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
 		options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
 	}

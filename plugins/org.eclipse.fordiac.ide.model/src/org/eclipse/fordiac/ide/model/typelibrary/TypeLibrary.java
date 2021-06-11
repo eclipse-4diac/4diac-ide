@@ -63,6 +63,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
+	private final Palette errorTypeLib = PaletteFactory.eINSTANCE.createPalette();
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private final IProject project;
 
@@ -143,6 +144,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	private TypeLibrary(final IProject project) {
 		this.project = project;
 		blockTypeLib.setTypeLibrary(this);
+		errorTypeLib.setTypeLibrary(this);
 		if (null != project) {
 			loadPaletteFolderMembers(project);
 		}
@@ -376,5 +378,9 @@ public final class TypeLibrary implements TypeLibraryTags {
 		} else {
 			// invalid location, throw an exception or warn user
 		}
+	}
+
+	public Palette getErrorTypeLib() {
+		return errorTypeLib;
 	}
 }

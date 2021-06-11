@@ -53,18 +53,14 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
-				if (!(notification.getNotifier() instanceof Algorithm)) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							if ((null != editor.getViewer()) && (null != editor.getViewer().getControl())
-									&& (!editor.getViewer().getControl().isDisposed())) {
-								updatePrefix();
-							}
-						}
-					});
-				}
+			if ((Notification.REMOVING_ADAPTER != notification.getEventType())
+					&& (!(notification.getNotifier() instanceof Algorithm))) {
+				Display.getDefault().asyncExec(() -> {
+					if ((null != editor.getViewer()) && (null != editor.getViewer().getControl())
+							&& (!editor.getViewer().getControl().isDisposed())) {
+						updatePrefix();
+					}
+				});
 			}
 		}
 	};

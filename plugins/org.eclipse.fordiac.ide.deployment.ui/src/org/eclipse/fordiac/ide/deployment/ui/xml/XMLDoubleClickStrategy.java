@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009 Profactor GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.xml;
 
+import org.eclipse.fordiac.ide.deployment.ui.Activator;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
@@ -26,14 +27,14 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.ITextDoubleClickStrategy#doubleClicked(org.eclipse.
 	 * jface.text.ITextViewer)
 	 */
 	@Override
 	public void doubleClicked(final ITextViewer part) {
-		int pos = part.getSelectedRange().x;
+		final int pos = part.getSelectedRange().x;
 
 		if (pos < 0) {
 			return;
@@ -47,8 +48,9 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 	}
 
 	protected boolean selectComment(final int caretPos) {
-		IDocument doc = fText.getDocument();
-		int startPos, endPos;
+		final IDocument doc = fText.getDocument();
+		int startPos;
+		int endPos;
 
 		try {
 			int pos = caretPos;
@@ -73,7 +75,7 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 			startPos = pos;
 
 			pos = caretPos;
-			int length = doc.getLength();
+			final int length = doc.getLength();
 			c = ' ';
 
 			while (pos < length) {
@@ -89,12 +91,12 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 
 			endPos = pos;
 
-			int offset = startPos + 1;
-			int len = endPos - offset;
+			final int offset = startPos + 1;
+			final int len = endPos - offset;
 			fText.setSelectedRange(offset, len);
 			return true;
-		} catch (BadLocationException x) {
-			// TODO exception handling
+		} catch (final BadLocationException x) {
+			Activator.getDefault().logError(x.getMessage(), x);
 		}
 
 		return false;
@@ -102,8 +104,9 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 
 	protected boolean selectWord(final int caretPos) {
 
-		IDocument doc = fText.getDocument();
-		int startPos, endPos;
+		final IDocument doc = fText.getDocument();
+		int startPos;
+		int endPos;
 
 		try {
 
@@ -121,7 +124,7 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 			startPos = pos;
 
 			pos = caretPos;
-			int length = doc.getLength();
+			final int length = doc.getLength();
 
 			while (pos < length) {
 				c = doc.getChar(pos);
@@ -135,16 +138,16 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 			selectRange(startPos, endPos);
 			return true;
 
-		} catch (BadLocationException x) {
-			// TODO exception handling
+		} catch (final BadLocationException x) {
+			Activator.getDefault().logError(x.getMessage(), x);
 		}
 
 		return false;
 	}
 
 	private void selectRange(final int startPos, final int stopPos) {
-		int offset = startPos + 1;
-		int length = stopPos - offset;
+		final int offset = startPos + 1;
+		final int length = stopPos - offset;
 		fText.setSelectedRange(offset, length);
 	}
 }

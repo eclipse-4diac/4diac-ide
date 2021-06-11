@@ -24,7 +24,6 @@ import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionOfFb;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.dnd.TemplateTransfer;
@@ -86,10 +85,8 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 	protected void handleDrop() {
 
 		if (!(getCurrentEvent().data instanceof FBTypePaletteEntry)
-				&& !(getCurrentEvent().data instanceof SubApplicationTypePaletteEntry)
-				&& !(getCurrentEvent().data instanceof TransferDataSelectionOfFb[])) {
-			// only allow FB type drops and of TransferDataSelectionOfFb -->
-			// filter e.g. Folder Drops from Type Navigator
+				&& !(getCurrentEvent().data instanceof SubApplicationTypePaletteEntry)) {
+			// only allow FB type drops
 			return;
 		}
 		super.handleDrop();
@@ -123,9 +120,7 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 		getCurrentEvent().detail = DND.DROP_COPY;
 
 		if (template instanceof FBType || template instanceof FBTypePaletteEntry
-				|| template instanceof FBTypePaletteEntry[] || template instanceof TransferDataSelectionOfFb[]
-						|| template instanceof SubApplicationTypePaletteEntry
-						|| template instanceof SubApplicationTypePaletteEntry[]) {
+				|| template instanceof SubApplicationTypePaletteEntry) {
 			return new FBTypeTemplateCreationFactory(template);
 		}
 		return null;

@@ -258,7 +258,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	// subclasses need to override this method if they use a different type dropdown
 	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
-		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
+		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value).intValue()];
 		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
 	}
 
@@ -368,7 +368,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 				break;
 			case TYPE_COL:
 				if (data instanceof AdapterDeclaration) {
-					final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
+					final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value).intValue()];
 					final DataType newType = getPalette().getAdapterTypeEntry(dataTypeName).getType();
 					cmd = newChangeTypeCommand((VarDeclaration) data, newType);
 				} else {

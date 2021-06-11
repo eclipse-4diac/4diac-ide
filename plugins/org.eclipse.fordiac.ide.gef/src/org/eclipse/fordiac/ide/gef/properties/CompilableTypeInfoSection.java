@@ -105,13 +105,13 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		private Object getLanguageIndex(final String language) {
 			switch (language) {
 			case LANGUAGE_JAVA:
-				return LANGUAGE_JAVA_INDEX;
+				return Integer.valueOf(LANGUAGE_JAVA_INDEX);
 			case LANGUAGE_CPP:
-				return LANGUAGE_CPP_INDEX;
+				return Integer.valueOf(LANGUAGE_CPP_INDEX);
 			case LANGUAGE_C:
-				return LANGUAGE_C_INDEX;
+				return Integer.valueOf(LANGUAGE_C_INDEX);
 			default:
-				return LANGUAGE_OTHER_INDEX;
+				return Integer.valueOf(LANGUAGE_OTHER_INDEX);
 			}
 		}
 
@@ -130,7 +130,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 			Command cmd = null;
 			switch (property) {
 			case COMPILER_LANGUAGE:
-				switch ((Integer) value) {
+				switch (((Integer) value).intValue()) {
 				case LANGUAGE_JAVA_INDEX:
 					cmd = new ChangeCompilerLanguageCommand(data, Language.get(LANGUAGE_JAVA));
 					break;

@@ -76,7 +76,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements IEditorFileChangeListener {
 
-	public AutomationSystem system;
+	private AutomationSystem system;
 	private DiagramOutlinePage outlinePage;
 	private final EditorTabCommandStackListener subEditorCommandStackListener;
 

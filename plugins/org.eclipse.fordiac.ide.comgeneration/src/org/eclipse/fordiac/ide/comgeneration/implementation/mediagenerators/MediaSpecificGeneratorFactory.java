@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2015 Luka Lednicki, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,21 +25,21 @@ public class MediaSpecificGeneratorFactory {
 		super();
 	}
 
-	public void addGenerator(MediaSpecificGenerator generator) {
+	public void addGenerator(final MediaSpecificGenerator generator) {
 		generators.put(generator.getProtocolId(), generator);
 	}
 
-	public void removeGenerator(MediaSpecificGenerator generator) {
+	public void removeGenerator(final MediaSpecificGenerator generator) {
 		generators.remove(generator.getProtocolId());
 	}
 
-	public MediaSpecificGenerator getForProtocolId(String protocolId) {
+	public MediaSpecificGenerator getForProtocolId(final String protocolId) {
 		return generators.get(protocolId);
 	}
 
-	public Collection<MediaSpecificGenerator> getForMediaType(String mediaType) {
-		HashSet<MediaSpecificGenerator> generatorsForMediaType = new HashSet<MediaSpecificGenerator>();
-		for (MediaSpecificGenerator generator : generators.values()) {
+	public Collection<MediaSpecificGenerator> getForMediaType(final String mediaType) {
+		final HashSet<MediaSpecificGenerator> generatorsForMediaType = new HashSet<>();
+		for (final MediaSpecificGenerator generator : generators.values()) {
 			if (generator.getMediaType().equals(mediaType)) {
 				generatorsForMediaType.add(generator);
 			}
@@ -48,7 +48,7 @@ public class MediaSpecificGeneratorFactory {
 	}
 
 	public void resetAllGenerators() {
-		for (MediaSpecificGenerator generator : generators.values()) {
+		for (final MediaSpecificGenerator generator : generators.values()) {
 			generator.reset();
 		}
 	}

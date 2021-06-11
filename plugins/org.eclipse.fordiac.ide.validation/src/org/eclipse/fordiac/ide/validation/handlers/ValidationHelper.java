@@ -41,7 +41,9 @@ public final class ValidationHelper {
 		final List<Constraint> constraints = OCLParser.loadOCLConstraints(namedElement);
 		final IResource iresource = getFile(namedElement);
 		try {
-			iresource.deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
+			if (iresource != null) {
+				iresource.deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
+			}
 		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e); // $NON-NLS-1$
 		}
@@ -51,15 +53,14 @@ public final class ValidationHelper {
 			for (final TreeIterator<?> iterator = namedElement.eAllContents(); iterator.hasNext();) {
 				final EObject object = (EObject) iterator.next();
 				final String objectName = object.eClass().getName();
-				if (contextName.equals(objectName)) {
-					if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
-						try {
-							final String[] properties = ConstraintHelper.getConstraintProperties(constraint.getName());
-							addValidationMarker(iresource, properties[0], properties[1], createHierarchicalName(object),
-									object.hashCode());
-						} catch (final CoreException e) {
-							Activator.getDefault().logError(e.getMessage(), e);
-						}
+				if ((contextName.equals(objectName))
+						&& (!Activator.getDefault().getOclInstance().check(object, constraint))) {
+					try {
+						final String[] properties = ConstraintHelper.getConstraintProperties(constraint.getName());
+						addValidationMarker(iresource, properties[0], properties[1], createHierarchicalName(object),
+								object.hashCode());
+					} catch (final CoreException e) {
+						Activator.getDefault().logError(e.getMessage(), e);
 					}
 				}
 			}
@@ -68,16 +69,20 @@ public final class ValidationHelper {
 
 	private static void addValidationMarker(final IResource iresource, final String message, final String severity, final String location,
 			final int lineNumber) throws CoreException {
+		if (iresource == null) {
+			return;
+		}
+
 		final IMarker imarker = iresource.createMarker(IValidationMarker.TYPE);
 		imarker.setAttribute(IMarker.MESSAGE, message);
 		switch (severity) {
-		case "ERROR":
+		case "ERROR": //$NON-NLS-1$
 			imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 			break;
-		case "WARNING":
+		case "WARNING": //$NON-NLS-1$
 			imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
 			break;
-		case "INFO":
+		case "INFO": //$NON-NLS-1$
 			imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
 			break;
 		default:
@@ -127,18 +132,18 @@ public final class ValidationHelper {
 			return builder.toString();
 		} else if (object instanceof ECState) {
 			final ECState state = (ECState) object;
-			final StringBuilder builder = new StringBuilder("ECC");
+			final StringBuilder builder = new StringBuilder("ECC"); //$NON-NLS-1$
 			builder.append('.');
 			builder.append(state.getName());
 			return builder.toString();
 		} else if (object instanceof ECC) {
-			final StringBuilder builder = new StringBuilder("ECC");
+			final StringBuilder builder = new StringBuilder("ECC"); //$NON-NLS-1$
 			return builder.toString();
 		} else if (object instanceof ECTransition) {
 			final ECTransition transition = (ECTransition) object;
-			final StringBuilder builder = new StringBuilder("ECC");
+			final StringBuilder builder = new StringBuilder("ECC"); //$NON-NLS-1$
 			builder.append('.');
-			builder.append("Transition X:" + transition.getPosition().getX() + " Y:" + transition.getPosition().getY());
+			builder.append("Transition X:" + transition.getPosition().getX() + " Y:" + transition.getPosition().getY()); //$NON-NLS-1$ //$NON-NLS-2$
 			return builder.toString();
 		} else {
 			return object.toString();

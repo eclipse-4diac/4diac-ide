@@ -40,9 +40,9 @@ public interface PositionableElement extends EObject {
 	Position getPosition();
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition
-	 * <em>Position</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <em>Position</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value the new value of the '<em>Position</em>' reference.
+	 * @param value the new value of the '<em>Position</em>' containment reference.
 	 * @see #getPosition()
 	 * @generated */
 	void setPosition(Position value);

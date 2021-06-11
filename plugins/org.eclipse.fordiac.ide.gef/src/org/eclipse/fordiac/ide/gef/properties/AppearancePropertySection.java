@@ -59,7 +59,6 @@ public class AppearancePropertySection extends AbstractPropertySection {
 		initializeControls(composite);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
@@ -88,13 +87,13 @@ public class AppearancePropertySection extends AbstractPropertySection {
 	@Override
 	public void refresh() {
 		if (colorizableElement != null && colorizableElement.getColor() != null) {
-			final org.eclipse.fordiac.ide.model.libraryElement.Color color = colorizableElement.getColor();
-			this.color.dispose();
-			this.color = new Color(null, new RGB(color.getRed(), color.getGreen(), color.getBlue()));
+			final org.eclipse.fordiac.ide.model.libraryElement.Color col = colorizableElement.getColor();
+			color.dispose();
+			color = new Color(null, new RGB(col.getRed(), col.getGreen(), col.getBlue()));
 			colorLabel.setBackground(this.color);
 		} else {
-			this.color.dispose();
-			this.color = new Color(null, new RGB(255, 255, 255));
+			color.dispose();
+			color = new Color(null, new RGB(255, 255, 255));
 			colorLabel.setBackground(this.color);
 		}
 
@@ -138,9 +137,8 @@ public class AppearancePropertySection extends AbstractPropertySection {
 					Command cmd;
 					if (!selectedViews.isEmpty()) {
 						cmd = new CompoundCommand(Messages.AppearancePropertySection_ChangeBackgroundColor);
-						for (final ColorizableElement colorizableElement : selectedViews) {
-							final ChangeBackgroundcolorCommand tmp = new ChangeBackgroundcolorCommand(colorizableElement,
-									rgb);
+						for (final ColorizableElement ce : selectedViews) {
+							final ChangeBackgroundcolorCommand tmp = new ChangeBackgroundcolorCommand(ce, rgb);
 							((CompoundCommand) cmd).add(tmp);
 						}
 					} else {

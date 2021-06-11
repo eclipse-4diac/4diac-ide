@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
@@ -29,8 +30,8 @@ import org.eclipse.ui.PlatformUI;
 public class FullyCleanDeviceHandler extends AbstractDeviceDeploymentCommand {
 
 	@Override
-	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
-		List<String> resNames = executor.queryResources().stream().map(res -> res.getName())
+	protected void executeCommand(final IDeviceManagementInteractor executor) throws DeploymentException {
+		final List<String> resNames = executor.queryResources().stream().map(Resource::getName)
 				.collect(Collectors.toList());
 
 		if (!resNames.isEmpty() && 0 == runDeleteQuestionDialog(resNames)) {
@@ -43,23 +44,23 @@ public class FullyCleanDeviceHandler extends AbstractDeviceDeploymentCommand {
 		return Messages.FullyCleanDeviceHandler_FullyCleanDeviceError;
 	}
 
-	private int runDeleteQuestionDialog(List<String> resNames) {
-		StringBuilder message = new StringBuilder(MessageFormat
+	private int runDeleteQuestionDialog(final List<String> resNames) {
+		final StringBuilder message = new StringBuilder(MessageFormat
 				.format(Messages.FullyCleanDeviceHandler_DeleteResourcesFromDevice, getDevice().getName()));
 
-		for (String name : resNames) {
+		for (final String name : resNames) {
 			message.append("\n\t"); //$NON-NLS-1$
 			message.append(name);
 		}
-		MessageDialog dialog = new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+		final MessageDialog dialog = new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				Messages.FullyCleanDeviceHandler_FullyCleanDevice, null, message.toString(), MessageDialog.QUESTION,
 				new String[] { Messages.FullyCleanDeviceHandler_Delete, SWT.getMessage("SWT_Cancel") }, 0); //$NON-NLS-1$
 		return dialog.open();
 	}
 
-	private static void deleteResources(IDeviceManagementInteractor executor, List<String> resNames)
+	private static void deleteResources(final IDeviceManagementInteractor executor, final List<String> resNames)
 			throws DeploymentException {
-		for (String res : resNames) {
+		for (final String res : resNames) {
 			executor.deleteResource(res);
 		}
 	}

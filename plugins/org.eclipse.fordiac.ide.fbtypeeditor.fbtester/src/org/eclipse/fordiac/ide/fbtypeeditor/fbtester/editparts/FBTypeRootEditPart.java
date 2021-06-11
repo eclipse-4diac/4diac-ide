@@ -76,10 +76,11 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 					case Notification.ADD_MANY:
 					case Notification.REMOVE:
 					case Notification.REMOVE_MANY:
-						Display.getDefault().asyncExec(() -> refreshChildren());
+						Display.getDefault().asyncExec(FBTypeRootEditPart.this::refreshChildren);
 						break;
 					case Notification.SET:
 						break;
+					default:
 					}
 				}
 			};

@@ -79,12 +79,15 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 
 		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(SubApp.class::isInstance)
 				.findFirst().orElse(null);
-		t.test(subapp);
-		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 1);
+		if (subapp == null) {
+			t.test(subapp);
+		} else {
+			t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 1);
 
-		t.test(subapp.getSubAppNetwork().isSubApplicationNetwork());
+			t.test(subapp.getSubAppNetwork().isSubApplicationNetwork());
 
-		t.test(!subapp.isNestedInSubApp());
+			t.test(!subapp.isNestedInSubApp());
+		}
 	}
 
 	protected static void verifySubAppCreationWithConnections(final State s, final State o, final TestFunction t) {
@@ -93,31 +96,36 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 		// extract the functionblock in the outer network
 		final FB fb = (FB) s.getFbNetwork().getNetworkElements().stream().filter(FB.class::isInstance)
 				.findFirst().orElse(null);
-		t.test(fb);
+
 
 		// get the subapp from the outer network
 		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(SubApp.class::isInstance)
 				.findFirst().orElse(null);
-		t.test(subapp);
 
-		// get the functionblock in the subapp
-		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 1);
-		final FB subappFB = (FB) subapp.getSubAppNetwork().getNetworkElements().get(0);
-		t.test(subappFB);
+		if (subapp == null || fb == null) {
+			t.test(subapp);
+			t.test(fb);
+		} else {
+			// get the functionblock in the subapp
+			t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 1);
+			final FB subappFB = (FB) subapp.getSubAppNetwork().getNetworkElements().get(0);
+			t.test(subappFB);
 
-		// data connection from outer fb output to subapp interface
-		t.test(fb.getInterface().getOutputVars().get(0).getOutputConnections().get(0).getDestination(),
-				subapp.getInterface().getInputVars().get(0));
-		// data connection from subapp interface to inner fb
-		t.test(subapp.getInterface().getInputVars().get(0).getOutputConnections().get(0).getDestination(),
-				subappFB.getInterface().getInputVars().get(0));
+			// data connection from outer fb output to subapp interface
+			t.test(fb.getInterface().getOutputVars().get(0).getOutputConnections().get(0).getDestination(),
+					subapp.getInterface().getInputVars().get(0));
+			// data connection from subapp interface to inner fb
+			t.test(subapp.getInterface().getInputVars().get(0).getOutputConnections().get(0).getDestination(),
+					subappFB.getInterface().getInputVars().get(0));
 
-		// event connection from outer fb output to subapp interface
-		t.test(fb.getInterface().getEventOutputs().get(0).getOutputConnections().get(0).getDestination(),
-				subapp.getInterface().getEventInputs().get(0));
-		// event connection from subapp interface to inner fb
-		t.test(subapp.getInterface().getEventInputs().get(0).getOutputConnections().get(0).getDestination(),
-				subappFB.getInterface().getEventInputs().get(0));
+			// event connection from outer fb output to subapp interface
+			t.test(fb.getInterface().getEventOutputs().get(0).getOutputConnections().get(0).getDestination(),
+					subapp.getInterface().getEventInputs().get(0));
+			// event connection from subapp interface to inner fb
+			t.test(subapp.getInterface().getEventInputs().get(0).getOutputConnections().get(0).getDestination(),
+					subappFB.getInterface().getEventInputs().get(0));
+
+		}
 	}
 
 	// parameter creation function

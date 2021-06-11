@@ -46,8 +46,8 @@ public class ChangeVariableOrderCommand extends Command {
 		}
 	}
 
-	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration var, boolean moveUp) {
-		this(type, var, moveUp ? -1 : 1);
+	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration variable, boolean moveUp) {
+		this(type, variable, moveUp ? -1 : 1);
 	}
 
 	@Override

@@ -165,10 +165,8 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		final String fileExtension = s[s.length - 1].toUpperCase();
 		if (fileExtension.equals(TypeLibraryTags.DATA_TYPE_FILE_ENDING)) {
 			return isDtpDuplicate(lib);
-		} else {
-			return isSubFbtAdpDuplicate(lib, fileExtension);
 		}
-
+		return isSubFbtAdpDuplicate(lib, fileExtension);
 	}
 
 	private boolean isSubFbtAdpDuplicate(final TypeLibrary lib, final String fileExtension) {

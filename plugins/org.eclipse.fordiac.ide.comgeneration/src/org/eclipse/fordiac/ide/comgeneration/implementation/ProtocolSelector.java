@@ -26,6 +26,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 
 public final class ProtocolSelector {
 
+	private static final String CAN = "Can"; //$NON-NLS-1$
+	private static final String ETHERNET = "Ethernet"; //$NON-NLS-1$
+
 	public static void doAutomatedProtocolSelection(final CommunicationModel model) {
 		for (final CommunicationChannel channel : model.getChannels().values()) {
 			final List<Segment> commonSegments = new ArrayList<>();
@@ -93,9 +96,9 @@ public final class ProtocolSelector {
 	}
 
 	private static String getProtocolIdForMetiaType(final Segment segment) {
-		if (segment.getType().getName().equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
+		if (segment.getType().getName().equalsIgnoreCase(ETHERNET)) {
 			return EthernetPubSubGenerator.PROTOCOL_ID;
-		} else if (segment.getType().getName().equalsIgnoreCase("Can")) { //$NON-NLS-1$
+		} else if (segment.getType().getName().equalsIgnoreCase(CAN)) {
 			return CanPubSubGenerator.PROTOCOL_ID;
 		}
 		return null;
@@ -106,15 +109,15 @@ public final class ProtocolSelector {
 			final String name1 = o1.getType().getName();
 			final String name2 = o2.getType().getName();
 
-			if (name1.equalsIgnoreCase("Can")) { //$NON-NLS-1$
-				if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
+			if (name1.equalsIgnoreCase(CAN)) {
+				if (name2.equalsIgnoreCase(CAN)) {
 					return 0;
 				}
 				return -1;
-			} else if (name1.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
-				if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
+			} else if (name1.equalsIgnoreCase(ETHERNET)) {
+				if (name2.equalsIgnoreCase(CAN)) {
 					return 1;
-				} else if (name2.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
+				} else if (name2.equalsIgnoreCase(ETHERNET)) {
 					return 0;
 				}
 				return -1;

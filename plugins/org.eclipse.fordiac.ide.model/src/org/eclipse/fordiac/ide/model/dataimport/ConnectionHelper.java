@@ -18,7 +18,6 @@ import java.util.Set;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -27,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class ConnectionHelper {
@@ -264,19 +262,6 @@ public final class ConnectionHelper {
 	public enum ConnectionState {
 		VALID, SOURCE_MISSING, SOURCE_ENDPOINT_MISSING, DEST_MISSING, DEST_ENDPOINT_MISSING, SOURCE_EXITS,
 		SOURCE_ENDPOINT_EXISTS, DEST_EXISTS, DEST_ENPOINT_EXITS, MISSING_TYPE
-	}
-
-	protected static ErrorMarkerFBNElement createErrorMarkerFB(final String name) {
-		final ErrorMarkerFBNElement createErrorMarkerFBNElement = LibraryElementFactory.eINSTANCE
-				.createErrorMarkerFBNElement();
-		createErrorMarkerFBNElement.getTypeLibrary();
-		createErrorMarkerFBNElement.setName(name);
-		createErrorMarkerFBNElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		final Position position = LibraryElementFactory.eINSTANCE.createPosition();
-		position.setX(0);
-		position.setY(0);
-		createErrorMarkerFBNElement.setPosition(position);
-		return createErrorMarkerFBNElement;
 	}
 
 	public static IInterfaceElement createRepairInterfaceElement(final IInterfaceElement connection,

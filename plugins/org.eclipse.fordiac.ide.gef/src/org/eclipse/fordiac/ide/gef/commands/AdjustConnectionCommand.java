@@ -68,7 +68,8 @@ public class AdjustConnectionCommand extends Command {
 			break;
 		default:
 			Activator.getDefault().logError(
-					MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex, index));
+					MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex,
+							Integer.valueOf(index)));
 			break;
 		}
 		connection.revalidate();

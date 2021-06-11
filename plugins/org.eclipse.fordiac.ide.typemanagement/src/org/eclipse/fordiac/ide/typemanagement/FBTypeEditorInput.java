@@ -78,9 +78,8 @@ public class FBTypeEditorInput implements IEditorInput {
 		if (obj instanceof FBTypeEditorInput) {
 			final FBTypeEditorInput input = (FBTypeEditorInput) obj;
 			return fbType.equals(input.getContent()) && entry.getFile().equals(input.getPaletteEntry().getFile());
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	@Override
