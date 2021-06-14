@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- * 				 2018 - 2019 Johannes Kepler University,
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2021 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,7 @@
  *   Alois Zoitl - extracted interface selection policy and added connection
  *   			   creation feedback
  *   Daniel Lindhuber - added source comment
+ *   Alois Zoitl - added update handling on source comment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -31,6 +32,7 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
@@ -65,6 +67,8 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private int mouseState;
 
 	private Adapter contentAdapter = null;
+	private IInterfaceElement sourcePin = null;
+	private Adapter sourcePinAdapter = null;
 
 	private boolean showInstanceName = Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_COMMENT_AT_PIN);
 	private final IPropertyChangeListener preferenceListener = event -> {
@@ -90,11 +94,11 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 	@Override
 	protected void refreshTargetConnections() {
+		updateSourcePinAdapter();
 		super.refreshTargetConnections();
 		if (getReferencedValueEditPart() != null) {
 			getReferencedValueEditPart().refreshValue();
 		}
-		refreshLabelText();
 	}
 
 	protected String getLabelText() {
@@ -110,7 +114,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	private boolean isShowInput() {
-		return showInstanceName && isInput() && !getModelTargetConnections().isEmpty();
+		return showInstanceName && isInput() && !getModel().getInputConnections().isEmpty();
 	}
 
 	private void addPreferenceListener() {
@@ -118,22 +122,28 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	private String getSourcePinInstanceName() {
-		if (!getModelTargetConnections().isEmpty()) {
-			final Object conn = getModelTargetConnections().get(0);
-			if (conn instanceof Connection) {
-				final FBNetworkElement source = ((Connection) conn).getSourceElement();
-				final String pinName = ((Connection) conn).getSource().getName();
-				if (source != null && !isSubAppPin(source)) {
-					final String elementName = source.getName();
-					return elementName + "." + pinName; //$NON-NLS-1$
-				}
-				return pinName;
+		final IInterfaceElement refPin = getSourcePin();
+		if (refPin != null) {
+			final FBNetworkElement source = refPin.getFBNetworkElement();
+			final String pinName = refPin.getName();
+			if (source != null && !isSubAppPin(source)) {
+				final String elementName = source.getName();
+				return elementName + "." + pinName; //$NON-NLS-1$
 			}
+			return pinName;
 		}
 		return ""; //$NON-NLS-1$
 	}
 
-	private boolean isSubAppPin(FBNetworkElement connSource) {
+	private IInterfaceElement getSourcePin() {
+		final EList<Connection> inputConnections = getModel().getInputConnections();
+		if (!inputConnections.isEmpty()) {
+			return inputConnections.get(0).getSource();
+		}
+		return null;
+	}
+
+	private boolean isSubAppPin(final FBNetworkElement connSource) {
 		if (connSource instanceof SubApp) {
 			return ((SubApp) connSource).getSubAppNetwork() == getModel().getFBNetworkElement().getFbNetwork();
 		}
@@ -199,7 +209,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 	@Override
 	protected void refreshVisuals() {
-		// nothing to do
+		refreshLabelText();
 	}
 
 	protected abstract GraphicalNodeEditPolicy getNodeEditPolicy();
@@ -301,6 +311,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		if (!isActive()) {
 			super.activate();
 			getModel().eAdapters().add(getContentAdapter());
+			addSourcePinAdapter();
 		}
 	}
 
@@ -310,6 +321,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 			super.deactivate();
 			getModel().eAdapters().remove(getContentAdapter());
 			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(preferenceListener);
+			removeSourcePinAdapter();
 		}
 		referencedPart = null;
 	}
@@ -380,4 +392,54 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		return referencedPart;
 	}
 
+	private void addSourcePinAdapter() {
+		if (isShowInput()) {
+			sourcePin = getSourcePin();
+			if (sourcePin != null) {
+				sourcePin.eAdapters().add(getSourcePinAdapter());
+				final FBNetworkElement sourceElement = sourcePin.getFBNetworkElement();
+				if (sourceElement != null) {
+					sourceElement.eAdapters().add(getSourcePinAdapter());
+				}
+			}
+		}
+	}
+
+	private void removeSourcePinAdapter() {
+		if (sourcePin != null) {
+			sourcePin.eAdapters().remove(getSourcePinAdapter());
+			final FBNetworkElement sourceElement = sourcePin.getFBNetworkElement();
+			if (sourceElement != null) {
+				sourceElement.eAdapters().remove(getSourcePinAdapter());
+			}
+			sourcePin = null;
+		}
+	}
+
+	private void updateSourcePinAdapter() {
+		if (sourcePin != getSourcePin()) {
+			// the source pin has changed remove the adapters from the old source ping and add to the new
+			removeSourcePinAdapter();
+			addSourcePinAdapter();
+		}
+	}
+
+	private Adapter getSourcePinAdapter() {
+		if(sourcePinAdapter == null) {
+			sourcePinAdapter = createSourcePinAdapter();
+		}
+		return sourcePinAdapter;
+	}
+
+	private Adapter createSourcePinAdapter() {
+		return new AdapterImpl() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				final Object feature = notification.getFeature();
+				if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
+					refreshLabelText();
+				}
+			}
+		};
+	}
 }
