@@ -66,6 +66,21 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		}
 	};
 
+	private final Adapter fbNetworkAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification msg) {
+			super.notifyChanged(msg);
+			final Object feature = msg.getFeature();
+			if ((LibraryElementPackage.eINSTANCE.getFBNetwork_NetworkElements().equals(feature))
+					&& ((msg.getEventType() == Notification.REMOVE) || (msg.getEventType() == Notification.REMOVE_MANY))
+					&& (msg.getOldValue() == fbNetworkElement)) {
+				((EObject) msg.getNotifier()).eAdapters().remove(fbNetworkAdapter);
+				// the subapp/cfb was removed from the network
+				closeEditor();
+			}
+		}
+	};
+
 	private void closeEditor() {
 		final IEditorSite siteToUse = getEditorSite();
 		if (siteToUse instanceof MultiPageEditorSite) {
@@ -115,6 +130,10 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 			// the tooltip will show the whole name when hovering
 			untypedInput.setName(name);
 			fbNetworkElement.eAdapters().add(fbNetworkElementAdapter);
+			final EObject container = fbNetworkElement.eContainer();
+			if (container != null) {
+				container.eAdapters().add(fbNetworkAdapter);
+			}
 		}
 	}
 
@@ -122,6 +141,10 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	public void dispose() {
 		if (fbNetworkElement != null) {
 			fbNetworkElement.eAdapters().remove(fbNetworkElementAdapter);
+			final EObject container = fbNetworkElement.eContainer();
+			if (container != null) {
+				container.eAdapters().remove(fbNetworkAdapter);
+			}
 		}
 		super.dispose();
 	}
