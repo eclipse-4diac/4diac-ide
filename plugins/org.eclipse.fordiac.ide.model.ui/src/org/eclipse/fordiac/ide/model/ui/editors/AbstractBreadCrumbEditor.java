@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
+import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -54,10 +55,9 @@ import org.eclipse.ui.IPersistableEditor;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
-public abstract class AbstractBreadCrumbEditor extends MultiPageEditorPart
+public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEditor
 implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker,
 INavigationLocationProvider, IPersistableEditor {
 
@@ -66,7 +66,7 @@ INavigationLocationProvider, IPersistableEditor {
 	private static final String TAG_GRAPHICAL_VIEWER_HOR_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_HOR_SCROLL"; //$NON-NLS-1$
 	private static final String TAG_GRAPHICAL_VIEWER_VER_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_VER_SCROLL"; //$NON-NLS-1$
 
-	private final Map<Object, Integer> modelToEditorNum = new HashMap<>();
+	private Map<Object, Integer> modelToEditorNum = new HashMap<>();
 
 	private BreadcrumbWidget breadcrumb;
 	// the memento we got for recreating the editor state
@@ -152,7 +152,35 @@ INavigationLocationProvider, IPersistableEditor {
 		return -1;
 	}
 
+	@Override
+	public boolean closeChildEditor(final IEditorPart childEditor) {
+		final int pageIndex = pages.indexOf(childEditor);
+		if (pageIndex != -1) {
+			removePage(pageIndex);
+			updateEditorMapping(pageIndex);
+			return true;
+		}
+		return false;
+	}
 
+	private void updateEditorMapping(final int pageIndex) {
+		final Map<Object, Integer> newModelToEditorNum = new HashMap<>();
+
+		modelToEditorNum.forEach((obj, index) -> {
+			final int intIndex = index.intValue();
+			if (intIndex != pageIndex) {
+				if (intIndex < pageIndex) {
+					// keep the old index entry
+					newModelToEditorNum.put(obj, Integer.valueOf(intIndex));
+				} else {
+					// we where before the removed entry so our index is one lower
+					newModelToEditorNum.put(obj, Integer.valueOf(intIndex - 1));
+				}
+			}
+		});
+
+		modelToEditorNum = newModelToEditorNum;
+	}
 
 	@Override
 	public boolean isDirty() {

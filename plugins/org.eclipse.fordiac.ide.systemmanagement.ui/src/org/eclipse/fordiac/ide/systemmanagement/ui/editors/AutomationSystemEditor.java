@@ -98,7 +98,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	@Override
-	protected void createPages() {
+	protected void addPages() {
 		try {
 			final int pagenum = addPage(new SystemEditor(), getEditorInput());
 			getModelToEditorNumMapping().put(system, Integer.valueOf(pagenum));

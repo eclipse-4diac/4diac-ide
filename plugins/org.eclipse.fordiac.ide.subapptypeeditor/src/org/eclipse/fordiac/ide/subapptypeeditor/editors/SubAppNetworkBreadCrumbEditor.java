@@ -90,7 +90,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	protected void createPages() {
+	protected void addPages() {
 		try {
 			final TypedSubAppNetworkEditor initialEditor = new TypedSubAppNetworkEditor();
 			initialEditor.setCommonCommandStack(getCommandStack());
