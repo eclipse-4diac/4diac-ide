@@ -37,30 +37,30 @@ import org.eclipse.fordiac.ide.model.data.util.DataAdapterFactory;
  * factory convert EMF adapter notifications into calls to {@link #fireNotifyChanged fireNotifyChanged}. The adapters
  * also support Eclipse property sheets. Note that most of the adapters are shared among multiple instances. <!--
  * begin-user-doc --> <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class DataItemProviderAdapterFactory extends DataAdapterFactory
 		implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
 	/** This keeps track of the root adapter factory that delegates to this adapter factory. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ComposedAdapterFactory parentAdapterFactory;
 
 	/** This is used to implement {@link org.eclipse.emf.edit.provider.IChangeNotifier}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected IChangeNotifier changeNotifier = new ChangeNotifier();
 
 	/** This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
-	protected Collection<Object> supportedTypes = new ArrayList<Object>();
+	protected Collection<Object> supportedTypes = new ArrayList<>();
 
 	/** This constructs an instance. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public DataItemProviderAdapterFactory() {
 		supportedTypes.add(IEditingDomainItemProvider.class);
@@ -72,13 +72,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyDerivedType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyDerivedTypeItemProvider anyDerivedTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyDerivedType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyDerivedTypeAdapter() {
@@ -91,13 +91,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.ArrayType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ArrayTypeItemProvider arrayTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.ArrayType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createArrayTypeAdapter() {
@@ -110,13 +110,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected DirectlyDerivedTypeItemProvider directlyDerivedTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType}. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createDirectlyDerivedTypeAdapter() {
@@ -129,13 +129,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.EnumeratedType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected EnumeratedTypeItemProvider enumeratedTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.EnumeratedType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createEnumeratedTypeAdapter() {
@@ -148,13 +148,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.EnumeratedValue}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected EnumeratedValueItemProvider enumeratedValueItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.EnumeratedValue}. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createEnumeratedValueAdapter() {
@@ -167,13 +167,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.StructuredType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected StructuredTypeItemProvider structuredTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.StructuredType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createStructuredTypeAdapter() {
@@ -186,13 +186,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.Subrange} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected SubrangeItemProvider subrangeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.Subrange}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createSubrangeAdapter() {
@@ -205,13 +205,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.SubrangeType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected SubrangeTypeItemProvider subrangeTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.SubrangeType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createSubrangeTypeAdapter() {
@@ -224,13 +224,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.ValueType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ValueTypeItemProvider valueTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.ValueType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createValueTypeAdapter() {
@@ -243,13 +243,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.ElementaryType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ElementaryTypeItemProvider elementaryTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.ElementaryType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createElementaryTypeAdapter() {
@@ -262,13 +262,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.DerivedType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected DerivedTypeItemProvider derivedTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.DerivedType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createDerivedTypeAdapter() {
@@ -281,13 +281,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.EventType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected EventTypeItemProvider eventTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.EventType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createEventTypeAdapter() {
@@ -300,13 +300,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyTypeItemProvider anyTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyTypeAdapter() {
@@ -319,13 +319,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyElementaryType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyElementaryTypeItemProvider anyElementaryTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyElementaryType}. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyElementaryTypeAdapter() {
@@ -338,13 +338,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyMagnitudeType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyMagnitudeTypeItemProvider anyMagnitudeTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyMagnitudeType}. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyMagnitudeTypeAdapter() {
@@ -357,13 +357,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyNumType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyNumTypeItemProvider anyNumTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyNumType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyNumTypeAdapter() {
@@ -376,13 +376,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyRealType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyRealTypeItemProvider anyRealTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyRealType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyRealTypeAdapter() {
@@ -395,13 +395,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.RealType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected RealTypeItemProvider realTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.RealType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createRealTypeAdapter() {
@@ -414,13 +414,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.LrealType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected LrealTypeItemProvider lrealTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.LrealType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createLrealTypeAdapter() {
@@ -433,13 +433,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyIntType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyIntTypeItemProvider anyIntTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyIntType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyIntTypeAdapter() {
@@ -452,13 +452,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyUnsignedType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyUnsignedTypeItemProvider anyUnsignedTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyUnsignedType}. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyUnsignedTypeAdapter() {
@@ -471,13 +471,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.UsintType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected UsintTypeItemProvider usintTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.UsintType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createUsintTypeAdapter() {
@@ -490,13 +490,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.UintType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected UintTypeItemProvider uintTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.UintType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createUintTypeAdapter() {
@@ -509,13 +509,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.UdintType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected UdintTypeItemProvider udintTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.UdintType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createUdintTypeAdapter() {
@@ -528,13 +528,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.UlintType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected UlintTypeItemProvider ulintTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.UlintType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createUlintTypeAdapter() {
@@ -547,13 +547,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnySignedType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnySignedTypeItemProvider anySignedTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnySignedType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnySignedTypeAdapter() {
@@ -566,13 +566,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.SintType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected SintTypeItemProvider sintTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.SintType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createSintTypeAdapter() {
@@ -585,13 +585,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.IntType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected IntTypeItemProvider intTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.IntType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createIntTypeAdapter() {
@@ -604,13 +604,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.DintType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected DintTypeItemProvider dintTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.DintType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createDintTypeAdapter() {
@@ -623,13 +623,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.LintType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected LintTypeItemProvider lintTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.LintType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createLintTypeAdapter() {
@@ -642,13 +642,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyDurationType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyDurationTypeItemProvider anyDurationTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyDurationType}. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyDurationTypeAdapter() {
@@ -661,13 +661,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.TimeType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected TimeTypeItemProvider timeTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.TimeType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createTimeTypeAdapter() {
@@ -680,13 +680,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.LtimeType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected LtimeTypeItemProvider ltimeTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.LtimeType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createLtimeTypeAdapter() {
@@ -699,13 +699,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyBitType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyBitTypeItemProvider anyBitTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyBitType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyBitTypeAdapter() {
@@ -718,13 +718,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.BoolType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected BoolTypeItemProvider boolTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.BoolType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createBoolTypeAdapter() {
@@ -737,13 +737,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.ByteType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ByteTypeItemProvider byteTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.ByteType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createByteTypeAdapter() {
@@ -756,13 +756,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.WordType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected WordTypeItemProvider wordTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.WordType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createWordTypeAdapter() {
@@ -775,13 +775,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.DwordType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected DwordTypeItemProvider dwordTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.DwordType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createDwordTypeAdapter() {
@@ -794,13 +794,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.LwordType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected LwordTypeItemProvider lwordTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.LwordType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createLwordTypeAdapter() {
@@ -813,13 +813,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyCharsType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyCharsTypeItemProvider anyCharsTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyCharsType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyCharsTypeAdapter() {
@@ -832,13 +832,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyStringType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyStringTypeItemProvider anyStringTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyStringType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyStringTypeAdapter() {
@@ -851,13 +851,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.StringType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected StringTypeItemProvider stringTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.StringType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createStringTypeAdapter() {
@@ -870,13 +870,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.WstringType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected WstringTypeItemProvider wstringTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.WstringType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createWstringTypeAdapter() {
@@ -889,13 +889,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyCharType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyCharTypeItemProvider anyCharTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyCharType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyCharTypeAdapter() {
@@ -908,13 +908,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.CharType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected CharTypeItemProvider charTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.CharType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createCharTypeAdapter() {
@@ -927,13 +927,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.WcharType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected WcharTypeItemProvider wcharTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.WcharType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createWcharTypeAdapter() {
@@ -946,13 +946,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyDateType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyDateTypeItemProvider anyDateTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyDateType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createAnyDateTypeAdapter() {
@@ -965,13 +965,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.DateAndTimeType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected DateAndTimeTypeItemProvider dateAndTimeTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.DateAndTimeType}. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createDateAndTimeTypeAdapter() {
@@ -984,13 +984,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.LdtType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected LdtTypeItemProvider ldtTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.LdtType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createLdtTypeAdapter() {
@@ -1003,13 +1003,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.DateType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected DateTypeItemProvider dateTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.DateType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createDateTypeAdapter() {
@@ -1022,13 +1022,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.TimeOfDayType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected TimeOfDayTypeItemProvider timeOfDayTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.TimeOfDayType}. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createTimeOfDayTypeAdapter() {
@@ -1041,13 +1041,13 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.LtodType} instances.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected LtodTypeItemProvider ltodTypeItemProvider;
 
 	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.LtodType}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter createLtodTypeAdapter() {
@@ -1058,8 +1058,27 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 		return ltodTypeItemProvider;
 	}
 
+	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.LdateType} instances.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	protected LdateTypeItemProvider ldateTypeItemProvider;
+
+	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.LdateType}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public Adapter createLdateTypeAdapter() {
+		if (ldateTypeItemProvider == null) {
+			ldateTypeItemProvider = new LdateTypeItemProvider(this);
+		}
+
+		return ldateTypeItemProvider;
+	}
+
 	/** This returns the root adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ComposeableAdapterFactory getRootAdapterFactory() {
@@ -1067,7 +1086,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 	}
 
 	/** This sets the composed adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
@@ -1075,7 +1094,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean isFactoryForType(Object type) {
@@ -1084,7 +1103,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This implementation substitutes the factory itself as the key for the adapter. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Adapter adapt(Notifier notifier, Object type) {
@@ -1092,7 +1111,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object adapt(Object object, Object type) {
@@ -1107,7 +1126,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 	}
 
 	/** This adds a listener. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void addListener(INotifyChangedListener notifyChangedListener) {
@@ -1115,7 +1134,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 	}
 
 	/** This removes a listener. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void removeListener(INotifyChangedListener notifyChangedListener) {
@@ -1124,7 +1143,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/** This delegates to {@link #changeNotifier} and to {@link #parentAdapterFactory}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void fireNotifyChanged(Notification notification) {
@@ -1136,7 +1155,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 	}
 
 	/** This disposes all of the item providers created by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void dispose() {
@@ -1244,6 +1263,8 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 			timeOfDayTypeItemProvider.dispose();
 		if (ltodTypeItemProvider != null)
 			ltodTypeItemProvider.dispose();
+		if (ldateTypeItemProvider != null)
+			ldateTypeItemProvider.dispose();
 	}
 
 }

@@ -15,19 +15,11 @@
  */
 package org.eclipse.fordiac.ide.model.data;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Date And Time Type</b></em>'. <!-- end-user-doc
- * -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Ldate Type</b></em>'. <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDateAndTimeType()
+ * @see org.eclipse.fordiac.ide.model.data.DataPackage#getLdateType()
  * @model
  * @generated */
-public interface DateAndTimeType extends AnyDateType {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true" otherRequired="true"
-	 * @generated */
-	@Override
-	boolean isCompatibleWith(DataType other);
-
-} // DateAndTimeType
+public interface LdateType extends AnyDateType {
+} // LdateType

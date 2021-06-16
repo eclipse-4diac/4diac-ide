@@ -934,5 +934,6 @@
         <genParameters ecoreParameter="data.ecore#//LtodType/isCompatibleWith/other"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="data.ecore#//LdateType"/>
   </genPackages>
 </genmodel:GenModel>

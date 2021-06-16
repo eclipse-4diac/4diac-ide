@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -33,7 +33,7 @@ public interface StructuredType extends AnyDerivedType {
 	/** Returns the value of the '<em><b>Member Variables</b></em>' containment reference list. The list contents are of
 	 * type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Member Variables</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType_MemberVariables()
 	 * @model containment="true" extendedMetaData="kind='element' name='VarDeclaration'
@@ -42,7 +42,7 @@ public interface StructuredType extends AnyDerivedType {
 	EList<VarDeclaration> getMemberVariables();
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true" otherRequired="true"
 	 * @generated */
 	@Override

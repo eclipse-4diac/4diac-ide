@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -32,7 +32,7 @@ public interface DerivedType extends ValueType {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Base Type</em>' reference.
 	 * @see #setBaseType(ElementaryType)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDerivedType_BaseType()
@@ -42,7 +42,7 @@ public interface DerivedType extends ValueType {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType <em>Base Type</em>}'
 	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Base Type</em>' reference.
 	 * @see #getBaseType()
 	 * @generated */

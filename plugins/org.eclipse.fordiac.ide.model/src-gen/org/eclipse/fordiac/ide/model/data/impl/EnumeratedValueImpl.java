@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue {
 	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */
@@ -42,7 +42,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 
 	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */
@@ -50,7 +50,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 
 	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered */
@@ -58,21 +58,21 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 
 	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered */
 	protected String name = NAME_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected EnumeratedValueImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -80,7 +80,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getComment() {
@@ -88,7 +88,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setComment(String newComment) {
@@ -100,7 +100,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getName() {
@@ -108,7 +108,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setName(String newName) {
@@ -119,7 +119,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -134,7 +134,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -152,7 +152,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -170,7 +170,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -185,7 +185,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {

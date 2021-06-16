@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -36,7 +36,7 @@ public interface EnumeratedValue extends EObject {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Comment</em>' attribute.
 	 * @see #setComment(String)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedValue_Comment()
@@ -46,7 +46,7 @@ public interface EnumeratedValue extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment <em>Comment</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Comment</em>' attribute.
 	 * @see #getComment()
 	 * @generated */
@@ -57,7 +57,7 @@ public interface EnumeratedValue extends EObject {
 	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedValue_Name()
@@ -68,7 +68,7 @@ public interface EnumeratedValue extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName <em>Name</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated */

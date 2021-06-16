@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,20 +16,61 @@ package org.eclipse.fordiac.ide.model.data.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
-import org.eclipse.fordiac.ide.model.data.*;
+import org.eclipse.fordiac.ide.model.data.AnyBitType;
+import org.eclipse.fordiac.ide.model.data.AnyCharType;
+import org.eclipse.fordiac.ide.model.data.AnyCharsType;
+import org.eclipse.fordiac.ide.model.data.AnyDateType;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.data.AnyDurationType;
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType;
+import org.eclipse.fordiac.ide.model.data.AnyIntType;
+import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType;
+import org.eclipse.fordiac.ide.model.data.AnyNumType;
+import org.eclipse.fordiac.ide.model.data.AnyRealType;
+import org.eclipse.fordiac.ide.model.data.AnySignedType;
+import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
+import org.eclipse.fordiac.ide.model.data.BoolType;
+import org.eclipse.fordiac.ide.model.data.ByteType;
+import org.eclipse.fordiac.ide.model.data.CharType;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
+import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.DerivedType;
+import org.eclipse.fordiac.ide.model.data.DintType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.DwordType;
 import org.eclipse.fordiac.ide.model.data.ElementaryType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.LdateType;
+import org.eclipse.fordiac.ide.model.data.LdtType;
+import org.eclipse.fordiac.ide.model.data.LintType;
+import org.eclipse.fordiac.ide.model.data.LrealType;
+import org.eclipse.fordiac.ide.model.data.LtimeType;
+import org.eclipse.fordiac.ide.model.data.LtodType;
+import org.eclipse.fordiac.ide.model.data.LwordType;
+import org.eclipse.fordiac.ide.model.data.RealType;
+import org.eclipse.fordiac.ide.model.data.SintType;
+import org.eclipse.fordiac.ide.model.data.StringType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.data.SubrangeType;
+import org.eclipse.fordiac.ide.model.data.TimeOfDayType;
+import org.eclipse.fordiac.ide.model.data.TimeType;
+import org.eclipse.fordiac.ide.model.data.UdintType;
+import org.eclipse.fordiac.ide.model.data.UintType;
+import org.eclipse.fordiac.ide.model.data.UlintType;
+import org.eclipse.fordiac.ide.model.data.UsintType;
 import org.eclipse.fordiac.ide.model.data.ValueType;
+import org.eclipse.fordiac.ide.model.data.WcharType;
+import org.eclipse.fordiac.ide.model.data.WordType;
+import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -37,17 +78,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * {@link #doSwitch(EObject) doSwitch(object)} to invoke the <code>caseXXX</code> method for each class of the model,
  * starting with the actual class of the object and proceeding up the inheritance hierarchy until a non-null result is
  * returned, which is the result of the switch. <!-- end-user-doc -->
- * 
+ *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage
  * @generated */
 public class DataSwitch<T> extends Switch<T> {
 	/** The cached model package <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected static DataPackage modelPackage;
 
 	/** Creates an instance of the switch. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public DataSwitch() {
 		if (modelPackage == null) {
@@ -56,7 +97,7 @@ public class DataSwitch<T> extends Switch<T> {
 	}
 
 	/** Checks whether this is a switch for the given package. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated */
@@ -67,7 +108,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that
 	 * result. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated */
 	@Override
@@ -1074,6 +1115,25 @@ public class DataSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case DataPackage.LDATE_TYPE: {
+			LdateType ldateType = (LdateType) theEObject;
+			T result = caseLdateType(ldateType);
+			if (result == null)
+				result = caseAnyDateType(ldateType);
+			if (result == null)
+				result = caseAnyElementaryType(ldateType);
+			if (result == null)
+				result = caseAnyType(ldateType);
+			if (result == null)
+				result = caseDataType(ldateType);
+			if (result == null)
+				result = caseLibraryElement(ldateType);
+			if (result == null)
+				result = caseINamedElement(ldateType);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -1082,7 +1142,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Derived Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Derived Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1093,7 +1153,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Array Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Array Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1104,7 +1164,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Type</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1116,7 +1176,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Directly Derived Type</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Directly Derived Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1128,7 +1188,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Enumerated Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Enumerated Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1140,7 +1200,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Enumerated Value</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Enumerated Value</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1152,7 +1212,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Structured Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Structured Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1163,7 +1223,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Subrange</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Subrange</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1175,7 +1235,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Subrange Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Subrange Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1186,7 +1246,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Value Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Value Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1198,7 +1258,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Elementary Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Elementary Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1209,7 +1269,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Derived Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Derived Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1220,7 +1280,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Event Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Event Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1231,7 +1291,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Any Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1243,7 +1303,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Elementary Type</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Elementary Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1255,7 +1315,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Magnitude Type</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Magnitude Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1266,7 +1326,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Any Num Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Num Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1278,7 +1338,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Real Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Real Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1289,7 +1349,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Real Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Real Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1300,7 +1360,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Lreal Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Lreal Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1311,7 +1371,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Any Int Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Int Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1323,7 +1383,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Unsigned Type</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Unsigned Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1334,7 +1394,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Usint Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Usint Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1345,7 +1405,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Uint Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Uint Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1356,7 +1416,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Udint Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Udint Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1367,7 +1427,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Ulint Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Ulint Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1379,7 +1439,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Signed Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Signed Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1390,7 +1450,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Sint Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Sint Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1401,7 +1461,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Int Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Int Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1412,7 +1472,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Dint Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Dint Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1423,7 +1483,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Lint Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Lint Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1435,7 +1495,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Duration Type</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Duration Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1446,7 +1506,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Time Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Time Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1457,7 +1517,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Ltime Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Ltime Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1468,7 +1528,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Any Bit Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Bit Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1479,7 +1539,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Bool Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Bool Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1490,7 +1550,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Byte Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Byte Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1501,7 +1561,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Word Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Word Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1512,7 +1572,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Dword Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Dword Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1523,7 +1583,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Lword Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Lword Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1535,7 +1595,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Chars Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Chars Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1547,7 +1607,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any String Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any String Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1558,7 +1618,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>String Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>String Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1569,7 +1629,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Wstring Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Wstring Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1581,7 +1641,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Char Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Char Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1592,7 +1652,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Char Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Char Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1603,7 +1663,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Wchar Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Wchar Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1615,7 +1675,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Any Date Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Any Date Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1627,7 +1687,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Date And Time Type</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Date And Time Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1638,7 +1698,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Ldt Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Ldt Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1649,7 +1709,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Date Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Date Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1661,7 +1721,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Time Of Day Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Time Of Day Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1672,7 +1732,7 @@ public class DataSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Ltod Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Ltod Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1681,10 +1741,21 @@ public class DataSwitch<T> extends Switch<T> {
 		return null;
 	}
 
+	/** Returns the result of interpreting the object as an instance of '<em>Ldate Type</em>'. <!-- begin-user-doc -->
+	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 *
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Ldate Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated */
+	public T caseLdateType(LdateType object) {
+		return null;
+	}
+
 	/** Returns the result of interpreting the object as an instance of '<em>INamed Element</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>INamed Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1696,7 +1767,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Library Element</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Library Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1708,7 +1779,7 @@ public class DataSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>EObject</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch, but this is the last case
 	 * anyway. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)

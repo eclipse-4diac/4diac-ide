@@ -430,4 +430,5 @@
       <eParameters name="other" lowerBound="1" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LdateType" eSuperTypes="#//AnyDateType"/>
 </ecore:EPackage>

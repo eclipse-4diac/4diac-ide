@@ -13,21 +13,29 @@
  *      - initial API and implementation and/or initial documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.model.data;
+package org.eclipse.fordiac.ide.model.data.impl;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Date And Time Type</b></em>'. <!-- end-user-doc
- * -->
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.fordiac.ide.model.data.DataPackage;
+import org.eclipse.fordiac.ide.model.data.LdateType;
+
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Ldate Type</b></em>'. <!-- end-user-doc -->
  *
- *
- * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDateAndTimeType()
- * @model
  * @generated */
-public interface DateAndTimeType extends AnyDateType {
+public class LdateTypeImpl extends AnyDateTypeImpl implements LdateType {
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true" otherRequired="true"
+	 * @generated */
+	protected LdateTypeImpl() {
+		super();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
-	boolean isCompatibleWith(DataType other);
+	protected EClass eStaticClass() {
+		return DataPackage.Literals.LDATE_TYPE;
+	}
 
-} // DateAndTimeType
+} // LdateTypeImpl

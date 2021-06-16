@@ -1,16 +1,18 @@
 /**
- *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *  *
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  *
  * SPDX-License-Identifier: EPL-2.0
- *  *
- *  * Contributors:
- *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
- *  *     - initial API and implementation and/or initial documentation
- *  ******************************************************************************* */
+ *
+ * Contributors:
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.data.provider;
 
 import java.util.Collection;
@@ -19,17 +21,17 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.LdateType;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType} object. <!--
+/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.LdateType} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
  *
  * @generated */
-public class DirectlyDerivedTypeItemProvider extends DerivedTypeItemProvider {
+public class LdateTypeItemProvider extends AnyDateTypeItemProvider {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public DirectlyDerivedTypeItemProvider(AdapterFactory adapterFactory) {
+	public LdateTypeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -45,12 +47,12 @@ public class DirectlyDerivedTypeItemProvider extends DerivedTypeItemProvider {
 		return itemPropertyDescriptors;
 	}
 
-	/** This returns DirectlyDerivedType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This returns LdateType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/DirectlyDerivedType")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/LdateType")); //$NON-NLS-1$
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -58,9 +60,9 @@ public class DirectlyDerivedTypeItemProvider extends DerivedTypeItemProvider {
 	 * @generated */
 	@Override
 	public String getText(Object object) {
-		String label = ((DirectlyDerivedType) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_DirectlyDerivedType_type") : //$NON-NLS-1$
-				getString("_UI_DirectlyDerivedType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((LdateType) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_LdateType_type") : //$NON-NLS-1$
+				getString("_UI_LdateType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
