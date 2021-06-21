@@ -69,6 +69,8 @@ public class PasteCommand extends Command {
 	private boolean calcualteDelta = false;
 	private Point pasteRefPos;
 
+	private CutAndPasteFromSubAppCommand cutPasteCmd;
+
 	/**
 	 * Instantiates a new paste command.
 	 *
@@ -82,9 +84,11 @@ public class PasteCommand extends Command {
 		this.dstFBNetwork = destination;
 		this.pasteRefPos = pasteRefPos;
 		calcualteDelta = true;
+
 	}
 
-	public PasteCommand(final List<? extends Object> templates, final FBNetwork destination, final int copyDeltaX, final int copyDeltaY) {
+	public PasteCommand(final List<? extends Object> templates, final FBNetwork destination, final int copyDeltaX,
+			final int copyDeltaY) {
 		this.templates = templates;
 		this.dstFBNetwork = destination;
 		xDelta = copyDeltaX;
@@ -116,13 +120,20 @@ public class PasteCommand extends Command {
 	public void undo() {
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
+		if (cutPasteCmd != null) {
+			cutPasteCmd.undo();
+		}
 		ElementSelector.selectViewObjects(templates);
+
 	}
 
 	@Override
 	public void redo() {
 		dstFBNetwork.getNetworkElements().addAll(copiedElements.values());
 		connCreateCmds.redo();
+		if (cutPasteCmd != null) {
+			cutPasteCmd.redo();
+		}
 		ElementSelector.selectViewObjects(copiedElements.values());
 	}
 
@@ -267,6 +278,14 @@ public class PasteCommand extends Command {
 		pastePos.setX(element.getPosition().getX() + xDelta);
 		pastePos.setY(element.getPosition().getY() + yDelta);
 		return pastePos;
+	}
+
+	protected CutAndPasteFromSubAppCommand getCutPasteCmd() {
+		return cutPasteCmd;
+	}
+
+	public void setCutPasteCmd(final CutAndPasteFromSubAppCommand cutPasteCmd) {
+		this.cutPasteCmd = cutPasteCmd;
 	}
 
 }

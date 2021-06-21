@@ -48,7 +48,7 @@ public class CutEditPartsAction extends CopyEditPartsAction {
 	@Override
 	public void run() {
 		final List<Object> templates = getSelectedTemplates();
-		final CopyPasteMessage message = new CopyPasteMessage(CopyStatus.CUT, templates);
+		final CopyPasteMessage message = new CopyPasteMessage(CopyStatus.CUT_FROM_ROOT, templates);
 		final CutAndPasteFromSubAppCommand cutAndPasteFromSubAppCommand = isCutFromSubapp(templates);
 		final Command fbDeleteCommands = getFBDeleteCommands(templates);
 		message.setDeleteCommandos(new CompoundCommand());
