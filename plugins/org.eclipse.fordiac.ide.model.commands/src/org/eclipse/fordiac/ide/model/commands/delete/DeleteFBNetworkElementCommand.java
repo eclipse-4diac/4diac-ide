@@ -86,7 +86,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 			cmds.undo();
 		}
 		if (element instanceof ErrorMarkerRef && errorMarker != null) {
-			FordiacMarkerHelper.createMarker(errorMarker);
+			FordiacMarkerHelper.createMarkerInFile(errorMarker);
 		}
 	}
 

@@ -84,7 +84,8 @@ public class UpdateFBTypeCommand extends Command {
 	private MapToCommand mapCmd = null;
 	private UnmapCommand unmapCmd = null;
 
-	private ErrorMarkerBuilder errorMarker;
+	private ErrorMarkerBuilder errorMarkerFB;
+	private final List<ErrorMarkerBuilder> errorPins;
 
 	public UpdateFBTypeCommand(final FBNetworkElement fbnElement, final PaletteEntry entry) {
 		this.oldElement = fbnElement;
@@ -94,6 +95,7 @@ public class UpdateFBTypeCommand extends Command {
 		} else {
 			this.entry = fbnElement.getPaletteEntry();
 		}
+		errorPins = new ArrayList<>();
 	}
 
 	@Override
@@ -149,10 +151,10 @@ public class UpdateFBTypeCommand extends Command {
 		if ((!(oldElement instanceof ErrorMarkerFBNElement)) && newElement instanceof ErrorMarkerFBNElement) {
 			final String errorMessage = MessageFormat.format("Type File: {0} could not be loaded for FB", //$NON-NLS-1$
 					entry.getFile() != null ? entry.getFile().getFullPath() : "null type"); //$NON-NLS-1$
-			errorMarker = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement, 0);
-			errorMarker.setErrorMarkerRef((ErrorMarkerRef) newElement);
+			errorMarkerFB = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement, 0);
+			errorMarkerFB.setErrorMarkerRef((ErrorMarkerRef) newElement);
 			((ErrorMarkerRef) newElement).setErrorMessage(errorMessage);
-			FordiacMarkerHelper.createMarker(errorMarker);
+			FordiacMarkerHelper.createMarkerInFile(errorMarkerFB);
 		}
 	}
 
@@ -169,6 +171,7 @@ public class UpdateFBTypeCommand extends Command {
 		network.getNetworkElements().remove(oldElement);
 		handleErrorMarker();
 		network.getNetworkElements().add(newElement);
+		errorPins.forEach(FordiacMarkerHelper::createMarkerInFile);
 		connCreateCmds.redo();
 
 		if (mapCmd != null) {
@@ -188,9 +191,9 @@ public class UpdateFBTypeCommand extends Command {
 			resourceConnCreateCmds.undo();
 			mapCmd.undo();
 		}
-
+		errorPins.stream().map(ErrorMarkerBuilder::getErrorMarkerRef).forEach(FordiacMarkerHelper::deleteErrorMarker);
 		connCreateCmds.undo();
-		if (errorMarker != null && newElement instanceof ErrorMarkerRef) {
+		if (errorMarkerFB != null && newElement instanceof ErrorMarkerRef) {
 			FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) newElement);
 		}
 		replaceFBs(newElement, oldElement);
@@ -243,30 +246,46 @@ public class UpdateFBTypeCommand extends Command {
 		return connections;
 	}
 
-	private static IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement newElement,
+	private IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement newElement,
 			final FBNetworkElement oldElement, final IInterfaceElement oldInterface) {
 		if (oldInterface != null && oldInterface.getFBNetworkElement() == oldElement) {
 			// origView is an interface of the original FB => find same interface on copied
 			// FB
-			IInterfaceElement interfaceElement = newElement.getInterfaceElement(oldInterface.getName());
+			final IInterfaceElement interfaceElement = newElement.getInterfaceElement(oldInterface.getName());
+
 			if (interfaceElement == null) {
-				interfaceElement = createErrorMarker(newElement, oldInterface);
+				return createErrorMarker(newElement, oldInterface,
+						"Pin " + oldInterface.getName() + " not found after Type update"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			return interfaceElement;
+			if (!oldInterface.getType().isCompatibleWith(interfaceElement.getType())) {
+				final String errorMessage = oldInterface.getTypeName()
+						+ "from previous type is not compatible with new Type: " + interfaceElement.getTypeName(); //$NON-NLS-1$
+				return createErrorMarker(newElement, oldInterface, "wrongType: " + oldInterface.getName(), //$NON-NLS-1$
+						errorMessage);
+			}
+
+
 		}
 		return oldInterface;
 	}
 
-	private static IInterfaceElement createErrorMarker(final FBNetworkElement newElement,
-			final IInterfaceElement oldInterface) {
+
+	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement,
+			final IInterfaceElement oldInterface, final String errorMessage) {
+		return createErrorMarker(newElement, oldInterface, oldInterface.getName(), errorMessage);
+	}
+
+	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement,
+			final IInterfaceElement oldInterface, final String name, final String errorMessage) {
 		IInterfaceElement interfaceElement;
-		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(), oldInterface.getName(),
+		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(), name,
 				oldInterface.isIsInput(), newElement.getInterface());
 		final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper
-				.createErrorMarker("Pin " + interfaceElement.getName() + " not found after Type update", newElement, 0); //$NON-NLS-1$ //$NON-NLS-2$
+				.createErrorMarker(errorMessage, newElement, 0);
 		createErrorMarker.setErrorMarkerRef((ErrorMarkerRef) interfaceElement);
-		FordiacMarkerHelper.createMarker(createErrorMarker);
+		FordiacMarkerHelper.createMarkerInFile(createErrorMarker);
+		errorPins.add(createErrorMarker);
 		return interfaceElement;
 	}
 
@@ -348,19 +367,7 @@ public class UpdateFBTypeCommand extends Command {
 		} else if (entry.getType() instanceof CompositeFBType) {
 			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
 		}else if(oldElement instanceof ErrorMarkerFBNElement && entry instanceof FBTypePaletteEntry){
-			final TypeLibrary typeLibrary = oldElement.getPaletteEntry().getTypeLibrary();
-			FBTypePaletteEntry fbTypeEntry = typeLibrary.getErrorTypeLib()
-					.getFBTypeEntry(oldElement.getType().getName());
-			if (fbTypeEntry == null) {
-				fbTypeEntry = typeLibrary.getBlockTypeLib().getFBTypeEntry(oldElement.getType().getName());
-			}
-
-			if (fbTypeEntry != null && fbTypeEntry.getFile() != null) {
-				copy = LibraryElementFactory.eINSTANCE.createFB();
-				copy.setPaletteEntry(fbTypeEntry);
-				return copy;
-			}
-			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
+			copy = createErrorTypeFb();
 		} else if (entry.getFile() == null || !entry.getFile().exists()) {
 			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
 		}
@@ -370,6 +377,24 @@ public class UpdateFBTypeCommand extends Command {
 
 
 		copy.setPaletteEntry(entry);
+		return copy;
+	}
+
+	public FBNetworkElement createErrorTypeFb() {
+		FBNetworkElement copy;
+		final TypeLibrary typeLibrary = oldElement.getPaletteEntry().getTypeLibrary();
+		FBTypePaletteEntry fbTypeEntry = typeLibrary.getErrorTypeLib()
+				.getFBTypeEntry(oldElement.getType().getName());
+		if (fbTypeEntry == null) {
+			fbTypeEntry = typeLibrary.getBlockTypeLib().getFBTypeEntry(oldElement.getType().getName());
+		}
+
+		if (fbTypeEntry != null && fbTypeEntry.getFile() != null) {
+			copy = LibraryElementFactory.eINSTANCE.createFB();
+			copy.setPaletteEntry(fbTypeEntry);
+			return copy;
+		}
+		copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
 		return copy;
 	}
 

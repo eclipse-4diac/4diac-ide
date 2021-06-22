@@ -205,7 +205,7 @@ public abstract class CommonElementImporter {
 		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) { //$NON-NLS-1$
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				errorMarkerAttributes.stream().forEach(a -> FordiacMarkerHelper.createMarker(a, file));
+				errorMarkerAttributes.stream().forEach(a -> FordiacMarkerHelper.createMarkerInFile(a, file));
 				return Status.OK_STATUS;
 			}
 		};

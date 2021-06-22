@@ -159,14 +159,14 @@ public final class FordiacMarkerHelper {
 		}
 	}
 
-	public static void createMarker(final ErrorMarkerBuilder errorMarker) {
+	public static void createMarkerInFile(final ErrorMarkerBuilder errorMarker) {
 		final IFile file = getFileFromRef(errorMarker.getErrorMarkerRef());
-		createMarker(errorMarker, file);
+		createMarkerInFile(errorMarker, file);
 
 	}
 
 	@SuppressWarnings("boxing")
-	public static void createMarker(final ErrorMarkerBuilder errorMarker, final IFile file) {
+	public static void createMarkerInFile(final ErrorMarkerBuilder errorMarker, final IFile file) {
 		Assert.isNotNull(file);
 		try {
 			final IMarker marker = file.createMarker(IMarker.PROBLEM, errorMarker.getAttributes());

@@ -83,7 +83,7 @@ public class DeleteInterfaceCommand extends Command {
 	private void undoErrorMarker() {
 		parent.getErrorMarker().add(oldIndex, interfaceElement);
 		if (oldErrorMarker != null) {
-			FordiacMarkerHelper.createMarker(oldErrorMarker);
+			FordiacMarkerHelper.createMarkerInFile(oldErrorMarker);
 		}
 	}
 
