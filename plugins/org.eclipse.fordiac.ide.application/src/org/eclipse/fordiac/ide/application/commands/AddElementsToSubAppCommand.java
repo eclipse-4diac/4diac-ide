@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NameRepository;
@@ -207,8 +208,23 @@ public class AddElementsToSubAppCommand extends Command {
 	 * @param ie  the interface element on the inside of the subapp as reference for creating the */
 	private void handleModifyConnection(final Connection con, final IInterfaceElement ie) {
 		final IInterfaceElement source = con.getSource();
-		final IInterfaceElement subAppIE = sourceToSubAppPin.computeIfAbsent(source, k -> createInterfaceElement(ie, generateSubAppIEName(ie)));
-		createConnModificationCommands(con, subAppIE);
+		// find a pin with matching source in the subapp
+		final Optional<IInterfaceElement> reusablePin = targetSubApp.getInterface().getAllInterfaceElements().stream()
+			.filter(pin -> pin.getInputConnections().size() == 1)
+			.filter(pin -> pin.getInputConnections().get(0).getSource().equals(source))
+			.findFirst();
+		
+		final IInterfaceElement subAppIE;
+		// flag indicating if a pin is new and therefore both inside and outside connections need to be created
+		final boolean isNewPin = !(reusablePin.isPresent() || sourceToSubAppPin.containsKey(source));
+		if (reusablePin.isPresent()) {
+			// pin already exists in the target subapp (prior to command execution)
+			subAppIE = reusablePin.get();
+		} else {
+			// pin has been created in the course of this command or is not present at all and needs to be created
+			subAppIE = sourceToSubAppPin.computeIfAbsent(source, k -> createInterfaceElement(ie, generateSubAppIEName(ie)));
+		}
+		createConnModificationCommands(con, subAppIE, isNewPin);
 	}
 
 	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String subAppIEName) {
@@ -227,10 +243,16 @@ public class AddElementsToSubAppCommand extends Command {
 		return ie.getFBNetworkElement().getName() + "_" + ie.getName(); //$NON-NLS-1$
 	}
 
-	private void createConnModificationCommands(final Connection con, final IInterfaceElement subAppIE) {
+	private void createConnModificationCommands(final Connection con, final IInterfaceElement subAppIE, boolean isNewPin) {
 		modifiedConns.add(new DeleteConnectionCommand(con));
-		createSubAppPinConnection(targetSubApp.getFbNetwork(), subAppIE, con, false);
-		createSubAppPinConnection(targetSubApp.getSubAppNetwork(), subAppIE, con, true);
+		if (isNewPin) {
+			createSubAppPinConnection(targetSubApp.getFbNetwork(), subAppIE, con, false);
+			createSubAppPinConnection(targetSubApp.getSubAppNetwork(), subAppIE, con, true);
+		} else if (subAppIE.isIsInput()) {
+			createSubAppPinConnection(targetSubApp.getSubAppNetwork(), subAppIE, con, true);
+		} else {
+			createSubAppPinConnection(targetSubApp.getFbNetwork(), subAppIE, con, false);
+		}
 	}
 
 	private void createSubAppPinConnection(FBNetwork network, IInterfaceElement ie, Connection con, boolean isInsideSubApp) {
