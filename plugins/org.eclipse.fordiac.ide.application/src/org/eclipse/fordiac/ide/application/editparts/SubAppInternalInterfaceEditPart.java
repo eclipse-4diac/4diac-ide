@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
@@ -25,9 +24,7 @@ import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -128,20 +125,6 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 				super.notifyChanged(notification);
 			}
 		};
-	}
-
-	protected void updatePadding(final int yPosition) {
-		final IFigure paddingFigure = (IFigure) getFigure().getParent().getChildren().get(0);
-		final int textHeight = ((InterfaceFigure) getFigure()).getTextBounds().height();
-		paddingFigure.setMinimumSize(new Dimension(-1, yPosition - textHeight));
-	}
-
-	private static int getYPositionFromAttribute(final IInterfaceElement ie) {
-		final Attribute attribute = ie.getAttribute("YPOSITION"); //$NON-NLS-1$
-		if (attribute != null) {
-			return Integer.parseInt(attribute.getValue());
-		}
-		return 0;
 	}
 
 	private void goToParent() {

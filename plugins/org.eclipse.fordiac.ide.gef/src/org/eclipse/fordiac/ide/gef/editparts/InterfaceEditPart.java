@@ -29,6 +29,7 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -43,6 +44,7 @@ import org.eclipse.fordiac.ide.gef.policies.InterfaceElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -442,4 +444,19 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 			}
 		};
 	}
+
+	protected void updatePadding(final int yPosition) {
+		final IFigure paddingFigure = (IFigure) getFigure().getParent().getChildren().get(0);
+		final int textHeight = ((InterfaceFigure) getFigure()).getTextBounds().height();
+		paddingFigure.setMinimumSize(new Dimension(-1, yPosition - textHeight));
+	}
+
+	protected static int getYPositionFromAttribute(final IInterfaceElement ie) {
+		final Attribute attribute = ie.getAttribute("YPOSITION"); //$NON-NLS-1$
+		if (attribute != null) {
+			return Integer.parseInt(attribute.getValue());
+		}
+		return 0;
+	}
+
 }
