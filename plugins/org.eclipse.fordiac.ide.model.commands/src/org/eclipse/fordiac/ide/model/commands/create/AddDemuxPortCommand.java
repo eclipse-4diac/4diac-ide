@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.StructManipulation;
+import org.eclipse.fordiac.ide.model.StructTreeNode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -42,35 +43,25 @@ public class AddDemuxPortCommand extends Command {
 
 	private final StructuredType struct;
 	private ChangeStructCommand cmd;
+	private final StructTreeNode node;
 
 
-	public AddDemuxPortCommand(final Demultiplexer type, final String name) {
+	public AddDemuxPortCommand(final Demultiplexer type, final StructTreeNode node) {
+		this.node = node;
 		this.type = type;
-		this.varName = name;
-		struct = type.getTypeLibrary().getDataTypeLibrary().getStructuredType(type.getStructType().getName());
-		oldVisibleChildren = type.getAttributeValue(DEMUX_VISIBLE_CHILDREN);
-	}
-
-	private String getNewAttributeValue() {
-		if (null == oldVisibleChildren) { // default configuration
-			final StringBuilder sb = new StringBuilder();
-			type.getStructType().getMemberVariables()
-			.forEach(memVar -> sb.append(memVar.getName() + VARIABLE_SEPARATOR));
-			if (!type.getStructType().getMemberVariables().isEmpty()) {
-				sb.deleteCharAt(sb.length() - 1);
-			}
-			sb.append(VARIABLE_SEPARATOR + varName);
-			return sb.toString();
-		} else if ("".equals(oldVisibleChildren)) { //$NON-NLS-1$
-			return varName;
-		} else {
-			return oldVisibleChildren + VARIABLE_SEPARATOR + varName;
-		}
+		this.varName = node.getPinName();
+		this.oldVisibleChildren = node.getRootNode().visibleToString();
+		this.struct = type.getTypeLibrary().getDataTypeLibrary().getStructuredType(type.getStructType().getName());
 	}
 
 	@Override
 	public void execute() {
-		newVisibleChildren = getNewAttributeValue();
+
+		node.check(true);
+
+		if (null == newVisibleChildren) {
+			newVisibleChildren = node.getRootNode().visibleToString();
+		}
 		createChangeStructCommand();
 		cmd.execute();
 		oldMux = type;
@@ -81,6 +72,7 @@ public class AddDemuxPortCommand extends Command {
 	private void createChangeStructCommand() {
 		final StructuredType configuredStruct = DataFactory.eINSTANCE.createStructuredType();
 		configuredStruct.setName(type.getStructType().getName());
+
 		final List<String> visibleChildrenNames = Arrays
 				.asList(newVisibleChildren.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
 		final List<VarDeclaration> varDecls = new ArrayList<>();
@@ -97,13 +89,14 @@ public class AddDemuxPortCommand extends Command {
 	@Override
 	public boolean canExecute() {
 		// can execute if port doesn't exist in demux yet
-		return (varName != null) && ((oldVisibleChildren == null)
-				|| Arrays.stream(oldVisibleChildren.split(VARIABLE_SEPARATOR))
-				.filter(name -> name.equals(varName)).findAny().isEmpty());
+		return (varName != null)
+				&& ((oldVisibleChildren == null) || Arrays.stream(oldVisibleChildren.split(VARIABLE_SEPARATOR))
+						.filter(name -> name.equals(varName)).findAny().isEmpty());
 	}
 
 	@Override
 	public void redo() {
+		node.check(true);
 		cmd.redo();
 		type = (Demultiplexer) cmd.getNewMux();
 		setVisibleChildrenAttribute(newVisibleChildren);
@@ -111,13 +104,11 @@ public class AddDemuxPortCommand extends Command {
 
 	@Override
 	public void undo() {
+		node.check(false);
 		type = oldMux;
 		cmd.undo();
-		if (oldVisibleChildren == null) {
-			type.deleteAttribute(DEMUX_VISIBLE_CHILDREN);
-		} else {
-			setVisibleChildrenAttribute(oldVisibleChildren);
-		}
+		setVisibleChildrenAttribute(oldVisibleChildren);
+
 	}
 
 	private void setVisibleChildrenAttribute(final String value) {
@@ -127,8 +118,7 @@ public class AddDemuxPortCommand extends Command {
 	private List<VarDeclaration> getVarDeclarations(final List<String> varDeclNames) {
 		final List<VarDeclaration> vars = new ArrayList<>();
 		varDeclNames.forEach(name -> {
-			final VarDeclaration varDecl = EcoreUtil
-					.copy(StructManipulation.findVarDeclarationInStruct(struct, name));
+			final VarDeclaration varDecl = EcoreUtil.copy(StructManipulation.findVarDeclarationInStruct(struct, name));
 			if (null != varDecl) {
 				varDecl.setName(name);
 				vars.add(varDecl);
