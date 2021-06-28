@@ -55,7 +55,7 @@ public final class FordiacMarkerHelper {
 
 	private static final String FB_NETWORK_ELEMENT_TARGET = "FBNetworkElement"; //$NON-NLS-1$
 	private static final String CONNECTION_TARGET = "Connection"; //$NON-NLS-1$
-	private static final String VALUE_TARGET = "Connection"; //$NON-NLS-1$
+	private static final String VALUE_TARGET = "Value"; //$NON-NLS-1$
 
 	private static final Map<Long, ErrorMarkerRef> markers = new ConcurrentHashMap<>();
 
@@ -69,6 +69,10 @@ public final class FordiacMarkerHelper {
 
 	public static boolean markerTargetsConnection(final Map<String, Object> attrs) {
 		return CONNECTION_TARGET.equals(attrs.get(TARGET_TYPE));
+	}
+
+	public static boolean markerTargetsValue(final Map<String, Object> attrs) {
+		return VALUE_TARGET.equals(attrs.get(TARGET_TYPE));
 	}
 
 	public static void addTargetIdentifier(final EObject element, final Map<String, Object> attrs) {
@@ -125,6 +129,9 @@ public final class FordiacMarkerHelper {
 		}
 		final StringBuilder builder = new StringBuilder();
 		createHierarchicalName(container, builder);
+		if (builder.length() > 0) {
+			builder.deleteCharAt(builder.length() - 1); // remove the last dot
+		}
 
 		return builder.toString();
 	}
@@ -149,10 +156,6 @@ public final class FordiacMarkerHelper {
 				builder.insert(0, '.');
 				builder.insert(0, ((Device) runner.eContainer()).getName());
 			}
-		}
-
-		if (builder.length() > 0) {
-			builder.deleteCharAt(builder.length() - 1); // remove the last dot
 		}
 	}
 

@@ -31,6 +31,8 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
@@ -220,6 +222,8 @@ INavigationLocationProvider, IPersistableEditor {
 				gotoFBNetworkElement(attrs.get(IMarker.LOCATION));
 			} else if (FordiacMarkerHelper.markerTargetsConnection(attrs)) {
 				gotoConnection(marker);
+			} else if (FordiacMarkerHelper.markerTargetsValue(attrs)) {
+				gotoValue(marker);
 			}
 		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
@@ -228,15 +232,27 @@ INavigationLocationProvider, IPersistableEditor {
 
 	protected void gotoConnection(final IMarker marker) {
 		@SuppressWarnings("boxing")
-		final ErrorMarkerRef ie = FordiacMarkerHelper.getMarkerRefById(marker.getId());
-		final EObject parent = ie instanceof ErrorMarkerInterface ? ((ErrorMarkerInterface) ie).getFBNetworkElement()
-				: null;
+		final ErrorMarkerRef errorRef = FordiacMarkerHelper.getMarkerRefById(marker.getId());
+		final FBNetworkElement parent = errorRef instanceof ErrorMarkerInterface
+				? ((ErrorMarkerInterface) errorRef).getFBNetworkElement()
+						: null;
+		selectErrorRef(errorRef, parent);
+	}
 
+	protected void gotoValue(final IMarker marker) {
+		@SuppressWarnings("boxing")
+		final ErrorMarkerRef errorRef = FordiacMarkerHelper.getMarkerRefById(marker.getId());
+		final FBNetworkElement parent = errorRef instanceof Value
+				? ((Value) errorRef).getVarDeclaration().getFBNetworkElement()
+						: null;
+		selectErrorRef(errorRef, parent);
+	}
+
+	private void selectErrorRef(final ErrorMarkerRef errorRef, final FBNetworkElement parent) {
 		if (null != parent) {
 			final EObject toView = parent.eContainer().eContainer();
 			getBreadcrumb().setInput(toView);
-			final IEditorPart editor = HandlerHelper.openEditor(toView);
-			HandlerHelper.selectElement(ie, editor);
+			HandlerHelper.selectElement(errorRef, getActiveEditor());
 		}
 	}
 
