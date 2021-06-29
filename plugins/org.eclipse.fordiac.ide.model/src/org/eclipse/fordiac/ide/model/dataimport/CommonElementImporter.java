@@ -45,8 +45,10 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -61,6 +63,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -68,9 +71,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 
-/**
- * The Class CommonElementImporter.
- */
+/** The Class CommonElementImporter. */
 public abstract class CommonElementImporter {
 
 	private static class ImporterStreams implements AutoCloseable {
@@ -187,7 +188,7 @@ public abstract class CommonElementImporter {
 		} catch (final Exception e) {
 			Activator.getDefault().logWarning("Type Loading issue", e);//$NON-NLS-1$
 			createErrorMarker(e.getMessage());
-		}finally {
+		} finally {
 			buildErrorMarker(file);
 		}
 	}
@@ -195,8 +196,7 @@ public abstract class CommonElementImporter {
 	protected ErrorMarkerBuilder createErrorMarker(final String message) {
 		final Map<String, Object> attrs = new HashMap<>();
 		attrs.put(IMarker.MESSAGE, message);
-		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarkerBuilder(attrs,
-				getLineNumber());
+		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarkerBuilder(attrs, getLineNumber());
 		errorMarkerAttributes.add(e);
 		return e;
 	}
@@ -299,15 +299,13 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	/**
-	 * Parses the identification.
+	/** Parses the identification.
 	 *
 	 * @param elem the elem
 	 * @param node the node
 	 *
 	 * @return the identification
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void parseIdentification(final LibraryElement elem) throws XMLStreamException {
 		final Identification ident = LibraryElementFactory.eINSTANCE.createIdentification();
 		final String standard = getAttributeValue(LibraryElementTags.STANDARD_ATTRIBUTE);
@@ -338,14 +336,12 @@ public abstract class CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.IDENTIFICATION_ELEMENT);
 	}
 
-	/**
-	 * Parses the version info.
+	/** Parses the version info.
 	 *
 	 * @param elem the library element the version info should be added to.
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void parseVersionInfo(final LibraryElement elem) throws TypeImportException, XMLStreamException {
 		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 
@@ -382,14 +378,11 @@ public abstract class CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.VERSION_INFO_ELEMENT);
 	}
 
-	/**
-	 * Gets the xand y.
+	/** Gets the xand y.
 	 *
-	 * @param positionableElement the positionable element where the parsed
-	 *                            coordinates should be set to
+	 * @param positionableElement the positionable element where the parsed coordinates should be set to
 	 *
-	 * @throws TypeImportException the FBT import exception
-	 */
+	 * @throws TypeImportException the FBT import exception */
 	public void getXandY(final PositionableElement positionableElement) throws TypeImportException {
 		try {
 			final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
@@ -433,9 +426,21 @@ public abstract class CommonElementImporter {
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != name && null != value) {
+		if ((null != name) && (null != value)) {
 			confObject.setAttribute(name, null == type ? "STRING" : type, //$NON-NLS-1$
 					value, comment);
+		}
+
+		if (confObject instanceof StructManipulator) {
+			checkStructAttribute((StructManipulator) confObject, name);
+		}
+	}
+
+	private void checkStructAttribute(StructManipulator fb, String name) {
+		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(name)) {
+			final Attribute attr = fb.getAttribute(LibraryElementTags.STRUCTURED_TYPE_ELEMENT); // $NON-NLS-1$
+			final StructuredType structType = getTypeLibrary().getDataTypeLibrary().getStructuredType(attr.getValue());
+			fb.setStructTypeElementsAtInterface(structType);
 		}
 	}
 
