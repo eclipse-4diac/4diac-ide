@@ -20,7 +20,10 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.StructTreeNode;
+import org.eclipse.fordiac.ide.model.StructTreeNode.StructTreeContentProvider;
+import org.eclipse.fordiac.ide.model.StructTreeNode.StructTreeLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -31,12 +34,8 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
@@ -48,7 +47,6 @@ import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -173,8 +171,8 @@ public class StructManipulatorSection extends AbstractSection {
 	private void createMemberVariableViewer(final Composite parent) {
 		memberVarViewer = createTreeViewer(parent);
 		configureTreeLayout(memberVarViewer);
-		memberVarViewer.setContentProvider(new TreeContentProvider());
-		memberVarViewer.setLabelProvider(new TreeLabelProvider());
+		memberVarViewer.setContentProvider(new StructTreeContentProvider());
+		memberVarViewer.setLabelProvider(new StructTreeLabelProvider());
 		GridLayoutFactory.fillDefaults().generateLayout(parent);
 
 		createContextMenu(memberVarViewer.getControl());
@@ -228,17 +226,19 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	private static void configureTreeLayout(final TreeViewer viewer) {
-		final TreeViewerColumn col1 = new TreeViewerColumn(viewer, SWT.LEFT);
-		final TreeViewerColumn col2 = new TreeViewerColumn(viewer, SWT.LEFT);
-		final TreeViewerColumn col3 = new TreeViewerColumn(viewer, SWT.LEFT);
+		final TreeViewerColumn variableName = new TreeViewerColumn(viewer, SWT.LEFT);
+		final TreeViewerColumn variableType = new TreeViewerColumn(viewer, SWT.LEFT);
+		final TreeViewerColumn comment = new TreeViewerColumn(viewer, SWT.LEFT);
+		viewer.getTree().setHeaderVisible(true);
+		variableName.getColumn().setResizable(true);
+		variableType.getColumn().setResizable(true);
 
-		col1.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_NAME);
-		col2.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_TYPE);
-		col3.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT);
-
-		col1.getColumn().setWidth(200);
-		col2.getColumn().setWidth(100);
-		col3.getColumn().setWidth(800);
+		variableName.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_NAME);
+		variableType.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_TYPE);
+		comment.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT);
+		variableName.getColumn().setWidth(200);
+		variableType.getColumn().setWidth(100);
+		comment.getColumn().setWidth(800);
 	}
 
 	@Override
@@ -271,89 +271,28 @@ public class StructManipulatorSection extends AbstractSection {
 			memberVarViewer.setInput(null);
 		}
 		setType(input);
-		final TreeContentProvider contentProvider = (TreeContentProvider) memberVarViewer.getContentProvider();
 		if (initTree) {
-			contentProvider.initTree(getType(),
-					memberVarViewer instanceof CheckboxTreeViewer ? (CheckboxTreeViewer) memberVarViewer : null);
+			final StructTreeNode node = initTree(getType(), memberVarViewer);
+			((StructTreeContentProvider) memberVarViewer.getContentProvider()).setRoot(node);
+
 		}
 
 		disableOpenEditorForAnyType(getType().getStructType().getName());
 	}
 
-	public static class TreeContentProvider implements ITreeContentProvider {
+	public StructTreeNode initTree(final StructManipulator struct, final TreeViewer viewer) {
+		final StructuredType structuredType = struct.getPaletteEntry().getTypeLibrary().getDataTypeLibrary()
+				.getStructuredType(struct.getStructType().getName());
 
-		StructTreeNode root = null;
-
-		@Override
-		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof StructManipulator) {
-				return getMemberVariableNodes(((StructManipulator) inputElement));
-			}
-			return new Object[] {};
+		final StructTreeNode root = CheckableStructTreeNode.initTree(struct, structuredType);
+		if (viewer != null) {
+			root.setViewer(viewer);
 		}
 
-		public void initTree(final StructManipulator struct, final CheckboxTreeViewer viewer) {
-			final StructuredType structuredType = struct.getPaletteEntry().getTypeLibrary().getDataTypeLibrary()
-					.getStructuredType(struct.getStructType().getName());
-			root = StructTreeNode.initTree(struct, structuredType);
-			if (viewer != null) {
-				root.setViewer(viewer);
-			}
-		}
-
-		private Object[] getMemberVariableNodes(final StructManipulator struct) {
-			return root.getChildrenAsArray();
-		}
-
-		@Override
-		public Object[] getChildren(final Object parentElement) {
-			if (parentElement instanceof StructTreeNode) {
-				return ((StructTreeNode) parentElement).getChildrenAsArray();
-			}
-			return new Object[0];
-		}
-
-		@Override
-		public Object getParent(final Object element) {
-			if (element instanceof StructTreeNode) {
-				return ((StructTreeNode) element).getParent();
-			}
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(final Object element) {
-			if (element instanceof StructTreeNode) {
-				return ((StructTreeNode) element).hasChildren();
-			}
-			return false;
-		}
+		return root;
 	}
 
-	public static class TreeLabelProvider extends LabelProvider implements ITableLabelProvider {
-		@Override
-		public Image getColumnImage(final Object element, final int columnIndex) {
-			return null;
-		}
 
-		@Override
-		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof StructTreeNode) {
-				final VarDeclaration memVar = ((StructTreeNode) element).getVariable();
-				switch (columnIndex) {
-				case 0:
-					return memVar.getName();
-				case 1:
-					return memVar.getTypeName();
-				case 2:
-					return memVar.getComment();
-				default:
-					break;
-				}
-			}
-			return element.toString();
-		}
-	}
 
 	@Override
 	protected void setInputCode() {

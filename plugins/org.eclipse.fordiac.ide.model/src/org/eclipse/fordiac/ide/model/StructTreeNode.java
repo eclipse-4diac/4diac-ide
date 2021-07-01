@@ -19,19 +19,22 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.graphics.Image;
 
 public class StructTreeNode {
-	private final VarDeclaration variable;
-	private final StructTreeNode root;
-	private final StructTreeNode parent;
-	private final String pinName;
-	private final List<StructTreeNode> children;
-	private boolean isChecked = false;
-	private boolean isGrey = false;
-	private CheckboxTreeViewer viewer = null;
 
-	private StructTreeNode(final VarDeclaration variable, final StructTreeNode parent) {
+	protected final VarDeclaration variable;
+	protected final StructTreeNode root;
+	protected final String pinName;
+	protected final List<StructTreeNode> children;
+	protected final StructTreeNode parent;
+	protected TreeViewer viewer = null;
+
+	protected StructTreeNode(final VarDeclaration variable, final StructTreeNode parent) {
 		this.variable = variable;
 		this.parent = parent;
 		this.pinName = getFullPinName();
@@ -39,7 +42,7 @@ public class StructTreeNode {
 		this.root = parent.root;
 	}
 
-	private StructTreeNode() {
+	protected StructTreeNode() {
 		// initialize root node
 		this.variable = null;
 		this.parent = null;
@@ -48,21 +51,32 @@ public class StructTreeNode {
 		this.root = this;
 	}
 
-	public static StructTreeNode createRootNode() {
-		return new StructTreeNode();
-	}
+	public static void buildTree(final StructManipulator struct, final StructuredType structType,
+			final StructTreeNode parent) {
+		for (final VarDeclaration memberVariable : structType.getMemberVariables()) {
+			final StructTreeNode treeNode = parent.addChild(memberVariable);
 
-	public static StructTreeNode initTree(final StructManipulator struct, final StructuredType structType) {
-		final StructTreeNode createRootNode = createRootNode();
-		buildTree(struct, structType, createRootNode);
-		return createRootNode;
-	}
-
-	private String getFullPinName() {
-		if ((null == parent) || (null == parent.pinName)) {
-			return getVariableName(variable);
+			if ((memberVariable.getType() instanceof StructuredType)
+					&& (memberVariable.getType() != GenericTypes.ANY_STRUCT)) {
+				buildTree(struct, (StructuredType) memberVariable.getType(), treeNode);
+			}
 		}
-		return (parent.pinName + "." + getVariableName(variable)); //$NON-NLS-1$
+	}
+
+	protected static String getVariableName(final VarDeclaration variable) {
+		return null == variable ? "" : variable.getName(); //$NON-NLS-1$
+	}
+
+	public Object[] getChildrenAsArray() {
+		return children.toArray();
+	}
+
+	public VarDeclaration getVariable() {
+		return variable;
+	}
+
+	public StructTreeNode getParent() {
+		return parent;
 	}
 
 	public String getParentVarName() {
@@ -81,80 +95,15 @@ public class StructTreeNode {
 		return children;
 	}
 
-	public void check(final boolean isChecked) {
-		if (root.viewer != null) {
-			root.viewer.setChecked(this, isChecked);
+	private String getFullPinName() {
+		if ((null == parent) || (null == parent.pinName)) {
+			return getVariableName(variable);
 		}
-		this.isChecked = isChecked;
+		return (parent.pinName + "." + getVariableName(variable)); //$NON-NLS-1$
 	}
 
-	public boolean isChecked() {
-		return isChecked;
-	}
-
-
-	public boolean childIsChecked() {
-		return childIsChecked(this);
-	}
-
-	public static void buildTree(final StructManipulator struct, final StructuredType structType,
-			final StructTreeNode parent) {
-		for (final VarDeclaration memberVariable : structType.getMemberVariables()) {
-			final StructTreeNode treeNode = parent.addChild(memberVariable);
-
-			if (struct.getInterfaceElement(treeNode.getPinName()) != null) {
-				treeNode.check(true);
-			}
-
-			if ((memberVariable.getType() instanceof StructuredType)
-					&& (memberVariable.getType() != GenericTypes.ANY_STRUCT)) {
-				buildTree(struct, (StructuredType) memberVariable.getType(), treeNode);
-			} else if (treeNode.isChecked()) {
-				greyParents(treeNode);
-			}
-		}
-	}
-
-	public static void greyParents(final StructTreeNode node) {
-		StructTreeNode parent = node.getParent();
-		final StructTreeNode rootNode = node.getRootNode();
-		while (parent != rootNode) {
-			if (!parent.isChecked()) {
-				parent.setGrey(true);
-				parent.check(true);
-			}
-			parent = parent.getParent();
-		}
-
-	}
-
-	protected boolean childIsChecked(final StructTreeNode parent) {
-		for (final StructTreeNode node : parent.getChildren()) {
-			if (node.isChecked) {
-				return true;
-			}
-			if (node.hasChildren()) {
-				return childIsChecked(node);
-			}
-		}
-
-		return false;
-	}
-
-	private static String getVariableName(final VarDeclaration variable) {
-		return null == variable ? "" : variable.getName(); //$NON-NLS-1$
-	}
-
-	public Object[] getChildrenAsArray() {
-		return children.toArray();
-	}
-
-	public VarDeclaration getVariable() {
-		return variable;
-	}
-
-	public StructTreeNode getParent() {
-		return parent;
+	public void setViewer(final TreeViewer viewer) {
+		root.viewer = viewer;
 	}
 
 	public StructTreeNode addChild(final VarDeclaration memberVariable) {
@@ -163,85 +112,74 @@ public class StructTreeNode {
 		return treeNode;
 	}
 
+	public static class StructTreeContentProvider implements ITreeContentProvider {
 
-	private static StructTreeNode find(final StructTreeNode parent, final String name) {
-		for (final StructTreeNode node : parent.getChildren()) {
-			if (node.pinName.equals(name)) {
-				return node;
+		private StructTreeNode root = null;
+
+		public void setRoot(final StructTreeNode root) {
+			this.root = root;
+		}
+
+		@Override
+		public Object[] getElements(final Object inputElement) {
+			if (inputElement instanceof StructManipulator) {
+				return getMemberVariableNodes(((StructManipulator) inputElement));
 			}
-			if (node.hasChildren()) {
-				final StructTreeNode find = find(node, name);
-				if (find != null) {
-					return find;
+			return new Object[] {};
+		}
+
+		private Object[] getMemberVariableNodes(final StructManipulator struct) {
+			return root.getChildrenAsArray();
+		}
+
+		@Override
+		public Object[] getChildren(final Object parentElement) {
+			if (parentElement instanceof CheckableStructTreeNode) {
+				return ((StructTreeNode) parentElement).getChildrenAsArray();
+			}
+			return new Object[0];
+		}
+
+		@Override
+		public Object getParent(final Object element) {
+			if (element instanceof CheckableStructTreeNode) {
+				return ((StructTreeNode) element).getParent();
+			}
+			return null;
+		}
+
+		@Override
+		public boolean hasChildren(final Object element) {
+			if (element instanceof CheckableStructTreeNode) {
+				return ((CheckableStructTreeNode) element).hasChildren();
+			}
+			return false;
+		}
+	}
+
+	public static class StructTreeLabelProvider extends LabelProvider implements ITableLabelProvider {
+		@Override
+		public Image getColumnImage(final Object element, final int columnIndex) {
+			return null;
+		}
+
+		@Override
+		public String getColumnText(final Object element, final int columnIndex) {
+			if (element instanceof CheckableStructTreeNode) {
+				final VarDeclaration memVar = ((StructTreeNode) element).getVariable();
+				switch (columnIndex) {
+				case 0:
+					return memVar.getName();
+				case 1:
+					return memVar.getTypeName();
+				case 2:
+					return memVar.getComment();
+				default:
+					break;
 				}
 			}
-		}
-		return null;
-	}
-
-	public StructTreeNode find(final String name) {
-		return find(getRootNode(), name);
-	}
-
-	private static void serializeTreeToString(final StructTreeNode parent, final StringBuilder stringBuilder) {
-		for (final StructTreeNode node : parent.getChildren()) {
-			if (node.isChecked && !node.isGrey) {
-				stringBuilder.append(node.pinName);
-				stringBuilder.append(LibraryElementTags.VARIABLE_SEPARATOR);
-			}
-			serializeTreeToString(node, stringBuilder);
+			return element.toString();
 		}
 	}
 
-	public String visibleToString() {
-		final StringBuilder stringBuilder = new StringBuilder();
-		serializeTreeToString(this, stringBuilder);
-
-		if (stringBuilder.length() > 0) {
-			return stringBuilder.substring(0, stringBuilder.length() - 1);
-		}
-
-		return ""; //$NON-NLS-1$
-	}
-
-	public StructTreeNode getRootNode() {
-		return root;
-	}
-
-	public boolean isGrey() {
-		return isGrey;
-	}
-
-
-
-	public void setGrey(final boolean isGrey) {
-		if (root.viewer != null) {
-			root.viewer.setChecked(this, isGrey);
-		}
-		this.isGrey = isGrey;
-	}
-
-	public void uncheckChildren(final CheckboxTreeViewer viewer) {
-		this.isChecked = false;
-		viewer.setChecked(this, false);
-		children.forEach(c -> {
-			c.isChecked = false;
-			viewer.setChecked(c, false);
-			c.uncheckChildren(viewer);
-		});
-	}
-
-	public void ungrayChildren(final CheckboxTreeViewer viewer) {
-		this.isGrey = false;
-		viewer.setGrayChecked(this, false);
-		children.forEach(c -> {
-			c.isGrey = false;
-			viewer.setGrayChecked(parent, false);
-			c.ungrayChildren(viewer);
-		});
-	}
-
-	public void setViewer(final CheckboxTreeViewer viewer) {
-		root.viewer = viewer;
-	}
 }

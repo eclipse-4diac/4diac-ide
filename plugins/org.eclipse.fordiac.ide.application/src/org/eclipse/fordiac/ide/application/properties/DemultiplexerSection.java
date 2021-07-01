@@ -13,10 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.StructTreeNode;
 import org.eclipse.fordiac.ide.model.commands.create.AddDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -42,7 +44,7 @@ public class DemultiplexerSection extends StructManipulatorSection {
 			@Override
 			public boolean isChecked(final Object element) {
 				if (null != element) {
-					final StructTreeNode node = (StructTreeNode) element;
+					final CheckableStructTreeNode node = (CheckableStructTreeNode) element;
 					return node.isChecked() || node.isGrey();
 				}
 				return false;
@@ -50,7 +52,7 @@ public class DemultiplexerSection extends StructManipulatorSection {
 
 			@Override
 			public boolean isGrayed(final Object element) {
-				final StructTreeNode node = (StructTreeNode) element;
+				final CheckableStructTreeNode node = (CheckableStructTreeNode) element;
 				return node.isGrey();
 			}
 
@@ -59,10 +61,9 @@ public class DemultiplexerSection extends StructManipulatorSection {
 		getViewer().addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(final CheckStateChangedEvent event) {
-				final StructTreeNode node = (StructTreeNode) event.getElement();
+				final CheckableStructTreeNode node = (CheckableStructTreeNode) event.getElement();
 				final Command cmd = createDemuxPortCommand(node);
 				executeCommand(cmd);
-				updateGrayedElements(node, getViewer());
 				selectStructManipulator(cmd);
 
 			}
@@ -84,8 +85,8 @@ public class DemultiplexerSection extends StructManipulatorSection {
 				setInitTree(true);
 			}
 
-			private Command createDemuxPortCommand(final StructTreeNode node) {
-				if (!node.isChecked()) {
+			private Command createDemuxPortCommand(final CheckableStructTreeNode node) {
+				if (!node.isChecked() || node.isGrayChecked()) {
 					return new AddDemuxPortCommand(getType(), node);
 				}
 
@@ -100,52 +101,12 @@ public class DemultiplexerSection extends StructManipulatorSection {
 		this.initTree = initTree;
 	}
 
-	private static void updateGrayedElements(final StructTreeNode node, final CheckboxTreeViewer viewer) {
-
-		if (node.isGrey()) {
-			node.setGrey(false);
-		}
-
-		if (node.isChecked()) {
-			greyParents(node, viewer);
-		} else {
-			ungreyParents(node, viewer);
-		}
+	@Override
+	public StructTreeNode initTree(final StructManipulator struct, final TreeViewer viewer) {
+		return super.initTree(struct, viewer);
 	}
 
-	private static void ungreyParents(final StructTreeNode node, final CheckboxTreeViewer viewer) {
-		StructTreeNode parent = node.getParent();
-		final StructTreeNode rootNode = node.getRootNode();
-		while (parent != rootNode) {
-			if (parent.isGrey() && !parent.childIsChecked()) {
-				parent.setGrey(false);
-				parent.check(false);
-				viewer.setGrayChecked(parent, false);
-			}
-			parent = parent.getParent();
-		}
-	}
 
-	private static void greyParents(final StructTreeNode node, final CheckboxTreeViewer viewer) {
-		if (node.isGrey() && node.isChecked()) {
-			node.setGrey(false);
-		}
-
-
-		StructTreeNode parent = node.getParent();
-		final StructTreeNode rootNode = node.getRootNode();
-
-		while (parent != rootNode) {
-			if (!parent.isChecked()) {
-				parent.setGrey(true);
-				parent.check(true);
-				viewer.setGrayChecked(parent, true);
-			}
-
-			parent = parent.getParent();
-		}
-
-	}
 
 	private CheckboxTreeViewer getViewer() {
 		return (CheckboxTreeViewer) memberVarViewer;

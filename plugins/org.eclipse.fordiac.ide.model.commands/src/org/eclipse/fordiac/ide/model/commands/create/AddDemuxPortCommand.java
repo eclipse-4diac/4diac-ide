@@ -21,10 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.StructManipulation;
-import org.eclipse.fordiac.ide.model.StructTreeNode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -43,10 +43,10 @@ public class AddDemuxPortCommand extends Command {
 
 	private final StructuredType struct;
 	private ChangeStructCommand cmd;
-	private final StructTreeNode node;
+	private final CheckableStructTreeNode node;
 
 
-	public AddDemuxPortCommand(final Demultiplexer type, final StructTreeNode node) {
+	public AddDemuxPortCommand(final Demultiplexer type, final CheckableStructTreeNode node) {
 		this.node = node;
 		this.type = type;
 		this.varName = node.getPinName();
@@ -57,7 +57,7 @@ public class AddDemuxPortCommand extends Command {
 	@Override
 	public void execute() {
 
-		node.check(true);
+		node.updateNode(true);
 
 		if (null == newVisibleChildren) {
 			newVisibleChildren = node.getRootNode().visibleToString();
@@ -96,7 +96,7 @@ public class AddDemuxPortCommand extends Command {
 
 	@Override
 	public void redo() {
-		node.check(true);
+		node.updateNode(true);
 		cmd.redo();
 		type = (Demultiplexer) cmd.getNewMux();
 		setVisibleChildrenAttribute(newVisibleChildren);
@@ -104,7 +104,7 @@ public class AddDemuxPortCommand extends Command {
 
 	@Override
 	public void undo() {
-		node.check(false);
+		node.updateNode(false);
 		type = oldMux;
 		cmd.undo();
 		setVisibleChildrenAttribute(oldVisibleChildren);
