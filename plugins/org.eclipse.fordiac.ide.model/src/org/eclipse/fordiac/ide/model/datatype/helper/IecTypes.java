@@ -131,9 +131,9 @@ public final class IecTypes {
 			DATE.setName(FordiacKeywords.DATE);
 			LDATE.setName(FordiacKeywords.LDATE);
 			DATE_AND_TIME.setName(FordiacKeywords.DATE_AND_TIME);
-			LDT.setName(FordiacKeywords.LDT);
+			LDT.setName(FordiacKeywords.LDATE_AND_TIME);
 			TIME_OF_DAY.setName(FordiacKeywords.TIME_OF_DAY);
-			LTOD.setName(FordiacKeywords.LTOD);
+			LTOD.setName(FordiacKeywords.LTIME_OF_DAY);
 		}
 
 		public static DataType[] getAllElementaryType() {
@@ -142,9 +142,9 @@ public final class IecTypes {
 					TIME_OF_DAY, LTOD };
 		}
 
-		public static DataType getTypeByName(String name) {
-			var allElementaryTypes = getAllElementaryType();
-			for (DataType type : allElementaryTypes) {
+		public static DataType getTypeByName(final String name) {
+			final var allElementaryTypes = getAllElementaryType();
+			for (final DataType type : allElementaryTypes) {
 				if (type.getName().equalsIgnoreCase(name)) {
 					return type;
 				}

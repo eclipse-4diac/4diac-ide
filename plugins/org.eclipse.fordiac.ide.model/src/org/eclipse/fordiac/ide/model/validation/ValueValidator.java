@@ -13,11 +13,15 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.validation;
 
+import static java.util.Map.entry;
+
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyCharsType;
@@ -34,7 +38,11 @@ import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
 import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
+import org.eclipse.fordiac.ide.model.data.LtimeType;
+import org.eclipse.fordiac.ide.model.data.LtodType;
 import org.eclipse.fordiac.ide.model.data.StringType;
+import org.eclipse.fordiac.ide.model.data.TimeOfDayType;
+import org.eclipse.fordiac.ide.model.data.TimeType;
 import org.eclipse.fordiac.ide.model.data.WcharType;
 import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
@@ -84,6 +92,17 @@ public final class ValueValidator {
 
 	private static final String[] timeNames = { "d", "h", "m", "s", "ms", "us", "ns" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 	private static final int[] timesMaxs = { 365, 24, 60, 60, 1000, 1000, 1000 };
+
+	private static final String TIME_SHORT_FORM = "T"; //$NON-NLS-1$
+	private static final String LONG_TIME_SHORT_FORM = "LT"; //$NON-NLS-1$
+	private static final String DATE_AND_TIME_SHORT_FORM = "DT"; //$NON-NLS-1$
+
+	private static final Map<String, String> SHORT_FORM_TRANSLATIONS = Map
+			.ofEntries(entry(TIME_SHORT_FORM, FordiacKeywords.TIME), entry(LONG_TIME_SHORT_FORM, FordiacKeywords.LTIME),
+					entry(FordiacKeywords.TOD, FordiacKeywords.TIME_OF_DAY),
+					entry(FordiacKeywords.LTOD, FordiacKeywords.LTIME_OF_DAY),
+					entry(DATE_AND_TIME_SHORT_FORM, FordiacKeywords.DATE_AND_TIME),
+					entry(FordiacKeywords.LDT, FordiacKeywords.LDATE_AND_TIME));
 
 	/**
 	 * Returns {@code true} if the given STLiteral is a valid bool Literal. A valid
@@ -251,6 +270,9 @@ public final class ValueValidator {
 		DataType literalType = null;
 		if (!typeSpecifier.isBlank()) {
 			literalType = IecTypes.ElementaryTypes.getTypeByName(typeSpecifier);
+			if (null == literalType) {
+				literalType = IecTypes.ElementaryTypes.getTypeByName(SHORT_FORM_TRANSLATIONS.get(typeSpecifier));
+			}
 		} else {
 			literalType = type; // We assume that the literal type is the same as the data type
 		}
@@ -383,6 +405,9 @@ public final class ValueValidator {
 		} else if (type instanceof DateAndTimeType || type instanceof LdtType) {
 			errorString += checkDateAndTimeLiteral(literalValue);
 		}
+		else if (type instanceof TimeOfDayType || type instanceof LtodType) {
+			errorString += isTODStringValid(literalValue);
+		}
 		return errorString;
 	}
 
@@ -412,7 +437,7 @@ public final class ValueValidator {
 	private static String checkDateLiteral(final String literalValue) {
 		var errorString = EMPTY_STRING;
 		if (!isDateStringValid(literalValue)) {
-			errorString += Messages.VALIDATOR_INCORRECT_DATE_FORMAT;
+			errorString += Messages.VALIDATOR_INVALID_DATE_FORMAT;
 		}
 		return errorString;
 	}
@@ -433,7 +458,7 @@ public final class ValueValidator {
 	private static String checkDateAndTimeLiteral(final String literalValue) {
 		var errorString = EMPTY_STRING;
 		if (!isDaTLiteralValid(literalValue)) {
-			errorString += Messages.VALIDATOR_INCORRECT_DATE_AND_TIME_FORMAT;
+			errorString += Messages.VALIDATOR_INVALID_DATE_AND_TIME_FORMAT;
 		}
 		return errorString;
 	}
@@ -443,11 +468,12 @@ public final class ValueValidator {
 		if (!baseSpecifier.isBlank()) {
 			errorString += MessageFormat.format(Messages.VALIDATOR_BASE_SPECIFIER_INVALID_FOR_TYPE, type.getName());
 		}
-		errorString += isTimeIntervalLiteralValid(literalValue);
-		if (!errorString.isBlank()) {
-			errorString += Messages.VALIDATOR_INVALID_TIME_LITERAL;
+		if (type instanceof TimeType || type instanceof LtimeType) {
+			errorString += isTimeIntervalLiteralValid(literalValue);
+			if (!errorString.isBlank()) {
+				errorString = Messages.VALIDATOR_INVALID_TIME_LITERAL + errorString;
+			}
 		}
-
 		return errorString;
 	}
 
