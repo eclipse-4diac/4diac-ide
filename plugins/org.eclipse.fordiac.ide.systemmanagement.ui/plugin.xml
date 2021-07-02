@@ -60,13 +60,14 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="%SystemEditor.name"
-            extensions="sys"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
             contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
             default="true"
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
+            extensions="sys"
             icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"
-            id="org.eclipse.fordiac.ide.editors.SystemEditor">
+            id="org.eclipse.fordiac.ide.editors.SystemEditor"
+            matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy"
+            name="%SystemEditor.name">
       </editor>
    </extension>
    <extension
