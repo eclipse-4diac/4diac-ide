@@ -637,5 +637,19 @@
                Show type name beside typed fbnetwork elements.
             </description>
       </decorator>
+      <decorator
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.InstanceCommentDecorator"
+            icon="fordiacimage://ICON_FB_TYPE"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.InstanceCommentDecorator"
+            label="Instance comment decoration"
+            lightweight="true"
+            state="false">
+            <enablement>
+                <objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+            </enablement>
+            <description>
+               Show instance comment beside typed fbnetwork elements.
+            </description>
+      </decorator>
    </extension>
 </plugin>
