@@ -621,4 +621,21 @@
           </editorInputEnablement>
        </linkHelper>
     </extension>
+    <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.InstanceTypeDecorator"
+            icon="fordiacimage://ICON_FB_TYPE"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.InstanceTypeDecorator"
+            label="Instance type decoration"
+            lightweight="true"
+            state="false">
+            <enablement>
+                <objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+            </enablement>
+            <description>
+               Show type name beside typed fbnetwork elements.
+            </description>
+      </decorator>
+   </extension>
 </plugin>
