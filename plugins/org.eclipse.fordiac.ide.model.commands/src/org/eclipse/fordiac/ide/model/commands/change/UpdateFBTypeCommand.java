@@ -265,7 +265,7 @@ public class UpdateFBTypeCommand extends Command {
 						errorMessage);
 			}
 
-
+			return interfaceElement;
 		}
 		return oldInterface;
 	}
