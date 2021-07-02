@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Matthias Plasch, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Harmonized deployment and monitoring     
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
@@ -32,12 +32,12 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 	}
 
 	@Override
-	public List<IEditPartCreator> getChildren(FBNetwork fbNetwork) {
-		List<IEditPartCreator> arrayList = new ArrayList<>();
+	public List<IEditPartCreator> getChildren(final FBNetwork fbNetwork) {
+		final List<IEditPartCreator> arrayList = new ArrayList<>();
 
 		// TODO - model refactoring fetch only the list of monitored elements of the
 		// same system
-		for (MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {
+		for (final MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {
 			if (null != element) {
 				if (fbNetwork.getNetworkElements().contains(element.getPort().getFb())) {
 					arrayList.add(element);
@@ -60,17 +60,22 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 	}
 
 	@Override
-	public void notifyAddPort(PortElement port) {
+	public void notifyAddPort(final PortElement port) {
 		// nothing to do
 	}
 
 	@Override
-	public void notifyRemovePort(PortElement port) {
+	public void notifyRemovePort(final PortElement port) {
 		// nothing to do
 	}
 
 	@Override
-	public void notifyTriggerEvent(PortElement port) {
+	public void notifyTriggerEvent(final PortElement port) {
+		// nothing to do
+	}
+
+	@Override
+	public void notifyWatchesChanged() {
 		// nothing to do
 	}
 

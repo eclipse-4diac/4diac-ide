@@ -223,7 +223,13 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	private static String createHexValue(final String value, final DataType type) {
 		// we want to convert every AnyBit type besides bool
 		if (isHexValue(type) && isNumeric(value)) {
-			return convertIntegerToHexString(Integer.parseInt(value));
+			int parseInt;
+			try {
+				parseInt = Integer.parseInt(value);
+			} catch (final NumberFormatException e) {
+				parseInt = 0;
+			}
+			return convertIntegerToHexString(parseInt);
 		}
 		return value;
 	}

@@ -61,6 +61,8 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 				createMonitoringElement(manager, port);
 			}
 			refreshEditor();
+			MonitoringManager.getInstance().notifyWatchesChanged();
+
 		}
 		return null;
 	}

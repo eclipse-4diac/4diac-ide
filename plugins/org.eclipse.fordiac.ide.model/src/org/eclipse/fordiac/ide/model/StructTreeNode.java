@@ -27,11 +27,11 @@ import org.eclipse.swt.graphics.Image;
 
 public class StructTreeNode {
 
-	protected final VarDeclaration variable;
-	protected final StructTreeNode root;
+	protected VarDeclaration variable;
+	protected StructTreeNode root;
 	protected final String pinName;
 	protected final List<StructTreeNode> children;
-	protected final StructTreeNode parent;
+	protected StructTreeNode parent;
 	protected TreeViewer viewer = null;
 
 	protected StructTreeNode(final VarDeclaration variable, final StructTreeNode parent) {
@@ -150,8 +150,8 @@ public class StructTreeNode {
 
 		@Override
 		public boolean hasChildren(final Object element) {
-			if (element instanceof CheckableStructTreeNode) {
-				return ((CheckableStructTreeNode) element).hasChildren();
+			if (element instanceof StructTreeNode) {
+				return ((StructTreeNode) element).hasChildren();
 			}
 			return false;
 		}
