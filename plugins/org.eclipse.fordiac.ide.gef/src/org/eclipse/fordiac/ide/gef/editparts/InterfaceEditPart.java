@@ -146,7 +146,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	private boolean isSubAppPin(final FBNetworkElement connSource) {
-		if (connSource instanceof SubApp) {
+		if (connSource instanceof SubApp && getModel().getFBNetworkElement() != null) {
 			return ((SubApp) connSource).getSubAppNetwork() == getModel().getFBNetworkElement().getFbNetwork();
 		}
 		return false;
