@@ -165,6 +165,8 @@ public final class Messages extends NLS {
 	/** The FB type library_ erro r_ not supported. */
 	public static String FBTypeLibrary_ERROR_NotSupported;
 
+	public static String FordiacMarkerHelper_RemoveErrorMarkersFromFile;
+
 	/** Identifier has length zero */
 	public static String IdentifierVerifyer_ERROR_IdentifierLengthZero;
 

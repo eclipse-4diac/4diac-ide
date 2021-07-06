@@ -190,14 +190,10 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		if (getModel().getValue() != null) {
 			getFigure().setText(getModel().getValue());
 			setVisible(true);
-			setBackground(hasError());
+			setBackground(getModel().hasError());
 		} else {
 			setVisible(false);
 		}
-	}
-
-	private boolean hasError() {
-		return getModel().getFileMarkerId() != 0;
 	}
 
 	private void setBackground(final boolean hasError) {

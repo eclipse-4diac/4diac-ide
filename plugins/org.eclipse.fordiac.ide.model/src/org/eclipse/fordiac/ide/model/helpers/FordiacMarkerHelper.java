@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
@@ -192,13 +194,16 @@ public final class FordiacMarkerHelper {
 	}
 
 	private static ErrorMarkerBuilder deleteMarkerInJob(final IFile f, final ErrorMarkerRef ie) {
-		final IMarker marker = f.getMarker(ie.getFileMarkerId());
-		final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + f.getName()) { //$NON-NLS-1$
-			@SuppressWarnings("boxing")
+		final long markerId = ie.getFileMarkerId();
+		final IMarker marker = f.getMarker(markerId);
+		ie.setFileMarkerId(0);  // remove errormarker id from errorMarkerref
+		markers.remove(Long.valueOf(markerId));
+
+		final WorkspaceJob job = new WorkspaceJob(
+				MessageFormat.format(Messages.FordiacMarkerHelper_RemoveErrorMarkersFromFile, f.getName())) {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
 				try {
-					markers.remove(marker.getId());
 					marker.delete();
 				} catch (final CoreException e) {
 					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
@@ -209,6 +214,12 @@ public final class FordiacMarkerHelper {
 		final ErrorMarkerBuilder errorMarkerAttribute = new ErrorMarkerBuilder(marker, ie);
 		job.setRule(f.getProject());
 		job.schedule();
+		try {
+			job.join();
+		} catch (final InterruptedException e) {
+			Activator.getDefault().logError("Delete marker Job interrupted", e); //$NON-NLS-1$
+			Thread.currentThread().interrupt();
+		}
 		return errorMarkerAttribute;
 	}
 
