@@ -10,7 +10,8 @@
             default="true"
             class="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor"
             id="org.eclipse.fordiac.ide.datatypeeditor.editors.DTPFileEditor"
-            icon="fordiacimage://ICON_DATA_TYPE">
+            icon="fordiacimage://ICON_DATA_TYPE"
+            matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy">
       </editor>
    </extension>
    <extension

@@ -100,7 +100,8 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 				if (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass())) {
 					Display.getDefault().asyncExec(() -> {
 						if (null != paletteEntry) {
-							setPartName(paletteEntry.getLabel());
+							setPartName(paletteEntry.getFile().getName());
+							setInput(new FileEditorInput(paletteEntry.getFile()));
 						}
 					});
 
