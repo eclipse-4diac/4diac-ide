@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.StructManipulation;
+import org.eclipse.fordiac.ide.model.StructTreeNode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -95,11 +95,16 @@ public class DeleteDemuxPortCommand extends Command {
 	private Collection<VarDeclaration> getVarDeclarations(final List<String> varDeclNames) {
 		final List<VarDeclaration> vars = new ArrayList<>();
 		varDeclNames.forEach(varName -> {
-			final VarDeclaration varDecl = EcoreUtil
-					.copy(StructManipulation.findVarDeclarationInStruct(type.getStructType(), varName));
-			if (null != varDecl) {
-				varDecl.setName(varName);
-				vars.add(varDecl);
+			final StructTreeNode find = node.find(varName);
+			VarDeclaration findVarDeclarationInStruct = null;
+			if (find != null) {
+				findVarDeclarationInStruct = find.getVariable();
+				final VarDeclaration varDecl = EcoreUtil
+						.copy(findVarDeclarationInStruct);
+				if (null != varDecl) {
+					varDecl.setName(varName);
+					vars.add(varDecl);
+				}
 			}
 		});
 		return vars;
