@@ -93,6 +93,7 @@ public class ErrorMessageHandler {
 
 	private static final class ErrorMessageDialog extends PopupDialog {
 
+		private static final int ERROR_TEXT_WIDTH_HINT = 400;
 		private static final int MOUSE_CURSOR_OFFSET_Y = 10;
 		private static final int MOUSE_CURSOR_OFFSET_X = 5;
 		private static final Point MOUSE_CURSOR_OFFSET = new Point(MOUSE_CURSOR_OFFSET_X, MOUSE_CURSOR_OFFSET_Y);
@@ -160,16 +161,18 @@ public class ErrorMessageHandler {
 		protected Control createDialogArea(final Composite parent) {
 			final Composite warningComposite = new Composite(parent, SWT.NONE);
 			warningComposite.setLayout(new GridLayout(2, false));
-			warningComposite.setLayoutData(new GridData(0, 0, true, false));
+			warningComposite.setLayoutData(new GridData(0, 0, true, true));
 
 			final Label image = new Label(warningComposite, SWT.NONE);
 			image.setImage(parent.getDisplay().getSystemImage(SWT.ICON_WARNING));
 			image.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-			final Label text = new Label(warningComposite, SWT.NONE);
-			text.setText(errorMsg); // message is never null (instanceof check in receiver)
+			final Label errorText = new Label(warningComposite, SWT.WRAP);
+			errorText.setText(errorMsg); // message is never null (instanceof check in receiver)
 
-			text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+			final GridData errorTestLayoutData = new GridData(SWT.FILL, SWT.CENTER, true, true);
+			errorTestLayoutData.widthHint = ERROR_TEXT_WIDTH_HINT;
+			errorText.setLayoutData(errorTestLayoutData);
 
 			final Control focused = getShell().getDisplay().getFocusControl();
 			if (isTextInput(focused)) {

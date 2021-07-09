@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -57,6 +57,7 @@ import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LintType;
 import org.eclipse.fordiac.ide.model.data.LrealType;
@@ -83,276 +84,281 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyDerivedTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass arrayTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass dataTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass directlyDerivedTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass enumeratedTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass enumeratedValueEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass structuredTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass subrangeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass subrangeTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass valueTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass elementaryTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass derivedTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass eventTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyElementaryTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyMagnitudeTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyNumTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyRealTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass realTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass lrealTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyIntTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyUnsignedTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass usintTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass uintTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass udintTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass ulintTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anySignedTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass sintTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass intTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass dintTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass lintTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyDurationTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass timeTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass ltimeTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyBitTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass boolTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass byteTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass wordTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass dwordTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass lwordTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyCharsTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyStringTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass stringTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass wstringTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyCharTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass charTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass wcharTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass anyDateTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass dateAndTimeTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass ldtTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass dateTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass timeOfDayTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass ltodTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	private EClass ldateTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	private EEnum baseType1EEnum = null;
 
@@ -362,7 +368,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also
 	 * performs initialization of the package, or returns the registered package, if one already exists. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#eNS_URI
 	 * @see #init()
@@ -372,7 +378,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private static boolean isInited = false;
 
@@ -382,7 +388,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * This method is used to initialize {@link DataPackage#eINSTANCE} when that field is accessed. Clients should not
 	 * invoke it directly. Instead, they should simply access that field to obtain the package. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
@@ -431,7 +437,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyDerivedType() {
@@ -439,7 +445,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAnyDerivedType_CompilerInfo() {
@@ -447,7 +453,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getArrayType() {
@@ -455,7 +461,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getArrayType_Subranges() {
@@ -463,7 +469,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getArrayType_InitialValues() {
@@ -471,7 +477,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getArrayType_BaseType() {
@@ -479,7 +485,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDataType() {
@@ -487,7 +493,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDirectlyDerivedType() {
@@ -495,7 +501,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getEnumeratedType() {
@@ -503,7 +509,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getEnumeratedType_EnumeratedValue() {
@@ -511,7 +517,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getEnumeratedValue() {
@@ -519,7 +525,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getEnumeratedValue_Comment() {
@@ -527,7 +533,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getEnumeratedValue_Name() {
@@ -535,7 +541,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getStructuredType() {
@@ -543,7 +549,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getStructuredType_MemberVariables() {
@@ -551,7 +557,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSubrange() {
@@ -559,7 +565,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getSubrange_LowerLimit() {
@@ -567,7 +573,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getSubrange_UpperLimit() {
@@ -575,7 +581,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSubrangeType() {
@@ -583,7 +589,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getSubrangeType_Subrange() {
@@ -591,7 +597,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getValueType() {
@@ -599,7 +605,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getElementaryType() {
@@ -607,7 +613,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDerivedType() {
@@ -615,7 +621,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getDerivedType_BaseType() {
@@ -623,7 +629,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getEventType() {
@@ -631,7 +637,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyType() {
@@ -639,7 +645,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyElementaryType() {
@@ -647,7 +653,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyMagnitudeType() {
@@ -655,7 +661,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyNumType() {
@@ -663,7 +669,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyRealType() {
@@ -671,7 +677,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getRealType() {
@@ -679,7 +685,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getLrealType() {
@@ -687,7 +693,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyIntType() {
@@ -695,7 +701,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyUnsignedType() {
@@ -703,7 +709,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getUsintType() {
@@ -711,7 +717,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getUintType() {
@@ -719,7 +725,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getUdintType() {
@@ -727,7 +733,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getUlintType() {
@@ -735,7 +741,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnySignedType() {
@@ -743,7 +749,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSintType() {
@@ -751,7 +757,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getIntType() {
@@ -759,7 +765,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDintType() {
@@ -767,7 +773,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getLintType() {
@@ -775,7 +781,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyDurationType() {
@@ -783,7 +789,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getTimeType() {
@@ -791,7 +797,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getLtimeType() {
@@ -799,7 +805,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyBitType() {
@@ -807,7 +813,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getBoolType() {
@@ -815,7 +821,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getByteType() {
@@ -823,7 +829,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getWordType() {
@@ -831,7 +837,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDwordType() {
@@ -839,7 +845,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getLwordType() {
@@ -847,7 +853,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyCharsType() {
@@ -855,7 +861,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyStringType() {
@@ -863,7 +869,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getStringType() {
@@ -871,7 +877,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getWstringType() {
@@ -879,7 +885,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyCharType() {
@@ -887,7 +893,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getCharType() {
@@ -895,7 +901,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getWcharType() {
@@ -903,7 +909,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAnyDateType() {
@@ -911,7 +917,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDateAndTimeType() {
@@ -919,7 +925,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getLdtType() {
@@ -927,7 +933,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDateType() {
@@ -935,7 +941,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getTimeOfDayType() {
@@ -943,7 +949,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getLtodType() {
@@ -951,7 +957,15 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public EClass getLdateType() {
+		return ldateTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public EEnum getBaseType1() {
@@ -959,7 +973,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DataFactory getDataFactory() {
@@ -967,13 +981,13 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private boolean isCreated = false;
 
 	/** Creates the meta-model objects for the package. This method is guarded to have no affect on any invocation but
 	 * its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public void createPackageContents() {
 		if (isCreated)
@@ -1099,18 +1113,20 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 		ltodTypeEClass = createEClass(LTOD_TYPE);
 
+		ldateTypeEClass = createEClass(LDATE_TYPE);
+
 		// Create enums
 		baseType1EEnum = createEEnum(BASE_TYPE1);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private boolean isInitialized = false;
 
 	/** Complete the initialization of the package and its meta-model. This method is guarded to have no affect on any
 	 * invocation but its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public void initializePackageContents() {
 		if (isInitialized)
@@ -1184,6 +1200,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		dateTypeEClass.getESuperTypes().add(this.getAnyDateType());
 		timeOfDayTypeEClass.getESuperTypes().add(this.getAnyDateType());
 		ltodTypeEClass.getESuperTypes().add(this.getAnyDateType());
+		ldateTypeEClass.getESuperTypes().add(this.getAnyDateType());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(anyDerivedTypeEClass, AnyDerivedType.class, "AnyDerivedType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
@@ -1233,6 +1250,10 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		initEReference(getStructuredType_MemberVariables(), theLibraryElementPackage.getVarDeclaration(), null,
 				"memberVariables", null, 0, -1, StructuredType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		op = addEOperation(structuredTypeEClass, theXMLTypePackage.getBoolean(), "isCompatibleWith", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
+		addEParameter(op, this.getDataType(), "other", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(subrangeEClass, Subrange.class, "Subrange", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -1527,6 +1548,9 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 				IS_ORDERED);
 		addEParameter(op, this.getDataType(), "other", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(ldateTypeEClass, LdateType.class, "LdateType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+				IS_GENERATED_INSTANCE_CLASS);
+
 		// Initialize enums and add enum literals
 		initEEnum(baseType1EEnum, BaseType1.class, "BaseType1"); //$NON-NLS-1$
 		addEEnumLiteral(baseType1EEnum, BaseType1.DATEANDTIME);
@@ -1564,7 +1588,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/** Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected void createExtendedMetaDataAnnotations() {
 		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
@@ -1603,7 +1627,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/** Initializes the annotations for <b>http://www.obeo.fr/dsl/dnc/archetype</b>. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected void createArchetypeAnnotations() {
 		String source = "http://www.obeo.fr/dsl/dnc/archetype"; //$NON-NLS-1$

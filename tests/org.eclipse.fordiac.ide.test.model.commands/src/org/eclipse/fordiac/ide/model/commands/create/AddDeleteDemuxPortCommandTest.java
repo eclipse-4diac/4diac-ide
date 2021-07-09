@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.StructManipulation;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
@@ -57,6 +58,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 		private Demultiplexer demux;
 		private final StructuredType struct;
+		private CheckableStructTreeNode node;
 
 		public Demultiplexer getDemultiplexer() {
 			return demux;
@@ -69,6 +71,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		public State() {
 			struct = createSampleStruct();
 			demux = createDemultiplexer();
+			node = CheckableStructTreeNode.initTree(demux, struct);
 		}
 
 		public void setDemultiplexer(final Demultiplexer demux) {
@@ -166,7 +169,6 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 	protected static void verifyDefaultInitialValues(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getDemultiplexer());
-		t.test(state.getDemultiplexer().getAttribute(StructManipulation.CHILDREN_ATTRIBUTE) == null);
 		t.test(state.getDemultiplexer().getAttributeValue(StructManipulation.STRUCT_ATTRIBUTE)
 				.equals(state.getStruct().getName()));
 		t.test(state.getStruct().getMemberVariables().size(),
@@ -194,7 +196,8 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	}
 
 	private static State executeDeleteCommand(final State state, final String name) {
-		final DeleteDemuxPortCommand cmd = new DeleteDemuxPortCommand(state.getDemultiplexer(), name);
+		final CheckableStructTreeNode n = (CheckableStructTreeNode) state.node.find(name);
+		final DeleteDemuxPortCommand cmd = new DeleteDemuxPortCommand(state.getDemultiplexer(), n);
 		state.setCommand(cmd);
 		final State newState = commandExecution(state);
 		newState.setDemultiplexer(cmd.getType());
@@ -202,7 +205,8 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	}
 
 	private static State executeAddCommand(final State state, final String name) {
-		final AddDemuxPortCommand cmd = new AddDemuxPortCommand(state.getDemultiplexer(), name);
+		final CheckableStructTreeNode n = (CheckableStructTreeNode) state.node.find(name);
+		final AddDemuxPortCommand cmd = new AddDemuxPortCommand(state.getDemultiplexer(), n);
 		state.setCommand(cmd);
 		final State newState = commandExecution(state);
 		newState.setDemultiplexer(cmd.getType());

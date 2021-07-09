@@ -18,7 +18,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +33,7 @@ import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -134,50 +134,75 @@ public class PasteEditPartsAction extends SelectionAction {
 			if ((pasteRefPosition != null) && (copyPasteMessage.getCutAndPasteFromSubAppCommandos() != null)) {
 				copyPasteMessage.getCutAndPasteFromSubAppCommandos().setPastePos(pasteRefPosition);
 			}
-			if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_PASTED) {
+			if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_PASTED
+					|| copyPasteMessage.getCopyStatus() == CopyStatus.COPY) {
 				execute(createPasteCommand());
-			} else if (isCutFromSubappToParentSubapp(copyPasteMessage)) {
-				handleCutFromSubappToParentSubapp(copyPasteMessage);
+			} else if (isCutFromSubappToParent(copyPasteMessage)) {
+				handleCutFromSubappToParent(copyPasteMessage);
 			} else if (isCutFromRootToSubapp(copyPasteMessage)) {
 				handleCutFromRootToSubapp(copyPasteMessage);
-			} else if (isCutFromSubappToSubapp(copyPasteMessage)) {
-				handleCutFromSubappToSubapp(copyPasteMessage);
+			} else if (isCutFromSubappToChildSubapp(copyPasteMessage)) {
+				handleCutFromSubappToChildSubapp(copyPasteMessage);
 			} else {
-				if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) {
-					copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
-					execute(copyPasteMessage.getDeleteCommandos());
-				}
-				execute(createPasteCommand());
+				handleCutFromSubappToAnywhere(copyPasteMessage);
 			}
 
 		}
 		pasteRefPosition = null;
 	}
 
+	public void handleCutFromSubappToAnywhere(final CopyPasteMessage copyPasteMessage) {
+		if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) {
+			copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
+			execute(copyPasteMessage.getDeleteCommandos());
+		}
+		final Command createPasteCommand = createPasteCommand();
+		if (createPasteCommand instanceof PasteCommand
+				&& copyPasteMessage.getCutAndPasteFromSubAppCommandos() != null) {
+			((PasteCommand) createPasteCommand)
+			.setCutPasteCmd(copyPasteMessage.getCutAndPasteFromSubAppCommandos());
+		}
+
+		execute(createPasteCommand);
+	}
+
 	@Override
-	protected void execute(Command command) {
+	protected void execute(final Command command) {
 		if (command.canExecute()) {
 			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) Clipboard.getDefault().getContents();
-			if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT) {
+			if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_ROOT) {
 				copyPasteMessage.setCopyInfo(CopyStatus.CUT_PASTED);
 			}
 		}
 		super.execute(command);
 	}
 
-	private void handleCutFromSubappToSubapp(final CopyPasteMessage copyPasteMessage) {
+	private void handleCutFromSubappToChildSubapp(final CopyPasteMessage copyPasteMessage) {
 		final Object selection = getSelectedObjects().get(0);
 		final SubApp targetSubapp = getSubapp(selection);
 		copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
-		final AddElementsToSubAppCommand addElementsToSubAppCommand = new AddElementsToSubAppCommand(targetSubapp,
-				Arrays.asList(copyPasteMessage.getData().get(0)));
-		execute(addElementsToSubAppCommand);
+		execute(new AddElementsToSubAppCommand(targetSubapp, copyPasteMessage.getData()));
 	}
 
-	private boolean isCutFromSubappToSubapp(final CopyPasteMessage copyPasteMessage) {
+	private boolean isCutFromSubappToChildSubapp(final CopyPasteMessage copyPasteMessage) {
 		if (!isSelectionSubapp()) {
 			return false;
 		}
+		final SubApp targetSubapp = getSubapp(getSelectedObjects().get(0));
+
+		final List<FBNetworkElement> elements = copyPasteMessage.getCutAndPasteFromSubAppCommandos().getElements();
+
+		if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) {
+			// we need to undo the delete because otherwise it would not be possible to check whether they are in the
+			// same network
+			copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
+			if (!FBNetworkHelper.targetSubappIsInSameFbNetwork(elements, targetSubapp)) {
+				copyPasteMessage.getCutAndPasteFromSubAppCommandos().redo();
+				return false;
+			}
+			copyPasteMessage.getCutAndPasteFromSubAppCommandos().redo();
+		}
+
 		return copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP;
 	}
 
@@ -185,9 +210,7 @@ public class PasteEditPartsAction extends SelectionAction {
 		final Object selection = getSelectedObjects().get(0);
 		final SubApp targetSubapp = getSubapp(selection);
 		copyPasteMessage.getDeleteCommandos().undo();
-		final AddElementsToSubAppCommand addElementsToSubAppCommand = new AddElementsToSubAppCommand(targetSubapp,
-				Arrays.asList(copyPasteMessage.getData().get(0)));
-		execute(addElementsToSubAppCommand);
+		execute(new AddElementsToSubAppCommand(targetSubapp, copyPasteMessage.getData()));
 
 	}
 
@@ -205,7 +228,7 @@ public class PasteEditPartsAction extends SelectionAction {
 		if (!isSelectionSubapp()) {
 			return false;
 		}
-		return copyPasteMessage.getCopyStatus() == CopyStatus.CUT;
+		return copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_ROOT;
 	}
 
 	protected boolean isSelectionSubapp() {
@@ -213,7 +236,7 @@ public class PasteEditPartsAction extends SelectionAction {
 				|| (getSelectedObjects().get(0) instanceof UISubAppNetworkEditPart);
 	}
 
-	protected boolean isCutFromSubappToParentSubapp(final CopyPasteMessage copyPasteMessage) {
+	protected boolean isCutFromSubappToParent(final CopyPasteMessage copyPasteMessage) {
 
 		if (copyPasteMessage.getCopyStatus() != CopyStatus.CUT_FROM_SUBAPP) {
 			return false;
@@ -254,7 +277,7 @@ public class PasteEditPartsAction extends SelectionAction {
 		return copyPasteMessage.isCutFromSubApp();
 	}
 
-	protected void handleCutFromSubappToParentSubapp(final CopyPasteMessage copyPasteMessage) {
+	protected void handleCutFromSubappToParent(final CopyPasteMessage copyPasteMessage) {
 		execute(copyPasteMessage.getCutAndPasteFromSubAppCommandos());
 		Clipboard.getDefault().setContents(new Object()); // Clear clipboard afterwards to prevent double
 		// pasting

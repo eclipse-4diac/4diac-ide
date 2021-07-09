@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -33,21 +33,21 @@ import org.eclipse.fordiac.ide.model.data.ElementaryType;
 public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	/** The cached value of the '{@link #getBaseType() <em>Base Type</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getBaseType()
 	 * @generated
 	 * @ordered */
 	protected ElementaryType baseType;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected DerivedTypeImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -55,7 +55,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ElementaryType getBaseType() {
@@ -72,14 +72,14 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public ElementaryType basicGetBaseType() {
 		return baseType;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setBaseType(ElementaryType newBaseType) {
@@ -91,7 +91,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -106,7 +106,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -121,7 +121,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -136,7 +136,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {

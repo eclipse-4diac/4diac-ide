@@ -10,7 +10,8 @@
             icon="fordiacimage://ICON_SUB_APP_TYPE"
             contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
             class="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"
-            id="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor">
+            id="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"
+            matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy">
       </editor>
    </extension>
 <extension

@@ -30,7 +30,7 @@ public class ChangeDataTypeCommand extends Command {
 	private final VarDeclaration interfaceElement;
 	private final DataType dataType;
 	private DataType oldDataType;
-	private UpdateFBTypeCommand cmd = null;
+	private UpdateFBTypeCommand updateTypeCmd = null;
 
 	public ChangeDataTypeCommand(final VarDeclaration interfaceElement, final DataType dataType) {
 		super();
@@ -42,10 +42,14 @@ public class ChangeDataTypeCommand extends Command {
 	public void execute() {
 		oldDataType = interfaceElement.getType();
 		setNewType();
+		handleAdapter();
+	}
+
+	public void handleAdapter() {
 		if ((dataType instanceof AdapterType) && (interfaceElement.eContainer().eContainer() instanceof CompositeFBType)
 				&& (!(interfaceElement.eContainer().eContainer() instanceof SubAppType))) {
-			cmd = new ChangeAdapterFBCommand((AdapterDeclaration) interfaceElement);
-			cmd.execute();
+			updateTypeCmd = new ChangeAdapterFBCommand((AdapterDeclaration) interfaceElement);
+			updateTypeCmd.execute();
 		}
 	}
 
@@ -53,16 +57,16 @@ public class ChangeDataTypeCommand extends Command {
 	public void undo() {
 		interfaceElement.setType(oldDataType);
 		interfaceElement.setTypeName(oldDataType.getName());
-		if (null != cmd) {
-			cmd.undo();
+		if (null != updateTypeCmd) {
+			updateTypeCmd.undo();
 		}
 	}
 
 	@Override
 	public void redo() {
 		setNewType();
-		if (null != cmd) {
-			cmd.redo();
+		if (null != updateTypeCmd) {
+			updateTypeCmd.redo();
 		}
 	}
 

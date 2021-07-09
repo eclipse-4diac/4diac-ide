@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.subapptypeeditor.editors;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -90,7 +92,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	protected void createPages() {
+	protected void addPages() {
 		try {
 			final TypedSubAppNetworkEditor initialEditor = new TypedSubAppNetworkEditor();
 			initialEditor.setCommonCommandStack(getCommandStack());
@@ -225,7 +227,10 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
 		try {
-			return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker.getAttributes());
+			final Map<String, Object> attrs = marker.getAttributes();
+			return FordiacMarkerHelper.markerTargetsFBNetworkElement(attrs)
+					|| FordiacMarkerHelper.markerTargetsConnection(attrs)
+					|| FordiacMarkerHelper.markerTargetsValue(attrs);
 		} catch (final CoreException e) {
 			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
 		}

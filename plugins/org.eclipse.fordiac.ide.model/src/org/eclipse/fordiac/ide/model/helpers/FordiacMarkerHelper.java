@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
@@ -55,7 +57,7 @@ public final class FordiacMarkerHelper {
 
 	private static final String FB_NETWORK_ELEMENT_TARGET = "FBNetworkElement"; //$NON-NLS-1$
 	private static final String CONNECTION_TARGET = "Connection"; //$NON-NLS-1$
-	private static final String VALUE_TARGET = "Connection"; //$NON-NLS-1$
+	private static final String VALUE_TARGET = "Value"; //$NON-NLS-1$
 
 	private static final Map<Long, ErrorMarkerRef> markers = new ConcurrentHashMap<>();
 
@@ -69,6 +71,10 @@ public final class FordiacMarkerHelper {
 
 	public static boolean markerTargetsConnection(final Map<String, Object> attrs) {
 		return CONNECTION_TARGET.equals(attrs.get(TARGET_TYPE));
+	}
+
+	public static boolean markerTargetsValue(final Map<String, Object> attrs) {
+		return VALUE_TARGET.equals(attrs.get(TARGET_TYPE));
 	}
 
 	public static void addTargetIdentifier(final EObject element, final Map<String, Object> attrs) {
@@ -125,6 +131,9 @@ public final class FordiacMarkerHelper {
 		}
 		final StringBuilder builder = new StringBuilder();
 		createHierarchicalName(container, builder);
+		if (builder.length() > 0) {
+			builder.deleteCharAt(builder.length() - 1); // remove the last dot
+		}
 
 		return builder.toString();
 	}
@@ -150,20 +159,16 @@ public final class FordiacMarkerHelper {
 				builder.insert(0, ((Device) runner.eContainer()).getName());
 			}
 		}
-
-		if (builder.length() > 0) {
-			builder.deleteCharAt(builder.length() - 1); // remove the last dot
-		}
 	}
 
-	public static void createMarker(final ErrorMarkerBuilder errorMarker) {
+	public static void createMarkerInFile(final ErrorMarkerBuilder errorMarker) {
 		final IFile file = getFileFromRef(errorMarker.getErrorMarkerRef());
-		createMarker(errorMarker, file);
+		createMarkerInFile(errorMarker, file);
 
 	}
 
 	@SuppressWarnings("boxing")
-	public static void createMarker(final ErrorMarkerBuilder errorMarker, final IFile file) {
+	public static void createMarkerInFile(final ErrorMarkerBuilder errorMarker, final IFile file) {
 		Assert.isNotNull(file);
 		try {
 			final IMarker marker = file.createMarker(IMarker.PROBLEM, errorMarker.getAttributes());
@@ -189,13 +194,16 @@ public final class FordiacMarkerHelper {
 	}
 
 	private static ErrorMarkerBuilder deleteMarkerInJob(final IFile f, final ErrorMarkerRef ie) {
-		final IMarker marker = f.getMarker(ie.getFileMarkerId());
-		final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + f.getName()) { //$NON-NLS-1$
-			@SuppressWarnings("boxing")
+		final long markerId = ie.getFileMarkerId();
+		final IMarker marker = f.getMarker(markerId);
+		ie.setFileMarkerId(0);  // remove errormarker id from errorMarkerref
+		markers.remove(Long.valueOf(markerId));
+
+		final WorkspaceJob job = new WorkspaceJob(
+				MessageFormat.format(Messages.FordiacMarkerHelper_RemoveErrorMarkersFromFile, f.getName())) {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
 				try {
-					markers.remove(marker.getId());
 					marker.delete();
 				} catch (final CoreException e) {
 					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
@@ -206,6 +214,12 @@ public final class FordiacMarkerHelper {
 		final ErrorMarkerBuilder errorMarkerAttribute = new ErrorMarkerBuilder(marker, ie);
 		job.setRule(f.getProject());
 		job.schedule();
+		try {
+			job.join();
+		} catch (final InterruptedException e) {
+			Activator.getDefault().logError("Delete marker Job interrupted", e); //$NON-NLS-1$
+			Thread.currentThread().interrupt();
+		}
 		return errorMarkerAttribute;
 	}
 

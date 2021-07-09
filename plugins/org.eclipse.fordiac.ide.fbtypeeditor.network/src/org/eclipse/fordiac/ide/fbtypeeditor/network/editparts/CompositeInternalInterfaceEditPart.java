@@ -125,6 +125,10 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
 					refresh();
 				}
+				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getAttribute_Value().equals(feature)) {
+					updatePadding(getYPositionFromAttribute(getModel()));
+				}
 				super.notifyChanged(notification);
 			}
 		};

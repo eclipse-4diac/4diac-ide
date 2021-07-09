@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -65,7 +64,6 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		final SubApp subapp = (SubApp) s.getFbNetwork().getElementNamed(SUBAPP);
 		t.test(subapp);
 		t.test(subapp.getPaletteEntry());
-		t.test(subapp.getSubAppNetwork(), (FBNetwork) null);
 		t.test(subapp.getType());
 		t.test(subapp.isTyped());
 		t.test(subapp.getType().getFBNetwork().getNetworkElements().size(), 0);
@@ -90,7 +88,6 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		final SubApp subapp = (SubApp) s.getFbNetwork().getElementNamed(SUBAPP);
 		t.test(subapp);
 		t.test(subapp.getPaletteEntry());
-		t.test(subapp.getSubAppNetwork(), (FBNetwork) null);
 		t.test(subapp.getType());
 		t.test(subapp.isTyped());
 		t.test(subapp.getType().getFBNetwork().getNetworkElements().size(), 2);

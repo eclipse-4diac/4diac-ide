@@ -12,7 +12,8 @@
             extensions="fbt, adp"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor"
-            name="FB Type Editor">
+            name="FB Type Editor"
+            matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy">
       </editor>
    </extension>
    <extension

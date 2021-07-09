@@ -12,12 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 
 public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 
@@ -34,9 +32,7 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 	@Override
 	protected IFigure createFigure() {
 		final IFigure figure = new InterfaceFigure();
-		final Display display = Display.getCurrent();
-		final Color red = display.getSystemColor(SWT.COLOR_RED);
-		figure.setBackgroundColor(red);
+		figure.setBackgroundColor(ColorConstants.red);
 		figure.setOpaque(true);
 		return figure;
 	}

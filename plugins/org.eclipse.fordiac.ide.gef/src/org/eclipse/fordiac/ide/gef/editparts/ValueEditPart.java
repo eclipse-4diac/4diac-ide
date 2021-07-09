@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.AncestorListener;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
@@ -47,6 +48,7 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.widgets.Display;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
@@ -153,6 +155,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			if (LibraryElementPackage.eINSTANCE.getValue_Value().equals(feature)) {
 				refreshValue();
 				refreshPosition();
+			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
+				Display.getDefault().asyncExec(ValueEditPart.this::refreshValue);
 			}
 			super.notifyChanged(notification);
 		}
@@ -186,8 +190,16 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		if (getModel().getValue() != null) {
 			getFigure().setText(getModel().getValue());
 			setVisible(true);
+			setBackground(getModel().hasError());
 		} else {
 			setVisible(false);
+		}
+	}
+
+	private void setBackground(final boolean hasError) {
+		getFigure().setOpaque(hasError);
+		if (hasError) {
+			getFigure().setBackgroundColor(ColorConstants.red);
 		}
 	}
 

@@ -34,13 +34,11 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuilder;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionState;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -55,7 +53,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 class FBNetworkImporter extends CommonElementImporter {
@@ -130,7 +127,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 
-		if (null == fb.getPaletteEntry() || fb instanceof ErrorMarkerRef) {
+		if ((null == fb.getPaletteEntry()) || (fb instanceof ErrorMarkerRef)) {
 			// we don't have a type create error marker.
 			// This can only be done after fb has been added to FB network,
 			// so that the error marker can determine the location!
@@ -139,12 +136,6 @@ class FBNetworkImporter extends CommonElementImporter {
 					fb, getLineNumber());
 			e.setErrorMarkerRef((ErrorMarkerRef) fb);
 			errorMarkerAttributes.add(e);
-		}
-
-		if (fb instanceof StructManipulator) {
-			final Attribute attr = fb.getAttribute("StructuredType"); //$NON-NLS-1$
-			final StructuredType structType = getTypeLibrary().getDataTypeLibrary().getStructuredType(attr.getValue());
-			((StructManipulator) fb).setStructTypeElementsAtInterface(structType);
 		}
 	}
 

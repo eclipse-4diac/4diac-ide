@@ -23,18 +23,18 @@ import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class DirectlyDerivedTypeItemProvider extends DerivedTypeItemProvider {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public DirectlyDerivedTypeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
 	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
@@ -46,7 +46,7 @@ public class DirectlyDerivedTypeItemProvider extends DerivedTypeItemProvider {
 	}
 
 	/** This returns DirectlyDerivedType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object getImage(Object object) {
@@ -54,7 +54,7 @@ public class DirectlyDerivedTypeItemProvider extends DerivedTypeItemProvider {
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getText(Object object) {
@@ -66,7 +66,7 @@ public class DirectlyDerivedTypeItemProvider extends DerivedTypeItemProvider {
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
 	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
@@ -76,7 +76,7 @@ public class DirectlyDerivedTypeItemProvider extends DerivedTypeItemProvider {
 
 	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
 	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {

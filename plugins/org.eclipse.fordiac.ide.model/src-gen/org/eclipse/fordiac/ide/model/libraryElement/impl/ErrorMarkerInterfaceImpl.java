@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -19,19 +19,13 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.eclipse.fordiac.ide.model.data.DataType;
-
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -66,7 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements ErrorMarkerInterface {
 	/** The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered */
@@ -74,7 +68,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered */
@@ -82,7 +76,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getInputConnections() <em>Input Connections</em>}' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getInputConnections()
 	 * @generated
 	 * @ordered */
@@ -90,7 +84,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getOutputConnections() <em>Output Connections</em>}' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getOutputConnections()
 	 * @generated
 	 * @ordered */
@@ -98,7 +92,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getType() <em>Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered */
@@ -106,7 +100,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getTypeName()
 	 * @generated
 	 * @ordered */
@@ -114,7 +108,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getTypeName()
 	 * @generated
 	 * @ordered */
@@ -122,7 +116,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getFileMarkerId()
 	 * @generated
 	 * @ordered */
@@ -130,7 +124,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getFileMarkerId()
 	 * @generated
 	 * @ordered */
@@ -138,7 +132,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getErrorMessage()
 	 * @generated
 	 * @ordered */
@@ -146,7 +140,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getErrorMessage()
 	 * @generated
 	 * @ordered */
@@ -154,21 +148,21 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getRepairedEndpoint() <em>Repaired Endpoint</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getRepairedEndpoint()
 	 * @generated
 	 * @ordered */
 	protected IInterfaceElement repairedEndpoint;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ErrorMarkerInterfaceImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -176,7 +170,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean isIsInput() {
@@ -184,7 +178,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setIsInput(boolean newIsInput) {
@@ -196,12 +190,12 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
+			inputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this,
 					LibraryElementPackage.ERROR_MARKER_INTERFACE__INPUT_CONNECTIONS,
 					LibraryElementPackage.CONNECTION__DESTINATION);
 		}
@@ -209,12 +203,12 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
+			outputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this,
 					LibraryElementPackage.ERROR_MARKER_INTERFACE__OUTPUT_CONNECTIONS,
 					LibraryElementPackage.CONNECTION__SOURCE);
 		}
@@ -222,7 +216,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DataType getType() {
@@ -239,14 +233,14 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public DataType basicGetType() {
 		return type;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setType(DataType newType) {
@@ -258,7 +252,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getTypeName() {
@@ -266,7 +260,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setTypeName(String newTypeName) {
@@ -278,7 +272,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public long getFileMarkerId() {
@@ -286,7 +280,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setFileMarkerId(long newFileMarkerId) {
@@ -298,7 +292,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getErrorMessage() {
@@ -306,7 +300,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setErrorMessage(String newErrorMessage) {
@@ -318,7 +312,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public IInterfaceElement getRepairedEndpoint() {
@@ -336,14 +330,14 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public IInterfaceElement basicGetRepairedEndpoint() {
 		return repairedEndpoint;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setRepairedEndpoint(IInterfaceElement newRepairedEndpoint) {
@@ -356,7 +350,15 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public boolean hasError() {
+		return getFileMarkerId() != 0;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public FBNetworkElement getFBNetworkElement() {
@@ -364,7 +366,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -381,7 +383,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -396,7 +398,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -427,7 +429,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -466,7 +468,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -502,7 +504,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -529,7 +531,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
@@ -547,7 +549,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
@@ -565,7 +567,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {

@@ -165,6 +165,8 @@ public final class Messages extends NLS {
 	/** The FB type library_ erro r_ not supported. */
 	public static String FBTypeLibrary_ERROR_NotSupported;
 
+	public static String FordiacMarkerHelper_RemoveErrorMarkersFromFile;
+
 	/** Identifier has length zero */
 	public static String IdentifierVerifyer_ERROR_IdentifierLengthZero;
 
@@ -215,6 +217,37 @@ public final class Messages extends NLS {
 	public static String FBNetworkImporter_ConnectionDestinationNotFound;
 	public static String FBNetworkImporter_ConnectionSourceMissing;
 	public static String FBNetworkImporter_ConnectionSourceNotFound;
+
+	public static String VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE;
+	public static String VALIDATOR_BASE_SPECIFIER_IS_INVALID_FOR;
+	public static String VALIDATOR_INVALID_BOOL_LITERAL;
+	public static String VALIDATOR_NO_BASE_SPECIFIER_FOR_BOOL;
+	public static String VALIDATOR_VALID_SIGNED_NUMBER_CLAUSE;
+	public static String VALIDATOR_VALID_HEXADECIMAL_NUMBER_CLAUSE;
+	public static String VALIDATOR_VALID_OCTAL_NUMBER_CLAUSE;
+	public static String VALIDATOR_VALID_BINARY_NUMBER_CLAUSE;
+	public static String VALIDATOR_VALID_UNSIGNED_VALUE_CLAUSE;
+	public static String VALIDATOR_VALID_REAL_VALUE;
+	public static String VALIDATOR_INVALID_BASE_SPECIFIER;
+	public static String VALIDATOR_ST_TIME_LITERAL_ERROR_UNSIGNED_EXPECTED;
+	public static String VALIDATOR_ST_TIME_LITERAL_OVERFLOW_ERROR;
+	public static String VALIDATOR_UNKNOWN_LITERAL_TYPE;
+	public static String VALIDATOR_BASE_SPECIFIER_INVALID_FOR_TYPE;
+	public static String VALIDATOR_INVALID_DATE_AND_TIME_FORMAT;
+	public static String VALIDATOR_INVALID_DATE_FORMAT;
+	public static String VALIDATOR_WSTRING_QUOTES_HAVE_NOT_TO_BE_ESCAPED;
+	public static String VALIDATOR_INVALID_STRING_CHAR_LITERAL;
+	public static String VALIDATOR_EMPTY_CHARACTERS_ARE_NOT_ALLOWED;
+	public static String VALIDATOR_SECONDS_VALUE_CANT_BE_LARGER_THAN_60;
+	public static String VALIDATOR_MINUTE_VALUE_CANT_BE_LARGER_THAN_60;
+	public static String VALIDATOR_HOURS_VALUE_CANT_BE_24;
+	public static String VALIDATOR_INVALID_FORMAT_TOD_LITERAL;
+	public static String VALIDATOR_UNKOWN_LITERAL_ERROR_PLEASE_CHECK_SANENESS_OF_LITERAL;
+	public static String VALIDATOR_W_STRING_DOLLAR_IS_ESCAPE_SYMBOL;
+	public static String VALIDATOR_STRING_QUOTE_DOES_NOT_NEED_ESCAPE_SYMBOL;
+	public static String VALIDATOR_INVALID_WSTRING_WCHAR_LITERAL;
+	public static String VALIDATOR_INVALID_TIME_LITERAL;
+	public static String VALIDATOR_TOO_MANY_TIME_DEFINITIONS_FOUND;
 
 	static {
 		// initialize resource bundle

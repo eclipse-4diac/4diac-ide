@@ -21,160 +21,160 @@ import org.eclipse.emf.common.util.Enumerator;
 
 /** <!-- begin-user-doc --> A representation of the literals of the enumeration '<em><b>Base Type1</b></em>', and
  * utility methods for working with them. <!-- end-user-doc -->
- * 
+ *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getBaseType1()
  * @model
  * @generated */
 public enum BaseType1 implements Enumerator {
 	/** The '<em><b>DATEANDTIME</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #DATEANDTIME_VALUE
 	 * @generated
 	 * @ordered */
 	DATEANDTIME(0, "DATEANDTIME", "DATE_AND_TIME"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>BYTE</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #BYTE_VALUE
 	 * @generated
 	 * @ordered */
 	BYTE(1, "BYTE", "BYTE"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>SINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #SINT_VALUE
 	 * @generated
 	 * @ordered */
 	SINT(2, "SINT", "SINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>USINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #USINT_VALUE
 	 * @generated
 	 * @ordered */
 	USINT(3, "USINT", "USINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>LWORD</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #LWORD_VALUE
 	 * @generated
 	 * @ordered */
 	LWORD(4, "LWORD", "LWORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>TIME</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #TIME_VALUE
 	 * @generated
 	 * @ordered */
 	TIME(5, "TIME", "TIME"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>WORD</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #WORD_VALUE
 	 * @generated
 	 * @ordered */
 	WORD(6, "WORD", "WORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>STRING</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #STRING_VALUE
 	 * @generated
 	 * @ordered */
 	STRING(7, "STRING", "STRING"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>BOOL</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #BOOL_VALUE
 	 * @generated
 	 * @ordered */
 	BOOL(8, "BOOL", "BOOL"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>LREAL</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #LREAL_VALUE
 	 * @generated
 	 * @ordered */
 	LREAL(9, "LREAL", "LREAL"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>REAL</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #REAL_VALUE
 	 * @generated
 	 * @ordered */
 	REAL(10, "REAL", "REAL"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>LINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #LINT_VALUE
 	 * @generated
 	 * @ordered */
 	LINT(11, "LINT", "LINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>ULINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #ULINT_VALUE
 	 * @generated
 	 * @ordered */
 	ULINT(12, "ULINT", "ULINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>UINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #UINT_VALUE
 	 * @generated
 	 * @ordered */
 	UINT(13, "UINT", "UINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>DATE</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #DATE_VALUE
 	 * @generated
 	 * @ordered */
 	DATE(14, "DATE", "DATE"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>DWORD</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #DWORD_VALUE
 	 * @generated
 	 * @ordered */
 	DWORD(15, "DWORD", "DWORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>INT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #INT_VALUE
 	 * @generated
 	 * @ordered */
 	INT(16, "INT", "INT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>TIMEOFDAY</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #TIMEOFDAY_VALUE
 	 * @generated
 	 * @ordered */
 	TIMEOFDAY(17, "TIMEOFDAY", "TIME_OF_DAY"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>WSTRING</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #WSTRING_VALUE
 	 * @generated
 	 * @ordered */
 	WSTRING(18, "WSTRING", "WSTRING"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>DINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #DINT_VALUE
 	 * @generated
 	 * @ordered */
 	DINT(19, "DINT", "DINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>UDINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #UDINT_VALUE
 	 * @generated
 	 * @ordered */
 	UDINT(20, "UDINT", "UDINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The '<em><b>ANY</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #ANY_VALUE
 	 * @generated
 	 * @ordered */
@@ -186,7 +186,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #DATEANDTIME
 	 * @model literal="DATE_AND_TIME"
 	 * @generated
@@ -199,7 +199,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #BYTE
 	 * @model
 	 * @generated
@@ -212,7 +212,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #SINT
 	 * @model
 	 * @generated
@@ -225,7 +225,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #USINT
 	 * @model
 	 * @generated
@@ -238,7 +238,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #LWORD
 	 * @model
 	 * @generated
@@ -251,7 +251,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #TIME
 	 * @model
 	 * @generated
@@ -264,7 +264,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #WORD
 	 * @model
 	 * @generated
@@ -277,7 +277,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #STRING
 	 * @model
 	 * @generated
@@ -290,7 +290,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #BOOL
 	 * @model
 	 * @generated
@@ -303,7 +303,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #LREAL
 	 * @model
 	 * @generated
@@ -316,7 +316,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #REAL
 	 * @model
 	 * @generated
@@ -329,7 +329,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #LINT
 	 * @model
 	 * @generated
@@ -342,7 +342,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #ULINT
 	 * @model
 	 * @generated
@@ -355,7 +355,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #UINT
 	 * @model
 	 * @generated
@@ -368,7 +368,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #DATE
 	 * @model
 	 * @generated
@@ -381,7 +381,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #DWORD
 	 * @model
 	 * @generated
@@ -394,7 +394,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #INT
 	 * @model
 	 * @generated
@@ -407,7 +407,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #TIMEOFDAY
 	 * @model literal="TIME_OF_DAY"
 	 * @generated
@@ -420,7 +420,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #WSTRING
 	 * @model
 	 * @generated
@@ -433,7 +433,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #DINT
 	 * @model
 	 * @generated
@@ -446,7 +446,7 @@ public enum BaseType1 implements Enumerator {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #UDINT
 	 * @model
 	 * @generated
@@ -459,7 +459,7 @@ public enum BaseType1 implements Enumerator {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #ANY
 	 * @model
 	 * @generated
@@ -474,19 +474,18 @@ public enum BaseType1 implements Enumerator {
 
 	/** A public read-only list of all the '<em><b>Base Type1</b></em>' enumerators. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public static final List<BaseType1> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/** Returns the '<em><b>Base Type1</b></em>' literal with the specified literal value. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param literal the literal.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated */
 	public static BaseType1 get(String literal) {
-		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			BaseType1 result = VALUES_ARRAY[i];
+		for (BaseType1 result : VALUES_ARRAY) {
 			if (result.toString().equals(literal)) {
 				return result;
 			}
@@ -496,13 +495,12 @@ public enum BaseType1 implements Enumerator {
 
 	/** Returns the '<em><b>Base Type1</b></em>' literal with the specified name. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param name the name.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated */
 	public static BaseType1 getByName(String name) {
-		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			BaseType1 result = VALUES_ARRAY[i];
+		for (BaseType1 result : VALUES_ARRAY) {
 			if (result.getName().equals(name)) {
 				return result;
 			}
@@ -512,7 +510,7 @@ public enum BaseType1 implements Enumerator {
 
 	/** Returns the '<em><b>Base Type1</b></em>' literal with the specified integer value. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param value the integer value.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated */
@@ -568,22 +566,22 @@ public enum BaseType1 implements Enumerator {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private final int value;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private final String name;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private final String literal;
 
 	/** Only this class can construct instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private BaseType1(int value, String name, String literal) {
 		this.value = value;
@@ -592,7 +590,7 @@ public enum BaseType1 implements Enumerator {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int getValue() {
@@ -600,7 +598,7 @@ public enum BaseType1 implements Enumerator {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getName() {
@@ -608,7 +606,7 @@ public enum BaseType1 implements Enumerator {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getLiteral() {
@@ -617,7 +615,7 @@ public enum BaseType1 implements Enumerator {
 
 	/** Returns the literal value of the enumerator, which is its string representation. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {

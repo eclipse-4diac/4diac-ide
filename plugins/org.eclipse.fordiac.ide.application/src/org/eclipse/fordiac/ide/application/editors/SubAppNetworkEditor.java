@@ -15,36 +15,49 @@ package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.editors.EditorCloserAdapter;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.ui.IEditorInput;
 
 public class SubAppNetworkEditor extends FBNetworkEditor {
 
-	private Adapter adapter = new AdapterImpl() {
+	private Adapter adapter = new EditorCloserAdapter(this) {
 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final int type = notification.getEventType();
 			final int featureId = notification.getFeatureID(Application.class);
 
-			if ((Notification.SET == type) && (LibraryElementPackage.SUB_APP__NAME == featureId)) {
-				updateEditorTitle(getSubApp().getName());
+			if ((LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY == featureId)
+					&& (getSubApp().isTyped())) {
+				// undo of detached from the subapp type
+				closeEditor();
+			} else {
+				if ((Notification.SET == type) && (LibraryElementPackage.SUB_APP__NAME == featureId)) {
+					updateEditorTitle(getSubApp().getName());
+				}
+				firePropertyChange(PROP_DIRTY);
 			}
-			firePropertyChange(PROP_DIRTY);
 		}
 	};
+
+	private Adapter fbNetworkAdapter;
 
 	@Override
 	public void dispose() {
 		if ((adapter != null) && (getModel() != null) && (getSubApp().eAdapters().contains(adapter))) {
 			getSubApp().eAdapters().remove(adapter);
 			adapter = null;
+			final EObject container = getSubApp().eContainer();
+			if (container != null) {
+				container.eAdapters().remove(fbNetworkAdapter);
+			}
 		}
 		super.dispose();
 		getEditDomain().setPaletteViewer(null);
@@ -57,6 +70,11 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 			setModel(subAppInput.getSubApp().getSubAppNetwork());
 			// register Adapter to be informed on changes of the subapplication name
 			getSubApp().eAdapters().add(adapter);
+			final EObject container = getSubApp().eContainer();
+			if (container != null) {
+				fbNetworkAdapter = new FBNElemEditorCloser(this, getSubApp());
+				container.eAdapters().add(fbNetworkAdapter);
+			}
 		}
 		super.setModel(input);
 	}

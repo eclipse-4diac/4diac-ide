@@ -672,6 +672,7 @@
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerRef">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/fileMarkerId"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/errorMessage"/>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerRef/hasError" body="return getFileMarkerId() != 0;"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
@@ -934,5 +935,6 @@
         <genParameters ecoreParameter="data.ecore#//LtodType/isCompatibleWith/other"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="data.ecore#//LdateType"/>
   </genPackages>
 </genmodel:GenModel>

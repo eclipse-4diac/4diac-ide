@@ -31,8 +31,11 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
+import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -54,10 +57,9 @@ import org.eclipse.ui.IPersistableEditor;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
-public abstract class AbstractBreadCrumbEditor extends MultiPageEditorPart
+public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEditor
 implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker,
 INavigationLocationProvider, IPersistableEditor {
 
@@ -66,7 +68,7 @@ INavigationLocationProvider, IPersistableEditor {
 	private static final String TAG_GRAPHICAL_VIEWER_HOR_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_HOR_SCROLL"; //$NON-NLS-1$
 	private static final String TAG_GRAPHICAL_VIEWER_VER_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_VER_SCROLL"; //$NON-NLS-1$
 
-	private final Map<Object, Integer> modelToEditorNum = new HashMap<>();
+	private Map<Object, Integer> modelToEditorNum = new HashMap<>();
 
 	private BreadcrumbWidget breadcrumb;
 	// the memento we got for recreating the editor state
@@ -152,7 +154,35 @@ INavigationLocationProvider, IPersistableEditor {
 		return -1;
 	}
 
+	@Override
+	public boolean closeChildEditor(final IEditorPart childEditor) {
+		final int pageIndex = pages.indexOf(childEditor);
+		if (pageIndex != -1) {
+			removePage(pageIndex);
+			updateEditorMapping(pageIndex);
+			return true;
+		}
+		return false;
+	}
 
+	private void updateEditorMapping(final int pageIndex) {
+		final Map<Object, Integer> newModelToEditorNum = new HashMap<>();
+
+		modelToEditorNum.forEach((obj, index) -> {
+			final int intIndex = index.intValue();
+			if (intIndex != pageIndex) {
+				if (intIndex < pageIndex) {
+					// keep the old index entry
+					newModelToEditorNum.put(obj, Integer.valueOf(intIndex));
+				} else {
+					// we where before the removed entry so our index is one lower
+					newModelToEditorNum.put(obj, Integer.valueOf(intIndex - 1));
+				}
+			}
+		});
+
+		modelToEditorNum = newModelToEditorNum;
+	}
 
 	@Override
 	public boolean isDirty() {
@@ -192,6 +222,8 @@ INavigationLocationProvider, IPersistableEditor {
 				gotoFBNetworkElement(attrs.get(IMarker.LOCATION));
 			} else if (FordiacMarkerHelper.markerTargetsConnection(attrs)) {
 				gotoConnection(marker);
+			} else if (FordiacMarkerHelper.markerTargetsValue(attrs)) {
+				gotoValue(marker);
 			}
 		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
@@ -200,15 +232,27 @@ INavigationLocationProvider, IPersistableEditor {
 
 	protected void gotoConnection(final IMarker marker) {
 		@SuppressWarnings("boxing")
-		final ErrorMarkerRef ie = FordiacMarkerHelper.getMarkerRefById(marker.getId());
-		final EObject parent = ie instanceof ErrorMarkerInterface ? ((ErrorMarkerInterface) ie).getFBNetworkElement()
-				: null;
+		final ErrorMarkerRef errorRef = FordiacMarkerHelper.getMarkerRefById(marker.getId());
+		final FBNetworkElement parent = errorRef instanceof ErrorMarkerInterface
+				? ((ErrorMarkerInterface) errorRef).getFBNetworkElement()
+						: null;
+		selectErrorRef(errorRef, parent);
+	}
 
+	protected void gotoValue(final IMarker marker) {
+		@SuppressWarnings("boxing")
+		final ErrorMarkerRef errorRef = FordiacMarkerHelper.getMarkerRefById(marker.getId());
+		final FBNetworkElement parent = errorRef instanceof Value
+				? ((Value) errorRef).getVarDeclaration().getFBNetworkElement()
+						: null;
+		selectErrorRef(errorRef, parent);
+	}
+
+	private void selectErrorRef(final ErrorMarkerRef errorRef, final FBNetworkElement parent) {
 		if (null != parent) {
 			final EObject toView = parent.eContainer().eContainer();
 			getBreadcrumb().setInput(toView);
-			final IEditorPart editor = HandlerHelper.openEditor(toView);
-			HandlerHelper.selectElement(ie, editor);
+			HandlerHelper.selectElement(errorRef, getActiveEditor());
 		}
 	}
 

@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -31,18 +31,18 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.ArrayType} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public ArrayTypeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
 	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
@@ -56,7 +56,7 @@ public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	}
 
 	/** This adds a property descriptor for the Initial Values feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected void addInitialValuesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
@@ -69,7 +69,7 @@ public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	}
 
 	/** This adds a property descriptor for the Base Type feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected void addBaseTypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
@@ -84,7 +84,7 @@ public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
@@ -96,7 +96,7 @@ public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
@@ -107,7 +107,7 @@ public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	}
 
 	/** This returns ArrayType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object getImage(Object object) {
@@ -115,7 +115,7 @@ public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getText(Object object) {
@@ -127,7 +127,7 @@ public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
 	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
@@ -148,7 +148,7 @@ public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 
 	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
 	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {

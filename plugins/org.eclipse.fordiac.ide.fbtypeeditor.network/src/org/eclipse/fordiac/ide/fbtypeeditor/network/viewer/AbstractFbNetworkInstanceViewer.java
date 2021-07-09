@@ -22,7 +22,10 @@ import java.util.EventObject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.editors.FBNElemEditorCloser;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
@@ -31,6 +34,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.ui.editors.EditorCloserAdapter;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -45,6 +50,20 @@ import org.eclipse.ui.IEditorInput;
 public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	private FBNetworkElement fbNetworkElement;
 
+	private final Adapter fbNetworkElementAdapter = new EditorCloserAdapter(this) {
+		@Override
+		public void notifyChanged(final Notification msg) {
+			super.notifyChanged(msg);
+			final Object feature = msg.getFeature();
+			if ((LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_PaletteEntry().equals(feature))
+					&& (fbNetworkElement.getType() == null)) {
+				// the subapp/cfb was detached from the type
+				closeEditor();
+			}
+		}
+	};
+
+	private Adapter fbNetworkAdapter;
 
 	// subclasses need to override this method and return the fbnetwork contained in fbNetworkElement
 	@Override
@@ -83,7 +102,25 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 			setPartName(name);
 			// the tooltip will show the whole name when hovering
 			untypedInput.setName(name);
+			fbNetworkElement.eAdapters().add(fbNetworkElementAdapter);
+			final EObject container = fbNetworkElement.eContainer();
+			if (container != null) {
+				fbNetworkAdapter = new FBNElemEditorCloser(this, fbNetworkElement);
+				container.eAdapters().add(fbNetworkAdapter);
+			}
 		}
+	}
+
+	@Override
+	public void dispose() {
+		if (fbNetworkElement != null) {
+			fbNetworkElement.eAdapters().remove(fbNetworkElementAdapter);
+			final EObject container = fbNetworkElement.eContainer();
+			if (container != null) {
+				container.eAdapters().remove(fbNetworkAdapter);
+			}
+		}
+		super.dispose();
 	}
 
 	@Override

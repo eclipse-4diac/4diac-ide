@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Point;
 
@@ -149,6 +150,16 @@ public final class FBNetworkHelper {
 
 	public static void moveFBNetworkByOffset(final List<FBNetworkElement> fbNetwork, final Point offset) {
 		moveFBNetworkByOffset(fbNetwork, offset.x, offset.y);
+	}
+
+	public static boolean targetSubappIsInSameFbNetwork(final List<FBNetworkElement> elements,
+			final SubApp targetSubApp) {
+		for (final FBNetworkElement block : elements) {
+			if (!block.getFbNetwork().getNetworkElements().contains(targetSubApp)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private FBNetworkHelper() {

@@ -12,7 +12,6 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import static org.eclipse.fordiac.ide.model.LibraryElementTags.DEMUX_VISIBLE_CHILDREN;
-import static org.eclipse.fordiac.ide.model.LibraryElementTags.VARIABLE_SEPARATOR;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,9 +19,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.StructManipulation;
+import org.eclipse.fordiac.ide.model.StructTreeNode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -34,51 +34,23 @@ public class DeleteDemuxPortCommand extends Command {
 
 	private Demultiplexer type;
 	private final VarDeclaration variable;
-	private final String name;
-	private String oldVisibleChildren;
+	private final String oldVisibleChildren;
 	private String newVisibleChildren;
 	private ChangeStructCommand cmd;
 	private Demultiplexer oldMux;
+	private final CheckableStructTreeNode node;
 
-	public DeleteDemuxPortCommand(final Demultiplexer type, final String name) {
+	public DeleteDemuxPortCommand(final Demultiplexer type, final CheckableStructTreeNode node) {
+		this.variable = (VarDeclaration) type.getInterfaceElement(node.getPinName());
+		this.oldVisibleChildren = node.getRootNode().visibleToString();
 		this.type = type;
-		this.name = name;
-		this.variable = (VarDeclaration) type.getInterfaceElement(name);
-		this.oldVisibleChildren = type.getAttributeValue(DEMUX_VISIBLE_CHILDREN);
-	}
-
-	private String getNewAttributeValue() {
-		if (null == oldVisibleChildren) {
-			final StringBuilder sb = new StringBuilder();
-			type.getStructType().getMemberVariables().forEach(memVar -> sb.append(memVar.getName() + VARIABLE_SEPARATOR));
-			if (!type.getStructType().getMemberVariables().isEmpty()) {
-				sb.deleteCharAt(sb.length() - 1);
-			}
-			oldVisibleChildren = sb.toString();
-		}
-		return cutVarFromAttribute();
-	}
-
-	private String cutVarFromAttribute() {
-		final int startIndex = oldVisibleChildren.indexOf(name);
-		if ((startIndex == -1) || (oldVisibleChildren.length() == name.length())) {
-			return ""; //$NON-NLS-1$
-		}
-		final int endIndex = startIndex + name.length();
-		final StringBuilder sb = new StringBuilder(oldVisibleChildren);
-		sb.delete(startIndex, endIndex);
-		if (sb.charAt(sb.length() - 1) == ',') {
-			return sb.substring(0, sb.length() - 1);
-		}
-		if (sb.charAt(0) == ',') {
-			return sb.substring(1);
-		}
-		return sb.toString();
+		this.node = node;
 	}
 
 	@Override
 	public void execute() {
-		newVisibleChildren = getNewAttributeValue();
+		node.updateNode(false);
+		newVisibleChildren = node.getRootNode().visibleToString();
 		createChangeStructCommand();
 		cmd.execute();
 		oldMux = type;
@@ -102,6 +74,7 @@ public class DeleteDemuxPortCommand extends Command {
 
 	@Override
 	public void redo() {
+		node.updateNode(false);
 		cmd.redo();
 		type = (Demultiplexer) cmd.getNewMux();
 		setVisibleChildrenAttribute(newVisibleChildren);
@@ -109,6 +82,7 @@ public class DeleteDemuxPortCommand extends Command {
 
 	@Override
 	public void undo() {
+		node.updateNode(true);
 		type = oldMux;
 		cmd.undo();
 		setVisibleChildrenAttribute(oldVisibleChildren);
@@ -121,11 +95,16 @@ public class DeleteDemuxPortCommand extends Command {
 	private Collection<VarDeclaration> getVarDeclarations(final List<String> varDeclNames) {
 		final List<VarDeclaration> vars = new ArrayList<>();
 		varDeclNames.forEach(varName -> {
-			final VarDeclaration varDecl = EcoreUtil
-					.copy(StructManipulation.findVarDeclarationInStruct(type.getStructType(), varName));
-			if (null != varDecl) {
-				varDecl.setName(varName);
-				vars.add(varDecl);
+			final StructTreeNode find = node.find(varName);
+			VarDeclaration findVarDeclarationInStruct = null;
+			if (find != null) {
+				findVarDeclarationInStruct = find.getVariable();
+				final VarDeclaration varDecl = EcoreUtil
+						.copy(findVarDeclarationInStruct);
+				if (null != varDecl) {
+					varDecl.setName(varName);
+					vars.add(varDecl);
+				}
 			}
 		});
 		return vars;

@@ -26,7 +26,7 @@ public class CopyPasteMessage {
 	private CompoundCommand deleteCommandos;
 
 	public enum CopyStatus {
-		CUT_FROM_SUBAPP, COPY, CUT, CUT_PASTED
+		CUT_FROM_SUBAPP, COPY, CUT_FROM_ROOT, CUT_PASTED
 	}
 
 	public CopyPasteMessage(final CopyStatus copyInfo, final List<Object> templates) {

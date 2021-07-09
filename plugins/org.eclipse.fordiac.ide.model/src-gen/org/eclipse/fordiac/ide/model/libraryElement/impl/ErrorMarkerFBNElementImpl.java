@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -16,12 +16,9 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -45,7 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements ErrorMarkerFBNElement {
 	/** The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getFileMarkerId()
 	 * @generated
 	 * @ordered */
@@ -53,7 +50,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 
 	/** The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getFileMarkerId()
 	 * @generated
 	 * @ordered */
@@ -61,7 +58,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 
 	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getErrorMessage()
 	 * @generated
 	 * @ordered */
@@ -69,7 +66,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 
 	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getErrorMessage()
 	 * @generated
 	 * @ordered */
@@ -77,21 +74,21 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 
 	/** The cached value of the '{@link #getRepairedElement() <em>Repaired Element</em>}' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getRepairedElement()
 	 * @generated
 	 * @ordered */
 	protected FBNetworkElement repairedElement;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ErrorMarkerFBNElementImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -99,7 +96,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public long getFileMarkerId() {
@@ -107,7 +104,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setFileMarkerId(long newFileMarkerId) {
@@ -119,7 +116,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getErrorMessage() {
@@ -127,7 +124,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setErrorMessage(String newErrorMessage) {
@@ -139,7 +136,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public FBNetworkElement getRepairedElement() {
@@ -157,14 +154,14 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public FBNetworkElement basicGetRepairedElement() {
 		return repairedElement;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setRepairedElement(FBNetworkElement newRepairedElement) {
@@ -177,7 +174,15 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public boolean hasError() {
+		return getFileMarkerId() != 0;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -196,7 +201,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -217,7 +222,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -238,7 +243,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -255,7 +260,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
@@ -273,7 +278,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
@@ -291,7 +296,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {
