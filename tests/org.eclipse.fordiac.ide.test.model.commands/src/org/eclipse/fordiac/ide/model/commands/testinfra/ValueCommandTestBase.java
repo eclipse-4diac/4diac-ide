@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.junit.jupiter.params.provider.Arguments;
@@ -33,6 +34,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 		public State() {
 			super();
 			variable.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			variable.setType(IecTypes.ElementaryTypes.STRING);
 		}
 
 		public VarDeclaration getVar() {
@@ -58,13 +60,13 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 				State::new, //
 				(StateVerifier<State>) ValueCommandTestBase::verifyDefaultInitialValues, //
 				executionDescriptions //
-		));
+				));
 
 		commands.addAll(describeCommand("Start from set values", // //$NON-NLS-1$
 				ValueCommandTestBase::setInitialValues, //
 				(StateVerifier<State>) ValueCommandTestBase::verifySetInitialValues, //
 				executionDescriptions //
-		));
+				));
 		return commands;
 	}
 
