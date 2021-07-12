@@ -118,7 +118,7 @@ public class StructManipulatorSection extends AbstractSection {
 				e -> OpenStructMenu.openStructEditor(getType().getStructType().getPaletteEntry().getFile()));
 	}
 
-	private void handleStructSelectionChanged() {
+	protected void handleStructSelectionChanged() {
 		if (null != getType()) {
 			final String newStructName = getNewStructName();
 			disableOpenEditorForAnyType(newStructName);
@@ -248,7 +248,7 @@ public class StructManipulatorSection extends AbstractSection {
 		}
 	}
 
-	private void fillStructTypeCombo() {
+	protected void fillStructTypeCombo() {
 		memberVarViewer.setInput(getType());
 		final String structName = getType().getStructType().getName();
 		muxStructSelector.removeAll();
