@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler
  * 							 University
+ * Copyright (c) 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Lukas Wais - Implemented a max size for monitoring values
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.AncestorListener;
+import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Point;
@@ -28,17 +31,22 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.monitoring.Activator;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.graphics.FontMetrics;
 
 public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPart implements SpecificLayerEditPart {
 
@@ -46,9 +54,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 
 	private IPropertyChangeListener listener;
 
-	/**
-	 * FIXME implement deactivate
-	 */
+	/** FIXME implement deactivate */
 	@Override
 	public void activate() {
 		super.activate();
@@ -80,7 +86,8 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 					}
 				} else if (interfaceElement instanceof AdapterDeclaration) {
 					IInterfaceElement subInterfaceElement = null;
-					final InterfaceList interfaceList = ((AdapterDeclaration) interfaceElement).getType().getInterfaceList();
+					final InterfaceList interfaceList = ((AdapterDeclaration) interfaceElement).getType()
+							.getInterfaceList();
 					final List<IInterfaceElement> list = new ArrayList<>();
 					list.addAll(interfaceList.getEventInputs());
 					list.addAll(interfaceList.getEventOutputs());
@@ -88,7 +95,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 					list.addAll(interfaceList.getOutputVars());
 					for (final IInterfaceElement element : list) {
 						if (element.equals(getInterfaceElement())
-								&& interfaceElement.eContainer().eContainer() == getModel().getPort().getFb()) {
+								&& (interfaceElement.eContainer().eContainer() == getModel().getPort().getFb())) {
 							subInterfaceElement = element;
 							break;
 						}
@@ -145,7 +152,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			}
 		}
 		org.eclipse.fordiac.ide.monitoring.Activator.getDefault().getPreferenceStore()
-		.addPropertyChangeListener(getPreferenceChangeListener());
+				.addPropertyChangeListener(getPreferenceChangeListener());
 		refreshVisuals();
 	}
 
@@ -198,8 +205,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			final Rectangle bounds = parentPart.getFigure().getBounds();
 			int x = 0;
 			if (isInput()) {
-				int width = getFigure().getBounds().width;
-				width = Math.max(40, width);
+				final int width = calculateWidth();
 				x = bounds.x - 2 - width;
 			} else {
 				x = bounds.x + bounds.width + 2;
@@ -222,8 +228,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 		if (getParent() != null) {
 			Rectangle bounds = null;
 			final Point p = calculatePos();
-			int width = getFigure().getPreferredSize().width;
-			width = Math.max(40, width);
+			final int width = calculateWidth();
 			bounds = new Rectangle(p.x, p.y, width, -1);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 
@@ -248,4 +253,25 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 		return getModel().getPort().getInterfaceElement();
 	}
 
+	private int calculateWidth() {
+		int width = getFigure().getPreferredSize().width;
+		width = Math.max(40, width);
+		width = Math.min(width, getMaxWidth());
+		return width;
+	}
+
+	private static int maxLabelWidth = -1;
+
+	private static int getMaxWidth() {
+		if (maxLabelWidth == -1) {
+			final IPreferenceStore preferenceStore = org.eclipse.fordiac.ide.gef.Activator.getDefault()
+					.getPreferenceStore();
+			final int maxLabelSize = preferenceStore.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);
+			final FontMetrics fm = FigureUtilities
+					.getFontMetrics(JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+			maxLabelWidth = (int) (maxLabelSize * fm.getAverageCharacterWidth());
+
+		}
+		return maxLabelWidth;
+	}
 }
