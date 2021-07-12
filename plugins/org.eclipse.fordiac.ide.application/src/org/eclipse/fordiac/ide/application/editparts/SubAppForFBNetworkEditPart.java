@@ -2,6 +2,7 @@
  * Copyright (c) 2008 - 2017 Profactor GmbH, AIT, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
  *               2020 Primetals Technologies Germany GmbH
+ *               2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,6 +20,7 @@
  *               - added update support for removing or readding subapp type
  *   Bianca Wiesmayr, Alois Zoitl - unfolded subapp
  *   Daniel Lindhuber - instance comment
+ *   				  - root refresh for monitoring elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -61,6 +63,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 							.equals(notification.getFeature())) {
 						refreshChildren();
 						refreshInterfaceEditParts();
+						refreshRoot();
 					}
 					break;
 				case Notification.REMOVE:
@@ -72,6 +75,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 							.equals(notification.getFeature())) {
 						refreshChildren();
 						refreshInterfaceEditParts();
+						refreshRoot();
 					}
 					break;
 				case Notification.SET:
@@ -82,6 +86,13 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 				}
 				refreshToolTip();
 				backgroundColorChanged(getFigure());
+			}
+
+			private void refreshRoot() {
+				final EditPart root = getRoot();
+				if (root != null) {
+					root.getChildren().forEach(child -> ((EditPart) child).refresh());
+				}
 			}
 
 			private void refreshInterfaceEditParts() {

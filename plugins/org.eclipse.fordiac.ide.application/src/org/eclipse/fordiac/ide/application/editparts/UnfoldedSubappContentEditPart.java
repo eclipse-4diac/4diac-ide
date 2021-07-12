@@ -17,6 +17,9 @@
 
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
@@ -67,6 +70,13 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	};
 
 	@Override
+	protected List<?> getModelChildren() {
+		final List<Object> children = new ArrayList<>(getNetworkElements());
+		children.addAll(getFBValues());
+		return children;
+	}
+
+	@Override
 	public void setModel(final Object model) {
 		super.setModel(model);
 		p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
@@ -86,7 +96,6 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 		if (isActive()) {
 			super.deactivate();
 			((Notifier) getModel()).eAdapters().remove(adapter);
-
 		}
 	}
 

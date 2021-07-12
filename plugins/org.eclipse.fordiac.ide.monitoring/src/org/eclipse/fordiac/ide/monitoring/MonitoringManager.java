@@ -64,13 +64,12 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 */
 	public MonitoringBaseElement getMonitoringElement(final IInterfaceElement port) {
 		if (port != null) {
-			// TODO model refactoring - add way to get system from port
-			for (final SystemMonitoringData data : systemMonitoringData.values()) {
-				final MonitoringBaseElement element = data.getMonitoredElement(port);
-				if (null != element) {
-					return element;
-				}
+			
+			SystemMonitoringData data = systemMonitoringData.get(port.getFBNetworkElement().getFbNetwork().getAutomationSystem());
+			if (data != null) {
+				return data.getMonitoredElement(port);
 			}
+
 		}
 		return null;
 	}

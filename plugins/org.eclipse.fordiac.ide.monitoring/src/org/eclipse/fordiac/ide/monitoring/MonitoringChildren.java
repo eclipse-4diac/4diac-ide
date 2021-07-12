@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- * 							 Johannes Kepler University
+ * Copyright (c) 2012 - 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University,
+ * 							 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *   Gerhard Ebenhofer, Matthias Plasch, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Daniel Lindhuber - refined conditions for children
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
@@ -23,7 +25,9 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IChildrenProvider;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class MonitoringChildren implements IMonitoringListener, IChildrenProvider {
 
@@ -34,24 +38,38 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 	@Override
 	public List<IEditPartCreator> getChildren(final FBNetwork fbNetwork) {
 		final List<IEditPartCreator> arrayList = new ArrayList<>();
-
-		// TODO - model refactoring fetch only the list of monitored elements of the
-		// same system
 		for (final MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {
 			if (null != element) {
-				if (fbNetwork.getNetworkElements().contains(element.getPort().getFb())) {
+				if (element.getPort().getFb().getFbNetwork().equals(fbNetwork)) {
 					arrayList.add(element);
-				} else if (null != element.getPort().getFb().getResource()
-						&& (!element.getPort().getFb().isResourceFB())) {
-					// check if we are in the resource diagram editor for a mapped FB
-					if (element.getPort().getFb().getResource().getFBNetwork().equals(fbNetwork)) {
+				} else if (checkResource(element)) {
+					final Object parent = element.getPort().getFb().getFbNetwork().eContainer();
+					if (isInsideMonitoredSubApp(parent, fbNetwork)) {
 						arrayList.add(element);
 					}
 				}
 			}
-
 		}
 		return arrayList;
+	}
+
+	private static boolean checkResource(final MonitoringBaseElement element) {
+		return element.getPort().getFb().getResource() != null && !element.getPort().getFb().isResourceFB();
+	}
+
+	private static boolean isInsideMonitoredSubApp(final Object parent, final FBNetwork network) {
+		if (parent instanceof SubApp) {
+			final SubApp subapp = (SubApp) parent;
+			if (network.equals(subapp.getSubAppNetwork())) {
+				return true;
+			} else if (subapp.isUnfolded()) {
+				return isInsideMonitoredSubApp(subapp.eContainer().eContainer(), network);
+			}
+		}
+		if (parent instanceof Application) {
+			return network.equals(((Application) parent).getFBNetwork());
+		}
+		return false;
 	}
 
 	@Override
