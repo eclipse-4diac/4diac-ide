@@ -114,7 +114,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	public Command getCommand(final Request request) {
 		if (request instanceof DirectEditRequest) {
 			final AbstractCreateFBNetworkElementCommand cmd = getDirectEditCommand((DirectEditRequest) request);
-			if (null != cmd) {
+			if (null != cmd && cmd.canExecute()) {
 				getViewer().getEditDomain().getCommandStack().execute(cmd);
 				final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(cmd.getElement());
 				getViewer().select(part);

@@ -25,6 +25,7 @@ public final class Messages extends NLS {
 	public static String ChangeBackgroundcolorCommand_LABEL_ChangeColor;
 	public static String ChangeValueCommand_LABEL_ChangeValue;
 	public static String ChangeValueCommand_ConstantValuesNoAllowedOnAny;
+	public static String CreateFBNetworkElementCommand_Error_RecursiveType;
 	public static String CreateSubAppInstanceCommand_CreateSubapplicationInstance;
 	public static String DeleteConnectionCommand_DeleteConnection;
 	public static String DeleteFBNetworkElement;
