@@ -436,11 +436,14 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	private void checkStructAttribute(StructManipulator fb, String name) {
+	private void checkStructAttribute(final StructManipulator fb, final String name) {
 		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(name)) {
 			final Attribute attr = fb.getAttribute(LibraryElementTags.STRUCTURED_TYPE_ELEMENT); // $NON-NLS-1$
 			final StructuredType structType = getTypeLibrary().getDataTypeLibrary().getStructuredType(attr.getValue());
 			fb.setStructTypeElementsAtInterface(structType);
+		} else if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(name)) {
+			// reset type to get visible children configured
+			fb.setStructTypeElementsAtInterface(fb.getStructType());
 		}
 	}
 

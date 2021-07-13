@@ -66,9 +66,9 @@ public class ChangeStructCommand extends Command {
 	private MapToCommand mapCmd = null;
 	private UnmapCommand unmapCmd = null;
 
-	public ChangeStructCommand(final StructManipulator mux, final StructuredType struct) {
+	public ChangeStructCommand(final StructManipulator mux, final StructuredType newStruct) {
 		this.oldMux = mux;
-		newStruct = struct;
+		this.newStruct = newStruct;
 		entry = mux.getPaletteEntry();
 		network = mux.getFbNetwork();
 	}
@@ -310,5 +310,9 @@ public class ChangeStructCommand extends Command {
 			retVal = new DataConnectionCreateCommand(fbn);
 		}
 		return retVal;
+	}
+
+	public StructManipulator getOldMux() {
+		return oldMux;
 	}
 }

@@ -253,15 +253,17 @@ public class UpdateFBTypeCommand extends Command {
 			// FB
 			final IInterfaceElement interfaceElement = newElement.getInterfaceElement(oldInterface.getName());
 
+
 			if (interfaceElement == null) {
 				return createErrorMarker(newElement, oldInterface,
-						"Pin " + oldInterface.getName() + " not found after Type update"); //$NON-NLS-1$ //$NON-NLS-2$
+						MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()));
 			}
 
 			if (!oldInterface.getType().isCompatibleWith(interfaceElement.getType())) {
-				final String errorMessage = oldInterface.getTypeName()
-						+ "from previous type is not compatible with new Type: " + interfaceElement.getTypeName(); //$NON-NLS-1$
-				return createErrorMarker(newElement, oldInterface, "wrongType: " + oldInterface.getName(), //$NON-NLS-1$
+				final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
+						oldInterface.getTypeName(), interfaceElement.getTypeName());
+				return createErrorMarker(newElement, oldInterface,
+						MessageFormat.format(Messages.UpdateFBTypeCommand_wrong_type, oldInterface.getName()),
 						errorMessage);
 			}
 
