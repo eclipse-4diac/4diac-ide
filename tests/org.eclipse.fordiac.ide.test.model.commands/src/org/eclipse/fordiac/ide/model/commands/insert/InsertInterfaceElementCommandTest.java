@@ -124,7 +124,11 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add Input", //$NON-NLS-1$
-						(final State s) -> {final State result = executeCommand(s, FordiacKeywords.DWORD, true); verifyGetters(s,assertion); return result;}, //
+						(final State s) -> {
+							final State result = executeCommand(s, FordiacKeywords.DWORD, true);
+							verifyGetters(s, tester.get());
+							return result;
+						}, //
 						(final State s, final State o, final TestFunction t) -> {
 							verifyStateHasDataInput(s, t);
 							verifyStateNoDataOutput(s, t);

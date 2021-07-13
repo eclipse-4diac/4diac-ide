@@ -32,8 +32,8 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 	private static final String VARIABLE2_NAME = "InternalVar2"; //$NON-NLS-1$
 	private static final String VARIABLE3_NAME = "INTERNALVAR1"; //$NON-NLS-1$
 
-	private static State executeCommandVar1(State state) {
-		BaseFBType baseFBType = getBaseFBType(state, assumption);
+	private static State executeCommandVar1(final State state) {
+		final BaseFBType baseFBType = getBaseFBType(state, tester.get());
 
 		state.setCommand(new CreateInternalVariableCommand(baseFBType, 0, FordiacKeywords.VARIABLE_INTERNAL,
 				getDatatypelib().getType(FordiacKeywords.BOOL)));
@@ -41,15 +41,15 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 		return commandExecution(state);
 	}
 
-	private static void verifyStateVar1(State state, State oldState, TestFunction t) {
-		BaseFBType baseFBType = getBaseFBType(state, t);
+	private static void verifyStateVar1(final State state, final State oldState, final TestFunction t) {
+		final BaseFBType baseFBType = getBaseFBType(state, t);
 		t.test(!baseFBType.getInternalVars().isEmpty());
 		t.test(baseFBType.getInternalVars().get(0).getName(), VARIABLE1_NAME);
 		t.test(baseFBType.getInternalVars().get(0).getTypeName(), FordiacKeywords.BOOL);
 	}
 
-	private static State executeCommandVar2(State state) {
-		BaseFBType baseFBType = getBaseFBType(state, assumption);
+	private static State executeCommandVar2(final State state) {
+		final BaseFBType baseFBType = getBaseFBType(state, tester.get());
 
 		state.setCommand(new CreateInternalVariableCommand(baseFBType, 1, FordiacKeywords.VARIABLE_INTERNAL,
 				getDatatypelib().getType(FordiacKeywords.DWORD)));
@@ -58,15 +58,15 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 		return commandExecution(state);
 	}
 
-	private static void verifyStateVar2(State state, State oldState, TestFunction t) {
+	private static void verifyStateVar2(final State state, final State oldState, final TestFunction t) {
 		verifyStateVar1(state, oldState, t);
-		BaseFBType baseFBType = getBaseFBType(state, t);
+		final BaseFBType baseFBType = getBaseFBType(state, t);
 		t.test(baseFBType.getInternalVars().get(1).getName(), VARIABLE2_NAME);
 		t.test(baseFBType.getInternalVars().get(1).getTypeName(), FordiacKeywords.DWORD);
 	}
 
-	private static State executeCommandVar3(State state) {
-		BaseFBType baseFBType = getBaseFBType(state, assumption);
+	private static State executeCommandVar3(final State state) {
+		final BaseFBType baseFBType = getBaseFBType(state, tester.get());
 
 		state.setCommand(new CreateInternalVariableCommand(baseFBType));
 		// Name will be INTERNALVAR1 because of automatic naming
@@ -74,21 +74,21 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 		return commandExecution(state);
 	}
 
-	private static void verifyStateVar3(State state, State oldState, TestFunction t) {
+	private static void verifyStateVar3(final State state, final State oldState, final TestFunction t) {
 		verifyStateVar2(state, oldState, t);
-		BaseFBType baseFBType = getBaseFBType(state, t);
+		final BaseFBType baseFBType = getBaseFBType(state, t);
 		t.test(baseFBType.getInternalVars().get(2).getName(), VARIABLE3_NAME);
 		t.test(baseFBType.getInternalVars().get(2).getTypeName(), FordiacKeywords.BOOL);
 	}
 
-	private static State executeReorder(State state, int index, boolean direction) {
-		final BaseFBType baseFBType = getBaseFBType(state, assumption);
+	private static State executeReorder(final State state, final int index, final boolean direction) {
+		final BaseFBType baseFBType = getBaseFBType(state, tester.get());
 		state.setCommand(new ChangeVariableOrderCommand(baseFBType.getInternalVars(),
 				baseFBType.getInternalVars().get(index), direction));
 		return commandExecution(state);
 	}
 
-	private static void verifyOrder(State state, TestFunction t, String name1, String name2, String name3) {
+	private static void verifyOrder(final State state, final TestFunction t, final String name1, final String name2, final String name3) {
 		final BaseFBType baseFBType = getBaseFBType(state, t);
 		t.test(baseFBType.getInternalVars().size(), 3);
 		t.test(baseFBType.getInternalVars().get(0).getName(), name1);
@@ -96,15 +96,15 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 		t.test(baseFBType.getInternalVars().get(2).getName(), name3);
 	}
 
-	private static State executeDeleteVariable(State state) {
-		final BaseFBType baseFBType = getBaseFBType(state, assumption);
+	private static State executeDeleteVariable(final State state) {
+		final BaseFBType baseFBType = getBaseFBType(state, tester.get());
 		final VarDeclaration v = baseFBType.getInternalVars().get(0);
-		assumption.test(v.getName(), VARIABLE3_NAME);
+		tester.get().test(v.getName(), VARIABLE3_NAME);
 		state.setCommand(new DeleteInternalVariableCommand(baseFBType, v));
 		return commandExecution(state);
 	}
 
-	private static void verifyDelete(State state, State oldState, TestFunction t) {
+	private static void verifyDelete(final State state, final State oldState, final TestFunction t) {
 		final BaseFBType baseFBType = getBaseFBType(state, t);
 		t.test(baseFBType.getInternalVars().size(),
 				((BaseFBType) oldState.getFunctionblock().getType()).getInternalVars().size() - 1);
@@ -118,36 +118,36 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 				new ExecutionDescription<>("Add an internal variable", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeCommandVar1, //
 						CreateInternalVariableCommandTest::verifyStateVar1 //
-				), //
+						), //
 				new ExecutionDescription<>("Add a second internal variable", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeCommandVar2, //
 						CreateInternalVariableCommandTest::verifyStateVar2 //
-				), //
+						), //
 				new ExecutionDescription<>("Add a third internal variable", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeCommandVar3, //
 						CreateInternalVariableCommandTest::verifyStateVar3 //
-				), //
+						), //
 				new ExecutionDescription<>("move second algorithmn to third place", //$NON-NLS-1$
-						(State s) -> executeReorder(s, 1, false), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, t, VARIABLE1_NAME, VARIABLE3_NAME, VARIABLE2_NAME)//
-				), //
+						(final State s) -> executeReorder(s, 1, false), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE1_NAME, VARIABLE3_NAME, VARIABLE2_NAME)//
+						), //
 				new ExecutionDescription<>("move second algorithmn to first place", //$NON-NLS-1$
-						(State s) -> executeReorder(s, 1, true), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
-				), //
+						(final State s) -> executeReorder(s, 1, true), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
+						), //
 				new ExecutionDescription<>("move first algorithmn past lower bound", //$NON-NLS-1$
-						(State s) -> executeReorder(s, 0, true), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
-				), //
+						(final State s) -> executeReorder(s, 0, true), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
+						), //
 				new ExecutionDescription<>("move third algorithmn past upper bound", //$NON-NLS-1$
-						(State s) -> executeReorder(s, 2, false), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
-				), //
+						(final State s) -> executeReorder(s, 2, false), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
+						), //
 				new ExecutionDescription<>("delete first entry", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeDeleteVariable, //
 						CreateInternalVariableCommandTest::verifyDelete //
-				)//
-		);
+						)//
+				);
 
 		return createCommands(executionDescriptions);
 	}

@@ -43,10 +43,10 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 
 		final State result = commandExecution(state);
 
-		assertion.test(state.getCommand() instanceof CreateMemberVariableCommand);
+		tester.get().test(state.getCommand() instanceof CreateMemberVariableCommand);
 		final CreateMemberVariableCommand c = (CreateMemberVariableCommand) state.getCommand();
-		assertion.test(c.getCreatedElement(), c.getVarDeclaration());
-		assertion.test(!c.getVariableList().isEmpty());
+		tester.get().test(c.getCreatedElement(), c.getVarDeclaration());
+		tester.get().test(!c.getVariableList().isEmpty());
 
 		return result;
 	}
