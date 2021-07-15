@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
+ * Copyright (c) 2016, 2021 fortiss GmbH, Johannes Keppler University Linz
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,8 +12,12 @@
  *   Alois Zoitl, Monika Wenger
  *       - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
+ *               - added checks for value errormarkers
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.Messages;
@@ -27,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.gef.commands.Command;
@@ -37,6 +42,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 	private final FBNetworkElement element;
 	private final CompoundCommand cmds = new CompoundCommand();
 	private ErrorMarkerBuilder errorMarker;
+	private final List<ErrorMarkerBuilder> valueErrorMarkers = new ArrayList<>();
 
 	public DeleteFBNetworkElementCommand(final FBNetworkElement element) {
 		super(Messages.DeleteFBNetworkElementCommand_DeleteFBOrSubapplication);
@@ -66,8 +72,8 @@ public class DeleteFBNetworkElementCommand extends Command {
 			cmds.add(new UnmapCommand(element));
 		}
 		getDeleteConnections(element);
-		// Before removing the fbnetwork element the connections and mapping should be
-		// removed
+		handleValueErrorMarkers();
+		// Before removing the fbnetwork element the connections, value error markers, and mapping should be removed
 		if (cmds.canExecute()) {
 			cmds.execute();
 		}
@@ -75,8 +81,6 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (element instanceof SubApp) {
 			closeSubApplicationEditor((SubApp) element);
 		}
-
-
 	}
 
 	@Override
@@ -88,6 +92,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (element instanceof ErrorMarkerRef && errorMarker != null) {
 			FordiacMarkerHelper.createMarkerInFile(errorMarker);
 		}
+		restoreValueErrorMarkers();
 	}
 
 	@Override
@@ -95,11 +100,13 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (cmds.canRedo()) {
 			cmds.redo();
 		}
-		fbParent.getNetworkElements().remove(element);
-		
+		handleValueErrorMarkers();
 		if (element instanceof ErrorMarkerRef) {
 			errorMarker = FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) element);
 		}
+
+		fbParent.getNetworkElements().remove(element);
+
 	}
 
 	private void getDeleteConnections(final FBNetworkElement element) {
@@ -119,6 +126,21 @@ public class DeleteFBNetworkElementCommand extends Command {
 	private static void closeSubApplicationEditor(final SubApp subapp) {
 		EditorUtils.closeEditorsFiltered(editor -> ((editor instanceof I4diacModelEditor)
 				&& (subapp.getSubAppNetwork() == ((I4diacModelEditor) editor).getModel())));
+	}
+
+	private void handleValueErrorMarkers() {
+		for (final VarDeclaration varIn : element.getInterface().getInputVars()) {
+			if ((varIn.getValue() != null) && (varIn.getValue().hasError())) {
+				valueErrorMarkers.add(FordiacMarkerHelper.deleteErrorMarker(varIn.getValue()));
+			}
+		}
+	}
+
+	private void restoreValueErrorMarkers() {
+		for (final ErrorMarkerBuilder errorMarkerBuilder : valueErrorMarkers) {
+			FordiacMarkerHelper.createMarkerInFile(errorMarkerBuilder);
+		}
+		valueErrorMarkers.clear();
 	}
 
 }
