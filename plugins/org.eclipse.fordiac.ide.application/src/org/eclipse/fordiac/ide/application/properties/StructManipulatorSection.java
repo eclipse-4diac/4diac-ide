@@ -142,6 +142,17 @@ public class StructManipulatorSection extends AbstractSection {
 		return !newStructName.contentEquals(getType().getStructType().getName());
 	}
 
+	protected void updateStructManipulatorFB(final StructManipulator newMux) {
+		setType(newMux);
+		final GraphicalViewer viewer = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor().getAdapter(GraphicalViewer.class);
+		if (null != viewer) {
+			viewer.flush();
+			final Object obj = viewer.getEditPartRegistry().get(newMux);
+			viewer.select((EditPart) obj);
+		}
+	}
+
 	protected void selectNewStructManipulatorFB(final StructManipulator newMux) {
 		final GraphicalViewer viewer = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor().getAdapter(GraphicalViewer.class);

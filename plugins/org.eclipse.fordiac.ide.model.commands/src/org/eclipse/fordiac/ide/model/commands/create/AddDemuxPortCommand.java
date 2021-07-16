@@ -20,11 +20,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.StructTreeNode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -41,7 +39,6 @@ public class AddDemuxPortCommand extends Command {
 	private final String varName;
 	private Demultiplexer oldMux;
 
-	private final StructuredType struct;
 	private ChangeStructCommand cmd;
 	private final CheckableStructTreeNode node;
 
@@ -51,7 +48,6 @@ public class AddDemuxPortCommand extends Command {
 		this.type = type;
 		this.varName = node.getPinName();
 		this.oldVisibleChildren = node.getRootNode().visibleToString();
-		this.struct = type.getTypeLibrary().getDataTypeLibrary().getStructuredType(type.getStructType().getName());
 	}
 
 	@Override
@@ -76,7 +72,8 @@ public class AddDemuxPortCommand extends Command {
 		final List<String> visibleChildrenNames = Arrays
 				.asList(newVisibleChildren.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
 		final List<VarDeclaration> varDecls = new ArrayList<>();
-		for (final VarDeclaration varDeclaration : getVarDeclarations(visibleChildrenNames)) {
+		for (final VarDeclaration varDeclaration : CheckableStructTreeNode.getVarDeclarations(visibleChildrenNames,
+				node)) {
 			final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			variable.setName(varDeclaration.getName());
 			variable.setType(varDeclaration.getType());
@@ -115,22 +112,7 @@ public class AddDemuxPortCommand extends Command {
 		type.setAttribute(DEMUX_VISIBLE_CHILDREN, FordiacKeywords.STRING, value, ""); //$NON-NLS-1$
 	}
 
-	private List<VarDeclaration> getVarDeclarations(final List<String> varDeclNames) {
-		final List<VarDeclaration> vars = new ArrayList<>();
-		varDeclNames.forEach(name -> {
-			final StructTreeNode find = node.find(name);
-			VarDeclaration findVarDeclarationInStruct = null;
-			if (find != null) {
-				findVarDeclarationInStruct = find.getVariable();
-				final VarDeclaration varDecl = EcoreUtil.copy(findVarDeclarationInStruct);
-				if (null != varDecl) {
-					varDecl.setName(name);
-					vars.add(varDecl);
-				}
-			}
-		});
-		return vars;
-	}
+
 
 	public Demultiplexer getType() {
 		return type;

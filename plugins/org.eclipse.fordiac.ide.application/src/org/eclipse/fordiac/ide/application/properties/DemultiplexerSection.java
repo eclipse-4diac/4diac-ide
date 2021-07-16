@@ -120,7 +120,7 @@ public class DemultiplexerSection extends StructManipulatorSection implements Co
 			type = deleteCommand.getType();
 		}
 		setInitTree(false);
-		selectNewStructManipulatorFB(type);
+		updateStructManipulatorFB(type);
 		setInitTree(true);
 	}
 
