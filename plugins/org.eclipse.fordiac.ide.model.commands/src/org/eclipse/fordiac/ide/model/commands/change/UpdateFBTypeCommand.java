@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateComman
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -43,11 +45,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -100,7 +104,20 @@ public class UpdateFBTypeCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return (null != entry) && (null != oldElement) && (null != network);
+		if ((null == entry) || (null == oldElement) || (null == network)) {
+			return false;
+		}
+		if (!FBNetworkHelper.isTypeInsertionSave((FBType) entry.getType(), network)) {
+			// editor type has to be present if insertion fails
+			showErrorMessage(FBNetworkHelper.getFBTypeOfEditor(network).getName());
+			return false;
+		}
+		return true;
+	}
+
+	private static void showErrorMessage(final String typeName) {
+		ErrorMessenger.popUpErrorMessage(
+				MessageFormat.format(Messages.CreateFBNetworkElementCommand_Error_RecursiveType, typeName), 2000);
 	}
 
 	/* (non-Javadoc)

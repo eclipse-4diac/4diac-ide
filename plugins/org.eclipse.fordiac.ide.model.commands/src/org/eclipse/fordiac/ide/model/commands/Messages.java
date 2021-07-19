@@ -44,6 +44,10 @@ public final class Messages extends NLS {
 	public static String ConnectingIncompatibleInterfaceTypes;
 	public static String UntypeSubappCommand_Label;
 
+	public static String UpdateFBTypeCommand_Pin_not_found;
+	public static String UpdateFBTypeCommand_type_mismatch;
+	public static String UpdateFBTypeCommand_wrong_type;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -170,11 +170,11 @@ public final class FBNetworkHelper {
 		return true;
 	}
 
-	public static boolean isTypeInsertionSave(FBType type, FBNetwork network) {
-		if (type == null || network == null) {
+	public static boolean isTypeInsertionSave(final FBType type, final EObject element) {
+		if (type == null || element == null) {
 			return true;
 		}
-		final FBType editorType = getFBTypeOfEditor(network);
+		final FBType editorType = getFBTypeOfEditor(element);
 		if (editorType != null) {
 			if (type.equals(editorType)) {
 				return false;
@@ -183,8 +183,8 @@ public final class FBNetworkHelper {
 		}
 		return true;
 	}
-	
-	private static EList<? extends FBNetworkElement> getChildFBNElements(FBNetworkElement networkElem) {
+
+	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBNetworkElement networkElem) {
 		if (networkElem instanceof SubApp) {
 			final SubApp subapp = (SubApp) networkElem;
 			if (subapp.isTyped()) {
@@ -199,7 +199,7 @@ public final class FBNetworkHelper {
 		return new BasicEList<>();
 	}
 
-	private static EList<? extends FBNetworkElement> getChildFBNElements(FBType type) {
+	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBType type) {
 		if (type instanceof BaseFBType) { // basic and simple fb type
 			return ((BaseFBType) type).getInternalFbs();
 		}
@@ -209,8 +209,8 @@ public final class FBNetworkHelper {
 		return new BasicEList<>();
 	}
 
-	public static FBType getFBTypeOfEditor(final FBNetwork network) {
-		final EObject root = EcoreUtil.getRootContainer(network);
+	public static FBType getFBTypeOfEditor(final EObject element) {
+		final EObject root = EcoreUtil.getRootContainer(element);
 		if (root instanceof FBType) {
 			return (FBType) root;
 		}
