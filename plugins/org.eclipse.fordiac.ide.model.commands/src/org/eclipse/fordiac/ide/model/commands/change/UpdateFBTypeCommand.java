@@ -51,7 +51,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -107,17 +106,7 @@ public class UpdateFBTypeCommand extends Command {
 		if ((null == entry) || (null == oldElement) || (null == network)) {
 			return false;
 		}
-		if (!FBNetworkHelper.isTypeInsertionSave((FBType) entry.getType(), network)) {
-			// editor type has to be present if insertion fails
-			showErrorMessage(FBNetworkHelper.getFBTypeOfEditor(network).getName());
-			return false;
-		}
-		return true;
-	}
-
-	private static void showErrorMessage(final String typeName) {
-		ErrorMessenger.popUpErrorMessage(
-				MessageFormat.format(Messages.CreateFBNetworkElementCommand_Error_RecursiveType, typeName), 2000);
+		return FBNetworkHelper.isTypeInsertionSave((FBType) entry.getType(), network);
 	}
 
 	/* (non-Javadoc)

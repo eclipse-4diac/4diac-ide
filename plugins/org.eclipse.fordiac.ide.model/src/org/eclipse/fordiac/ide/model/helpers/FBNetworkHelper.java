@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -22,6 +23,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -38,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Point;
 
@@ -174,12 +177,18 @@ public final class FBNetworkHelper {
 		if (type == null || element == null) {
 			return true;
 		}
-		final FBType editorType = getFBTypeOfEditor(element);
+		final FBType editorType = getRootType(element);
 		if (editorType != null) {
 			if (type.equals(editorType)) {
+				ErrorMessenger
+				.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
 				return false;
 			}
-			return !containsType(editorType, getChildFBNElements(type));
+			if (containsType(editorType, getChildFBNElements(type))) {
+				ErrorMessenger.popUpErrorMessage(
+						MessageFormat.format(Messages.Error_RecursiveType, type.getName(), editorType.getName()));
+				return false;
+			}
 		}
 		return true;
 	}
@@ -209,7 +218,7 @@ public final class FBNetworkHelper {
 		return new BasicEList<>();
 	}
 
-	public static FBType getFBTypeOfEditor(final EObject element) {
+	private static FBType getRootType(final EObject element) {
 		final EObject root = EcoreUtil.getRootContainer(element);
 		if (root instanceof FBType) {
 			return (FBType) root;

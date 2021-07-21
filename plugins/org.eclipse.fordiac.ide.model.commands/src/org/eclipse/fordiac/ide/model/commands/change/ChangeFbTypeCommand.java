@@ -14,13 +14,9 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.text.MessageFormat;
-
-import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeFbTypeCommand extends Command {
@@ -37,17 +33,7 @@ public class ChangeFbTypeCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if (!FBNetworkHelper.isTypeInsertionSave(newType, fb)) {
-			// editor type has to be present if insertion fails
-			showErrorMessage(FBNetworkHelper.getFBTypeOfEditor(fb).getName());
-			return false;
-		}
-		return true;
-	}
-
-	private static void showErrorMessage(final String typeName) {
-		ErrorMessenger.popUpErrorMessage(
-				MessageFormat.format(Messages.CreateFBNetworkElementCommand_Error_RecursiveType, typeName), 2000);
+		return FBNetworkHelper.isTypeInsertionSave(newType, fb);
 	}
 
 	@Override
