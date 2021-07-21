@@ -292,7 +292,7 @@ public final class ValueValidator {
 		} else if (literalType instanceof AnyIntType) {
 			return checkAnyIntLiteral(literalType, baseSpecifier, literalValue);
 		} else if (literalType instanceof AnyRealType) {
-			return checkAnyRealLiteral(literalType, baseSpecifier, literalValue);
+			return checkAnyRealLiteral(literalType, typeSpecifier, baseSpecifier, literalValue);
 		} else if (literalType instanceof AnyDurationType) {
 			return checkDurationLiteral(literalType, baseSpecifier, literalValue);
 		} else if (literalType instanceof AnyDateType) {
@@ -558,14 +558,25 @@ public final class ValueValidator {
 		return errorString;
 	}
 
-	private static String checkAnyRealLiteral(final DataType type, final String baseSpecifier, final String literalValue) {
+	private static String checkAnyRealLiteral(final DataType type, final String typeSpecifier,
+			final String baseSpecifier, final String literalValue) {
 		var errorString = EMPTY_STRING;
 
 		if (!baseSpecifier.isBlank()) {
 			errorString += MessageFormat.format(Messages.VALIDATOR_BASE_SPECIFIER_IS_INVALID_FOR, type.getName());
 		}
-		if (!isRealLiteralValid(literalValue)) {
-			errorString += MessageFormat.format(Messages.VALIDATOR_VALID_REAL_VALUE, type.getName());
+
+		if (typeSpecifier.isBlank()) { // literal type was not explicitly given, so it could be a implicit castable
+			// value too
+			if (!isRealLiteralValid(literalValue) && !isSignedLiteralValid(literalValue)
+					&& !isBinaryBaseLiteralValid(literalValue) && !isOctalBaseLiteralValid(literalValue)
+					&& !isHexBaseLiteralValid(literalValue)) {
+				errorString += MessageFormat.format(Messages.VALIDATOR_VALID_REAL_VALUE, type.getName());
+			}
+		} else {
+			if (!isRealLiteralValid(literalValue)) {
+				errorString += MessageFormat.format(Messages.VALIDATOR_VALID_REAL_VALUE, type.getName());
+			}
 		}
 
 		return errorString;
