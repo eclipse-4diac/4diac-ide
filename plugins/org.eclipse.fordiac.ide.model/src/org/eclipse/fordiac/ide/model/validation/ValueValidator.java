@@ -65,7 +65,7 @@ public final class ValueValidator {
 	private static final String ST_ESCAPE_SYMBOL = "$"; //$NON-NLS-1$
 	private static final String ST_ESCAPE_WITH_SINGLE_QUOTE = "$\'"; //$NON-NLS-1$
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
-	private static final String REGEX_LITERAL_SPLITTER = "([^#]*#)?([^#]*#)?(.*)"; //$NON-NLS-1$
+	private static final String REGEX_LITERAL_SPLITTER = "([a-zA-Z]*#)?([0-9]*#)?(.*)"; //$NON-NLS-1$
 	private static final String REGEX_SIGNED = "[+-]?[0-9](?:_?[0-9])*+"; //$NON-NLS-1$
 	private static final String REGEX_UNSIGNED = "[0-9](?:_?[0-9])*+"; //$NON-NLS-1$
 	private static final String REGEX_HEX = "(?:_?[0-9a-fA-F])*+"; //$NON-NLS-1$
@@ -262,7 +262,7 @@ public final class ValueValidator {
 		}
 		var baseSpecifier = matcher.group(2);
 		if (baseSpecifier != null) {
-			baseSpecifier = typeSpecifier.replace("#", EMPTY_STRING); //$NON-NLS-1$
+			baseSpecifier = baseSpecifier.replace("#", EMPTY_STRING); //$NON-NLS-1$
 		} else {
 			baseSpecifier = EMPTY_STRING;
 		}
