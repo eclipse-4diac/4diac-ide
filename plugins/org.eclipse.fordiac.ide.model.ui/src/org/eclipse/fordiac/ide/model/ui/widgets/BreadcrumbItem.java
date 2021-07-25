@@ -98,7 +98,9 @@ public class BreadcrumbItem {
 	void dispose() {
 		text.dispose();
 		if (arrow != null) {
-			arrow.getImage().dispose();
+			if (arrow.getImage() != null) {
+				arrow.getImage().dispose();
+			}
 			arrow.dispose();
 		}
 	}
