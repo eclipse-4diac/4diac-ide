@@ -622,7 +622,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		final String MESSAGE_NO_MAIN = "{1}"; //$NON-NLS-1$
 
 		final String MESSAGE_VERIFY_INITIAL_STATE = "Verify initial State"; //$NON-NLS-1$
-		final String MESSAGE_EXECUTE_ALL_COMMANDS = "Execute all Commands"; //$NON-NLS-1$
 		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I = "Execute until Command {0}: {1}"; //$NON-NLS-1$
 		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO = "Execute until Command {0}: {1}, run Undo"; //$NON-NLS-1$
 		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO = "Execute until Command {0}: {1}, run Undo, run Redo"; //$NON-NLS-1$
@@ -632,11 +631,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 				MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 						MESSAGE_VERIFY_INITIAL_STATE),
 				initializer, initialVerifier, Collections.emptyList(), undo, redo));
-
-		if (commands.size() > 1) {
-			descriptions.add(Arguments.of(MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN,
-					description, MESSAGE_EXECUTE_ALL_COMMANDS), initializer, initialVerifier, commands, undo, redo));
-		}
 
 		int index = 0;
 		final ArrayList<Object> commandsUntil = new ArrayList<>();
