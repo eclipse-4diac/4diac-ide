@@ -150,23 +150,23 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	@Override
 	public String getPortString() {
 				StringBuilder portString = new StringBuilder();
-		
+
 				for (String element : getPort().getHierarchy()) {
 					portString.append(element);
 					portString.append("."); //$NON-NLS-1$
 				}
-		
+
 				portString.append(getPort().getFb().getName());
 				portString.append("."); //$NON-NLS-1$
-		
+
 				if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
 					portString.append(((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName());
 					portString.append("."); //$NON-NLS-1$
 				}
 				portString.append(getPort().getInterfaceElement().getName());
-		
+
 				return portString.toString();
-		
+
 	}
 
 	/**
@@ -208,8 +208,9 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 				return basicGetPort();
 			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
 				return isOffline();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -225,8 +226,10 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
 				setOffline((Boolean)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -242,8 +245,10 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
 				setOffline(OFFLINE_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -257,8 +262,9 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 				return port != null;
 			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
 				return offline != OFFLINE_EDEFAULT;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

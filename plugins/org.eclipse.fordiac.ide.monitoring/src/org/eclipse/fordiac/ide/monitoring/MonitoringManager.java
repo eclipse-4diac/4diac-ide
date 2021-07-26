@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -205,7 +206,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		}
 	}
 
-	public void writeValue(final MonitoringElement element, final String value) {
+	public void writeValue(MonitoringElement element, final String value) {
 		final AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
@@ -222,6 +223,10 @@ public class MonitoringManager extends AbstractMonitoringManager {
 				.getDevMgmInteractor(device);
 
 		if (devMgmInteractor != null) {
+			if (element instanceof SubappMonitoringElement) {
+				element = (MonitoringElement) ((SubappMonitoringElement) element).getAnchor();
+			}
+
 			String fullName = element.getQualifiedString();
 			fullName = fullName.substring(0, fullName.lastIndexOf('.')); // strip interface name
 			fullName = fullName.substring(0, fullName.lastIndexOf('.') + 1); // strip fbName

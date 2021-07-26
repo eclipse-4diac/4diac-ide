@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -51,7 +51,7 @@ public interface MonitoringFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Adapter Port Element</em>'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return a new object of class '<em>Adapter Port Element</em>'.
 	 * @generated
 	 */
@@ -60,7 +60,7 @@ public interface MonitoringFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Adapter Monitoring Event</em>'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return a new object of class '<em>Adapter Monitoring Event</em>'.
 	 * @generated
 	 */
@@ -73,6 +73,24 @@ public interface MonitoringFactory extends EFactory {
 	 * @generated
 	 */
 	AdapterMonitoringVarDeclaration createAdapterMonitoringVarDeclaration();
+
+	/**
+	 * Returns a new object of class '<em>Sub App Port Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sub App Port Element</em>'.
+	 * @generated
+	 */
+	SubAppPortElement createSubAppPortElement();
+
+	/**
+	 * Returns a new object of class '<em>Subapp Monitoring Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Subapp Monitoring Element</em>'.
+	 * @generated
+	 */
+	SubappMonitoringElement createSubappMonitoringElement();
 
 	/**
 	 * Returns the package supported by this factory.

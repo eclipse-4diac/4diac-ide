@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -26,6 +26,8 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
+import org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
@@ -55,7 +57,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	/**
 	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MonitoringFactoryImpl() {
@@ -74,6 +76,8 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 			case MonitoringPackage.ADAPTER_PORT_ELEMENT: return createAdapterPortElement();
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT: return createAdapterMonitoringEvent();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION: return createAdapterMonitoringVarDeclaration();
+			case MonitoringPackage.SUB_APP_PORT_ELEMENT: return createSubAppPortElement();
+			case MonitoringPackage.SUBAPP_MONITORING_ELEMENT: return createSubappMonitoringElement();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -127,6 +131,28 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	public AdapterMonitoringVarDeclaration createAdapterMonitoringVarDeclaration() {
 		AdapterMonitoringVarDeclarationImpl adapterMonitoringVarDeclaration = new AdapterMonitoringVarDeclarationImpl();
 		return adapterMonitoringVarDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SubAppPortElement createSubAppPortElement() {
+		SubAppPortElementImpl subAppPortElement = new SubAppPortElementImpl();
+		return subAppPortElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SubappMonitoringElement createSubappMonitoringElement() {
+		SubappMonitoringElementImpl subappMonitoringElement = new SubappMonitoringElementImpl();
+		return subappMonitoringElement;
 	}
 
 	/**

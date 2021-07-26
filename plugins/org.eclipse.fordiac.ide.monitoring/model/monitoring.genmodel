@@ -30,5 +30,13 @@
     <genClasses ecoreClass="monitoring.ecore#//AdapterMonitoringEvent"/>
     <genClasses ecoreClass="monitoring.ecore#//AdapterMonitoringVarDeclaration"/>
     <genClasses image="false" ecoreClass="monitoring.ecore#//IEditPartCreator"/>
+    <genClasses ecoreClass="monitoring.ecore#//SubAppPortElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//SubAppPortElement/anchor"/>
+    </genClasses>
+    <genClasses ecoreClass="monitoring.ecore#//SubappMonitoringElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//SubappMonitoringElement/anchor"/>
+      <genOperations ecoreOperation="monitoring.ecore#//SubappMonitoringElement/getQualifiedString"
+          body="&#x9;&#x9;return anchor.getQualifiedString();"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

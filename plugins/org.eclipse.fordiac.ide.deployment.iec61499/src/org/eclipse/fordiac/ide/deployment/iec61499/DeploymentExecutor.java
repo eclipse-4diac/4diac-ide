@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -107,7 +106,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		return new EthernetDeviceManagementCommunicationHandler();
 	}
 
-	private static String getValidType(final FB fb) {
+	private static String getValidType(final FBNetworkElement fb) {
 		if (fb != null && fb.getPaletteEntry() != null) {
 			if (fb instanceof StructManipulator) {
 				// the _1 is needed for 4diac FORTE to separate type name from configuration

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
+import org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!--
@@ -57,6 +59,20 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * @generated
 	 */
 	private EClass iEditPartCreatorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass subAppPortElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass subappMonitoringElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -235,6 +251,46 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSubAppPortElement() {
+		return subAppPortElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSubAppPortElement_Anchor() {
+		return (EReference)subAppPortElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSubappMonitoringElement() {
+		return subappMonitoringElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSubappMonitoringElement_Anchor() {
+		return (EReference)subappMonitoringElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -316,6 +372,12 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		adapterMonitoringVarDeclarationEClass = createEClass(ADAPTER_MONITORING_VAR_DECLARATION);
 
 		iEditPartCreatorEClass = createEClass(IEDIT_PART_CREATOR);
+
+		subAppPortElementEClass = createEClass(SUB_APP_PORT_ELEMENT);
+		createEReference(subAppPortElementEClass, SUB_APP_PORT_ELEMENT__ANCHOR);
+
+		subappMonitoringElementEClass = createEClass(SUBAPP_MONITORING_ELEMENT);
+		createEReference(subappMonitoringElementEClass, SUBAPP_MONITORING_ELEMENT__ANCHOR);
 	}
 
 	/**
@@ -328,7 +390,7 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * Complete the initialization of the package and its meta-model. This method is
 	 * guarded to have no affect on any invocation but its first. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public void initializePackageContents() {
@@ -357,6 +419,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		adapterMonitoringEventEClass.getESuperTypes().add(theLibraryElementPackage.getEvent());
 		adapterMonitoringVarDeclarationEClass.getESuperTypes().add(this.getIEditPartCreator());
 		adapterMonitoringVarDeclarationEClass.getESuperTypes().add(theLibraryElementPackage.getVarDeclaration());
+		subAppPortElementEClass.getESuperTypes().add(theMonitoringBasePackage.getPortElement());
+		subappMonitoringElementEClass.getESuperTypes().add(this.getMonitoringElement());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(monitoringElementEClass, MonitoringElement.class, "MonitoringElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -381,6 +445,14 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		initEClass(adapterMonitoringVarDeclarationEClass, AdapterMonitoringVarDeclaration.class, "AdapterMonitoringVarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(iEditPartCreatorEClass, IEditPartCreator.class, "IEditPartCreator", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(subAppPortElementEClass, SubAppPortElement.class, "SubAppPortElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSubAppPortElement_Anchor(), theLibraryElementPackage.getIInterfaceElement(), null, "anchor", null, 0, 1, SubAppPortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(subappMonitoringElementEClass, SubappMonitoringElement.class, "SubappMonitoringElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSubappMonitoringElement_Anchor(), theMonitoringBasePackage.getMonitoringBaseElement(), null, "anchor", null, 0, 1, SubappMonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(subappMonitoringElementEClass, theXMLTypePackage.getString(), "getQualifiedString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

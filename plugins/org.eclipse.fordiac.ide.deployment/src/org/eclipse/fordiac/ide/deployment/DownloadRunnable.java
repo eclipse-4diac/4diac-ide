@@ -267,7 +267,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 			throws DeploymentException {
 		for (final ParameterData param : resDepData.getParams()) {
 			executor.writeFBParameter(resDepData.getRes(), param.getValue(),
-					new FBDeploymentData(param.getPrefix(), (FB) param.getVar().getFBNetworkElement()), param.getVar());
+					new FBDeploymentData(param.getPrefix(), param.getVar().getFBNetworkElement()), param.getVar());
 			curMonitor.worked(1);
 		}
 	}
@@ -287,7 +287,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 			throws DeploymentException {
 		final Resource res = resDepData.getRes();
 		for (final FBDeploymentData fbDepData : resDepData.getFbs()) {
-			if (!fbDepData.getFb().isResourceTypeFB()) {
+			if (fbDepData.getFb() instanceof FB && !((FB) fbDepData.getFb()).isResourceTypeFB()) {
 				executor.createFBInstance(fbDepData, res);
 				curMonitor.worked(1);
 				final InterfaceList interfaceList = fbDepData.getFb().getInterface();

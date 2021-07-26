@@ -26,8 +26,11 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IChildrenProvider;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+
 
 public class MonitoringChildren implements IMonitoringListener, IChildrenProvider {
 
@@ -54,7 +57,8 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 	}
 
 	private static boolean checkResource(final MonitoringBaseElement element) {
-		return element.getPort().getFb().getResource() != null && !element.getPort().getFb().isResourceFB();
+		final FBNetworkElement fb = element.getPort().getFb();
+		return element.getPort().getFb().getResource() != null && (fb instanceof FB) && (!((FB) fb).isResourceFB());
 	}
 
 	private static boolean isInsideMonitoredSubApp(final Object parent, final FBNetwork network) {

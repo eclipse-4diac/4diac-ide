@@ -9,8 +9,11 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Michael Oberlehner - added subapp monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
+
+import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.devResponse.Data;
 import org.eclipse.fordiac.ide.deployment.devResponse.FB;
@@ -101,18 +104,27 @@ class DeviceMonitoringHandler implements Runnable {
 
 				for (final FB fb : res.getFbs()) {
 					final String fbName = resName + fb.getName() + "."; //$NON-NLS-1$
-
 					for (final Port p : fb.getPorts()) {
+						final String portString = fbName + p.getName();
 						final MonitoringBaseElement element = systemMonData
-								.getMonitoringElementByPortString(fbName + p.getName());
-						if (element instanceof MonitoringElement) {
-							updateMonitoringElement((MonitoringElement) element, p);
-						}
+								.getMonitoringElementByPortString(portString);
+						final List<MonitoringElement> subappPins = systemMonData.getSubappElements().get(portString);
+
+						if (subappPins != null) { // we need to look if we can find an pin
+							for (final MonitoringElement e : subappPins) {
+								updateMonitoringElement(e, p);
+							}
+
+						} else
+							if (element instanceof MonitoringElement) {
+								updateMonitoringElement((MonitoringElement) element, p);
+							}
 					}
 				}
 			}
 		}
 	}
+
 
 	private static void updateMonitoringElement(final MonitoringElement monitoringElement, final Port p) {
 		for (final Data d : p.getDataValues()) {
