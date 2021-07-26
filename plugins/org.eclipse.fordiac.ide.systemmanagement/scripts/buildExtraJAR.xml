@@ -26,7 +26,7 @@
 		<javac destdir="${temp.folder}/ant_tasks/systemmanagement-ant.jar.bin" failonerror="true" verbose="true" debug="on" includeantruntime="false">
 			<classpath>
 				<dirset dir="${basedir}/..">
-					<include name="eclipse.fordiac.ide.systemmanagement/bin"/>					
+					<include name="org.eclipse.fordiac.ide.systemmanagement/bin"/>					
 				</dirset>
 				<fileset dir="${target.home}">
 					<include name="plugins/eclipse.fordiac.ide.systemmanagement*.jar"/>
