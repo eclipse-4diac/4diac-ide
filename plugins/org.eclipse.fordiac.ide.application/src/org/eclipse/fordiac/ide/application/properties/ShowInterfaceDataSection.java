@@ -18,16 +18,18 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.properties.ShowInterfaceEventSection.CellImmutableModifier;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -99,6 +101,24 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 			@Override
 			public boolean canModify(final Object element, final String property) {
 				return false;
+			}
+		};
+	}
+
+	@Override
+	protected LabelProvider getLabelProvider() {
+		return new DataLabelProvider() {
+			@Override
+			public String getColumnText(Object element, int columnIndex) {
+				if ((element instanceof VarDeclaration) && (columnIndex == DataLabelProvider.INITIALVALUE_COL_INDEX)) {
+					final VarDeclaration varDecl = (VarDeclaration) element;
+					final VarDeclaration varDeclType = varDecl.getFBNetworkElement().getType().getInterfaceList().getVariable(varDecl.getName());
+					if (varDeclType.getValue() == null) {
+						return ""; //$NON-NLS-1$
+					}
+					return varDeclType.getValue().getValue();
+				}
+				return super.getColumnText(element, columnIndex);
 			}
 		};
 	}
