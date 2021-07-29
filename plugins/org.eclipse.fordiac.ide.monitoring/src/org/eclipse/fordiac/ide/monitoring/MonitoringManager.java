@@ -155,6 +155,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	@Override
 	public void disableSystem(final AutomationSystem system) {
 		final SystemMonitoringData data = systemMonitoringData.remove(system);
+		notifyWatchesChanged();
 		if (null != data) {
 			data.disableSystem();
 		}
