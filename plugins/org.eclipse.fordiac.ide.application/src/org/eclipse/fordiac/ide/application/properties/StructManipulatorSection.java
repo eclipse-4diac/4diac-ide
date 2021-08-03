@@ -134,8 +134,7 @@ public class StructManipulatorSection extends AbstractSection {
 
 	public String getNewStructName() {
 		final int index = muxStructSelector.getSelectionIndex();
-		final String newStructName = muxStructSelector.getItem(index);
-		return newStructName;
+		return muxStructSelector.getItem(index);
 	}
 
 	public boolean newStructSelected(final String newStructName) {

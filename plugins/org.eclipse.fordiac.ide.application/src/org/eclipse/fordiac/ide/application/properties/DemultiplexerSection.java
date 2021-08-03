@@ -14,12 +14,10 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
-import org.eclipse.fordiac.ide.model.StructTreeNode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -126,11 +124,6 @@ public class DemultiplexerSection extends StructManipulatorSection implements Co
 
 	protected void setInitTree(final boolean initTree) {
 		this.initTree = initTree;
-	}
-
-	@Override
-	public StructTreeNode initTree(final StructManipulator struct, final TreeViewer viewer) {
-		return super.initTree(struct, viewer);
 	}
 
 	private CheckboxTreeViewer getViewer() {

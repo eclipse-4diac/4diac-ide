@@ -197,7 +197,4 @@ public class WatchValueTreeNode extends StructTreeNode {
 		return !hasChildren() && isStructNode();
 	}
 
-	private boolean isRoot() {
-		return this.parent == null;
-	}
 }
