@@ -21,7 +21,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 
-class FBShapeShadowBorder extends AbstractBackground {
+public class FBShapeShadowBorder extends AbstractBackground {
 
 	private static final int SHADOW_ALPHA = 30;
 
@@ -29,7 +29,7 @@ class FBShapeShadowBorder extends AbstractBackground {
 
 	private static final int SHADOW_CORNER_RADIUS = DiagramPreferences.CORNER_DIM + 2;
 
-	protected static final Insets SHADOW_INSETS = new Insets(2, 2, SHADOW_SIZE, SHADOW_SIZE * 2 / 3);
+	public static final Insets SHADOW_INSETS = new Insets(2, 2, SHADOW_SIZE, SHADOW_SIZE * 2 / 3);
 
 	@Override
 	public Insets getInsets(final IFigure figure) {
