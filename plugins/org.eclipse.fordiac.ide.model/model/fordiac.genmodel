@@ -410,10 +410,13 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceSequence">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceSequence/serviceTransaction"/>
+      <genOperations ecoreOperation="lib.ecore#//ServiceSequence/getService" body="return (Service) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/inputPrimitive"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/outputPrimitive"/>
+      <genOperations ecoreOperation="lib.ecore#//ServiceTransaction/getServiceSequence"
+          body="return (ServiceSequence) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceInterfaceFBType"/>
     <genClasses ecoreClass="lib.ecore#//STAlgorithm"/>
@@ -531,7 +534,11 @@
       <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterDestination"
           body="return org.eclipse.fordiac.ide.model.Annotations.getAdapterDestination(this);"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ServiceInterface"/>
+    <genClasses ecoreClass="lib.ecore#//ServiceInterface">
+      <genOperations ecoreOperation="lib.ecore#//ServiceInterface/getService" body="return (Service) this.eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//ServiceInterface/isLeftInterface"
+          body="&#x9;&#x9;final ServiceInterface leftInterface = getService().getLeftInterface();"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//IInterfaceElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//IInterfaceElement/isInput"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/inputConnections"/>
