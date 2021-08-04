@@ -13,10 +13,12 @@
 	</modules>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tycho.version>2.3.0</tycho.version>
 		<tycho-repo.url>http://download.eclipse.org/releases/2021-03</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
+		<sonar.java.source>11</sonar.java.source>
 		<org.eclipse.justj.jre.repository>http://download.eclipse.org/justj/sandbox/jres/14/updates/nightly/latest</org.eclipse.justj.jre.repository>
 	</properties>
 
