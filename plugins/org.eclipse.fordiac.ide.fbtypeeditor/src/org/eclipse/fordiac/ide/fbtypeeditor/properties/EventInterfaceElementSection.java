@@ -58,7 +58,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		createEventSection(getRightComposite());
 	}
 
-	private void createEventSection(Composite parent) {
+	private void createEventSection(final Composite parent) {
 		eventComposite = getWidgetFactory().createGroup(parent, FordiacMessages.With);
 		eventComposite.setLayout(new GridLayout(1, false));
 		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -66,13 +66,13 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		withEventsViewer.setContentProvider(new VarContentProvider());
 		withEventsViewer.setLabelProvider(new VarDeclarationLabelProvider());
 
-		Table tableWith = withEventsViewer.getTable();
+		final Table tableWith = withEventsViewer.getTable();
 		configureTableLayout(tableWith);
 		tableWith.addListener(SWT.Selection, event -> {
 			if (event.detail == SWT.CHECK) {
-				TableItem checkedItem = (TableItem) event.item;
-				VarDeclaration variable = (VarDeclaration) checkedItem.getData();
-				With with = variable.getWiths().stream().filter(w -> w.eContainer().equals(getType())).findFirst()
+				final TableItem checkedItem = (TableItem) event.item;
+				final VarDeclaration variable = (VarDeclaration) checkedItem.getData();
+				final With with = variable.getWiths().stream().filter(w -> w.eContainer().equals(getType())).findFirst()
 						.orElse(null);
 				if (checkedItem.getChecked()) {
 					if (null == with) {
@@ -85,14 +85,14 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		});
 	}
 
-	private void configureTableLayout(Table tableWith) {
-		TableColumn column1 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
+	private void configureTableLayout(final Table tableWith) {
+		final TableColumn column1 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
 		column1.setText(FordiacMessages.Variable);
-		TableColumn column2 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
+		final TableColumn column2 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
 		column2.setText(FordiacMessages.DataType);
-		TableColumn column3 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
+		final TableColumn column3 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
 		column3.setText(FordiacMessages.Comment);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 100));
 		layout.addColumnData(new ColumnWeightData(20, 70));
 		layout.addColumnData(new ColumnWeightData(20, 100));
@@ -114,14 +114,14 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	@Override
 	public void refresh() {
 		super.refresh();
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != getType()) {
 			withEventsViewer.setInput(getType());
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 			getType().getWith().stream().filter(with -> (with.getVariables() != null))
-					.map(with -> withEventsViewer.testFindItem(with.getVariables()))
-					.filter(item -> (item instanceof TableItem)).forEach(item -> ((TableItem) item).setChecked(true));
+			.map(with -> withEventsViewer.testFindItem(with.getVariables()))
+			.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
 		}
 		commandStack = commandStackBuffer;
 	}
@@ -134,7 +134,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	}
 
 	@Override
-	protected DataType getTypeForSelection(String text) {
+	protected DataType getTypeForSelection(final String text) {
 		// currently we only have one kind of data type therefore we will return null
 		// here so that it is not changed
 		return null;
