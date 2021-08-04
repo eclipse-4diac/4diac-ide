@@ -100,21 +100,24 @@ public class TransactionLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 	protected Command getCreateCommand(final CreateRequest request) {
 		final Object type = request.getNewObjectType();
 		final ServiceTransaction model = (ServiceTransaction) getHost().getModel();
+		final boolean leftInterface = type.equals("LeftInputPrimitive"); //$NON-NLS-1$
 		if (type.equals("LeftInputPrimitive") || type.equals("RightInputPrimitive")) { //$NON-NLS-1$ //$NON-NLS-2$
 			return new CreateInputPrimitiveCommand((String) type, model);
 		} else if (type.equals("LeftOutputPrimitive") || type.equals("RightOutputPrimitive")) { //$NON-NLS-1$ //$NON-NLS-2$
-			final PrimitiveEditPart refPrimitiv = (PrimitiveEditPart) getInsertionReference(request.getLocation());
-			if (null != refPrimitiv) {
-				if (refPrimitiv instanceof InputPrimitiveEditPart) {
+			final PrimitiveEditPart refPrimitive = (PrimitiveEditPart) getInsertionReference(request.getLocation());
+			if (null != refPrimitive) {
+				if (refPrimitive instanceof InputPrimitiveEditPart) {
 					// we can not be above the input primitive
 					return null;
 				}
-				if (refPrimitiv instanceof OutputPrimitiveEditPart) {
-					return new CreateOutputPrimitiveCommand((String) type, model,
-							(OutputPrimitive) refPrimitiv.getModel());
+				if (refPrimitive instanceof OutputPrimitiveEditPart) {
+
+					return new CreateOutputPrimitiveCommand(model, (OutputPrimitive) refPrimitive.getModel(),
+							leftInterface);
+
 				}
 			}
-			return new CreateOutputPrimitiveCommand((String) type, model, null);
+			return new CreateOutputPrimitiveCommand(model, null, leftInterface);
 		}
 		return null;
 	}
