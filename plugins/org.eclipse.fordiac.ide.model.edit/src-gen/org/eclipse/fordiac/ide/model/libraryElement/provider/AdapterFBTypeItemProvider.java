@@ -78,7 +78,7 @@ public class AdapterFBTypeItemProvider extends FBTypeItemProvider {
 	public String getText(final Object object) {
 		final String label = ((AdapterFBType) object).getName();
 		return label == null || label.length() == 0 ? getString("_UI_AdapterFBType_type") : //$NON-NLS-1$
-			getString("_UI_AdapterFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+				getString("_UI_AdapterFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by

@@ -38,7 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	/** The default value of the '{@link #getEvent() <em>Event</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getEvent()
 	 * @generated
 	 * @ordered */
@@ -46,7 +46,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/** The cached value of the '{@link #getEvent() <em>Event</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getEvent()
 	 * @generated
 	 * @ordered */
@@ -54,7 +54,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/** The default value of the '{@link #getParameters() <em>Parameters</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getParameters()
 	 * @generated
 	 * @ordered */
@@ -62,7 +62,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/** The cached value of the '{@link #getParameters() <em>Parameters</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getParameters()
 	 * @generated
 	 * @ordered */
@@ -70,7 +70,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/** The cached value of the '{@link #getInterface() <em>Interface</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getInterface()
 	 * @generated
 	 * @ordered */

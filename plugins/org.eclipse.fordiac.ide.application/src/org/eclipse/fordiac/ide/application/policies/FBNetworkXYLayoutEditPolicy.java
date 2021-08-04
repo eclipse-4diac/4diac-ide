@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPa
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
@@ -66,6 +67,10 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Object constraint) {
 		// return a command that can move a "ViewEditPart"
 		if ((child.getModel() instanceof PositionableElement) && (constraint instanceof Rectangle)) {
+			if (child.getModel() instanceof FBNetworkElement) {
+				return new FBNetworkElementSetPositionCommand((FBNetworkElement) child.getModel(), request,
+						(Rectangle) constraint);
+			}
 			return new SetPositionCommand((PositionableElement) child.getModel(), request, (Rectangle) constraint);
 		}
 		return null;

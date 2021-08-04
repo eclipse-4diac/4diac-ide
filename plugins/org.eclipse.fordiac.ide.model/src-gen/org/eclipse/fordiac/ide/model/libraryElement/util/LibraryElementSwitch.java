@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -17,11 +17,8 @@ package org.eclipse.fordiac.ide.model.libraryElement.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
-
 import org.eclipse.fordiac.ide.model.data.DataType;
-
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -107,17 +104,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * {@link #doSwitch(EObject) doSwitch(object)} to invoke the <code>caseXXX</code> method for each class of the model,
  * starting with the actual class of the object and proceeding up the inheritance hierarchy until a non-null result is
  * returned, which is the result of the switch. <!-- end-user-doc -->
- * 
+ *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
  * @generated */
 public class LibraryElementSwitch<T> extends Switch<T> {
 	/** The cached model package <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected static LibraryElementPackage modelPackage;
 
 	/** Creates an instance of the switch. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public LibraryElementSwitch() {
 		if (modelPackage == null) {
@@ -126,7 +123,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/** Checks whether this is a switch for the given package. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated */
@@ -137,7 +134,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that
 	 * result. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated */
 	@Override
@@ -1085,7 +1082,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Adapter Declaration</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Adapter Declaration</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1096,7 +1093,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Adapter Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Adapter Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1107,7 +1104,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Algorithm</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Algorithm</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1118,7 +1115,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Application</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Application</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1130,7 +1127,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Basic FB Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Basic FB Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1142,7 +1139,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Compiler Info</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Compiler Info</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1153,7 +1150,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Compiler</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Compiler</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1164,7 +1161,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Connection</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Connection</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1176,7 +1173,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Connection Routing Data</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Connection Routing Data</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1187,7 +1184,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Device</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Device</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1198,7 +1195,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Device Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Device Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1209,7 +1206,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>EC Action</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EC Action</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1220,7 +1217,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>ECC</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>ECC</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1231,7 +1228,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>EC State</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EC State</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1243,7 +1240,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>EC Transition</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EC Transition</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1254,7 +1251,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Event</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Event</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1265,7 +1262,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>FB</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>FB</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1277,7 +1274,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>FB Network Element</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>FB Network Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1288,7 +1285,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Sub App</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Sub App</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1299,7 +1296,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>FB Type</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>FB Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1311,7 +1308,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Identification</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Identification</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1323,7 +1320,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Input Primitive</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Input Primitive</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1335,7 +1332,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Interface List</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Interface List</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1346,7 +1343,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Link</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Link</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1357,7 +1354,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Mapping</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Mapping</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1369,7 +1366,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Other Algorithm</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Other Algorithm</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1381,7 +1378,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Output Primitive</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Output Primitive</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1392,7 +1389,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Attribute</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Attribute</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1403,7 +1400,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Resource</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Resource</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1415,7 +1412,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Resource Type Name</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Resource Type Name</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1427,7 +1424,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Resource Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Resource Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1438,7 +1435,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Segment</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Segment</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1450,7 +1447,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Service Sequence</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Service Sequence</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1462,7 +1459,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Service Transaction</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Service Transaction</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1474,7 +1471,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Service Interface FB Type</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Service Interface FB Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1485,7 +1482,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>ST Algorithm</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>ST Algorithm</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1496,7 +1493,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>FB Network</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>FB Network</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1507,7 +1504,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Sub App Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Sub App Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1519,7 +1516,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Automation System</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Automation System</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1531,7 +1528,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Var Declaration</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Var Declaration</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1542,7 +1539,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Version Info</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Version Info</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1553,7 +1550,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>With</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>With</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1565,7 +1562,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Library Element</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Library Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1577,7 +1574,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Compilable Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Compilable Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1589,7 +1586,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Configurable Object</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1601,7 +1598,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Composite FB Type</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Composite FB Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1613,7 +1610,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Text Algorithm</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Text Algorithm</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1625,7 +1622,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Data Connection</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Data Connection</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1637,7 +1634,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Event Connection</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Event Connection</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1649,7 +1646,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Adapter Connection</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Adapter Connection</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1661,7 +1658,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Service Interface</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Service Interface</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1673,7 +1670,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>IInterface Element</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>IInterface Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1684,7 +1681,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Value</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Value</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1696,7 +1693,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>System Configuration</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>System Configuration</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1708,7 +1705,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>INamed Element</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>INamed Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1720,7 +1717,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Resource Type FB</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Resource Type FB</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1731,7 +1728,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Segment Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Segment Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1743,7 +1740,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Adapter FB Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Adapter FB Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1755,7 +1752,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Adapter Event</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Adapter Event</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1766,7 +1763,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Service</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Service</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1778,7 +1775,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Typed Configureable Object</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Typed Configureable Object</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1789,7 +1786,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Adapter FB</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Adapter FB</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1800,7 +1797,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Primitive</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Primitive</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1812,7 +1809,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Positionable Element</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Positionable Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1823,7 +1820,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Position</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Position</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1834,7 +1831,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Color</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Color</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1846,7 +1843,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Colorizable Element</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Colorizable Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1857,7 +1854,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>IVar Element</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>IVar Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1869,7 +1866,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Attribute Declaration</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Attribute Declaration</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1881,7 +1878,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Typed Element</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Typed Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1893,7 +1890,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Simple FB Type</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Simple FB Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1904,7 +1901,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Base FB Type</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Base FB Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1916,7 +1913,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Struct Manipulator</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Struct Manipulator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1928,7 +1925,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Demultiplexer</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Demultiplexer</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1939,7 +1936,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Multiplexer</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Multiplexer</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1951,7 +1948,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Local Variable</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Local Variable</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1963,7 +1960,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Error Marker FBN Element</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Error Marker FBN Element</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1975,7 +1972,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Error Marker Interface</em>'. <!--
 	 * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Error Marker Interface</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1986,7 +1983,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>CFB Instance</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>CFB Instance</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -1998,7 +1995,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>Error Marker Ref</em>'. <!-- begin-user-doc
 	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Error Marker Ref</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -2009,7 +2006,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 
 	/** Returns the result of interpreting the object as an instance of '<em>Type</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
@@ -2021,7 +2018,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	/** Returns the result of interpreting the object as an instance of '<em>EObject</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch, but this is the last case
 	 * anyway. <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)

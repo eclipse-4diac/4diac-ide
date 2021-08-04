@@ -60,7 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements ErrorMarkerInterface {
 	/** The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered */
@@ -68,7 +68,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered */
@@ -100,7 +100,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getTypeName()
 	 * @generated
 	 * @ordered */
@@ -108,7 +108,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getTypeName()
 	 * @generated
 	 * @ordered */
@@ -116,7 +116,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getFileMarkerId()
 	 * @generated
 	 * @ordered */
@@ -124,7 +124,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getFileMarkerId()
 	 * @generated
 	 * @ordered */
@@ -132,7 +132,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getErrorMessage()
 	 * @generated
 	 * @ordered */
@@ -140,7 +140,7 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 
 	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getErrorMessage()
 	 * @generated
 	 * @ordered */

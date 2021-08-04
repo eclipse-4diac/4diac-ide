@@ -34,6 +34,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#getDx1 <em>Dx1</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#getDx2 <em>Dx2</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#getDy <em>Dy</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#isNeedsValidation <em>Needs
+ * Validation</em>}</li>
  * </ul>
  *
  * @generated */
@@ -83,6 +85,22 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 * @ordered */
 	protected int dy = DY_EDEFAULT;
+
+	/** The default value of the '{@link #isNeedsValidation() <em>Needs Validation</em>}' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @see #isNeedsValidation()
+	 * @generated
+	 * @ordered */
+	protected static final boolean NEEDS_VALIDATION_EDEFAULT = false;
+
+	/** The cached value of the '{@link #isNeedsValidation() <em>Needs Validation</em>}' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @see #isNeedsValidation()
+	 * @generated
+	 * @ordered */
+	protected boolean needsValidation = NEEDS_VALIDATION_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -163,6 +181,27 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * 
 	 * @generated */
 	@Override
+	public boolean isNeedsValidation() {
+		return needsValidation;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public void setNeedsValidation(boolean newNeedsValidation) {
+		boolean oldNeedsValidation = needsValidation;
+		needsValidation = newNeedsValidation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.CONNECTION_ROUTING_DATA__NEEDS_VALIDATION, oldNeedsValidation,
+					needsValidation));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case LibraryElementPackage.CONNECTION_ROUTING_DATA__DX1:
@@ -171,6 +210,8 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 			return getDx2();
 		case LibraryElementPackage.CONNECTION_ROUTING_DATA__DY:
 			return getDy();
+		case LibraryElementPackage.CONNECTION_ROUTING_DATA__NEEDS_VALIDATION:
+			return isNeedsValidation();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -190,6 +231,9 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 			return;
 		case LibraryElementPackage.CONNECTION_ROUTING_DATA__DY:
 			setDy((Integer) newValue);
+			return;
+		case LibraryElementPackage.CONNECTION_ROUTING_DATA__NEEDS_VALIDATION:
+			setNeedsValidation((Boolean) newValue);
 			return;
 		default:
 			super.eSet(featureID, newValue);
@@ -212,6 +256,9 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 		case LibraryElementPackage.CONNECTION_ROUTING_DATA__DY:
 			setDy(DY_EDEFAULT);
 			return;
+		case LibraryElementPackage.CONNECTION_ROUTING_DATA__NEEDS_VALIDATION:
+			setNeedsValidation(NEEDS_VALIDATION_EDEFAULT);
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -230,6 +277,8 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 			return dx2 != DX2_EDEFAULT;
 		case LibraryElementPackage.CONNECTION_ROUTING_DATA__DY:
 			return dy != DY_EDEFAULT;
+		case LibraryElementPackage.CONNECTION_ROUTING_DATA__NEEDS_VALIDATION:
+			return needsValidation != NEEDS_VALIDATION_EDEFAULT;
 		default:
 			return super.eIsSet(featureID);
 		}
@@ -250,6 +299,8 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 		result.append(dx2);
 		result.append(", dy: "); //$NON-NLS-1$
 		result.append(dy);
+		result.append(", needsValidation: "); //$NON-NLS-1$
+		result.append(needsValidation);
 		result.append(')');
 		return result.toString();
 	}

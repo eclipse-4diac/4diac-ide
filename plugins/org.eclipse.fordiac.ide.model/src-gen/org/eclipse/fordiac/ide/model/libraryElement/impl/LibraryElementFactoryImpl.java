@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -17,18 +17,13 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-
 import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -103,15 +98,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-
 import org.eclipse.gef.commands.CommandStack;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryElementFactory {
 	/** Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public static LibraryElementFactory init() {
 		try {
@@ -127,14 +121,14 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public LibraryElementFactoryImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EObject create(EClass eClass) {
@@ -289,7 +283,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
@@ -310,7 +304,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
@@ -331,7 +325,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AdapterDeclaration createAdapterDeclaration() {
@@ -340,7 +334,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AdapterType createAdapterType() {
@@ -349,7 +343,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Application createApplication() {
@@ -358,7 +352,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public BasicFBType createBasicFBType() {
@@ -367,7 +361,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public CompilerInfo createCompilerInfo() {
@@ -376,7 +370,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public org.eclipse.fordiac.ide.model.libraryElement.Compiler createCompiler() {
@@ -385,7 +379,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ConnectionRoutingData createConnectionRoutingData() {
@@ -394,7 +388,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Device createDevice() {
@@ -403,7 +397,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DeviceType createDeviceType() {
@@ -412,7 +406,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ECAction createECAction() {
@@ -421,7 +415,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ECC createECC() {
@@ -430,7 +424,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ECState createECState() {
@@ -439,7 +433,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ECTransition createECTransition() {
@@ -448,7 +442,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Event createEvent() {
@@ -457,7 +451,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public FB createFB() {
@@ -466,7 +460,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public FBNetworkElement createFBNetworkElement() {
@@ -475,7 +469,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SubApp createSubApp() {
@@ -484,7 +478,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public FBType createFBType() {
@@ -493,7 +487,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Identification createIdentification() {
@@ -502,7 +496,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public InputPrimitive createInputPrimitive() {
@@ -511,7 +505,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public InterfaceList createInterfaceList() {
@@ -520,7 +514,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Link createLink() {
@@ -529,7 +523,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Mapping createMapping() {
@@ -538,7 +532,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public OtherAlgorithm createOtherAlgorithm() {
@@ -547,7 +541,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public OutputPrimitive createOutputPrimitive() {
@@ -556,7 +550,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Attribute createAttribute() {
@@ -565,7 +559,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Resource createResource() {
@@ -574,7 +568,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ResourceTypeName createResourceTypeName() {
@@ -583,7 +577,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ResourceType createResourceType() {
@@ -592,7 +586,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Segment createSegment() {
@@ -601,7 +595,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ServiceSequence createServiceSequence() {
@@ -610,7 +604,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ServiceTransaction createServiceTransaction() {
@@ -619,7 +613,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ServiceInterfaceFBType createServiceInterfaceFBType() {
@@ -628,7 +622,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public STAlgorithm createSTAlgorithm() {
@@ -637,7 +631,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public FBNetwork createFBNetwork() {
@@ -646,7 +640,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SubAppType createSubAppType() {
@@ -655,7 +649,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AutomationSystem createAutomationSystem() {
@@ -664,7 +658,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public VarDeclaration createVarDeclaration() {
@@ -673,7 +667,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public VersionInfo createVersionInfo() {
@@ -682,7 +676,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public With createWith() {
@@ -691,7 +685,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LibraryElement createLibraryElement() {
@@ -700,7 +694,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public CompilableType createCompilableType() {
@@ -709,7 +703,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ConfigurableObject createConfigurableObject() {
@@ -718,7 +712,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public CompositeFBType createCompositeFBType() {
@@ -727,7 +721,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DataConnection createDataConnection() {
@@ -736,7 +730,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EventConnection createEventConnection() {
@@ -745,7 +739,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AdapterConnection createAdapterConnection() {
@@ -754,7 +748,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ServiceInterface createServiceInterface() {
@@ -763,7 +757,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Value createValue() {
@@ -772,7 +766,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SystemConfiguration createSystemConfiguration() {
@@ -781,7 +775,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ResourceTypeFB createResourceTypeFB() {
@@ -790,7 +784,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SegmentType createSegmentType() {
@@ -799,7 +793,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AdapterFBType createAdapterFBType() {
@@ -808,7 +802,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AdapterEvent createAdapterEvent() {
@@ -817,7 +811,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Service createService() {
@@ -826,7 +820,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public TypedConfigureableObject createTypedConfigureableObject() {
@@ -835,7 +829,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AdapterFB createAdapterFB() {
@@ -844,7 +838,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Primitive createPrimitive() {
@@ -853,7 +847,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public PositionableElement createPositionableElement() {
@@ -862,7 +856,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Position createPosition() {
@@ -871,7 +865,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Color createColor() {
@@ -880,7 +874,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ColorizableElement createColorizableElement() {
@@ -889,7 +883,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AttributeDeclaration createAttributeDeclaration() {
@@ -898,7 +892,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SimpleFBType createSimpleFBType() {
@@ -907,7 +901,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public BaseFBType createBaseFBType() {
@@ -916,7 +910,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Demultiplexer createDemultiplexer() {
@@ -925,7 +919,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Multiplexer createMultiplexer() {
@@ -934,7 +928,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LocalVariable createLocalVariable() {
@@ -943,7 +937,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ErrorMarkerFBNElement createErrorMarkerFBNElement() {
@@ -952,7 +946,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ErrorMarkerInterface createErrorMarkerInterface() {
@@ -961,7 +955,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public CFBInstance createCFBInstance() {
@@ -970,7 +964,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ErrorMarkerRef createErrorMarkerRef() {
@@ -979,7 +973,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public Language createLanguageFromString(EDataType eDataType, String initialValue) {
 		Language result = Language.get(initialValue);
@@ -990,70 +984,70 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertLanguageToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public IProject createIProjectFromString(EDataType eDataType, String initialValue) {
 		return (IProject) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public IFile createIFileFromString(EDataType eDataType, String initialValue) {
 		return (IFile) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertIFileToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public CommandStack createCommandStackFromString(EDataType eDataType, String initialValue) {
 		return (CommandStack) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertCommandStackToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public Point createPointFromString(EDataType eDataType, String initialValue) {
 		return (Point) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertPointToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LibraryElementPackage getLibraryElementPackage() {
@@ -1061,7 +1055,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @deprecated
 	 * @generated */
 	@Deprecated

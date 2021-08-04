@@ -34,8 +34,10 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
@@ -133,6 +135,10 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 					constraintRect.x += p.x;
 					constraintRect.y += p.y;
 
+					if(child.getModel() instanceof FBNetworkElement) {
+						return new FBNetworkElementSetPositionCommand((FBNetworkElement) child.getModel(), request,
+								(Rectangle) constraint);
+					}
 					return new SetPositionCommand((PositionableElement) child.getModel(), request,
 							(Rectangle) constraint);
 				}
