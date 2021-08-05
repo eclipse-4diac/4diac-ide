@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Moved position calculation to the comment type edit part
+ *   Virendra Ashiwal - extracted "getnumEventwith" method out of calculateWithPos() method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -28,6 +29,7 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
@@ -188,24 +190,35 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
-		final int pos = calculateWithPos(connection, isInput());
+		final int pos = calculateWithPos((With) connection.getModel(), isInput());
 		if (isInput()) {
 			return new InputWithAnchor(getFigure(), pos, this);
-
 		}
 		return new OutputWithAnchor(getFigure(), pos, this);
 	}
 
-	private static int calculateWithPos(final ConnectionEditPart connection, final boolean isInput) {
-		int pos = 1;
-		final With with = (With) connection.getModel();
-		final Event event = (Event) with.eContainer();
 
+	public static int calculateWithPos(final With with, final boolean isInput) {
+		//final With with = (With) connection.getModel();
+		final Event event = (Event) with.eContainer();
 		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		if (null != interfaceList) {
-			pos += ((isInput) ? interfaceList.getEventInputs() : interfaceList.getEventOutputs()).indexOf(event);
+				return getnumEventwith( isInput?interfaceList.getEventInputs():interfaceList.getEventOutputs(), event);
 		}
-		return pos;
+		return 0;
+	}
+	
+	protected static int getnumEventwith(EList<Event> eList, Event event) {
+		int nrOfEventWITH = 0;
+		for (Event ele : eList) {
+			if (!ele.getWith().isEmpty()) {
+				nrOfEventWITH++;
+			}
+			if (ele == event) {
+				break;
+			}
+		}
+		return nrOfEventWITH;
 	}
 
 	@Override

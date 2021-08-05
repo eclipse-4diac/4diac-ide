@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019 - 2020 Johannes Kepler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,26 +11,36 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - added positioning calculations
+ *   Daniel Lindhuber - added recursive type insertion check
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Point;
 
@@ -160,6 +171,71 @@ public final class FBNetworkHelper {
 			}
 		}
 		return true;
+	}
+
+	public static boolean isTypeInsertionSave(final FBType type, final EObject element) {
+		if (type == null || element == null) {
+			return true;
+		}
+		final FBType editorType = getRootType(element);
+		if (editorType != null) {
+			if (type.equals(editorType)) {
+				ErrorMessenger
+				.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
+				return false;
+			}
+			if (containsType(editorType, getChildFBNElements(type))) {
+				ErrorMessenger.popUpErrorMessage(
+						MessageFormat.format(Messages.Error_RecursiveType, type.getName(), editorType.getName()));
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBNetworkElement networkElem) {
+		if (networkElem instanceof SubApp) {
+			final SubApp subapp = (SubApp) networkElem;
+			if (subapp.isTyped()) {
+				return subapp.getType().getFBNetwork().getNetworkElements();
+			}
+			return subapp.getSubAppNetwork().getNetworkElements();
+		}
+		final FBType type = networkElem.getType();
+		if (type != null) {
+			return getChildFBNElements(type);
+		}
+		return new BasicEList<>();
+	}
+
+	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBType type) {
+		if (type instanceof BaseFBType) { // basic and simple fb type
+			return ((BaseFBType) type).getInternalFbs();
+		}
+		if (type instanceof CompositeFBType) { // subapp and composite fb type
+			return ((CompositeFBType) type).getFBNetwork().getNetworkElements();
+		}
+		return new BasicEList<>();
+	}
+
+	private static FBType getRootType(final EObject element) {
+		final EObject root = EcoreUtil.getRootContainer(element);
+		if (root instanceof FBType) {
+			return (FBType) root;
+		}
+		return null;
+	}
+
+	private static boolean containsType(final FBType editorType, final EList<? extends FBNetworkElement> networkElementList) {
+		for (final FBNetworkElement elem : networkElementList) {
+			if (editorType.equals(elem.getType())) {
+				return true;
+			}
+			if (containsType(editorType, getChildFBNElements(elem))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private FBNetworkHelper() {

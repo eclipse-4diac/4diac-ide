@@ -52,10 +52,10 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 	@Override
 	protected List<?> getModelChildren() {
-		List<Object> children = new ArrayList<>(getNetworkElements());
+		final List<Object> children = new ArrayList<>(getNetworkElements());
 		children.addAll(getFBValues());
 
-		for (IChildrenProvider provider : getChildrenProviders()) {
+		for (final IChildrenProvider provider : getChildrenProviders()) {
 			if (provider.isEnabled()) {
 				children.addAll(provider.getChildren(getModel()));
 			}
@@ -67,10 +67,10 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	 * go through all fb network elements and find inputs with parameters to be
 	 * shown.
 	 */
-	private Collection<? extends Object> getFBValues() {
-		ArrayList<Object> valueElements = new ArrayList<>();
-		for (FBNetworkElement element : getNetworkElements()) {
-			for (VarDeclaration interfaceElement : element.getInterface().getInputVars()) {
+	protected Collection<? extends Object> getFBValues() {
+		final ArrayList<Object> valueElements = new ArrayList<>();
+		for (final FBNetworkElement element : getNetworkElements()) {
+			for (final VarDeclaration interfaceElement : element.getInterface().getInputVars()) {
 				if (null != interfaceElement.getValue()) {
 					valueElements.add(interfaceElement.getValue());
 				}
@@ -88,17 +88,17 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 	private void getExtensions() {
 		childProviders = new ArrayList<>();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor("org.eclipse.fordiac.ide.gef", //$NON-NLS-1$
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor("org.eclipse.fordiac.ide.gef", //$NON-NLS-1$
 				"ChildrenProvider"); //$NON-NLS-1$
-		for (IConfigurationElement element : elems) {
+		for (final IConfigurationElement element : elems) {
 			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
+				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof IChildrenProvider) {
-					IChildrenProvider childrenProvider = (IChildrenProvider) object;
+					final IChildrenProvider childrenProvider = (IChildrenProvider) object;
 					childProviders.add(childrenProvider);
 				}
-			} catch (CoreException corex) {
+			} catch (final CoreException corex) {
 				Activator.getDefault()
 				.logError("Error loading ChildrenProvider Extensions in org.eclipse.fordiac.ide.gef", corex); //$NON-NLS-1$
 			}

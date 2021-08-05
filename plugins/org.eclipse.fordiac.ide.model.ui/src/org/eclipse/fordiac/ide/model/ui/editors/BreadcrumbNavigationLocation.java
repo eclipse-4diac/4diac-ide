@@ -83,6 +83,10 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 
 	@Override
 	public void restoreLocation() {
+		if (breadCrumbEditor.getBreadcrumb().getActiveItem().getModel().equals(model)) {
+			return;
+		}
+
 		breadCrumbEditor.getBreadcrumb().setInput(model);
 		final GraphicalViewer viewer = breadCrumbEditor.getAdapter(GraphicalViewer.class);
 		if ((viewer != null) && (viewerData != null)) {

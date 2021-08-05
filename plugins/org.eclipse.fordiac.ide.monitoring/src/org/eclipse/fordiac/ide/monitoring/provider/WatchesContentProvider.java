@@ -13,15 +13,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.provider;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.model.StructTreeNode;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNode;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -30,16 +33,55 @@ import org.eclipse.swt.widgets.Display;
 public class WatchesContentProvider implements ITreeContentProvider {
 
 	private Viewer viewer;
+	private WatchValueTreeNode root;
+	private volatile boolean hasValueOnForte = false;
 
-	private Adapter adapter = new AdapterImpl() {
+	public WatchesContentProvider() {
+		init();
+	}
+
+	public void update() {
+		init();
+	}
+
+	private synchronized void init() {
+		root = new WatchValueTreeNode(null);
+		final Collection<MonitoringBaseElement> elementsToMonitor = MonitoringManager.getInstance().getElementsToMonitor();
+		for (final MonitoringBaseElement element : elementsToMonitor) {
+			if (element != null) {
+				hasValueOnForte = !((MonitoringElement) element).getCurrentValue().equals("N/A"); //$NON-NLS-1$
+				root.addChild(element);
+				if (!element.eAdapters().contains(adapter)) {
+					element.eAdapters().add(adapter);
+				}
+			}
+			Collections.sort(root.getChildren(), (node1, node2) -> {
+
+				final String s1 = ((WatchValueTreeNode) node1).getWatchedElementString();
+				final String s2 = ((WatchValueTreeNode) node2).getWatchedElementString();
+				return s1.compareToIgnoreCase(s2);
+			});
+		}
+
+	}
+
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
-			int featureID = notification.getFeatureID(MonitoringElement.class);
+			final int featureID = notification.getFeatureID(MonitoringElement.class);
 			if (featureID == MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE
 					&& notification.getNotifier() instanceof MonitoringElement) {
 				Display.getDefault().asyncExec(() -> {
 					if (!viewer.getControl().isDisposed()) {
-						((TreeViewer) viewer).refresh(notification.getNotifier());
+						final MonitoringElement element = (MonitoringElement) notification.getNotifier();
+						if (!hasValueOnForte) {
+							init();
+							hasValueOnForte = true;
+						}
+						final WatchValueTreeNode containsElement = containsElement(element);
+						if (containsElement != null) {
+							((TreeViewer) viewer).refresh();
+						}
 					}
 				});
 
@@ -47,41 +89,37 @@ public class WatchesContentProvider implements ITreeContentProvider {
 		}
 	};
 
-	private List<MonitoringBaseElement> watchedElements = new ArrayList<>();
+
+	public WatchValueTreeNode containsElement(final MonitoringElement monitoringElement) {
+		return (WatchValueTreeNode) root.getChildren().stream()
+				.filter(node -> ((WatchValueTreeNode) node).getMonitoringBaseElement().equals(monitoringElement))
+				.findAny().orElse(null);
+	}
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof MonitoringElement) {
-			return new Object[0];
+	public Object[] getChildren(final Object parentElement) {
+		Assert.isTrue(parentElement instanceof WatchValueTreeNode);
+		return ((WatchValueTreeNode) parentElement).getChildrenAsArray();
+	}
+
+	@Override
+	public Object getParent(final Object element) {
+		return ((WatchValueTreeNode) element).getParent();
+	}
+
+	@Override
+	public boolean hasChildren(final Object element) {
+
+		if (element instanceof String) {
+			return false;
 		}
-
-		removeAdapterFromChildrenList();
-
-		watchedElements.clear();
-
-		for (MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {
-			if (element != null && !watchedElements.contains(element)) {
-				element.eAdapters().add(adapter);
-				watchedElements.add(element);
-			}
-		}
-
-		return watchedElements.toArray();
+		Assert.isTrue(element instanceof WatchValueTreeNode);
+		return ((WatchValueTreeNode) element).hasChildren();
 	}
 
 	@Override
-	public Object getParent(Object element) {
-		return null;
-	}
-
-	@Override
-	public boolean hasChildren(Object element) {
-		return false;
-	}
-
-	@Override
-	public Object[] getElements(Object inputElement) {
-		return getChildren(inputElement);
+	public Object[] getElements(final Object inputElement) {
+		return root.getChildrenAsArray();
 	}
 
 	@Override
@@ -90,12 +128,13 @@ public class WatchesContentProvider implements ITreeContentProvider {
 	}
 
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		this.viewer = viewer;
 	}
 
 	private void removeAdapterFromChildrenList() {
-		for (MonitoringBaseElement element : watchedElements) {
+		for (final StructTreeNode node : root.getChildren()) {
+			final MonitoringBaseElement element = ((WatchValueTreeNode) node).getMonitoringBaseElement();
 			if (element.eAdapters().contains(adapter)) {
 				element.eAdapters().remove(adapter);
 			}

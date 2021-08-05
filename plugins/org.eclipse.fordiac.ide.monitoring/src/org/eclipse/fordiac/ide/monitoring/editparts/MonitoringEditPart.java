@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2017 Profactor GmbH, fortiss GmbH
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2012, 2021 Profactor GmbH, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Lukas Wais - implemented hex conversion for AnyBit types
+ *   Alois Zoitl - added value validation for direct edit of values
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
@@ -31,11 +32,14 @@ import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -47,6 +51,45 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.widgets.Display;
 
 public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
+
+	private static class MonitoringDirectEditPolicy extends DirectEditPolicy {
+		@Override
+		protected Command getDirectEditCommand(final DirectEditRequest request) {
+			final String value = (String) request.getCellEditor().getValue();
+			applyNewValue(value);
+			return null;
+		}
+
+		private void applyNewValue(final String value) {
+			final MonitoringEditPart editPart = (MonitoringEditPart) getHost();
+			if (isValid(value)) {
+				MonitoringManager.getInstance().writeValue(editPart.getModel(), value);
+			}
+		}
+
+		@Override
+		protected void showCurrentEditValue(final DirectEditRequest request) {
+			final String value = (String) request.getCellEditor().getValue();
+			final MonitoringEditPart editPart = (MonitoringEditPart) getHost();
+			if (null != editPart) {
+				editPart.getNameLabel().setText(value);
+			}
+		}
+
+		private boolean isValid(final String newValue) {
+			if (!newValue.isBlank()) {
+				final MonitoringEditPart editPart = (MonitoringEditPart) getHost();
+				final IInterfaceElement ie = editPart.getModel().getPort().getInterfaceElement();
+				final String validationMsg = ValueValidator.validateValue(ie.getType(), newValue);
+				if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
+					ErrorMessenger.popUpErrorMessage(validationMsg);
+					return false;
+				}
+			}
+			return true;
+		}
+
+	}
 
 	/** The property change listener. */
 	private final IPropertyChangeListener propertyChangeListener = event -> {
@@ -88,24 +131,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	protected void createEditPolicies() {
 		if (!isEvent()) {
 			// only allow direct edit if it is not an event, see Bug 510735 for details.
-			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
-				@Override
-				protected Command getDirectEditCommand(final DirectEditRequest request) {
-					final String value = (String) request.getCellEditor().getValue();
-					final MonitoringEditPart editPart = (MonitoringEditPart) getHost();
-					MonitoringManager.getInstance().writeValue(editPart.getModel(), value);
-					return null;
-				}
-
-				@Override
-				protected void showCurrentEditValue(final DirectEditRequest request) {
-					final String value = (String) request.getCellEditor().getValue();
-					final MonitoringEditPart editPart = (MonitoringEditPart) getHost();
-					if (null != editPart) {
-						editPart.getNameLabel().setText(value);
-					}
-				}
-			});
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new MonitoringDirectEditPolicy());
 		}
 	}
 
@@ -194,19 +220,25 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 		}
 	}
 
-	private static String createHexValue(String value, DataType type) {
+	private static String createHexValue(final String value, final DataType type) {
 		// we want to convert every AnyBit type besides bool
 		if (isHexValue(type) && isNumeric(value)) {
-			return convertIntegerToHexString(Integer.parseInt(value));
+			int parseInt;
+			try {
+				parseInt = Integer.parseInt(value);
+			} catch (final NumberFormatException e) {
+				parseInt = 0;
+			}
+			return convertIntegerToHexString(parseInt);
 		}
 		return value;
 	}
 
-	private static String convertIntegerToHexString(int number) {
+	private static String convertIntegerToHexString(final int number) {
 		return "16#" + Integer.toHexString(number); //$NON-NLS-1$
 	}
 
-	private static boolean isNumeric(String input) {
+	private static boolean isNumeric(final String input) {
 		return input.chars().allMatch(Character::isDigit);
 	}
 
@@ -215,7 +247,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	}
 
 	// checks if the value should be converted to a hexstring
-	private static boolean isHexValue(DataType type) {
+	private static boolean isHexValue(final DataType type) {
 		return (type instanceof AnyBitType) && !(type instanceof BoolType);
 	}
 

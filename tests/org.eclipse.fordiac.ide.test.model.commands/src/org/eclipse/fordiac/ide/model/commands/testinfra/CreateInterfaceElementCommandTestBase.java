@@ -39,7 +39,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 	}
 
 	private static void verifyInitialState(final State state, final State oldState, final TestFunction t) {
-		FBCreateCommandTest.verifyState(state, oldState, assumption); // skip further tests if FB
+		FBCreateCommandTest.verifyState(state, oldState, tester.get()); // skip further tests if FB
 		// creation failed
 	}
 

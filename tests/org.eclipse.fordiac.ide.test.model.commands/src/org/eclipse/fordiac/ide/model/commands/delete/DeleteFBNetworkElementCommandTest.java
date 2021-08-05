@@ -30,7 +30,7 @@ public class DeleteFBNetworkElementCommandTest extends FBNetworkTestBase {
 	 */
 	protected static State undoCommand(final Object stateObj) {
 		final State state = (State) stateObj;
-		assumption.test(state.getCommand().canUndo());
+		tester.get().test(state.getCommand().canUndo());
 		state.getCommand().undo();
 		return (state);
 	}
@@ -43,7 +43,7 @@ public class DeleteFBNetworkElementCommandTest extends FBNetworkTestBase {
 	 */
 	protected static State redoCommand(final Object stateObj) {
 		final State state = (State) stateObj;
-		assumption.test(state.getCommand().canRedo());
+		tester.get().test(state.getCommand().canRedo());
 		state.getCommand().redo();
 		return (state);
 	}

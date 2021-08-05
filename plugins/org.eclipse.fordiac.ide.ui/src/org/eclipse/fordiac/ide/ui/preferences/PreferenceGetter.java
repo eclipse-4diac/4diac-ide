@@ -45,13 +45,7 @@ public final class PreferenceGetter {
 	 * @return the color
 	 */
 	public static Color getColor(final String pref) {
-		RGB rgb = PreferenceConverter.getColor(UIPlugin.getDefault().getPreferenceStore(), pref);
-
-		if (!usedColors.containsKey(rgb)) {
-			usedColors.put(rgb, new Color(null, rgb));
-		}
-
-		return usedColors.get(rgb);
+		return getColor(UIPlugin.getDefault().getPreferenceStore(), pref);
 	}
 
 	/**
@@ -62,16 +56,12 @@ public final class PreferenceGetter {
 	 *
 	 * @return the color
 	 */
-	public static Color getColor(IPreferenceStore store, final String pref) {
-		RGB rgb = PreferenceConverter.getColor(store, pref);
-
-		if (!usedColors.containsKey(rgb)) {
-			usedColors.put(rgb, new Color(null, rgb));
-		}
-		return usedColors.get(rgb);
+	public static Color getColor(final IPreferenceStore store, final String pref) {
+		final RGB rgb = PreferenceConverter.getColor(store, pref);
+		return usedColors.computeIfAbsent(rgb, rgbCol -> new Color(null, rgbCol));
 	}
 
-	public static Color getDataColor(String dataType) {
+	public static Color getDataColor(final String dataType) {
 		if ("BOOL".equals(dataType)) { //$NON-NLS-1$
 			return getColor(PreferenceConstants.P_BOOL_CONNECTOR_COLOR);
 		}
@@ -94,22 +84,22 @@ public final class PreferenceGetter {
 		return getColor(PreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR);
 	}
 
-	private static boolean isAnyBit(String dataType) {
+	private static boolean isAnyBit(final String dataType) {
 		return "ANY_BIT".equals(dataType) || "BYTE".equals(dataType) || "WORD".equals(dataType) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				|| "DWORD".equals(dataType) || "LWORD".equals(dataType); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	private static boolean isAnyInt(String dataType) {
+	private static boolean isAnyInt(final String dataType) {
 		return "ANY_INT".equals(dataType) || "SINT".equals(dataType) || "INT".equals(dataType) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				|| "DINT".equals(dataType) || "LINT".equals(dataType) || "USINT".equals(dataType) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				|| "UINT".equals(dataType) || "UDINT".equals(dataType) || "ULINT".equals(dataType); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
-	private static boolean isAnyReal(String dataType) {
+	private static boolean isAnyReal(final String dataType) {
 		return "ANY_REAL".equals(dataType) || "REAL".equals(dataType) || "LREAL".equals(dataType); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
-	private static boolean isAnyString(String dataType) {
+	private static boolean isAnyString(final String dataType) {
 		return "ANY_STRING".equals(dataType) || "STRING".equals(dataType) || "WSTRING".equals(dataType); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 

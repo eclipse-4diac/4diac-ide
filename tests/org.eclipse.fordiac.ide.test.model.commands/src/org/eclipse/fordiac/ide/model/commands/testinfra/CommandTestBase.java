@@ -47,6 +47,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 * used to add information on what test was executed to the Exception
 	 */
 	private static final ThreadLocal<TestInfo> testinfo = new ThreadLocal<>();
+	protected static final ThreadLocal<TestFunction> tester = new ThreadLocal<>();
 
 	private static ErrorMessageTestReceiver emh = new ErrorMessageTestReceiver();
 
@@ -197,7 +198,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		@SuppressWarnings("unchecked")
 		final T state = (T) stateObj;
 		emh.start();
-		assumption.test(state.getCommand().canExecute() && state.getCommand().canRedo());
+		tester.get().test(state.getCommand().canExecute() && state.getCommand().canRedo());
 		state.getCommand().redo();
 		state.setMessages(emh.getMessages());
 		emh.stop();
@@ -216,7 +217,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		final T state = (T) stateObj;
 		emh.start();
 		state.setViaUndo();
-		assumption.test(state.getCommand().canUndo());
+		tester.get().test(state.getCommand().canUndo());
 		state.getCommand().undo();
 		state.setMessages(emh.getMessages());
 		emh.stop();
@@ -234,7 +235,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		@SuppressWarnings("unchecked")
 		final T state = (T) stateObj;
 		emh.start();
-		assumption.test(!(state.getCommand().canExecute() && state.getCommand().canUndo()));
+		tester.get().test(!(state.getCommand().canExecute() && state.getCommand().canUndo()));
 		state.setMessages(emh.getMessages());
 		emh.stop();
 		return (state);
@@ -251,7 +252,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		@SuppressWarnings("unchecked")
 		final T state = (T) stateObj;
 		emh.start();
-		assumption.test(!(state.getCommand().canExecute() && state.getCommand().canRedo()));
+		tester.get().test(!(state.getCommand().canExecute() && state.getCommand().canRedo()));
 		state.setMessages(emh.getMessages());
 		emh.stop();
 		return (state);
@@ -265,9 +266,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 * @return new state description
 	 */
 	protected static <T extends StateBase> T disabledCommandExecution(final T state) {
-		assumption.test(state.getCommand());
+		tester.get().test(state.getCommand());
 		emh.start();
-		assumption.test(!state.getCommand().canExecute());
+		tester.get().test(!state.getCommand().canExecute());
 		state.setMessages(emh.getMessages());
 		emh.stop();
 		state.setUndoAllowed(false);
@@ -282,9 +283,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 * @return new state description
 	 */
 	protected static <T extends StateBase> T commandExecution(final T state) {
-		assumption.test(state.getCommand());
+		tester.get().test(state.getCommand());
 		emh.start();
-		assumption.test(state.getCommand().canExecute());
+		tester.get().test(state.getCommand().canExecute());
 		state.getCommand().execute();
 		state.setMessages(emh.getMessages());
 		emh.stop();
@@ -621,7 +622,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		final String MESSAGE_NO_MAIN = "{1}"; //$NON-NLS-1$
 
 		final String MESSAGE_VERIFY_INITIAL_STATE = "Verify initial State"; //$NON-NLS-1$
-		final String MESSAGE_EXECUTE_ALL_COMMANDS = "Execute all Commands"; //$NON-NLS-1$
 		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I = "Execute until Command {0}: {1}"; //$NON-NLS-1$
 		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO = "Execute until Command {0}: {1}, run Undo"; //$NON-NLS-1$
 		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO = "Execute until Command {0}: {1}, run Undo, run Redo"; //$NON-NLS-1$
@@ -631,11 +631,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 				MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 						MESSAGE_VERIFY_INITIAL_STATE),
 				initializer, initialVerifier, Collections.emptyList(), undo, redo));
-
-		if (commands.size() > 1) {
-			descriptions.add(Arguments.of(MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN,
-					description, MESSAGE_EXECUTE_ALL_COMMANDS), initializer, initialVerifier, commands, undo, redo));
-		}
 
 		int index = 0;
 		final ArrayList<Object> commandsUntil = new ArrayList<>();
@@ -699,6 +694,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			final CommandExecutor<T> redo, final TestInfo ti) {
 
 		testinfo.set(ti);
+		tester.set(assertion);
 
 		try {
 
@@ -710,14 +706,13 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			// execution of the test will therefore not fail on those commands due to
 			// initial assumptions being wrong
 			final Iterator<ExecutionDescription<T>> iterator = commands.iterator();
-			TestFunction t;
 			if (iterator.hasNext()) {
-				t = assumption;
+				tester.set(assumption);
 			} else {
-				t = assertion;
+				tester.set(assertion);
 			}
 
-			initialVerifier.verifyState(current.getState(), current.getBefore().getState(), t);
+			initialVerifier.verifyState(current.getState(), current.getBefore().getState(), tester.get());
 
 			// step through all the commands/undo/redo
 			while (iterator.hasNext()) {
@@ -725,9 +720,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 				// if there are more commands to be executed use assume instead of assert
 				// same reason as for initial state verifier
 				if (iterator.hasNext()) {
-					t = assumption;
+					tester.set(assumption);
 				} else {
-					t = assertion;
+					tester.set(assertion);
 				}
 
 				final StateNode<T> clone = new StateNode<>(current);
@@ -739,21 +734,21 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 								clone);
 						clone.setAfter(current);
 					}
-					command.verifier.verifyState(current.getState(), current.getBefore().getState(), t);
+					command.verifier.verifyState(current.getState(), current.getBefore().getState(), tester.get());
 					break;
 				case UNDO:
 					// execute undo and fix undo list
 					current = new StateNode<>(undo.executeCommand(current.getState()), current.getBefore().getVerifier(),
 							clone.getBefore().getBefore());
 					current.setAfter(clone);
-					current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), t);
+					current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), tester.get());
 					break;
 				case REDO:
 					// execute redo and fix undo list
 					current = new StateNode<>(redo.executeCommand(current.getState()), current.getAfter().getVerifier(),
 							clone);
 					clone.setAfter(current);
-					current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), t);
+					current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), tester.get());
 					break;
 				default:
 					throw new RuntimeException("Unhandled Operation");// NOSONAR //$NON-NLS-1$
@@ -761,6 +756,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			}
 		} finally {
 			testinfo.remove();
+			tester.remove();
 		}
 	}
 

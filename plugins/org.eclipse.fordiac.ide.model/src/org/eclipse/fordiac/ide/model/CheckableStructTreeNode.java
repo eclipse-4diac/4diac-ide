@@ -12,6 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -217,5 +221,22 @@ public class CheckableStructTreeNode extends StructTreeNode {
 		this.isGrey = isGrey;
 	}
 
+	public static List<VarDeclaration> getVarDeclarations(final List<String> varDeclNames,
+			final CheckableStructTreeNode node) {
+		final List<VarDeclaration> vars = new ArrayList<>();
+		varDeclNames.forEach(name -> {
+			final CheckableStructTreeNode find = (CheckableStructTreeNode) node.find(name);
+			VarDeclaration findVarDeclarationInStruct = null;
+			if (find != null) {
+				findVarDeclarationInStruct = find.getVariable();
+				final VarDeclaration varDecl = EcoreUtil.copy(findVarDeclarationInStruct);
+				if (null != varDecl) {
+					varDecl.setName(name);
+					vars.add(varDecl);
+				}
+			}
+		});
+		return vars;
+	}
 
 }

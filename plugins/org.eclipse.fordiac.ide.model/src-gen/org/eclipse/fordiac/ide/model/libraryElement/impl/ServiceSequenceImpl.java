@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -19,19 +19,15 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
@@ -51,7 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence {
 	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered */
@@ -59,7 +55,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 
 	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered */
@@ -67,7 +63,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 
 	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */
@@ -75,7 +71,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 
 	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */
@@ -83,21 +79,21 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 
 	/** The cached value of the '{@link #getServiceTransaction() <em>Service Transaction</em>}' containment reference
 	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getServiceTransaction()
 	 * @generated
 	 * @ordered */
 	protected EList<ServiceTransaction> serviceTransaction;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ServiceSequenceImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -105,7 +101,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getName() {
@@ -113,19 +109,20 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setName(String newName) {
-		String oldName = name;
+		final String oldName = name;
 		name = newName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_SEQUENCE__NAME, oldName,
 					name));
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getComment() {
@@ -133,31 +130,40 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setComment(String newComment) {
-		String oldComment = comment;
+		final String oldComment = comment;
 		comment = newComment;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_SEQUENCE__COMMENT,
 					oldComment, comment));
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<ServiceTransaction> getServiceTransaction() {
 		if (serviceTransaction == null) {
-			serviceTransaction = new EObjectContainmentEList<ServiceTransaction>(ServiceTransaction.class, this,
+			serviceTransaction = new EObjectContainmentEList<>(ServiceTransaction.class, this,
 					LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION);
 		}
 		return serviceTransaction;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public Service getService() {
+		return (Service) this.eContainer();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -170,7 +176,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -187,7 +193,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -210,7 +216,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -231,7 +237,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -241,21 +247,22 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		case LibraryElementPackage.SERVICE_SEQUENCE__COMMENT:
 			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 		case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
-			return serviceTransaction != null && !serviceTransaction.isEmpty();
+			return (serviceTransaction != null) && !serviceTransaction.isEmpty();
 		default:
 			return super.eIsSet(featureID);
 		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$

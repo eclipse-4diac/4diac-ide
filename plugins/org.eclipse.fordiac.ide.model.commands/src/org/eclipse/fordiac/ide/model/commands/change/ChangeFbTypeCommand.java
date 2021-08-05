@@ -14,6 +14,7 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.commands.Command;
@@ -28,6 +29,11 @@ public class ChangeFbTypeCommand extends Command {
 		super();
 		this.fb = fb;
 		this.newType = newType;
+	}
+
+	@Override
+	public boolean canExecute() {
+		return FBNetworkHelper.isTypeInsertionSave(newType, fb);
 	}
 
 	@Override

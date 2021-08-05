@@ -36,8 +36,8 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 	private static final String ALGORITHM_TEXT = "Hokus Pokus"; //$NON-NLS-1$
 	private static final String ALGORITHM_COMMENT = "Magic!"; //$NON-NLS-1$
 
-	private static State executeCommandWithIndex(State state, int index) {
-		getBaseFBType(state, assumption);
+	private static State executeCommandWithIndex(final State state, final int index) {
+		getBaseFBType(state, tester.get());
 
 		final STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		stAlg.setName(ALGORITHM_NAME); // Algorithm name changes based on what is already in the list
@@ -45,7 +45,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		stAlg.setComment(ALGORITHM_COMMENT);
 
 		final PaletteEntry pe = state.getFunctionblock();
-		assumption.test(pe.getType() instanceof BasicFBType);
+		tester.get().test(pe.getType() instanceof BasicFBType);
 		final BasicFBType fb = (BasicFBType) pe.getType();
 
 		state.setCommand(new InsertAlgorithmCommand(fb, stAlg, index));
@@ -53,7 +53,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		return commandExecution(state);
 	}
 
-	private static void verifyStateWithAlgorithmIndex(State state, TestFunction t, int index, String algorithmName) {
+	private static void verifyStateWithAlgorithmIndex(final State state, final TestFunction t, final int index, final String algorithmName) {
 		final EList<Algorithm> algorithmList = ((BasicFBType) state.getFbNetwork().getNetworkElements().get(0)
 				.getType()).getAlgorithm();
 
@@ -65,33 +65,33 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		t.test(algorithmList.get(index).getName(), algorithmName);
 	}
 
-	private static State executeCommand1(State state) {
+	private static State executeCommand1(final State state) {
 		return executeCommandWithIndex(state, 0);
 	}
 
-	private static void verifyState1(State state, State oldState, TestFunction t) {
+	private static void verifyState1(final State state, final State oldState, final TestFunction t) {
 		verifyStateWithAlgorithmIndex(state, t, 0, ALGORITHM_NAME);
 	}
 
-	private static State executeCommand2(State state) {
+	private static State executeCommand2(final State state) {
 		return executeCommand1(state);
 	}
 
-	private static void verifyState2(State state, State oldState, TestFunction t) {
+	private static void verifyState2(final State state, final State oldState, final TestFunction t) {
 		verifyStateWithAlgorithmIndex(state, t, 0, ALGORITHM2_NAME);
 		verifyStateWithAlgorithmIndex(state, t, 1, ALGORITHM_NAME);
 	}
 
-	private static State executeCommand3(State state) {
+	private static State executeCommand3(final State state) {
 		return executeCommandWithIndex(state, 2);
 	}
 
-	private static void verifyState3(State state, State oldState, TestFunction t) {
+	private static void verifyState3(final State state, final State oldState, final TestFunction t) {
 		verifyState2(state, oldState, t);
 		verifyStateWithAlgorithmIndex(state, t, 2, ALGORITHM3_NAME);
 	}
 
-	private static State executeReorder(State state, int index, boolean direction) {
+	private static State executeReorder(final State state, final int index, final boolean direction) {
 		final EList<Algorithm> algorithmList = ((BasicFBType) state.getFbNetwork().getNetworkElements().get(0)
 				.getType()).getAlgorithm();
 		state.setCommand(new ChangeAlgorithmOrderCommand(algorithmList, algorithmList.get(index), direction));
@@ -99,7 +99,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		return commandExecution(state);
 	}
 
-	private static void verifyOrder(State state, TestFunction t, String name1, String name2, String name3) {
+	private static void verifyOrder(final State state, final TestFunction t, final String name1, final String name2, final String name3) {
 		verifyStateWithAlgorithmIndex(state, t, 0, name1);
 		verifyStateWithAlgorithmIndex(state, t, 1, name2);
 		verifyStateWithAlgorithmIndex(state, t, 2, name3);
@@ -111,28 +111,28 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 				new ExecutionDescription<>("Add a ST algorithm", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand1, //
 						InsertAlgorithmCommandTest::verifyState1 //
-				), //
+						), //
 				new ExecutionDescription<>("Add a second ST algorithm at index 0", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand2, //
 						InsertAlgorithmCommandTest::verifyState2 //
-				), //
+						), //
 				new ExecutionDescription<>("Add a third ST algorithm at end of list", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand3, //
 						InsertAlgorithmCommandTest::verifyState3 //
-				), //
+						), //
 				new ExecutionDescription<>("move second algorithmn to third place", //$NON-NLS-1$
-						(State s) -> executeReorder(s, 1, false), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, t, ALGORITHM2_NAME, ALGORITHM3_NAME, ALGORITHM_NAME)), //
+						(final State s) -> executeReorder(s, 1, false), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM2_NAME, ALGORITHM3_NAME, ALGORITHM_NAME)), //
 				new ExecutionDescription<>("move second algorithmn to first place", //$NON-NLS-1$
-						(State s) -> executeReorder(s, 1, true), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)), //
+						(final State s) -> executeReorder(s, 1, true), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)), //
 				new ExecutionDescription<>("move first algorithmn past lower bound", //$NON-NLS-1$
-						(State s) -> executeReorder(s, 0, true), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)), //
+						(final State s) -> executeReorder(s, 0, true), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)), //
 				new ExecutionDescription<>("move third algorithmn past upper bound", //$NON-NLS-1$
-						(State s) -> executeReorder(s, 2, false), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)) //
-		);
+						(final State s) -> executeReorder(s, 2, false), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)) //
+				);
 
 		return createCommands(executionDescriptions);
 	}

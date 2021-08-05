@@ -56,8 +56,13 @@ public class BreadcrumbWidget implements ISelectionProvider {
 	}
 
 	public void setInput(final Object input) {
+		if (!items.isEmpty() && getActiveItem().getModel().equals(input)) {
+			return;
+		}
+
 		if (isValidBreadcrumbInput(input)) {
 			items.forEach(BreadcrumbItem::dispose);
+			items.clear();
 			toolbar.requestLayout();
 			createBreadcrumbItems(input);
 			toolbar.pack();

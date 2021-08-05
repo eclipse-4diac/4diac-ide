@@ -159,7 +159,8 @@ public class ConnectionCommandsTest extends FBNetworkTestBase {
 
 	private static State deleteFB2(final State state) {
 		state.setCommand(new DeleteFBNetworkElementCommand(state.getFbNetwork().getNetworkElements().get(1)));
-		assertion.test(((DeleteFBNetworkElementCommand)state.getCommand()).getFBNetworkElement(), state.getFbNetwork().getNetworkElements().get(1));
+		tester.get().test(((DeleteFBNetworkElementCommand) state.getCommand()).getFBNetworkElement(),
+				state.getFbNetwork().getNetworkElements().get(1));
 		return commandExecution(state);
 	}
 

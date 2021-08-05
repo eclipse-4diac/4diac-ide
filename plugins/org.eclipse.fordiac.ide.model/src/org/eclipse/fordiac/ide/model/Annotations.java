@@ -378,11 +378,31 @@ public final class Annotations {
 	}
 
 	public static AutomationSystem getAutomationSystem(final FBNetwork fbn) {
-		if (fbn.isApplicationNetwork() || fbn.isSubApplicationNetwork()) {
+		if (fbn.isApplicationNetwork()) {
 			return fbn.getApplication().getAutomationSystem();
+		}
+		if (fbn.isSubApplicationNetwork()) {
+			if (fbn.getApplication() != null) {
+				return fbn.getApplication().getAutomationSystem();
+			}
+			final Resource res = getResource(fbn);
+			if (res != null) {
+				return res.getAutomationSystem();
+			}
 		}
 		if (fbn.isResourceNetwork()) {
 			return ((Resource) fbn.eContainer()).getAutomationSystem();
+		}
+		return null;
+	}
+
+	private static Resource getResource(FBNetwork fbn) {
+		EObject parent = fbn.eContainer();
+		while (parent != null) {
+			if (parent instanceof Resource) {
+				return (Resource) parent;
+			}
+			parent = parent.eContainer();
 		}
 		return null;
 	}

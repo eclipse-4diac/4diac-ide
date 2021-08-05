@@ -77,13 +77,13 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 
 		final State result = commandExecution(state);
 
-		assertion.test(state.getCommand() instanceof CreateInterfaceElementCommand);
+		tester.get().test(state.getCommand() instanceof CreateInterfaceElementCommand);
 		final CreateInterfaceElementCommand c = ((CreateInterfaceElementCommand) state.getCommand());
-		assertion.test(c.isInput(), false);
-		assertion.test(c.getInterfaceList(), getTypeInterfaceList(state));
-		assertion.test(c.getDataType(), getDatatypelib().getType(FordiacKeywords.BYTE));
-		assertion.test(getTypeInterfaceList(state).getInterfaceElement(ELEMENT3_NAME), c.getCreatedElement());
-		assertion.test(c.getCreatedElement(), c.getCreatedElement());
+		tester.get().test(c.isInput(), false);
+		tester.get().test(c.getInterfaceList(), getTypeInterfaceList(state));
+		tester.get().test(c.getDataType(), getDatatypelib().getType(FordiacKeywords.BYTE));
+		tester.get().test(getTypeInterfaceList(state).getInterfaceElement(ELEMENT3_NAME), c.getCreatedElement());
+		tester.get().test(c.getCreatedElement(), c.getCreatedElement());
 
 		return result;
 	}

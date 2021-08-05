@@ -28,4 +28,18 @@
       </tagprovider>
    </extension>
 
+  <!-- ant task infrastructure --> 
+   <extension point="org.eclipse.ant.core.antTasks">
+      <antTask
+            library="ant_tasks/systemmanagement-ant.jar"
+            name="fordiac.importProject"
+            class="org.eclipse.fordiac.ide.systemmanagement.ant.Import4diacProject">
+      </antTask>
+   </extension>
+  
+   <extension point="org.eclipse.ant.core.extraClasspathEntries">
+      <extraClasspathEntry library="ant_tasks/systemmanagement-ant.jar" />
+   </extension>
+
+
 </plugin>

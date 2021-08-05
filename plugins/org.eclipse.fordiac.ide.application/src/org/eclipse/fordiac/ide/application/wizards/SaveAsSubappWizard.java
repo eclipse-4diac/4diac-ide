@@ -117,8 +117,8 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		TypeManagementPreferencesHelper.setupIdentification(type);
 		TypeManagementPreferencesHelper.setupVersionInfo(type);
 		performTypeSetup((SubAppType) type);
-		AbstractBlockTypeExporter.saveType(entry);
 		entry.setType(type);
+		AbstractBlockTypeExporter.saveType(entry);
 
 		// replace needs to be called before opening the type editor so that we get the correct command stack
 		if (newFilePage.getReplaceSource()) {

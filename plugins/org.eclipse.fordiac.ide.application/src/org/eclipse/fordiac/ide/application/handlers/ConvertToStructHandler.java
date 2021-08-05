@@ -84,7 +84,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final ISelection sel = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		setBaseEnabled(!collectSelectedVarDecls(sel).isEmpty());
@@ -106,7 +106,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 	private static List<VarDeclaration> collectSelectedVarDecls(final ISelection sel) {
 		if (sel instanceof StructuredSelection) {
 			return (List<VarDeclaration>) ((IStructuredSelection) sel).toList().stream()
-					.filter(ep -> ep instanceof EditPart).map(ep -> ((EditPart) ep).getModel())
+					.filter(EditPart.class::isInstance).map(ep -> ((EditPart) ep).getModel())
 					.filter(el -> (el instanceof VarDeclaration) && !(el instanceof AdapterDeclaration))
 					.collect(Collectors.toList());
 		}

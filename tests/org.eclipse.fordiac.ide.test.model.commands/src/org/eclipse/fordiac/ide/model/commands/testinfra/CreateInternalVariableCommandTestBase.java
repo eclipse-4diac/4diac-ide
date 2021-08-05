@@ -30,25 +30,25 @@ public abstract class CreateInternalVariableCommandTestBase extends FBNetworkTes
 		return FBCreateCommandTest.executeCommand(state);
 	}
 
-	private static void verifyInitialState(State state, State oldState, TestFunction t) {
-		FBCreateCommandTest.verifyState(state, oldState, assumption); // skip further tests if FB
-																	// creation failed
+	private static void verifyInitialState(final State state, final State oldState, final TestFunction t) {
+		FBCreateCommandTest.verifyState(state, oldState, tester.get()); // skip further tests if FB
+		// creation failed
 
 	}
 
-	protected static BaseFBType getBaseFBType(State state, TestFunction t) {
+	protected static BaseFBType getBaseFBType(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType() instanceof BaseFBType);
 		return (BaseFBType) state.getFbNetwork().getNetworkElements().get(0).getType();
 	}
 
-	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+	protected static Collection<Arguments> createCommands(final List<ExecutionDescription<?>> executionDescriptions) {
 		final Collection<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", //$NON-NLS-1$
 				CreateInternalVariableCommandTestBase::initializeState, //
 				(StateVerifier<State>) CreateInternalVariableCommandTestBase::verifyInitialState, //
 				executionDescriptions //
-		));
+				));
 
 		return commands;
 	}

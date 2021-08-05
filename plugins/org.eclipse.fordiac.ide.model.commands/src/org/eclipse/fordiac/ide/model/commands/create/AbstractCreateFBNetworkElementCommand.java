@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2016 fortiss GmbH
  * 				 2019 Johannes Keppler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,10 +12,12 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
+ *   Daniel Lindhuber - added recursive type handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -37,15 +40,18 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return fbNetwork != null;
+		if (FBNetworkHelper.isTypeInsertionSave(element.getType(), fbNetwork)) {
+			return fbNetwork != null;
+		}
+		return false;
 	}
 
 	@Override
 	public void execute() {
 		element.setInterface(getTypeInterfaceList().copy());
 		element.updatePosition(x, y);
-		fbNetwork.getNetworkElements().add(element); // as subclasses may not be able to run redo on execute we have to
-		// duplicate this here
+		fbNetwork.getNetworkElements().add(element); // as subclasses may not be able to
+		// run redo on execute we have to duplicate this here
 		element.setName(NameRepository.createUniqueName(element, getInitalInstanceName()));
 	}
 

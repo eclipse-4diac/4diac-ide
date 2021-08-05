@@ -412,7 +412,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			// forward direct edit request to instance name
 			final List<EditPart> children = getChildren();
-			children.stream().filter(e -> e instanceof InstanceNameEditPart)
+			children.stream().filter(InstanceNameEditPart.class::isInstance)
 			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}

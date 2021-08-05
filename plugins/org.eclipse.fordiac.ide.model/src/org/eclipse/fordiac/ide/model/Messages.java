@@ -249,6 +249,9 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_INVALID_TIME_LITERAL;
 	public static String VALIDATOR_TOO_MANY_TIME_DEFINITIONS_FOUND;
 
+	public static String Error_SelfInsertion;
+	public static String Error_RecursiveType;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
