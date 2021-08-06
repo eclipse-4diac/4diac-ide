@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2017 fortiss GmbH
- * 		 2019, 2021 Johannes Kepler University Linz
+ * 		         2019, 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,9 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveInterfaceCommand;
@@ -27,21 +25,23 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateOutpu
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteOutputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.TransactionEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeOutputPrimitiveOrderCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -50,12 +50,9 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -71,15 +68,22 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class TransactionSection extends AbstractServiceSection {
 
-	private TableViewer leftPrimitivesViewer;
-	private TableViewer rightPrimitivesViewer;
+	private static final int PARAMETER_COL_WIDTH = 400;
+	private static final int EVENT_COL_WIDTH = 200;
+	private static final int INDEX_COL_WIDTH = 80;
+	private static final int INTERFACE_COL_WIDTH = 30;
+	private TableViewer outputPrimitivesViewer;
 	private Group inputsGroup;
 	private Group outputsGroup;
 	private Button interfaceSelector;
+
+	private Text eventNameInput;
+	private Text parameterNameInput;
+
+	private static final String INTERFACE = ""; //$NON-NLS-1$
+	private static final String INDEX = "index"; //$NON-NLS-1$
 	private static final String NAME = "name"; //$NON-NLS-1$
 	private static final String PARAM = "parameter"; //$NON-NLS-1$
-	private static final String INTERFACE = "interface"; //$NON-NLS-1$
-
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -90,41 +94,29 @@ public class TransactionSection extends AbstractServiceSection {
 		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final Composite inputsComp = getWidgetFactory().createComposite(section);
-		inputsComp.setLayout(new FillLayout());
+		inputsComp.setLayout(new GridLayout(1, false));
+		inputsComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
 		createInputPrimitiveGroup(inputsComp);
 
 		final Composite outputsComp = getWidgetFactory().createComposite(section);
-		outputsComp.setLayout(new GridLayout(2, false));
+		outputsComp.setLayout(new GridLayout(1, false));
 		outputsComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		createLeftInterfaceOutputsEdit(outputsComp);
-		createRightInterfaceOutputsEdit(outputsComp);
-
-		leftPrimitivesViewer.setContentProvider(new TransactionContentProvider(true));
-		rightPrimitivesViewer.setContentProvider(new TransactionContentProvider(false));
-
+		createOutputsEdit(outputsComp);
+		outputPrimitivesViewer.setContentProvider(new TransactionContentProvider());
 		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
 	}
 
-
 	private void createInputPrimitiveGroup(final Composite parent) {
 		inputsGroup = getWidgetFactory().createGroup(parent, "Input Primitive");
-		inputsGroup.setLayout(new GridLayout(2, true));
+		inputsGroup.setLayout(new GridLayout(5, false));
+		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Text nameOfInput = new Text(inputsGroup, SWT.BORDER);
-		nameOfInput.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
 		interfaceSelector = new Button(inputsGroup, SWT.PUSH);
 		interfaceSelector.setText("Interface");
-
+		interfaceSelector.setImage(FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
+		interfaceSelector.pack();
 		interfaceSelector.addSelectionListener(new SelectionListener() {
-
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				final ServiceInterface current = getType().getInputPrimitive().getInterface();
@@ -136,16 +128,37 @@ public class TransactionSection extends AbstractServiceSection {
 				}
 				final Command cmd = new ChangePrimitiveInterfaceCommand(getType().getInputPrimitive(), other);
 				executeCommand(cmd);
+				refresh();
 			}
 
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
 				// nothing to do here
 			}
+		});
 
+
+		getWidgetFactory().createCLabel(inputsGroup, "Name:");
+		eventNameInput = new Text(inputsGroup, SWT.BORDER);
+		eventNameInput.setSize(75, getMinimumHeight());
+		eventNameInput.addModifyListener(e -> {
+			final Command cmd = new ChangePrimitiveEventCommand(getType().getInputPrimitive(),
+					eventNameInput.getText());
+			executeCommand(cmd);
+			eventNameInput.redraw();
+		});
+
+		getWidgetFactory().createCLabel(inputsGroup, "Parameter:");
+		parameterNameInput = new Text(inputsGroup, SWT.BORDER);
+		parameterNameInput.setSize(SWT.FILL, getMinimumHeight());
+		parameterNameInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		parameterNameInput.addModifyListener(e -> {
+			final Command cmd = new ChangePrimitiveParameterCommand(getType().getInputPrimitive(),
+					parameterNameInput.getText());
+			executeCommand(cmd);
+			parameterNameInput.redraw();
 		});
 	}
-
 
 	private void setInputPrimitiveIcon() {
 		final InputPrimitive inputPrimitive = getType().getInputPrimitive();
@@ -156,104 +169,111 @@ public class TransactionSection extends AbstractServiceSection {
 		}
 	}
 
-	private TableViewer createTableViewer(final Group parent, boolean isLeftViewer) {
+	private static TableViewer createTableViewer(final Group parent) {
 		final TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
 		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
-		viewer.setCellEditors(createCellEditors(viewer.getTable()));
+
 		viewer.setColumnProperties(getColumnProperties());
 		viewer.setLabelProvider(new TransactionLabelProvider());
-		viewer.setCellModifier(new TransactionCellModifier(isLeftViewer));
+
 		return viewer;
 	}
 
-	private static CellEditor[] createCellEditors(Table table) {
-		final TextCellEditor editor = new TextCellEditor(table);
-		((Text) editor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		return new CellEditor[] { editor, new TextCellEditor(table), new TextCellEditor(table) };
+	private CellEditor[] createCellEditors(final Table table) {
+		final CellEditor interfaceEditor = new CheckboxCellEditor(table);
+		return new CellEditor[] { interfaceEditor, new TextCellEditor(table),
+				ComboBoxWidgetFactory.createComboBoxCellEditor(table, getOutputEventNames(), SWT.READ_ONLY),
+				new TextCellEditor(table) };
 
 	}
 
+	private String[] getOutputEventNames() {
+		return ((FBType) getType().getServiceSequence().getService().eContainer()).getInterfaceList().getEventOutputs()
+				.stream().map(Event::getName).toArray(String[]::new);
+	}
 
 	private static String[] getColumnProperties() {
-		return new String[] { NAME, PARAM, INTERFACE };
+		return new String[] { INTERFACE, INDEX, NAME, PARAM };
 	}
 
 	private static Layout createTableLayout(final Table table) {
-		final TableColumn eventColumn = new TableColumn(table, SWT.LEFT);
-		eventColumn.setText(FordiacMessages.Event);
-		final TableColumn paramColumn = new TableColumn(table, SWT.LEFT);
-		paramColumn.setText("Parameter");
-		final TableColumn interfaceColumn = new TableColumn(table, SWT.LEFT);
-		interfaceColumn.setText(FordiacMessages.Interface);
+		final TableColumn interfaceCol = new TableColumn(table, SWT.LEFT);
+		interfaceCol.setText(""); //$NON-NLS-1$
+		final TableColumn indexCol = new TableColumn(table, SWT.LEFT);
+		indexCol.setText("Index");
+		final TableColumn eventCol = new TableColumn(table, SWT.LEFT);
+		eventCol.setText(FordiacMessages.Event);
+		final TableColumn paramCol = new TableColumn(table, SWT.LEFT);
+		paramCol.setText("Parameter");
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(80));
-		layout.addColumnData(new ColumnPixelData(200));
-		layout.addColumnData(new ColumnPixelData(200));
+		layout.addColumnData(new ColumnPixelData(INTERFACE_COL_WIDTH));
+		layout.addColumnData(new ColumnPixelData(INDEX_COL_WIDTH));
+		layout.addColumnData(new ColumnPixelData(EVENT_COL_WIDTH));
+		layout.addColumnData(new ColumnPixelData(PARAMETER_COL_WIDTH));
 		return layout;
 	}
 
-	private void createLeftInterfaceOutputsEdit(final Composite parent) {
-		inputsGroup = getWidgetFactory().createGroup(parent, getLeftInterfaceGroupName());
-		inputsGroup.setLayout(new GridLayout(2, false));
-		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-		buttons.createControls(inputsGroup, getWidgetFactory());
-		leftPrimitivesViewer = createTableViewer(inputsGroup, true);
-		configureButtonList(buttons, leftPrimitivesViewer, true);
-	}
-
-	private String getLeftInterfaceGroupName() {
-		if (type == null) {
-			return "Output Primitives at Left Interface";
-		}
-		final ServiceInterface leftInterface = getType().getServiceSequence().getService().getLeftInterface();
-		if (null != leftInterface) {
-			return "Output Primitives at Left Interface ("
-					+ leftInterface.getName() + ")";
-		}
-		return "";
-	}
-
-	private void configureButtonList(final AddDeleteReorderListWidget buttons, final TableViewer primitiveViewer,
-			final boolean isLeftInterface) {
-		buttons.bindToTableViewer(primitiveViewer, this,
-				ref -> newCreateCommand((OutputPrimitive) ref, isLeftInterface),
+	private void configureButtonList(final AddDeleteReorderListWidget buttons, final TableViewer primitiveViewer) {
+		buttons.bindToTableViewer(primitiveViewer, this, ref -> newCreateCommand((OutputPrimitive) ref, true),
 				ref -> newDeleteCommand((OutputPrimitive) ref), ref -> newOrderCommand((OutputPrimitive) ref, true),
 				ref -> newOrderCommand((OutputPrimitive) ref, false));
 	}
 
-	private static Command newOrderCommand(OutputPrimitive ref, boolean up) {
+	private static Command newOrderCommand(final OutputPrimitive ref, final boolean up) {
 		return new ChangeOutputPrimitiveOrderCommand(ref, up);
 	}
 
-	private static Command newDeleteCommand(OutputPrimitive ref) {
+	private static Command newDeleteCommand(final OutputPrimitive ref) {
 		return new DeleteOutputPrimitiveCommand(ref);
 	}
 
-	private CreateOutputPrimitiveCommand newCreateCommand(final OutputPrimitive ref,
-			final boolean isLeftInterface) {
+	private CreateOutputPrimitiveCommand newCreateCommand(final OutputPrimitive ref, final boolean isLeftInterface) {
 		return new CreateOutputPrimitiveCommand(getType(), ref, isLeftInterface);
 	}
 
-
-	private void createRightInterfaceOutputsEdit(final Composite parent) {
-		outputsGroup = getWidgetFactory().createGroup(parent, getRightInterfaceGroupName());
+	private void createOutputsEdit(final Composite parent) {
+		outputsGroup = getWidgetFactory().createGroup(parent, getInterfaceNames());
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(outputsGroup, getWidgetFactory());
-		rightPrimitivesViewer = createTableViewer(outputsGroup, false);
-		configureButtonList(buttons, rightPrimitivesViewer, false);
+		outputPrimitivesViewer = createTableViewer(outputsGroup);
+		configureButtonList(buttons, outputPrimitivesViewer);
 	}
 
-	private String getRightInterfaceGroupName() {
+	private String getInterfaceNames() {
 		if (type == null) {
-			return "Output Primitives at Right Interface";
+			return "Output Primitives";
 		}
-		return "Output Primitives at Right Interface ("
-		+ ((Service) getType().eContainer().eContainer()).getRightInterface().getName() + ")";
+		return collectOutputPrimitiveGroupName();
+	}
+
+	private String collectOutputPrimitiveGroupName() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("Output Primitives at Right Interface (");
+		sb.append(getRightInterfaceName());
+		sb.append(") and Left Interface (");
+		sb.append(getLeftInterfaceName());
+		sb.append(")"); //$NON-NLS-1$
+		return sb.toString();
+	}
+
+	private String getLeftInterfaceName() {
+		final ServiceInterface leftInterface = getType().getServiceSequence().getService().getLeftInterface();
+		if (null != leftInterface) {
+			return leftInterface.getName();
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	private String getRightInterfaceName() {
+		final ServiceInterface rightInterface = getType().getServiceSequence().getService().getRightInterface();
+		if (null != rightInterface) {
+			return rightInterface.getName();
+		}
+		return ""; //$NON-NLS-1$
 	}
 
 	@Override
@@ -268,18 +288,21 @@ public class TransactionSection extends AbstractServiceSection {
 		commandStack = null;
 		if (null != type) {
 			Display.getDefault().asyncExec(() -> {
-				leftPrimitivesViewer.setInput(getType());
-				rightPrimitivesViewer.setInput(getType());
-				inputsGroup.setText(getLeftInterfaceGroupName());
-				outputsGroup.setText(getRightInterfaceGroupName());
+				outputPrimitivesViewer.setInput(getType());
+				outputsGroup.setText(getInterfaceNames());
 				setInputPrimitiveIcon();
+
+				eventNameInput.setText(getType().getInputPrimitive().getEvent());
+				if (getType().getInputPrimitive().getParameters() == null) {
+					parameterNameInput.setText(""); //$NON-NLS-1$
+				} else {
+					parameterNameInput.setText(getType().getInputPrimitive().getParameters());
+				}
+
 			});
 		}
 		commandStack = commandStackBuffer;
 	}
-
-
-
 
 	@Override
 	protected Object getInputType(final Object input) {
@@ -294,30 +317,38 @@ public class TransactionSection extends AbstractServiceSection {
 
 	@Override
 	protected void setInputCode() {
-		// evtl hier buttons deaktivieren
+		// nothing to do here
 	}
 
 	@Override
 	protected void setInputInit() {
-		// currently nothing to be done here
+		outputPrimitivesViewer.setCellEditors(createCellEditors(outputPrimitivesViewer.getTable()));
+		outputPrimitivesViewer.setCellModifier(new TransactionCellModifier());
 	}
 
 	protected static class TransactionLabelProvider extends LabelProvider implements ITableLabelProvider {
-		public static final int NAME_COL_INDEX = 0;
-		public static final int PARAM_COL_INDEX = 1;
-		public static final int INTERFACE_COL_INDEX = 2;
+		public static final int INTERFACE_COL_INDEX = 0;
+		public static final int INDEX_COL_INDEX = 1;
+		public static final int NAME_COL_INDEX = 2;
+		public static final int PARAM_COL_INDEX = 3;
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
 			if (element instanceof Primitive) {
 				final Primitive primitive = (Primitive) element;
 				switch (columnIndex) {
+				case INTERFACE_COL_INDEX:
+					return ""; //$NON-NLS-1$
+				case INDEX_COL_INDEX:
+					return String
+							.valueOf(primitive.getServiceTransaction().getOutputPrimitive().indexOf(primitive) + 1);
 				case NAME_COL_INDEX:
 					return primitive.getEvent();
 				case PARAM_COL_INDEX:
+					if (primitive.getParameters() == null) {
+						return "";  //$NON-NLS-1$
+					}
 					return primitive.getParameters();
-				case INTERFACE_COL_INDEX:
-					return primitive.getInterface().getName();
 				default:
 					break;
 				}
@@ -327,54 +358,81 @@ public class TransactionSection extends AbstractServiceSection {
 
 		@Override
 		public Image getColumnImage(final Object object, final int columnIndex) {
+			if ((object instanceof Primitive) && (columnIndex == INTERFACE_COL_INDEX)) {
+				final Primitive primitive = (Primitive) object;
+				if (primitive.getInterface().isLeftInterface()) {
+					return FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage();
+				}
+				return FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImage();
+			}
 			return null;
 		}
 	}
 
+	private Object getNameOfCurrentEvent(final Primitive primitive) {
+		final String event = primitive.getEvent();
+		if (event == null) {
+			return Integer.valueOf(0);
+		}
+		final String[] eventNames = getOutputEventNames();
+		final int indexOfEvent = Arrays.asList(eventNames).indexOf(event);
+		if (indexOfEvent < 0) {
+			return Integer.valueOf(0);
+		}
+		return Integer.valueOf(indexOfEvent);
+	}
+
 	private class TransactionCellModifier implements ICellModifier {
-		private final boolean isLeftViewer;
-
-		public TransactionCellModifier(boolean isLeftViewer) {
-			this.isLeftViewer = isLeftViewer;
+		@Override
+		public boolean canModify(final Object element, final String property) {
+			return !property.equals(INDEX);
 		}
 
 		@Override
-		public boolean canModify(Object element, String property) {
-			final boolean leftInterface = ((Primitive) element).getInterface().isLeftInterface();
-			if (isLeftViewer) {
-				return leftInterface;
-			} else {
-				return !leftInterface;
-			}
-		}
-
-		@Override
-		public Object getValue(Object element, String property) {
-			// hü melanie siehe TransactionLabelProvider/getColumnText
+		public Object getValue(final Object element, final String property) {
 			if (element instanceof Primitive) {
+				final Primitive primitive = (Primitive) element;
 				switch (property) {
+				case INDEX:
+					return String
+							.valueOf(primitive.getServiceTransaction().getOutputPrimitive().indexOf(primitive) + 1);
 				case NAME:
-					return "NAME";
+					return getNameOfCurrentEvent(primitive);
 				case PARAM:
-					return "PARAM";
+					if (primitive.getParameters() == null) {
+						return "";  //$NON-NLS-1$
+					}
+					return primitive.getParameters();
 				case INTERFACE:
-					return "i";
+					return Boolean.valueOf(true);
+				default:
+					break;
 				}
 			}
 			return element;
 		}
 
+
 		@Override
-		public void modify(Object element, String property, Object value) {
+		public void modify(final Object element, final String property, final Object value) {
 			final TableItem tableItem = (TableItem) element;
 			final OutputPrimitive primitive = (OutputPrimitive) tableItem.getData();
 			Command cmd = null;
 			switch (property) {
 			case NAME:
-				cmd = new ChangePrimitiveEventCommand(primitive, value.toString());
+				final int selectedEv = ((Integer) value).intValue();
+				final String[] eventNames = getOutputEventNames();
+				cmd = new ChangePrimitiveEventCommand(primitive, eventNames[selectedEv]);
 				break;
 			case PARAM:
 				cmd = new ChangePrimitiveParameterCommand(primitive, value.toString());
+				break;
+			case INTERFACE:
+				if (primitive.getInterface().isLeftInterface()) {
+					cmd = new ChangePrimitiveInterfaceCommand(primitive, primitive.getService().getRightInterface());
+				} else {
+					cmd = new ChangePrimitiveInterfaceCommand(primitive, primitive.getService().getLeftInterface());
+				}
 				break;
 			default:
 				break;
@@ -388,30 +446,9 @@ public class TransactionSection extends AbstractServiceSection {
 	}
 
 	protected static class TransactionContentProvider extends ArrayContentProvider {
-		private final boolean isLeftInterface;
-
-		public TransactionContentProvider(boolean isLeftInterface) {
-			this.isLeftInterface = isLeftInterface;
-		}
-
 		@Override
-		public Object[] getElements(Object inputElement) {
-			if (isLeftInterface) {
-				return getLeftOutputPrimitives((ServiceTransaction) inputElement).toArray();
-			}
-			return getRightOutputPrimitives((ServiceTransaction) inputElement).toArray();
-
-		}
-
-		private List<OutputPrimitive> getLeftOutputPrimitives(ServiceTransaction t) {
-			return t.getOutputPrimitive().stream().filter(p -> p.getInterface().isLeftInterface())
-					.collect(Collectors.toCollection(ArrayList::new));
-		}
-
-		private List<OutputPrimitive> getRightOutputPrimitives(ServiceTransaction t) {
-			return t.getOutputPrimitive().stream().filter(p -> !p.getInterface().isLeftInterface())
-					.collect(Collectors.toCollection(ArrayList::new));
-
+		public Object[] getElements(final Object inputElement) {
+			return ((ServiceTransaction) inputElement).getOutputPrimitive().toArray();
 		}
 	}
 }

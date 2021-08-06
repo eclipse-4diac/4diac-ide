@@ -12,7 +12,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.util
+ org.eclipse.fordiac.ide.util,
+ org.eclipse.swt,
+ org.eclipse.jface
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.14.0.qualifier
