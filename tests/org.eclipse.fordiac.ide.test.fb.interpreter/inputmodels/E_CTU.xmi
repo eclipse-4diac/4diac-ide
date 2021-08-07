@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ASCII"?>
+<libraryElement:BasicFBType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" name="E_CTU" comment="Event driven up counter">
+  <versionInfo author="Alois Zoitl" date="2017-09-21" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
+  <identification description="Copyright (c) 2017 fortiss GmbH&#xD;&#xA; &#xD;&#xA;This program and the accompanying materials are made&#xD;&#xA;available under the terms of the Eclipse Public License 2.0&#xD;&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0" standard="61499-1 Annex 2"/>
+  <interfaceList>
+    <eventInputs name="CU" comment="Count up" isInput="true">
+      <with variables="//@interfaceList/@inputVars.0"/>
+    </eventInputs>
+    <eventInputs name="R" comment="Reset" isInput="true"/>
+    <eventOutputs name="CUO" comment="Count up output">
+      <with variables="//@interfaceList/@outputVars.0"/>
+      <with variables="//@interfaceList/@outputVars.1"/>
+    </eventOutputs>
+    <eventOutputs name="RO" comment="Reset output">
+      <with variables="//@interfaceList/@outputVars.0"/>
+      <with variables="//@interfaceList/@outputVars.1"/>
+    </eventOutputs>
+    <inputVars name="PV" comment="Process Value" isInput="true" typeName="UINT" arraySize="-1" withs="//@interfaceList/@eventInputs.0/@with.0"/>
+    <outputVars name="Q" comment="True if CV >= PV" typeName="BOOL" arraySize="-1" withs="//@interfaceList/@eventOutputs.0/@with.0 //@interfaceList/@eventOutputs.1/@with.0"/>
+    <outputVars name="CV" comment="Counter Value" typeName="UINT" arraySize="-1" withs="//@interfaceList/@eventOutputs.0/@with.1 //@interfaceList/@eventOutputs.1/@with.1"/>
+  </interfaceList>
+  <service/>
+  <eCC start="//@eCC/@eCState.0">
+    <eCState name="START" comment="Initial State" outTransitions="//@eCC/@eCTransition.0 //@eCC/@eCTransition.2" inTransitions="//@eCC/@eCTransition.1 //@eCC/@eCTransition.3">
+      <position x="110" y="85"/>
+    </eCState>
+    <eCState name="CU" outTransitions="//@eCC/@eCTransition.1" inTransitions="//@eCC/@eCTransition.0">
+      <position x="314" y="33"/>
+      <eCAction algorithm="//@algorithm.1" output="//@interfaceList/@eventOutputs.0"/>
+    </eCState>
+    <eCState name="R" outTransitions="//@eCC/@eCTransition.3" inTransitions="//@eCC/@eCTransition.2">
+      <position x="155" y="204"/>
+      <eCAction algorithm="//@algorithm.0" output="//@interfaceList/@eventOutputs.1"/>
+    </eCState>
+    <eCTransition conditionExpression="CV &lt; 65535" source="//@eCC/@eCState.0" destination="//@eCC/@eCState.1" conditionEvent="//@interfaceList/@eventInputs.0">
+      <position x="194" y="42"/>
+    </eCTransition>
+    <eCTransition source="//@eCC/@eCState.1" destination="//@eCC/@eCState.0">
+      <position x="257" y="102"/>
+    </eCTransition>
+    <eCTransition conditionExpression="" source="//@eCC/@eCState.0" destination="//@eCC/@eCState.2" conditionEvent="//@interfaceList/@eventInputs.1">
+      <position x="169" y="154"/>
+    </eCTransition>
+    <eCTransition source="//@eCC/@eCState.2" destination="//@eCC/@eCState.0">
+      <position x="109" y="210"/>
+    </eCTransition>
+  </eCC>
+  <algorithm xsi:type="libraryElement:STAlgorithm" name="R" comment="reset counter" text="CV := 0;&#xD;&#xA;Q := FALSE;"/>
+  <algorithm xsi:type="libraryElement:STAlgorithm" name="CU" comment="count up" text="CV := CV + 1;&#xD;&#xA;Q  := (CV >= PV);"/>
+</libraryElement:BasicFBType>

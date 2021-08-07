@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright (c) 2021 Johannes Kepler University Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Antonio Garmendía, Bianca Wiesmayr
+ *       - initial implementation and/or documentation
+ *******************************************************************************/
+package org.eclipses.fordiac.ide.interpreter;
+
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.junit.Test;
+
+public class EventPermitTest extends AbstractInterpreterTest {
+
+	public EventPermitTest() {
+		// do nothing
+	}
+
+	@Test
+	public void testPermit() {
+		final BasicFBType fb = loadFBType("E_PERMIT"); //$NON-NLS-1$
+		fb.setService(createEmptyServiceModel());
+		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
+
+		// input PERMIT is default 0, no output event sent
+		addTransaction(seq, new FBTransaction("EI")); //$NON-NLS-1$
+		runTest(fb, seq);
+
+		// set input PERMIT to 1, event goes through
+		fb.getService().getServiceSequence().clear();
+		final ServiceSequence seq2 = addServiceSequence(fb.getService());
+		setVariable(fb, "PERMIT", "1"); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq2, new FBTransaction("EI", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
+
+	}
+
+
+
+}
