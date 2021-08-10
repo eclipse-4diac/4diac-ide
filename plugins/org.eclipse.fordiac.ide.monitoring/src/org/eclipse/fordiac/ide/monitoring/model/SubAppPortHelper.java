@@ -16,11 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
+import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 
 public class SubAppPortHelper {
@@ -73,15 +76,25 @@ public class SubAppPortHelper {
 
 			final PortElement createPortElement = MonitoringManagerUtils
 					.createPortElement(current.getFBNetworkElement(), current);
-			final String portString = createPortElement.getPortString();
+			String portString = createPortElement.getPortString();
+
+			final MonitoringBaseElement monitoringElement = MonitoringManager.getInstance()
+					.getMonitoringElement(createPortElement.getInterfaceElement());
+			if (monitoringElement instanceof SubappMonitoringElement) {
+				final SubappMonitoringElement e = (SubappMonitoringElement) monitoringElement;
+				portString = e.getAnchor().getPort().getPortString();
+				if (subappElements.containsKey(portString)) {
+					return portString;
+				}
+			}
 
 			if (subappElements.containsKey(portString)) {
 				return portString;
 			}
 
 		} while ((current.getFBNetworkElement() instanceof SubApp));
-		return null;
 
+		return null;
 	}
 
 

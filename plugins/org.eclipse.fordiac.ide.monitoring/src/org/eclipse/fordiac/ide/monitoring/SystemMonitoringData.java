@@ -17,8 +17,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,7 +50,7 @@ public class SystemMonitoringData {
 
 	private final Map<String, List<MonitoringElement>> subappElements = new HashMap<>();
 
-	protected Map<String, List<MonitoringElement>> getSubappElements() {
+	public Map<String, List<MonitoringElement>> getSubappElements() {
 		return subappElements;
 	}
 
@@ -160,13 +162,23 @@ public class SystemMonitoringData {
 		monitoredElements.remove(port.getInterfaceElement());
 		monitoredElementsPerPortStrings.remove(port.getPortString());
 
-		if (subappElements.containsKey(port.getPortString())) {
-			final List<MonitoringElement> subappPins = subappElements.get(port.getPortString());
-			final boolean remove = subappPins.remove(element);
-			Assert.isTrue(remove);
+		if (element instanceof SubappMonitoringElement) {
+			removeSubappElement(element, port);
 		}
 
 
+	}
+
+	public void removeSubappElement(final MonitoringBaseElement element, final PortElement port) {
+		final String portString = ((SubappMonitoringElement) element).getAnchor().getPort().getPortString();
+		if (subappElements.containsKey(portString)) {
+			final List<MonitoringElement> subappPins = subappElements.get(portString);
+			final boolean remove = subappPins.remove(element);
+			Assert.isTrue(remove);
+			if (subappPins.isEmpty()) {
+				subappElements.remove(portString);
+			}
+		}
 	}
 
 	public void addMonitoringElement(final MonitoringBaseElement element) {
@@ -193,7 +205,7 @@ public class SystemMonitoringData {
 				final List<MonitoringElement> subappPins = subappElements.get(port.getPortString());
 				subappPins.add((MonitoringElement) element);
 			}
-			// TODO add this handleConnectedSubappPorts(element);
+			handleConnectedSubappPorts(element);
 
 			monitoredElementsPerPortStrings.put(port.getPortString(), element);
 		}
@@ -215,13 +227,32 @@ public class SystemMonitoringData {
 				.findConnectedMonitoredSubappPort(interfaceElement, subappElements);
 
 		if (findConnectedMonitoredSubappPort != null) {
-			subappElements.get(findConnectedMonitoredSubappPort).add((MonitoringElement) element);
+			final List<MonitoringElement> list = subappElements.get(findConnectedMonitoredSubappPort);
+
+			if (!list.contains(element)) {
+				list.add((MonitoringElement) element);
+			}
 		}
 
 	}
 
 	public MonitoringBaseElement getMonitoredElement(final IInterfaceElement port) {
 		return monitoredElements.get(port);
+	}
+
+	public Entry<String, List<MonitoringElement>> getSubappElements(final MonitoringBaseElement m)
+	{
+		final Iterator<Entry<String, List<MonitoringElement>>> entries = getSubappElements().entrySet().iterator();
+		while (entries.hasNext()) {
+			final Entry<String, List<MonitoringElement>> e = entries.next();
+			final List<MonitoringElement> l = e.getValue();
+			for (final MonitoringElement me : l) {
+				if (me.equals(m)) {
+					return e;
+				}
+			}
+		}
+		return null;
 	}
 
 }
