@@ -67,7 +67,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 	@Override
 	protected ServiceSequence getInputType(final Object input) {
 		if (input instanceof ServiceSequenceEditPart) {
-			return ((ServiceSequenceEditPart) input).getCastedModel();
+			return ((ServiceSequenceEditPart) input).getModel();
 		}
 		if (input instanceof ServiceSequence) {
 			return (ServiceSequence) input;

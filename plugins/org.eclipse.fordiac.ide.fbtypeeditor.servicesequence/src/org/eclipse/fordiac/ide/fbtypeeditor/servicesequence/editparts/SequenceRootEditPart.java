@@ -16,28 +16,21 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.Layer;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart.ServiceSequenceFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.ServiceFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.ServiceSequenceFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.ChangeInterfaceNameEditPolicy;
-import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -51,7 +44,7 @@ import org.eclipse.swt.SWT;
 
 public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 
-	private Adapter adapter = new AdapterImpl() {
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -77,153 +70,13 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		super.deactivate();
 	}
 
-	public static class ServiceFigure extends FreeformLayeredPane {
-		private Figure leftFigure;
-		private Figure middleFigure;
-		private Figure rightFigure;
-		private Label leftLabel;
-		private Label rightLabel;
-		private Layer serviceSequenceContainer;
 
-		public ServiceFigure() {
-			setLayoutManager(new StackLayout());
-			setForegroundColor(ColorConstants.blue);
-			createBaseLayer();
-			createInterfaceLayer();
-			createServiceSequenceLayer();
-		}
-
-		private void createBaseLayer() {
-			Layer baseLayer = new Layer();
-			baseLayer.setBorder(new MarginBorder(0, 10, 0, 10));
-			GridLayout layout = new GridLayout(3, false);
-			layout.horizontalSpacing = 0;
-			layout.marginWidth = 0;
-			layout.marginHeight = 0;
-			layout.verticalSpacing = 0;
-			baseLayer.setLayoutManager(layout);
-
-			leftFigure = new Figure();
-			GridLayout leftLayout = new GridLayout();
-			leftFigure.setLayoutManager(leftLayout);
-			leftLayout.horizontalSpacing = 0;
-			leftLayout.marginWidth = 0;
-			leftLayout.marginHeight = 0;
-			leftLayout.verticalSpacing = 0;
-			baseLayer.add(leftFigure);
-
-			middleFigure = new Figure();
-			middleFigure.setPreferredSize(37, 0);
-			middleFigure.setBorder(new AdvancedLineBorder(PositionConstants.EAST | PositionConstants.WEST));
-			baseLayer.add(middleFigure);
-
-			rightFigure = new Figure();
-			GridLayout rightLayout = new GridLayout();
-			rightFigure.setLayoutManager(rightLayout);
-			rightLayout.horizontalSpacing = 0;
-			rightLayout.marginWidth = 0;
-			rightLayout.marginHeight = 0;
-			rightLayout.verticalSpacing = 0;
-			baseLayer.add(rightFigure);
-
-			GridData leftGridData = new GridData();
-			leftGridData.horizontalAlignment = SWT.FILL;
-			leftGridData.verticalAlignment = SWT.FILL;
-			leftGridData.grabExcessVerticalSpace = true;
-			leftGridData.grabExcessHorizontalSpace = true;
-			GridData middleGridData = new GridData();
-			middleGridData.verticalAlignment = SWT.FILL;
-			middleGridData.grabExcessVerticalSpace = true;
-			GridData rightGridData = new GridData();
-			rightGridData.horizontalAlignment = SWT.FILL;
-			rightGridData.verticalAlignment = SWT.FILL;
-			rightGridData.grabExcessVerticalSpace = true;
-			rightGridData.grabExcessHorizontalSpace = true;
-
-			layout.setConstraint(middleFigure, middleGridData);
-			layout.setConstraint(leftFigure, leftGridData);
-			layout.setConstraint(rightFigure, rightGridData);
-
-			add(baseLayer);
-		}
-
-		private void createInterfaceLayer() {
-			Layer interfaceLayer = new Layer();
-			interfaceLayer.setBorder(new MarginBorder(5, 0, 0, 0));
-			GridLayout layout = new GridLayout(2, true);
-			layout.horizontalSpacing = 0;
-			layout.marginWidth = 0;
-			layout.marginHeight = 0;
-			layout.verticalSpacing = 0;
-			interfaceLayer.setLayoutManager(layout);
-
-			leftLabel = new Label();
-			leftLabel.setLabelAlignment(PositionConstants.RIGHT);
-			leftLabel.setBorder(new MarginBorder(5, 0, 0, 35));
-			GridData leftLabelData = new GridData();
-			leftLabelData.grabExcessHorizontalSpace = true;
-			leftLabelData.horizontalAlignment = GridData.FILL;
-			interfaceLayer.getLayoutManager().setConstraint(leftLabel, leftLabelData);
-			interfaceLayer.add(leftLabel);
-
-			rightLabel = new Label();
-			rightLabel.setLabelAlignment(PositionConstants.LEFT);
-			rightLabel.setBorder(new MarginBorder(5, 35, 0, 0));
-			GridData rightLabelData = new GridData();
-			rightLabelData.grabExcessHorizontalSpace = true;
-			rightLabelData.horizontalAlignment = GridData.FILL;
-			interfaceLayer.getLayoutManager().setConstraint(rightLabel, rightLabelData);
-			interfaceLayer.add(rightLabel);
-
-			add(interfaceLayer);
-		}
-
-		private void createServiceSequenceLayer() {
-			serviceSequenceContainer = new Layer();
-			serviceSequenceContainer.setBorder(new MarginBorder(20, 10, 5, 10));
-			GridLayout layout = new GridLayout();
-			layout.horizontalSpacing = 0;
-			layout.marginWidth = 0;
-			serviceSequenceContainer.setLayoutManager(layout);
-			add(serviceSequenceContainer);
-		}
-
-		public Figure getLeftFigure() {
-			return leftFigure;
-		}
-
-		public Figure getMiddleFigure() {
-			return middleFigure;
-		}
-
-		public Figure getRightFigure() {
-			return rightFigure;
-		}
-
-		public Label getLeftLabel() {
-			return leftLabel;
-		}
-
-		public Label getRightLabel() {
-			return rightLabel;
-		}
-
-		public Layer getServiceSequenceContainer() {
-			return serviceSequenceContainer;
-		}
-
-		public void setLeftLabelText(String name) {
-			leftLabel.setText(null != name ? name : ""); //$NON-NLS-1$
-		}
-
-		public void setRightLabelText(String name) {
-			rightLabel.setText(null != name ? name : ""); //$NON-NLS-1$
-		}
-	}
 
 	@Override
 	protected IFigure createFigure() {
-		return new ServiceFigure();
+		final ServiceFigure figure = new ServiceFigure();
+		figure.createVisuals();
+		return figure;
 	}
 
 	@Override
@@ -245,13 +98,13 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 	}
 
 	public DirectEditManager getManager(boolean isLeft) {
-		Label l = isLeft ? ((ServiceFigure) getFigure()).getLeftLabel() : ((ServiceFigure) getFigure()).getRightLabel();
+		final Label l = isLeft ? ((ServiceFigure) getFigure()).getLeftLabel() : ((ServiceFigure) getFigure()).getRightLabel();
 		return new LabelDirectEditManager(this, l);
 	}
 
 	@Override
 	public void performRequest(final Request request) {
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT && request instanceof DirectEditRequest) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT) && (request instanceof DirectEditRequest)) {
 			performDirectEdit(isLeft((DirectEditRequest) request));
 		} else {
 			super.performRequest(request);
@@ -281,7 +134,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		ServiceFigure figure = (ServiceFigure) getFigure();
+		final ServiceFigure figure = (ServiceFigure) getFigure();
 		if (null != getCastedModel()) {
 			if (null != getCastedModel().getLeftInterface()) {
 				figure.setLeftLabelText(
@@ -297,22 +150,16 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected List<?> getModelChildren() {
-		ArrayList<Object> children = new ArrayList<>();
-		if (getCastedModel().getServiceSequence() != null) {
-			children.addAll(getCastedModel().getServiceSequence());
-		}
-		return children;
+	protected List<ServiceSequence> getModelChildren() {
+		return new ArrayList<>(getCastedModel().getServiceSequence());
 	}
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof ServiceSequenceEditPart) {
-			ServiceSequenceFigure child = (ServiceSequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
-			ServiceFigure thisFigure = (ServiceFigure) getFigure();
-			GridData childData = new GridData();
-			childData.grabExcessHorizontalSpace = true;
-			childData.horizontalAlignment = GridData.FILL;
+			final ServiceSequenceFigure child = (ServiceSequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
+			final ServiceFigure thisFigure = (ServiceFigure) getFigure();
+			final GridData childData = new GridData(SWT.FILL, SWT.NONE, true, false);
 			thisFigure.getServiceSequenceContainer().add(child);
 			thisFigure.getServiceSequenceContainer().getLayoutManager().setConstraint(child, childData);
 		}
@@ -321,8 +168,8 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof ServiceSequenceEditPart) {
-			ServiceSequenceFigure child = (ServiceSequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
-			ServiceFigure thisFigure = (ServiceFigure) getFigure();
+			final ServiceSequenceFigure child = (ServiceSequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
+			final ServiceFigure thisFigure = (ServiceFigure) getFigure();
 			thisFigure.getServiceSequenceContainer().remove(child);
 		}
 	}

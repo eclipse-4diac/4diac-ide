@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2015 fortiss GmbH
+ *               2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
@@ -27,7 +29,6 @@ import org.eclipse.fordiac.ide.gef.policies.ChangeStringEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.IChangeStringEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
@@ -41,21 +42,20 @@ implements NodeEditPart, IChangeStringEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (getCastedModel().eAdapters().contains(adapter)) {
+			if (getModel().eAdapters().contains(adapter)) {
 				refresh();
 			}
 		}
 	};
 
 	protected PrimitiveEditPart(final PrimitiveConnection connection) {
-		super();
 		this.connection = connection;
 	}
 
 	@Override
 	public void activate() {
 		if (!isActive()) {
-			getCastedModel().eAdapters().add(adapter);
+			getModel().eAdapters().add(adapter);
 		}
 		super.activate();
 	}
@@ -63,7 +63,7 @@ implements NodeEditPart, IChangeStringEditPart {
 	@Override
 	public void deactivate() {
 		if (isActive()) {
-			getCastedModel().eAdapters().remove(adapter);
+			getModel().eAdapters().remove(adapter);
 		}
 		super.deactivate();
 	}
@@ -76,28 +76,29 @@ implements NodeEditPart, IChangeStringEditPart {
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		final PrimitiveFigure figure = (PrimitiveFigure) getFigure();
-		if (null != getCastedModel()) {
-			figure.setLabelText(getCastedModel().getEvent());
+		if (null != getModel()) {
+			figure.setLabelText(getModel().getEvent());
 			figure.setInterfaceDirection(isLeftInterface());
 		}
 	}
 
-	public Primitive getCastedModel() {
-		return (Primitive) getModel();
+	@Override
+	public Primitive getModel() {
+		return (Primitive) super.getModel();
 	}
+
 
 	protected TransactionEditPart getCastedParent() {
 		return (TransactionEditPart) getParent();
 	}
 
 	protected boolean isLeftInterface() {
-		return getCastedModel().getInterface().getName().equals(
-				((Service) getCastedModel().eContainer().eContainer().eContainer()).getLeftInterface().getName());
+		return getModel().getInterface().isLeftInterface();
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		return new PrimitiveFigure(isLeftInterface(), getCastedModel().getEvent());
+		return new PrimitiveFigure(isLeftInterface(), getModel().getEvent());
 	}
 
 	@Override

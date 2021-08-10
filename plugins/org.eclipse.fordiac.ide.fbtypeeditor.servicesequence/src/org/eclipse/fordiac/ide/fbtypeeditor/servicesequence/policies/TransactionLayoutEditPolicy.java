@@ -84,12 +84,12 @@ public class TransactionLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 				OutputPrimitive refElement = null;
 				if (after != null) {
 					if (after instanceof OutputPrimitiveEditPart) {
-						refElement = ((OutputPrimitiveEditPart) after).getCastedModel();
+						refElement = ((OutputPrimitiveEditPart) after).getModel();
 					} else if ((after instanceof InputPrimitiveEditPart) && (!target.getOutputPrimitive().isEmpty())) {
 						refElement = target.getOutputPrimitive().get(0);
 					}
 				}
-				return new MoveOutputPrimitiveCommand(target, ((OutputPrimitiveEditPart) child).getCastedModel(),
+				return new MoveOutputPrimitiveCommand(target, ((OutputPrimitiveEditPart) child).getModel(),
 						refElement);
 			}
 		}

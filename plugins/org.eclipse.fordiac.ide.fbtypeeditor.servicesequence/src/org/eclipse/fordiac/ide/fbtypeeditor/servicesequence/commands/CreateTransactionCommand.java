@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 public class CreateTransactionCommand extends AbstractCreationCommand {
-
 	private ServiceTransaction newTransaction;
 	private final ServiceSequence parent;
 	private ServiceTransaction refElement;

@@ -17,13 +17,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.gef.commands.Command;
 
-/**
- * The Class DeleteServiceSquenceCommand.
- */
 public class DeleteServiceSequenceCommand extends Command {
 
-	private FBType fbType;
-	private ServiceSequence sequence;
+	private final FBType fbType;
+	private final ServiceSequence sequence;
 
 	/**
 	 * Instantiates a new delete service squence command.
@@ -36,41 +33,21 @@ public class DeleteServiceSequenceCommand extends Command {
 		this.sequence = sequence;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#canExecute()
-	 */
 	@Override
 	public boolean canExecute() {
-		return fbType != null && sequence != null;
+		return (fbType != null) && (sequence != null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	@Override
 	public void execute() {
 		fbType.getService().getServiceSequence().remove(sequence);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
 	@Override
 	public void undo() {
 		fbType.getService().getServiceSequence().add(sequence);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
 	@Override
 	public void redo() {
 		fbType.getService().getServiceSequence().remove(sequence);

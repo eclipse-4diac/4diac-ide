@@ -13,10 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
-public class Activator extends AbstractUIPlugin {
+public class Activator extends Abstract4DIACUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.fbtypeeditor.servicesequence"; //$NON-NLS-1$
 	private static Activator plugin;
 

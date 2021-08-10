@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *               2021 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,10 +11,12 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.draw2d.ConnectionAnchor;
@@ -29,7 +32,7 @@ import org.eclipse.gef.Request;
 
 public class InputPrimitiveEditPart extends PrimitiveEditPart {
 
-	private ConnectingConnection connectingConnection;
+	private final ConnectingConnection connectingConnection;
 
 	InputPrimitiveEditPart() {
 		super(new PrimitiveConnection(true));
@@ -37,8 +40,8 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart {
 	}
 
 	@Override
-	public InputPrimitive getCastedModel() {
-		return (InputPrimitive) getModel();
+	public InputPrimitive getModel() {
+		return (InputPrimitive) super.getModel();
 	}
 
 	public ConnectingConnection getConnectingConnection() {
@@ -47,20 +50,18 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart {
 
 	@Override
 	public List<Object> getModelSourceConnections() {
-		ArrayList<Object> temp = new ArrayList<>();
-		OutputPrimitive view = getCastedParent().getPossibleOutputPrimitive(getCastedModel());
+		final List<Object> conns = new ArrayList<>();
+		final OutputPrimitive view = getCastedParent().getPossibleOutputPrimitive(getModel());
 		if (view != null) {
-			temp.add(connectingConnection);
+			conns.add(connectingConnection);
 		}
-		temp.add(getPrimitiveConnection());
-		return temp;
+		conns.add(getPrimitiveConnection());
+		return conns;
 	}
 
 	@Override
 	public List<Object> getModelTargetConnections() {
-		ArrayList<Object> temp = new ArrayList<>();
-		temp.add(getPrimitiveConnection());
-		return temp;
+		return Arrays.asList(getPrimitiveConnection());
 	}
 
 	@Override
@@ -72,7 +73,8 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart {
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		if (connection instanceof PrimitiveConnectionEditPart) {
 			return new FixedAnchor(getNameLabel(), !isLeftInterface());
-		} else if (connection instanceof ConnectingConnectionEditPart) {
+		}
+		if (connection instanceof ConnectingConnectionEditPart) {
 			return new AdvancedFixedAnchor(getCenterFigure(), isLeftInterface(), isLeftInterface() ? 3 : -4, 0);
 		}
 		return null;
@@ -95,7 +97,7 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart {
 
 	@Override
 	public EObject getElement() {
-		return getCastedModel();
+		return getModel();
 	}
 
 	@Override

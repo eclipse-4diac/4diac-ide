@@ -19,6 +19,7 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.swt.SWT;
 
 public class PrimitiveFigure extends Layer {
 	private final Label nameLabel;
@@ -39,16 +40,12 @@ public class PrimitiveFigure extends Layer {
 		spaceData.widthHint = 37;
 
 		nameLabel = new Label();
-		final GridData nameLabelData = new GridData();
+		final GridData nameLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		nameLabelData.widthHint = 100;
-		nameLabelData.grabExcessHorizontalSpace = true;
-		nameLabelData.horizontalAlignment = GridData.FILL;
 
 		emptyLabel = new Label();
-		final GridData emptyLabelData = new GridData();
+		final GridData emptyLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		emptyLabelData.widthHint = 100;
-		emptyLabelData.grabExcessHorizontalSpace = true;
-		emptyLabelData.horizontalAlignment = GridData.FILL;
 
 		final GridData arrowLeftData = new GridData();
 		arrowLeftData.widthHint = 50;

@@ -98,10 +98,10 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	@Override
 	protected Primitive getInputType(final Object input) {
-		if (input instanceof InputPrimitiveEditPart || input instanceof OutputPrimitiveEditPart) {
-			return ((PrimitiveEditPart) input).getCastedModel();
+		if ((input instanceof InputPrimitiveEditPart) || (input instanceof OutputPrimitiveEditPart)) {
+			return ((PrimitiveEditPart) input).getModel();
 		}
-		if (input instanceof InputPrimitive || input instanceof OutputPrimitive) {
+		if ((input instanceof InputPrimitive) || (input instanceof OutputPrimitive)) {
 			return ((Primitive) input);
 		}
 		return null;

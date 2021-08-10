@@ -23,8 +23,9 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 
 	private PolylineConnection connection;
 
-	public PrimitiveConnection getCastedModel() {
-		return (PrimitiveConnection) getModel();
+	@Override
+	public PrimitiveConnection getModel() {
+		return (PrimitiveConnection) super.getModel();
 	}
 
 	@Override
@@ -35,11 +36,12 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 	@Override
 	protected IFigure createFigure() {
 		connection = (PolylineConnection) super.createFigure();
-		setConnection(getCastedModel().isLeft(), getCastedModel().isInputPrimitive());
+		setConnection(getModel().isLeft(), getModel().isInputPrimitive());
 		return connection;
 	}
 
 	public void setConnection(boolean isLeft, boolean isInput) {
+		// TODO consider isLeft here
 		if (isInput) {
 			connection.setSourceDecoration(null);
 			connection.setTargetDecoration(createArrowRectangle());
@@ -50,8 +52,8 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	private static PolygonDecoration createArrow() {
-		PolygonDecoration arrow = new PolygonDecoration();
-		PointList pl = new PointList();
+		final PolygonDecoration arrow = new PolygonDecoration();
+		final PointList pl = new PointList();
 		pl.addPoint(0, 0);
 		pl.addPoint(-7, -4);
 		pl.addPoint(-7, 4);
@@ -62,8 +64,8 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	private static PolygonDecoration createSquare() {
-		PolygonDecoration square = new PolygonDecoration();
-		PointList pl = new PointList();
+		final PolygonDecoration square = new PolygonDecoration();
+		final PointList pl = new PointList();
 		pl.addPoint(-4, -4);
 		pl.addPoint(-4, 4);
 		pl.addPoint(4, 4);
@@ -75,8 +77,8 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	private static PolygonDecoration createArrowRectangle() {
-		PolygonDecoration arrowRectangle = new PolygonDecoration();
-		PointList pl = new PointList();
+		final PolygonDecoration arrowRectangle = new PolygonDecoration();
+		final PointList pl = new PointList();
 		pl.addPoint(-4, -4);
 		pl.addPoint(-4, 4);
 		pl.addPoint(4, 4);

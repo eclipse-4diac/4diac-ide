@@ -307,7 +307,7 @@ public class TransactionSection extends AbstractServiceSection {
 	@Override
 	protected Object getInputType(final Object input) {
 		if (input instanceof TransactionEditPart) {
-			return ((TransactionEditPart) input).getCastedModel();
+			return ((TransactionEditPart) input).getModel();
 		}
 		if (input instanceof ServiceTransaction) {
 			return input;

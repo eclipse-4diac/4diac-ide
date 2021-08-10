@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2015 Profactor GmbH, fortiss GmbH
- * 
+ *               2021 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,10 +11,12 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.draw2d.ConnectionAnchor;
@@ -36,17 +39,15 @@ public class OutputPrimitiveEditPart extends PrimitiveEditPart {
 
 	@Override
 	public List<Object> getModelSourceConnections() {
-		ArrayList<Object> temp = new ArrayList<>();
-		temp.add(getPrimitiveConnection());
-		return temp;
+		return Arrays.asList(getPrimitiveConnection());
 	}
 
 	@Override
 	public List<Object> getModelTargetConnections() {
-		ArrayList<Object> temp = new ArrayList<>();
-		InputPrimitive view = getCastedParent().getPossibleInputPrimitive(getCastedModel());
+		final List<Object> temp = new ArrayList<>();
+		final InputPrimitive view = getCastedParent().getPossibleInputPrimitive(getModel());
 		if (view != null) {
-			EditPart part = (EditPart) getViewer().getEditPartRegistry().get(view);
+			final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(view);
 			if (part instanceof InputPrimitiveEditPart) {
 				temp.add(((InputPrimitiveEditPart) part).getConnectingConnection());
 			}
@@ -83,8 +84,8 @@ public class OutputPrimitiveEditPart extends PrimitiveEditPart {
 	}
 
 	@Override
-	public OutputPrimitive getCastedModel() {
-		return (OutputPrimitive) getModel();
+	public OutputPrimitive getModel() {
+		return (OutputPrimitive) super.getModel();
 	}
 
 	@Override
@@ -94,7 +95,7 @@ public class OutputPrimitiveEditPart extends PrimitiveEditPart {
 
 	@Override
 	public EObject getElement() {
-		return getCastedModel();
+		return getModel();
 	}
 
 	@Override
