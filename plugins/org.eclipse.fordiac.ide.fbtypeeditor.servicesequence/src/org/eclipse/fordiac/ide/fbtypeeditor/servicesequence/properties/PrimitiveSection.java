@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ *               2019, 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,9 +12,13 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
+ *   Melanie Winter - updated section, use comboboxes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
+import java.util.Arrays;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveInterfaceCommand;
@@ -22,48 +26,34 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.PrimitiveEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class PrimitiveSection extends AbstractServiceSection {
 
-	private Text eventText;
 	private Text parametersText;
 	private CCombo serviceInterfaceCombo;
-	private Button buttonNone;
-	private Button buttonTrue;
-	private Button buttonFalse;
-	private Group qiGroup;
+	private CCombo eventCombo;
 
-	private PrimitiveEditPart editPart;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createEventSection(getLeftComposite());
 		createPrimitiveSection(getLeftComposite());
-		createQISection(getRightComposite());
 	}
 
 	protected void createEventSection(final Composite parent) {
@@ -71,64 +61,15 @@ public class PrimitiveSection extends AbstractServiceSection {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreateEventSection_Event);
-		eventText = createGroupText(composite, true);
-		eventText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(new ChangePrimitiveEventCommand(getType(), eventText.getText()));
-			setRadioButton();
-			addContentAdapter();
-		});
-	}
 
-	protected void createQISection(final Composite parent) {
-		qiGroup = getWidgetFactory().createGroup(parent, "QI"); //$NON-NLS-1$
-		qiGroup.setLayout(new RowLayout(SWT.VERTICAL));
-		qiGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		buttonNone = getWidgetFactory().createButton(qiGroup, Messages.PrimitiveSection_None, SWT.RADIO);
-		buttonNone.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent event) {
-				changeEventText(Messages.PrimitiveSection_None);
-				refresh();
-			}
-		});
-		buttonTrue = getWidgetFactory().createButton(qiGroup, "true", SWT.RADIO); //$NON-NLS-1$
-		buttonTrue.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent event) {
-				changeEventText("true"); //$NON-NLS-1$
-				refresh();
-			}
-		});
-		buttonFalse = getWidgetFactory().createButton(qiGroup, "false", SWT.RADIO); //$NON-NLS-1$
-		buttonFalse.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent event) {
-				changeEventText("false"); //$NON-NLS-1$
-				refresh();
-			}
-		});
-		qiGroup.setVisible(false);
-	}
+		eventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
+		eventCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 
-	private void changeEventText(final String button) {
-		if (null != editPart) {
-			final String event = getType().getEvent().replace("+", "").replace("-", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			switch (button) {
-			case "true": //$NON-NLS-1$
-				editPart.getNameLabel().setText(event + "+"); //$NON-NLS-1$
-				executeCommand(new ChangePrimitiveEventCommand(getType(), event + "+")); //$NON-NLS-1$
-				break;
-			case "false": //$NON-NLS-1$
-				editPart.getNameLabel().setText(event + "-"); //$NON-NLS-1$
-				executeCommand(new ChangePrimitiveEventCommand(getType(), event + "-")); //$NON-NLS-1$
-				break;
-			default:
-				editPart.getNameLabel().setText(event);
-				executeCommand(new ChangePrimitiveEventCommand(getType(), event));
-				break;
-			}
-		}
+		eventCombo.addListener(SWT.Selection, event -> {
+			executeCommand(
+					new ChangePrimitiveEventCommand(getType(), eventCombo.getText()));
+			refresh();
+		});
 	}
 
 	protected void createPrimitiveSection(final Composite parent) {
@@ -136,6 +77,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Interface);
+
 		serviceInterfaceCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
 		serviceInterfaceCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		serviceInterfaceCombo.addListener(SWT.Selection, event -> {
@@ -144,6 +86,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 							getType(), serviceInterfaceCombo.getText()));
 			refresh();
 		});
+
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Parameters);
 		parametersText = createGroupText(composite, true);
 		parametersText.addModifyListener(e -> {
@@ -156,13 +99,9 @@ public class PrimitiveSection extends AbstractServiceSection {
 	@Override
 	protected Primitive getInputType(final Object input) {
 		if (input instanceof InputPrimitiveEditPart || input instanceof OutputPrimitiveEditPart) {
-			editPart = (PrimitiveEditPart) input;
 			return ((PrimitiveEditPart) input).getCastedModel();
 		}
 		if (input instanceof InputPrimitive || input instanceof OutputPrimitive) {
-			final IEditorPart editor = EditorUtils.getCurrentActiveEditor();
-			final GraphicalViewer view = editor.getAdapter(GraphicalViewer.class);
-			editPart = (PrimitiveEditPart) view.getEditPartRegistry().get(input);
 			return ((Primitive) input);
 		}
 		return null;
@@ -172,7 +111,6 @@ public class PrimitiveSection extends AbstractServiceSection {
 	protected void setInputCode() {
 		parametersText.setEnabled(false);
 		serviceInterfaceCombo.removeAll();
-		eventText.setEnabled(false);
 	}
 
 	@Override
@@ -182,16 +120,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		if (null != type) {
 			parametersText.setText(getType().getParameters() != null ? getType().getParameters() : ""); //$NON-NLS-1$
 			setServiceInterfaceDropdown();
-			eventText.setText(getType().getEvent());
-			if (containsQI()) {
-				setRadioButton();
-				if (type instanceof OutputPrimitive) {
-					qiGroup.setText("QO"); //$NON-NLS-1$
-				} else {
-					qiGroup.setText("QI"); //$NON-NLS-1$
-				}
-				qiGroup.setVisible(true);
-			}
+			setEventDropdown();
 		}
 		commandStack = commandStackBuffer;
 	}
@@ -205,44 +134,28 @@ public class PrimitiveSection extends AbstractServiceSection {
 		return (FBType) getType().eContainer().eContainer().eContainer().eContainer();
 	}
 
-	protected boolean containsQI() {
-		if (type instanceof InputPrimitive) {
-			for (final VarDeclaration inVar : getFB().getInterfaceList().getInputVars()) {
-				if ("QI".equals(inVar.getName())) { //$NON-NLS-1$
-					return true;
-				}
-			}
-		} else if (type instanceof OutputPrimitive) {
-			for (final VarDeclaration outVar : getFB().getInterfaceList().getOutputVars()) {
-				if ("QO".equals(outVar.getName())) { //$NON-NLS-1$
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	public void setRadioButton() {
-		if (getType().getEvent().endsWith("+")) { //$NON-NLS-1$
-			buttonTrue.setSelection(true);
-			buttonFalse.setSelection(false);
-			buttonNone.setSelection(false);
-		} else {
-			if (getType().getEvent().endsWith("-")) { //$NON-NLS-1$
-				buttonFalse.setSelection(true);
-				buttonNone.setSelection(false);
-				buttonTrue.setSelection(false);
-			} else {
-				buttonNone.setSelection(true);
-				buttonFalse.setSelection(false);
-				buttonTrue.setSelection(false);
-			}
-		}
-	}
-
 	protected boolean isLeftInterfaceSelected() {
 		return (serviceInterfaceCombo.getText().equals(serviceInterfaceCombo.getItem(0)));
 	}
+
+	public void setEventDropdown() {
+		eventCombo.removeAll();
+		final FBType fb = (FBType) getType().getService().eContainer();
+		for (final Event event : getRelevantEvents(fb)) {
+			eventCombo.add(event.getName());
+		}
+		final String currentEvent = getType().getEvent();
+		final int index = Arrays.asList(eventCombo.getItems()).indexOf(currentEvent);
+		eventCombo.select(index);
+	}
+
+	private EList<Event> getRelevantEvents(final FBType fb) {
+		if (getType() instanceof InputPrimitive) {
+			return fb.getInterfaceList().getEventInputs();
+		}
+		return fb.getInterfaceList().getEventOutputs();
+	}
+
 
 	public void setServiceInterfaceDropdown() {
 		serviceInterfaceCombo.removeAll();
