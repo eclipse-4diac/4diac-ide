@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
@@ -65,12 +66,13 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 */
 	public MonitoringBaseElement getMonitoringElement(final IInterfaceElement port) {
 		if (port != null) {
-			
-			SystemMonitoringData data = systemMonitoringData.get(port.getFBNetworkElement().getFbNetwork().getAutomationSystem());
-			if (data != null) {
-				return data.getMonitoredElement(port);
+			final FBNetworkElement fbNetworkElement = port.getFBNetworkElement();
+			if (fbNetworkElement != null) {
+				final SystemMonitoringData data = systemMonitoringData.get(fbNetworkElement.getFbNetwork().getAutomationSystem());
+				if (data != null) {
+					return data.getMonitoredElement(port);
+				}
 			}
-
 		}
 		return null;
 	}
