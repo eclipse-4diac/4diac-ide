@@ -257,8 +257,13 @@ public class UpdateFBTypeCommand extends Command {
 		if (oldInterface != null && oldInterface.getFBNetworkElement() == oldElement) {
 			// origView is an interface of the original FB => find same interface on copied
 			// FB
-			final IInterfaceElement interfaceElement = newElement.getInterfaceElement(oldInterface.getName());
+			
+			// remove "{0}" from message
+			String wrongMsg = Messages.UpdateFBTypeCommand_wrong_type.trim().substring(0,
+					Messages.UpdateFBTypeCommand_wrong_type.trim().length() - 3);
 
+			final IInterfaceElement interfaceElement = newElement.getInterfaceElement(oldInterface.getName().replace(wrongMsg, ""));
+			
 
 			if (interfaceElement == null) {
 				return createErrorMarker(newElement, oldInterface,
@@ -268,9 +273,16 @@ public class UpdateFBTypeCommand extends Command {
 			if (!oldInterface.getType().isCompatibleWith(interfaceElement.getType())) {
 				final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
 						oldInterface.getTypeName(), interfaceElement.getTypeName());
-				return createErrorMarker(newElement, oldInterface,
-						MessageFormat.format(Messages.UpdateFBTypeCommand_wrong_type, oldInterface.getName()),
-						errorMessage);
+				
+				if(oldInterface.getName().startsWith(wrongMsg)) {
+					// "Wrong type:" already in name
+					return createErrorMarker(newElement, oldInterface, oldInterface.getName(),
+							errorMessage);
+				}else {
+					return createErrorMarker(newElement, oldInterface,
+							MessageFormat.format(Messages.UpdateFBTypeCommand_wrong_type, oldInterface.getName()),
+							errorMessage);
+				}
 			}
 
 			return interfaceElement;
