@@ -16,6 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
@@ -36,11 +38,22 @@ public class CreateTransactionCommand extends AbstractCreationCommand {
 		this.refElement = refElement;
 
 	}
+
+	@Override
+	public boolean canExecute() {
+		return refElement != null && parent != null;
+	}
 	@Override
 	public void execute() {
 		newTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		final InputPrimitive primitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
-		primitive.setEvent("INIT"); //$NON-NLS-1$
+
+		final EList<Event> eventInputs = parent.getService().getFBType().getInterfaceList().getEventInputs();
+		if (eventInputs.isEmpty()) {
+			primitive.setEvent("INIT"); //$NON-NLS-1$
+		} else {
+			primitive.setEvent(eventInputs.get(0).getName());
+		}
 		primitive.setInterface(parent.getService().getLeftInterface());
 		newTransaction.setInputPrimitive(primitive);
 		addNewTransaction();

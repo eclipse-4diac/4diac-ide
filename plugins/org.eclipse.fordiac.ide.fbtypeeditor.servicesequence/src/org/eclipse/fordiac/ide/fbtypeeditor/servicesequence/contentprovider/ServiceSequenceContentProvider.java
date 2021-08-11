@@ -26,7 +26,7 @@ public class ServiceSequenceContentProvider implements ITreeContentProvider {
 		if (inputElement instanceof ServiceSequence) {
 			return ((ServiceSequence) inputElement).getServiceTransaction().toArray();
 		}
-		return new Object[] {};
+		return new Object[0];
 	}
 
 	@Override

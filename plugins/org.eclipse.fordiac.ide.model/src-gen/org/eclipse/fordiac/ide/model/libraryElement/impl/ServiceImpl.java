@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
@@ -46,7 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 public class ServiceImpl extends EObjectImpl implements Service {
 	/** The cached value of the '{@link #getRightInterface() <em>Right Interface</em>}' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getRightInterface()
 	 * @generated
 	 * @ordered */
@@ -54,7 +55,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 
 	/** The cached value of the '{@link #getLeftInterface() <em>Left Interface</em>}' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getLeftInterface()
 	 * @generated
 	 * @ordered */
@@ -62,21 +63,21 @@ public class ServiceImpl extends EObjectImpl implements Service {
 
 	/** The cached value of the '{@link #getServiceSequence() <em>Service Sequence</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getServiceSequence()
 	 * @generated
 	 * @ordered */
 	protected EList<ServiceSequence> serviceSequence;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ServiceImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -84,19 +85,27 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<ServiceSequence> getServiceSequence() {
 		if (serviceSequence == null) {
-			serviceSequence = new EObjectContainmentEList.Resolving<ServiceSequence>(ServiceSequence.class, this,
+			serviceSequence = new EObjectContainmentEList.Resolving<>(ServiceSequence.class, this,
 					LibraryElementPackage.SERVICE__SERVICE_SEQUENCE);
 		}
 		return serviceSequence;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public FBType getFBType() {
+		return (FBType) this.eContainer();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public ServiceInterface getRightInterface() {
@@ -122,14 +131,14 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public ServiceInterface basicGetRightInterface() {
 		return rightInterface;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public NotificationChain basicSetRightInterface(ServiceInterface newRightInterface, NotificationChain msgs) {
 		ServiceInterface oldRightInterface = rightInterface;
@@ -146,7 +155,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setRightInterface(ServiceInterface newRightInterface) {
@@ -167,7 +176,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ServiceInterface getLeftInterface() {
@@ -193,14 +202,14 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public ServiceInterface basicGetLeftInterface() {
 		return leftInterface;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public NotificationChain basicSetLeftInterface(ServiceInterface newLeftInterface, NotificationChain msgs) {
 		ServiceInterface oldLeftInterface = leftInterface;
@@ -217,7 +226,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setLeftInterface(ServiceInterface newLeftInterface) {
@@ -238,7 +247,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -255,7 +264,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -276,7 +285,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -299,7 +308,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -320,7 +329,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {

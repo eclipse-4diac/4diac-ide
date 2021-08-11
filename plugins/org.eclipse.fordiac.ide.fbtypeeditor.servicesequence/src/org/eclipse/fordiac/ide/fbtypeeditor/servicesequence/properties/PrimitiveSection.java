@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrim
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.PrimitiveEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
@@ -47,27 +48,48 @@ public class PrimitiveSection extends AbstractServiceSection {
 	private Text parametersText;
 	private CCombo serviceInterfaceCombo;
 	private CCombo eventCombo;
-
+	private CCombo dataQualifyingCombo;
+	private final static int ASCII_UNDERSCORE = 95;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createEventSection(getLeftComposite());
 		createPrimitiveSection(getLeftComposite());
+		fillDataQualifyingDropdown();
+		dataQualifyingCombo.setToolTipText("available if there is a datapin named QI");
 	}
 
 	protected void createEventSection(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		composite.setLayout(new GridLayout(3, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		composite.pack();
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreateEventSection_Event);
 
-		eventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
-		eventCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		final Composite eventComposite = getWidgetFactory().createComposite(composite);
+		eventComposite.setLayout(new GridLayout(1, true));
+		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
 
+		eventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), eventComposite);
+		eventCombo.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		eventCombo.addListener(SWT.Selection, event -> {
-			executeCommand(
-					new ChangePrimitiveEventCommand(getType(), eventCombo.getText()));
+			final String newEventName = eventCombo.getText() + dataQualifyingCombo.getText();
+			executeCommand(new ChangePrimitiveEventCommand(getType(), newEventName));
+			refresh();
+		});
+
+		final Composite dataQualifyingComposite = getWidgetFactory().createComposite(composite);
+		dataQualifyingComposite.setLayout(new GridLayout(1, true));
+		dataQualifyingComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.NONE, false, false));
+		dataQualifyingComposite.setSize(STANDARD_LABEL_WIDTH, getMinimumHeight());
+		dataQualifyingComposite.setToolTipText("available if there is a datapin named QI");
+
+		dataQualifyingCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), dataQualifyingComposite);
+		dataQualifyingCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+		dataQualifyingCombo.addListener(SWT.Selection, event -> {
+			final String newEventName = eventCombo.getText() + dataQualifyingCombo.getText();
+			executeCommand(new ChangePrimitiveEventCommand(getType(), newEventName));
 			refresh();
 		});
 	}
@@ -121,32 +143,77 @@ public class PrimitiveSection extends AbstractServiceSection {
 			parametersText.setText(getType().getParameters() != null ? getType().getParameters() : ""); //$NON-NLS-1$
 			setServiceInterfaceDropdown();
 			setEventDropdown();
+			setDataQualifyingDropdown();
+
+			final IInterfaceElement qiData = getType().getService().getFBType().getInterfaceList()
+					.getInterfaceElement("QI"); //$NON-NLS-1$
+			dataQualifyingCombo.setEnabled(qiData != null);
 		}
 		commandStack = commandStackBuffer;
 	}
+
+
 
 	@Override
 	protected Primitive getType() {
 		return (Primitive) type;
 	}
 
-	protected FBType getFB() {
-		return (FBType) getType().eContainer().eContainer().eContainer().eContainer();
+	protected FBType getFBType() {
+		return getType().getService().getFBType();
 	}
 
 	protected boolean isLeftInterfaceSelected() {
 		return (serviceInterfaceCombo.getText().equals(serviceInterfaceCombo.getItem(0)));
 	}
 
+	private void fillDataQualifyingDropdown() {
+		dataQualifyingCombo.removeAll();
+		dataQualifyingCombo.add(""); //$NON-NLS-1$
+		dataQualifyingCombo.add("+"); //$NON-NLS-1$
+		dataQualifyingCombo.add("-"); //$NON-NLS-1$
+
+	}
+
+	private void setDataQualifyingDropdown() {
+		final String currentEvent = getType().getEvent();
+		final String lastChar = String.valueOf(currentEvent.charAt(currentEvent.length() - 1));
+		int index = 0;
+		final String[] itemsArray = dataQualifyingCombo.getItems();
+		for (int i = 0; i < itemsArray.length; i++) {
+			if (lastChar.equals(itemsArray[i])) {
+				index = i;
+			}
+		}
+		dataQualifyingCombo.select(index);
+	}
+
 	public void setEventDropdown() {
 		eventCombo.removeAll();
-		final FBType fb = (FBType) getType().getService().eContainer();
+		final FBType fb = getType().getService().getFBType();
 		for (final Event event : getRelevantEvents(fb)) {
 			eventCombo.add(event.getName());
 		}
-		final String currentEvent = getType().getEvent();
-		final int index = Arrays.asList(eventCombo.getItems()).indexOf(currentEvent);
-		eventCombo.select(index);
+
+		selectCurrentEventInCombo();
+	}
+
+	private void selectCurrentEventInCombo() {
+
+		String currentEvent = getType().getEvent();
+		int index;
+
+		final char lastChar = currentEvent.charAt(currentEvent.length() - 1);
+
+		if (!(Character.isLetterOrDigit(lastChar) || (lastChar == ASCII_UNDERSCORE))) {
+			currentEvent = currentEvent.substring(0, currentEvent.length()-1);
+			index = Arrays.asList(eventCombo.getItems()).indexOf(currentEvent);
+		} else {
+			index = Arrays.asList(eventCombo.getItems()).indexOf(currentEvent);
+		}
+		if (index >= 0) {
+			eventCombo.select(index);
+		}
 	}
 
 	private EList<Event> getRelevantEvents(final FBType fb) {
@@ -159,7 +226,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	public void setServiceInterfaceDropdown() {
 		serviceInterfaceCombo.removeAll();
-		final Service s = (Service) getType().eContainer().eContainer().eContainer();
+		final Service s = getType().getService();
 		serviceInterfaceCombo.add(s.getLeftInterface().getName());
 		serviceInterfaceCombo.add(s.getRightInterface().getName());
 		if (serviceInterfaceCombo.getItem(0).equals(getType().getInterface().getName())) {
