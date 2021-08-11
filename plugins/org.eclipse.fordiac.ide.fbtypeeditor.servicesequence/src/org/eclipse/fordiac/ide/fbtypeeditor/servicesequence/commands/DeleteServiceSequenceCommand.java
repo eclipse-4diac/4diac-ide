@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011  Profactor GmbH, TU Wien ACIN
- * 
+ *               2021 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Melanie Winter - restore original position during undo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
@@ -21,21 +23,25 @@ public class DeleteServiceSequenceCommand extends Command {
 
 	private final FBType fbType;
 	private final ServiceSequence sequence;
-
-	/**
-	 * Instantiates a new delete service squence command.
-	 * 
+	private final int oldIndex;
+	
+	/** Instantiates a new delete service squence command.
+	 *
 	 * @param fbType   the fb type
-	 * @param sequence the sequence
-	 */
-	public DeleteServiceSequenceCommand(FBType fbType, ServiceSequence sequence) {
+	 * @param sequence the sequence to delete */
+	public DeleteServiceSequenceCommand(final FBType fbType, final ServiceSequence sequence) {
 		this.fbType = fbType;
 		this.sequence = sequence;
+		this.oldIndex = fbType.getService().getServiceSequence().indexOf(sequence);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (fbType != null) && (sequence != null);
+		return (fbType != null) && (sequence != null) && sequenceExistsInFBType();
+	}
+
+	private boolean sequenceExistsInFBType() {
+		return oldIndex >= 0;
 	}
 
 	@Override
@@ -45,7 +51,7 @@ public class DeleteServiceSequenceCommand extends Command {
 
 	@Override
 	public void undo() {
-		fbType.getService().getServiceSequence().add(sequence);
+		fbType.getService().getServiceSequence().add(oldIndex, sequence);
 	}
 
 	@Override
