@@ -17,7 +17,6 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
@@ -27,15 +26,15 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 
 public class StructParser {
 
-	private StringTokenizer tokenizer = null;
 
-	public WatchValueTreeNode createStructFromString(String struct, final StructuredType structType,
+	public static WatchValueTreeNode createStructFromString(String struct, final StructuredType structType,
 			final MonitoringElement monitoringElement, final WatchValueTreeNode parent) {
 		// remove first () for easier parsing
-		Assert.isTrue(struct.length() > 0);
+		if (!struct.isEmpty()) {
+			struct = struct.substring(1, struct.length() - 1);
+		}
 
-		struct = struct.substring(1, struct.length() - 1);
-		tokenizer = new StringTokenizer(struct, ","); //$NON-NLS-1$
+		final StringTokenizer tokenizer = new StringTokenizer(struct, ","); //$NON-NLS-1$
 		final IInterfaceElement interfaceElement = monitoringElement.getPort().getInterfaceElement();
 		interfaceElement.getName();
 		final WatchValueTreeNode structRoot = new WatchValueTreeNode(monitoringElement, structType,
