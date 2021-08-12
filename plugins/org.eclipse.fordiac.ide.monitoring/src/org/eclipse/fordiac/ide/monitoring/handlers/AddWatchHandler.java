@@ -114,7 +114,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 					}
 				} else if (model instanceof IInterfaceElement) {
 					final IInterfaceElement ie = (IInterfaceElement) model;
-					if (MonitoringManagerUtils.canBeMonitored(ie) && !manager.containsPort(ie)) {
+					if (MonitoringManagerUtils.canBeMonitored(ie, false) && !manager.containsPort(ie)) {
 						foundElements.add(ie);
 					}
 				}

@@ -35,7 +35,7 @@ public final class MonitoringManagerUtils {
 		throw new AssertionError(); // class should not be instantiated
 	}
 
-	public static boolean canBeMonitored(final IInterfaceElement ie) {
+	public static boolean canBeMonitored(final IInterfaceElement ie, final boolean showError) {
 
 		final FBNetworkElement fbNetworkElement = ie.getFBNetworkElement();
 
@@ -43,11 +43,12 @@ public final class MonitoringManagerUtils {
 			final IInterfaceElement anchor = SubAppPortHelper.findAnchorInterfaceElement(ie);
 
 			if (anchor == null) {
-				ErrorMessenger.popUpErrorMessage(Messages.MonitoringManagerUtils_NoSubappAnchor);
+				if (showError) {
+					ErrorMessenger.popUpErrorMessage(Messages.MonitoringManagerUtils_NoSubappAnchor);
+				}
 				return false;
 			}
 			return true;
-
 		}
 
 		return fbNetworkElement instanceof FB;
@@ -59,7 +60,7 @@ public final class MonitoringManagerUtils {
 		// As a first solution try to find the first interface element and see if we
 		// can monitor it
 		final var ies = obj.getInterface().getAllInterfaceElements();
-		return !ies.isEmpty() && canBeMonitored(ies.get(0));
+		return !ies.isEmpty() && canBeMonitored(ies.get(0), false);
 	}
 
 	public static PortElement createPortElement(
