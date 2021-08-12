@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 
 
 public class MonitoringChildren implements IMonitoringListener, IChildrenProvider {
@@ -45,7 +46,7 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 			if (null != element) {
 				if (element.getPort().getFb().getFbNetwork().equals(fbNetwork)) {
 					arrayList.add(element);
-				} else if (checkResource(element)) {
+				} else if (element instanceof SubappMonitoringElement || checkResource(element)) {
 					final Object parent = element.getPort().getFb().getFbNetwork().eContainer();
 					if (isInsideMonitoredSubApp(parent, fbNetwork)) {
 						arrayList.add(element);
