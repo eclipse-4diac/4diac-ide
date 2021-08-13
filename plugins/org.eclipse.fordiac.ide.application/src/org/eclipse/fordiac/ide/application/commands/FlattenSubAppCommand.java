@@ -129,6 +129,7 @@ public class FlattenSubAppCommand extends Command {
 		parent.getAdapterConnections().addAll(transferAdapterConnections);
 
 		createCommands.redo();
+		setUniqueName.redo();
 		mappCommands.redo();
 	}
 
@@ -149,6 +150,7 @@ public class FlattenSubAppCommand extends Command {
 		parent.getAdapterConnections().removeAll(transferAdapterConnections);
 		subapp.getSubAppNetwork().getAdapterConnections().addAll(transferAdapterConnections);
 
+		setUniqueName.undo();
 		deleteCommands.undo();
 	}
 
