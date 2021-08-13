@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -193,9 +194,12 @@ public final class NameRepository {
 				}
 				elementsList = elements;
 			}
+		} else if (refElement instanceof ServiceSequence) {
+			final ServiceSequence seq = (ServiceSequence) refElement;
+			elementsList = seq.getService().getServiceSequence();
 		} else {
 			throw new IllegalArgumentException(
-					"Refenrence list for given class not available: " + refElement.getClass().toString()); //$NON-NLS-1$
+					"Reference list for given class not available: " + refElement.getClass().toString()); //$NON-NLS-1$
 		}
 
 		return elementsList.stream().filter(element -> element != refElement).map(INamedElement::getName)

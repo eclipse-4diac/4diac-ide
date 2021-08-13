@@ -65,8 +65,12 @@ public class ServiceFigure extends FreeformLayeredPane {
 		layout.verticalSpacing = 0;
 		baseLayer.setLayoutManager(layout);
 
+		final int middleLineWidth = 5;
 		leftFigure = new Figure();
 		final GridLayout leftLayout = new GridLayout();
+		// final AdvancedLineBorder middleLineLeft = new AdvancedLineBorder(PositionConstants.EAST);
+		// middleLineLeft.setWidth(middleLineWidth);
+		// leftFigure.setBorder(middleLineLeft);
 		leftFigure.setLayoutManager(leftLayout);
 		leftLayout.horizontalSpacing = 0;
 		leftLayout.marginWidth = 0;
@@ -76,16 +80,22 @@ public class ServiceFigure extends FreeformLayeredPane {
 
 		middleFigure = new Figure();
 		middleFigure.setPreferredSize(150, 0);
-		// middleFigure.setBorder(new AdvancedLineBorder(PositionConstants.EAST | PositionConstants.WEST));
-		final AdvancedLineBorder middleLines = new AdvancedLineBorder(PositionConstants.EAST | PositionConstants.WEST);
-		middleLines.setWidth(5);
-		middleFigure.setBorder(middleLines);
+		// final AdvancedLineBorder middleLines = new AdvancedLineBorder(PositionConstants.WEST |
+		// PositionConstants.EAST);
+		// middleLines.setWidth(10);
+
+		final AdvancedLineBorder middleLineLeft = new AdvancedLineBorder(PositionConstants.WEST);
+		middleLineLeft.setWidth(middleLineWidth);
+		middleFigure.setBorder(middleLineLeft);
 		middleFigure.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHTER_GRAY));
 		middleFigure.setOpaque(true);
 		baseLayer.add(middleFigure);
 
 		rightFigure = new Figure();
 		final GridLayout rightLayout = new GridLayout();
+		final AdvancedLineBorder middleLineRight = new AdvancedLineBorder(PositionConstants.WEST);
+		middleLineRight.setWidth(middleLineWidth);
+		rightFigure.setBorder(middleLineRight);
 		rightFigure.setLayoutManager(rightLayout);
 		rightLayout.horizontalSpacing = 0;
 		rightLayout.marginWidth = 0;
@@ -119,6 +129,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 		final GridData leftLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(leftLabel, leftLabelData);
 		interfaceLayer.add(leftLabel);
+
 
 		rightLabel = new Label();
 		rightLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE));
@@ -173,7 +184,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 
 	public void setRightLabelText(final String name) {
 		rightLabel.setText(null != name ? name : ""); //$NON-NLS-1$
-		rightLabel.setIcon(FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImage());
+		rightLabel.setIcon(FordiacImage.ICON_RIGHT_OUTPUT_PRIMITIVE.getImage());
 		rightLabel.setTextPlacement(PositionConstants.EAST);
 	}
 }

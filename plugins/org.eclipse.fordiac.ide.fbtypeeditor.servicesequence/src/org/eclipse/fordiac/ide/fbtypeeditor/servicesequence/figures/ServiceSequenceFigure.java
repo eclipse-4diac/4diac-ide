@@ -11,9 +11,10 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Melanie Winter
+ *   Bianca Wiesmayr, Melanie Winter
  *     - extracted from ServiceSequenceEditPart, cleanup, allow expanding
  *******************************************************************************/
+
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -35,6 +36,8 @@ import org.eclipse.swt.widgets.Display;
 public class ServiceSequenceFigure extends Layer {
 	private final Label nameLabel;
 	private final Label commentLabel;
+	private String name;
+	private String comment;
 
 	private final IFigure nameCommentFigure;
 
@@ -50,8 +53,9 @@ public class ServiceSequenceFigure extends Layer {
 	}
 
 
-	private void setExpanded(final boolean isExpanded) {
+	public void setExpanded(final boolean isExpanded) {
 		this.isExpanded = isExpanded;
+		setLabelText(name, comment);
 	}
 
 	// avoid call of overridable method from constructor
@@ -69,25 +73,19 @@ public class ServiceSequenceFigure extends Layer {
 		nameLabel.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 		nameLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.BOLD));
 		nameLabel.setLabelAlignment(PositionConstants.LEFT);
-		// commentLabel.setLabelAlignment(PositionConstants.RIGHT);
 
 		commentLabel.setOpaque(true);
 		commentLabel.setLabelAlignment(PositionConstants.RIGHT);
 		commentLabel.setForegroundColor(ColorConstants.black);
-		// nameLabel.add(commentLabel, new GridData(SWT.RIGHT, SWT.None, true, false));
-
-		final GridData nameLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		
+		final GridData nameLayoutData = new GridData(SWT.LEFT, SWT.FILL, true, true);
 		nameCommentFigure.getLayoutManager().setConstraint(nameLabel, nameLayoutData);
 
-		final GridData commentLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		final GridData commentLayoutData = new GridData(SWT.RIGHT, SWT.FILL, true, true);
 		nameCommentFigure.getLayoutManager().setConstraint(commentLabel, commentLayoutData);
-		// getLayoutManager().setConstraint(commentLabel, nameLayoutData);
-
 		nameCommentFigure.add(nameLabel);
 		nameCommentFigure.add(commentLabel);
 
-
-		// add(commentLabel);
 		add(nameCommentFigure);
 		setConstraint(nameCommentFigure, new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -97,20 +95,28 @@ public class ServiceSequenceFigure extends Layer {
 
 		final GridData containerData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		getLayoutManager().setConstraint(transactionContainer, containerData);
+		transactionContainer.setBackgroundColor(ColorConstants.darkBlue);
 		add(transactionContainer);
 
 	}
 
-	public Label getLabel() {
+	public Label getNameLabel() {
 		return nameLabel;
+	}
+
+	public Label getCommentLabel() {
+		return commentLabel;
 	}
 
 	public void setLabelText(final String name, final String comment) {
 		final String sequenceName = null != name ? name : ""; //$NON-NLS-1$
+		this.name = sequenceName;
 		final String symbol = isExpanded ? "\u25BE  " : "\u25B8  "; //$NON-NLS-1$ //$NON-NLS-2$
 		this.nameLabel.setText(symbol + sequenceName);
 
-		this.commentLabel.setText(comment);
+		final String serviceComment = comment != null ? comment : "";
+		this.comment = comment;
+		this.commentLabel.setText(serviceComment);
 
 	}
 

@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Melanie Winter - added parameter figure
  *******************************************************************************/
+
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
 
 import org.eclipse.draw2d.Figure;
@@ -20,8 +21,10 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Layer;
+import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 
 public class PrimitiveFigure extends Layer {
 	private final Label nameLabel;
@@ -40,6 +43,9 @@ public class PrimitiveFigure extends Layer {
 
 		centerFigure = new Figure();
 		final GridData spaceData = new GridData();
+		centerFigure.setForegroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_CYAN));
+		centerFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
+		centerFigure.setBorder(new LineBorder());
 		spaceData.widthHint = 37;
 
 		nameLabel = new Label();
@@ -54,10 +60,15 @@ public class PrimitiveFigure extends Layer {
 		arrowLeftData.widthHint = 50;
 		leftFigure = new Figure();
 
+		leftFigure.setForegroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN));
+		leftFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_GREEN));
 
 		final GridData arrowRightData = new GridData();
 		arrowRightData.widthHint = 50;
 		rightFigure = new Figure();
+
+		rightFigure.setForegroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
+		rightFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA));
 
 		final GridData parameterData = new GridData();
 		parameterData.widthHint = 50;
