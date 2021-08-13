@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveParameterCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.PrimitiveEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPrimitiveEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -121,7 +121,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 	@Override
 	protected Primitive getInputType(final Object input) {
 		if ((input instanceof InputPrimitiveEditPart) || (input instanceof OutputPrimitiveEditPart)) {
-			return ((PrimitiveEditPart) input).getModel();
+			return ((AbstractPrimitiveEditPart) input).getModel();
 		}
 		if ((input instanceof InputPrimitive) || (input instanceof OutputPrimitive)) {
 			return ((Primitive) input);

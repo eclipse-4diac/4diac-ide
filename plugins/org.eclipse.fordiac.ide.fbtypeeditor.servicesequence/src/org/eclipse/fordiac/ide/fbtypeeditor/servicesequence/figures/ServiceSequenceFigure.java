@@ -11,25 +11,38 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr - extracted from ServiceSequenceEditPart, cleanup
+ *   Melanie Winter
+ *     - extracted from ServiceSequenceEditPart, cleanup, allow expanding
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Layer;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
+import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.widgets.Display;
 
 public class ServiceSequenceFigure extends Layer {
 	private final Label nameLabel;
 	private final Layer transactionContainer;
+	private boolean isExpanded;
 
-	public ServiceSequenceFigure() {
+	public ServiceSequenceFigure(final boolean isExpanded) {
 		nameLabel = new Label();
 		transactionContainer = new Layer();
+		setExpanded(isExpanded);
+	}
+
+
+	private void setExpanded(final boolean isExpanded) {
+		this.isExpanded = isExpanded;
 	}
 
 	// avoid call of overridable method from constructor
@@ -38,8 +51,12 @@ public class ServiceSequenceFigure extends Layer {
 		setLayoutManager(sequenceLayout);
 		sequenceLayout.verticalSpacing = 0;
 		nameLabel.setOpaque(true);
-		nameLabel.setBackgroundColor(ColorConstants.lightGray);
-		nameLabel.setLabelAlignment(PositionConstants.CENTER);
+		nameLabel.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHT_GRAY));
+		nameLabel.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
+		nameLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.BOLD));
+		final MarginBorder titleBorder = new MarginBorder(new Insets(3, 20, 3, 0));
+		nameLabel.setBorder(titleBorder);
+		nameLabel.setLabelAlignment(PositionConstants.LEFT);
 
 		final GridData nameLayoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		getLayoutManager().setConstraint(nameLabel, nameLayoutData);
@@ -52,6 +69,7 @@ public class ServiceSequenceFigure extends Layer {
 		final GridData containerData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		getLayoutManager().setConstraint(transactionContainer, containerData);
 		add(transactionContainer);
+
 	}
 
 	public Label getLabel() {
@@ -59,7 +77,9 @@ public class ServiceSequenceFigure extends Layer {
 	}
 
 	public void setLabelText(final String name) {
-		this.nameLabel.setText(null != name ? name : ""); //$NON-NLS-1$
+		final String sequenceName = null != name ? name : ""; //$NON-NLS-1$
+		final String symbol = isExpanded ? "\u25BE  " : "\u25B8  "; //$NON-NLS-1$ //$NON-NLS-2$
+		this.nameLabel.setText(symbol + sequenceName);
 	}
 
 	public Layer getTransactionContainer() {

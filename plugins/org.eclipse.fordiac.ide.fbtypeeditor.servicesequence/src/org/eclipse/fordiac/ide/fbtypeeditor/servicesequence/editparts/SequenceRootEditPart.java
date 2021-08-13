@@ -48,9 +48,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (getCastedModel().eAdapters().contains(adapter)) {
-				refresh();
-			}
+			refresh();
 		}
 	};
 
@@ -70,8 +68,6 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		super.deactivate();
 	}
 
-
-
 	@Override
 	protected IFigure createFigure() {
 		final ServiceFigure figure = new ServiceFigure();
@@ -86,7 +82,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ChangeInterfaceNameEditPolicy());
 	}
 
-	public boolean isLeft(DirectEditRequest request) {
+	public boolean isLeft(final DirectEditRequest request) {
 		Point point;
 		if (null == request.getLocation()) {
 			point = new Point(request.getCellEditor().getControl().getLocation());
@@ -97,8 +93,9 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		return point.x < (getFigure().getClientArea().width / 2);
 	}
 
-	public DirectEditManager getManager(boolean isLeft) {
-		final Label l = isLeft ? ((ServiceFigure) getFigure()).getLeftLabel() : ((ServiceFigure) getFigure()).getRightLabel();
+	public DirectEditManager getManager(final boolean isLeft) {
+		final Label l = isLeft ? ((ServiceFigure) getFigure()).getLeftLabel()
+				: ((ServiceFigure) getFigure()).getRightLabel();
 		return new LabelDirectEditManager(this, l);
 	}
 
@@ -111,7 +108,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		}
 	}
 
-	public void performDirectEdit(final char initialCharacter, boolean isLeft) {
+	public void performDirectEdit(final char initialCharacter, final boolean isLeft) {
 		if (getManager(isLeft) instanceof LabelDirectEditManager) {
 			((LabelDirectEditManager) getManager(isLeft)).show(initialCharacter);
 		} else {
@@ -119,7 +116,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		}
 	}
 
-	public void performDirectEdit(boolean isLeft) {
+	public void performDirectEdit(final boolean isLeft) {
 		getManager(isLeft).show();
 	}
 
@@ -160,7 +157,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 			final ServiceSequenceFigure child = (ServiceSequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
 			final ServiceFigure thisFigure = (ServiceFigure) getFigure();
 			final GridData childData = new GridData(SWT.FILL, SWT.NONE, true, false);
-			thisFigure.getServiceSequenceContainer().add(child);
+			thisFigure.getServiceSequenceContainer().add(child, index);
 			thisFigure.getServiceSequenceContainer().getLayoutManager().setConstraint(child, childData);
 		}
 	}

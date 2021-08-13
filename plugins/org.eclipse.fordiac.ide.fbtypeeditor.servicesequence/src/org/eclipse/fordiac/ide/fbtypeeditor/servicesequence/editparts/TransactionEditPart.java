@@ -45,9 +45,7 @@ public class TransactionEditPart extends AbstractGraphicalEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (getModel().eAdapters().contains(adapter)) {
-				refresh();
-			}
+			refresh();
 		}
 	};
 

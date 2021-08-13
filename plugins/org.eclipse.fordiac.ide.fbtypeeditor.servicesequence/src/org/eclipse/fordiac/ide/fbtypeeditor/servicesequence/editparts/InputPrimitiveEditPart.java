@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.Request;
 
-public class InputPrimitiveEditPart extends PrimitiveEditPart {
+public class InputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 
 	private final ConnectingConnection connectingConnection;
 

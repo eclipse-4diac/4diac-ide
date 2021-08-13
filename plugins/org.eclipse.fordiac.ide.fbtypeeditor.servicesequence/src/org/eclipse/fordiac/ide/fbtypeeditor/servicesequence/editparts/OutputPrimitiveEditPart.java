@@ -31,7 +31,7 @@ import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 
-public class OutputPrimitiveEditPart extends PrimitiveEditPart {
+public class OutputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 
 	OutputPrimitiveEditPart() {
 		super(new PrimitiveConnection(false));

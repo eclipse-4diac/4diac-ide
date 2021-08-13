@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 fortiss GmbH
+ *               2021 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Melanie Winter - added parameter figure
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
 
@@ -27,9 +29,10 @@ public class PrimitiveFigure extends Layer {
 	private final Figure centerFigure;
 	private final Figure leftFigure;
 	private final Figure rightFigure;
+	private final Figure parameterFigure;
 
 	public PrimitiveFigure(final boolean isLeftInterface, final String name) {
-		final GridLayout mainLayout = new GridLayout(5, false);
+		final GridLayout mainLayout = new GridLayout(6, false);
 		setLayoutManager(mainLayout);
 		mainLayout.marginHeight = 0;
 		mainLayout.marginWidth = 0;
@@ -51,9 +54,15 @@ public class PrimitiveFigure extends Layer {
 		arrowLeftData.widthHint = 50;
 		leftFigure = new Figure();
 
+
 		final GridData arrowRightData = new GridData();
 		arrowRightData.widthHint = 50;
 		rightFigure = new Figure();
+
+		final GridData parameterData = new GridData();
+		parameterData.widthHint = 50;
+		parameterFigure = new Figure();
+		parameterFigure.setLayoutManager(new GridLayout());
 
 		setInterfaceDirection(isLeftInterface);
 
@@ -63,6 +72,7 @@ public class PrimitiveFigure extends Layer {
 		setConstraint(leftFigure, arrowLeftData);
 		setConstraint(rightFigure, arrowRightData);
 		setConstraint(nameLabel, nameLabelData);
+		setConstraint(parameterFigure, parameterData);
 	}
 
 	public void setInterfaceDirection(final boolean interfaceDirection) {
@@ -76,6 +86,7 @@ public class PrimitiveFigure extends Layer {
 			add(centerFigure);
 			add(rightFigure);
 			add(emptyLabel);
+			add(parameterFigure);
 		} else {
 			nameLabel.setLabelAlignment(PositionConstants.LEFT);
 			add(emptyLabel);
@@ -83,6 +94,7 @@ public class PrimitiveFigure extends Layer {
 			add(centerFigure);
 			add(rightFigure);
 			add(nameLabel);
+			add(parameterFigure);
 		}
 	}
 
@@ -96,5 +108,9 @@ public class PrimitiveFigure extends Layer {
 
 	public Figure getCenterFigure() {
 		return centerFigure;
+	}
+
+	public Figure getParameterFigure() {
+		return parameterFigure;
 	}
 }

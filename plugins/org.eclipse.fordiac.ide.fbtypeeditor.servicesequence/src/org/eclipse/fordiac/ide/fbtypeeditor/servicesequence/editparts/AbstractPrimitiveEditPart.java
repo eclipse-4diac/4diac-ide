@@ -11,7 +11,7 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr, Melanie Winter - cleanup
+ *   Bianca Wiesmayr, Melanie Winter - cleanup, addChildVisual
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
@@ -29,11 +29,14 @@ import org.eclipse.fordiac.ide.gef.policies.ChangeStringEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.IChangeStringEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.swt.layout.GridData;
 
-public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart
+public abstract class AbstractPrimitiveEditPart extends AbstractDirectEditableEditPart
 implements NodeEditPart, IChangeStringEditPart {
 
 	private final PrimitiveConnection connection;
@@ -42,13 +45,12 @@ implements NodeEditPart, IChangeStringEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (getModel().eAdapters().contains(adapter)) {
-				refresh();
-			}
+			refresh();
+
 		}
 	};
 
-	protected PrimitiveEditPart(final PrimitiveConnection connection) {
+	protected AbstractPrimitiveEditPart(final PrimitiveConnection connection) {
 		this.connection = connection;
 	}
 
@@ -87,7 +89,6 @@ implements NodeEditPart, IChangeStringEditPart {
 		return (Primitive) super.getModel();
 	}
 
-
 	protected TransactionEditPart getCastedParent() {
 		return (TransactionEditPart) getParent();
 	}
@@ -120,5 +121,18 @@ implements NodeEditPart, IChangeStringEditPart {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeletePrimitiveEditPolicy());
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ChangeStringEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
+	}
+
+	@Override
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		if (childEditPart instanceof ParameterEditPart) {
+			final PrimitiveFigure thisFigure = (PrimitiveFigure) getFigure();
+			final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+			final GridData childData = new GridData();
+			childData.grabExcessHorizontalSpace = true;
+			childData.horizontalAlignment = GridData.FILL;
+			thisFigure.getParameterFigure().getLayoutManager().setConstraint(child, childData);
+			thisFigure.getParameterFigure().add(child, index);
+		}
 	}
 }

@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateOutpu
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.MoveOutputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.PrimitiveEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPrimitiveEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
@@ -104,7 +104,7 @@ public class TransactionLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 		if (type.equals("LeftInputPrimitive") || type.equals("RightInputPrimitive")) { //$NON-NLS-1$ //$NON-NLS-2$
 			return new CreateInputPrimitiveCommand((String) type, model);
 		} else if (type.equals("LeftOutputPrimitive") || type.equals("RightOutputPrimitive")) { //$NON-NLS-1$ //$NON-NLS-2$
-			final PrimitiveEditPart refPrimitive = (PrimitiveEditPart) getInsertionReference(request.getLocation());
+			final AbstractPrimitiveEditPart refPrimitive = (AbstractPrimitiveEditPart) getInsertionReference(request.getLocation());
 			if (null != refPrimitive) {
 				if (refPrimitive instanceof InputPrimitiveEditPart) {
 					// we can not be above the input primitive

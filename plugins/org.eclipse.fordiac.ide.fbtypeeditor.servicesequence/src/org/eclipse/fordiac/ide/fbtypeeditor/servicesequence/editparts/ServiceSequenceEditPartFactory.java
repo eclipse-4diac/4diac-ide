@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -27,12 +27,12 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  */
 public class ServiceSequenceEditPartFactory extends Abstract4diacEditPartFactory {
 
-	public ServiceSequenceEditPartFactory(GraphicalEditor editor) {
+	public ServiceSequenceEditPartFactory(final GraphicalEditor editor) {
 		super(editor);
 	}
 
 	@Override
-	protected EditPart getPartForElement(EditPart context, final Object modelElement) {
+	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof FBType && context == null) {
 			return new SequenceRootEditPart();
 		}
@@ -53,6 +53,9 @@ public class ServiceSequenceEditPartFactory extends Abstract4diacEditPartFactory
 		}
 		if (modelElement instanceof ConnectingConnection) {
 			return new ConnectingConnectionEditPart();
+		}
+		if (modelElement instanceof Parameter) {
+			return new ParameterEditPart();
 		}
 		throw createEditpartCreationException(modelElement);
 	}
