@@ -20,6 +20,9 @@ public final class ServiceConstants {
 	private static final int GRAY_RGB = 234;
 	public static final RGB LIGHT_GRAY = new RGB(GRAY_RGB, GRAY_RGB, GRAY_RGB);
 
+	private static final int LIGHTER_GRAY_RGB = 250;
+	public static final RGB LIGHTER_GRAY = new RGB(LIGHTER_GRAY_RGB, LIGHTER_GRAY_RGB, LIGHTER_GRAY_RGB);
+
 	private static final int TEXT_BLUE_R = 0;
 	private static final int TEXT_BLUE_G = 120;
 	private static final int TEXT_BLUE_B = 215;

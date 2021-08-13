@@ -27,7 +27,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.ServiceSequenceFigure;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.SequenceLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.policies.HighlightEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -85,7 +84,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 			}
 		});
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new HighlightEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SequenceLayoutEditPolicy());
+		// installEditPolicy(EditPolicy.LAYOUT_ROLE, new SequenceLayoutEditPolicy());
 	}
 
 	@Override
@@ -147,7 +146,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 		super.refreshVisuals();
 		final ServiceSequenceFigure figure = getFigure();
 		if (null != getModel()) {
-			figure.setLabelText(getModel().getName());
+			figure.setLabelText(getModel().getName(), getModel().getComment());
 		}
 	}
 

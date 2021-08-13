@@ -26,8 +26,13 @@ import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.StackLayout;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.widgets.Display;
 
 public class ServiceFigure extends FreeformLayeredPane {
 	private Figure leftFigure;
@@ -36,6 +41,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 	private Label leftLabel;
 	private Label rightLabel;
 	private Layer serviceSequenceContainer;
+
 
 	public ServiceFigure() {
 		// nothing to do here, call createVisuals() manually to avoid call of overridable method from constructor
@@ -69,8 +75,13 @@ public class ServiceFigure extends FreeformLayeredPane {
 		baseLayer.add(leftFigure);
 
 		middleFigure = new Figure();
-		middleFigure.setPreferredSize(37, 0);
-		middleFigure.setBorder(new AdvancedLineBorder(PositionConstants.EAST | PositionConstants.WEST));
+		middleFigure.setPreferredSize(150, 0);
+		// middleFigure.setBorder(new AdvancedLineBorder(PositionConstants.EAST | PositionConstants.WEST));
+		final AdvancedLineBorder middleLines = new AdvancedLineBorder(PositionConstants.EAST | PositionConstants.WEST);
+		middleLines.setWidth(5);
+		middleFigure.setBorder(middleLines);
+		middleFigure.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHTER_GRAY));
+		middleFigure.setOpaque(true);
 		baseLayer.add(middleFigure);
 
 		rightFigure = new Figure();
@@ -93,6 +104,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 		final Layer interfaceLayer = new Layer();
 		interfaceLayer.setBorder(new MarginBorder(5, 0, 0, 0));
 		final GridLayout layout = new GridLayout(2, true);
+		interfaceLayer.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 		layout.horizontalSpacing = 0;
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
@@ -101,15 +113,17 @@ public class ServiceFigure extends FreeformLayeredPane {
 
 		leftLabel = new Label();
 		leftLabel.setLabelAlignment(PositionConstants.RIGHT);
-		leftLabel.setBorder(new MarginBorder(5, 0, 0, 35));
+		leftLabel.setBorder(new MarginBorder(5, 0, 0, 100));
+		leftLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE));
 
 		final GridData leftLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(leftLabel, leftLabelData);
 		interfaceLayer.add(leftLabel);
 
 		rightLabel = new Label();
+		rightLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE));
 		rightLabel.setLabelAlignment(PositionConstants.LEFT);
-		rightLabel.setBorder(new MarginBorder(5, 35, 0, 0));
+		rightLabel.setBorder(new MarginBorder(5, 100, 0, 0));
 		final GridData rightLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(rightLabel, rightLabelData);
 		interfaceLayer.add(rightLabel);
@@ -151,11 +165,15 @@ public class ServiceFigure extends FreeformLayeredPane {
 		return serviceSequenceContainer;
 	}
 
-	public void setLeftLabelText(String name) {
+	public void setLeftLabelText(final String name) {
 		leftLabel.setText(null != name ? name : ""); //$NON-NLS-1$
+		leftLabel.setIcon(FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
+		leftLabel.setTextPlacement(PositionConstants.WEST);
 	}
 
-	public void setRightLabelText(String name) {
+	public void setRightLabelText(final String name) {
 		rightLabel.setText(null != name ? name : ""); //$NON-NLS-1$
+		rightLabel.setIcon(FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImage());
+		rightLabel.setTextPlacement(PositionConstants.EAST);
 	}
 }
