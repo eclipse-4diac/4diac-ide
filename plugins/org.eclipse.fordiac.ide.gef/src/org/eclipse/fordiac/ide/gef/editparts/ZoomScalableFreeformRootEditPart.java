@@ -370,13 +370,17 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 		final BackgroundFreeformFigure editorBackground = new BackgroundFreeformFigure();
 		viewPort.setContents(editorBackground);
-		final ModuloFreeformFigure drawingAreaContainer = new ModuloFreeformFigure(); // same size as drawingArea,
-		// resizes that
+		final FreeformFigure drawingAreaContainer = createDrawingAreaContainer(drawingArea);
 		drawingAreaContainer.setBorder(new SingleLineBorder());
 		editorBackground.setContents(drawingAreaContainer);
-		drawingAreaContainer.setContents(drawingArea);
 
 		return viewPort;
+	}
+
+	protected FreeformFigure createDrawingAreaContainer(final FreeformLayeredPane drawingArea) {
+		final ModuloFreeformFigure drawingAreaContainer = new ModuloFreeformFigure();
+		drawingAreaContainer.setContents(drawingArea);
+		return drawingAreaContainer;
 	}
 
 	protected class ModuloFreeformFigure extends Figure implements FreeformFigure, FreeformListener {
@@ -404,12 +408,14 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 		@Override
 		public void fireExtentChanged() {
-			performRevalidation();
+			getListeners(FreeformListener.class)
+					.forEachRemaining(listener -> ((FreeformListener) listener).notifyFreeformExtentChanged());
+			revalidate();
 		}
 
 		@Override
 		public void notifyFreeformExtentChanged() {
-			performRevalidation();
+			revalidate();
 		}
 
 		@Override
@@ -460,14 +466,12 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			return (axisPos / baseUnit) * baseUnit;
 		}
 
-		private void performRevalidation() { // see invalidate() from FreeformHelper
+		@Override
+		public void invalidate() {
 			extent = null;
-			if (getParent() != null) {
-				((BackgroundFreeformFigure) getParent()).performRevalidation();
-			} else {
-				revalidate();
-			}
+			super.invalidate();
 		}
+
 
 		@Override
 		public void removeFreeformListener(final FreeformListener listener) {
@@ -491,7 +495,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	}
 
 	protected class BackgroundFreeformFigure extends Figure implements FreeformFigure, FreeformListener {
-		private ModuloFreeformFigure contents;
+		private FreeformFigure contents;
 		private Rectangle extent;
 
 		public BackgroundFreeformFigure() {
@@ -511,12 +515,12 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		public void fireExtentChanged() {
 			getListeners(FreeformListener.class)
 			.forEachRemaining(listener -> ((FreeformListener) listener).notifyFreeformExtentChanged());
-			performRevalidation();
+			revalidate();
 		}
 
 		@Override
 		public void notifyFreeformExtentChanged() {
-			performRevalidation();
+			revalidate();
 		}
 
 		@Override
@@ -549,19 +553,16 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 					bounds.y + ((bounds.height - extent.height) / 2), extent.width, extent.height);
 		}
 
-		public void setContents(final ModuloFreeformFigure contents) {
+		public void setContents(final FreeformFigure contents) {
 			this.contents = contents;
 			add(contents);
 			contents.addFreeformListener(this);
 		}
 
-		private void performRevalidation() { // see invalidate() from FreeformHelper
+		@Override
+		public void invalidate() {
 			extent = null;
-			if (getParent() != null) {
-				getParent().revalidate();
-			} else {
-				revalidate();
-			}
+			super.invalidate();
 		}
 	}
 }

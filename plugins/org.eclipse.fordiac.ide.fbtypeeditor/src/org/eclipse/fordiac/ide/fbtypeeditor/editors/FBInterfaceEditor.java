@@ -18,11 +18,19 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FreeformFigure;
+import org.eclipse.draw2d.FreeformLayeredPane;
+import org.eclipse.draw2d.FreeformListener;
+import org.eclipse.draw2d.FreeformViewport;
+import org.eclipse.draw2d.RangeModel;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBInterfacePaletteFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
+import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -35,6 +43,8 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -42,10 +52,13 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
 
@@ -181,6 +194,100 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		fbType = type;
 		getGraphicalViewer().setContents(fbType);
 
+	}
+
+	@Override
+	protected ScalableFreeformRootEditPart createRootEditPart() {
+		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
+			@Override
+			protected FreeformFigure createDrawingAreaContainer(final FreeformLayeredPane drawingArea) {
+				final InterfaceEditorContantArea drawingAreaContainer = new InterfaceEditorContantArea();
+				drawingAreaContainer.setContents(drawingArea);
+				return drawingAreaContainer;
+			}
+		};
+	}
+
+	@Override
+	protected Point getInitialScrollPos() {
+		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
+				.getRootEditPart();
+
+		final FreeformViewport rootviewPort = (FreeformViewport) rootEditPart.getFigure();
+
+		return new Point(calculateCenterScrollPos(rootviewPort.getHorizontalRangeModel()),
+				calculateCenterScrollPos(rootviewPort.getVerticalRangeModel()));
+	}
+
+	private static int calculateCenterScrollPos(final RangeModel rangeModel) {
+		final int center = (rangeModel.getMaximum() + rangeModel.getMinimum()) / 2;
+		return center - rangeModel.getExtent() / 2;
+	}
+
+	private class InterfaceEditorContantArea extends Figure implements FreeformFigure, FreeformListener {
+		private FreeformLayeredPane contents;
+		private Rectangle extent;
+
+		InterfaceEditorContantArea() {
+			setOpaque(true);
+
+			final ColorRegistry colorRegistry = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme()
+					.getColorRegistry();
+			setBackgroundColor(colorRegistry.get("org.eclipse.ui.editors.backgroundColor")); //$NON-NLS-1$
+
+		}
+
+		@Override
+		public void addFreeformListener(final FreeformListener listener) {
+			addListener(FreeformListener.class, listener);
+		}
+
+		@Override
+		public void fireExtentChanged() {
+			getListeners(FreeformListener.class)
+			.forEachRemaining(listener -> ((FreeformListener) listener).notifyFreeformExtentChanged());
+			revalidate();
+		}
+
+		@Override
+		public void notifyFreeformExtentChanged() {
+			revalidate();
+		}
+
+		@Override
+		public Rectangle getFreeformExtent() {
+			if (extent == null) {
+				extent = contents.getFreeformExtent().getCopy();
+				translateToParent(extent);
+			}
+			return extent;
+		}
+
+		@Override
+		public void invalidate() {
+			extent = null;
+			super.invalidate();
+		}
+
+		@Override
+		public void removeFreeformListener(final FreeformListener listener) {
+			removeListener(FreeformListener.class, listener);
+		}
+
+		@Override
+		public void setFreeformBounds(final Rectangle bounds) {
+			Rectangle r = getFreeformExtent(); // we insist on our own size calculation
+			setBounds(r);
+			r = r.getCopy();
+			translateFromParent(r);
+			contents.setFreeformBounds(r);
+		}
+
+		public void setContents(final FreeformLayeredPane contents) {
+			this.contents = contents;
+			add(contents);
+			contents.addFreeformListener(this);
+		}
 	}
 
 }
