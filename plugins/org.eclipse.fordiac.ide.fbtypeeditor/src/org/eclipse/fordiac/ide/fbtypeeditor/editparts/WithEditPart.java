@@ -22,7 +22,6 @@ import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -48,17 +47,6 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		return false;
 	}
 
-//	private int calculateWithPos(final boolean isInput) {
-//		int pos = 0;
-//		final With with = getCastedModel();
-//		final Event event = (Event) with.eContainer();
-//		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
-//		if (null != interfaceList) {
-//			return InterfaceEditPart.getnumEventwith( isInput?interfaceList.getEventInputs():interfaceList.getEventOutputs(), event);
-//	}
-//	return 0;
-//}
-
 	@Override
 	protected void createEditPolicies() {
 		// // Selection handle edit policy.
@@ -83,9 +71,6 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	private void updateConnection(final PolylineConnection connection) {
 		final int h = 15;
 		final float scale = 0.2f;
-		// ConnectionEditPart connection_var = null;
-		// final int withPos = InterfaceEditPart.calculateWithPos((ConnectionEditPart)
-		// connection_var, isInput());
 		final int withPos = InterfaceEditPart.calculateWithPos(getCastedModel(),isInput());
 		// creating top rectangle
 		final PointList rect = createPointList(h, withPos);

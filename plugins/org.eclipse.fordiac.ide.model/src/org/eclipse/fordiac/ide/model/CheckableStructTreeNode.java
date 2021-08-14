@@ -101,7 +101,7 @@ public class CheckableStructTreeNode extends StructTreeNode {
 	}
 
 	private void ungreyParents(final CheckableStructTreeNode node) {
-		CheckableStructTreeNode parent = node;// node.getParent();
+		CheckableStructTreeNode parent = node;
 		final StructTreeNode rootNode = node.getRootNode();
 		while (parent != rootNode) {
 			if (parent.isGrey() && !parent.childIsChecked()) {
@@ -116,7 +116,7 @@ public class CheckableStructTreeNode extends StructTreeNode {
 	}
 
 	public static void greyParents(final CheckableStructTreeNode node) {
-		CheckableStructTreeNode parent = node;// ; node.getParent();
+		CheckableStructTreeNode parent = node;
 		final StructTreeNode rootNode = node.getRootNode();
 		while (parent != rootNode) {
 			if (!parent.isChecked()) {

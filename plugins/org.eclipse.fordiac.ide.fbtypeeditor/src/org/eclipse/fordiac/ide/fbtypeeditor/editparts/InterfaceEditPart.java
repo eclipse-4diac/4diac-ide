@@ -199,7 +199,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 
 	public static int calculateWithPos(final With with, final boolean isInput) {
-		//final With with = (With) connection.getModel();
 		final Event event = (Event) with.eContainer();
 		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		if (null != interfaceList) {
@@ -208,9 +207,9 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return 0;
 	}
 	
-	protected static int getnumEventwith(EList<Event> eList, Event event) {
+	protected static int getnumEventwith(final EList<Event> eList, final Event event) {
 		int nrOfEventWITH = 0;
-		for (Event ele : eList) {
+		for (final Event ele : eList) {
 			if (!ele.getWith().isEmpty()) {
 				nrOfEventWITH++;
 			}

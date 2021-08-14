@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart {
@@ -67,8 +68,8 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	 * go through all fb network elements and find inputs with parameters to be
 	 * shown.
 	 */
-	protected Collection<? extends Object> getFBValues() {
-		final ArrayList<Object> valueElements = new ArrayList<>();
+	protected Collection<Value> getFBValues() {
+		final ArrayList<Value> valueElements = new ArrayList<>();
 		for (final FBNetworkElement element : getNetworkElements()) {
 			for (final VarDeclaration interfaceElement : element.getInterface().getInputVars()) {
 				if (null != interfaceElement.getValue()) {

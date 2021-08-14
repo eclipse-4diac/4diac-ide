@@ -13,7 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.views;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.Assert;
@@ -43,7 +44,7 @@ public class StructParser {
 
 		WatchValueTreeNode previous = structRoot;
 
-		final Stack<WatchValueTreeNode> structParentLevelStack = new Stack<>();
+		final Deque<WatchValueTreeNode> structParentLevelStack = new ArrayDeque<>();
 		structParentLevelStack.push(structRoot);
 
 		while (tokenizer.hasMoreTokens()) {
@@ -55,7 +56,7 @@ public class StructParser {
 				String varName = parsedAssignment[0];
 				String value = parsedAssignment[1];
 
-				// check for ( at the beginning
+				// check for a ( at the beginning
 				if (value.charAt(0) == '(') {
 
 					parsedAssignment = parseAssignment(value.substring(1), previous);
@@ -69,7 +70,7 @@ public class StructParser {
 					}
 				}
 
-				// check for ) at the end
+				// check for a ) at the end
 				if (value.charAt(value.length() - 1) == ')') {
 					// remove )
 					value = value.substring(0, value.length() - 1);
@@ -109,7 +110,7 @@ public class StructParser {
 			return new String[] { variableName, value };
 		}
 
-		// otherwise we have a splitted a string, we attach it to the value of the previous node
+		// otherwise we have a split a string, we attach it to the value of the previous node
 		final StringBuilder newValueBuilder = new StringBuilder();
 
 		String value = "null";

@@ -24,7 +24,6 @@ public class ParameterEditPolicy extends INamedElementRenameEditPolicy {
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
 		if (getHost() instanceof AbstractDirectEditableEditPart) {
-			final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
 			return new ChangePrimitiveParameterCommand(((ParameterEditPart) getHost()).getModel().getPrimitive(),
 					REQ_ADD);
 		}

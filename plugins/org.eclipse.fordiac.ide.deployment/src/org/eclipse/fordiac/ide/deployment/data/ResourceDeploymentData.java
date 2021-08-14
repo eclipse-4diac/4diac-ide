@@ -92,7 +92,7 @@ public class ResourceDeploymentData {
 	private void addFBNetworkElements(final Deque<SubApp> subAppHierarchy, final FBNetwork fbNetwork, final String prefix) {
 		for (final FBNetworkElement fbnElement : fbNetwork.getNetworkElements()) {
 			if (fbnElement instanceof FB) {
-				fbs.add(new FBDeploymentData(prefix, (FB) fbnElement));
+				fbs.add(new FBDeploymentData(prefix, fbnElement));
 			} else if (fbnElement instanceof SubApp) {
 				addSubAppParams((SubApp) fbnElement, subAppHierarchy, prefix);
 				final FBNetwork subAppInternalNetwork = getFBNetworkForSubApp((SubApp) fbnElement);
