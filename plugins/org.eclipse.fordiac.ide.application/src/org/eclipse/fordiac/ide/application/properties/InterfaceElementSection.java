@@ -30,6 +30,8 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
@@ -216,8 +218,13 @@ public class InterfaceElementSection extends AbstractSection {
 		currentParameterTextCLabel.setVisible(b);
 		currentParameterText.setVisible(b);
 		if (null != type) {
-			infoSection.setText(getType().getFBNetworkElement().getName() + " . " //$NON-NLS-1$
-					+ (getType().getName() != null ? getType().getName() : "")); //$NON-NLS-1$
+			final FBNetworkElement fb = getType().getFBNetworkElement();
+			if (fb != null) {
+				infoSection.setText(fb.getName() + " . " //$NON-NLS-1$
+						+ (getType().getName() != null ? getType().getName() : "")); //$NON-NLS-1$
+			} else { // e.g., IP address of device
+				infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
+			}
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
 
@@ -238,7 +245,10 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 
 			connectionsViewer.setInput(getType());
-			setEditable(!getType().getFBNetworkElement().isContainedInTypedInstance());
+
+			if (fb != null) {
+				setEditable(!fb.isContainedInTypedInstance());
+			}
 		}
 
 		commandStack = commandStackBuffer;
@@ -254,22 +264,26 @@ public class InterfaceElementSection extends AbstractSection {
 		String itype;
 		final VarDeclaration varDecl = (VarDeclaration) getType();
 		itype = varDecl.getType() != null ? varDecl.getType().getName() : ""; //$NON-NLS-1$
-		if (getType().isIsInput()) {
-			if (null != getType().getFBNetworkElement().getType()) {
-				final IInterfaceElement ie = getType().getFBNetworkElement().getType().getInterfaceList()
-						.getInterfaceElement(getType().getName());
+		if (varDecl.isIsInput() && (varDecl.getFBNetworkElement() != null)) {
+			final FBType fbType = varDecl.getFBNetworkElement().getType();
+			if (null != fbType) {
+				final IInterfaceElement ie = fbType.getInterfaceList()
+						.getInterfaceElement(varDecl.getName());
 				if (ie instanceof VarDeclaration) {
 					parameterText.setText(
-							(((VarDeclaration) ie).getValue() != null) ? ((VarDeclaration) ie).getValue().getValue()
-									: ""); //$NON-NLS-1$
-					if (getType().getType() instanceof StructuredType) {
+							getValueFromVarDecl((VarDeclaration) ie));
+					if (varDecl.getType() instanceof StructuredType) {
 						itype = getStructTypes((StructuredType) getType().getType());
 					}
 				}
 			}
 		}
-		currentParameterText.setText((varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""); //$NON-NLS-1$
+		currentParameterText.setText(getValueFromVarDecl(varDecl));
 		return itype;
+	}
+
+	private static String getValueFromVarDecl(final VarDeclaration varDecl) {
+		return (varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""; //$NON-NLS-1$
 	}
 
 	// this method will be removed as soon as there is a toString for StructType in
