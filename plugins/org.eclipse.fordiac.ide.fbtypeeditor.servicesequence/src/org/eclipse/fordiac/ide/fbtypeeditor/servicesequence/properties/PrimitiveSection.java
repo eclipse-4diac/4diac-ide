@@ -23,9 +23,9 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveInterfaceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveParameterCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPrimitiveEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -40,27 +40,33 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class PrimitiveSection extends AbstractServiceSection {
 
 	private Text parametersText;
+
 	private CCombo serviceInterfaceCombo;
 	private CCombo eventCombo;
 	private CCombo dataQualifyingCombo;
-	private final static int ASCII_UNDERSCORE = 95;
+	private static final int ASCII_UNDERSCORE = 95;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createEventSection(getLeftComposite());
-		createPrimitiveSection(getLeftComposite());
+		Group primitiveSpecification;
+		primitiveSpecification = getWidgetFactory().createGroup(getLeftComposite(), "Primitive Specification");
+		primitiveSpecification.setLayout(new GridLayout());
+		primitiveSpecification.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		createEventSection(primitiveSpecification);
+		createPrimitiveSection(primitiveSpecification);
 		fillDataQualifyingDropdown();
 		dataQualifyingCombo.setToolTipText("available if there is a datapin named QI");
 	}
 
-	protected void createEventSection(final Composite parent) {
+	protected void createEventSection(final Group parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
@@ -94,7 +100,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		});
 	}
 
-	protected void createPrimitiveSection(final Composite parent) {
+	protected void createPrimitiveSection(final Group parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));

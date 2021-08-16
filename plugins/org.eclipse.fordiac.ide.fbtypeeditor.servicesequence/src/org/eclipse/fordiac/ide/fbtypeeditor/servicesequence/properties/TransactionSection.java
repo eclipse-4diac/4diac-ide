@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteOutpu
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.TransactionEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeOutputPrimitiveOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
@@ -50,6 +49,7 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -73,11 +73,11 @@ public class TransactionSection extends AbstractServiceSection {
 	private static final int INDEX_COL_WIDTH = 80;
 	private static final int INTERFACE_COL_WIDTH = 30;
 	private TableViewer outputPrimitivesViewer;
-	private Group inputsGroup;
 	private Group outputsGroup;
+	private Group inputsGroup;
 	private Button interfaceSelector;
-
-	private Text eventNameInput;
+	private Composite composite;
+	private CCombo eventNameInput;
 	private Text parameterNameInput;
 
 	private static final String INTERFACE = ""; //$NON-NLS-1$
@@ -109,10 +109,15 @@ public class TransactionSection extends AbstractServiceSection {
 
 	private void createInputPrimitiveGroup(final Composite parent) {
 		inputsGroup = getWidgetFactory().createGroup(parent, "Input Primitive");
-		inputsGroup.setLayout(new GridLayout(5, false));
+		inputsGroup.setLayout(new GridLayout(1, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		interfaceSelector = new Button(inputsGroup, SWT.PUSH);
+		composite = getWidgetFactory().createComposite(inputsGroup);
+		composite.setLayout(new GridLayout(5, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		composite.pack();
+
+		interfaceSelector = new Button(composite, SWT.PUSH);
 		interfaceSelector.setText("Interface");
 		interfaceSelector.setImage(FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
 		interfaceSelector.pack();
@@ -138,20 +143,22 @@ public class TransactionSection extends AbstractServiceSection {
 		});
 
 
-		getWidgetFactory().createCLabel(inputsGroup, "Name:");
-		eventNameInput = new Text(inputsGroup, SWT.BORDER);
-		eventNameInput.setSize(75, getMinimumHeight());
-		eventNameInput.addModifyListener(e -> {
+		getWidgetFactory().createCLabel(composite, "Name:");
+
+		eventNameInput = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
+		eventNameInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		eventNameInput.setSize(100, getMinimumHeight());
+		eventNameInput.addListener(SWT.Selection, event -> {
 			final Command cmd = new ChangePrimitiveEventCommand(getType().getInputPrimitive(),
 					eventNameInput.getText());
 			executeCommand(cmd);
 			eventNameInput.redraw();
 		});
 
-		getWidgetFactory().createCLabel(inputsGroup, "Parameter:");
-		parameterNameInput = new Text(inputsGroup, SWT.BORDER);
-		parameterNameInput.setSize(SWT.FILL, getMinimumHeight());
-		parameterNameInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		getWidgetFactory().createCLabel(composite, "Parameter:");
+
+		parameterNameInput = new Text(composite, SWT.BORDER);
+		parameterNameInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 		parameterNameInput.addModifyListener(e -> {
 			final Command cmd = new ChangePrimitiveParameterCommand(getType().getInputPrimitive(),
 					parameterNameInput.getText());
@@ -188,7 +195,7 @@ public class TransactionSection extends AbstractServiceSection {
 	}
 
 	private String[] getOutputEventNames() {
-		return ((FBType) getType().getServiceSequence().getService().eContainer()).getInterfaceList().getEventOutputs()
+		return (getType().getServiceSequence().getService().getFBType()).getInterfaceList().getEventOutputs()
 				.stream().map(Event::getName).toArray(String[]::new);
 	}
 
@@ -291,7 +298,7 @@ public class TransactionSection extends AbstractServiceSection {
 				outputPrimitivesViewer.setInput(getType());
 				outputsGroup.setText(getInterfaceNames());
 				setInputPrimitiveIcon();
-
+				fillEventNameInputDropdown();
 				eventNameInput.setText(getType().getInputPrimitive().getEvent());
 				if (getType().getInputPrimitive().getParameters() == null) {
 					parameterNameInput.setText(""); //$NON-NLS-1$
@@ -302,6 +309,16 @@ public class TransactionSection extends AbstractServiceSection {
 			});
 		}
 		commandStack = commandStackBuffer;
+	}
+
+	private void fillEventNameInputDropdown() {
+		eventNameInput.removeAll();
+		final String[] inputEvents = getType().getServiceSequence().getService().getFBType().getInterfaceList()
+				.getEventInputs().stream().map(Event::getName).toArray(String[]::new);
+		for (final String s : inputEvents) {
+			eventNameInput.add(s);
+		}
+		composite.layout();
 	}
 
 	@Override
