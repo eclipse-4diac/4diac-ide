@@ -136,12 +136,14 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 			if (null != getCastedModel().getLeftInterface()) {
 				figure.setLeftLabelText(
 						null != getCastedModel().getLeftInterface() ? getCastedModel().getLeftInterface().getName()
-								: ""); //$NON-NLS-1$
+								: "", //$NON-NLS-1$
+						getCastedModel().getLeftInterface().getComment());
 			}
 			if (null != getCastedModel().getRightInterface()) {
 				figure.setRightLabelText(
 						null != getCastedModel().getRightInterface() ? getCastedModel().getRightInterface().getName()
-								: ""); //$NON-NLS-1$
+								: "", //$NON-NLS-1$
+						getCastedModel().getRightInterface().getComment());
 			}
 		}
 	}

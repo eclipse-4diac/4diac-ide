@@ -77,7 +77,7 @@ public class ServiceSequenceFigure extends Layer {
 		commentLabel.setOpaque(true);
 		commentLabel.setLabelAlignment(PositionConstants.RIGHT);
 		commentLabel.setForegroundColor(ColorConstants.black);
-		
+
 		final GridData nameLayoutData = new GridData(SWT.LEFT, SWT.FILL, true, true);
 		nameCommentFigure.getLayoutManager().setConstraint(nameLabel, nameLayoutData);
 
@@ -117,6 +117,8 @@ public class ServiceSequenceFigure extends Layer {
 		final String serviceComment = comment != null ? comment : "";
 		this.comment = comment;
 		this.commentLabel.setText(serviceComment);
+
+		this.commentLabel.setToolTip(new Label(serviceComment));
 
 	}
 

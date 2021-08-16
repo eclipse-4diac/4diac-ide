@@ -68,9 +68,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 		final int middleLineWidth = 5;
 		leftFigure = new Figure();
 		final GridLayout leftLayout = new GridLayout();
-		// final AdvancedLineBorder middleLineLeft = new AdvancedLineBorder(PositionConstants.EAST);
-		// middleLineLeft.setWidth(middleLineWidth);
-		// leftFigure.setBorder(middleLineLeft);
+
 		leftFigure.setLayoutManager(leftLayout);
 		leftLayout.horizontalSpacing = 0;
 		leftLayout.marginWidth = 0;
@@ -80,11 +78,9 @@ public class ServiceFigure extends FreeformLayeredPane {
 
 		middleFigure = new Figure();
 		middleFigure.setPreferredSize(150, 0);
-		// final AdvancedLineBorder middleLines = new AdvancedLineBorder(PositionConstants.WEST |
-		// PositionConstants.EAST);
-		// middleLines.setWidth(10);
 
 		final AdvancedLineBorder middleLineLeft = new AdvancedLineBorder(PositionConstants.WEST);
+		middleLineLeft.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 		middleLineLeft.setWidth(middleLineWidth);
 		middleFigure.setBorder(middleLineLeft);
 		middleFigure.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHTER_GRAY));
@@ -94,6 +90,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 		rightFigure = new Figure();
 		final GridLayout rightLayout = new GridLayout();
 		final AdvancedLineBorder middleLineRight = new AdvancedLineBorder(PositionConstants.WEST);
+		middleLineRight.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 		middleLineRight.setWidth(middleLineWidth);
 		rightFigure.setBorder(middleLineRight);
 		rightFigure.setLayoutManager(rightLayout);
@@ -113,7 +110,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 	private void createInterfaceLayer() {
 		final Layer interfaceLayer = new Layer();
 		interfaceLayer.setBorder(new MarginBorder(5, 0, 0, 0));
-		final GridLayout layout = new GridLayout(2, true);
+		final GridLayout layout = new GridLayout(3, false);
 		interfaceLayer.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 		layout.horizontalSpacing = 0;
 		layout.marginWidth = 0;
@@ -123,19 +120,26 @@ public class ServiceFigure extends FreeformLayeredPane {
 
 		leftLabel = new Label();
 		leftLabel.setLabelAlignment(PositionConstants.RIGHT);
-		leftLabel.setBorder(new MarginBorder(5, 0, 0, 100));
+		leftLabel.setBorder(new MarginBorder(5, 0, 0, 0));
 		leftLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE));
 
-		final GridData leftLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
+		final GridData leftLabelData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(leftLabel, leftLabelData);
 		interfaceLayer.add(leftLabel);
 
+		final Label fillerLabel = new Label();
+		fillerLabel.setBorder(new MarginBorder(5, 100, 0, 110));
+		fillerLabel.setLabelAlignment(PositionConstants.CENTER);
+		final GridData fillerLabelData = new GridData(SWT.CENTER, SWT.NONE, false, false);
+		interfaceLayer.getLayoutManager().setConstraint(fillerLabel, fillerLabelData);
+		interfaceLayer.add(fillerLabel);
 
 		rightLabel = new Label();
 		rightLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE));
 		rightLabel.setLabelAlignment(PositionConstants.LEFT);
-		rightLabel.setBorder(new MarginBorder(5, 100, 0, 0));
-		final GridData rightLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
+		rightLabel.setBorder(new MarginBorder(5, 0, 0, 0));
+
+		final GridData rightLabelData = new GridData(SWT.LEFT, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(rightLabel, rightLabelData);
 		interfaceLayer.add(rightLabel);
 
@@ -176,15 +180,22 @@ public class ServiceFigure extends FreeformLayeredPane {
 		return serviceSequenceContainer;
 	}
 
-	public void setLeftLabelText(final String name) {
+	public void setLeftLabelText(final String name, final String comment) {
 		leftLabel.setText(null != name ? name : ""); //$NON-NLS-1$
 		leftLabel.setIcon(FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
 		leftLabel.setTextPlacement(PositionConstants.WEST);
+		if (comment != null && !comment.isEmpty()) {
+			leftLabel.setToolTip(new Label(comment));
+		}
 	}
 
-	public void setRightLabelText(final String name) {
+	public void setRightLabelText(final String name, final String comment) {
 		rightLabel.setText(null != name ? name : ""); //$NON-NLS-1$
 		rightLabel.setIcon(FordiacImage.ICON_RIGHT_OUTPUT_PRIMITIVE.getImage());
 		rightLabel.setTextPlacement(PositionConstants.EAST);
+
+		if (comment != null && !comment.isEmpty()) {
+			rightLabel.setToolTip(new Label(comment));
+		}
 	}
 }
