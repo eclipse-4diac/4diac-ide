@@ -14,8 +14,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<tycho.version>2.3.0</tycho.version>
-		<tycho-repo.url>http://download.eclipse.org/releases/2021-03</tycho-repo.url>
+		<tycho.version>2.4.0</tycho.version>
+		<tycho-repo.url>http://download.eclipse.org/releases/2021-06</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>11</sonar.java.source>
@@ -82,12 +82,12 @@
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.equinox.executable</id>
-								<versionRange>3.8.1100</versionRange>
+								<versionRange>3.8.1200</versionRange>
 							</requirement>
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.platform</id>
-								<versionRange>4.19.0</versionRange>
+								<versionRange>4.20.0</versionRange>
 							</requirement>
 						</extraRequirements>
 						<profileProperties>
@@ -130,7 +130,7 @@
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.equinox.executable</id>
-								<versionRange>3.8.1000</versionRange>
+								<versionRange>3.8.1200</versionRange>
 							</requirement>
 							<requirement>
 								<type>eclipse-feature</type>
