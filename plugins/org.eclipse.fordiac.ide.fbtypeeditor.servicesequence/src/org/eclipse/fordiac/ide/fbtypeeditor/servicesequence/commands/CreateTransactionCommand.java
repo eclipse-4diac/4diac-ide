@@ -12,7 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
- *   Melanie Winter - add insertion after refelement
+ *   Melanie Winter - add insertion after refelement/index
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 public class CreateTransactionCommand extends AbstractCreationCommand {
 	private ServiceTransaction newTransaction;
 	private final ServiceSequence parent;
-	private ServiceTransaction refElement;
+	private int index;
 
 	public CreateTransactionCommand(final ServiceSequence sequence) {
 		this.parent = sequence;
@@ -35,13 +35,16 @@ public class CreateTransactionCommand extends AbstractCreationCommand {
 
 	public CreateTransactionCommand(final ServiceSequence sequence, final ServiceTransaction refElement) {
 		this(sequence);
-		this.refElement = refElement;
-
+		if (refElement != null) {
+			index = parent.getServiceTransaction().indexOf(refElement) + 1;
+		} else {
+			index = parent.getServiceTransaction().size();
+		}
 	}
 
 	@Override
 	public boolean canExecute() {
-		return refElement != null && parent != null;
+		return parent != null;
 	}
 	@Override
 	public void execute() {
@@ -60,12 +63,7 @@ public class CreateTransactionCommand extends AbstractCreationCommand {
 	}
 
 	private void addNewTransaction() {
-		if (null == refElement) {
-			parent.getServiceTransaction().add(newTransaction);
-		} else {
-			final int index = parent.getServiceTransaction().indexOf(refElement) + 1;
-			parent.getServiceTransaction().add(index, newTransaction);
-		}
+		parent.getServiceTransaction().add(index, newTransaction);
 	}
 
 	@Override
