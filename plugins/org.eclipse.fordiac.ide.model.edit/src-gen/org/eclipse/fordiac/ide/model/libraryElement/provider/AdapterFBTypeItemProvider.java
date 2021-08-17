@@ -28,13 +28,13 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class AdapterFBTypeItemProvider extends FBTypeItemProvider {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public AdapterFBTypeItemProvider(AdapterFactory adapterFactory) {
+	public AdapterFBTypeItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -42,7 +42,7 @@ public class AdapterFBTypeItemProvider extends FBTypeItemProvider {
 	 *
 	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -54,7 +54,7 @@ public class AdapterFBTypeItemProvider extends FBTypeItemProvider {
 	/** This adds a property descriptor for the Adapter Type feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	protected void addAdapterTypePropertyDescriptor(Object object) {
+	protected void addAdapterTypePropertyDescriptor(final Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_AdapterFBType_adapterType_feature"), //$NON-NLS-1$
@@ -67,37 +67,37 @@ public class AdapterFBTypeItemProvider extends FBTypeItemProvider {
 	 *
 	 * @generated not */
 	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, FordiacImage.ICON_ADAPTER.getImage());
+	public Object getImage(final Object object) {
+		return overlayImage(object, FordiacImage.ICON_ADAPTER_TYPE.getImage());
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
-	public String getText(Object object) {
-		String label = ((AdapterFBType) object).getName();
+	public String getText(final Object object) {
+		final String label = ((AdapterFBType) object).getName();
 		return label == null || label.length() == 0 ? getString("_UI_AdapterFBType_type") : //$NON-NLS-1$
-				getString("_UI_AdapterFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_AdapterFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
 	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
 
 	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
 	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

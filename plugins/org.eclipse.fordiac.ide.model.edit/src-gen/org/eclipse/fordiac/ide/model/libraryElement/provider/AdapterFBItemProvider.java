@@ -55,11 +55,11 @@ public class AdapterFBItemProvider extends FBItemProvider {
 	 * @generated */
 	protected void addAdapterDeclPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_AdapterFB_adapterDecl_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_AdapterFB_adapterDecl_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_AdapterFB_type"),  //$NON-NLS-1$
-						LibraryElementPackage.Literals.ADAPTER_FB__ADAPTER_DECL, true, false, true, null, null, null));
+		.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+				getResourceLocator(), getString("_UI_AdapterFB_adapterDecl_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_AdapterFB_adapterDecl_feature", //$NON-NLS-1$ //$NON-NLS-2$
+						"_UI_AdapterFB_type"),  //$NON-NLS-1$
+				LibraryElementPackage.Literals.ADAPTER_FB__ADAPTER_DECL, true, false, true, null, null, null));
 	}
 
 	/** This returns AdapterFB.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -67,7 +67,7 @@ public class AdapterFBItemProvider extends FBItemProvider {
 	 * @generated NOT */
 	@Override
 	public Object getImage(final Object object) {
-		return overlayImage(object, FordiacImage.ICON_ADAPTER.getImage());
+		return overlayImage(object, FordiacImage.ICON_ADAPTER_TYPE.getImage());
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->

@@ -107,14 +107,6 @@
                afterTab="org.eclipse.fordiac.ide.application.property.tab.ShowEvent"
                category="FB"
                id="org.eclipse.fordiac.ide.application.property.tab.ShowData"
-               image="fordiacimage://ICON_FB"
-               label="Data"
-               indented="true">
-         </propertyTab>
-         <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.property.tab.ShowData"
-               category="FB"
-               id="org.eclipse.fordiac.ide.application.property.tab.ShowData"
                image="fordiacimage://ICON_DATA"
                label="Data"
                indented="true">
@@ -123,7 +115,7 @@
                afterTab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                category="FB"
                id="org.eclipse.fordiac.ide.application.property.tab.ShowAdapter"
-               image="fordiacimage://ICON_ADAPTER"
+               image="fordiacimage://ICON_ADAPTER_LIST"
                label="Adapter"
                indented="true">
          </propertyTab>

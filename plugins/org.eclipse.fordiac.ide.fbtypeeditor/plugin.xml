@@ -56,7 +56,7 @@
          <propertyTab
                category="interface"
                id="property.tab.adapter"
-               image="fordiacimage://ICON_ADAPTER"
+               image="fordiacimage://ICON_ADAPTER_LIST"
                label="Adapter">
          </propertyTab>
          <propertyTab
@@ -83,7 +83,7 @@
                afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData"
                category="fb"
                id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters"
-               image="fordiacimage://ICON_ADAPTER"
+               image="fordiacimage://ICON_ADAPTER_LIST"
                indented="true"
                label="Edit Adapters">
          </propertyTab>
