@@ -23,6 +23,7 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Layer;
+import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.StackLayout;
@@ -41,6 +42,8 @@ public class ServiceFigure extends FreeformLayeredPane {
 	private Label leftLabel;
 	private Label rightLabel;
 	private Layer serviceSequenceContainer;
+
+	private static final int MIDDLE_LINE_WIDTH = 5;
 
 
 	public ServiceFigure() {
@@ -65,12 +68,14 @@ public class ServiceFigure extends FreeformLayeredPane {
 		layout.verticalSpacing = 0;
 		baseLayer.setLayoutManager(layout);
 
-		final int middleLineWidth = 5;
+
 		leftFigure = new Figure();
 		final GridLayout leftLayout = new GridLayout();
-
 		leftFigure.setLayoutManager(leftLayout);
+		final LineBorder middleLines = new AdvancedLineBorder(PositionConstants.EAST);
+		middleLines.setWidth(MIDDLE_LINE_WIDTH);
 		leftLayout.horizontalSpacing = 0;
+		leftFigure.setBorder(middleLines);
 		leftLayout.marginWidth = 0;
 		leftLayout.marginHeight = 0;
 		leftLayout.verticalSpacing = 0;
@@ -81,18 +86,15 @@ public class ServiceFigure extends FreeformLayeredPane {
 
 		final AdvancedLineBorder middleLineLeft = new AdvancedLineBorder(PositionConstants.WEST);
 		middleLineLeft.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
-		middleLineLeft.setWidth(middleLineWidth);
+		middleLineLeft.setWidth(MIDDLE_LINE_WIDTH);
 		middleFigure.setBorder(middleLineLeft);
+		middleFigure.setBorder(middleLines);
 		middleFigure.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHTER_GRAY));
 		middleFigure.setOpaque(true);
 		baseLayer.add(middleFigure);
 
 		rightFigure = new Figure();
 		final GridLayout rightLayout = new GridLayout();
-		final AdvancedLineBorder middleLineRight = new AdvancedLineBorder(PositionConstants.WEST);
-		middleLineRight.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
-		middleLineRight.setWidth(middleLineWidth);
-		rightFigure.setBorder(middleLineRight);
 		rightFigure.setLayoutManager(rightLayout);
 		rightLayout.horizontalSpacing = 0;
 		rightLayout.marginWidth = 0;
@@ -184,7 +186,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 		leftLabel.setText(null != name ? name : ""); //$NON-NLS-1$
 		leftLabel.setIcon(FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
 		leftLabel.setTextPlacement(PositionConstants.WEST);
-		if (comment != null && !comment.isEmpty()) {
+		if ((comment != null) && !comment.isEmpty()) {
 			leftLabel.setToolTip(new Label(comment));
 		}
 	}
@@ -194,7 +196,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 		rightLabel.setIcon(FordiacImage.ICON_RIGHT_OUTPUT_PRIMITIVE.getImage());
 		rightLabel.setTextPlacement(PositionConstants.EAST);
 
-		if (comment != null && !comment.isEmpty()) {
+		if ((comment != null) && !comment.isEmpty()) {
 			rightLabel.setToolTip(new Label(comment));
 		}
 	}

@@ -52,7 +52,7 @@ import org.eclipse.swt.widgets.Control;
 public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* ResizableCompartmentEditPart */ {
 
 
-	private boolean isExpanded = false;
+	private boolean isExpanded = true;
 
 
 	private final Adapter adapter = new AdapterImpl() {

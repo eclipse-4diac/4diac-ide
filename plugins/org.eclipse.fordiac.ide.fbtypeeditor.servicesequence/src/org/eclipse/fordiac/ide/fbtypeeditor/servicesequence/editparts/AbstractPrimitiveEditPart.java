@@ -79,8 +79,9 @@ implements NodeEditPart, IChangeStringEditPart {
 		super.refreshVisuals();
 		final PrimitiveFigure figure = (PrimitiveFigure) getFigure();
 		if (null != getModel()) {
-			figure.setLabelText(getModel().getEvent());
+			figure.setNameLabelText(getModel().getEvent());
 			figure.setInterfaceDirection(isLeftInterface());
+			figure.setParameterLabelText(getModel().getParameters());
 		}
 	}
 
@@ -99,12 +100,12 @@ implements NodeEditPart, IChangeStringEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		return new PrimitiveFigure(isLeftInterface(), getModel().getEvent());
+		return new PrimitiveFigure(isLeftInterface(), getModel().getEvent(), getModel().getParameters());
 	}
 
 	@Override
 	public Label getNameLabel() {
-		return ((PrimitiveFigure) getFigure()).getLabel();
+		return ((PrimitiveFigure) getFigure()).getNameLabel();
 	}
 
 	public Figure getCenterFigure() {
@@ -131,8 +132,6 @@ implements NodeEditPart, IChangeStringEditPart {
 			final GridData childData = new GridData();
 			childData.grabExcessHorizontalSpace = true;
 			childData.horizontalAlignment = GridData.FILL;
-			thisFigure.getParameterFigure().getLayoutManager().setConstraint(child, childData);
-			thisFigure.getParameterFigure().add(child, index);
 		}
 	}
 }

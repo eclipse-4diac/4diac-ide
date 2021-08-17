@@ -11,79 +11,72 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Melanie Winter - added parameter figure
+ *   Melanie Winter - added parameterLabel
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Layer;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 
 public class PrimitiveFigure extends Layer {
 	private final Label nameLabel;
 	private final Label emptyLabel;
+	private final Label parameterLabel;
+
 	private final Figure centerFigure;
 	private final Figure leftFigure;
 	private final Figure rightFigure;
-	private final Figure parameterFigure;
 
-	public PrimitiveFigure(final boolean isLeftInterface, final String name) {
+	public PrimitiveFigure(final boolean isLeftInterface, final String name, final String parameter) {
 		final GridLayout mainLayout = new GridLayout(6, false);
 		setLayoutManager(mainLayout);
 		mainLayout.marginHeight = 0;
 		mainLayout.marginWidth = 0;
 		mainLayout.horizontalSpacing = 0;
 
-		centerFigure = new Figure();
-		final GridData spaceData = new GridData();
-		centerFigure.setForegroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_CYAN));
-		centerFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
-		centerFigure.setBorder(new LineBorder());
-		spaceData.widthHint = 37;
+		final int arrowLength = 100;
 
 		nameLabel = new Label();
 		final GridData nameLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
-		nameLabelData.widthHint = 100;
+		nameLabelData.widthHint = 200;
+
+		parameterLabel = new Label();
+		final GridData parameterLabelData = new GridData(SWT.FILL, SWT.NONE, false, false);
+		parameterLabelData.widthHint = 150;
 
 		emptyLabel = new Label();
-		final GridData emptyLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
-		emptyLabelData.widthHint = 100;
+		final GridData emptyLabelData = new GridData(SWT.FILL, SWT.NONE, false, false);
+		emptyLabelData.widthHint = 500;
 
-		final GridData arrowLeftData = new GridData();
-		arrowLeftData.widthHint = 50;
+		final GridData arrowLeftData = new GridData(SWT.NONE, SWT.CENTER, false, false);
+		arrowLeftData.widthHint = arrowLength;
 		leftFigure = new Figure();
 
-		leftFigure.setForegroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN));
-		leftFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_GREEN));
+		centerFigure = new Figure();
+		final GridData spaceData = new GridData(SWT.FILL, SWT.CENTER, false, false);
+		spaceData.widthHint = 55;
 
-		final GridData arrowRightData = new GridData();
-		arrowRightData.widthHint = 50;
+		final GridData arrowRightData = new GridData(SWT.NONE, SWT.CENTER, false, false);
+		arrowRightData.widthHint = arrowLength;
 		rightFigure = new Figure();
-
-		rightFigure.setForegroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
-		rightFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA));
-
-		final GridData parameterData = new GridData();
-		parameterData.widthHint = 50;
-		parameterFigure = new Figure();
-		parameterFigure.setLayoutManager(new GridLayout());
 
 		setInterfaceDirection(isLeftInterface);
 
-		nameLabel.setText(name);
+		setNameLabelText(name);
+		setParameterLabelText(parameter);
 		setConstraint(emptyLabel, emptyLabelData);
-		setConstraint(centerFigure, spaceData);
 		setConstraint(leftFigure, arrowLeftData);
+		setConstraint(centerFigure, spaceData);
 		setConstraint(rightFigure, arrowRightData);
 		setConstraint(nameLabel, nameLabelData);
-		setConstraint(parameterFigure, parameterData);
+		setConstraint(parameterLabel, parameterLabelData);
 	}
 
 	public void setInterfaceDirection(final boolean interfaceDirection) {
@@ -92,28 +85,32 @@ public class PrimitiveFigure extends Layer {
 		}
 		if (interfaceDirection) {
 			nameLabel.setLabelAlignment(PositionConstants.RIGHT);
+			parameterLabel.setLabelAlignment(PositionConstants.LEFT);
+
+			add(parameterLabel);
 			add(nameLabel);
 			add(leftFigure);
 			add(centerFigure);
 			add(rightFigure);
 			add(emptyLabel);
-			add(parameterFigure);
 		} else {
 			nameLabel.setLabelAlignment(PositionConstants.LEFT);
+			parameterLabel.setLabelAlignment(PositionConstants.RIGHT);
+
 			add(emptyLabel);
 			add(leftFigure);
 			add(centerFigure);
 			add(rightFigure);
 			add(nameLabel);
-			add(parameterFigure);
+			add(parameterLabel);
 		}
 	}
 
-	public Label getLabel() {
+	public Label getNameLabel() {
 		return nameLabel;
 	}
 
-	public void setLabelText(final String name) {
+	public void setNameLabelText(final String name) {
 		this.nameLabel.setText(null != name ? name : ""); //$NON-NLS-1$
 	}
 
@@ -121,7 +118,18 @@ public class PrimitiveFigure extends Layer {
 		return centerFigure;
 	}
 
-	public Figure getParameterFigure() {
-		return parameterFigure;
+	public Label getParameterLabel() {
+		return parameterLabel;
 	}
+
+	public void setParameterLabelText(final String parameter) {
+		if (parameter != null && !parameter.isEmpty()) {
+			this.parameterLabel.setText("(" + parameter + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+			this.parameterLabel.setToolTip(new Label(parameter));
+			this.parameterLabel.setForegroundColor(ColorConstants.black);
+		} else {
+			this.parameterLabel.setText("");
+		}
+	}
+
 }

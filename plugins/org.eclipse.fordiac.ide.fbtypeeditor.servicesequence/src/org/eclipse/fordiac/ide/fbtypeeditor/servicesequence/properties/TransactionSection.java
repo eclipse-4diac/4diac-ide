@@ -57,7 +57,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Table;
@@ -294,19 +293,19 @@ public class TransactionSection extends AbstractServiceSection {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			Display.getDefault().asyncExec(() -> {
-				outputPrimitivesViewer.setInput(getType());
-				outputsGroup.setText(getInterfaceNames());
-				setInputPrimitiveIcon();
-				fillEventNameInputDropdown();
-				eventNameInput.setText(getType().getInputPrimitive().getEvent());
-				if (getType().getInputPrimitive().getParameters() == null) {
-					parameterNameInput.setText(""); //$NON-NLS-1$
-				} else {
-					parameterNameInput.setText(getType().getInputPrimitive().getParameters());
-				}
+			// Display.getDefault().asyncExec(() -> {
+			outputPrimitivesViewer.setInput(getType());
+			outputsGroup.setText(getInterfaceNames());
+			setInputPrimitiveIcon();
+			fillEventNameInputDropdown();
+			eventNameInput.setText(getType().getInputPrimitive().getEvent());
+			if (getType().getInputPrimitive().getParameters() == null) {
+				parameterNameInput.setText(""); //$NON-NLS-1$
+			} else {
+				parameterNameInput.setText(getType().getInputPrimitive().getParameters());
+			}
 
-			});
+				// });
 		}
 		commandStack = commandStackBuffer;
 	}

@@ -41,7 +41,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Table;
@@ -185,12 +184,12 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			Display.getDefault().asyncExec(() ->{
+			// Display.getDefault().asyncExec(() ->{
 
-				nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-				commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-				transactionsViewer.setInput(getType());
-			});
+			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			transactionsViewer.setInput(getType());
+				// });
 		}
 		commandStack = commandStackBuffer;
 	}
