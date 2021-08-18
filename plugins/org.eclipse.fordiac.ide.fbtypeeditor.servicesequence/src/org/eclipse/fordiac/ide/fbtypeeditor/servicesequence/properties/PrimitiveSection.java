@@ -37,8 +37,11 @@ import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
@@ -46,11 +49,13 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class PrimitiveSection extends AbstractServiceSection {
 
-	private Text parametersText;
 
+	private Text parametersText;
 	private CCombo serviceInterfaceCombo;
 	private CCombo eventCombo;
 	private CCombo dataQualifyingCombo;
+	private Button checkBox;
+	private Text customEventText;
 	private static final int ASCII_UNDERSCORE = 95;
 
 	@Override
@@ -61,21 +66,24 @@ public class PrimitiveSection extends AbstractServiceSection {
 		primitiveSpecification.setLayout(new GridLayout());
 		primitiveSpecification.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		createEventSection(primitiveSpecification);
+		createCustomEventSection(primitiveSpecification);
 		createPrimitiveSection(primitiveSpecification);
 		fillDataQualifyingDropdown();
 		dataQualifyingCombo.setToolTipText("available if there is a datapin named QI");
 	}
+
 
 	protected void createEventSection(final Group parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		composite.pack();
+
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreateEventSection_Event);
 
 		final Composite eventComposite = getWidgetFactory().createComposite(composite);
 		eventComposite.setLayout(new GridLayout(1, true));
-		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
+		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
 		eventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), eventComposite);
 		eventCombo.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
@@ -98,6 +106,54 @@ public class PrimitiveSection extends AbstractServiceSection {
 			executeCommand(new ChangePrimitiveEventCommand(getType(), newEventName));
 			refresh();
 		});
+	}
+
+	private void createCustomEventSection(final Composite parent) {
+		final Composite customEventComposite = getWidgetFactory().createComposite(parent);
+		customEventComposite.setLayout(new GridLayout(3, false));
+		customEventComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+
+		getWidgetFactory().createCLabel(customEventComposite, "custom event: ");
+
+		checkBox = new Button(customEventComposite, SWT.CHECK);
+		customEventText = createGroupText(customEventComposite, true);
+
+		if (isCustomEvent()) {
+			checkBox.setSelection(true);
+			// customEventText.setText(getType().getEvent());
+		}
+
+		checkBox.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				if (checkBox.getSelection()) {
+					executeCommand(new ChangePrimitiveEventCommand(getType(), "")); //$NON-NLS-1$
+				} else {
+					customEventText.setText(""); //$NON-NLS-1$
+					eventCombo.select(0);
+					executeCommand(new ChangePrimitiveEventCommand(getType(), eventCombo.getText()));
+				}
+				refresh();
+			}
+		});
+
+		customEventText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangePrimitiveEventCommand(getType(), customEventText.getText()));
+			addContentAdapter();
+		});
+	}
+
+	private boolean isCustomEvent() {
+		if (getType() != null) {
+			final FBType fb = getType().getService().getFBType();
+			for (final Event event : getRelevantEvents(fb)) {
+				if (event.getName().equals(getType().getEvent())) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	protected void createPrimitiveSection(final Group parent) {
@@ -153,7 +209,11 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 			final IInterfaceElement qiData = getType().getService().getFBType().getInterfaceList()
 					.getInterfaceElement("QI"); //$NON-NLS-1$
+
 			dataQualifyingCombo.setEnabled(qiData != null);
+			customEventText.setEnabled(checkBox.getSelection());
+			eventCombo.setEnabled(!checkBox.getSelection());
+			dataQualifyingCombo.setEnabled(!checkBox.getSelection());
 		}
 		commandStack = commandStackBuffer;
 	}
@@ -183,12 +243,15 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	private void setDataQualifyingDropdown() {
 		final String currentEvent = getType().getEvent();
-		final String lastChar = String.valueOf(currentEvent.charAt(currentEvent.length() - 1));
 		int index = 0;
-		final String[] itemsArray = dataQualifyingCombo.getItems();
-		for (int i = 0; i < itemsArray.length; i++) {
-			if (lastChar.equals(itemsArray[i])) {
-				index = i;
+
+		if (!currentEvent.isEmpty()) {
+			final String lastChar = String.valueOf(currentEvent.charAt(currentEvent.length() - 1));
+			final String[] itemsArray = dataQualifyingCombo.getItems();
+			for (int i = 0; i < itemsArray.length; i++) {
+				if (lastChar.equals(itemsArray[i])) {
+					index = i;
+				}
 			}
 		}
 		dataQualifyingCombo.select(index);
@@ -207,18 +270,25 @@ public class PrimitiveSection extends AbstractServiceSection {
 	private void selectCurrentEventInCombo() {
 
 		String currentEvent = getType().getEvent();
-		int index;
 
-		final char lastChar = currentEvent.charAt(currentEvent.length() - 1);
-
-		if (!(Character.isLetterOrDigit(lastChar) || (lastChar == ASCII_UNDERSCORE))) {
-			currentEvent = currentEvent.substring(0, currentEvent.length()-1);
-			index = Arrays.asList(eventCombo.getItems()).indexOf(currentEvent);
-		} else {
-			index = Arrays.asList(eventCombo.getItems()).indexOf(currentEvent);
+		// handle qualifier QI
+		if(!currentEvent.isEmpty()) {
+			final char lastChar = currentEvent.charAt(currentEvent.length() - 1);
+			if (!(Character.isLetterOrDigit(lastChar) || (lastChar == ASCII_UNDERSCORE))) {
+				currentEvent = currentEvent.substring(0, currentEvent.length()-1);
+			}
 		}
+
+		// select event in combobox
+		final int index = Arrays.asList(eventCombo.getItems()).indexOf(currentEvent);
 		if (index >= 0) {
 			eventCombo.select(index);
+			checkBox.setSelection(false);
+			customEventText.setText(""); //$NON-NLS-1$
+		} else {
+			// set custom event
+			checkBox.setSelection(true);
+			customEventText.setText(currentEvent);
 		}
 	}
 
