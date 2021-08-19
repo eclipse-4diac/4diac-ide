@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2015 fortiss GmbH
+ *               2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,15 +11,21 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies;
+
+import static org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceInterfacePaletteFactory.LEFT_INPUT_PRIMITIVE;
+import static org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE;
+import static org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceInterfacePaletteFactory.RIGHT_INPUT_PRIMITIVE;
+import static org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateInputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateOutputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.MoveOutputPrimitiveCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPrimitiveEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
@@ -100,10 +107,10 @@ public class TransactionLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 	protected Command getCreateCommand(final CreateRequest request) {
 		final Object type = request.getNewObjectType();
 		final ServiceTransaction model = (ServiceTransaction) getHost().getModel();
-		final boolean leftInterface = type.equals("LeftInputPrimitive"); //$NON-NLS-1$
-		if (type.equals("LeftInputPrimitive") || type.equals("RightInputPrimitive")) { //$NON-NLS-1$ //$NON-NLS-2$
+		final boolean leftInterface = LEFT_INPUT_PRIMITIVE.equals(type);
+		if (LEFT_INPUT_PRIMITIVE.equals(type) || RIGHT_INPUT_PRIMITIVE.equals(type)) {
 			return new CreateInputPrimitiveCommand((String) type, model);
-		} else if (type.equals("LeftOutputPrimitive") || type.equals("RightOutputPrimitive")) { //$NON-NLS-1$ //$NON-NLS-2$
+		} else if (LEFT_OUTPUT_PRIMITIVE.equals(type) || RIGHT_OUTPUT_PRIMITIVE.equals(type)) {
 			final AbstractPrimitiveEditPart refPrimitive = (AbstractPrimitiveEditPart) getInsertionReference(request.getLocation());
 			if (null != refPrimitive) {
 				if (refPrimitive instanceof InputPrimitiveEditPart) {

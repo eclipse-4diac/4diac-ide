@@ -56,8 +56,8 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 		final PolygonDecoration arrow = new PolygonDecoration();
 		final PointList pl = new PointList();
 		pl.addPoint(1, 0);
-		pl.addPoint(-11, -6);
-		pl.addPoint(-11, 6);
+		pl.addPoint(-9, -5);
+		pl.addPoint(-9, 5);
 		pl.addPoint(1, 0);
 		arrow.setTemplate(pl);
 		arrow.setScale(1, 1);
@@ -85,8 +85,8 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 		final PolygonDecoration arrowRectangle = new PolygonDecoration();
 		final PointList pl = new PointList();
 		pl.addPoint(-5, 0);
-		pl.addPoint(-17, -6);
-		pl.addPoint(-17, 6);
+		pl.addPoint(-15, -5);
+		pl.addPoint(-15, 5);
 		pl.addPoint(-5, 0);
 
 		createSquare(pl, 5);

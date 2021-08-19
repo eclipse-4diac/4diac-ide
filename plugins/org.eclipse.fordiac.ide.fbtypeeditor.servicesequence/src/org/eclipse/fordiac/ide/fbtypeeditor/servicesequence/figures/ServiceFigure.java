@@ -84,11 +84,6 @@ public class ServiceFigure extends FreeformLayeredPane {
 
 		middleFigure = new Figure();
 		middleFigure.setPreferredSize(150, 0);
-
-		final AdvancedLineBorder middleLineLeft = new AdvancedLineBorder(PositionConstants.WEST);
-		middleLineLeft.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
-		middleLineLeft.setWidth(MIDDLE_LINE_WIDTH);
-		middleFigure.setBorder(middleLineLeft);
 		middleFigure.setBorder(middleLines);
 		middleFigure.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHTER_GRAY));
 		middleFigure.setOpaque(true);

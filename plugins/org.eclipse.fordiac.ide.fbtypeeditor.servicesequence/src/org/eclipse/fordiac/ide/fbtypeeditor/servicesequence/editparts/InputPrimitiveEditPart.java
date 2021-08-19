@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr, Melanie Winter - cleanup
+ *   Bianca Wiesmayr, Melanie Winter - cleanup, implemented anchor refresh
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
@@ -26,12 +26,12 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.AdvancedFixe
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
-import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.Request;
 
 public class InputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 
 	private final ConnectingConnection connectingConnection;
+
 
 	InputPrimitiveEditPart() {
 		super(new PrimitiveConnection(true));
@@ -47,10 +47,29 @@ public class InputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 		return connectingConnection;
 	}
 
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		if (getModel() != null) {
+			if (srcAnchor != null) {
+				srcAnchor.setIsInput(!isLeftInterface());
+			}
+			if (srcNeighbourAnchor != null) {
+				srcNeighbourAnchor.setIsInput(isLeftInterface());
+			}
+			if (dstAnchor != null) {
+				dstAnchor.setIsInput(isLeftInterface());
+			}
+		}
+	}
+
 	@Override
 	public List<Object> getModelSourceConnections() {
 		final List<Object> conns = new ArrayList<>();
-		conns.add(connectingConnection);
+		if (!getModel().getServiceTransaction().getOutputPrimitive().isEmpty()) {
+			conns.add(connectingConnection);
+		}
 		conns.add(getPrimitiveConnection());
 		return conns;
 	}
@@ -62,27 +81,6 @@ public class InputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
-		return null;
-	}
-
-	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
-		if (connection instanceof PrimitiveConnectionEditPart) {
-			return new FixedAnchor(getNameLabel(), !isLeftInterface());
-		}
-		if (connection instanceof ConnectingConnectionEditPart) {
-			return new AdvancedFixedAnchor(getCenterFigure(), isLeftInterface(), isLeftInterface() ? 3 : -4, 0);
-		}
-		return null;
-	}
-
-	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
-		if (connection instanceof PrimitiveConnectionEditPart) {
-			return new FixedAnchor(getCenterFigure(), isLeftInterface());
-		} else if (connection instanceof ConnectingConnectionEditPart) {
-			return new AdvancedFixedAnchor(getCenterFigure(), isLeftInterface(), isLeftInterface() ? 3 : -4, 0);
-		}
 		return null;
 	}
 
@@ -103,6 +101,27 @@ public class InputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 
 	@Override
 	public INamedElement getINamedElement() {
+		return null;
+	}
+
+	@Override
+	protected FixedAnchor getPrimitiveConnSourceAnchor() {
+		return new FixedAnchor(getNameLabel(), !isLeftInterface());
+	}
+
+	@Override
+	protected AdvancedFixedAnchor getConnectingConnSourceAnchor() {
+		return new AdvancedFixedAnchor(getCenterFigure(), isLeftInterface(), isLeftInterface() ? 3 : -4, 0);
+	}
+
+	@Override
+	protected FixedAnchor getPrimitiveConnTargetAnchor() {
+		return new FixedAnchor(getCenterFigure(), isLeftInterface());
+	}
+
+	@Override
+	protected AdvancedFixedAnchor getConnectingConnTargetAnchor() {
+		// input primitive is always at the top
 		return null;
 	}
 }

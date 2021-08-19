@@ -69,7 +69,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		createCustomEventSection(primitiveSpecification);
 		createPrimitiveSection(primitiveSpecification);
 		fillDataQualifyingDropdown();
-		dataQualifyingCombo.setToolTipText("available if there is a datapin named QI");
+		dataQualifyingCombo.setToolTipText("available if there is a data pin named QI");
 	}
 
 
@@ -97,7 +97,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		dataQualifyingComposite.setLayout(new GridLayout(1, true));
 		dataQualifyingComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.NONE, false, false));
 		dataQualifyingComposite.setSize(STANDARD_LABEL_WIDTH, getMinimumHeight());
-		dataQualifyingComposite.setToolTipText("available if there is a datapin named QI");
+		dataQualifyingComposite.setToolTipText("available if there is a data pin named QI");
 
 		dataQualifyingCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), dataQualifyingComposite);
 		dataQualifyingCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));

@@ -31,8 +31,8 @@ public class ServiceSequenceContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
-		if (parentElement instanceof ServiceSequence
-				&& null != ((ServiceSequence) parentElement).getServiceTransaction()) {
+		if ((parentElement instanceof ServiceSequence)
+				&& (null != ((ServiceSequence) parentElement).getServiceTransaction())) {
 			return ((ServiceSequence) parentElement).getServiceTransaction().toArray();
 		}
 		if (parentElement instanceof ServiceTransaction) {
@@ -47,7 +47,7 @@ public class ServiceSequenceContentProvider implements ITreeContentProvider {
 	@Override
 	public Object getParent(final Object element) {
 		if (element instanceof ServiceSequence) {
-			return ((ServiceSequence) element).eContainer();
+			return ((ServiceSequence) element).getService();
 		}
 		return null;
 	}

@@ -131,7 +131,7 @@ public class PrimitiveFigure extends Layer {
 	}
 
 	public void setParameterLabelText(final String parameter) {
-		if (parameter != null && !parameter.isEmpty()) {
+		if ((parameter != null) && !parameter.isEmpty()) {
 			this.parameterLabel.setText("(" + parameter + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 			this.parameterLabel.setToolTip(new Label(parameter));
 		} else {

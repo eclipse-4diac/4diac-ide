@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2021 TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University Linz
+ *               2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -45,21 +45,25 @@ public class CreateOutputPrimitiveCommand extends AbstractCreationCommand {
 	@Override
 	public void execute() {
 		final Service service = transaction.getServiceSequence().getService();
-		newElement = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-		final FBType fb = (FBType) service.eContainer();
-		final String event;
-		if (fb.getInterfaceList().getEventOutputs().isEmpty()) {
-			event = "not available";
-		} else {
-			event = fb.getInterfaceList().getEventOutputs().get(0).getName();
-		}
-		newElement.setEvent(event);
+		createOutputPrimitive(service);
 		if (isLeftInterface) {
 			newElement.setInterface(service.getLeftInterface());
 		} else {
 			newElement.setInterface(service.getRightInterface());
 		}
 		addNewPrimitive();
+	}
+
+	private void createOutputPrimitive(final Service service) {
+		newElement = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
+		final FBType fb = service.getFBType();
+		final String event;
+		if (fb.getInterfaceList().getEventOutputs().isEmpty()) {
+			event = "INITO"; //$NON-NLS-1$
+		} else {
+			event = fb.getInterfaceList().getEventOutputs().get(0).getName();
+		}
+		newElement.setEvent(event);
 	}
 
 	private void addNewPrimitive() {

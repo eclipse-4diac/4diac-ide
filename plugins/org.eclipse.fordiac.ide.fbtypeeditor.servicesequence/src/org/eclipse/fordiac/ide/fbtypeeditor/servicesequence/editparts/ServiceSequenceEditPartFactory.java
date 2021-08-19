@@ -33,7 +33,7 @@ public class ServiceSequenceEditPartFactory extends Abstract4diacEditPartFactory
 
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof FBType && context == null) {
+		if ((modelElement instanceof FBType) && (context == null)) {
 			return new SequenceRootEditPart();
 		}
 		if (modelElement instanceof ServiceSequence) {
@@ -53,9 +53,6 @@ public class ServiceSequenceEditPartFactory extends Abstract4diacEditPartFactory
 		}
 		if (modelElement instanceof ConnectingConnection) {
 			return new ConnectingConnectionEditPart();
-		}
-		if (modelElement instanceof Parameter) {
-			return new ParameterEditPart();
 		}
 		throw createEditpartCreationException(modelElement);
 	}

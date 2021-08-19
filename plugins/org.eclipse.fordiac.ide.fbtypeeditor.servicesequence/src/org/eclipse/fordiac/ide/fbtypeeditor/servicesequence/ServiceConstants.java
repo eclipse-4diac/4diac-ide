@@ -31,7 +31,7 @@ public final class ServiceConstants {
 	private static final int TEXT_BLUE_B = 215;
 	public static final RGB TEXT_BLUE = new RGB(TEXT_BLUE_R, TEXT_BLUE_G, TEXT_BLUE_B);
 
-	public static final int LINE_WIDTH = 2;
+	public static final int LINE_WIDTH = 1;
 
 	private ServiceConstants() {
 		throw new UnsupportedOperationException();

@@ -44,7 +44,6 @@ public class ExpandServiceSequenceHandler extends AbstractHandler {
 				ep.toggleExpanded();
 			}
 		}
-		System.out.print("Hello world");
 		return Status.OK_STATUS;
 	}
 
