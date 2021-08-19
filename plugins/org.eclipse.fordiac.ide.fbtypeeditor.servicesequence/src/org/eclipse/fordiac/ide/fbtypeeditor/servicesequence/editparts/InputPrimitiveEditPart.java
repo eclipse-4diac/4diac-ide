@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.AdvancedFixe
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.Request;
 
@@ -51,10 +50,7 @@ public class InputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 	@Override
 	public List<Object> getModelSourceConnections() {
 		final List<Object> conns = new ArrayList<>();
-		final OutputPrimitive view = getCastedParent().getPossibleOutputPrimitive(getModel());
-		if (view != null) {
-			conns.add(connectingConnection);
-		}
+		conns.add(connectingConnection);
 		conns.add(getPrimitiveConnection());
 		return conns;
 	}

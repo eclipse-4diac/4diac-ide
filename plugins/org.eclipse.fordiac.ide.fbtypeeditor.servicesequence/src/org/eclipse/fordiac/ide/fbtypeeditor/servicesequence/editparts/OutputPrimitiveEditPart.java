@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.draw2d.ConnectionAnchor;
@@ -28,32 +27,52 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.gef.ConnectionEditPart;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 
 public class OutputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 
+	private final ConnectingConnection connectingConnection;
+
 	OutputPrimitiveEditPart() {
 		super(new PrimitiveConnection(false));
+		connectingConnection = new ConnectingConnection();
+	}
+
+	public ConnectingConnection getConnectingConnection() {
+		return connectingConnection;
 	}
 
 	@Override
 	public List<Object> getModelSourceConnections() {
-		return Arrays.asList(getPrimitiveConnection());
+		final List<Object> conns = new ArrayList<>();
+
+		if (getModel().getServiceTransaction().getOutputPrimitive().indexOf(getModel()) < getModel()
+				.getServiceTransaction().getOutputPrimitive().size() - 1) {
+			conns.add(getConnectingConnection());
+		}
+		conns.add(getPrimitiveConnection());
+		return conns;
 	}
 
 	@Override
 	public List<Object> getModelTargetConnections() {
-		final List<Object> temp = new ArrayList<>();
-		final InputPrimitive view = getCastedParent().getPossibleInputPrimitive(getModel());
-		if (view != null) {
-			final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(view);
-			if (part instanceof InputPrimitiveEditPart) {
-				temp.add(((InputPrimitiveEditPart) part).getConnectingConnection());
-			}
+		final List<Object> conns = new ArrayList<>();
+		conns.add(getPrimitiveConnection());
+
+		final int currentIndex = getModel().getServiceTransaction().getOutputPrimitive().indexOf(getModel());
+		if (currentIndex == 0) { // First output primitive: connection from input primitive
+			final InputPrimitive iP = getModel().getServiceTransaction().getInputPrimitive();
+			final InputPrimitiveEditPart part = (InputPrimitiveEditPart) getViewer().getEditPartRegistry().get(iP);
+			conns.add(part.getModelSourceConnections().get(0));
+			return conns;
 		}
-		temp.add(getPrimitiveConnection());
-		return temp;
+		// return previous output primitive
+
+		final OutputPrimitive oP = getModel().getServiceTransaction().getOutputPrimitive().get(currentIndex - 1);
+		final OutputPrimitiveEditPart part = (OutputPrimitiveEditPart) getViewer().getEditPartRegistry().get(oP);
+		conns.add(part.getModelSourceConnections().get(0));
+
+		return conns;
 	}
 
 	@Override

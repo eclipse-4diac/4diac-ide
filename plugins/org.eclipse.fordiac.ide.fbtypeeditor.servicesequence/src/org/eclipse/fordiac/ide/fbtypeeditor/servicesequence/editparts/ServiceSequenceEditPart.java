@@ -98,12 +98,6 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 
 	}
 
-	@Override
-	public void performDirectEdit() {
-		super.performDirectEdit();
-	}
-
-
 	public void toggleExpanded() {
 		isExpanded = !isExpanded;
 		refresh();

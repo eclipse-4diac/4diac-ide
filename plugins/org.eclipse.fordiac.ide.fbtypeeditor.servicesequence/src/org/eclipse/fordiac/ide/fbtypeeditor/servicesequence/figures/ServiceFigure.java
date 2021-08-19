@@ -68,12 +68,13 @@ public class ServiceFigure extends FreeformLayeredPane {
 		layout.verticalSpacing = 0;
 		baseLayer.setLayoutManager(layout);
 
+		final LineBorder middleLines = new AdvancedLineBorder(PositionConstants.EAST);
+		middleLines.setWidth(MIDDLE_LINE_WIDTH);
+		middleLines.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 
 		leftFigure = new Figure();
 		final GridLayout leftLayout = new GridLayout();
 		leftFigure.setLayoutManager(leftLayout);
-		final LineBorder middleLines = new AdvancedLineBorder(PositionConstants.EAST);
-		middleLines.setWidth(MIDDLE_LINE_WIDTH);
 		leftLayout.horizontalSpacing = 0;
 		leftFigure.setBorder(middleLines);
 		leftLayout.marginWidth = 0;

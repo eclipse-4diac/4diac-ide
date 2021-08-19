@@ -13,6 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PolylineConnection;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 
 public class ConnectingConnectionEditPart extends AbstractConnectionEditPart {
@@ -20,6 +23,13 @@ public class ConnectingConnectionEditPart extends AbstractConnectionEditPart {
 	@Override
 	public ConnectingConnection getModel() {
 		return (ConnectingConnection) super.getModel();
+	}
+
+	@Override
+	protected IFigure createFigure() {
+		final PolylineConnection conn = (PolylineConnection) super.createFigure();
+		conn.setLineWidth(ServiceConstants.LINE_WIDTH);
+		return conn;
 	}
 
 	@Override
