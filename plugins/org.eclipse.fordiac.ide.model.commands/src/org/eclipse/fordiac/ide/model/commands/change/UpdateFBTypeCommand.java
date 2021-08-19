@@ -47,7 +47,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /** UpdateFBTypeCommand triggers an update of the type for an FB instance */
@@ -102,13 +105,12 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		return createErrorMarker(newElement, oldInterface, oldInterface.getName(), errorMessage);
 	}
 
-	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement,
-			final IInterfaceElement oldInterface, final String name, final String errorMessage) {
+	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement, final IInterfaceElement oldInterface,
+			final String name, final String errorMessage) {
 		IInterfaceElement interfaceElement;
 		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(), name,
 				oldInterface.isIsInput(), newElement.getInterface());
-		final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper
-				.createErrorMarker(errorMessage, newElement, 0);
+		final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement, 0);
 		createErrorMarker.setErrorMarkerRef((ErrorMarkerRef) interfaceElement);
 		FordiacMarkerHelper.createMarkerInFile(createErrorMarker);
 		errorPins.add(createErrorMarker);
@@ -136,10 +138,12 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
 		} else if (entry.getType() instanceof CompositeFBType) {
 			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else if (oldElement instanceof ErrorMarkerFBNElement && entry instanceof FBTypePaletteEntry){
+		} else if (oldElement instanceof ErrorMarkerFBNElement && entry instanceof FBTypePaletteEntry) {
 			copy = createErrorTypeFb();
 		} else if (entry.getFile() == null || !entry.getFile().exists()) {
 			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
+		} else if (isMultiplexer()) {	//$NON-NLS-1$
+			copy = createMultiplexer();
 		} else {
 			copy = LibraryElementFactory.eINSTANCE.createFB();
 		}
@@ -148,11 +152,28 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		return copy;
 	}
 
+	private FBNetworkElement createMultiplexer() {
+		FBNetworkElement copy;
+		StructManipulator sManipulator;
+		if (entry.getType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
+			sManipulator = (StructManipulator) LibraryElementFactory.eINSTANCE.createMultiplexer();
+		} else {
+			sManipulator = (StructManipulator) LibraryElementFactory.eINSTANCE.createDemultiplexer();
+		}
+		sManipulator.setStructType(new DataTypeLibrary().getStructuredTypes().get(0));
+		copy = sManipulator;
+		return copy;
+	}
+
+	private boolean isMultiplexer() {
+		return entry.getType() instanceof ServiceInterfaceFBType
+				&& entry.getType().getName().startsWith("STRUCT");
+	}
+
 	public FBNetworkElement createErrorTypeFb() {
 		FBNetworkElement copy;
 		final TypeLibrary typeLibrary = oldElement.getPaletteEntry().getTypeLibrary();
-		FBTypePaletteEntry fbTypeEntry = typeLibrary.getErrorTypeLib()
-				.getFBTypeEntry(oldElement.getType().getName());
+		FBTypePaletteEntry fbTypeEntry = typeLibrary.getErrorTypeLib().getFBTypeEntry(oldElement.getType().getName());
 		if (fbTypeEntry == null) {
 			fbTypeEntry = typeLibrary.getBlockTypeLib().getFBTypeEntry(oldElement.getType().getName());
 		}
