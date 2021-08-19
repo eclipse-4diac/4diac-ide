@@ -17,17 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.TransactionFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.DeleteTransactionEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.TransactionLayoutEditPolicy;
-import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.policies.HighlightEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -65,15 +62,6 @@ public class TransactionEditPart extends AbstractGraphicalEditPart {
 		super.deactivate();
 	}
 
-	public static class TransactionFigure extends Figure {
-		public TransactionFigure() {
-			final GridLayout layout = new GridLayout();
-			layout.marginWidth = 0;
-			layout.horizontalSpacing = 0;
-			setBorder(new AdvancedLineBorder(PositionConstants.NORTH, SWT.LINE_DASH));
-			setLayoutManager(layout);
-		}
-	}
 
 	@Override
 	protected IFigure createFigure() {

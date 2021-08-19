@@ -22,7 +22,10 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Layer;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
+import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.swt.SWT;
 
 public class PrimitiveFigure extends Layer {
@@ -34,6 +37,8 @@ public class PrimitiveFigure extends Layer {
 	private final Figure leftFigure;
 	private final Figure rightFigure;
 
+	private static final int ARROW_LENGTH = 100;
+
 	public PrimitiveFigure(final boolean isLeftInterface, final String name, final String parameter) {
 		final GridLayout mainLayout = new GridLayout(6, false);
 		setLayoutManager(mainLayout);
@@ -41,14 +46,15 @@ public class PrimitiveFigure extends Layer {
 		mainLayout.marginWidth = 0;
 		mainLayout.horizontalSpacing = 0;
 
-		final int arrowLength = 100;
 
 		nameLabel = new Label();
-		final GridData nameLabelData = new GridData(SWT.FILL, SWT.NONE, true, false);
+		nameLabel.setForegroundColor(ColorConstants.black);
+		final GridData nameLabelData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		nameLabelData.widthHint = 200;
 
 		parameterLabel = new Label();
-		final GridData parameterLabelData = new GridData(SWT.FILL, SWT.NONE, false, false);
+		parameterLabel.setForegroundColor(ColorManager.getColor(ServiceConstants.GRAY));
+		final GridData parameterLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
 		parameterLabelData.widthHint = 150;
 
 		emptyLabel = new Label();
@@ -56,7 +62,7 @@ public class PrimitiveFigure extends Layer {
 		emptyLabelData.widthHint = 500;
 
 		final GridData arrowLeftData = new GridData(SWT.NONE, SWT.CENTER, false, false);
-		arrowLeftData.widthHint = arrowLength;
+		arrowLeftData.widthHint = ARROW_LENGTH;
 		leftFigure = new Figure();
 
 		centerFigure = new Figure();
@@ -64,7 +70,7 @@ public class PrimitiveFigure extends Layer {
 		spaceData.widthHint = 55;
 
 		final GridData arrowRightData = new GridData(SWT.NONE, SWT.CENTER, false, false);
-		arrowRightData.widthHint = arrowLength;
+		arrowRightData.widthHint = ARROW_LENGTH;
 		rightFigure = new Figure();
 
 		setInterfaceDirection(isLeftInterface);
@@ -86,6 +92,7 @@ public class PrimitiveFigure extends Layer {
 		if (interfaceDirection) {
 			nameLabel.setLabelAlignment(PositionConstants.RIGHT);
 			parameterLabel.setLabelAlignment(PositionConstants.LEFT);
+			nameLabel.setBorder(new MarginBorder(0, 0, 0, 10));
 
 			add(parameterLabel);
 			add(nameLabel);
@@ -96,6 +103,7 @@ public class PrimitiveFigure extends Layer {
 		} else {
 			nameLabel.setLabelAlignment(PositionConstants.LEFT);
 			parameterLabel.setLabelAlignment(PositionConstants.RIGHT);
+			nameLabel.setBorder(new MarginBorder(0, 10, 0, 0));
 
 			add(emptyLabel);
 			add(leftFigure);
@@ -126,10 +134,8 @@ public class PrimitiveFigure extends Layer {
 		if (parameter != null && !parameter.isEmpty()) {
 			this.parameterLabel.setText("(" + parameter + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 			this.parameterLabel.setToolTip(new Label(parameter));
-			this.parameterLabel.setForegroundColor(ColorConstants.black);
 		} else {
-			this.parameterLabel.setText("");
+			this.parameterLabel.setText(""); //$NON-NLS-1$
 		}
 	}
-
 }
