@@ -21,18 +21,17 @@ import java.util.Arrays;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveInterfaceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveParameterCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.InterfaceSelectorButton;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
@@ -51,11 +50,11 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 
 	private Text parametersText;
-	private CCombo serviceInterfaceCombo;
 	private CCombo eventCombo;
 	private CCombo dataQualifyingCombo;
 	private Button checkBox;
 	private Text customEventText;
+	private InterfaceSelectorButton interfaceSelector;
 	private static final int ASCII_UNDERSCORE = 95;
 
 	@Override
@@ -162,12 +161,8 @@ public class PrimitiveSection extends AbstractServiceSection {
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Interface);
 
-		serviceInterfaceCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
-		serviceInterfaceCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		serviceInterfaceCombo.addListener(SWT.Selection, event -> {
-			executeCommand(
-					new ChangePrimitiveInterfaceCommand((Service) getType().eContainer().eContainer().eContainer(),
-							getType(), serviceInterfaceCombo.getText()));
+		interfaceSelector = new InterfaceSelectorButton(composite, cmd -> {
+			executeCommand(cmd);
 			refresh();
 		});
 
@@ -194,7 +189,6 @@ public class PrimitiveSection extends AbstractServiceSection {
 	@Override
 	protected void setInputCode() {
 		parametersText.setEnabled(false);
-		serviceInterfaceCombo.removeAll();
 	}
 
 	@Override
@@ -203,7 +197,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		commandStack = null;
 		if (null != type) {
 			parametersText.setText(getType().getParameters() != null ? getType().getParameters() : ""); //$NON-NLS-1$
-			setServiceInterfaceDropdown();
+			interfaceSelector.setType(getType());
 			setEventDropdown();
 			setDataQualifyingDropdown();
 
@@ -227,10 +221,6 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	protected FBType getFBType() {
 		return getType().getService().getFBType();
-	}
-
-	protected boolean isLeftInterfaceSelected() {
-		return (serviceInterfaceCombo.getText().equals(serviceInterfaceCombo.getItem(0)));
 	}
 
 	private void fillDataQualifyingDropdown() {
@@ -299,18 +289,6 @@ public class PrimitiveSection extends AbstractServiceSection {
 		return fb.getInterfaceList().getEventOutputs();
 	}
 
-
-	public void setServiceInterfaceDropdown() {
-		serviceInterfaceCombo.removeAll();
-		final Service s = getType().getService();
-		serviceInterfaceCombo.add(s.getLeftInterface().getName());
-		serviceInterfaceCombo.add(s.getRightInterface().getName());
-		if (serviceInterfaceCombo.getItem(0).equals(getType().getInterface().getName())) {
-			serviceInterfaceCombo.select(0);
-		} else {
-			serviceInterfaceCombo.select(1);
-		}
-	}
 
 	@Override
 	protected void setInputInit() {

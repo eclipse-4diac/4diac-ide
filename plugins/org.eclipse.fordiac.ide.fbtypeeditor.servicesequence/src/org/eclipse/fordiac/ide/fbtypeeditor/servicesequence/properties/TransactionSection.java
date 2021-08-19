@@ -24,9 +24,9 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateOutputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteOutputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.TransactionEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.InterfaceSelectorButton;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeOutputPrimitiveOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
@@ -50,12 +50,9 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Layout;
@@ -74,7 +71,7 @@ public class TransactionSection extends AbstractServiceSection {
 	private TableViewer outputPrimitivesViewer;
 	private Group outputsGroup;
 	private Group inputsGroup;
-	private Button interfaceSelector;
+	private InterfaceSelectorButton interfaceSelector;
 	private Composite composite;
 	private CCombo eventNameInput;
 	private Text parameterNameInput;
@@ -116,29 +113,9 @@ public class TransactionSection extends AbstractServiceSection {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		composite.pack();
 
-		interfaceSelector = new Button(composite, SWT.PUSH);
-		interfaceSelector.setText("Interface");
-		interfaceSelector.setImage(FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
-		interfaceSelector.pack();
-		interfaceSelector.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				final ServiceInterface current = getType().getInputPrimitive().getInterface();
-				ServiceInterface other;
-				if (current.isLeftInterface()) {
-					other = current.getService().getRightInterface();
-				} else {
-					other = current.getService().getLeftInterface();
-				}
-				final Command cmd = new ChangePrimitiveInterfaceCommand(getType().getInputPrimitive(), other);
-				executeCommand(cmd);
-				refresh();
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-				// nothing to do here
-			}
+		interfaceSelector = new InterfaceSelectorButton(composite, cmd -> {
+			executeCommand(cmd);
+			refresh();
 		});
 
 
@@ -164,15 +141,6 @@ public class TransactionSection extends AbstractServiceSection {
 			executeCommand(cmd);
 			parameterNameInput.redraw();
 		});
-	}
-
-	private void setInputPrimitiveIcon() {
-		final InputPrimitive inputPrimitive = getType().getInputPrimitive();
-		if (inputPrimitive.getInterface().isLeftInterface()) {
-			interfaceSelector.setImage(FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
-		} else {
-			interfaceSelector.setImage(FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImage());
-		}
 	}
 
 	private static TableViewer createTableViewer(final Group parent) {
@@ -293,10 +261,9 @@ public class TransactionSection extends AbstractServiceSection {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			// Display.getDefault().asyncExec(() -> {
+			interfaceSelector.setType(getType().getInputPrimitive());
 			outputPrimitivesViewer.setInput(getType());
 			outputsGroup.setText(getInterfaceNames());
-			setInputPrimitiveIcon();
 			fillEventNameInputDropdown();
 			eventNameInput.setText(getType().getInputPrimitive().getEvent());
 			if (getType().getInputPrimitive().getParameters() == null) {
@@ -304,8 +271,6 @@ public class TransactionSection extends AbstractServiceSection {
 			} else {
 				parameterNameInput.setText(getType().getInputPrimitive().getParameters());
 			}
-
-				// });
 		}
 		commandStack = commandStackBuffer;
 	}
