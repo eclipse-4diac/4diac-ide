@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - extracted from SequenceRootEditPart
+ *   Melanie Winter - clean up, modernize
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
@@ -108,7 +109,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 	private void createInterfaceLayer() {
 		final Layer interfaceLayer = new Layer();
 		interfaceLayer.setBorder(new MarginBorder(5, 0, 0, 0));
-		final GridLayout layout = new GridLayout(3, false);
+		final GridLayout layout = new GridLayout(2, true);
 		interfaceLayer.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 		layout.horizontalSpacing = 0;
 		layout.marginWidth = 0;
@@ -116,26 +117,23 @@ public class ServiceFigure extends FreeformLayeredPane {
 		layout.verticalSpacing = 0;
 		interfaceLayer.setLayoutManager(layout);
 
+		final int centerMargin = 100;
+		final int topMargin = 5;
+		final int borderMargin = 30;
+
 		leftLabel = new Label();
 		leftLabel.setLabelAlignment(PositionConstants.RIGHT);
-		leftLabel.setBorder(new MarginBorder(5, 0, 0, 0));
+		leftLabel.setBorder(new MarginBorder(topMargin, borderMargin, 0, centerMargin));
 		leftLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE));
 
 		final GridData leftLabelData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(leftLabel, leftLabelData);
 		interfaceLayer.add(leftLabel);
 
-		final Label fillerLabel = new Label();
-		fillerLabel.setBorder(new MarginBorder(5, 100, 0, 110));
-		fillerLabel.setLabelAlignment(PositionConstants.CENTER);
-		final GridData fillerLabelData = new GridData(SWT.CENTER, SWT.NONE, false, false);
-		interfaceLayer.getLayoutManager().setConstraint(fillerLabel, fillerLabelData);
-		interfaceLayer.add(fillerLabel);
-
 		rightLabel = new Label();
 		rightLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE));
 		rightLabel.setLabelAlignment(PositionConstants.LEFT);
-		rightLabel.setBorder(new MarginBorder(5, 0, 0, 0));
+		rightLabel.setBorder(new MarginBorder(topMargin, centerMargin, 0, borderMargin));
 
 		final GridData rightLabelData = new GridData(SWT.LEFT, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(rightLabel, rightLabelData);
