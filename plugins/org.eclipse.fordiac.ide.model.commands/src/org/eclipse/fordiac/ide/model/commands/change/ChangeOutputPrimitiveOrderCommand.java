@@ -14,62 +14,16 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.commands.internal.AbstractChangeListElementOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
-import org.eclipse.gef.commands.Command;
 
-public class ChangeOutputPrimitiveOrderCommand extends Command {
-	private final OutputPrimitive selection;
-	private EList<OutputPrimitive> outputPrimitives;
-	private int oldIndex;
-	private int newIndex;
+public class ChangeOutputPrimitiveOrderCommand extends AbstractChangeListElementOrderCommand<OutputPrimitive> {
 
-	private ChangeOutputPrimitiveOrderCommand(OutputPrimitive selection) {
-		this.selection = selection;
-		if (null != selection) {
-			outputPrimitives = selection.getServiceTransaction().getOutputPrimitive();
-			oldIndex = outputPrimitives.indexOf(selection);
-		}
+	public ChangeOutputPrimitiveOrderCommand(final OutputPrimitive selection, final boolean moveUp) {
+		super(selection, moveUp, selection.getServiceTransaction().getOutputPrimitive());
 	}
 
-	public ChangeOutputPrimitiveOrderCommand(OutputPrimitive selection, boolean moveUp) {
-		this(selection);
-		this.newIndex = moveUp ? oldIndex - 1 : oldIndex + 1;
-
-		if (newIndex < 0) {
-			newIndex = 0;
-		}
-		if (newIndex >= outputPrimitives.size()) {
-			newIndex = outputPrimitives.size() - 1;
-		}
-	}
-
-	public ChangeOutputPrimitiveOrderCommand(OutputPrimitive selection, int newIndex) {
-		this(selection);
-		this.newIndex = newIndex;
-	}
-
-	@Override
-	public boolean canExecute() {
-		return (null != selection) && (outputPrimitives.size() > 1) && (outputPrimitives.size() > newIndex);
-	}
-
-	@Override
-	public void execute() {
-		moveTo(newIndex);
-	}
-
-	@Override
-	public void redo() {
-		moveTo(newIndex);
-	}
-
-	@Override
-	public void undo() {
-		moveTo(oldIndex);
-	}
-
-	private void moveTo(int index) {
-		outputPrimitives.move(index, selection);
+	public ChangeOutputPrimitiveOrderCommand(final OutputPrimitive selection, final int newIndex) {
+		super(selection, newIndex, selection.getServiceTransaction().getOutputPrimitive());
 	}
 }

@@ -15,15 +15,15 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.commands.internal.AbstractChangeListElementOrderCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 
-public class ChangeTransactionOrderCommand extends AbstractChangeListElementOrderCommand<ServiceTransaction> {
+public class ChangeServiceSequenceOrderCommand extends AbstractChangeListElementOrderCommand<ServiceSequence> {
 
-	public ChangeTransactionOrderCommand(final ServiceTransaction selection, final boolean moveUp) {
-		super(selection, moveUp, selection.getServiceSequence().getServiceTransaction());
+	public ChangeServiceSequenceOrderCommand(final ServiceSequence selection, final boolean moveUp) {
+		super(selection, moveUp, selection.getService().getServiceSequence());
 	}
 
-	public ChangeTransactionOrderCommand(final ServiceTransaction selection, final int newIndex) {
-		super(selection, newIndex, selection.getServiceSequence().getServiceTransaction());
+	public ChangeServiceSequenceOrderCommand(final ServiceSequence selection, final int newIndex) {
+		super(selection, newIndex, selection.getService().getServiceSequence());
 	}
 }
