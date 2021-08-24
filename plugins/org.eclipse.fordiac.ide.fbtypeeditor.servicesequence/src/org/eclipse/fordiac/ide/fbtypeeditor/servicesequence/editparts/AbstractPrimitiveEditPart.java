@@ -22,6 +22,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.AdvancedFixedAnchor;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.PrimitiveFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.DeletePrimitiveEditPolicy;
@@ -35,6 +36,8 @@ import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.requests.DirectEditRequest;
 
 public abstract class AbstractPrimitiveEditPart extends AbstractDirectEditableEditPart
 implements NodeEditPart, IChangeStringEditPart {
@@ -163,7 +166,17 @@ implements NodeEditPart, IChangeStringEditPart {
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeletePrimitiveEditPolicy());
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ChangeStringEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ChangeStringEditPolicy() {
+			@Override
+			protected Command getDirectEditCommand(final DirectEditRequest request) {
+				if (getHost() instanceof AbstractPrimitiveEditPart) {
+					final AbstractPrimitiveEditPart viewEditPart = (AbstractPrimitiveEditPart) getHost();
+					return new ChangePrimitiveEventCommand((Primitive) viewEditPart.getElement(),
+							(String) request.getCellEditor().getValue());
+				}
+				return null;
+			}
+		});
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
 	}
 }
