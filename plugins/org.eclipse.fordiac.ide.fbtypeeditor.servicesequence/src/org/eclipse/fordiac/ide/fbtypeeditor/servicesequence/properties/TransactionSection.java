@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
 import java.util.Arrays;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveInterfaceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveParameterCommand;
@@ -70,13 +71,12 @@ public class TransactionSection extends AbstractServiceSection {
 	private static final int INTERFACE_COL_WIDTH = 30;
 	private TableViewer outputPrimitivesViewer;
 	private Group outputsGroup;
-	private Group inputsGroup;
 	private InterfaceSelectorButton interfaceSelector;
 	private Composite composite;
 	private CCombo eventNameInput;
 	private Text parameterNameInput;
 
-	private static final String INTERFACE = ""; //$NON-NLS-1$
+	private static final String INTERFACE = "";  //$NON-NLS-1$
 	private static final String INDEX = "index"; //$NON-NLS-1$
 	private static final String NAME = "name"; //$NON-NLS-1$
 	private static final String PARAM = "parameter"; //$NON-NLS-1$
@@ -104,7 +104,8 @@ public class TransactionSection extends AbstractServiceSection {
 	}
 
 	private void createInputPrimitiveGroup(final Composite parent) {
-		inputsGroup = getWidgetFactory().createGroup(parent, "Input Primitive");
+		final Group inputsGroup;
+		inputsGroup = getWidgetFactory().createGroup(parent, Messages.TransactionSection_InputPrimitive);
 		inputsGroup.setLayout(new GridLayout(1, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -119,7 +120,7 @@ public class TransactionSection extends AbstractServiceSection {
 		});
 
 
-		getWidgetFactory().createCLabel(composite, "Name:");
+		getWidgetFactory().createCLabel(composite, Messages.ServiceSection_Name);
 
 		eventNameInput = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
 		eventNameInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
@@ -131,7 +132,7 @@ public class TransactionSection extends AbstractServiceSection {
 			eventNameInput.redraw();
 		});
 
-		getWidgetFactory().createCLabel(composite, "Parameter:");
+		getWidgetFactory().createCLabel(composite, Messages.TransactionSection_Parameter);
 
 		parameterNameInput = new Text(composite, SWT.BORDER);
 		parameterNameInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
@@ -174,11 +175,11 @@ public class TransactionSection extends AbstractServiceSection {
 		final TableColumn interfaceCol = new TableColumn(table, SWT.LEFT);
 		interfaceCol.setText(""); //$NON-NLS-1$
 		final TableColumn indexCol = new TableColumn(table, SWT.LEFT);
-		indexCol.setText("Index");
+		indexCol.setText(Messages.TransactionSection_CreateTableLayout_Index);
 		final TableColumn eventCol = new TableColumn(table, SWT.LEFT);
 		eventCol.setText(FordiacMessages.Event);
 		final TableColumn paramCol = new TableColumn(table, SWT.LEFT);
-		paramCol.setText("Parameter");
+		paramCol.setText(Messages.TransactionSection_CreateTableLayout_Parameter);
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(INTERFACE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(INDEX_COL_WIDTH));
@@ -219,16 +220,19 @@ public class TransactionSection extends AbstractServiceSection {
 
 	private String getInterfaceNames() {
 		if (type == null) {
-			return "Output Primitives";
+			return Messages.TransactionSection_OutputPrimitives;
 		}
 		return collectOutputPrimitiveGroupName();
 	}
 
 	private String collectOutputPrimitiveGroupName() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("Output Primitives at Right Interface (");
+		sb.append(Messages.TransactionSection_CollectOutputPrimitiveGroupName_PrimitivesRightInterface);
+		sb.append(" ("); //$NON-NLS-1$
 		sb.append(getRightInterfaceName());
-		sb.append(") and Left Interface (");
+		sb.append(") "); //$NON-NLS-1$
+		sb.append(Messages.TransactionSection_CollectOutputPrimitiveGroupName_AndLeftInterface);
+		sb.append(" ("); //$NON-NLS-1$
 		sb.append(getLeftInterfaceName());
 		sb.append(")"); //$NON-NLS-1$
 		return sb.toString();

@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets;
 
 import java.util.function.Consumer;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
@@ -33,7 +34,7 @@ public class InterfaceSelectorButton {
 
 	public InterfaceSelectorButton(final Composite parent, final Consumer<Command> executeCommand) {
 		interfaceSelector = new Button(parent, SWT.PUSH);
-		interfaceSelector.setText("Interface");
+		interfaceSelector.setText(Messages.InterfaceSelectorButton_Interface);
 		interfaceSelector.setImage(FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
 		interfaceSelector.pack();
 

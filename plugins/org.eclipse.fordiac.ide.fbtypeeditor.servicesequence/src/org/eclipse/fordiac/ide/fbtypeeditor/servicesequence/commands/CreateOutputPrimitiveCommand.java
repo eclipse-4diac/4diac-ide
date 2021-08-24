@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -47,7 +48,7 @@ public class CreateOutputPrimitiveCommand extends AbstractCreateElementCommand<O
 		final FBType fb = service.getFBType();
 		final String event;
 		if (fb.getInterfaceList().getEventOutputs().isEmpty()) {
-			event = "not available";
+			event = Messages.CreateOutputPrimitiveCommand_NotAvailable;
 		} else {
 			event = fb.getInterfaceList().getEventOutputs().get(0).getName();
 		}

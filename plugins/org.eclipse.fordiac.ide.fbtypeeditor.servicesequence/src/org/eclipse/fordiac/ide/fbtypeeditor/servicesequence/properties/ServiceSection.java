@@ -107,7 +107,7 @@ public class ServiceSection extends AbstractServiceSection {
 		leftInterfaceComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
 		// left interface name
-		getWidgetFactory().createCLabel(leftInterfaceComposite, Messages.ServiceSection_LeftInterface_Name);
+		getWidgetFactory().createCLabel(leftInterfaceComposite, Messages.ServiceSection_Name);
 		leftNameInput = new Text(leftInterfaceComposite, SWT.BORDER);
 		leftNameInput.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
 		leftNameInput.addModifyListener(e -> {
@@ -117,7 +117,7 @@ public class ServiceSection extends AbstractServiceSection {
 		});
 
 		// left interface comment
-		getWidgetFactory().createCLabel(leftInterfaceComposite, Messages.ServiceSection_LeftInterface_Comment);
+		getWidgetFactory().createCLabel(leftInterfaceComposite, Messages.ServiceSection_Comment);
 		leftCommentInput = new Text(leftInterfaceComposite, SWT.BORDER);
 		leftCommentInput.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		leftCommentInput.addModifyListener(e -> {
@@ -138,7 +138,7 @@ public class ServiceSection extends AbstractServiceSection {
 		rightInterfaceComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
 		// right interface name
-		getWidgetFactory().createCLabel(rightInterfaceComposite, Messages.ServiceSection_RightInterface_Name);
+		getWidgetFactory().createCLabel(rightInterfaceComposite, Messages.ServiceSection_Name);
 		rightNameInput = new Text(rightInterfaceComposite, SWT.BORDER);
 		rightNameInput.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false));
 		rightNameInput.addModifyListener(e -> {
@@ -148,7 +148,7 @@ public class ServiceSection extends AbstractServiceSection {
 		});
 
 		// right interface comment
-		getWidgetFactory().createCLabel(rightInterfaceComposite, Messages.ServiceSection_RightInterface_Comment);
+		getWidgetFactory().createCLabel(rightInterfaceComposite, Messages.ServiceSection_Comment);
 		rightCommentInput = new Text(rightInterfaceComposite, SWT.BORDER);
 		rightCommentInput.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		rightCommentInput.addModifyListener(e -> {
@@ -202,7 +202,7 @@ public class ServiceSection extends AbstractServiceSection {
 			sequencesViewer.refresh();
 		});
 
-		sequenceReorderUp = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.UP);
+		sequenceReorderUp = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
 		sequenceReorderUp.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		sequenceReorderUp.addListener(SWT.Selection, e -> {
 			executeCommand(
@@ -211,7 +211,7 @@ public class ServiceSection extends AbstractServiceSection {
 							true));
 		});
 
-		sequenceReorderDown = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.DOWN);
+		sequenceReorderDown = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
 		sequenceReorderDown.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		sequenceReorderDown.addListener(SWT.Selection, e -> {
 			executeCommand(

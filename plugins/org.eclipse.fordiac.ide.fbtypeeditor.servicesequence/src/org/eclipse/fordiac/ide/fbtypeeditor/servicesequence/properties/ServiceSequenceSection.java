@@ -55,7 +55,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 	private Text commentText;
 
 	private static final String INDEX = "index"; //$NON-NLS-1$
-	private static final String INPUT_PRIMIIVE = "input_primitive"; //$NON-NLS-1$
+	private static final String INPUT_PRIMIIVE = "input primitive"; //$NON-NLS-1$
 	private static final String OUTPUT_PRIMIIVES = "output primitives"; //$NON-NLS-1$
 
 	@Override
@@ -97,11 +97,12 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 	}
 
 	private void createTypeAndCommentSection(final Composite parent) {
-		final Group typeAndCommentGroup = getWidgetFactory().createGroup(parent, "Service Sequence"); //$NON-NLS-1$
+		final Group typeAndCommentGroup = getWidgetFactory().createGroup(parent,
+				Messages.ServiceSequenceSection_ServiceSequence);
 		typeAndCommentGroup.setLayout(new GridLayout(4, false));
 		typeAndCommentGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSequenceSection_Name);
+		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_Name);
 		nameText = createGroupText(typeAndCommentGroup, true);
 		nameText.setSize(100, getMinimumHeight());
 		nameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
@@ -110,7 +111,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 			executeCommand(cmd);
 		});
 
-		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSequenceSection_Comment);
+		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_Comment);
 		commentText = createGroupText(typeAndCommentGroup, true);
 		commentText.setSize(SWT.FILL, getMinimumHeight());
 		commentText.addModifyListener(e -> {
@@ -167,11 +168,11 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 
 	private static Layout createTableLayout(final Table table) {
 		final TableColumn indexColumn = new TableColumn(table, SWT.LEFT);
-		indexColumn.setText("index");
+		indexColumn.setText(Messages.ServiceSequenceSection_Index);
 		final TableColumn inputPrimitiveColumn = new TableColumn(table, SWT.LEFT);
-		inputPrimitiveColumn.setText("input primitive");
+		inputPrimitiveColumn.setText(Messages.ServiceSequenceSection_InputPrimitive);
 		final TableColumn outputPrimitiveColumn = new TableColumn(table, SWT.LEFT);
-		outputPrimitiveColumn.setText("output primitvive");
+		outputPrimitiveColumn.setText(Messages.ServiceSequenceSection_OutputPrimitives);
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(80));
 		layout.addColumnData(new ColumnPixelData(125));
@@ -189,7 +190,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			transactionsViewer.setInput(getType());
-				// });
+			// });
 		}
 		commandStack = commandStackBuffer;
 	}

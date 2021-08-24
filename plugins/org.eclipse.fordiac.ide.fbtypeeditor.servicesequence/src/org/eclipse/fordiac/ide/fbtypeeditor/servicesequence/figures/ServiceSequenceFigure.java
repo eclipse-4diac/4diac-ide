@@ -71,7 +71,7 @@ public class ServiceSequenceFigure extends Layer {
 		final MarginBorder titleBorder = new MarginBorder(new Insets(3, 20, 3, 0));
 		nameLabel.setBorder(titleBorder);
 		nameLabel.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
-		nameLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.BOLD));
+		nameLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.BOLD)); //$NON-NLS-1$
 		nameLabel.setLabelAlignment(PositionConstants.LEFT);
 
 		commentLabel.setOpaque(true);
@@ -114,7 +114,7 @@ public class ServiceSequenceFigure extends Layer {
 		final String symbol = isExpanded ? "\u25BE  " : "\u25B8  "; //$NON-NLS-1$ //$NON-NLS-2$
 		this.nameLabel.setText(symbol + sequenceName);
 
-		final String serviceComment = comment != null ? comment : "";
+		final String serviceComment = comment != null ? comment : ""; //$NON-NLS-1$
 		this.comment = comment;
 		this.commentLabel.setText(serviceComment);
 

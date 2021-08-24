@@ -124,14 +124,14 @@ public class ServiceFigure extends FreeformLayeredPane {
 		leftLabel = new Label();
 		leftLabel.setLabelAlignment(PositionConstants.RIGHT);
 		leftLabel.setBorder(new MarginBorder(topMargin, borderMargin, 0, centerMargin));
-		leftLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE));
+		leftLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE)); //$NON-NLS-1$
 
 		final GridData leftLabelData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(leftLabel, leftLabelData);
 		interfaceLayer.add(leftLabel);
 
 		rightLabel = new Label();
-		rightLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE));
+		rightLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE)); //$NON-NLS-1$
 		rightLabel.setLabelAlignment(PositionConstants.LEFT);
 		rightLabel.setBorder(new MarginBorder(topMargin, centerMargin, 0, borderMargin));
 

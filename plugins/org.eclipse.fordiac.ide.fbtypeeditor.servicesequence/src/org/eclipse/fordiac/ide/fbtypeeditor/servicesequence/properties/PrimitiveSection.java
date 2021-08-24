@@ -61,14 +61,15 @@ public class PrimitiveSection extends AbstractServiceSection {
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		Group primitiveSpecification;
-		primitiveSpecification = getWidgetFactory().createGroup(getLeftComposite(), "Primitive Specification");
+		primitiveSpecification = getWidgetFactory().createGroup(getLeftComposite(),
+				Messages.PrimitiveSection_CreateControls_PrimitiveSpecification);
 		primitiveSpecification.setLayout(new GridLayout());
 		primitiveSpecification.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		createEventSection(primitiveSpecification);
 		createCustomEventSection(primitiveSpecification);
 		createPrimitiveSection(primitiveSpecification);
 		fillDataQualifyingDropdown();
-		dataQualifyingCombo.setToolTipText("available if there is a data pin named QI");
+		dataQualifyingCombo.setToolTipText(Messages.PrimitiveSection_DataQualifyingToolTip);
 	}
 
 
@@ -96,7 +97,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		dataQualifyingComposite.setLayout(new GridLayout(1, true));
 		dataQualifyingComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.NONE, false, false));
 		dataQualifyingComposite.setSize(STANDARD_LABEL_WIDTH, getMinimumHeight());
-		dataQualifyingComposite.setToolTipText("available if there is a data pin named QI");
+		dataQualifyingComposite.setToolTipText(Messages.PrimitiveSection_DataQualifyingToolTip);
 
 		dataQualifyingCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), dataQualifyingComposite);
 		dataQualifyingCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
@@ -112,7 +113,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		customEventComposite.setLayout(new GridLayout(3, false));
 		customEventComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
-		getWidgetFactory().createCLabel(customEventComposite, "custom event: ");
+		getWidgetFactory().createCLabel(customEventComposite, Messages.PrimitiveSection_CustomEvent);
 
 		checkBox = new Button(customEventComposite, SWT.CHECK);
 		customEventText = createGroupText(customEventComposite, true);
@@ -165,7 +166,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 			refresh();
 		});
 
-		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Parameters);
+		getWidgetFactory().createCLabel(composite, Messages.TransactionSection_Parameter);
 		parametersText = createGroupText(composite, true, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		parametersText.addModifyListener(e -> {
 			removeContentAdapter();
