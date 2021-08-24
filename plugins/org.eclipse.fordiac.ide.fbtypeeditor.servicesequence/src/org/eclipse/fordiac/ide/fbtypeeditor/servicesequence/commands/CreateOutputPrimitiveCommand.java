@@ -20,73 +20,44 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
-public class CreateOutputPrimitiveCommand extends AbstractCreationCommand {
+public class CreateOutputPrimitiveCommand extends AbstractCreateElementCommand<OutputPrimitive> {
 
 	private final boolean isLeftInterface;
 	private final ServiceTransaction transaction;
-	private final OutputPrimitive refElement;
-	private OutputPrimitive newElement;
 
-
-	public CreateOutputPrimitiveCommand(final ServiceTransaction element, final OutputPrimitive refElement,
-			final boolean isLeftInterface) {
+	public CreateOutputPrimitiveCommand(final ServiceTransaction transaction, final boolean isLeftInterface) {
+		super(transaction.getOutputPrimitive());
 		this.isLeftInterface = isLeftInterface;
-		this.transaction = element;
-		this.refElement = refElement;
+		this.transaction = transaction;
+
+	}
+
+	public CreateOutputPrimitiveCommand(final ServiceTransaction transaction, final OutputPrimitive refElement,
+			final boolean isLeftInterface) {
+		super(transaction.getOutputPrimitive(), refElement);
+		this.isLeftInterface = isLeftInterface;
+		this.transaction = transaction;
 	}
 
 	@Override
-	public boolean canExecute() {
-		return (transaction != null);
-	}
-
-	@Override
-	public void execute() {
+	protected OutputPrimitive createNewElement() {
 		final Service service = transaction.getServiceSequence().getService();
-		createOutputPrimitive(service);
-		if (isLeftInterface) {
-			newElement.setInterface(service.getLeftInterface());
-		} else {
-			newElement.setInterface(service.getRightInterface());
-		}
-		addNewPrimitive();
-	}
-
-	private void createOutputPrimitive(final Service service) {
-		newElement = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
+		final OutputPrimitive newOutputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
 		final FBType fb = service.getFBType();
 		final String event;
 		if (fb.getInterfaceList().getEventOutputs().isEmpty()) {
-			event = "INITO"; //$NON-NLS-1$
+			event = "not available";
 		} else {
 			event = fb.getInterfaceList().getEventOutputs().get(0).getName();
 		}
-		newElement.setEvent(event);
-	}
-
-	private void addNewPrimitive() {
-		if (null == refElement) {
-			transaction.getOutputPrimitive().add(newElement);
+		newOutputPrimitive.setEvent(event);
+		if (isLeftInterface) {
+			newOutputPrimitive.setInterface(service.getLeftInterface());
 		} else {
-			final int index = transaction.getOutputPrimitive().indexOf(refElement);
-			transaction.getOutputPrimitive().add(index, newElement);
+			newOutputPrimitive.setInterface(service.getRightInterface());
 		}
-	}
 
-	@Override
-	public void undo() {
-		transaction.getOutputPrimitive().remove(newElement);
-	}
-
-	@Override
-	public void redo() {
-		addNewPrimitive();
-	}
-
-	@Override
-	public Object getCreatedElement() {
-		return newElement;
+		return newOutputPrimitive;
 	}
 }

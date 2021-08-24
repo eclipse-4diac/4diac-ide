@@ -12,72 +12,46 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
- *   Melanie Winter - add insertion after refelement/index
+ *   Melanie Winter - add insertion after refelement/index, clean up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
-public class CreateTransactionCommand extends AbstractCreationCommand {
-	private ServiceTransaction newTransaction;
-	private final ServiceSequence parent;
-	private int index;
+public class CreateTransactionCommand extends AbstractCreateElementCommand<ServiceTransaction> {
+	private final FBType fbType;
 
 	public CreateTransactionCommand(final ServiceSequence sequence) {
-		this.parent = sequence;
+		super(sequence.getServiceTransaction());
+		this.fbType = sequence.getService().getFBType();
 	}
 
 	public CreateTransactionCommand(final ServiceSequence sequence, final ServiceTransaction refElement) {
-		this(sequence);
-		if (refElement != null) {
-			index = parent.getServiceTransaction().indexOf(refElement) + 1;
-		} else {
-			index = parent.getServiceTransaction().size();
-		}
+		super(sequence.getServiceTransaction(), refElement);
+		this.fbType = sequence.getService().getFBType();
 	}
 
 	@Override
-	public boolean canExecute() {
-		return parent != null;
-	}
-	@Override
-	public void execute() {
-		newTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
+	protected ServiceTransaction createNewElement() {
+		final ServiceTransaction newTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		final InputPrimitive primitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
 
-		final EList<Event> eventInputs = parent.getService().getFBType().getInterfaceList().getEventInputs();
+		final EList<Event> eventInputs = fbType.getService().getFBType().getInterfaceList().getEventInputs();
 		if (eventInputs.isEmpty()) {
 			primitive.setEvent("INIT"); //$NON-NLS-1$
 		} else {
 			primitive.setEvent(eventInputs.get(0).getName());
 		}
-		primitive.setInterface(parent.getService().getLeftInterface());
+		primitive.setInterface(fbType.getService().getLeftInterface());
 		newTransaction.setInputPrimitive(primitive);
-		addNewTransaction();
-	}
 
-	private void addNewTransaction() {
-		parent.getServiceTransaction().add(index, newTransaction);
-	}
-
-	@Override
-	public void undo() {
-		parent.getServiceTransaction().remove(newTransaction);
-	}
-
-	@Override
-	public void redo() {
-		addNewTransaction();
-	}
-
-	@Override
-	public Object getCreatedElement() {
 		return newTransaction;
 	}
+
 }

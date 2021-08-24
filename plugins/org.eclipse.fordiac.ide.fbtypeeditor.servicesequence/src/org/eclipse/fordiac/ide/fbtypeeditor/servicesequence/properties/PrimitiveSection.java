@@ -119,7 +119,6 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 		if (isCustomEvent()) {
 			checkBox.setSelection(true);
-			// customEventText.setText(getType().getEvent());
 		}
 
 		checkBox.addSelectionListener(new SelectionAdapter() {
@@ -167,7 +166,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		});
 
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Parameters);
-		parametersText = createGroupText(composite, true);
+		parametersText = createGroupText(composite, true, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		parametersText.addModifyListener(e -> {
 			removeContentAdapter();
 			executeCommand(new ChangePrimitiveParameterCommand(getType(), parametersText.getText()));

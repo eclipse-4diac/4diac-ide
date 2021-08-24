@@ -81,7 +81,9 @@ public class OutputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 		if (currentIndex == 0) { // First output primitive: connection from input primitive
 			final InputPrimitive iP = getModel().getServiceTransaction().getInputPrimitive();
 			final InputPrimitiveEditPart part = (InputPrimitiveEditPart) getViewer().getEditPartRegistry().get(iP);
-			conns.add(part.getModelSourceConnections().get(0));
+			if (part != null && !part.getModelSourceConnections().isEmpty()) {
+				conns.add(part.getModelSourceConnections().get(0));
+			}
 			return conns;
 		}
 		// return previous output primitive
