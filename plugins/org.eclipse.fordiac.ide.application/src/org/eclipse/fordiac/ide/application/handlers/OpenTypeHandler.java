@@ -72,7 +72,7 @@ public class OpenTypeHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection sel = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		if (!sel.isEmpty() && (sel instanceof IStructuredSelection)) {
+		if ((sel instanceof IStructuredSelection) && !sel.isEmpty()) {
 			Object obj = ((IStructuredSelection) sel).getFirstElement();
 			if (obj instanceof EditPart) {
 				obj = ((EditPart) obj).getModel();
