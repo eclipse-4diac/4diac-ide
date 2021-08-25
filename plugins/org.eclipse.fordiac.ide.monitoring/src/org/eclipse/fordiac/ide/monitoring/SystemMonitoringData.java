@@ -161,16 +161,20 @@ public class SystemMonitoringData {
 		}
 		monitoredElements.remove(port.getInterfaceElement());
 		monitoredElementsPerPortStrings.remove(port.getPortString());
-
-		if (element instanceof SubappMonitoringElement) {
-			removeSubappElement(element, port);
-		}
-
-
+		handleSubappElements(element, port);
 	}
 
-	public void removeSubappElement(final MonitoringBaseElement element, final PortElement port) {
-		final String portString = ((SubappMonitoringElement) element).getAnchor().getPort().getPortString();
+	public void handleSubappElements(final MonitoringBaseElement element, final PortElement port) {
+		if (subappElements.containsKey(port.getPortString())) {
+			removeSubappElement(element, port.getPortString());
+		}
+		if (element instanceof SubappMonitoringElement) {
+			removeSubappElement(element, ((SubappMonitoringElement) element).getAnchor().getPort().getPortString());
+		}
+	}
+
+
+	public void removeSubappElement(final MonitoringBaseElement element, final String portString) {
 		if (subappElements.containsKey(portString)) {
 			final List<MonitoringElement> subappPins = subappElements.get(portString);
 			final boolean remove = subappPins.remove(element);

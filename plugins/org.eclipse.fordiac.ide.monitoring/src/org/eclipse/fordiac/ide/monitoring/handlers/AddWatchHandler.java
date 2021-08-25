@@ -92,13 +92,13 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
-		boolean needToAdd = false;
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof StructuredSelection) {
-			needToAdd = !getSelectedWatchedElements(MonitoringManager.getInstance(), (StructuredSelection) selection)
-					.isEmpty();
+			setBaseEnabled(!getSelectedWatchedElements(MonitoringManager.getInstance(), (StructuredSelection) selection)
+					.isEmpty());
+		} else {
+			setBaseEnabled(false);
 		}
-		setBaseEnabled(needToAdd);
 	}
 
 	private static Set<IInterfaceElement> getSelectedWatchedElements(final MonitoringManager manager,

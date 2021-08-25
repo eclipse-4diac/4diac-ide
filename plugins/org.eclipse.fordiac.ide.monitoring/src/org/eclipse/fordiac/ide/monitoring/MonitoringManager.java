@@ -194,7 +194,11 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		final MonitoringBaseElement element = getMonitoringElement(interfaceElement);
 
 		if (element instanceof MonitoringElement) {
-			final MonitoringElement monitoringElement = (MonitoringElement) element;
+			MonitoringElement monitoringElement = (MonitoringElement) element;
+
+			if (element instanceof SubappMonitoringElement) {
+				monitoringElement = (MonitoringElement) ((SubappMonitoringElement) monitoringElement).getAnchor();
+			}
 
 			final SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
 			final IDeviceManagementInteractor devMgmInteractor = data
@@ -310,7 +314,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 				} catch (final DeploymentException ex) {
 					// TODO think if error should be shown to the user
 					Activator.getDefault()
-							.logError("Could not force value of " + e.getQualifiedString() + "to " + value, ex); //$NON-NLS-1$ //$NON-NLS-2$
+					.logError("Could not force value of " + e.getQualifiedString() + "to " + value, ex); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
