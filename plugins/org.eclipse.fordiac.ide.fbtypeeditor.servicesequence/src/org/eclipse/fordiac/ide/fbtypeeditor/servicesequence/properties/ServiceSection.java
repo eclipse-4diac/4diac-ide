@@ -28,7 +28,9 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteOutpu
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTransactionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeOutputPrimitiveOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeServiceSequenceOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeTransactionOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
@@ -39,6 +41,8 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -180,66 +184,83 @@ public class ServiceSection extends AbstractServiceSection {
 		final Composite buttonComp = createButtonContainer(getWidgetFactory(), transactionGroup);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
 
-		final Button sequenceNew;
-		final Button sequenceDelete;
-		final Button sequenceReorderUp;
-		final Button sequenceReorderDown;
-
-		sequenceNew = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
+		final Button sequenceNew = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
 		sequenceNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		sequenceNew.addListener(SWT.Selection, e -> {
-			final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
-			if (selection instanceof ServiceSequence) {
-				executeCommand(new CreateServiceSequenceCommand(getType().getService(), (ServiceSequence) selection));
-			} else if (selection instanceof ServiceTransaction) {
-				executeCommand(new CreateTransactionCommand(((ServiceTransaction) selection).getServiceSequence()));
-			} else if (selection instanceof OutputPrimitive) {
-				executeCommand(new CreateOutputPrimitiveCommand(((OutputPrimitive) selection).getServiceTransaction(),
-						null, true));
-			} else if(selection == null) {
-				executeCommand(new CreateServiceSequenceCommand(getType().getService()));
-			}
-			sequencesViewer.refresh();
-		});
+		sequenceNew.addListener(SWT.Selection, e -> executeCreateCommand());
 
-		sequenceReorderUp = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
+		final Button sequenceReorderUp = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
 		sequenceReorderUp.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		sequenceReorderUp.addListener(SWT.Selection, e -> {
-			executeCommand(
-					new ChangeServiceSequenceOrderCommand(
-							(ServiceSequence) ((TreeSelection) sequencesViewer.getSelection()).getFirstElement(),
-							true));
-		});
+		sequenceReorderUp.addListener(SWT.Selection, e -> executeMoveCommand(true));
 
-		sequenceReorderDown = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
+		final Button sequenceReorderDown = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
 		sequenceReorderDown.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		sequenceReorderDown.addListener(SWT.Selection, e -> {
-			executeCommand(
-					new ChangeServiceSequenceOrderCommand(
-							(ServiceSequence) ((TreeSelection) sequencesViewer.getSelection()).getFirstElement(),
-							false));
-			sequencesViewer.refresh();
-		});
+		sequenceReorderDown.addListener(SWT.Selection, e -> executeMoveCommand(false));
 
-		sequenceDelete = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
+		final Button sequenceDelete = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
 		sequenceDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		sequenceDelete.addListener(SWT.Selection, e -> {
-			final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
-			if (selection instanceof ServiceSequence) {
-				selectNewSequence(null); // clear the graphical viewer of the whole service sequence is deleted
-				executeCommand(new DeleteServiceSequenceCommand(getType(), (ServiceSequence) selection));
-			} else if (selection instanceof ServiceTransaction) {
-				executeCommand(new DeleteTransactionCommand((ServiceTransaction) selection));
-			} else if (selection instanceof OutputPrimitive) {
-				executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
-			}
-			sequencesViewer.refresh();
-		});
-
+		sequenceDelete.addListener(SWT.Selection, e -> executeDeleteCommand());
 	}
 
-	private void selectNewSequence(final ServiceSequence selectedSequence) {
-		// sequenceRootEditPart.setSelectedSequence(selectedSequence);
+	private void executeCreateCommand() {
+		final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
+		if (selection instanceof ServiceSequence) {
+			executeCommand(new CreateServiceSequenceCommand(getType().getService(), (ServiceSequence) selection));
+		} else if (selection instanceof ServiceTransaction) {
+			executeCommand(new CreateTransactionCommand(((ServiceTransaction) selection).getServiceSequence()));
+		} else if (selection instanceof OutputPrimitive) {
+			executeCommand(new CreateOutputPrimitiveCommand(((OutputPrimitive) selection).getServiceTransaction(), null,
+					true));
+		} else if (selection == null) {
+			executeCommand(new CreateServiceSequenceCommand(getType().getService()));
+		}
+		sequencesViewer.refresh();
+	}
+
+	private void executeMoveCommand(final boolean moveUp) {
+		final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
+		if (selection instanceof ServiceSequence) {
+			executeCommand(new ChangeServiceSequenceOrderCommand((ServiceSequence) selection, moveUp));
+		} else if (selection instanceof ServiceTransaction) {
+			executeCommand(new ChangeTransactionOrderCommand((ServiceTransaction) selection, moveUp));
+		} else if (selection instanceof OutputPrimitive) {
+			executeCommand(new ChangeOutputPrimitiveOrderCommand((OutputPrimitive) selection, moveUp));
+		}
+		sequencesViewer.refresh();
+	}
+
+	private void executeDeleteCommand() {
+		final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
+		if (selection instanceof ServiceSequence) {
+			executeCommand(new DeleteServiceSequenceCommand(getType(), (ServiceSequence) selection));
+		} else if (selection instanceof ServiceTransaction) {
+			executeCommand(new DeleteTransactionCommand((ServiceTransaction) selection));
+		} else if (selection instanceof OutputPrimitive) {
+			executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
+		}
+		sequencesViewer.refresh();
+	}
+
+	private SelectionListener getReorderButtonSelectionListener(final boolean moveUp) {
+		return new SelectionListener() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
+				if (selection instanceof ServiceSequence) {
+					executeCommand(new ChangeServiceSequenceOrderCommand((ServiceSequence) selection, moveUp));
+				} else if (selection instanceof ServiceTransaction) {
+					executeCommand(new ChangeTransactionOrderCommand((ServiceTransaction) selection, moveUp));
+				} else if (selection instanceof OutputPrimitive) {
+					executeCommand(new ChangeOutputPrimitiveOrderCommand((OutputPrimitive) selection, moveUp));
+				}
+				sequencesViewer.refresh();
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				// nothing to do here
+			}
+		};
 	}
 
 	@Override
