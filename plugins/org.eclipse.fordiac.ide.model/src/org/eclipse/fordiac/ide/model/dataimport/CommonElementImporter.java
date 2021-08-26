@@ -248,7 +248,10 @@ public abstract class CommonElementImporter {
 	}
 
 	public int getLineNumber() {
-		return reader.getLocation().getLineNumber();
+		if (reader != null && reader.getLocation() != null) {
+			return reader.getLocation().getLineNumber();
+		}
+		return -1; // we don't have a parse position
 	}
 
 	protected void proceedToStartElementNamed(final String elementName) throws XMLStreamException {
