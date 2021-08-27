@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 
-public class StructParser {
+public final class StructParser {
 
 	public static WatchValueTreeNode createStructFromString(String struct, final StructuredType structType,
 			final MonitoringElement monitoringElement, final WatchValueTreeNode parent) {
@@ -48,8 +48,8 @@ public class StructParser {
 			final String nextToken = tokenizer.nextToken();
 			final String[] parsedAssignment = parseAssignment(nextToken, previous);
 
-			// check if we have splitted a string
-			if (!parsedAssignment[0].equals("")) { //$NON-NLS-1$
+			// check if we have split a string
+			if (!"".equals(parsedAssignment[0])) { //$NON-NLS-1$
 
 				final String varName = parsedAssignment[0];
 				final String value = parsedAssignment[1];
@@ -121,6 +121,10 @@ public class StructParser {
 				buildTree((StructuredType) memberVariable.getType(), treeNode, element);
 			}
 		}
+	}
+
+	private StructParser() {
+		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
 	}
 
 }

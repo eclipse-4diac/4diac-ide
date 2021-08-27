@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 
-public class SubAppPortHelper {
+public final class SubAppPortHelper {
 
 
 	public static IInterfaceElement findAnchorInterfaceElement(final IInterfaceElement subappPin) {
@@ -98,4 +98,7 @@ public class SubAppPortHelper {
 	}
 
 
+	private SubAppPortHelper() {
+		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

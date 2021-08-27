@@ -39,7 +39,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 			this.dest = dest;
 		}
 	}
-	
+
 
 	protected final CompoundCommand deleteConnCmds = new CompoundCommand();
 	protected final CompoundCommand connCreateCmds = new CompoundCommand();
@@ -49,17 +49,17 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 	protected UnmapCommand unmapCmd = null;
 
 	/** The updated version of the FBNetworkElement */
-	protected FBNetworkElement newElement;	
+	protected FBNetworkElement newElement;
 	/** The FBNetworkElement which should be updated */
 	protected FBNetworkElement oldElement;
 	protected FBNetwork network;
-	
-	public AbstractUpdateFBNElementCommand(FBNetworkElement oldElement) {
+
+	protected AbstractUpdateFBNElementCommand(final FBNetworkElement oldElement) {
 		this.oldElement = oldElement;
 		this.network = this.oldElement.getFbNetwork();
 	}
 
-	
+
 	@Override
 	public void execute() {
 		Resource resource = null;
@@ -77,7 +77,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		}
 
 		handleExecute();
-		
+
 		// Map FB
 		if (resource != null) {
 			mapCmd = new MapToCommand(newElement, resource);
@@ -96,7 +96,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		deleteConnCmds.redo();
 
 		handleRedo();
-		
+
 		connCreateCmds.redo();
 
 		if (mapCmd != null) {
@@ -111,9 +111,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 			resourceConnCreateCmds.undo();
 			mapCmd.undo();
 		}
-		
+
 		handleUndo();
-		
+
 		replaceFBs(newElement, oldElement);
 		deleteConnCmds.undo();
 
@@ -121,8 +121,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 			unmapCmd.undo();
 		}
 	}
-	
-	
+
+
 	protected void recreateResourceConns(final List<ConnData> resourceConns) {
 		final FBNetworkElement orgMappedElement = unmapCmd.getMappedFBNetworkElement();
 		final FBNetworkElement copiedMappedElement = newElement.getOpposite();
@@ -145,7 +145,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 			}
 		}
 	}
-	
+
 	protected void doReconnect(final Connection oldConn, final IInterfaceElement source, final IInterfaceElement dest) {
 		// the connection may be already in our list if source and dest are on our FB
 		if (!isInDeleteConnList(oldConn)) {
@@ -160,7 +160,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 			}
 		}
 	}
-	
+
 	private boolean isInDeleteConnList(final Connection conn) {
 		for (final Object cmd : deleteConnCmds.getCommands()) {
 			if (((DeleteConnectionCommand) cmd).getConnectionView().equals(conn)) {
@@ -181,26 +181,26 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		}
 		return connections;
 	}
-	
+
 	protected void createValues() {
 		for (final VarDeclaration inVar : newElement.getInterface().getInputVars()) {
 			inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			checkSourceParam(inVar);
 		}
 	}
-	
+
 	private void checkSourceParam(final VarDeclaration variable) {
 		final VarDeclaration srcVar = oldElement.getInterface().getVariable(variable.getName());
 		if ((null != srcVar) && (null != srcVar.getValue())) {
 			variable.getValue().setValue(srcVar.getValue().getValue());
 		}
 	}
-	
-	protected void replaceFBs(final FBNetworkElement oldElement, final FBNetworkElement newElement) {
-		network.getNetworkElements().remove(oldElement);
-		network.getNetworkElements().add(newElement);
+
+	protected void replaceFBs(final FBNetworkElement removeElement, final FBNetworkElement addElement) {
+		network.getNetworkElements().remove(removeElement);
+		network.getNetworkElements().add(addElement);
 	}
-	
+
 	protected List<ConnData> getResourceCons() {
 		final List<ConnData> retVal = new ArrayList<>();
 		final FBNetworkElement resElement = oldElement.getOpposite();
@@ -223,20 +223,20 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		}
 		return retVal;
 	}
-	
-	
+
+
 	protected abstract void handleApplicationConnections();
-	
+
 	protected abstract IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement newElement, final FBNetworkElement oldElement, final IInterfaceElement oldInterface);
-	
-	protected abstract AbstractConnectionCreateCommand createConnCreateCMD(final IInterfaceElement refIE, final FBNetwork fbn);	
-	
+
+	protected abstract AbstractConnectionCreateCommand createConnCreateCMD(final IInterfaceElement refIE, final FBNetwork fbn);
+
 	protected abstract void reconnectConnections(final Connection oldConn, final IInterfaceElement source, final IInterfaceElement dest, final FBNetwork fbn);
 
-	
+
 	protected abstract void handleExecute();
-	
+
 	protected abstract void handleRedo();
-	
+
 	protected abstract void handleUndo();
 }

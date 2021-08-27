@@ -81,6 +81,7 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
+		// nothing needed to be done here, should be handled by the parent SubAppNetworkBreadCrumbEditor
 	}
 
 	@Override

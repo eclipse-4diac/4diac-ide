@@ -231,11 +231,6 @@ public final class ValueValidator {
 			errorString += Messages.VALIDATOR_SECONDS_VALUE_CANT_BE_LARGER_THAN_60;
 		}
 
-		//		if (!literalValue.matches("[0-9]?[0-9]:[0-9][0-9]:[0-9][0-9].?(?:_?[0-9])*+")) {
-		//			warning("Ambiguous time. Please consider using HH:MM:SS as format", STPackage.Literals.ST_LITERAL__VALUE,
-		//					WARNING_AMBIGUOUS_TIME);
-		//		}
-
 		return errorString;
 	}
 
@@ -418,11 +413,6 @@ public final class ValueValidator {
 		if (!literalValue.matches(REGEX_DATE)) {
 			return false;
 		}
-
-		//		if (!literalValue.matches("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]")) {
-		//			warning(literalValue + " is an amgiguous date. Please use YYYY-MM-DD.",
-		//					STPackage.Literals.ST_LITERAL__VALUE, WARNING_AMBGIGUOUS_DATE);
-		//		}
 
 		try {
 			if (dateFormat.parse(literalValue.replace(ST_UNDERSCORE_DIGIT_SEPARATOR, EMPTY_STRING)) == null) {

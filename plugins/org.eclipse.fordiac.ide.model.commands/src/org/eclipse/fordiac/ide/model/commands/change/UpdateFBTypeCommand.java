@@ -105,7 +105,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 
 	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement, final IInterfaceElement oldInterface,
 			final String name, final String errorMessage) {
-		boolean markerExists = newElement.getInterface().getErrorMarker().stream()
+		final boolean markerExists = newElement.getInterface().getErrorMarker().stream()
 				.anyMatch(e -> e.getName().equals(name));
 
 		IInterfaceElement interfaceElement;
@@ -160,10 +160,10 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	private FBNetworkElement createMultiplexer() {
 		FBNetworkElement copy;
 		StructManipulator sManipulator;
-		if (entry.getType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
-			sManipulator = (StructManipulator) LibraryElementFactory.eINSTANCE.createMultiplexer();
+		if ("STRUCT_MUX".equals(entry.getType().getName())) { //$NON-NLS-1$
+			sManipulator = LibraryElementFactory.eINSTANCE.createMultiplexer();
 		} else {
-			sManipulator = (StructManipulator) LibraryElementFactory.eINSTANCE.createDemultiplexer();
+			sManipulator = LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		}
 		sManipulator.setStructType(new DataTypeLibrary().getStructuredTypes().get(0));
 		copy = sManipulator;
@@ -216,7 +216,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		}
 	}
 
-	private void handleReconnect(final Connection connection, IInterfaceElement selected, IInterfaceElement other,
+	private void handleReconnect(final Connection connection, final IInterfaceElement selected, final IInterfaceElement other,
 			IInterfaceElement updatedSelected, IInterfaceElement updatedOther) {
 		if (!updatedSelected.getType().isCompatibleWith(updatedOther.getType())) {
 			// connection not compatible
@@ -242,16 +242,16 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		reconnect(connection, updatedSelected, updatedOther);
 	}
 
-	private void reconnect(final Connection connection, IInterfaceElement updatedSelected,
-			IInterfaceElement updatedOther) {
+	private void reconnect(final Connection connection, final IInterfaceElement updatedSelected,
+			final IInterfaceElement updatedOther) {
 		if (connection.getSourceElement() == oldElement) {
 			doReconnect(connection, updatedSelected, updatedOther);
 		} else {
 			doReconnect(connection, updatedOther, updatedSelected);
 		}
 	}
-	
-	private IInterfaceElement updateSelectedInterface(IInterfaceElement oldInterface, FBNetworkElement newElement) {
+
+	private IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface, final FBNetworkElement newElement) {
 		IInterfaceElement updatedSelected = newElement.getInterfaceElement(oldInterface.getName());
 		if (updatedSelected == null) {
 			updatedSelected = createErrorMarker(newElement, oldInterface,
@@ -260,8 +260,8 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		return updatedSelected;
 	}
 
-	protected ErrorMarkerInterface createWrongTypeMarker(IInterfaceElement oldInterface, IInterfaceElement newInterface,
-			FBNetworkElement element) {
+	protected ErrorMarkerInterface createWrongTypeMarker(final IInterfaceElement oldInterface, final IInterfaceElement newInterface,
+			final FBNetworkElement element) {
 		final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
 				oldInterface.getTypeName(), newInterface.getTypeName());
 		final ErrorMarkerInterface createErrorMarker = (ErrorMarkerInterface) createErrorMarker(element, oldInterface,
@@ -310,8 +310,8 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	@Override
-	protected void reconnectConnections(Connection oldConn, IInterfaceElement source, IInterfaceElement dest,
-			FBNetwork fbn) {
+	protected void reconnectConnections(final Connection oldConn, final IInterfaceElement source, final IInterfaceElement dest,
+			final FBNetwork fbn) {
 		// if source or dest is null it means that an interface element is not available
 		// any more
 		final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, fbn);

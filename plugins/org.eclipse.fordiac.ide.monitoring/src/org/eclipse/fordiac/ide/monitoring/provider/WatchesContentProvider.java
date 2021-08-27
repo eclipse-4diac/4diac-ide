@@ -124,13 +124,11 @@ public class WatchesContentProvider implements ITreeContentProvider {
 			}
 			for (int i = 0; i < node.getChildren().size(); i++) {
 				final WatchValueTreeNode oldNode = (WatchValueTreeNode) node.getChildren().get(i);
-				final WatchValueTreeNode new_ = (WatchValueTreeNode) newNode.getChildren().get(i);
-				oldNode.setValue(new_.getValue());
-				udpateChildren(oldNode, new_);
+				final WatchValueTreeNode newNodeChild = (WatchValueTreeNode) newNode.getChildren().get(i);
+				oldNode.setValue(newNodeChild.getValue());
+				udpateChildren(oldNode, newNodeChild);
 			}
-
 		}
-
 	};
 
 

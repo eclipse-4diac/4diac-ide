@@ -94,15 +94,15 @@ public enum FordiacImage {
 		if (image == null) {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEC_FIELD_ERROR);
 		}
-		if (!errorImages.containsKey(image)) {
+
+		return errorImages.computeIfAbsent(image, img -> {
 			final DecorationOverlayIcon overlay = new DecorationOverlayIcon(image,
 					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR),
 					IDecoration.TOP_LEFT);
 			count++;
 			UIPlugin.getDefault().logInfo("createErrorOverlayImage " + count); //$NON-NLS-1$
-			errorImages.put(image, overlay.createImage());
-		}
-		return errorImages.get(image);
+			return overlay.createImage();
+		});
 	}
 
 	FordiacImage() {

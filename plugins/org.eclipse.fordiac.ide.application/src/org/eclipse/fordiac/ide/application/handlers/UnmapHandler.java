@@ -36,7 +36,7 @@ public class UnmapHandler extends AbstractHandler {
 	private final List<FBNetworkElement> selectedNetworkElements = new ArrayList<>();
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final CompoundCommand cmd = new CompoundCommand();
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final CommandStack stack = editor.getAdapter(CommandStack.class);
@@ -53,11 +53,12 @@ public class UnmapHandler extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		setBaseEnabled(!getMappedFBList(getSelectedElements(evaluationContext)).isEmpty());
 	}
 
-	protected List<?> getSelectedElements(Object evaluationContext) {
+	@SuppressWarnings("static-method")  // this method is not static to be overrideable by children
+	protected List<?> getSelectedElements(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof StructuredSelection) {
@@ -66,7 +67,7 @@ public class UnmapHandler extends AbstractHandler {
 		return Collections.emptyList();
 	}
 
-	private List<FBNetworkElement> getMappedFBList(List<?> fbNetwork){
+	private List<FBNetworkElement> getMappedFBList(final List<?> fbNetwork){
 		selectedNetworkElements.clear();
 		for (Object element : fbNetwork) {
 			if(element instanceof EditPart) {
@@ -80,7 +81,7 @@ public class UnmapHandler extends AbstractHandler {
 		return selectedNetworkElements;
 	}
 
-	private void checkMapping(FBNetworkElement model) {
+	private void checkMapping(final FBNetworkElement model) {
 		if (model.isMapped()) {
 			selectedNetworkElements.add(model);
 		}
