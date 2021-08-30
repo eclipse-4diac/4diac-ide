@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpressi
 
 public class EvaluateExpressionImpl implements IEvaluateExpressionVisitor {
 
+	private static final String UNDEFINED_OPERATOR = "Undefined operator";  //$NON-NLS-1$
 	private static final String UNSUPPORTED_UNARY_OPERATOR_NAN = "Unsupported unary operator because the expression did not return a Number"; //$NON-NLS-1$
 
 	public static Function<Object, Object> of(IEvaluateExpressionVisitor evaluateExpression) {
@@ -86,7 +87,7 @@ public class EvaluateExpressionImpl implements IEvaluateExpressionVisitor {
 			case POWER:
 				return new BigDecimal(leftNumber.toString()).pow(Integer.parseInt(rightNumber.toString()));
 			default:
-				throw new IllegalArgumentException("Operator is not defined for Numbers:" + binaryOperator); //$NON-NLS-1$
+				throw new IllegalArgumentException(UNDEFINED_OPERATOR + " for Numbers:" + binaryOperator); //$NON-NLS-1$
 			}
 		}
 		throw new IllegalStateException("The binary operation cannot be" //$NON-NLS-1$
@@ -115,7 +116,7 @@ public class EvaluateExpressionImpl implements IEvaluateExpressionVisitor {
 			return Boolean.valueOf(!leftObject.equals(rightObject));
 
 		default:
-			throw new IllegalArgumentException("Operator is not defined"); //$NON-NLS-1$
+			throw new IllegalArgumentException(UNDEFINED_OPERATOR);
 		}
 	}
 
@@ -138,7 +139,7 @@ public class EvaluateExpressionImpl implements IEvaluateExpressionVisitor {
 				return Boolean.valueOf(leftBoolean.booleanValue() && rightBoolean.booleanValue());
 
 			default:
-				throw new IllegalArgumentException("Operator is not defined"); //$NON-NLS-1$
+				throw new IllegalArgumentException(UNDEFINED_OPERATOR);
 			}
 		} else {
 			throw new IllegalArgumentException("Operator can only compare Boolean values"); //$NON-NLS-1$
@@ -175,7 +176,7 @@ public class EvaluateExpressionImpl implements IEvaluateExpressionVisitor {
 						new BigDecimal(leftNumber.toString()).compareTo(new BigDecimal(rightNumber.toString())) >= 0);
 
 			default:
-				throw new IllegalArgumentException("Operator is not defined"); //$NON-NLS-1$
+				throw new IllegalArgumentException(UNDEFINED_OPERATOR);
 			}
 		} else {
 			throw new IllegalArgumentException("Operator can only compare Number values"); //$NON-NLS-1$

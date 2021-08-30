@@ -11,31 +11,36 @@
  *   Antonio Garmendía, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipses.fordiac.ide.interpreter;
-
-import java.util.Arrays;
-import java.util.List;
+package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 import org.junit.Test;
 
-public class EventSplitTest extends AbstractInterpreterTest {
+public class EventSwitchTest extends AbstractInterpreterTest {
 
-	public EventSplitTest() {
+	public EventSwitchTest() {
 		// do nothing
 	}
 
 	@Test
 	public void test() {
-		final BasicFBType fb = loadFBType("E_SPLIT"); //$NON-NLS-1$
+		final BasicFBType fb = loadFBType("E_SWITCH"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
-		final String[] arr = { "EO1", "EO2" }; //$NON-NLS-1$ //$NON-NLS-2$
-		final List<String> outputEvents = Arrays.asList(arr);
-		addTransaction(seq, new FBTransaction("EI", outputEvents)); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("EI", outputEvents)); //$NON-NLS-1$
+		setVariable(fb, "G", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransaction("EI", "EO1")); //$NON-NLS-1$ //$NON-NLS-2$
+
 		runTest(fb, seq);
+
+		fb.getService().getServiceSequence().clear();
+		final ServiceSequence seq2 = addServiceSequence(fb.getService());
+		setVariable(fb, "G", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq2, new FBTransaction("EI", "EO0")); //$NON-NLS-1$ //$NON-NLS-2$
+
+		runTest(fb, seq2);
 	}
 
 }

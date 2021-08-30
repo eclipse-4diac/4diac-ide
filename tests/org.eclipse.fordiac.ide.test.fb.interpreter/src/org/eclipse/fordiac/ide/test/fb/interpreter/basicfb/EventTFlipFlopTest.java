@@ -11,34 +11,31 @@
  *   Antonio Garmendía, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipses.fordiac.ide.interpreter;
+package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 import org.junit.Test;
 
-public class EventRSTest extends AbstractInterpreterTest {
+public class EventTFlipFlopTest extends AbstractInterpreterTest {
 
-	public EventRSTest() {
+	public EventTFlipFlopTest() {
 		// do nothing
 	}
 
 	@Test
 	public void test() {
-		final BasicFBType fb = loadFBType("E_RS"); //$NON-NLS-1$
+		final BasicFBType fb = loadFBType("E_T_FF"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
-		addTransaction(seq, new FBTransaction("R")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("S", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addTransaction(seq, new FBTransaction("S")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("R", "EO", "Q:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addTransaction(seq, new FBTransaction("R")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("S", "EO", "Q:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addTransaction(seq, new FBTransaction("R", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		runTest(fb, seq);
 	}
-
-
 
 }

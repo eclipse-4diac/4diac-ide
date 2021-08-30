@@ -11,34 +11,38 @@
  *   Antonio Garmendía, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipses.fordiac.ide.interpreter;
+package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 import org.junit.Test;
 
-public class EventSwitchTest extends AbstractInterpreterTest {
+public class EventSelectTest extends AbstractInterpreterTest {
 
-	public EventSwitchTest() {
+	public EventSelectTest() {
 		// do nothing
 	}
 
 	@Test
 	public void test() {
-		final BasicFBType fb = loadFBType("E_SWITCH"); //$NON-NLS-1$
+		final BasicFBType fb = loadFBType("E_SELECT"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "G", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("EI", "EO1")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransaction("EI0")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransaction("EI1", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		runTest(fb, seq);
 
 		fb.getService().getServiceSequence().clear();
 		final ServiceSequence seq2 = addServiceSequence(fb.getService());
 		setVariable(fb, "G", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq2, new FBTransaction("EI", "EO0")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq2, new FBTransaction("EI0", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq2, new FBTransaction("EI1")); //$NON-NLS-1$
 
 		runTest(fb, seq2);
-	}
 
+	}
 }

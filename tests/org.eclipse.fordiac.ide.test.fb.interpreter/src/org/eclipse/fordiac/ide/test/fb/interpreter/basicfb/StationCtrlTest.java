@@ -11,12 +11,14 @@
  *   Antonio Garmendía, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipses.fordiac.ide.interpreter;
+package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import java.util.Arrays;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 import org.junit.Test;
 
 public class StationCtrlTest extends AbstractInterpreterTest {
@@ -32,7 +34,7 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 		ServiceSequence seq = addServiceSequence(fb.getService());
 
 		addTransaction(seq, new FBTransaction("INIT", "INITO")); //$NON-NLS-1$ //$NON-NLS-2$
-		runTest(fb, seq, "START"); //$NON-NLS-1$
+		runTest(fb, seq);
 
 		// ErrorCode is default 0
 		fb.getService().getServiceSequence().clear();
@@ -41,7 +43,7 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 		final String[] outputs = { "StopConv", "PickPart" }; //$NON-NLS-1$//$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("NextPart", Arrays.asList(outputs))); //$NON-NLS-1$
 		addTransaction(seq, new FBTransaction("PartPicked", "StartConv")); //$NON-NLS-1$ //$NON-NLS-2$
-		runTest(fb, seq, "START"); //$NON-NLS-1$
+		runTest(fb, seq);
 
 
 		fb.getService().getServiceSequence().clear();

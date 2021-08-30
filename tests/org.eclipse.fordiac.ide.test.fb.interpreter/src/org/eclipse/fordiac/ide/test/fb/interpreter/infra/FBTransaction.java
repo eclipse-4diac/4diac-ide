@@ -11,7 +11,7 @@
  *   Antonio Garmendía, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipses.fordiac.ide.interpreter;
+package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
 
 import java.util.Arrays;
 import java.util.Collections;

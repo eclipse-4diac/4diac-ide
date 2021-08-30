@@ -19,6 +19,7 @@ import java.io.IOException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.xtext.resource.XtextResource;
 
 public class ConditionExpressionXMI {
@@ -40,7 +41,7 @@ public class ConditionExpressionXMI {
 		try {
 			resource.load(in, loadOptions);
 		} catch (final IOException e) {
-			e.printStackTrace();
+			Activator.getDefault().logError(e.getMessage());
 		}
 		return resource;
 	}

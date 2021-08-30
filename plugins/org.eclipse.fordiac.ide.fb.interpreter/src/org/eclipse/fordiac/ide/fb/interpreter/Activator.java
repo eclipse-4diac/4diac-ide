@@ -13,13 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle.
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends Abstract4DIACUIPlugin {
 
 	/** The Constant PLUGIN_ID. */
 	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.fb.interpreter"; //$NON-NLS-1$
@@ -27,13 +27,6 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);

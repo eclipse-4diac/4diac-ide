@@ -11,29 +11,33 @@
  *   Antonio Garmendía, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipses.fordiac.ide.interpreter;
+package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.junit.Test;
 
-public class EventTFlipFlopTest extends AbstractInterpreterTest {
+public class StationCtrlTestAutomated extends AbstractInterpreterTest {
 
-	public EventTFlipFlopTest() {
+	public StationCtrlTestAutomated() {
 		// do nothing
 	}
 
 	@Test
 	public void test() {
-		final BasicFBType fb = loadFBType("E_T_FF"); //$NON-NLS-1$
-		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
+		final BasicFBType fb = loadFBType("StationCtrl2", false); //$NON-NLS-1$
 
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
+		runTest(fb, seq, "START"); //$NON-NLS-1$
 
-		runTest(fb, seq);
+		seq = fb.getService().getServiceSequence().get(1);
+		runTest(fb, seq, "START"); //$NON-NLS-1$
+
+		seq = fb.getService().getServiceSequence().get(2);
+		runTest(fb, seq, "processingPart"); //$NON-NLS-1$
 	}
+
+
 
 }

@@ -11,7 +11,7 @@
  *   Antonio Garmendía, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipses.fordiac.ide.interpreter;
+package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,9 +50,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.test.fb.interpreter.ModelDeserializer;
 import org.eclipse.fordiac.ide.test.fb.interpreter.ModelSerializer;
 
-class AbstractInterpreterTest {
+public class AbstractInterpreterTest {
 	private static final String EXTERNAL_INTERFACE = "external"; //$NON-NLS-1$
 	private static final String INTERNAL_INTERFACE = "internal"; //$NON-NLS-1$
+	private static final String START_STATE = "START"; //$NON-NLS-1$
 
 	static final ModelDeserializer deserializer = new ModelDeserializer();
 	static final ModelSerializer serializer = new ModelSerializer();
@@ -127,34 +128,6 @@ class AbstractInterpreterTest {
 		}
 	}
 
-	private static Collection<Transaction> createTransactions(BasicFBType fb,
-			BasicFBTypeRuntime runtime) {
-		final List<Transaction> transactions = new ArrayList<>();
-		for (final ServiceSequence seq : fb.getService().getServiceSequence()) {
-			for (final ServiceTransaction st : seq.getServiceTransaction()) {
-				final String inputEvent = st.getInputPrimitive().getEvent();
-				if (inputEvent != null) {
-					final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE
-							.createEventOccurrence();
-					final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
-					if (eventPin == null) {
-						throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist"); //$NON-NLS-1$ //$NON-NLS-2$
-					}
-					eventOccurrence.setEvent(eventPin);
-					final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createTransaction();
-					transaction.setInputEventOccurrence(eventOccurrence);
-					transactions.add(transaction);
-				}
-			}
-		}
-		//The first transaction has a copy of the BasicFBTypeRuntime
-		final Copier copier = new Copier();
-		final BasicFBTypeRuntime copyBasicFBTypeRuntime = (BasicFBTypeRuntime) copier.copy(runtime);
-		copier.copyReferences();
-		transactions.get(0).getInputEventOccurrence().setFbRuntime(copyBasicFBTypeRuntime);
-		return transactions;
-	}
-
 	private static Collection<Transaction> createTransactions(BasicFBType fb, ServiceSequence seq,
 			BasicFBTypeRuntime runtime) {
 		final List<Transaction> transactions = new ArrayList<>();
@@ -187,8 +160,8 @@ class AbstractInterpreterTest {
 	}
 
 
-	protected static void runTest(final BasicFBType fb, final ServiceSequence seq) {
-		runTest(fb, seq, "START"); //$NON-NLS-1$
+	protected static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq) {
+		return runTest(fb, seq, START_STATE);
 	}
 
 	protected static BasicFBType runTest(BasicFBType fb, final ServiceSequence seq, final String startStateName) {

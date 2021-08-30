@@ -33,7 +33,7 @@ public class ModelSerializer {
 		// register XMI resource factory for .fsa extension
 		final Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		final Map<String, Object> m = reg.getExtensionToFactoryMap();
-		m.put("xmi", new XMIResourceFactoryImpl());
+		m.put("xmi", new XMIResourceFactoryImpl()); //$NON-NLS-1$
 
 		// create a new resource set
 		resourceSet = new ResourceSetImpl();
@@ -49,7 +49,7 @@ public class ModelSerializer {
 		resource.getContents().add(content);
 
 		// save resource
-		resource.save(Collections.EMPTY_MAP);
+		resource.save(Collections.emptyMap());
 	}
 
 }

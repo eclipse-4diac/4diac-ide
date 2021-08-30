@@ -140,35 +140,42 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	private ECTransition evaluateOutTransitions(BasicFBTypeRuntime basicFBTypeRuntime, Resource fBTypeResource) {
 		final var outTransitions = basicFBTypeRuntime.getActiveState().getOutTransitions();
 		for (final ECTransition outTransition : outTransitions) {
-			final var event = outTransition.getConditionEvent();
-			if (transitionHoldsFor(event)) {
-				final var condExpression = outTransition.getConditionExpression();
-				if (condExpression.isEmpty() || "1".equals(condExpression)) { //$NON-NLS-1$
-					return outTransition;
-				} else { // Run to condition
-					final var resource = new ConditionExpressionXMI(fBTypeResource.getResourceSet()).
-							createXtextResourceFromConditionExp(condExpression);
-					final var rootEObject = resource.getContents().get(0);
-					if (rootEObject instanceof Expression) {
-						final var evaluation = (Boolean) EvaluateExpressionImpl.of().apply(rootEObject);
-						if (Boolean.TRUE.equals(evaluation)) {
-							return outTransition;
-						}
-					}
-				}
+			if (transitionCanFire(outTransition, fBTypeResource)) {
+				return outTransition;
 			}
 		}
 		return null;
 	}
 
+	private boolean transitionCanFire(ECTransition outTransition, Resource fBTypeResource) {
+		final var event = outTransition.getConditionEvent();
+		if (transitionHoldsFor(event)) {
+			final var condExpression = outTransition.getConditionExpression();
+			if (condExpression.isEmpty() || "1".equals(condExpression)) { //$NON-NLS-1$
+				return true;
+			} else { // Run to condition
+				final var resource = new ConditionExpressionXMI(fBTypeResource.getResourceSet())
+						.createXtextResourceFromConditionExp(condExpression);
+				final var rootEObject = resource.getContents().get(0);
+				if (rootEObject instanceof Expression) {
+					final var evaluation = (Boolean) EvaluateExpressionImpl.of().apply(rootEObject);
+					if (Boolean.TRUE.equals(evaluation)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	private boolean transitionHoldsFor(final Event event) {
 		return (event == null) ||
-				(event.getName().equals(this.eventOccurrence.getEvent().getName()) && (this.eventOccurrence.isActive() == true));
+				(event.getName().equals(this.eventOccurrence.getEvent().getName()) && this.eventOccurrence.isActive());
 	}
 
 	private void isConsumed() {
 		this.eventOccurrence.setActive(false);
-		// The event was consumed, so it was not ignore
+		// The event was consumed, so it was not ignored
 		this.eventOccurrence.setIgnored(false);
 	}
 
