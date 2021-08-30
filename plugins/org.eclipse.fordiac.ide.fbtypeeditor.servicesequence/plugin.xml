@@ -108,12 +108,20 @@
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.ExpandServiceSequenceHandler"
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence">
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.RunServiceSequenceHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
-            name="Expand Service Sequence">
+            name="Expand/Collapse Service Sequence">
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
+            name="Run Service Sequence">
       </command>
    </extension>
    <extension
@@ -123,6 +131,24 @@
       <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
             label="Expand Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="false">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+        		
+            		</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
+            label="Run Service Sequence"
             style="push">
             <visibleWhen checkEnabled="false">
 					<with variable="selection">
@@ -156,6 +182,26 @@
             				</or>
             			</iterate>
         		
+            		</with>
+            </visibleWhen>
+       </command>
+   	</menuContribution> 
+   <menuContribution
+            locationURI="menu:org.eclipse.4diac.ide.source.menu">
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
+            label="Run Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="true">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
             		</with>
             </visibleWhen>
        </command>

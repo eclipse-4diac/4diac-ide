@@ -26,7 +26,7 @@ public class EventSelectTest extends AbstractInterpreterTest {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		final BasicFBType fb = loadFBType("E_SELECT"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 

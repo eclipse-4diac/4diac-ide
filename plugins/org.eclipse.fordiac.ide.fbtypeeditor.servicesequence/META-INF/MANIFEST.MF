@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.util,
  org.eclipse.swt,
  org.eclipse.jface,
- org.eclipse.fordiac.ide.model.ui
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.fordiac.ide.test.fb.interpreter
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.14.0.qualifier

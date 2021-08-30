@@ -29,7 +29,7 @@ public class EventSplitTest extends AbstractInterpreterTest {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		final BasicFBType fb = loadFBType("E_SPLIT"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 

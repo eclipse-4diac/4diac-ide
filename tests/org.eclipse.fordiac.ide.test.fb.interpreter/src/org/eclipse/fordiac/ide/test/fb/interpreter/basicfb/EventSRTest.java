@@ -26,7 +26,7 @@ public class EventSRTest extends AbstractInterpreterTest {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		final BasicFBType fb = loadFBType("E_SR"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
@@ -38,7 +38,7 @@ public class EventSRTest extends AbstractInterpreterTest {
 		addTransaction(seq, new FBTransaction("S")); //$NON-NLS-1$
 		addTransaction(seq, new FBTransaction("R", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransaction("S", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		// new FBTransaction().inputEvent("R").expectedOutput("EO").expectedOutput("
+
 		runTest(fb, seq);
 	}
 

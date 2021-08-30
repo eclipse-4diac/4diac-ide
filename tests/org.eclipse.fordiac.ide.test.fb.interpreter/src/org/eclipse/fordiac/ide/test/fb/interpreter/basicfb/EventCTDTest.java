@@ -27,7 +27,7 @@ public class EventCTDTest extends AbstractInterpreterTest {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		final BasicFBType fb = loadFBType("E_CTD"); //$NON-NLS-1$
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 

@@ -27,7 +27,7 @@ public class EventMergeTest extends AbstractInterpreterTest {
 	}
 
 	@Test
-	public void testEI1() {
+	public void testEI1() throws Exception {
 		final BasicFBType fb = loadFBType("E_MERGE"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 

@@ -26,7 +26,7 @@ public class EventRendTest extends AbstractInterpreterTest {
 	}
 
 	@Test
-	public void testPermit() {
+	public void testPermit() throws Exception {
 		final BasicFBType fb = loadFBType("E_REND"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 

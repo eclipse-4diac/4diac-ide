@@ -53,6 +53,10 @@ public final class Messages extends NLS {
 	public static String TransactionSection_InputPrimitive;
 	public static String TransactionSection_OutputPrimitives;
 	public static String TransactionSection_Parameter;
+	public static String RunServiceSequenceHandler_InconsistencyDetected;
+	public static String RunServiceSequenceHandler_SequenceDoesNotMatchECC;
+	public static String RunServiceSequenceHandler_SequenceMatchesECC;
+	public static String RunServiceSequenceHandler_Success;
 
 	static {
 		// initialize resource bundle

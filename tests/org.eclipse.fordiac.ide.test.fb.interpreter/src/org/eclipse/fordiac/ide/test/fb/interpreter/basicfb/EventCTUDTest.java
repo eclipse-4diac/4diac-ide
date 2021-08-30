@@ -27,7 +27,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		BasicFBType fb = loadFBType("E_CTUD"); //$NON-NLS-1$
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 

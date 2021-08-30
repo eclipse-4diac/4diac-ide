@@ -28,7 +28,7 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		final BasicFBType fb = loadFBType("StationCtrl"); //$NON-NLS-1$
 		fb.getService().getServiceSequence().clear();
 		ServiceSequence seq = addServiceSequence(fb.getService());

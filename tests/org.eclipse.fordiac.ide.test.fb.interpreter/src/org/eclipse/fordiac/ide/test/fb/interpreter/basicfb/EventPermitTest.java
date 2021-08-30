@@ -26,7 +26,7 @@ public class EventPermitTest extends AbstractInterpreterTest {
 	}
 
 	@Test
-	public void testPermit() {
+	public void testPermit() throws Exception {
 		final BasicFBType fb = loadFBType("E_PERMIT"); //$NON-NLS-1$
 		fb.setService(createEmptyServiceModel());
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);

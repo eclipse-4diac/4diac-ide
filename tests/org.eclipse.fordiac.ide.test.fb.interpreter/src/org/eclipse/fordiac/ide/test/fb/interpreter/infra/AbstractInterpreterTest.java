@@ -72,8 +72,8 @@ public class AbstractInterpreterTest {
 	}
 
 
-	protected static org.eclipse.fordiac.ide.model.libraryElement.Service createEmptyServiceModel() {
-		final org.eclipse.fordiac.ide.model.libraryElement.Service s = LibraryElementFactory.eINSTANCE.createService();
+	protected static Service createEmptyServiceModel() {
+		final Service s = LibraryElementFactory.eINSTANCE.createService();
 		final ServiceInterface left = LibraryElementFactory.eINSTANCE.createServiceInterface();
 		left.setName(EXTERNAL_INTERFACE);
 		final ServiceInterface right = LibraryElementFactory.eINSTANCE.createServiceInterface();
@@ -160,11 +160,12 @@ public class AbstractInterpreterTest {
 	}
 
 
-	protected static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq) {
+	public static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq) throws Exception {
 		return runTest(fb, seq, START_STATE);
 	}
 
-	protected static BasicFBType runTest(BasicFBType fb, final ServiceSequence seq, final String startStateName) {
+	public static BasicFBType runTest(BasicFBType fb, final ServiceSequence seq, final String startStateName)
+			throws Exception {
 		final ResourceSet reset = new ResourceSetImpl();
 		final Resource resource = reset
 				.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -202,32 +203,51 @@ public class AbstractInterpreterTest {
 	}
 
 
-	private static void checkResults(ServiceSequence seq, EventManager eventManager) {
+	private static void checkResults(ServiceSequence seq, EventManager eventManager) throws Exception {
 		final EList<ServiceTransaction> expectedResults = seq.getServiceTransaction();
 		final EList<Transaction> results = eventManager.getTransactions();
 
-		assert (expectedResults.size() == results.size()); // correct test data
+		if (expectedResults.size() != results.size()) { // correct test data
+			throw new IllegalArgumentException("test data is incorrect");
+		}
 
 		for (int i = 0; i < expectedResults.size(); i++) {
 			final Transaction result = results.get(i);
 			final ServiceTransaction expectedResult = expectedResults.get(i);
-			// input event was correctly generated
-			assert(result.getInputEventOccurrence().getEvent().getName().equals(expectedResult.getInputPrimitive().getEvent()));
+			checkTransaction(result, expectedResult);
+		}
+	}
 
-			// no unwanted output event occurrences
-			final long outputEvents = expectedResult.getOutputPrimitive().stream()
-					.filter(p -> !p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)).count();
-			assert (outputEvents == result.getOutputEventOccurences().size());
+	private static void checkTransaction(final Transaction result, final ServiceTransaction expectedResult) {
+		// input event was correctly generated
+		if (!result.getInputEventOccurrence().getEvent().getName()
+				.equals(expectedResult.getInputPrimitive().getEvent())) {
+			throw new IllegalArgumentException("Input event was not generated correctly");
+		}
 
-			// check all output primitives
-			for (int j = 0; j < outputEvents; j++) {
-				final OutputPrimitive p = expectedResult.getOutputPrimitive().get(j);
-				if (!p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)) {
-					// generated output event is correct
-					assert (p.getEvent().equals(result.getOutputEventOccurences().get(j).getEvent().getName()));
-					// the associated data is correct
-					assert (processParameters(p.getParameters(), result));
-				}
+		// no unwanted output event occurrences
+		final long outputEvents = expectedResult.getOutputPrimitive().stream()
+				.filter(p -> !p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)).count();
+		if (outputEvents != result.getOutputEventOccurences().size()) {
+			throw new IllegalArgumentException("Unwanted output event occurrence");
+		}
+
+		// check all output primitives
+		for (int j = 0; j < outputEvents; j++) {
+			final OutputPrimitive p = expectedResult.getOutputPrimitive().get(j);
+			checkOutputPrimitive(result, j, p);
+		}
+	}
+
+	private static void checkOutputPrimitive(final Transaction result, int j, final OutputPrimitive p) {
+		if (!p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)) {
+			// generated output event is correct
+			if (!p.getEvent().equals(result.getOutputEventOccurences().get(j).getEvent().getName())) {
+				throw new IllegalArgumentException("Generated output event is incorrect");
+			}
+			// the associated data is correct
+			if (!processParameters(p.getParameters(), result)) {
+				throw new IllegalArgumentException("Parameter values do not match the data");
 			}
 		}
 	}
