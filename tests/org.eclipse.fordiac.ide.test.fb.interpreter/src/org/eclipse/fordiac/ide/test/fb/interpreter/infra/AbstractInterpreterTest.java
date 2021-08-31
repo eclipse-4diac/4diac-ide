@@ -53,7 +53,7 @@ import org.eclipse.fordiac.ide.test.fb.interpreter.ModelSerializer;
 public class AbstractInterpreterTest {
 	private static final String EXTERNAL_INTERFACE = "external"; //$NON-NLS-1$
 	private static final String INTERNAL_INTERFACE = "internal"; //$NON-NLS-1$
-	private static final String START_STATE = "START"; //$NON-NLS-1$
+	public static final String START_STATE = "START"; //$NON-NLS-1$
 
 	static final ModelDeserializer deserializer = new ModelDeserializer();
 	static final ModelSerializer serializer = new ModelSerializer();
@@ -72,7 +72,7 @@ public class AbstractInterpreterTest {
 	}
 
 
-	protected static Service createEmptyServiceModel() {
+	public static Service createEmptyServiceModel() {
 		final Service s = LibraryElementFactory.eINSTANCE.createService();
 		final ServiceInterface left = LibraryElementFactory.eINSTANCE.createServiceInterface();
 		left.setName(EXTERNAL_INTERFACE);

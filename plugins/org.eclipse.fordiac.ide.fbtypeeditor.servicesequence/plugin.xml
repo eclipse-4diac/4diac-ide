@@ -112,6 +112,10 @@
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.RunServiceSequenceHandler"
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence">
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.RecordServiceSequenceHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -123,6 +127,10 @@
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
             name="Run Service Sequence">
       </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
+            name="Record Service Sequence">
+      </command>      
    </extension>
    <extension
            point="org.eclipse.ui.menus">
@@ -191,6 +199,23 @@
        <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
             label="Run Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="true">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+            		</with>
+            </visibleWhen>
+       </command>
+	       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
+            label="Record Service Sequence"
             style="push">
             <visibleWhen checkEnabled="true">
 					<with variable="selection">
