@@ -104,8 +104,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 
 		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_Name);
 		nameText = createGroupText(typeAndCommentGroup, true);
-		nameText.setSize(100, getMinimumHeight());
-		nameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
+		nameText.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
 		nameText.addModifyListener(e -> {
 			final Command cmd = new ChangeSequenceNameCommand(nameText.getText(), getType());
 			executeCommand(cmd);
@@ -113,7 +112,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 
 		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_Comment);
 		commentText = createGroupText(typeAndCommentGroup, true);
-		commentText.setSize(SWT.FILL, getMinimumHeight());
+		commentText.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		commentText.addModifyListener(e -> {
 			final Command cmd = new ChangeCommentCommand(getType(), commentText.getText());
 			executeCommand(cmd);

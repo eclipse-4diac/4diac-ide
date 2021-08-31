@@ -354,18 +354,6 @@ public class TransactionSection extends AbstractServiceSection {
 		}
 	}
 
-	private Object getNameOfCurrentEvent(final Primitive primitive) {
-		final String event = primitive.getEvent();
-		if (event == null) {
-			return Integer.valueOf(0);
-		}
-		final String[] eventNames = getOutputEventNames();
-		final int indexOfEvent = Arrays.asList(eventNames).indexOf(event);
-		if (indexOfEvent < 0) {
-			return Integer.valueOf(0);
-		}
-		return Integer.valueOf(indexOfEvent);
-	}
 
 	private class TransactionCellModifier implements ICellModifier {
 		@Override
@@ -426,6 +414,19 @@ public class TransactionSection extends AbstractServiceSection {
 				executeCommand(cmd);
 				refresh();
 			}
+		}
+
+		private Object getNameOfCurrentEvent(final Primitive primitive) {
+			final String event = primitive.getEvent();
+			if (event == null) {
+				return Integer.valueOf(0);
+			}
+			final String[] eventNames = getOutputEventNames();
+			final int indexOfEvent = Arrays.asList(eventNames).indexOf(event);
+			if (indexOfEvent < 0) {
+				return Integer.valueOf(0);
+			}
+			return Integer.valueOf(indexOfEvent);
 		}
 
 	}

@@ -19,6 +19,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FlowLayout;
+import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
@@ -36,22 +38,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
-public class ServiceFigure extends FreeformLayeredPane {
-	private Figure leftFigure;
-	private Figure middleFigure;
-	private Figure rightFigure;
+public final class ServiceFigure extends FreeformLayeredPane {
+	private static final int LEFT_RIGHT_BACKGROUND_WIDTH = 800;
+	private static final int MIDDLE_LINE_WIDTH = 5;
+
 	private Label leftLabel;
 	private Label rightLabel;
 	private Layer serviceSequenceContainer;
 
-	private static final int MIDDLE_LINE_WIDTH = 5;
-
-
 	public ServiceFigure() {
-		// nothing to do here, call createVisuals() manually to avoid call of overridable method from constructor
-	}
-
-	public void createVisuals() {
 		setLayoutManager(new StackLayout());
 		setForegroundColor(ColorConstants.blue);
 		createBaseLayer();
@@ -60,7 +55,7 @@ public class ServiceFigure extends FreeformLayeredPane {
 	}
 
 	private void createBaseLayer() {
-		final Layer baseLayer = new Layer();
+		final Layer baseLayer = new FreeformLayer();
 		baseLayer.setBorder(new MarginBorder(0, 10, 0, 10));
 		final GridLayout layout = new GridLayout(3, false);
 		layout.horizontalSpacing = 0;
@@ -69,28 +64,23 @@ public class ServiceFigure extends FreeformLayeredPane {
 		layout.verticalSpacing = 0;
 		baseLayer.setLayoutManager(layout);
 
-		final LineBorder middleLines = new AdvancedLineBorder(PositionConstants.EAST);
+
+		final Figure leftFigure = new Figure();
+		baseLayer.add(leftFigure);
+
+		final LineBorder middleLines = new AdvancedLineBorder(PositionConstants.EAST | PositionConstants.WEST);
 		middleLines.setWidth(MIDDLE_LINE_WIDTH);
 		middleLines.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 
-		leftFigure = new Figure();
-		final GridLayout leftLayout = new GridLayout();
-		leftFigure.setLayoutManager(leftLayout);
-		leftLayout.horizontalSpacing = 0;
-		leftFigure.setBorder(middleLines);
-		leftLayout.marginWidth = 0;
-		leftLayout.marginHeight = 0;
-		leftLayout.verticalSpacing = 0;
-		baseLayer.add(leftFigure);
-
-		middleFigure = new Figure();
-		middleFigure.setPreferredSize(150, 0);
+		final Figure middleFigure = new Figure();
 		middleFigure.setBorder(middleLines);
 		middleFigure.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHTER_GRAY));
 		middleFigure.setOpaque(true);
 		baseLayer.add(middleFigure);
 
-		rightFigure = new Figure();
+		final Figure rightFigure = new Figure();
+		baseLayer.add(rightFigure);
+
 		final GridLayout rightLayout = new GridLayout();
 		rightFigure.setLayoutManager(rightLayout);
 		rightLayout.horizontalSpacing = 0;
@@ -99,15 +89,22 @@ public class ServiceFigure extends FreeformLayeredPane {
 		rightLayout.verticalSpacing = 0;
 		baseLayer.add(rightFigure);
 
-		layout.setConstraint(middleFigure, new GridData(SWT.NONE, SWT.FILL, false, true));
-		layout.setConstraint(leftFigure, new GridData(SWT.FILL, SWT.FILL, true, true));
-		layout.setConstraint(rightFigure, new GridData(SWT.FILL, SWT.FILL, true, true));
+		final GridData middleGridData = new GridData(SWT.NONE, SWT.FILL, false, true);
+		middleGridData.widthHint = ServiceConstants.getMiddleSectionWidth();
+		layout.setConstraint(middleFigure, middleGridData);
+		final GridData leftGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		leftGridData.widthHint = ServiceConstants.getRightLeftSectionWidth();
+		final GridData rightGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		rightGridData.widthHint = ServiceConstants.getRightLeftSectionWidth();
+		layout.setConstraint(leftFigure, leftGridData);
+		layout.setConstraint(rightFigure, rightGridData);
 
 		add(baseLayer);
 	}
 
+
 	private void createInterfaceLayer() {
-		final Layer interfaceLayer = new Layer();
+		final Layer interfaceLayer = new FreeformLayer();
 		interfaceLayer.setBorder(new MarginBorder(5, 0, 0, 0));
 		final GridLayout layout = new GridLayout(2, true);
 		interfaceLayer.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
@@ -121,20 +118,12 @@ public class ServiceFigure extends FreeformLayeredPane {
 		final int topMargin = 5;
 		final int borderMargin = 30;
 
-		leftLabel = new Label();
-		leftLabel.setLabelAlignment(PositionConstants.RIGHT);
-		leftLabel.setBorder(new MarginBorder(topMargin, borderMargin, 0, centerMargin));
-		leftLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE)); //$NON-NLS-1$
-
+		leftLabel = createLabel(true);
 		final GridData leftLabelData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(leftLabel, leftLabelData);
 		interfaceLayer.add(leftLabel);
 
-		rightLabel = new Label();
-		rightLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE)); //$NON-NLS-1$
-		rightLabel.setLabelAlignment(PositionConstants.LEFT);
-		rightLabel.setBorder(new MarginBorder(topMargin, centerMargin, 0, borderMargin));
-
+		rightLabel = createLabel(false);
 		final GridData rightLabelData = new GridData(SWT.LEFT, SWT.NONE, true, false);
 		interfaceLayer.getLayoutManager().setConstraint(rightLabel, rightLabelData);
 		interfaceLayer.add(rightLabel);
@@ -142,26 +131,27 @@ public class ServiceFigure extends FreeformLayeredPane {
 		add(interfaceLayer);
 	}
 
+	private static Label createLabel(final boolean isLeftInterface) {
+		final int centerMargin = 100;
+		final int topMargin = 5;
+		final int borderMargin = 30;
+		final Label label = new Label();
+		label.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE)); //$NON-NLS-1$
+		if (isLeftInterface) {
+			label.setLabelAlignment(PositionConstants.RIGHT);
+			label.setBorder(new MarginBorder(topMargin, borderMargin, 0, centerMargin));
+		} else {
+			label.setLabelAlignment(PositionConstants.LEFT);
+			label.setBorder(new MarginBorder(topMargin, centerMargin, 0, borderMargin));
+		}
+		return label;
+	}
 	private void createServiceSequenceLayer() {
-		serviceSequenceContainer = new Layer();
+		serviceSequenceContainer = new FreeformLayer();
 		serviceSequenceContainer.setBorder(new MarginBorder(20, 10, 5, 10));
-		final GridLayout layout = new GridLayout();
-		layout.horizontalSpacing = 0;
-		layout.marginWidth = 0;
+		final FlowLayout layout = new FlowLayout();
 		serviceSequenceContainer.setLayoutManager(layout);
 		add(serviceSequenceContainer);
-	}
-
-	public Figure getLeftFigure() {
-		return leftFigure;
-	}
-
-	public Figure getMiddleFigure() {
-		return middleFigure;
-	}
-
-	public Figure getRightFigure() {
-		return rightFigure;
 	}
 
 	public Label getLeftLabel() {

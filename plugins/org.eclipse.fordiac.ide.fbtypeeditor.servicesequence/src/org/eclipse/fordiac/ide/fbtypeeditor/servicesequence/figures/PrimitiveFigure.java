@@ -37,8 +37,6 @@ public class PrimitiveFigure extends Layer {
 	private final Figure leftFigure;
 	private final Figure rightFigure;
 
-	private static final int ARROW_LENGTH = 100;
-
 	public PrimitiveFigure(final boolean isLeftInterface, final String name, final String parameter) {
 		final GridLayout mainLayout = new GridLayout(6, false);
 		setLayoutManager(mainLayout);
@@ -49,28 +47,28 @@ public class PrimitiveFigure extends Layer {
 
 		nameLabel = new Label();
 		nameLabel.setForegroundColor(ColorConstants.black);
-		final GridData nameLabelData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-		nameLabelData.widthHint = 200;
+		final GridData nameLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
+		nameLabelData.widthHint = ServiceConstants.getNameLabelWidth();
 
 		parameterLabel = new Label();
 		parameterLabel.setForegroundColor(ColorManager.getColor(ServiceConstants.GRAY));
 		final GridData parameterLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
-		parameterLabelData.widthHint = 150;
+		parameterLabelData.widthHint = ServiceConstants.getParameterLabelWidth();
 
 		emptyLabel = new Label();
-		final GridData emptyLabelData = new GridData(SWT.FILL, SWT.NONE, false, false);
-		emptyLabelData.widthHint = 500;
+		final GridData emptyLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
+		emptyLabelData.widthHint = ServiceConstants.getEmptyLabelWidth();
 
-		final GridData arrowLeftData = new GridData(SWT.NONE, SWT.CENTER, false, false);
-		arrowLeftData.widthHint = ARROW_LENGTH;
+		final GridData arrowLeftData = new GridData(SWT.FILL, SWT.CENTER, false, false);
+		arrowLeftData.widthHint = ServiceConstants.getArrowWidth();
 		leftFigure = new Figure();
 
 		centerFigure = new Figure();
 		final GridData spaceData = new GridData(SWT.FILL, SWT.CENTER, false, false);
-		spaceData.widthHint = 55;
+		spaceData.widthHint = ServiceConstants.getMiddleSectionWidth();
 
-		final GridData arrowRightData = new GridData(SWT.NONE, SWT.CENTER, false, false);
-		arrowRightData.widthHint = ARROW_LENGTH;
+		final GridData arrowRightData = new GridData(SWT.FILL, SWT.CENTER, false, false);
+		arrowRightData.widthHint = ServiceConstants.getArrowWidth();
 		rightFigure = new Figure();
 
 		setInterfaceDirection(isLeftInterface);
