@@ -10,19 +10,19 @@
  * Contributors:
  *   Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
+package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditManager;
-import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 
-public class ECTransitionDirectEditManager extends AbstractDirectEditManager<ECTransition> {
+public class ServicePrimitiveDirectEditManager extends AbstractDirectEditManager<Primitive> {
 
-	public ECTransitionDirectEditManager(final GraphicalEditPart source, final ECTransition transition,
+	public ServicePrimitiveDirectEditManager(final GraphicalEditPart source, final Primitive primitive,
 			final Label label, final ZoomManager zoomManager, final FigureCanvas fc) {
-		super(source, transition, label, zoomManager, fc, ECTransitionCellEditor.class);
+		super(source, primitive, label, zoomManager, fc, ServicePrimitiveCellEditor.class);
 	}
 }

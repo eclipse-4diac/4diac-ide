@@ -23,14 +23,16 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteServiceSequenceCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.ServiceSequenceFigure;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.SequenceLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.SequenceFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.TransactionLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.LabelCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.policies.HighlightEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -45,9 +47,7 @@ import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Control;
 
 public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* ResizableCompartmentEditPart */ {
 
@@ -94,7 +94,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 
 		});
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new HighlightEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SequenceLayoutEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new TransactionLayoutEditPolicy());
 
 	}
 
@@ -105,8 +105,8 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 	}
 
 	@Override
-	public ServiceSequenceFigure getFigure() {
-		return (ServiceSequenceFigure) super.getFigure();
+	public SequenceFigure getFigure() {
+		return (SequenceFigure) super.getFigure();
 	}
 
 	@Override
@@ -116,8 +116,8 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 
 	@Override
 	protected IFigure createFigure() {
-		final ServiceSequenceFigure figure = new ServiceSequenceFigure(isExpanded);
-		figure.createVisuals();
+		final SequenceFigure figure = new SequenceFigure(isExpanded);
+		figure.setBorder(new MarginBorder(new Insets(12, 0, 0, 0)));
 		final GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		figure.getLayoutManager().setConstraint(figure, layoutData);
 
@@ -135,11 +135,8 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof TransactionEditPart) {
-			final ServiceSequenceFigure thisFigure = getFigure();
 			final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-			final GridData childData = new GridData(SWT.FILL, SWT.NONE, true, false);
-			thisFigure.getTransactionContainer().getLayoutManager().setConstraint(child, childData);
-			thisFigure.getTransactionContainer().add(child, index);
+			getFigure().getTransactionContainer().add(child, index);
 		}
 	}
 
@@ -154,7 +151,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		final ServiceSequenceFigure figure = getFigure();
+		final SequenceFigure figure = getFigure();
 		if (null != getModel()) {
 			figure.setLabelText(getModel().getName(), getModel().getComment());
 		}
@@ -168,7 +165,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 	@Override
 	protected DirectEditManager createDirectEditManager() {
 		final DirectEditManager dem = super.createDirectEditManager();
-		final CellEditorLocator locator = new ServiceSequenceCellEditorLocator(getFigure().getNameLabel(),
+		final CellEditorLocator locator = new LabelCellEditorLocator(getFigure().getNameLabel(),
 				getZoomManager(), (FigureCanvas) getViewer().getControl());
 		dem.setLocator(locator);
 		return dem;
@@ -191,38 +188,4 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 		this.isExpanded = !isExpanded;
 		refresh();
 	}
-
-	public static class ServiceSequenceCellEditorLocator implements CellEditorLocator {
-		// partly taken from ECTransitionCellEditorLocator
-		private Point refPoint = new Point(0, 0);
-		private final Label label;
-		private final ZoomManager zoomManager;
-		private final FigureCanvas fc;
-
-		public ServiceSequenceCellEditorLocator(final Label label, final ZoomManager zoomManager,
-				final FigureCanvas fc) {
-			this.label = label;
-			this.zoomManager = zoomManager;
-			this.fc = fc;
-		}
-
-		@Override
-		public void relocate(final CellEditor celleditor) {
-			if (null != celleditor) {
-				final Control control = celleditor.getControl();
-				updateRefPoint();
-				final Point pref = new Point(control.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
-						control.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-				control.setBounds(refPoint.x - pref.x / 2, refPoint.y - pref.y / 2, pref.x + 1, pref.y + 1);
-			}
-		}
-
-		private void updateRefPoint() {
-			final Point labelTopLeft = label.getBounds().getCenter().scale(zoomManager.getZoom());
-			final Point location = fc.getViewport().getViewLocation();
-			refPoint = new Point(labelTopLeft.x - location.x, labelTopLeft.y - location.y);
-		}
-
-	}
-
 }

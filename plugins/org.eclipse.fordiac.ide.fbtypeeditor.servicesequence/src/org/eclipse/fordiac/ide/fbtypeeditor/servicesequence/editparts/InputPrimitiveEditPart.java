@@ -20,11 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.draw2d.ConnectionAnchor;
-import org.eclipse.draw2d.Label;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.AdvancedFixedAnchor;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.gef.Request;
 
@@ -81,26 +78,6 @@ public class InputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
-		return null;
-	}
-
-	@Override
-	public int getFeatureID() {
-		return 0;
-	}
-
-	@Override
-	public EObject getElement() {
-		return getModel();
-	}
-
-	@Override
-	public Label getLabel() {
-		return getNameLabel();
-	}
-
-	@Override
-	public INamedElement getINamedElement() {
 		return null;
 	}
 

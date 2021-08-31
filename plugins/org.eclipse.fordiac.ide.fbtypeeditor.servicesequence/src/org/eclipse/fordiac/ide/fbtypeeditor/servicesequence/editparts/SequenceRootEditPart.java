@@ -23,8 +23,8 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.SequenceFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.ServiceFigure;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.ServiceSequenceFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.ChangeInterfaceNameEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
@@ -137,13 +137,13 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 				figure.setLeftLabelText(
 						null != getCastedModel().getLeftInterface() ? getCastedModel().getLeftInterface().getName()
 								: "", //$NON-NLS-1$
-						getCastedModel().getLeftInterface().getComment());
+								getCastedModel().getLeftInterface().getComment());
 			}
 			if (null != getCastedModel().getRightInterface()) {
 				figure.setRightLabelText(
 						null != getCastedModel().getRightInterface() ? getCastedModel().getRightInterface().getName()
 								: "", //$NON-NLS-1$
-						getCastedModel().getRightInterface().getComment());
+								getCastedModel().getRightInterface().getComment());
 			}
 		}
 	}
@@ -156,7 +156,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof ServiceSequenceEditPart) {
-			final ServiceSequenceFigure child = (ServiceSequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
+			final SequenceFigure child = (SequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
 			final ServiceFigure thisFigure = (ServiceFigure) getFigure();
 			final GridData childData = new GridData(SWT.FILL, SWT.NONE, true, false);
 			thisFigure.getServiceSequenceContainer().add(child, index);
@@ -167,7 +167,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof ServiceSequenceEditPart) {
-			final ServiceSequenceFigure child = (ServiceSequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
+			final SequenceFigure child = (SequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
 			final ServiceFigure thisFigure = (ServiceFigure) getFigure();
 			thisFigure.getServiceSequenceContainer().remove(child);
 		}

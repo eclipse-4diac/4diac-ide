@@ -16,14 +16,12 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.ConnectionAnchor;
-import org.eclipse.draw2d.Label;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.AdvancedFixedAnchor;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.gef.Request;
@@ -62,8 +60,11 @@ public class OutputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 
 	@Override
 	public List<Object> getModelSourceConnections() {
-		final List<Object> conns = new ArrayList<>();
+		if (getModel().getServiceTransaction() == null) { // has been removed already
+			return Collections.emptyList();
+		}
 
+		final List<Object> conns = new ArrayList<>();
 		if (getModel().getServiceTransaction().getOutputPrimitive().indexOf(getModel()) < (getModel()
 				.getServiceTransaction().getOutputPrimitive().size() - 1)) {
 			conns.add(getConnectingConnection());
@@ -74,9 +75,12 @@ public class OutputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 
 	@Override
 	public List<Object> getModelTargetConnections() {
+		if (getModel().getServiceTransaction() == null) { // has been removed already
+			return Collections.emptyList();
+		}
+
 		final List<Object> conns = new ArrayList<>();
 		conns.add(getPrimitiveConnection());
-
 		final int currentIndex = getModel().getServiceTransaction().getOutputPrimitive().indexOf(getModel());
 		if (currentIndex == 0) { // First output primitive: connection from input primitive
 			final InputPrimitive iP = getModel().getServiceTransaction().getInputPrimitive();
@@ -103,26 +107,6 @@ public class OutputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 	@Override
 	public OutputPrimitive getModel() {
 		return (OutputPrimitive) super.getModel();
-	}
-
-	@Override
-	public int getFeatureID() {
-		return 0;
-	}
-
-	@Override
-	public EObject getElement() {
-		return getModel();
-	}
-
-	@Override
-	public Label getLabel() {
-		return getNameLabel();
-	}
-
-	@Override
-	public INamedElement getINamedElement() {
-		return null;
 	}
 
 	@Override
