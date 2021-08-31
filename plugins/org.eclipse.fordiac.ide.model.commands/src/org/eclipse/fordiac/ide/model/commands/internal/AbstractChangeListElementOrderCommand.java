@@ -48,6 +48,17 @@ public abstract class AbstractChangeListElementOrderCommand<T> extends Command {
 		this.newIndex = newIndex;
 	}
 
+	protected AbstractChangeListElementOrderCommand(final T selection, final T refElement, final boolean insertAfter,
+			final EList<T> list) {
+		this(selection, list);
+		int index = list.indexOf(refElement);
+		Assert.isTrue(index >= 0);
+		if (insertAfter) {
+			index++;
+		}
+		this.newIndex = index;
+	}
+
 	@Override
 	public boolean canExecute() {
 		return (null != selection) && (list.size() > 1) && (list.size() > newIndex);

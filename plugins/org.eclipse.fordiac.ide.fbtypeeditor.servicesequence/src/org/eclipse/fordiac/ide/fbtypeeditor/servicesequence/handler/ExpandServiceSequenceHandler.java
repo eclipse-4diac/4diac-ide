@@ -35,7 +35,6 @@ public class ExpandServiceSequenceHandler extends AbstractHandler {
 
 		for (final Object selected : selection.toList()) {
 			if (selected instanceof ServiceSequenceEditPart) {
-				// todo cast selected and set it expanded
 				final ServiceSequenceEditPart ep = (ServiceSequenceEditPart) selected;
 				ep.toggleExpanded();
 			} else if (selected instanceof ServiceSequence) {

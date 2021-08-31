@@ -18,13 +18,20 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 
 public class ModuloFreeformFigure extends AbstractFreeformFigure {
 	private final ZoomScalableFreeformRootEditPart zoomScalableFreeformRootEditPart;
+	private final boolean useFeedbackLayer;
 
 	private static final int PADDING = 0;
 	private static final int BASE_WIDTH = 400;
 	private static final int BASE_HEIGHT = 200;
 
 	public ModuloFreeformFigure(final ZoomScalableFreeformRootEditPart zoomScalableFreeformRootEditPart) {
+		this(zoomScalableFreeformRootEditPart, true);
+	}
+
+	public ModuloFreeformFigure(final ZoomScalableFreeformRootEditPart zoomScalableFreeformRootEditPart,
+			final boolean useFeedbackLayer) {
 		this.zoomScalableFreeformRootEditPart = zoomScalableFreeformRootEditPart;
+		this.useFeedbackLayer = useFeedbackLayer;
 	}
 
 	@Override
@@ -41,11 +48,16 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 		return contentsExtent;
 	}
 
-	private Rectangle getUnscaledContentsExtent() {
-		final Rectangle contentsExtent = ((FreeformFigure) this.zoomScalableFreeformRootEditPart.getContentPane()).getFreeformExtent().getCopy();
-		// add handle and feedback layer so that dragging elements result in growing the modulo extend
-		contentsExtent.union(((FreeformFigure) this.zoomScalableFreeformRootEditPart.getLayer(ZoomScalableFreeformRootEditPart.HANDLE_LAYER)).getFreeformExtent());
-		contentsExtent.union(((FreeformFigure) this.zoomScalableFreeformRootEditPart.getLayer(ZoomScalableFreeformRootEditPart.FEEDBACK_LAYER)).getFreeformExtent());
+	protected Rectangle getUnscaledContentsExtent() {
+		final Rectangle contentsExtent = ((FreeformFigure) this.zoomScalableFreeformRootEditPart.getContentPane())
+				.getFreeformExtent().getCopy();
+		if (useFeedbackLayer) {
+			// add handle and feedback layer so that dragging elements result in growing the modulo extend
+			contentsExtent.union(((FreeformFigure) this.zoomScalableFreeformRootEditPart
+					.getLayer(ZoomScalableFreeformRootEditPart.HANDLE_LAYER)).getFreeformExtent());
+			contentsExtent.union(((FreeformFigure) this.zoomScalableFreeformRootEditPart
+					.getLayer(ZoomScalableFreeformRootEditPart.FEEDBACK_LAYER)).getFreeformExtent());
+		}
 		return contentsExtent;
 	}
 

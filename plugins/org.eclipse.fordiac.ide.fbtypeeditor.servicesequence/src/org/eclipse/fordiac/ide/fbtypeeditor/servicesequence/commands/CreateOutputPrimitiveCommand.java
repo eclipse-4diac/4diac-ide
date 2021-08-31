@@ -41,6 +41,12 @@ public class CreateOutputPrimitiveCommand extends AbstractCreateElementCommand<O
 		this.transaction = transaction;
 	}
 
+	public CreateOutputPrimitiveCommand(final ServiceTransaction transaction, final int index, final boolean isLeftInterface) {
+		super(transaction.getOutputPrimitive(), index);
+		this.isLeftInterface = isLeftInterface;
+		this.transaction = transaction;
+	}
+
 	@Override
 	protected OutputPrimitive createNewElement() {
 		final Service service = transaction.getServiceSequence().getService();

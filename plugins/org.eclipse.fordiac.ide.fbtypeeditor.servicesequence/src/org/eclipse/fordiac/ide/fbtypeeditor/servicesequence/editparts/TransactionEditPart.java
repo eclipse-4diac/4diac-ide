@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -34,7 +33,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.swt.SWT;
 
 public class TransactionEditPart extends AbstractGraphicalEditPart {
 
@@ -114,8 +112,6 @@ public class TransactionEditPart extends AbstractGraphicalEditPart {
 		if ((childEditPart instanceof InputPrimitiveEditPart) || (childEditPart instanceof OutputPrimitiveEditPart)) {
 			final TransactionFigure thisFigure = (TransactionFigure) getFigure();
 			final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-			final GridData childData = new GridData(SWT.FILL, SWT.NONE, true, false);
-			thisFigure.getLayoutManager().setConstraint(child, childData);
 			thisFigure.add(child, childEditPart instanceof InputPrimitiveEditPart ? 0 : index);
 		}
 	}

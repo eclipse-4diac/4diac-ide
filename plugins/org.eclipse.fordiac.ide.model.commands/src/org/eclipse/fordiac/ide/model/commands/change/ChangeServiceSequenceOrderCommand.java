@@ -26,4 +26,9 @@ public class ChangeServiceSequenceOrderCommand extends AbstractChangeListElement
 	public ChangeServiceSequenceOrderCommand(final ServiceSequence selection, final int newIndex) {
 		super(selection, newIndex, selection.getService().getServiceSequence());
 	}
+
+	public ChangeServiceSequenceOrderCommand(final ServiceSequence selection, final ServiceSequence refElement,
+			final boolean insertAfter) {
+		super(selection, refElement, insertAfter, selection.getService().getServiceSequence());
+	}
 }

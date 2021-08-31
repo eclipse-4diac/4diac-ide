@@ -28,9 +28,8 @@ public final class Messages extends NLS {
 	public static String PrimitiveSection_CustomEvent;
 	public static String PrimitiveSection_CreatePrimitiveSection_Interface;
 	public static String PrimitiveSection_DataQualifyingToolTip;
+	public static String ServiceInterfacePaletteFactory_DrawerName;
 	public static String ServiceInterfacePaletteFactory_LeftInterface;
-	public static String ServiceInterfacePaletteFactory_InputPrimitive;
-	public static String ServiceInterfacePaletteFactory_InputPrimitive_Desc;
 	public static String ServiceInterfacePaletteFactory_OutputPrimitive;
 	public static String ServiceInterfacePaletteFactory_OutputPrimitive_Desc;
 	public static String ServiceInterfacePaletteFactory_RightInterface;

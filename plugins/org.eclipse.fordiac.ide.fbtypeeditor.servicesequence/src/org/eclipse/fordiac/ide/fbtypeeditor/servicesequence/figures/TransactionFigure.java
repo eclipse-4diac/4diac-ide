@@ -10,24 +10,22 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Melanie Winter - extracted from TransactionEditPart, updated layout
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
 
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.GridLayout;
+import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.swt.SWT;
 
-// extracted from TransactionEditPart
-public class TransactionFigure extends Figure {
+public final class TransactionFigure extends Figure {
 	public TransactionFigure() {
-		final GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		layout.horizontalSpacing = 0;
+		final FlowLayout layout = new FlowLayout();
 		final AdvancedLineBorder border = new AdvancedLineBorder(PositionConstants.NORTH, SWT.LINE_DASH);
 		border.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 		setBorder(border);

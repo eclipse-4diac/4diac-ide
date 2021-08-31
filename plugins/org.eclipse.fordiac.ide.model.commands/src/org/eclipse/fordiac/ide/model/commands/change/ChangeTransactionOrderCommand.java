@@ -26,4 +26,9 @@ public class ChangeTransactionOrderCommand extends AbstractChangeListElementOrde
 	public ChangeTransactionOrderCommand(final ServiceTransaction selection, final int newIndex) {
 		super(selection, newIndex, selection.getServiceSequence().getServiceTransaction());
 	}
+
+	public ChangeTransactionOrderCommand(final ServiceTransaction selection, final ServiceTransaction refElement,
+			final boolean insertAfter) {
+		super(selection, refElement, insertAfter, selection.getServiceSequence().getServiceTransaction());
+	}
 }

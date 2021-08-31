@@ -1,5 +1,5 @@
 /*******************************************************************************
-  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *          2019, 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -13,8 +13,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
  *   Melanie Winter - add insertion after refelement/index
- *   Melanie Winter, Bianca Wiesmayr 
- *    - extracted code from CreateTransactionSection for better reuse 
+ *   Melanie Winter, Bianca Wiesmayr
+ *    - extracted code from CreateTransactionSection for better reuse
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
@@ -27,13 +27,21 @@ public abstract class AbstractCreateElementCommand<T> extends AbstractCreationCo
 	private final EList<T> list;
 	private int index;
 
+
 	protected AbstractCreateElementCommand(final EList<T> list) {
 		this.list = list;
+		calculateInsertionIndex(list, refElement);
+	}
+
+	protected AbstractCreateElementCommand(final EList<T> list, final int index) {
+		this(list);
+		this.index = index;
 	}
 
 	protected AbstractCreateElementCommand(final EList<T> list, final T refElement) {
 		this(list);
 		this.refElement = refElement;
+		calculateInsertionIndex(list, refElement);
 	}
 
 	private void calculateInsertionIndex(final EList<T> list, final T refElement) {
@@ -50,7 +58,6 @@ public abstract class AbstractCreateElementCommand<T> extends AbstractCreationCo
 	}
 	@Override
 	public void execute() {
-		calculateInsertionIndex(list, refElement);
 		newElement = createNewElement();
 		list.add(index, newElement);
 	}

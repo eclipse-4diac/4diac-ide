@@ -26,4 +26,9 @@ public class ChangeOutputPrimitiveOrderCommand extends AbstractChangeListElement
 	public ChangeOutputPrimitiveOrderCommand(final OutputPrimitive selection, final int newIndex) {
 		super(selection, newIndex, selection.getServiceTransaction().getOutputPrimitive());
 	}
+
+	public ChangeOutputPrimitiveOrderCommand(final OutputPrimitive selection, final OutputPrimitive refElement,
+			final boolean insertAfter) {
+		super(selection, refElement, insertAfter, selection.getServiceTransaction().getOutputPrimitive());
+	}
 }

@@ -10,11 +10,15 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Filip Andren, Ingo Hegny
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter 
+ *     - change canvas, fix problem with size calculation when dragging elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.FreeformViewport;
+import org.eclipse.draw2d.RangeModel;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
@@ -24,6 +28,9 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRo
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPartFactory;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
+import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
@@ -33,6 +40,8 @@ import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -42,6 +51,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
@@ -70,8 +80,6 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		super.selectionChanged(part, selection);
 		// If not in FBTypeEditor ignore selection changed
-
-		// TODO move to IFBTEditor as method
 		if (part.getSite().getPage().getActiveEditor() instanceof FBTypeEditor) {
 			updateActions(getSelectionActions());
 			if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
@@ -156,6 +164,31 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 				menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 			}
 		};
+	}
+
+	@Override
+	protected ScalableFreeformRootEditPart createRootEditPart() {
+		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
+			@Override
+			protected AbstractFreeformFigure createDrawingAreaContainer() {
+				return new ModuloFreeformFigure(this, false);
+			}
+		};
+	}
+
+	@Override
+	protected Point getInitialScrollPos() {
+		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
+				.getRootEditPart();
+
+		final FreeformViewport rootviewPort = (FreeformViewport) rootEditPart.getFigure();
+
+		return new Point(calculateTopLeftScrollPosition(rootviewPort.getHorizontalRangeModel()),
+				calculateTopLeftScrollPosition(rootviewPort.getVerticalRangeModel()));
+	}
+
+	private static int calculateTopLeftScrollPosition(final RangeModel rangeModel) {
+		return rangeModel.getExtent();
 	}
 
 	@Override
