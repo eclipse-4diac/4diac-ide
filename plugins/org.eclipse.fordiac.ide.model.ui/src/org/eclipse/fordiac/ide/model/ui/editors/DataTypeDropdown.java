@@ -145,6 +145,7 @@ public class DataTypeDropdown extends TextCellEditor {
 	private void configureTextControl() {
 		textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		textControl.addModifyListener(e -> {
+			loadContent(); // refresh content before opening textfield
 			if (textControl.getText().isEmpty()) {
 				provider.setProposals(getElementaryTypes());
 				isElementary = true;

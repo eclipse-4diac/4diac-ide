@@ -166,11 +166,19 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			protected List<DataType> getDataTypesSorted() {
 				return super.getDataTypesSorted().stream().filter(Objects::nonNull)
 						.filter(type -> !type.getName().equals(StructViewingComposite.this.getType().getName()))
+						.filter(type -> !(type instanceof StructuredType) || isValidStruct((StructuredType) type))
 						.collect(Collectors.toList());
 			}
 		};
 		return new CellEditor[] { new TextCellEditor(table), typeDropDown, new TextCellEditor(table),
 				new TextCellEditor(table), new TextCellEditor(table) };
+	}
+
+	private boolean isValidStruct(final StructuredType type) {
+		return !type.getMemberVariables().stream()
+				.filter(var -> var.getType() instanceof StructuredType)
+				.anyMatch(var -> var.getTypeName().equals(StructViewingComposite.this.getType().getName())
+					|| !isValidStruct(dataTypeLibrary.getStructuredType(var.getTypeName())));
 	}
 
 	private static void configureTableLayout(final Table table) {
