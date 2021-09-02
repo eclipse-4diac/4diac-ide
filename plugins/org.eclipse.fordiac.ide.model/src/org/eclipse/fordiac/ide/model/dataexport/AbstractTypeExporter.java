@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
  * 				 2018, 2020 Johannes Keppler University
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,13 +15,26 @@
  *  Alois Zoitl - extracted this helper class from the CommonElementExporter
  *              - changed exporting the Saxx cursor api
  *  Alois Zoitl, Bianca Wiesmayr - extracted code to this common base class
+ *  Benjamin Muttenthaler - extracted saveType to this base class, so it can be used by the DataTypeExporter too
  ********************************************************************************/
 
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -50,6 +64,44 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		addEndElement();
 	}
 
+	public static void saveType(final PaletteEntry entry) {
+		final AbstractTypeExporter exporter = getTypeExporter(entry);
+
+		if (null != exporter) {
+			try {
+				exporter.createXMLEntries();
+			} catch (final XMLStreamException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+			}
+
+			final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
+				@Override
+				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+					exporter.writeToFile(entry.getFile());
+					// "reset" the modification timestamp in the PaletteEntry to avoid reload - as for this timestamp it
+					// is not necessary as the data is in memory
+					entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
+					return Status.OK_STATUS;
+				}
+			};
+			job.setRule(entry.getFile().getParent());
+			job.schedule();
+		}
+	}
+
+	private static AbstractTypeExporter getTypeExporter(final PaletteEntry entry) {
+		if (entry instanceof FBTypePaletteEntry) {
+			return new FbtExporter((FBTypePaletteEntry) entry);
+		} else if (entry instanceof AdapterTypePaletteEntry) {
+			return new AdapterExporter((AdapterTypePaletteEntry) entry);
+		} else if (entry instanceof SubApplicationTypePaletteEntry) {
+			return new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
+		} else if (entry instanceof DataTypePaletteEntry) {
+			return new DataTypeExporter((AnyDerivedType) entry.getType());
+		}
+		return null;
+	}
+
 	protected abstract String getRootTag();
 
 	protected abstract void createTypeSpecificXMLEntries() throws XMLStreamException;
@@ -70,12 +122,10 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		}
 	}
 
-	/**
-	 * Adds the compiler.
+	/** Adds the compiler.
 	 *
 	 * @param compiler the compiler
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void addCompiler(final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler)
 			throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.COMPILER_ELEMENT);
@@ -89,12 +139,10 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 				(null != compiler.getVersion()) ? compiler.getVersion() : ""); //$NON-NLS-1$
 	}
 
-	/**
-	 * Adds the variable.
+	/** Adds the variable.
 	 *
 	 * @param varDecl the var decl
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void addVarDeclaration(final VarDeclaration varDecl) throws XMLStreamException {
 		final boolean hasAttributes = !varDecl.getAttributes().isEmpty();
 		if (hasAttributes) {

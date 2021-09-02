@@ -18,21 +18,16 @@ package org.eclipse.fordiac.ide.datatypeeditor.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.fordiac.ide.datatypeeditor.Activator;
 import org.eclipse.fordiac.ide.datatypeeditor.DataTypeListener;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
-import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -112,16 +107,17 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		final DataTypeExporter exporter = new DataTypeExporter((AnyDerivedType) dataType);
-		try {
-			exporter.saveType(file);
-			commandStack.markSaveLocation();
-			firePropertyChange(IEditorPart.PROP_DIRTY);
-		} catch (final XMLStreamException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-			MessageDialog.openError(getSite().getShell().getShell(), Messages.MessageDialogTitle_SaveError,
-					Messages.MessageDialogContent_SaveError);
-		}
+		// TODO adapt implementation
+		// final DataTypeExporter exporter = new DataTypeExporter((AnyDerivedType) dataType);
+		// try {
+		// //exporter.saveType(file);
+		// commandStack.markSaveLocation();
+		// firePropertyChange(IEditorPart.PROP_DIRTY);
+		// } catch (final XMLStreamException e) {
+		// Activator.getDefault().logError(e.getMessage(), e);
+		// MessageDialog.openError(getSite().getShell().getShell(), Messages.MessageDialogTitle_SaveError,
+		// Messages.MessageDialogContent_SaveError);
+		// }
 	}
 
 	@Override

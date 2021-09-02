@@ -17,7 +17,6 @@ import java.text.MessageFormat;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
@@ -26,18 +25,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class DataTypeExporter extends AbstractTypeExporter {
 
-	public DataTypeExporter(AnyDerivedType type) {
+	public DataTypeExporter(final AnyDerivedType type) {
 		super(type);
 	}
 
 	@Override
 	protected AnyDerivedType getType() {
 		return (AnyDerivedType) super.getType();
-	}
-
-	public void saveType(IFile file) throws XMLStreamException {
-		createXMLEntries();
-		writeToFile(file);
 	}
 
 	@Override
@@ -56,9 +50,9 @@ public class DataTypeExporter extends AbstractTypeExporter {
 		}
 	}
 
-	private void createStructContent(StructuredType type) throws XMLStreamException {
+	private void createStructContent(final StructuredType type) throws XMLStreamException {
 		addStartElement(LibraryElementTags.STRUCTURED_TYPE_ELEMENT);
-		for (VarDeclaration varDecl : type.getMemberVariables()) {
+		for (final VarDeclaration varDecl : type.getMemberVariables()) {
 			addVarDeclaration(varDecl);
 		}
 		addEndElement();

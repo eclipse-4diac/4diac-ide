@@ -21,8 +21,6 @@ package org.eclipse.fordiac.ide.typemanagement.wizards;
 import java.io.File;
 import java.text.MessageFormat;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
@@ -30,7 +28,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -77,25 +75,26 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
-		String typeName = page1.getFileName();
-		File template = page1.getTemplate();
+		final String typeName = page1.getFileName();
+		final File template = page1.getTemplate();
 		if (!checkTemplateAvailable(template.getAbsolutePath())) {
 			return false;
 		}
-		IFile targetTypeFile = ResourcesPlugin.getWorkspace().getRoot()
+		final IFile targetTypeFile = ResourcesPlugin.getWorkspace().getRoot()
 				.getFile(new Path(page1.getContainerFullPath() + File.separator + typeName));
 		try {
 			ImportUtils.copyFile(template, targetTypeFile);
-			String fileEnding = typeName.substring(typeName.lastIndexOf('.'), typeName.length());
+			final String fileEnding = typeName.substring(typeName.lastIndexOf('.'), typeName.length());
 			return (fileEnding.equalsIgnoreCase("." + TypeLibraryTags.DATA_TYPE_FILE_ENDING)) //$NON-NLS-1$
-					? finishDataTypeCreation(targetTypeFile) : finishFBTypeCreation(targetTypeFile);
-		} catch (Exception e) {
+					? finishDataTypeCreation(targetTypeFile)
+					: finishFBTypeCreation(targetTypeFile);
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 		return false;
 	}
 
-	private static boolean checkTemplateAvailable(String templatePath) {
+	private static boolean checkTemplateAvailable(final String templatePath) {
 		if (!new File(templatePath).exists()) {
 			templateNotAvailable(templatePath);
 			return false;
@@ -103,36 +102,29 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	private static void templateNotAvailable(String templatePath) {
-		MessageBox mbx = new MessageBox(Display.getDefault().getActiveShell());
+	private static void templateNotAvailable(final String templatePath) {
+		final MessageBox mbx = new MessageBox(Display.getDefault().getActiveShell());
 		mbx.setMessage(MessageFormat.format(Messages.NewFBTypeWizard_TemplateNotAvailable, templatePath));
 		mbx.open();
 	}
 
-	private boolean finishDataTypeCreation(IFile targetTypeFile) {
-		StructuredType type = DataFactory.eINSTANCE.createStructuredType();
+	private boolean finishDataTypeCreation(final IFile targetTypeFile) {
+		refreshPaletteEntry(targetTypeFile);
+		final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
+		entry.setType(type);
 		TypeManagementPreferencesHelper.setupVersionInfo(type);
 		type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));
-		DataTypeExporter exporter = new DataTypeExporter(type);
-		try {
-			exporter.saveType(targetTypeFile);
-		} catch (XMLStreamException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
+
+		AbstractTypeExporter.saveType(entry);
 		if (page1.getOpenType()) {
 			openTypeEditor(targetTypeFile);
 		}
 		return true;
 	}
 
-	private boolean finishFBTypeCreation(IFile targetTypeFile) {
-		entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
-		if (null == entry) {
-			// refresh the palette and retry to fetch the entry
-			TypeLibrary.refreshTypeLib(targetTypeFile);
-			entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
-		}
-		LibraryElement type = entry.getType();
+	private boolean finishFBTypeCreation(final IFile targetTypeFile) {
+		refreshPaletteEntry(targetTypeFile);
+		final LibraryElement type = entry.getType();
 		type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));
 		TypeManagementPreferencesHelper.setupIdentification(type);
 		TypeManagementPreferencesHelper.setupVersionInfo(type);
@@ -144,8 +136,17 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	private static void openTypeEditor(IFile file) {
-		IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+	private void refreshPaletteEntry(final IFile targetTypeFile) {
+		entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
+		if (null == entry) {
+			// refresh the palette and retry to fetch the entry
+			TypeLibrary.refreshTypeLib(targetTypeFile);
+			entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
+		}
+	}
+
+	private static void openTypeEditor(final IFile file) {
+		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
 		EditorUtils.openEditor(new FileEditorInput(file), desc.getId());
 	}
 

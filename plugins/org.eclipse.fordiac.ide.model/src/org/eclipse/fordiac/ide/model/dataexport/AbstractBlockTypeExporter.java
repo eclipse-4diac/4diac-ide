@@ -23,17 +23,7 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -59,42 +49,6 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	@Override
 	protected FBType getType() {
 		return (FBType) super.getType();
-	}
-
-	public static void saveType(final PaletteEntry entry) {
-		final AbstractBlockTypeExporter exporter = getTypeExporter(entry);
-
-		if (null != exporter) {
-			try {
-				exporter.createXMLEntries();
-			} catch (final XMLStreamException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
-
-			final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-					exporter.writeToFile(entry.getFile());
-					// "reset" the modification timestamp in the PaletteEntry to avoid reload - as for this timestamp it
-					// is not necessary as the data is in memory
-					entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
-					return Status.OK_STATUS;
-				}
-			};
-			job.setRule(entry.getFile());
-			job.schedule();
-		}
-	}
-
-	private static AbstractBlockTypeExporter getTypeExporter(final PaletteEntry entry) {
-		if (entry instanceof FBTypePaletteEntry) {
-			return new FbtExporter((FBTypePaletteEntry) entry);
-		} else if (entry instanceof AdapterTypePaletteEntry) {
-			return new AdapterExporter((AdapterTypePaletteEntry) entry);
-		} else if (entry instanceof SubApplicationTypePaletteEntry) {
-			return new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
-		}
-		return null;
 	}
 
 	@Override
