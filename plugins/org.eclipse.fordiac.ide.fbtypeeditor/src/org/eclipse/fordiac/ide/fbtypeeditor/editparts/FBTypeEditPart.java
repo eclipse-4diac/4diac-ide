@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -36,9 +35,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
 public class FBTypeEditPart extends AbstractConnectableEditPart {
@@ -77,6 +74,8 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		super.activate();
 		getModel().eAdapters().add(adapter);
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+		// position the FB at 0,0
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), new Rectangle(0, 0, -1, -1));
 	}
 
 	@Override
@@ -206,44 +205,10 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		}
 	}
 
-	private void update(final Rectangle bounds) {
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
-	}
-
 	@Override
 	public void refresh() {
 		super.refresh();
 		getFigure().getTypeLabel().setText(getModel().getName());
-	}
-
-	@Override
-	protected void refreshVisuals() {
-		if (controlListener == null) {
-			controlListener = new ControlListener() {
-
-				@Override
-				public void controlResized(final ControlEvent e) {
-					final Point p = getParent().getViewer().getControl().getSize();
-					final Dimension dim = getFigure().getPreferredSize(-1, -1);
-
-					final Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
-					// rectangle rect = new Rectangle()
-
-					update(rect);
-				}
-
-				@Override
-				public void controlMoved(final ControlEvent e) {
-					// nothing to be done here
-				}
-
-			};
-			getParent().getViewer().getControl().addControlListener(controlListener);
-		}
-		final Point p = getParent().getViewer().getControl().getSize();
-		final Dimension dim = getFigure().getPreferredSize(-1, -1);
-		final Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
-		update(rect);
 	}
 
 }

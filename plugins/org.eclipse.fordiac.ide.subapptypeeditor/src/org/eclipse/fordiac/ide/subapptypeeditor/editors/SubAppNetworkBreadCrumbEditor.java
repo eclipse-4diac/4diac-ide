@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -65,11 +66,18 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		}
 
 		IEditorSite siteToUse = site;
+		ISelectionProvider selProvider = null;
 		if (siteToUse instanceof MultiPageEditorSite) {
 			siteToUse = (IEditorSite) ((MultiPageEditorSite) siteToUse).getMultiPageEditor().getSite();
+			selProvider = siteToUse.getSelectionProvider();
 		}
 
 		super.init(siteToUse, input);
+
+		if (selProvider != null) {
+			// restore the outer selection provider
+			siteToUse.setSelectionProvider(selProvider);
+		}
 
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
 		setPartName("FB Network"); //$NON-NLS-1$

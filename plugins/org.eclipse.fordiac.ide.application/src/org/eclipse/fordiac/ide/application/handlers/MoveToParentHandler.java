@@ -77,7 +77,7 @@ public class MoveToParentHandler extends AbstractHandler {
 	private static void selectElements(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
 		final GraphicalViewer viewer = getViewer(fbelements.get(0).getFbNetwork(), editor);
 		final List<EditPart> eps = fbelements.stream().map(el -> (EditPart) viewer.getEditPartRegistry().get(el))
-		.collect(Collectors.toList());
+				.collect(Collectors.toList());
 		viewer.setSelection(new StructuredSelection(eps));
 	}
 
@@ -119,7 +119,7 @@ public class MoveToParentHandler extends AbstractHandler {
 	}
 
 	private static List<FBNetworkElement> getSelectedFBNElements(final ISelection selection) {
-		if (!selection.isEmpty() && (selection instanceof IStructuredSelection)) {
+		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
 			final IStructuredSelection sel = (IStructuredSelection) selection;
 			return ((List<?>) sel.toList()).stream()
 					.filter(AbstractFBNElementEditPart.class::isInstance)

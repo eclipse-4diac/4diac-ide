@@ -51,7 +51,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 
 	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */
@@ -59,7 +59,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 
 	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */

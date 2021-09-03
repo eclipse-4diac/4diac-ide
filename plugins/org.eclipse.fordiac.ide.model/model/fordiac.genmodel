@@ -243,6 +243,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx2"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/needsValidation"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Device">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Device/resource"/>
@@ -589,6 +590,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/rightInterface"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/leftInterface"/>
       <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/serviceSequence"/>
+      <genOperations ecoreOperation="lib.ecore#//Service/getFBType" body="return (FBType) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//TypedConfigureableObject">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TypedConfigureableObject/paletteEntry"/>
@@ -609,6 +611,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/event"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/parameters"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/interface"/>
+      <genOperations ecoreOperation="lib.ecore#//Primitive/getServiceTransaction"
+          body="return (ServiceTransaction) this.eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//Primitive/getService" body="return getServiceTransaction().getServiceSequence().getService();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//PositionableElement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//PositionableElement/position"/>

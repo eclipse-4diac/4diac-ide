@@ -10,9 +10,11 @@
  *   Gerd Kainz, Alois Zoitl, Monika Wenger
  *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Michael Oberlehner - added subapp monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,9 +39,13 @@ import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
+import org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
+import org.eclipse.fordiac.ide.monitoring.Messages;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringAdapterInterfaceEditPart;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -57,8 +63,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 			final Set<IInterfaceElement> foundElements = getSelectedWatchedElements(manager,
 					(StructuredSelection) selection);
 			for (final IInterfaceElement ie : foundElements) {
-				final PortElement port = MonitoringManagerUtils.createPortElement(ie);
-				createMonitoringElement(manager, port);
+				createElementFromPort(manager, ie);
 			}
 			refreshEditor();
 			MonitoringManager.getInstance().notifyWatchesChanged();
@@ -67,15 +72,33 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		return null;
 	}
 
+	public void createElementFromPort(final MonitoringManager manager, final IInterfaceElement ie) {
+		final PortElement port = MonitoringManagerUtils.createPortElement(ie);
+		if (validatePort(port, ie)) {
+			createMonitoringElement(manager, port);
+		}
+
+	}
+
+	private static boolean validatePort(final PortElement port, final IInterfaceElement ie) {
+		if (port instanceof SubAppPortElement && ((SubAppPortElement) port).getAnchor() == null) {
+			ErrorMessenger.popUpErrorMessage(
+					MessageFormat.format(Messages.MonitoringManagerUtils_NoSubappAnchor, ie.getName()));
+			return false;
+		}
+
+		return true;
+	}
+
 	@Override
 	public void setEnabled(final Object evaluationContext) {
-		boolean needToAdd = false;
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof StructuredSelection) {
-			needToAdd = !getSelectedWatchedElements(MonitoringManager.getInstance(), (StructuredSelection) selection)
-					.isEmpty();
+			setBaseEnabled(!getSelectedWatchedElements(MonitoringManager.getInstance(), (StructuredSelection) selection)
+					.isEmpty());
+		} else {
+			setBaseEnabled(false);
 		}
-		setBaseEnabled(needToAdd);
 	}
 
 	private static Set<IInterfaceElement> getSelectedWatchedElements(final MonitoringManager manager,
@@ -91,7 +114,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 					}
 				} else if (model instanceof IInterfaceElement) {
 					final IInterfaceElement ie = (IInterfaceElement) model;
-					if (MonitoringManagerUtils.canBeMonitored(ie) && !manager.containsPort(ie)) {
+					if (MonitoringManagerUtils.canBeMonitored(ie, false) && !manager.containsPort(ie)) {
 						foundElements.add(ie);
 					}
 				}
@@ -104,15 +127,30 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		MonitoringBaseElement element;
 		if (port instanceof AdapterPortElement) {
 			element = MonitoringFactory.eINSTANCE.createMonitoringAdapterElement();
+		} else if (port instanceof SubAppPortElement) {
+			element = createSubappElement(port);
 		} else {
 			element = MonitoringFactory.eINSTANCE.createMonitoringElement();
 		}
+
 		element.setPort(port);
+
 		manager.addMonitoringElement(element);
 		if (port instanceof AdapterPortElement) {
 			final MonitoringAdapterElement adpaterElement = (MonitoringAdapterElement) element;
 			createMonitoringElementsForAdapterInterface(manager, adpaterElement);
 		}
+		return element;
+	}
+
+	public static MonitoringBaseElement createSubappElement(final PortElement port) {
+		MonitoringBaseElement element;
+		element = MonitoringFactory.eINSTANCE.createSubappMonitoringElement();
+		final MonitoringBaseElement anchor = MonitoringFactory.eINSTANCE.createMonitoringElement();
+		final PortElement anchorPort = MonitoringManagerUtils
+				.createPortElement(((SubAppPortElement) port).getAnchor());
+		anchor.setPort(anchorPort);
+		((SubappMonitoringElement) element).setAnchor(anchor);
 		return element;
 	}
 

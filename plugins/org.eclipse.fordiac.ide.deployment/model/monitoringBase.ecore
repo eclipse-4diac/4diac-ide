@@ -44,7 +44,7 @@
         <details key="body" value="&#x9;&#x9;return getResource().getAutomationSystem();"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fb" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FB"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fb" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetworkElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceElement" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//IInterfaceElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resource" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Resource"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchy" unique="false"

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ASCII"?>
+<libraryElement:BasicFBType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" name="E_REND" comment="Rendezvous (AND) of two events">
+  <versionInfo author="Alois Zoitl" date="2017-09-20" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
+  <identification description="Copyright (c) 2017 fortiss GmbH&#xD;&#xA; &#xD;&#xA;This program and the accompanying materials are made&#xD;&#xA;available under the terms of the Eclipse Public License 2.0&#xD;&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0" standard="61499-1 Annex A"/>
+  <interfaceList>
+    <eventInputs name="EI1" comment="first event to wait for" isInput="true"/>
+    <eventInputs name="EI2" comment="second event to wait for" isInput="true"/>
+    <eventInputs name="R" comment="reset the FB to inital state (i.e., wait again for both events)" isInput="true"/>
+    <eventOutputs name="EO" comment="triggered when both EI1 and EI2 occured at least once"/>
+  </interfaceList>
+  <service/>
+  <eCC start="//@eCC/@eCState.0">
+    <eCState name="START" comment="Initial State" outTransitions="//@eCC/@eCTransition.0 //@eCC/@eCTransition.1" inTransitions="//@eCC/@eCTransition.2 //@eCC/@eCTransition.3 //@eCC/@eCTransition.6">
+      <position x="80" y="200"/>
+    </eCState>
+    <eCState name="EI1" comment="EI1 occured at least once" outTransitions="//@eCC/@eCTransition.3 //@eCC/@eCTransition.4" inTransitions="//@eCC/@eCTransition.1">
+      <position x="231" y="68"/>
+    </eCState>
+    <eCState name="EO" comment="Both input events occured at least once send output event" outTransitions="//@eCC/@eCTransition.6" inTransitions="//@eCC/@eCTransition.4 //@eCC/@eCTransition.5">
+      <position x="337" y="202"/>
+      <eCAction output="//@interfaceList/@eventOutputs.0"/>
+    </eCState>
+    <eCState name="EI2" comment="EI2 occured at least once" outTransitions="//@eCC/@eCTransition.2 //@eCC/@eCTransition.5" inTransitions="//@eCC/@eCTransition.0">
+      <position x="221" y="303"/>
+    </eCState>
+    <eCTransition conditionExpression="" source="//@eCC/@eCState.0" destination="//@eCC/@eCState.3" conditionEvent="//@interfaceList/@eventInputs.1">
+      <position x="204" y="236"/>
+    </eCTransition>
+    <eCTransition conditionExpression="" source="//@eCC/@eCState.0" destination="//@eCC/@eCState.1" conditionEvent="//@interfaceList/@eventInputs.0">
+      <position x="208" y="173"/>
+    </eCTransition>
+    <eCTransition conditionExpression="" source="//@eCC/@eCState.3" destination="//@eCC/@eCState.0" conditionEvent="//@interfaceList/@eventInputs.2">
+      <position x="131" y="297"/>
+    </eCTransition>
+    <eCTransition conditionExpression="" source="//@eCC/@eCState.1" destination="//@eCC/@eCState.0" conditionEvent="//@interfaceList/@eventInputs.2">
+      <position x="160" y="139"/>
+    </eCTransition>
+    <eCTransition conditionExpression="" source="//@eCC/@eCState.1" destination="//@eCC/@eCState.2" conditionEvent="//@interfaceList/@eventInputs.1">
+      <position x="293" y="141"/>
+    </eCTransition>
+    <eCTransition conditionExpression="" source="//@eCC/@eCState.3" destination="//@eCC/@eCState.2" conditionEvent="//@interfaceList/@eventInputs.0">
+      <position x="288" y="265"/>
+    </eCTransition>
+    <eCTransition source="//@eCC/@eCState.2" destination="//@eCC/@eCState.0">
+      <position x="233" y="213"/>
+    </eCTransition>
+  </eCC>
+</libraryElement:BasicFBType>

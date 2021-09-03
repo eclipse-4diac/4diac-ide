@@ -10,11 +10,14 @@
  * Contributors:
  *   Gerhard Ebenhofer, Matthias Plasch, Gerd Kainz, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - added struct tree nodes for watching variable values
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.provider;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Adapter;
@@ -44,25 +47,39 @@ public class WatchesContentProvider implements ITreeContentProvider {
 		init();
 	}
 
-	private synchronized void init() {
+	private void init() {
+		Object[] expandedElements = null;
+		if (root != null) {
+			expandedElements = getTreeViewer().getExpandedElements().clone();
+		}
 		root = new WatchValueTreeNode(null);
+
 		final Collection<MonitoringBaseElement> elementsToMonitor = MonitoringManager.getInstance().getElementsToMonitor();
 		for (final MonitoringBaseElement element : elementsToMonitor) {
 			if (element != null) {
 				hasValueOnForte = !((MonitoringElement) element).getCurrentValue().equals("N/A"); //$NON-NLS-1$
-				root.addChild(element);
+				final WatchValueTreeNode node = root.addChild(element);
+
+				if (expandedElements != null) {
+					getTreeViewer().refresh(node);
+					updateExpandedState(Arrays.asList(expandedElements), node);
+				}
+
 				if (!element.eAdapters().contains(adapter)) {
 					element.eAdapters().add(adapter);
 				}
 			}
-			Collections.sort(root.getChildren(), (node1, node2) -> {
-
-				final String s1 = ((WatchValueTreeNode) node1).getWatchedElementString();
-				final String s2 = ((WatchValueTreeNode) node2).getWatchedElementString();
-				return s1.compareToIgnoreCase(s2);
-			});
 		}
+		sortChildrenAsc();
 
+	}
+
+	public void sortChildrenAsc() {
+		Collections.sort(root.getChildren(), (node1, node2) -> {
+			final String s1 = ((WatchValueTreeNode) node1).getWatchedElementString();
+			final String s2 = ((WatchValueTreeNode) node2).getWatchedElementString();
+			return s1.compareToIgnoreCase(s2);
+		});
 	}
 
 	private final Adapter adapter = new AdapterImpl() {
@@ -78,19 +95,60 @@ public class WatchesContentProvider implements ITreeContentProvider {
 							init();
 							hasValueOnForte = true;
 						}
-						final WatchValueTreeNode containsElement = containsElement(element);
-						if (containsElement != null) {
-							((TreeViewer) viewer).refresh();
+						final WatchValueTreeNode node = getNodeFromElement(element);
+						if (node != null) {
+							updateNodeElement(node, element);
 						}
 					}
 				});
 
 			}
 		}
+
+		private void updateNodeElement(final WatchValueTreeNode node, final MonitoringElement element) {
+			final WatchValueTreeNode newNode = WatchValueTreeNode.createNode(element, root);
+			root.getChildren().remove(newNode);
+			udpateNodeValue(node, newNode);
+			getTreeViewer().refresh();
+		}
+
+		private void udpateNodeValue(final WatchValueTreeNode node, final WatchValueTreeNode newNode) {
+			node.setValue(newNode.getValue());
+			udpateChildren(node, newNode);
+
+		}
+
+		private void udpateChildren(final WatchValueTreeNode node, final WatchValueTreeNode newNode) {
+			if (node.getChildren().size() != newNode.getChildren().size()) {
+				return;
+			}
+			for (int i = 0; i < node.getChildren().size(); i++) {
+				final WatchValueTreeNode oldNode = (WatchValueTreeNode) node.getChildren().get(i);
+				final WatchValueTreeNode newNodeChild = (WatchValueTreeNode) newNode.getChildren().get(i);
+				oldNode.setValue(newNodeChild.getValue());
+				udpateChildren(oldNode, newNodeChild);
+			}
+		}
 	};
 
 
-	public WatchValueTreeNode containsElement(final MonitoringElement monitoringElement) {
+
+	private void updateExpandedState(final List<Object> expanded, final WatchValueTreeNode newNode) {
+		for (final Object e : expanded) {
+			if (hasBeenExpanded(newNode, e)) {
+				getTreeViewer().setExpandedState(newNode, true);
+			}
+		}
+		newNode.getChildren().forEach(c -> updateExpandedState(expanded, (WatchValueTreeNode) c));
+	}
+
+	private static boolean hasBeenExpanded(final WatchValueTreeNode newNode, final Object e) {
+		return e instanceof WatchValueTreeNode
+				&& ((WatchValueTreeNode) e).getMonitoringBaseElement().equals(newNode.getMonitoringBaseElement())
+				&& ((WatchValueTreeNode) e).getWatchedElementString().equals(newNode.getWatchedElementString());
+	}
+
+	public WatchValueTreeNode getNodeFromElement(final MonitoringElement monitoringElement) {
 		return (WatchValueTreeNode) root.getChildren().stream()
 				.filter(node -> ((WatchValueTreeNode) node).getMonitoringBaseElement().equals(monitoringElement))
 				.findAny().orElse(null);
@@ -141,4 +199,7 @@ public class WatchesContentProvider implements ITreeContentProvider {
 		}
 	}
 
+	public TreeViewer getTreeViewer() {
+		return (TreeViewer) viewer;
+	}
 }

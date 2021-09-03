@@ -67,7 +67,7 @@ public class AdapterFBItemProvider extends FBItemProvider {
 	 * @generated NOT */
 	@Override
 	public Object getImage(final Object object) {
-		return overlayImage(object, FordiacImage.ICON_ADAPTER.getImage());
+		return overlayImage(object, FordiacImage.ICON_ADAPTER_TYPE.getImage());
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->

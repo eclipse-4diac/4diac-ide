@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ASCII"?>
+<libraryElement:BasicFBType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" name="E_MERGE" comment="Merge (OR) of two input events">
+  <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
+  <identification description="Copyright (c) 2017 fortiss GmbH&#xD;&#xA; &#xD;&#xA;This program and the accompanying materials are made&#xD;&#xA;available under the terms of the Eclipse Public License 2.0&#xD;&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0" function="Output EO is triggered when either EI1 or EI2 is received" standard="61499-1 Annex A"/>
+  <interfaceList>
+    <eventInputs name="EI1" isInput="true"/>
+    <eventInputs name="EI2" isInput="true"/>
+    <eventOutputs name="EO"/>
+  </interfaceList>
+  <service/>
+  <eCC start="//@eCC/@eCState.0">
+    <eCState name="START" comment="Initial State" outTransitions="//@eCC/@eCTransition.1 //@eCC/@eCTransition.2" inTransitions="//@eCC/@eCTransition.0">
+      <position x="110" y="85"/>
+    </eCState>
+    <eCState name="EO" outTransitions="//@eCC/@eCTransition.0" inTransitions="//@eCC/@eCTransition.1 //@eCC/@eCTransition.2">
+      <position x="121" y="195"/>
+      <eCAction output="//@interfaceList/@eventOutputs.0"/>
+    </eCState>
+    <eCTransition source="//@eCC/@eCState.1" destination="//@eCC/@eCState.0">
+      <position x="138" y="161"/>
+    </eCTransition>
+    <eCTransition conditionExpression="" source="//@eCC/@eCState.0" destination="//@eCC/@eCState.1" conditionEvent="//@interfaceList/@eventInputs.0">
+      <position x="81" y="153"/>
+    </eCTransition>
+    <eCTransition conditionExpression="" source="//@eCC/@eCState.0" destination="//@eCC/@eCState.1" conditionEvent="//@interfaceList/@eventInputs.1">
+      <position x="182" y="157"/>
+    </eCTransition>
+  </eCC>
+</libraryElement:BasicFBType>

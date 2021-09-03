@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011, 2021 TU Wien ACIN, fortiss GmbH,
+ *               2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,64 +11,60 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - clean up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceInterfacePaletteFactory;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.gef.commands.Command;
 
-public class CreateOutputPrimitiveCommand extends Command {
+public class CreateOutputPrimitiveCommand extends AbstractCreateElementCommand<OutputPrimitive> {
 
-	private final String type;
-	private final ServiceTransaction parent;
-	private final OutputPrimitive refElement;
-	private OutputPrimitive newElement;
+	private final boolean isLeftInterface;
+	private final ServiceTransaction transaction;
 
-	public CreateOutputPrimitiveCommand(final String type, final ServiceTransaction element, final OutputPrimitive refElement) {
-		this.type = type;
-		this.parent = element;
-		this.refElement = refElement;
+	public CreateOutputPrimitiveCommand(final ServiceTransaction transaction, final boolean isLeftInterface) {
+		super(transaction.getOutputPrimitive());
+		this.isLeftInterface = isLeftInterface;
+		this.transaction = transaction;
+
+	}
+
+	public CreateOutputPrimitiveCommand(final ServiceTransaction transaction, final OutputPrimitive refElement,
+			final boolean isLeftInterface) {
+		super(transaction.getOutputPrimitive(), refElement);
+		this.isLeftInterface = isLeftInterface;
+		this.transaction = transaction;
+	}
+
+	public CreateOutputPrimitiveCommand(final ServiceTransaction transaction, final int index, final boolean isLeftInterface) {
+		super(transaction.getOutputPrimitive(), index);
+		this.isLeftInterface = isLeftInterface;
+		this.transaction = transaction;
 	}
 
 	@Override
-	public boolean canExecute() {
-		return (type != null) && (parent != null);
-	}
-
-	@Override
-	public void execute() {
-		final Service service = (Service) parent.eContainer().eContainer();
-		newElement = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-		newElement.setEvent("INITO"); //$NON-NLS-1$
-		if (type.equals(ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE)) {
-			newElement.setInterface(service.getLeftInterface());
-		} else if (type.equals(ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE)) {
-			newElement.setInterface(service.getRightInterface());
-		}
-		if (null == refElement) {
-			parent.getOutputPrimitive().add(newElement);
+	protected OutputPrimitive createNewElement() {
+		final Service service = transaction.getServiceSequence().getService();
+		final OutputPrimitive newOutputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
+		final FBType fb = service.getFBType();
+		final String event;
+		if (fb.getInterfaceList().getEventOutputs().isEmpty()) {
+			event = Messages.CreateOutputPrimitiveCommand_NotAvailable;
 		} else {
-			final int index = parent.getOutputPrimitive().indexOf(refElement);
-			parent.getOutputPrimitive().add(index, newElement);
+			event = fb.getInterfaceList().getEventOutputs().get(0).getName();
 		}
-	}
-
-	@Override
-	public void undo() {
-		parent.getOutputPrimitive().remove(newElement);
-	}
-
-	@Override
-	public void redo() {
-		if (null == refElement) {
-			parent.getOutputPrimitive().add(newElement);
+		newOutputPrimitive.setEvent(event);
+		if (isLeftInterface) {
+			newOutputPrimitive.setInterface(service.getLeftInterface());
 		} else {
-			final int index = parent.getOutputPrimitive().indexOf(refElement);
-			parent.getOutputPrimitive().add(index, newElement);
+			newOutputPrimitive.setInterface(service.getRightInterface());
 		}
+
+		return newOutputPrimitive;
 	}
 }

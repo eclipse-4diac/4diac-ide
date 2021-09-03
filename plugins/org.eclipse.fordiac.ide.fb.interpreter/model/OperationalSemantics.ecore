@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="OpSem" nsURI="http://OperationalSemantics/1.0" nsPrefix="opsem">
+  <eClassifiers xsi:type="ecore:EClass" name="EventOccurrence">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="When we are just executing one FB, the the EventOccurrence maight not have a FBRuntime"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="event" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ignored" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fbRuntime" lowerBound="1"
+        eType="#//FBRuntimeAbstract" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventManager">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
+    <eOperations name="process">
+      <eParameters name="eventManager" eType="#//EventManager"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transactions" upperBound="-1"
+        eType="#//Transaction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FBRuntimeAbstract" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="How to manage to get the data?"/>
+    </eAnnotations>
+    <eOperations name="run" upperBound="-1" eType="#//EventOccurrence"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basicfbtype" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//BasicFBType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activeState" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ECState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fbtype" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transaction">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="commit, roolback?"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputEventOccurrence" lowerBound="1"
+        eType="#//EventOccurrence" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputEventOccurences"
+        upperBound="-1" eType="#//EventOccurrence" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: FB Interpreter (Incubation)
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.fb.interpreter
+Bundle-Version: 1.14.0.qualifier
+Bundle-Activator: org.eclipse.fordiac.ide.test.fb.interpreter.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.emf.ecore.xmi,
+ org.eclipse.fordiac.ide.fb.interpreter,
+ org.eclipse.fordiac.ide.model,
+ org.junit
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.fb.interpreter
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.fordiac.ide.test.fb.interpreter.infra

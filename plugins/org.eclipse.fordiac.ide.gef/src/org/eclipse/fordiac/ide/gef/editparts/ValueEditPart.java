@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -337,7 +338,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if (!getModel().getVarDeclaration().getFBNetworkElement().isContainedInTypedInstance()
+		final FBNetworkElement fb = getModel().getVarDeclaration().getFBNetworkElement();
+		if (!isTypedInstance(fb)
 				&& ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 						|| (request.getType() == RequestConstants.REQ_OPEN))) {
 			performDirectEdit();
@@ -345,6 +347,10 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		} else {
 			super.performRequest(request);
 		}
+	}
+
+	private static boolean isTypedInstance(final FBNetworkElement fb) {
+		return (fb != null) && fb.isContainedInTypedInstance();
 	}
 
 }

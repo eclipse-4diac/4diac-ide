@@ -83,6 +83,8 @@ public final class Messages extends NLS {
 
 	public static String InterfaceElementSection_OutConnections;
 
+	public static String InterfaceElementSection_InterfaceElement;
+
 	public static String ListFBCreateCommand_FBTypeNotFound;
 
 	/** The Map sub app to command_ staus message_ already mapped. */

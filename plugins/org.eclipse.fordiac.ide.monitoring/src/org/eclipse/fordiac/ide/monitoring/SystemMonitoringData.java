@@ -9,14 +9,20 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Michael Oberlehner - added subapp monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
@@ -24,8 +30,12 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
+import org.eclipse.fordiac.ide.monitoring.model.SubAppPortHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -37,6 +47,12 @@ public class SystemMonitoringData {
 
 	private final Map<IInterfaceElement, MonitoringBaseElement> monitoredElements = new HashMap<>();
 	private final Map<String, MonitoringBaseElement> monitoredElementsPerPortStrings = new HashMap<>();
+
+	private final Map<String, List<MonitoringElement>> subappElements = new HashMap<>();
+
+	public Map<String, List<MonitoringElement>> getSubappElements() {
+		return subappElements;
+	}
 
 	private final Map<Device, DeviceMonitoringHandler> deviceHandlers = new HashMap<>();
 
@@ -145,21 +161,102 @@ public class SystemMonitoringData {
 		}
 		monitoredElements.remove(port.getInterfaceElement());
 		monitoredElementsPerPortStrings.remove(port.getPortString());
+		handleSubappElements(element, port);
+	}
+
+	public void handleSubappElements(final MonitoringBaseElement element, final PortElement port) {
+		if (subappElements.containsKey(port.getPortString())) {
+			removeSubappElement(element, port.getPortString());
+		}
+		if (element instanceof SubappMonitoringElement) {
+			removeSubappElement(element, ((SubappMonitoringElement) element).getAnchor().getPort().getPortString());
+		}
+	}
+
+
+	public void removeSubappElement(final MonitoringBaseElement element, final String portString) {
+		if (subappElements.containsKey(portString)) {
+			final List<MonitoringElement> subappPins = subappElements.get(portString);
+			final boolean remove = subappPins.remove(element);
+			Assert.isTrue(remove);
+			if (subappPins.isEmpty()) {
+				subappElements.remove(portString);
+			}
+		}
 	}
 
 	public void addMonitoringElement(final MonitoringBaseElement element) {
 		final PortElement port = element.getPort();
 
 		monitoredElements.put(port.getInterfaceElement(), element);
-		monitoredElementsPerPortStrings.put(port.getPortString(), element);
+
+		if (port instanceof SubAppPortElement) {
+			final PortElement anchor = ((SubappMonitoringElement) element).getAnchor().getPort();
+			final String portString = anchor.getPortString();
+			if (subappElements.containsKey(portString)) {
+				final List<MonitoringElement> subappPins = subappElements.get(portString);
+				subappPins.add((MonitoringElement) element);
+			} else {
+				final List<MonitoringElement> l = new ArrayList<>();
+				l.add((SubappMonitoringElement) element);
+				subappElements.put(portString, l);
+			}
+
+		} else {
+
+			// This element has not been created, but there exists a dummy subapp port
+			if (subappElements.containsKey(port.getPortString())) {
+				final List<MonitoringElement> subappPins = subappElements.get(port.getPortString());
+				subappPins.add((MonitoringElement) element);
+			}
+			handleConnectedSubappPorts(element);
+
+			monitoredElementsPerPortStrings.put(port.getPortString(), element);
+		}
 
 		if (element instanceof MonitoringElement) {
 			sendAddWatch(element);
 		}
 	}
 
+	private void handleConnectedSubappPorts(final MonitoringBaseElement element) {
+
+		final FBNetworkElement fb = element.getPort().getFb();
+		if (!fb.isNestedInSubApp()) {
+			return;
+		}
+		final IInterfaceElement interfaceElement = element.getPort().getInterfaceElement();
+
+		final String findConnectedMonitoredSubappPort = SubAppPortHelper
+				.findConnectedMonitoredSubappPort(interfaceElement, subappElements);
+
+		if (findConnectedMonitoredSubappPort != null) {
+			final List<MonitoringElement> list = subappElements.get(findConnectedMonitoredSubappPort);
+
+			if (!list.contains(element)) {
+				list.add((MonitoringElement) element);
+			}
+		}
+
+	}
+
 	public MonitoringBaseElement getMonitoredElement(final IInterfaceElement port) {
 		return monitoredElements.get(port);
+	}
+
+	public Entry<String, List<MonitoringElement>> getSubappElements(final MonitoringBaseElement m)
+	{
+		final Iterator<Entry<String, List<MonitoringElement>>> entries = getSubappElements().entrySet().iterator();
+		while (entries.hasNext()) {
+			final Entry<String, List<MonitoringElement>> e = entries.next();
+			final List<MonitoringElement> l = e.getValue();
+			for (final MonitoringElement me : l) {
+				if (me.equals(m)) {
+					return e;
+				}
+			}
+		}
+		return null;
 	}
 
 }

@@ -10,11 +10,15 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Filip Andren, Ingo Hegny
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter 
+ *     - change canvas, fix problem with size calculation when dragging elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.FreeformViewport;
+import org.eclipse.draw2d.RangeModel;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
@@ -22,43 +26,41 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPartFactory;
+import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
+import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.KeyHandler;
-import org.eclipse.gef.KeyStroke;
-import org.eclipse.gef.MouseWheelHandler;
-import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
-import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
-import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 
-public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette implements IFBTEditorPart {
+public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
 
 	private FBType fbType;
-	private KeyHandler sharedKeyHandler;
 	private CommandStack commandStack;
 
 	@Override
@@ -68,70 +70,16 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
 		}
-		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
+		super.init(site, input);
 		setPartName(Messages.ServiceSequenceEditor_Service);
 		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
-		super.init(site, input);
-	}
-
-	@Override
-	protected void configureGraphicalViewer() {
-		super.configureGraphicalViewer();
-		final ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
-		final ScalableFreeformRootEditPart root = new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry());
-		viewer.setRootEditPart(root);
-		viewer.setEditPartFactory(new ServiceSequenceEditPartFactory(this));
-		// configure the context menu provider
-		final ContextMenuProvider cmProvider = new FordiacContextMenuProvider(viewer, root.getZoomManager(),
-				getActionRegistry()) {
-			@Override
-			public void buildContextMenu(final IMenuManager menu) {
-				super.buildContextMenu(menu);
-				final IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
-				menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-			}
-		};
-		viewer.setContextMenu(cmProvider);
-		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
-		final KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
-		viewer.setKeyHandler(viewerKeyHandler);
-	}
-
-	@Override
-	public void createPartControl(final Composite parent) {
-		final Composite graphicaEditor = new Composite(parent, SWT.NONE);
-		graphicaEditor.setLayout(new FillLayout());
-		super.createPartControl(graphicaEditor);
-	}
-
-	@Override
-	protected void initializeGraphicalViewer() {
-		final GraphicalViewer viewer = getGraphicalViewer();
-		viewer.setContents(fbType);
-	}
-
-	protected KeyHandler getCommonKeyHandler() {
-		if (sharedKeyHandler == null) {
-			sharedKeyHandler = new KeyHandler();
-			sharedKeyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
-			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
-					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
-			sharedKeyHandler.put(/* CTRL + '=' */
-					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
-					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
-
-		}
-		return sharedKeyHandler;
 	}
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		super.selectionChanged(part, selection);
 		// If not in FBTypeEditor ignore selection changed
-
-		// TODO move to IFBTEditor as method
 		if (part.getSite().getPage().getActiveEditor() instanceof FBTypeEditor) {
 			updateActions(getSelectionActions());
 			if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
@@ -154,7 +102,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		// currently nothing needs to be done here
+		// nothing to do here (handled by the FBType editor)
 	}
 
 	@Override
@@ -191,8 +139,73 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 
 	@Override
 	public void reloadType(final FBType type) {
-		// TODO Auto-generated method stub
+		this.fbType = type;
+		getGraphicalViewer().setContents(fbType);
+	}
 
+	@Override
+	public Object getModel() {
+		return fbType;
+	}
+
+	@Override
+	protected EditPartFactory getEditPartFactory() {
+		return new ServiceSequenceEditPartFactory(this);
+	}
+
+	@Override
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
+			final ZoomManager zoomManager) {
+		return new FordiacContextMenuProvider(viewer, zoomManager, getActionRegistry()) {
+			@Override
+			public void buildContextMenu(final IMenuManager menu) {
+				super.buildContextMenu(menu);
+				final IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
+				menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+			}
+		};
+	}
+
+	@Override
+	protected ScalableFreeformRootEditPart createRootEditPart() {
+		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
+			@Override
+			protected AbstractFreeformFigure createDrawingAreaContainer() {
+				return new ModuloFreeformFigure(this, false);
+			}
+		};
+	}
+
+	@Override
+	protected Point getInitialScrollPos() {
+		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
+				.getRootEditPart();
+
+		final FreeformViewport rootviewPort = (FreeformViewport) rootEditPart.getFigure();
+
+		return new Point(calculateTopLeftScrollPosition(rootviewPort.getHorizontalRangeModel()),
+				calculateTopLeftScrollPosition(rootviewPort.getVerticalRangeModel()));
+	}
+
+	private static int calculateTopLeftScrollPosition(final RangeModel rangeModel) {
+		return rangeModel.getExtent();
+	}
+
+	@Override
+	protected TransferDropTargetListener createTransferDropTargetListener() {
+		// we don't need an additional transferdroptarget listener
+		return null;
+	}
+
+	@Override
+	public AutomationSystem getSystem() {
+		// this is not needed for type editor
+		return null;
+	}
+
+	@Override
+	public void doSaveAs() {
+		// nothing to do here
 	}
 
 }

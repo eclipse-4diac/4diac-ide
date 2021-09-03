@@ -20,7 +20,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
@@ -53,21 +53,22 @@ public interface PortElement extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fb</em>' reference.
-	 * @see #setFb(FB)
+	 * @see #setFb(FBNetworkElement)
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement_Fb()
 	 * @model
 	 * @generated
 	 */
-	FB getFb();
+	FBNetworkElement getFb();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getFb <em>Fb</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Fb</em>' reference.
 	 * @see #getFb()
 	 * @generated
 	 */
-	void setFb(FB value);
+	void setFb(FBNetworkElement value);
 
 	/**
 	 * Returns the value of the '<em><b>Interface Element</b></em>' reference. <!--
@@ -77,7 +78,7 @@ public interface PortElement extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Interface Element</em>' reference.
 	 * @see #setInterfaceElement(IInterfaceElement)
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement_InterfaceElement()
@@ -104,7 +105,7 @@ public interface PortElement extends EObject {
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Resource</em>' reference.
 	 * @see #setResource(Resource)
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement_Resource()

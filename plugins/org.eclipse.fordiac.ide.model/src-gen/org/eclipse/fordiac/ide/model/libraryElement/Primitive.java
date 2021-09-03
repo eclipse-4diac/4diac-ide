@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -36,7 +36,7 @@ public interface Primitive extends EObject {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Event</em>' attribute.
 	 * @see #setEvent(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPrimitive_Event()
@@ -47,7 +47,7 @@ public interface Primitive extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getEvent <em>Event</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Event</em>' attribute.
 	 * @see #getEvent()
 	 * @generated */
@@ -59,7 +59,7 @@ public interface Primitive extends EObject {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Parameters</em>' attribute.
 	 * @see #setParameters(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPrimitive_Parameters()
@@ -69,7 +69,7 @@ public interface Primitive extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getParameters
 	 * <em>Parameters</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Parameters</em>' attribute.
 	 * @see #getParameters()
 	 * @generated */
@@ -81,7 +81,7 @@ public interface Primitive extends EObject {
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Interface</em>' reference.
 	 * @see #setInterface(ServiceInterface)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPrimitive_Interface()
@@ -91,10 +91,22 @@ public interface Primitive extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getInterface
 	 * <em>Interface</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Interface</em>' reference.
 	 * @see #getInterface()
 	 * @generated */
 	void setInterface(ServiceInterface value);
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" required="true"
+	 * @generated */
+	ServiceTransaction getServiceTransaction();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" required="true"
+	 * @generated */
+	Service getService();
 
 } // Primitive

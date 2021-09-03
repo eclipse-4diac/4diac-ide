@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Matthias Plasch, Filip Andren, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Michael Oberlehner - added subapp monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
@@ -21,8 +22,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -32,9 +35,11 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -64,12 +69,13 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 */
 	public MonitoringBaseElement getMonitoringElement(final IInterfaceElement port) {
 		if (port != null) {
-			
-			SystemMonitoringData data = systemMonitoringData.get(port.getFBNetworkElement().getFbNetwork().getAutomationSystem());
-			if (data != null) {
-				return data.getMonitoredElement(port);
+			final FBNetworkElement fbNetworkElement = port.getFBNetworkElement();
+			if (fbNetworkElement != null) {
+				final SystemMonitoringData data = systemMonitoringData.get(fbNetworkElement.getFbNetwork().getAutomationSystem());
+				if (data != null) {
+					return data.getMonitoredElement(port);
+				}
 			}
-
 		}
 		return null;
 	}
@@ -188,7 +194,11 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		final MonitoringBaseElement element = getMonitoringElement(interfaceElement);
 
 		if (element instanceof MonitoringElement) {
-			final MonitoringElement monitoringElement = (MonitoringElement) element;
+			MonitoringElement monitoringElement = (MonitoringElement) element;
+
+			if (element instanceof SubappMonitoringElement) {
+				monitoringElement = (MonitoringElement) ((SubappMonitoringElement) monitoringElement).getAnchor();
+			}
 
 			final SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
 			final IDeviceManagementInteractor devMgmInteractor = data
@@ -218,22 +228,52 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			return;
 		}
 
-		final IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem)
+		final SystemMonitoringData data = getSystemMonitoringData(automationSystem);
+		final IDeviceManagementInteractor devMgmInteractor = data
 				.getDevMgmInteractor(device);
 
 		if (devMgmInteractor != null) {
-			String fullName = element.getQualifiedString();
+			writeElements(element, value, data, devMgmInteractor);
+		}
+	}
+
+	public static void writeElements(final MonitoringElement element, final String value, final SystemMonitoringData data,
+			final IDeviceManagementInteractor devMgmInteractor) {
+		final List<MonitoringElement> elements = new ArrayList<>();
+
+		if (element instanceof SubappMonitoringElement) {
+			handleSubappPinWrite(element, data, elements);
+		} else {
+			elements.add(element);
+		}
+
+		for (final MonitoringElement e : elements) {
+
+			String fullName = e.getQualifiedString();
 			fullName = fullName.substring(0, fullName.lastIndexOf('.')); // strip interface name
 			fullName = fullName.substring(0, fullName.lastIndexOf('.') + 1); // strip fbName
 
-			final FBDeploymentData data = new FBDeploymentData(fullName, element.getPort().getFb());
+			final FBDeploymentData d = new FBDeploymentData(fullName, e.getPort().getFb());
 			try {
-				devMgmInteractor.writeFBParameter(element.getPort().getResource(), value, data,
-						(VarDeclaration) element.getPort().getInterfaceElement());
-			} catch (final DeploymentException e) {
+				devMgmInteractor.writeFBParameter(e.getPort().getResource(), value, d,
+						(VarDeclaration) e.getPort().getInterfaceElement());
+			} catch (final DeploymentException ex) {
 				// TODO think if error should be shown to the user
-				Activator.getDefault().logError("Could not write value to " + element.getQualifiedString(), e); //$NON-NLS-1$
+				Activator.getDefault().logError("Could not write value to " + e.getQualifiedString(), ex); //$NON-NLS-1$
 			}
+		}
+	}
+
+	public static void handleSubappPinWrite(final MonitoringElement element, final SystemMonitoringData data,
+			final Collection<MonitoringElement> elements) {
+		final MonitoringElement anchor = (MonitoringElement) ((SubappMonitoringElement) element).getAnchor();
+		if (element.getPort().getInterfaceElement().isIsInput()) {
+			// here we need to handle fan out
+			final Entry<String, List<MonitoringElement>> subappElements = data.getSubappElements(element);
+			Assert.isNotNull(subappElements);
+			elements.addAll(subappElements.getValue());
+		} else {
+			elements.add(anchor);
 		}
 	}
 
@@ -250,22 +290,34 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			return;
 		}
 
-		element.forceValue(value);
-		final IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem)
-				.getDevMgmInteractor(device);
+		final List<MonitoringElement> elements = new ArrayList<>();
+		final SystemMonitoringData data = getSystemMonitoringData(automationSystem);
+		if (element instanceof SubappMonitoringElement) {
+			handleSubappPinWrite(element, data, elements);
+		} else {
+			elements.add(element);
+		}
 
-		if (devMgmInteractor != null) {
-			try {
-				if (element.isForce()) {
-					devMgmInteractor.forceValue(element, value);
-				} else {
-					devMgmInteractor.clearForce(element);
+		for (final MonitoringElement e : elements) {
+
+			e.forceValue(value);
+			final IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem)
+					.getDevMgmInteractor(device);
+
+			if (devMgmInteractor != null) {
+				try {
+					if (e.isForce()) {
+						devMgmInteractor.forceValue(e, value);
+					} else {
+						devMgmInteractor.clearForce(e);
+					}
+				} catch (final DeploymentException ex) {
+					// TODO think if error should be shown to the user
+					Activator.getDefault()
+					.logError("Could not force value of " + e.getQualifiedString() + "to " + value, ex); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-			} catch (final DeploymentException e) {
-				// TODO think if error should be shown to the user
-				Activator.getDefault()
-				.logError("Could not force value of " + element.getQualifiedString() + "to " + value, e); //$NON-NLS-1$ //$NON-NLS-2$
 			}
+
 		}
 	}
 

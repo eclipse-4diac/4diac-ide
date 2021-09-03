@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019, 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Monika Wenger - initial API and implementation and/or initial documentation
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *               - cleaned command stack handling for property sections
+ *   Melanie Winter - buttons are created with AddDeleteWidget
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.AttributeDeleteCommand;
@@ -30,31 +30,27 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractAttributeSection extends AbstractSection {
@@ -63,8 +59,6 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	private static final String VALUE_COL = "value"; //$NON-NLS-1$
 	private static final String TYPE_COL = "type"; //$NON-NLS-1$
 	private static final String COMMENT_COL = "comment"; //$NON-NLS-1$
-	private Button attributeNew;
-	private Button attributeDelete;
 
 	@Override
 	protected abstract ConfigurableObject getInputType(Object input);
@@ -78,37 +72,35 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-		createInputInfoGroup(parent);
 		createNewDeleteButton(parent);
+		createInputInfoGroup(parent);
 	}
 
 	private void createNewDeleteButton(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
-		attributeNew = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		attributeNew.setToolTipText(Messages.AbstractAttributeSection_CreateAttribute);
-		attributeNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		attributeNew.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent event) {
-				if (type instanceof ConfigurableObject) {
-					executeCommand(new AttributeCreateCommand((ConfigurableObject) type));
-					attributeViewer.refresh();
-				}
-			}
-		});
-		attributeDelete = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		attributeDelete.setToolTipText(Messages.AbstractAttributeSection_DeleteSelectedAttribute);
-		attributeDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		attributeDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				executeCommand(new AttributeDeleteCommand((ConfigurableObject) type,
-						(Attribute) ((IStructuredSelection) attributeViewer.getSelection()).getFirstElement()));
-				attributeViewer.refresh();
-			}
-		});
+
+		final AddDeleteWidget buttons = new AddDeleteWidget();
+		buttons.createControls(composite, getWidgetFactory());
+		attributeViewer = TableWidgetFactory.createPropertyTableViewer(parent, 0);
+		configureButtonList(buttons, attributeViewer);
+	}
+
+	private void configureButtonList(final AddDeleteWidget buttons, final TableViewer attributeViewer) {
+		buttons.bindToTableViewer(attributeViewer, this,
+				ref -> newCreateCommand((ConfigurableObject) getType(), (Attribute) ref),
+				ref -> newDeleteCommand((ConfigurableObject) getType(), (Attribute) ref));
+	}
+
+	private static AttributeCreateCommand newCreateCommand(final ConfigurableObject object,
+			final Attribute ref) {
+		return new AttributeCreateCommand(object,
+				ref);
+	}
+
+	private static Command newDeleteCommand(final ConfigurableObject object, final Attribute ref) {
+		return new AttributeDeleteCommand(object, ref);
 	}
 
 	private static String[] getDataTypes() {
@@ -118,7 +110,6 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	}
 
 	private void createInputInfoGroup(final Composite parent) {
-		attributeViewer = TableWidgetFactory.createPropertyTableViewer(parent, 0);
 
 		configureTableLayout();
 		final Table table = attributeViewer.getTable();
@@ -160,8 +151,6 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	@Override
 	protected void setInputCode() {
 		attributeViewer.setCellModifier(null);
-		attributeDelete.setEnabled(false);
-		attributeNew.setEnabled(false);
 	}
 
 	@Override
@@ -257,5 +246,4 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 			return element.toString();
 		}
 	}
-
 }

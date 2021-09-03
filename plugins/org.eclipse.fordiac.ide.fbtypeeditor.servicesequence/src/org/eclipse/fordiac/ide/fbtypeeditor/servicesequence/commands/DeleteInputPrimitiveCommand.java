@@ -30,12 +30,12 @@ public class DeleteInputPrimitiveCommand extends Command {
 
 	public DeleteInputPrimitiveCommand(final InputPrimitive primitive) {
 		this.primitive = primitive;
-		this.parent = (ServiceTransaction) primitive.eContainer();
+		this.parent = primitive.getServiceTransaction();
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (null != primitive) && (primitive.eContainer() instanceof ServiceTransaction);
+		return (null != primitive) && (null != parent);
 	}
 
 	@Override

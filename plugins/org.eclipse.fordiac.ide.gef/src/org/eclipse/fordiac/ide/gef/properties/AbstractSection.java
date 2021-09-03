@@ -174,7 +174,11 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	protected Text createGroupText(final Composite group, final boolean editable) {
-		final Text text = getWidgetFactory().createText(group, "", SWT.BORDER); //$NON-NLS-1$
+		return createGroupText(group, editable, SWT.BORDER);
+	}
+
+	protected Text createGroupText(final Composite group, final boolean editable, final int style) {
+		final Text text = getWidgetFactory().createText(group, "", style); //$NON-NLS-1$
 		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		text.setEditable(editable);
 		text.setEnabled(editable);

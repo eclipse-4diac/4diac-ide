@@ -42,7 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements ErrorMarkerFBNElement {
 	/** The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getFileMarkerId()
 	 * @generated
 	 * @ordered */
@@ -50,7 +50,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 
 	/** The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getFileMarkerId()
 	 * @generated
 	 * @ordered */
@@ -58,7 +58,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 
 	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getErrorMessage()
 	 * @generated
 	 * @ordered */
@@ -66,7 +66,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 
 	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getErrorMessage()
 	 * @generated
 	 * @ordered */
@@ -74,7 +74,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 
 	/** The cached value of the '{@link #getRepairedElement() <em>Repaired Element</em>}' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getRepairedElement()
 	 * @generated
 	 * @ordered */

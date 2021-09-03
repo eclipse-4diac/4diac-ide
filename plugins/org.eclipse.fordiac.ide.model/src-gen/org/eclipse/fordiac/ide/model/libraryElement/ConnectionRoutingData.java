@@ -27,6 +27,8 @@ import org.eclipse.emf.ecore.EObject;
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx1 <em>Dx1</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx2 <em>Dx2</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDy <em>Dy</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#isNeedsValidation <em>Needs
+ * Validation</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnectionRoutingData()
@@ -86,5 +88,24 @@ public interface ConnectionRoutingData extends EObject {
 	 * @see #getDy()
 	 * @generated */
 	void setDy(int value);
+
+	/** Returns the value of the '<em><b>Needs Validation</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
+	 * @return the value of the '<em>Needs Validation</em>' attribute.
+	 * @see #setNeedsValidation(boolean)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnectionRoutingData_NeedsValidation()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated */
+	boolean isNeedsValidation();
+
+	/** Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#isNeedsValidation <em>Needs
+	 * Validation</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value the new value of the '<em>Needs Validation</em>' attribute.
+	 * @see #isNeedsValidation()
+	 * @generated */
+	void setNeedsValidation(boolean value);
 
 } // ConnectionRoutingData

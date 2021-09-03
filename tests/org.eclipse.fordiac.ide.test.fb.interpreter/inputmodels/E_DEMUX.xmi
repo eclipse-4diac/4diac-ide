@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ASCII"?>
+<libraryElement:BasicFBType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" name="E_DEMUX" comment="Event demultiplexor">
+  <versionInfo author="Alois Zoitl" date="2017-09-22" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
+  <identification description="Copyright (c) 2017 fortiss GmbH&#xD;&#xA; &#xD;&#xA;This program and the accompanying materials are made&#xD;&#xA;available under the terms of the Eclipse Public License 2.0&#xD;&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0" standard="61499-1 Annex A"/>
+  <interfaceList>
+    <eventInputs name="EI" isInput="true">
+      <with variables="//@interfaceList/@inputVars.0"/>
+    </eventInputs>
+    <eventOutputs name="EO0"/>
+    <eventOutputs name="EO1"/>
+    <eventOutputs name="EO2"/>
+    <eventOutputs name="EO3"/>
+    <inputVars name="K" isInput="true" typeName="UINT" arraySize="-1" withs="//@interfaceList/@eventInputs.0/@with.0"/>
+  </interfaceList>
+  <service/>
+  <eCC start="//@eCC/@eCState.0">
+    <eCState name="START" comment="Initial State" x="165" y="30" outTransitions="//@eCC/@eCTransition.4" inTransitions="//@eCC/@eCTransition.0 //@eCC/@eCTransition.1 //@eCC/@eCTransition.2 //@eCC/@eCTransition.3 //@eCC/@eCTransition.9"/>
+    <eCState name="State" x="180" y="233" outTransitions="//@eCC/@eCTransition.5 //@eCC/@eCTransition.6 //@eCC/@eCTransition.7 //@eCC/@eCTransition.8 //@eCC/@eCTransition.9" inTransitions="//@eCC/@eCTransition.4"/>
+    <eCState name="State_1" x="-14" y="146" outTransitions="//@eCC/@eCTransition.0" inTransitions="//@eCC/@eCTransition.5">
+      <eCAction output="//@interfaceList/@eventOutputs.0"/>
+    </eCState>
+    <eCState name="State_2" x="90" y="90" outTransitions="//@eCC/@eCTransition.1" inTransitions="//@eCC/@eCTransition.6">
+      <eCAction output="//@interfaceList/@eventOutputs.1"/>
+    </eCState>
+    <eCState name="State_3" x="275" y="96" outTransitions="//@eCC/@eCTransition.2" inTransitions="//@eCC/@eCTransition.7">
+      <eCAction output="//@interfaceList/@eventOutputs.2"/>
+    </eCState>
+    <eCState name="State_4" x="466" y="95" outTransitions="//@eCC/@eCTransition.3" inTransitions="//@eCC/@eCTransition.8">
+      <eCAction output="//@interfaceList/@eventOutputs.3"/>
+    </eCState>
+    <eCTransition x="105" y="74" source="//@eCC/@eCState.2" destination="//@eCC/@eCState.0"/>
+    <eCTransition x="159" y="75" source="//@eCC/@eCState.3" destination="//@eCC/@eCState.0"/>
+    <eCTransition x="253" y="69" source="//@eCC/@eCState.4" destination="//@eCC/@eCState.0"/>
+    <eCTransition x="391" y="32" source="//@eCC/@eCState.5" destination="//@eCC/@eCState.0"/>
+    <eCTransition x="233" y="107" conditionExpression="" source="//@eCC/@eCState.0" destination="//@eCC/@eCState.1" conditionEvent="//@interfaceList/@eventInputs.0"/>
+    <eCTransition x="75" y="204" conditionExpression="K = 0" source="//@eCC/@eCState.1" destination="//@eCC/@eCState.2"/>
+    <eCTransition x="153" y="130" conditionExpression="K = 1" source="//@eCC/@eCState.1" destination="//@eCC/@eCState.3"/>
+    <eCTransition x="272" y="153" conditionExpression="K = 2" source="//@eCC/@eCState.1" destination="//@eCC/@eCState.4"/>
+    <eCTransition x="376" y="191" conditionExpression="K = 3" source="//@eCC/@eCState.1" destination="//@eCC/@eCState.5"/>
+    <eCTransition x="203" y="152" conditionExpression="K > 3" source="//@eCC/@eCState.1" destination="//@eCC/@eCState.0"/>
+  </eCC>
+</libraryElement:BasicFBType>

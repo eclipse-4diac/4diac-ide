@@ -36,8 +36,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser;
@@ -98,6 +100,7 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 
@@ -595,18 +598,11 @@ public class STAlgorithmFilter {
       StringConcatenation _builder = new StringConcatenation();
       {
         for(final InArgument inArg : inArgs) {
-          _builder.append("*static_cast<CIEC_");
-          String _type = this.getType(call.getFb(), inArg);
-          _builder.append(_type);
-          _builder.append("*>(mInternalFBs[");
-          Integer _internalFbIndexFromName = this.internalFbIndexFromName(call.getFb());
-          _builder.append(_internalFbIndexFromName);
-          _builder.append("]->getDI(");
-          Integer _inputIndex = this.getInputIndex(call.getFb(), inArg.getVar());
-          _builder.append(_inputIndex);
-          _builder.append(")) = ");
-          CharSequence _generateExpression = this.generateExpression(inArg.getExpr());
-          _builder.append(_generateExpression);
+          String _generateInAssigmentExpression = this.generateInAssigmentExpression(call.getFb(), inArg);
+          _builder.append(_generateInAssigmentExpression);
+          _builder.append(" = ");
+          CharSequence _generateInAssigmentRHS = this.generateInAssigmentRHS(inArg);
+          _builder.append(_generateInAssigmentRHS);
           _builder.append(";");
           _builder.newLineIfNotEmpty();
         }
@@ -616,26 +612,77 @@ public class STAlgorithmFilter {
     return _xblockexpression;
   }
   
-  public String getType(final FB fb, final InArgument argument) {
-    EList<VarDeclaration> _inputVars = fb.getInterface().getInputVars();
-    for (final VarDeclaration input : _inputVars) {
-      String _name = input.getName();
-      String _var = argument.getVar();
-      boolean _equals = Objects.equal(_name, _var);
-      if (_equals) {
-        return input.getTypeName();
+  public CharSequence generateInAssigmentRHS(final InArgument inArg) {
+    CharSequence _xblockexpression = null;
+    {
+      final Expression inArgRHS = inArg.getExpr();
+      CharSequence _xifexpression = null;
+      if (((inArgRHS instanceof PrimaryVariable) && ((PrimaryVariable) inArgRHS).getVar().isArray())) {
+        CharSequence _xblockexpression_1 = null;
+        {
+          final VarDeclaration inArgVar = ((PrimaryVariable) inArgRHS).getVar();
+          EObject _eContainer = ((PrimaryVariable) inArgRHS).getVar().eContainer();
+          final InterfaceList argFBInterfaceList = ((InterfaceList) _eContainer);
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("*static_cast<CIEC_ARRAY*>(getDI(");
+          Integer _inputIndex = this.getInputIndex(argFBInterfaceList, inArgVar.getName());
+          _builder.append(_inputIndex);
+          _builder.append("))");
+          _xblockexpression_1 = _builder;
+        }
+        _xifexpression = _xblockexpression_1;
+      } else {
+        return this.generateExpression(inArg.getExpr());
       }
+      _xblockexpression = _xifexpression;
     }
-    return null;
+    return _xblockexpression;
   }
   
-  public Integer getInputIndex(final FB fb, final String varName) {
+  public String generateInAssigmentExpression(final FB calledFb, final InArgument argument) {
+    final VarDeclaration varDec = this.getInputVarDeclaration(calledFb, argument);
+    boolean _isArray = varDec.isArray();
+    if (_isArray) {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("*static_cast<CIEC_ARRAY*>(mInternalFBs[");
+      Integer _internalFbIndexFromName = this.internalFbIndexFromName(calledFb);
+      _builder.append(_internalFbIndexFromName);
+      _builder.append("]->getDI(");
+      Integer _inputIndex = this.getInputIndex(calledFb, argument.getVar());
+      _builder.append(_inputIndex);
+      _builder.append("))");
+      return _builder.toString();
+    } else {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append("*static_cast<CIEC_");
+      String _name = varDec.getType().getName();
+      _builder_1.append(_name);
+      _builder_1.append("*>(mInternalFBs[");
+      Integer _internalFbIndexFromName_1 = this.internalFbIndexFromName(calledFb);
+      _builder_1.append(_internalFbIndexFromName_1);
+      _builder_1.append("]->getDI(");
+      Integer _inputIndex_1 = this.getInputIndex(calledFb, argument.getVar());
+      _builder_1.append(_inputIndex_1);
+      _builder_1.append("))");
+      return _builder_1.toString();
+    }
+  }
+  
+  public VarDeclaration getInputVarDeclaration(final FB fb, final InArgument argument) {
+    final Function1<VarDeclaration, Boolean> _function = (VarDeclaration it) -> {
+      String _name = it.getName();
+      String _var = argument.getVar();
+      return Boolean.valueOf(Objects.equal(_name, _var));
+    };
+    return IterableExtensions.<VarDeclaration>findFirst(fb.getInterface().getInputVars(), _function);
+  }
+  
+  public Integer getInterfaceElementIndex(final EList<? extends IInterfaceElement> interfaceList, final String elementName) {
     int index = 0;
-    EList<VarDeclaration> _inputVars = fb.getInterface().getInputVars();
-    for (final VarDeclaration input : _inputVars) {
+    for (final IInterfaceElement interfaceElement : interfaceList) {
       {
-        String _name = input.getName();
-        boolean _equals = Objects.equal(_name, varName);
+        String _name = interfaceElement.getName();
+        boolean _equals = Objects.equal(_name, elementName);
         if (_equals) {
           return Integer.valueOf(index);
         }
@@ -643,6 +690,18 @@ public class STAlgorithmFilter {
       }
     }
     return null;
+  }
+  
+  public Integer getInputIndex(final InterfaceList list, final String varName) {
+    return this.getInterfaceElementIndex(list.getInputVars(), varName);
+  }
+  
+  public Integer getInputIndex(final FBType fbType, final String varName) {
+    return this.getInputIndex(fbType.getInterfaceList(), varName);
+  }
+  
+  public Integer getInputIndex(final FB fb, final String varName) {
+    return this.getInputIndex(fb.getInterface(), varName);
   }
   
   public CharSequence generateOutAssignments(final FBCall call) {
@@ -652,15 +711,12 @@ public class STAlgorithmFilter {
       StringConcatenation _builder = new StringConcatenation();
       {
         for(final OutArgument outArg : outArgs) {
-          CharSequence _generateExpression = this.generateExpression(outArg.getExpr());
-          _builder.append(_generateExpression);
-          _builder.append(".setValue(*mInternalFBs[");
-          Integer _internalFbIndexFromName = this.internalFbIndexFromName(call.getFb());
-          _builder.append(_internalFbIndexFromName);
-          _builder.append("]->getDO(");
-          Integer _outputIndex = this.getOutputIndex(call.getFb(), outArg.getVar());
-          _builder.append(_outputIndex);
-          _builder.append("));");
+          CharSequence _generateOutAssignmentLHS = this.generateOutAssignmentLHS(outArg);
+          _builder.append(_generateOutAssignmentLHS);
+          _builder.append(" = ");
+          CharSequence _generateOutAssignmentRHS = this.generateOutAssignmentRHS(call, outArg);
+          _builder.append(_generateOutAssignmentRHS);
+          _builder.append(";");
           _builder.newLineIfNotEmpty();
         }
       }
@@ -669,37 +725,174 @@ public class STAlgorithmFilter {
     return _xblockexpression;
   }
   
-  public Integer getOutputIndex(final FB fb, final String varName) {
-    int index = 0;
-    EList<VarDeclaration> _outputVars = fb.getInterface().getOutputVars();
-    for (final VarDeclaration output : _outputVars) {
-      {
-        String _name = output.getName();
-        boolean _equals = Objects.equal(_name, varName);
-        if (_equals) {
-          return Integer.valueOf(index);
-        }
-        index++;
+  public CharSequence generateOutAssignmentRHS(final FBCall fbCall, final OutArgument argument) {
+    CharSequence _xblockexpression = null;
+    {
+      final FBType fbType = fbCall.getFb().getType();
+      final VarDeclaration varDec = this.getTargetVarDeclaration(fbType, argument);
+      CharSequence _xifexpression = null;
+      if (((varDec != null) && varDec.isArray())) {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("*static_cast<CIEC_ARRAY*>(mInternalFBs[");
+        Integer _internalFbIndexFromName = this.internalFbIndexFromName(fbCall.getFb());
+        _builder.append(_internalFbIndexFromName);
+        _builder.append("]->");
+        String _generateGetVariable = this.generateGetVariable(fbType, varDec.getName());
+        _builder.append(_generateGetVariable);
+        _builder.append(")");
+        _xifexpression = _builder;
+      } else {
+        StringConcatenation _builder_1 = new StringConcatenation();
+        _builder_1.append("*static_cast<CIEC_");
+        String _name = varDec.getType().getName();
+        _builder_1.append(_name);
+        _builder_1.append("*>(");
+        String _generateGetVariable_1 = this.generateGetVariable(fbType, varDec.getName());
+        _builder_1.append(_generateGetVariable_1);
+        _builder_1.append(")");
+        _xifexpression = _builder_1;
       }
+      _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
+  }
+  
+  public String generateGetVariable(final FBType type, final String name) {
+    final Integer inputIndex = this.getInputIndex(type, name);
+    if ((inputIndex != null)) {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("getDI(");
+      _builder.append(inputIndex);
+      _builder.append(")");
+      return _builder.toString();
+    }
+    final Integer outputIndex = this.getOutputIndex(type, name);
+    if ((outputIndex != null)) {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append("getDO(");
+      _builder_1.append(outputIndex);
+      _builder_1.append(")");
+      return _builder_1.toString();
+    }
+    Integer _xifexpression = null;
+    if ((type instanceof BaseFBType)) {
+      _xifexpression = this.getInternalVarIndex(((BaseFBType)type), name);
+    } else {
+      _xifexpression = null;
+    }
+    final Integer internalVariableIndex = _xifexpression;
+    if ((internalVariableIndex != null)) {
+      StringConcatenation _builder_2 = new StringConcatenation();
+      _builder_2.append("getVarInternal(");
+      Integer _internalVarIndex = this.getInternalVarIndex(((BaseFBType) type), name);
+      _builder_2.append(_internalVarIndex);
+      _builder_2.append(")");
+      return _builder_2.toString();
+    }
+    String _name = type.getName();
+    String _plus = ((("Name " + name) + " not a variable on FB type ") + _name);
+    throw new IllegalArgumentException(_plus);
+  }
+  
+  public CharSequence generateOutAssignmentLHS(final OutArgument argument) {
+    CharSequence _xblockexpression = null;
+    {
+      final Variable goalExpression = argument.getExpr();
+      CharSequence _xifexpression = null;
+      if ((goalExpression instanceof PrimaryVariable)) {
+        CharSequence _xblockexpression_1 = null;
+        {
+          final VarDeclaration outVariable = ((PrimaryVariable)goalExpression).getVar();
+          EObject _eContainer = outVariable.eContainer().eContainer();
+          final FBType callingFBType = ((FBType) _eContainer);
+          CharSequence _xifexpression_1 = null;
+          boolean _isArray = outVariable.isArray();
+          if (_isArray) {
+            StringConcatenation _builder = new StringConcatenation();
+            _builder.append("*static_cast<CIEC_ARRAY*>(");
+            String _generateGetVariable = this.generateGetVariable(callingFBType, outVariable.getName());
+            _builder.append(_generateGetVariable);
+            _builder.append(")");
+            return _builder.toString();
+          } else {
+            StringConcatenation _builder_1 = new StringConcatenation();
+            CharSequence _generateExpression = this.generateExpression(argument.getExpr());
+            _builder_1.append(_generateExpression);
+            _xifexpression_1 = _builder_1;
+          }
+          _xblockexpression_1 = _xifexpression_1;
+        }
+        _xifexpression = _xblockexpression_1;
+      }
+      _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
+  }
+  
+  public VarDeclaration getVarDeclaration(final EList<? extends IInterfaceElement> interfaceList, final String varName) {
+    final Function1<IInterfaceElement, Boolean> _function = (IInterfaceElement it) -> {
+      String _name = it.getName();
+      return Boolean.valueOf(Objects.equal(_name, varName));
+    };
+    IInterfaceElement _findFirst = IterableExtensions.findFirst(interfaceList, _function);
+    return ((VarDeclaration) _findFirst);
+  }
+  
+  public VarDeclaration getTargetVarDeclaration(final FB fb, final OutArgument argument) {
+    return this.getTargetVarDeclaration(fb.getType(), argument);
+  }
+  
+  public VarDeclaration getTargetVarDeclaration(final FBType fbType, final OutArgument argument) {
+    VarDeclaration _xblockexpression = null;
+    {
+      final String varName = argument.getVar();
+      VarDeclaration _varDeclaration = this.getVarDeclaration(fbType.getInterfaceList().getOutputVars(), varName);
+      VarDeclaration _varDeclaration_1 = this.getVarDeclaration(fbType.getInterfaceList().getInputVars(), varName);
+      VarDeclaration _or = this.operator_or(_varDeclaration, _varDeclaration_1);
+      VarDeclaration _xifexpression = null;
+      if ((fbType instanceof BaseFBType)) {
+        _xifexpression = this.getVarDeclaration(((BaseFBType)fbType).getInternalVars(), varName);
+      } else {
+        _xifexpression = null;
+      }
+      _xblockexpression = this.operator_or(_or, _xifexpression);
+    }
+    return _xblockexpression;
+  }
+  
+  public VarDeclaration operator_or(final VarDeclaration element, final VarDeclaration element2) {
+    VarDeclaration _xifexpression = null;
+    if ((element != null)) {
+      _xifexpression = element;
+    } else {
+      _xifexpression = element2;
+    }
+    return _xifexpression;
+  }
+  
+  public Integer getOutputIndex(final FB fb, final String varName) {
+    return this.getInterfaceElementIndex(fb.getInterface().getOutputVars(), varName);
+  }
+  
+  public Integer getOutputIndex(final FBType fbType, final String varName) {
+    return this.getInterfaceElementIndex(fbType.getInterfaceList().getOutputVars(), varName);
+  }
+  
+  public Object getInternalVarIndex(final FB fb, final String varName) {
+    FBType _type = fb.getType();
+    if ((_type instanceof BaseFBType)) {
+      FBType _type_1 = fb.getType();
+      this.getInternalVarIndex(((BaseFBType) _type_1), varName);
     }
     return null;
   }
   
+  public Integer getInternalVarIndex(final BaseFBType fbType, final String varName) {
+    return this.getInterfaceElementIndex(fbType.getInternalVars(), varName);
+  }
+  
   public Integer eventIndexFromName(final FBCall fbCall) {
-    int index = 0;
-    EList<Event> _eventInputs = fbCall.getFb().getInterface().getEventInputs();
-    for (final Event inputEvent : _eventInputs) {
-      {
-        String _event = fbCall.getEvent();
-        String _name = inputEvent.getName();
-        boolean _equals = Objects.equal(_event, _name);
-        if (_equals) {
-          return Integer.valueOf(index);
-        }
-        index++;
-      }
-    }
-    return null;
+    return this.getInterfaceElementIndex(fbCall.getFb().getInterface().getEventInputs(), fbCall.getEvent());
   }
   
   public Integer internalFbIndexFromName(final FB fb) {

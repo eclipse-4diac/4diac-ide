@@ -281,12 +281,12 @@ Open the ServiceTest.cpp file that was recently exported, and take a look at the
   }
 }</div>
 
-<p>The comment reminds us to set an output event, replace <i>#error add code for REQ event!</i> with <i>STATE() = !STATE();</i> for the toggling effect.</p>
+<p>The comment reminds us to set an output event, replace <i>#error add code for REQ event!</i> with <i>st_STATE() = !st_STATE();</i> for the toggling effect.</p>
 
 <div class="code">void FORTE_ServiceTest::executeEvent(int pa_nEIID){
   switch(pa_nEIID){
     case scm_nEventREQID:
-	  STATE() = !STATE();
+	  st_STATE() = !st_STATE();
 	  sendOutputEvent(scm_nEventCNFID);
       break;
   }

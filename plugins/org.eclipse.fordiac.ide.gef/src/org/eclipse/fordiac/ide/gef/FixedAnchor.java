@@ -51,9 +51,11 @@ public class FixedAnchor extends AbstractConnectionAnchor {
 		return getLocation(null);
 	}
 
-
 	public boolean isInput() {
 		return isInput;
 	}
 
+	public void setIsInput(boolean isInput) {
+		this.isInput = isInput;
+	}
 }

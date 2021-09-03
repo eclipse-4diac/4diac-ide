@@ -13,10 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.views;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
@@ -24,69 +24,51 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 
-public class StructParser {
+public final class StructParser {
 
-	private StringTokenizer tokenizer = null;
-
-	public WatchValueTreeNode createStructFromString(String struct, final StructuredType structType,
+	public static WatchValueTreeNode createStructFromString(String struct, final StructuredType structType,
 			final MonitoringElement monitoringElement, final WatchValueTreeNode parent) {
 		// remove first () for easier parsing
-		Assert.isTrue(struct.length() > 0);
+		if (!struct.isEmpty()) {
+			struct = struct.substring(1, struct.length() - 1);
+		}
 
-		struct = struct.substring(1, struct.length() - 1);
-		tokenizer = new StringTokenizer(struct, ","); //$NON-NLS-1$
+		final StringTokenizer tokenizer = new StringTokenizer(struct, ","); //$NON-NLS-1$
 		final IInterfaceElement interfaceElement = monitoringElement.getPort().getInterfaceElement();
 		interfaceElement.getName();
 		final WatchValueTreeNode structRoot = new WatchValueTreeNode(monitoringElement, structType,
-				interfaceElement.getName(), "root",
-				null, parent);
+				interfaceElement.getName(), "root", null, parent); //$NON-NLS-1$
 
 		WatchValueTreeNode previous = structRoot;
 
-		final Stack<WatchValueTreeNode> structParentLevelStack = new Stack<>();
+		final Deque<WatchValueTreeNode> structParentLevelStack = new ArrayDeque<>();
 		structParentLevelStack.push(structRoot);
 
 		while (tokenizer.hasMoreTokens()) {
-			String[] parsedAssignment = parseAssignment(tokenizer.nextToken(), previous);
+			final String nextToken = tokenizer.nextToken();
+			final String[] parsedAssignment = parseAssignment(nextToken, previous);
 
-			// check if we have splitted a string
-			if (!parsedAssignment[0].equals("")) { //$NON-NLS-1$
+			// check if we have split a string
+			if (!"".equals(parsedAssignment[0])) { //$NON-NLS-1$
 
-				String varName = parsedAssignment[0];
-				String value = parsedAssignment[1];
+				final String varName = parsedAssignment[0];
+				final String value = parsedAssignment[1];
 
-				// check for ( at the beginning
+
+				final VarDeclaration varDeclaration = findVarDeclaration(structType, varName);
+				final WatchValueTreeNode newNode = new WatchValueTreeNode(monitoringElement, structType, varName, value,
+						varDeclaration, structParentLevelStack.peek());
+
+				previous = newNode;
+				structParentLevelStack.peek().addChild(newNode);
+
 				if (value.charAt(0) == '(') {
-
-					parsedAssignment = parseAssignment(value.substring(1), previous);
-					varName = parsedAssignment[0];
-					value = parsedAssignment[1];
-
-					// change previous type
-					if (previous != null) {
-						previous.setValue("structured type");
-						structParentLevelStack.push(previous);
-					}
+					structParentLevelStack.push(newNode);
 				}
 
-				// check for ) at the end
 				if (value.charAt(value.length() - 1) == ')') {
-					// remove )
-					value = value.substring(0, value.length() - 1);
-					final VarDeclaration varDeclaration = findVarDeclaration(structType, varName);
-					final WatchValueTreeNode newNode = new WatchValueTreeNode(monitoringElement, structType, varName,
-							value, varDeclaration, structParentLevelStack.peek());
-
-					structParentLevelStack.peek().addChild(newNode);
-					previous = newNode;
+					newNode.setValue(value.substring(0, value.length() - 1)); // remove )
 					structParentLevelStack.pop();
-				} else {
-					// we need this, otherwise the last element would have a wrong parent
-					final VarDeclaration varDeclaration = findVarDeclaration(structType, varName);
-					final WatchValueTreeNode newNode = new WatchValueTreeNode(monitoringElement, structType, varName,
-							value, varDeclaration, structParentLevelStack.peek());
-					structParentLevelStack.peek().addChild(newNode);
-					previous = newNode;
 				}
 			}
 		}
@@ -109,14 +91,13 @@ public class StructParser {
 			return new String[] { variableName, value };
 		}
 
-		// otherwise we have a splitted a string, we attach it to the value of the previous node
+		// otherwise we have a split a string, we attach it to the value of the previous node
 		final StringBuilder newValueBuilder = new StringBuilder();
 
-		String value = "null";
+		String value = "null"; //$NON-NLS-1$
 		if (previous != null) {
 			value = previous.getValue();
 		}
-
 
 		newValueBuilder.append(value);
 		newValueBuilder.append(assignment);
@@ -128,8 +109,8 @@ public class StructParser {
 		return new String[] { "", "" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public static void buildTree(final StructuredType structType,
-			final WatchValueTreeNode parent, final MonitoringBaseElement element) {
+	public static void buildTree(final StructuredType structType, final WatchValueTreeNode parent,
+			final MonitoringBaseElement element) {
 
 		for (final VarDeclaration memberVariable : structType.getMemberVariables()) {
 			final WatchValueTreeNode treeNode = (WatchValueTreeNode) parent.addChild(memberVariable, element,
@@ -140,6 +121,10 @@ public class StructParser {
 				buildTree((StructuredType) memberVariable.getType(), treeNode, element);
 			}
 		}
+	}
+
+	private StructParser() {
+		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
 	}
 
 }

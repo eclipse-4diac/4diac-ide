@@ -70,6 +70,7 @@
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                category="FB"
+               image="fordiacimage://ICON_EVENT"
                id="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
                indented="true"
                label="Edit Events">
@@ -77,6 +78,7 @@
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
                category="FB"
+               image="fordiacimage://ICON_DATA"
                id="org.eclipse.fordiac.ide.application.property.tab.EditData"
                indented="true"
                label="Edit Data">
@@ -84,6 +86,7 @@
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
                category="FB"
+               image="fordiacimage://ICON_ADAPTER_LIST"
                id="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
                indented="true"
                label="Edit Adapters">
@@ -107,14 +110,6 @@
                afterTab="org.eclipse.fordiac.ide.application.property.tab.ShowEvent"
                category="FB"
                id="org.eclipse.fordiac.ide.application.property.tab.ShowData"
-               image="fordiacimage://ICON_FB"
-               label="Data"
-               indented="true">
-         </propertyTab>
-         <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.property.tab.ShowData"
-               category="FB"
-               id="org.eclipse.fordiac.ide.application.property.tab.ShowData"
                image="fordiacimage://ICON_DATA"
                label="Data"
                indented="true">
@@ -123,7 +118,7 @@
                afterTab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                category="FB"
                id="org.eclipse.fordiac.ide.application.property.tab.ShowAdapter"
-               image="fordiacimage://ICON_ADAPTER"
+               image="fordiacimage://ICON_ADAPTER_LIST"
                label="Adapter"
                indented="true">
          </propertyTab>

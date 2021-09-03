@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,52 +11,63 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Melanie Winter - made expandable
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.Layer;
-import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteServiceSequenceCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.SequenceLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.SequenceFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.TransactionLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.LabelCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.policies.HighlightEditPolicy;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.gef.tools.CellEditorLocator;
+import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.swt.SWT;
 
 public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* ResizableCompartmentEditPart */ {
+
+
+	private boolean isExpanded = true;
+
 
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (getCastedModel().eAdapters().contains(adapter)) {
-				refresh();
-			}
+			refresh();
+
 		}
 	};
 
 	@Override
 	public void activate() {
 		if (!isActive()) {
-			getCastedModel().eAdapters().add(adapter);
+			getModel().eAdapters().add(adapter);
 		}
 		super.activate();
 	}
@@ -63,53 +75,12 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 	@Override
 	public void deactivate() {
 		if (isActive()) {
-			getCastedModel().eAdapters().remove(adapter);
+			getModel().eAdapters().remove(adapter);
 		}
 		super.deactivate();
 	}
 
-	public static class ServiceSequenceFigure extends Layer {
-		private final Label nameLabel;
-		private final Layer transactionContainer;
 
-		public ServiceSequenceFigure() {
-			final GridLayout sequenceLayout = new GridLayout();
-			setLayoutManager(sequenceLayout);
-			sequenceLayout.verticalSpacing = 0;
-			nameLabel = new Label();
-			nameLabel.setOpaque(true);
-			nameLabel.setBackgroundColor(ColorConstants.lightGray);
-			nameLabel.setLabelAlignment(PositionConstants.CENTER);
-			final GridData nameLayoutData = new GridData();
-			nameLayoutData.grabExcessHorizontalSpace = true;
-			nameLayoutData.horizontalAlignment = GridData.FILL;
-			getLayoutManager().setConstraint(nameLabel, nameLayoutData);
-			add(nameLabel);
-
-			transactionContainer = new Layer();
-			final GridLayout containerLayout = new GridLayout();
-			transactionContainer.setLayoutManager(containerLayout);
-			containerLayout.verticalSpacing = 0;
-			final GridData containerData = new GridData();
-			containerData.grabExcessHorizontalSpace = true;
-			containerData.horizontalAlignment = GridData.FILL;
-			getLayoutManager().setConstraint(transactionContainer, containerData);
-			add(transactionContainer);
-		}
-
-		public Label getLabel() {
-			return nameLabel;
-		}
-
-		public void setLabelText(final String name) {
-			this.nameLabel.setText(null != name ? name : ""); //$NON-NLS-1$
-		}
-
-		public Layer getTransactionContainer() {
-			return transactionContainer;
-		}
-
-	}
 
 	@Override
 	protected void createEditPolicies() {
@@ -117,46 +88,55 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteServiceSequenceCommand((FBType) getCastedModel().eContainer().eContainer(),
-						getCastedModel());
+				return new DeleteServiceSequenceCommand(getModel().getService().getFBType(),
+						getModel());
 			}
+
 		});
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new HighlightEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SequenceLayoutEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new TransactionLayoutEditPolicy());
+
 	}
 
-	public ServiceSequence getCastedModel() {
-		return (ServiceSequence) getModel();
+	public void toggleExpanded() {
+		isExpanded = !isExpanded;
+		refresh();
+		getFigure().setExpanded(isExpanded);
+	}
+
+	@Override
+	public SequenceFigure getFigure() {
+		return (SequenceFigure) super.getFigure();
+	}
+
+	@Override
+	public ServiceSequence getModel() {
+		return (ServiceSequence) super.getModel();
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		final ServiceSequenceFigure figure = new ServiceSequenceFigure();
-		final GridData layoutData = new GridData();
-		layoutData.grabExcessHorizontalSpace = true;
-		layoutData.horizontalAlignment = GridData.FILL;
+		final SequenceFigure figure = new SequenceFigure(isExpanded);
+		figure.setBorder(new MarginBorder(new Insets(12, 0, 0, 0)));
+		final GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
 		figure.getLayoutManager().setConstraint(figure, layoutData);
 
 		return figure;
 	}
 
 	@Override
-	protected List getModelChildren() {
-		final List<Object> children = new ArrayList<>();
-		children.addAll(getCastedModel().getServiceTransaction());
-		return children;
+	protected List<ServiceTransaction> getModelChildren() {
+		if (isExpanded) {
+			return new ArrayList<>(getModel().getServiceTransaction());
+		}
+		return Collections.emptyList();
 	}
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof TransactionEditPart) {
-			final ServiceSequenceFigure thisFigure = (ServiceSequenceFigure) getFigure();
 			final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-			final GridData childData = new GridData();
-			childData.grabExcessHorizontalSpace = true;
-			childData.horizontalAlignment = GridData.FILL;
-			thisFigure.getTransactionContainer().getLayoutManager().setConstraint(child, childData);
-			thisFigure.getTransactionContainer().add(child, index);
+			getFigure().getTransactionContainer().add(child, index);
 		}
 	}
 
@@ -164,26 +144,48 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 	protected void removeChildVisual(final EditPart childEditPart) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof TransactionEditPart) {
-			((ServiceSequenceFigure) getFigure()).getTransactionContainer().remove(child);
+			getFigure().getTransactionContainer().remove(child);
 		}
 	}
 
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		final ServiceSequenceFigure figure = (ServiceSequenceFigure) getFigure();
-		if (null != getCastedModel()) {
-			figure.setLabelText(getCastedModel().getName());
+		final SequenceFigure figure = getFigure();
+		if (null != getModel()) {
+			figure.setLabelText(getModel().getName(), getModel().getComment());
 		}
 	}
 
 	@Override
 	public INamedElement getINamedElement() {
-		return getCastedModel();
+		return getModel();
+	}
+
+	@Override
+	protected DirectEditManager createDirectEditManager() {
+		final DirectEditManager dem = super.createDirectEditManager();
+		final CellEditorLocator locator = new LabelCellEditorLocator(getFigure().getNameLabel(),
+				getZoomManager(), (FigureCanvas) getViewer().getControl());
+		dem.setLocator(locator);
+		return dem;
+	}
+
+	private ZoomManager getZoomManager() {
+		return ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager();
 	}
 
 	@Override
 	public Label getNameLabel() {
-		return ((ServiceSequenceFigure) getFigure()).getLabel();
+		return new Label(getModel().getName());
+	}
+
+	public boolean isExpanded() {
+		return isExpanded;
+	}
+
+	public void setExpanded(final boolean isExpanded) {
+		this.isExpanded = !isExpanded;
+		refresh();
 	}
 }

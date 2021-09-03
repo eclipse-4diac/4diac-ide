@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009  Profactor GmbH
+ * Copyright (c) 2008, 2021  Profactor GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,10 +10,10 @@
  * Contributors:
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - clean up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.gef.commands.Command;
@@ -32,42 +32,23 @@ public class DeleteOutputPrimitiveCommand extends Command {
 	private int index;
 	private DeleteTransactionCommand deleteTransactionCmd = null;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param primitive the primitive
-	 */
+	/** @param primitive the primitive to delete */
 	public DeleteOutputPrimitiveCommand(final OutputPrimitive primitive) {
 		this.primitive = primitive;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	@Override
 	public void execute() {
-		final EObject parentObject = primitive.eContainer();
-		if (parentObject instanceof ServiceTransaction) {
-			parent = (ServiceTransaction) parentObject;
-			index = parent.getOutputPrimitive().indexOf(primitive);
-			parent.getOutputPrimitive().remove(primitive);
+		parent = primitive.getServiceTransaction();
+		index = parent.getOutputPrimitive().indexOf(primitive);
+		parent.getOutputPrimitive().remove(primitive);
 
-			if (parent.getInputPrimitive() == null && parent.getOutputPrimitive().isEmpty()) {
-				deleteTransactionCmd = new DeleteTransactionCommand(parent);
-				deleteTransactionCmd.execute();
-			}
-
+		if ((parent.getInputPrimitive() == null) && parent.getOutputPrimitive().isEmpty()) {
+			deleteTransactionCmd = new DeleteTransactionCommand(parent);
+			deleteTransactionCmd.execute();
 		}
-
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
 	@Override
 	public void undo() {
 		if (deleteTransactionCmd != null) {
@@ -76,11 +57,6 @@ public class DeleteOutputPrimitiveCommand extends Command {
 		parent.getOutputPrimitive().add(index, primitive);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
 	@Override
 	public void redo() {
 		index = parent.getOutputPrimitive().indexOf(primitive);

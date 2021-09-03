@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014 fortiss GmbH
- * 
+ *               2021 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,78 +11,84 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - clean up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.gef.commands.Command;
 
-public class CreateServiceSequenceCommand extends Command {
+public class CreateServiceSequenceCommand extends AbstractCreateElementCommand<ServiceSequence> {
+	private final FBType fbType;
+	private boolean emptyService;
 
-	private FBType fbType;
-	private String name;
-	private String leftInterfaceName;
-	private String rightInterfaceName;
+	private static final String LEFT_INTERFACE_NAME = "left interface"; //$NON-NLS-1$
+	private static final String RIGHT_INTERFACE_NAME = "right interface"; //$NON-NLS-1$
+	private static final String DEFAULT_SEQUENCE_NAME = "Service Sequence"; //$NON-NLS-1$
 	private ServiceInterface leftInterface;
 	private ServiceInterface rightInterface;
-	private ServiceSequence sq;
 
-	public CreateServiceSequenceCommand(FBType fbType) {
-		this.fbType = fbType;
-		name = "Service Sequence"; //$NON-NLS-1$
-		leftInterfaceName = "left interface"; //$NON-NLS-1$
-		rightInterfaceName = "right interface"; //$NON-NLS-1$
+	public CreateServiceSequenceCommand(final Service service) {
+		super(service.getServiceSequence());
+		fbType = service.getFBType();
+	}
+
+	public CreateServiceSequenceCommand(final Service service, final ServiceSequence refElement) {
+		super(service.getServiceSequence(), refElement);
+		fbType = service.getFBType();
 	}
 
 	@Override
-	public boolean canExecute() {
-		return fbType != null;
+	protected ServiceSequence createNewElement() {
+		final ServiceSequence seq = LibraryElementFactory.eINSTANCE.createServiceSequence();
+		seq.setName(DEFAULT_SEQUENCE_NAME);
+		return seq;
 	}
 
-	@Override
-	public void execute() {
+	private void createEmptyServiceModel() {
 		if (null == fbType.getService()) {
+			emptyService = true;
 			fbType.setService(LibraryElementFactory.eINSTANCE.createService());
 		}
-		sq = LibraryElementFactory.eINSTANCE.createServiceSequence();
-		sq.setName(name);
 		if (fbType.getService().getLeftInterface() == null) {
 			leftInterface = LibraryElementFactory.eINSTANCE.createServiceInterface();
-			leftInterface.setName(leftInterfaceName);
+			leftInterface.setName(LEFT_INTERFACE_NAME);
 			fbType.getService().setLeftInterface(leftInterface);
 		}
 		if (fbType.getService().getRightInterface() == null) {
 			rightInterface = LibraryElementFactory.eINSTANCE.createServiceInterface();
-			rightInterface.setName(rightInterfaceName);
+			rightInterface.setName(RIGHT_INTERFACE_NAME);
 			fbType.getService().setRightInterface(rightInterface);
 		}
-		fbType.getService().getServiceSequence().add(sq);
+	}
 
+	@Override
+	public void execute() {
+		createEmptyServiceModel();
+		super.execute();
 	}
 
 	@Override
 	public void undo() {
-		if (leftInterface != null) {
+		if (null != leftInterface) {
 			fbType.getService().setLeftInterface(null);
 		}
-		if (rightInterface != null) {
+		if (null != rightInterface) {
 			fbType.getService().setRightInterface(null);
 		}
-		fbType.getService().getServiceSequence().remove(sq);
-
+		if (emptyService) {
+			fbType.setService(null);
+		}
+		super.undo();
 	}
 
 	@Override
 	public void redo() {
-		if (leftInterface != null) {
-			fbType.getService().setLeftInterface(leftInterface);
-		}
-		if (rightInterface != null) {
-			fbType.getService().setRightInterface(rightInterface);
-		}
-		fbType.getService().getServiceSequence().add(sq);
+		createEmptyServiceModel();
+		super.redo();
 	}
+
 }

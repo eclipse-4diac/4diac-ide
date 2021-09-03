@@ -193,6 +193,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private boolean handleResourceChanged(final IResourceDelta delta) {
+
 		if (isFileChange(delta)) {
 			collectPaletteEntries(delta);
 		} else if (IResourceDelta.OPEN == delta.getFlags()) {
@@ -201,6 +202,21 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				systemManager.notifyListeners();
 			} else if (0 != delta.getAffectedChildren(IResourceDelta.REMOVED).length) {
 				handleProjectRemove(delta);
+				return false;
+			}
+		} else if (delta.getResource().getType() == IResource.PROJECT) {
+			return checkForErrorMarkerChanges(delta);
+		}
+
+
+
+		return true;
+	}
+
+	public boolean checkForErrorMarkerChanges(final IResourceDelta delta) {
+		for (final IResourceDelta d : delta.getAffectedChildren()) {
+			if (IResourceDelta.MARKERS == (d.getFlags() & IResourceDelta.MARKERS)) {
+				systemManager.notifyListeners();
 				return false;
 			}
 		}

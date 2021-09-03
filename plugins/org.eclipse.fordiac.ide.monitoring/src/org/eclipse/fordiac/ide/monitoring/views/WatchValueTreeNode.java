@@ -55,24 +55,30 @@ public class WatchValueTreeNode extends StructTreeNode {
 
 	public WatchValueTreeNode addChild(final MonitoringBaseElement monitoringBaseElement) {
 
+		final WatchValueTreeNode node = createNode(monitoringBaseElement, this);
+
+		if (node != null) {
+			this.children.add(node);
+		}
+		return node;
+	}
+
+	public static WatchValueTreeNode createNode(final MonitoringBaseElement monitoringBaseElement,
+			final WatchValueTreeNode root) {
 		final DataType type = monitoringBaseElement.getPort().getInterfaceElement().getType();
 		WatchValueTreeNode node = null;
 		if (monitoringBaseElement instanceof MonitoringElement) {
 			final MonitoringElement monitoringElement = ((MonitoringElement) monitoringBaseElement);
 			if ((type instanceof StructuredType) && (type != IecTypes.GenericTypes.ANY_STRUCT)) {
 
-				node = createStructNode(monitoringBaseElement, type, this);
+				node = createStructNode(monitoringBaseElement, type, root);
 			} else if (type != IecTypes.GenericTypes.ANY_STRUCT) {
 				node = createVariableNode(monitoringElement);
 			}
 
-			if (node != null) {
-				this.children.add(node);
-			}
 
 		}
-
-		return null;
+		return node;
 	}
 
 	private static WatchValueTreeNode createVariableNode(final MonitoringElement monitoringElement) {
@@ -106,8 +112,7 @@ public class WatchValueTreeNode extends StructTreeNode {
 	public static WatchValueTreeNode createOnlineNode(final MonitoringBaseElement monitoringBaseElement,
 			final DataType type, final WatchValueTreeNode parent) {
 		final String currentValue = ((MonitoringElement) monitoringBaseElement).getCurrentValue();
-		final StructParser parser = new StructParser();
-		return parser.createStructFromString(currentValue, (StructuredType) type,
+		return StructParser.createStructFromString(currentValue, (StructuredType) type,
 				((MonitoringElement) monitoringBaseElement), parent);
 	}
 

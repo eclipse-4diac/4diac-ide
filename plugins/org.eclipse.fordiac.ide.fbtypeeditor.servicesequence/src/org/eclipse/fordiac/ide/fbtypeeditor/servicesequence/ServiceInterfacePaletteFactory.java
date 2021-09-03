@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH.
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,7 +22,8 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 public final class ServiceInterfacePaletteFactory {
-	private static final String SERVICE_TRANSACTION = "ServiceTransaction"; //$NON-NLS-1$
+	public static final String SERVICE_SEQUENCE = "ServiceSequence"; //$NON-NLS-1$
+	public static final String SERVICE_TRANSACTION = "ServiceTransaction"; //$NON-NLS-1$
 	public static final String RIGHT_OUTPUT_PRIMITIVE = "RightOutputPrimitive"; //$NON-NLS-1$
 	public static final String RIGHT_INPUT_PRIMITIVE = "RightInputPrimitive"; //$NON-NLS-1$
 	public static final String LEFT_OUTPUT_PRIMITIVE = "LeftOutputPrimitive"; //$NON-NLS-1$
@@ -73,41 +74,27 @@ public final class ServiceInterfacePaletteFactory {
 	}
 
 	private static void fillPalette(final PaletteRoot palette) {
-		PaletteDrawer drawer = new PaletteDrawer(Messages.ServiceInterfacePaletteFactory_LeftInterface);
-		ImageDescriptor desc = FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImageDescriptor();
-		CombinedTemplateCreationEntry entry = new CombinedTemplateCreationEntry(
-				Messages.ServiceInterfacePaletteFactory_InputPrimitive,
-				Messages.ServiceInterfacePaletteFactory_InputPrimitive_Desc,
-				new TemplateCreationFactory(LEFT_INPUT_PRIMITIVE), desc, desc);
-		drawer.add(entry);
-		desc = FordiacImage.ICON_LEFT_OUTPUT_PRIMITIVE.getImageDescriptor();
-		CombinedTemplateCreationEntry entry2 = new CombinedTemplateCreationEntry(
+		final PaletteDrawer drawer = new PaletteDrawer(Messages.ServiceInterfacePaletteFactory_DrawerName);
+
+		ImageDescriptor desc = FordiacImage.ICON_LEFT_OUTPUT_PRIMITIVE.getImageDescriptor();
+		final CombinedTemplateCreationEntry leftOPrimitiveEntry = new CombinedTemplateCreationEntry(
 				Messages.ServiceInterfacePaletteFactory_OutputPrimitive,
 				Messages.ServiceInterfacePaletteFactory_OutputPrimitive_Desc,
 				new TemplateCreationFactory(LEFT_OUTPUT_PRIMITIVE), desc, desc);
-		drawer.add(entry2);
-		palette.add(drawer);
-		drawer = new PaletteDrawer(Messages.ServiceInterfacePaletteFactory_RightInterface);
-		desc = FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImageDescriptor();
-		CombinedTemplateCreationEntry entry3 = new CombinedTemplateCreationEntry(
-				Messages.ServiceInterfacePaletteFactory_InputPrimitive,
-				Messages.ServiceInterfacePaletteFactory_InputPrimitive_Desc,
-				new TemplateCreationFactory(RIGHT_INPUT_PRIMITIVE), desc, desc);
-		drawer.add(entry3);
-		desc = FordiacImage.ICON_RIGHT_OUTPUT_PRIMITIVE.getImageDescriptor();
-		CombinedTemplateCreationEntry entry4 = new CombinedTemplateCreationEntry(
-				Messages.ServiceInterfacePaletteFactory_OutputPrimitive,
-				Messages.ServiceInterfacePaletteFactory_OutputPrimitive_Desc,
-				new TemplateCreationFactory(RIGHT_OUTPUT_PRIMITIVE), desc, desc);
-		drawer.add(entry4);
-		palette.add(drawer);
-		drawer = new PaletteDrawer(Messages.ServiceInterfacePaletteFactory_ServiceTransaction);
+		drawer.add(leftOPrimitiveEntry);
+
 		desc = FordiacImage.ICON_TRANSACTION.getImageDescriptor();
-		CombinedTemplateCreationEntry entry5 = new CombinedTemplateCreationEntry(
+		final CombinedTemplateCreationEntry transactionEntry = new CombinedTemplateCreationEntry(
 				Messages.ServiceInterfacePaletteFactory_ServiceTransaction,
 				Messages.ServiceInterfacePaletteFactory_ServiceTransaction_Desc,
 				new TemplateCreationFactory(SERVICE_TRANSACTION), desc, desc);
-		drawer.add(entry5);
+		drawer.add(transactionEntry);
+
+		desc = FordiacImage.ICON_SERVICE_SEQUENCE.getImageDescriptor();
+		final CombinedTemplateCreationEntry sequenceEntry = new CombinedTemplateCreationEntry(
+				Messages.ServiceSequenceSection_ServiceSequence, Messages.ServiceSequenceSection_ServiceSequence,
+				new TemplateCreationFactory(SERVICE_SEQUENCE), desc, desc);
+		drawer.add(sequenceEntry);
 		palette.add(drawer);
 	}
 

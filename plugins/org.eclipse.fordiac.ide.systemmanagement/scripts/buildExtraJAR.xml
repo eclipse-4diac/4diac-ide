@@ -27,9 +27,11 @@
 			<classpath>
 				<dirset dir="${basedir}/..">
 					<include name="org.eclipse.fordiac.ide.systemmanagement/bin"/>					
+					<include name="org.eclipse.fordiac.ide.model/bin"/>
 				</dirset>
 				<fileset dir="${target.home}">
 					<include name="plugins/eclipse.fordiac.ide.systemmanagement*.jar"/>
+					<include name="plugins/eclipse.fordiac.ide.model*.jar"/>
 					<include name="plugins/org.eclipse.core.resources*.jar"/>
 					<include name="plugins/org.eclipse.core.runtime*.jar"/>
 					<include name="plugins/org.eclipse.equinox.common*.jar"/>

@@ -174,7 +174,7 @@ public class FollowConnectionHandler extends AbstractHandler {
 
 	private static List<IInterfaceElement> getConnectionOposites(final ISelection selection,
 			final FBNetwork fbNetwork) {
-		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
+		if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			if ((structuredSelection.size() == 1)
 					&& (structuredSelection.getFirstElement() instanceof InterfaceEditPart)) {

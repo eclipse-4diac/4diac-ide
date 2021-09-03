@@ -17,8 +17,10 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;
@@ -31,20 +33,25 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 	@Override
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
 		final Composite container = createContainer(widgetFactory, parent);
+		container.setLayout(new FillLayout(SWT.VERTICAL));
+
 
 		createAddButton(widgetFactory, container);
 
 		upButton = widgetFactory.createButton(container, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
 		upButton.setToolTipText("Move element(s) up");
+		upButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 		downButton = widgetFactory.createButton(container, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
 		downButton.setToolTipText("Move element(s) down");
+		downButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 		createDeleteButton(widgetFactory, container);
 
 		// initially nothing should be selected therefore deactivate the buttons
 		setButtonEnablement(false);
 	}
+
 
 	@Override
 	public void setButtonEnablement(final boolean enable) {

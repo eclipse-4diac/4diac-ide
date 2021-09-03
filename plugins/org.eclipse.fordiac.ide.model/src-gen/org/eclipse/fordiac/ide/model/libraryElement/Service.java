@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -38,7 +38,7 @@ public interface Service extends EObject {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Service Sequence</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService_ServiceSequence()
 	 * @model containment="true" resolveProxies="true" extendedMetaData="kind='element' name='OutputPrimitive'
@@ -46,13 +46,19 @@ public interface Service extends EObject {
 	 * @generated */
 	EList<ServiceSequence> getServiceSequence();
 
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" required="true"
+	 * @generated */
+	FBType getFBType();
+
 	/** Returns the value of the '<em><b>Right Interface</b></em>' containment reference. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Right Interface</em>' attribute isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Right Interface</em>' containment reference.
 	 * @see #setRightInterface(ServiceInterface)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService_RightInterface()
@@ -62,7 +68,7 @@ public interface Service extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getRightInterface <em>Right
 	 * Interface</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Right Interface</em>' containment reference.
 	 * @see #getRightInterface()
 	 * @generated */
@@ -74,7 +80,7 @@ public interface Service extends EObject {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Left Interface</em>' containment reference.
 	 * @see #setLeftInterface(ServiceInterface)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService_LeftInterface()
@@ -84,7 +90,7 @@ public interface Service extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getLeftInterface <em>Left
 	 * Interface</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Left Interface</em>' containment reference.
 	 * @see #getLeftInterface()
 	 * @generated */

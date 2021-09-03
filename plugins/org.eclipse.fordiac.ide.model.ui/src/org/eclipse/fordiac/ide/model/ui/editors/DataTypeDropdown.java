@@ -70,7 +70,7 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private ContentProposalAdapter adapter;
 	private Text textControl;
-	private final DataTypeLibrary library;
+	private DataTypeLibrary library;
 	private SimpleContentProposalProvider provider;
 	private List<DataType> types;
 	private String[] elementaryTypes;
@@ -107,6 +107,11 @@ public class DataTypeDropdown extends TextCellEditor {
 		}
 	}
 
+	public void setDataTypeLibrary(DataTypeLibrary library) {
+		this.library = library;
+		loadContent();
+	}
+
 	/* is called with every opening of the content proposal popup, may lead to performance issues */
 	private void loadContent() {
 		types = getDataTypesSorted(); // get sorted types for convenient order in dialog
@@ -140,6 +145,7 @@ public class DataTypeDropdown extends TextCellEditor {
 	private void configureTextControl() {
 		textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		textControl.addModifyListener(e -> {
+			loadContent(); // refresh content before opening textfield
 			if (textControl.getText().isEmpty()) {
 				provider.setProposals(getElementaryTypes());
 				isElementary = true;
@@ -391,6 +397,10 @@ public class DataTypeDropdown extends TextCellEditor {
 					});
 				}
 
+				if (elementaries.children.isEmpty()) {
+					return new TypeNode[] { structures };
+				} 
+				
 				return new TypeNode[] { elementaries, structures };
 			}
 

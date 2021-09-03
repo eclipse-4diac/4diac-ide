@@ -90,6 +90,7 @@ public class AddDeleteWidget {
 	protected static Composite createContainer(final FormToolkit widgetFactory, final Composite parent) {
 		final Composite container = widgetFactory.createComposite(parent, SWT.NONE);
 		final GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
+
 		container.setLayoutData(buttonCompLayoutData);
 		container.setLayout(new GridLayout(1, true));
 		return container;

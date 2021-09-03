@@ -196,6 +196,7 @@
         <details key="name" value="dy"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="needsValidation" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ColorizableElement #//IVarElement">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
@@ -1162,6 +1163,11 @@
         eType="#//AdapterDeclaration"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Service">
+    <eOperations name="getFBType" lowerBound="1" eType="#//FBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return (FBType) this.eContainer();"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightInterface" eType="#//ServiceInterface"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftInterface" eType="#//ServiceInterface"
@@ -1215,6 +1221,16 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
   <eClassifiers xsi:type="ecore:EClass" name="Primitive">
+    <eOperations name="getServiceTransaction" lowerBound="1" eType="#//ServiceTransaction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return (ServiceTransaction) this.eContainer();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getService" lowerBound="1" eType="#//Service">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getServiceTransaction().getServiceSequence().getService();"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="event" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>

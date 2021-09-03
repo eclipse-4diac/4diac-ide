@@ -14,51 +14,27 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ICheckStateProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class DemultiplexerSection extends StructManipulatorSection implements CommandStackEventListener {
+public class DemultiplexerSection extends StructManipulatorSection {
 
 	@Override
 	protected TreeViewer createTreeViewer(final Composite parent) {
 		final CheckboxTreeViewer viewer = new CheckboxTreeViewer(parent);
 		viewer.setUseHashlookup(true);
 		return viewer;
-	}
-
-	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		if (commandStack != null) {
-			commandStack.removeCommandStackEventListener(this);
-		}
-		super.setInput(part, selection);
-		if (commandStack != null) {
-			commandStack.addCommandStackEventListener(this);
-		}
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-		if (commandStack != null) {
-			commandStack.removeCommandStackEventListener(this);
-		}
-
 	}
 
 	@Override
@@ -118,8 +94,10 @@ public class DemultiplexerSection extends StructManipulatorSection implements Co
 			type = deleteCommand.getType();
 		}
 		setInitTree(false);
+		blockRefresh = true;
 		updateStructManipulatorFB(type);
 		setInitTree(true);
+		blockRefresh = false;
 	}
 
 	protected void setInitTree(final boolean initTree) {
@@ -142,17 +120,7 @@ public class DemultiplexerSection extends StructManipulatorSection implements Co
 			if (command instanceof AddDemuxPortCommand || command instanceof DeleteDemuxPortCommand) {
 				selectStructManipulator(command);
 			}
-			if (command instanceof ChangeStructCommand) {
-				final ChangeStructCommand cmd = (ChangeStructCommand) command;
-				if (event.getDetail() == CommandStack.POST_UNDO) {
-					selectNewStructManipulatorFB(cmd.getOldMux());
-				} else if (event.getDetail() == CommandStack.POST_REDO) {
-					selectNewStructManipulatorFB(cmd.getNewMux());
-				}
-
-				fillStructTypeCombo();
-
-			}
+			super.stackChanged(event);
 		}
 	}
 }

@@ -40,7 +40,7 @@ public class SequenceLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 					newindex = target.getServiceTransaction().indexOf(refElement);
 				} else {
 					if (after.getModel() instanceof Primitive) {
-						final ServiceTransaction refElement = ((TransactionEditPart) after.getParent()).getCastedModel();
+						final ServiceTransaction refElement = ((TransactionEditPart) after.getParent()).getModel();
 						newindex = target.getServiceTransaction().indexOf(refElement);
 					}
 				}
