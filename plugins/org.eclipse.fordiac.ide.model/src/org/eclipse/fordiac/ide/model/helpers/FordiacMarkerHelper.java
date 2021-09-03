@@ -26,11 +26,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -291,16 +292,18 @@ public final class FordiacMarkerHelper {
 		return createErrorMarkerFBNElement;
 	}
 
-	public static FBNetworkElement createTypeErrorMarkerFB(final String typeFbElement, final TypeLibrary typeLibrary) {
+	public static FBNetworkElement createTypeErrorMarkerFB(final String typeFbElement, final TypeLibrary typeLibrary,
+			final EClass typeClass, final EClass entryClass) {
 		final ErrorMarkerFBNElement errorFb = FordiacMarkerHelper.createErrorMarkerFB(typeFbElement);
-		final FBType type = LibraryElementFactory.eINSTANCE.createFBType();
-		final FBTypePaletteEntry entry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
-		entry.setType(type);
+
+		final FBType fbType = (FBType) LibraryElementFactory.eINSTANCE.create(typeClass);
+		final PaletteEntry entry = (PaletteEntry) PaletteFactory.eINSTANCE.create(entryClass);
+		entry.setType(fbType);
 		entry.setLabel(typeFbElement);
-		type.setPaletteEntry(entry);
-		type.setName(typeFbElement);
-		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		errorFb.setInterface(type.getInterfaceList().copy());
+		fbType.setPaletteEntry(entry);
+		fbType.setName(typeFbElement);
+		fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		errorFb.setInterface(fbType.getInterfaceList().copy());
 		errorFb.setPaletteEntry(entry);
 		typeLibrary.getErrorTypeLib().addPaletteEntry(entry);
 		return errorFb;

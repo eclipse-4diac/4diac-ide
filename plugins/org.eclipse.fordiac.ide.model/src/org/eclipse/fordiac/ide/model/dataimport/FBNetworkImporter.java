@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuilder;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionState;
@@ -156,7 +157,9 @@ class FBNetworkImporter extends CommonElementImporter {
 			}
 			fb.setInterface(type.getInterfaceList().copy());
 		} else {
-			return FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary());
+			return FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
+					LibraryElementFactory.eINSTANCE.createFBType().eClass(),
+					PaletteFactory.eINSTANCE.createFBTypePaletteEntry().eClass());
 		}
 		fb.setPaletteEntry(entry);
 		return fb;
