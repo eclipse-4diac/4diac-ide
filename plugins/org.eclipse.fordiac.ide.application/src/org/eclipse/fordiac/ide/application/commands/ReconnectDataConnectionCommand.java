@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.requests.ReconnectRequest;
 
 /**
@@ -33,21 +32,18 @@ public class ReconnectDataConnectionCommand extends AbstractReconnectConnectionC
 	 *
 	 * @param request the request
 	 */
-	public ReconnectDataConnectionCommand(final ReconnectRequest request, FBNetwork parent) {
+	public ReconnectDataConnectionCommand(final ReconnectRequest request, final FBNetwork parent) {
 		super(Messages.ReconnectDataConnectionCommand_LABEL, request, parent);
 	}
 
 	@Override
-	protected boolean checkSourceAndTarget(IInterfaceElement sourceIE, IInterfaceElement targetIE) {
-		if ((sourceIE instanceof VarDeclaration) && (targetIE instanceof VarDeclaration)) {
-			return LinkConstraints.canExistDataConnection((VarDeclaration) sourceIE, (VarDeclaration) targetIE,
-					getParent(), (Connection) getRequest().getConnectionEditPart().getModel());
-		}
-		return false;
+	protected boolean checkSourceAndTarget(final IInterfaceElement sourceIE, final IInterfaceElement targetIE) {
+		return LinkConstraints.canExistDataConnection(sourceIE, targetIE, getParent(),
+				(Connection) getRequest().getConnectionEditPart().getModel());
 	}
 
 	@Override
-	protected AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent) {
+	protected AbstractConnectionCreateCommand createConnectionCreateCommand(final FBNetwork parent) {
 		return new DataConnectionCreateCommand(parent);
 	}
 }

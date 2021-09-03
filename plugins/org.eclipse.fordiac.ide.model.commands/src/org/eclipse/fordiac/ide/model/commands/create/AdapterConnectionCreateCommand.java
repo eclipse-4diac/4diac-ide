@@ -14,7 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -31,22 +30,13 @@ public class AdapterConnectionCreateCommand extends AbstractConnectionCreateComm
 	}
 
 	@Override
-	public boolean canExecute() {
-		if (!super.canExecute()) {
-			return false;
-		}
-		return LinkConstraints.canCreateAdapterConnection((AdapterDeclaration) getSource(),
-				(AdapterDeclaration) getDestination(), getParent());
+	protected boolean canExecuteConType() {
+		return LinkConstraints.canCreateAdapterConnection(getSource(), getDestination(), getParent());
 	}
 
 	@Override
 	protected AbstractConnectionCreateCommand createMirroredConnectionCommand(final FBNetwork fbNetwork) {
 		return new AdapterConnectionCreateCommand(fbNetwork);
-	}
-
-	@Override
-	protected Class getInterfaceType() {
-		return AdapterDeclaration.class;
 	}
 
 }

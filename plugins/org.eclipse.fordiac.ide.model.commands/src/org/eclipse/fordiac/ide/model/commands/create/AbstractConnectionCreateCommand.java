@@ -19,7 +19,6 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -27,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractConnectionCreateCommand extends Command {
@@ -99,19 +97,15 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		if (getSource() == getDestination()) {
 			return false;
 		}
-		if (!getInterfaceType().isInstance(getSource())) {
-			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
-			return false;
-		}
-		if (!getInterfaceType().isInstance(getDestination())) {
-			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
-			return false;
-		}
 
 		// ensure the right parent
 		checkParent();
 
-		return !checkUnfoldedSubAppConnections();
+		if (checkUnfoldedSubAppConnections()) {
+			return false;
+		}
+
+		return canExecuteConType();
 	}
 
 	private boolean checkUnfoldedSubAppConnections() {
@@ -255,11 +249,10 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	 */
 	protected abstract AbstractConnectionCreateCommand createMirroredConnectionCommand(FBNetwork fbNetwork);
 
-	/**
-	 * Get the class this connection type should be allowed to be connectable
-	 */
-	@SuppressWarnings("rawtypes")
-	protected abstract Class getInterfaceType();
+	/** Perform any connection type (i.e. event, data, or adapter con) specific checks
+	 *
+	 * @return true if the two pins can be connected false otherwise */
+	protected abstract boolean canExecuteConType();
 
 	private void setPerformMappingCheck(final boolean performMappingCheck) {
 		this.performMappingCheck = performMappingCheck;

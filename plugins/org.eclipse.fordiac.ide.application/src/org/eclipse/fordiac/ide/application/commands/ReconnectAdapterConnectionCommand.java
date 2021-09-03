@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -30,17 +29,13 @@ public class ReconnectAdapterConnectionCommand extends AbstractReconnectConnecti
 	}
 
 	@Override
-	protected boolean checkSourceAndTarget(IInterfaceElement sourceIE, IInterfaceElement targetIE) {
-		if ((sourceIE instanceof AdapterDeclaration) && (targetIE instanceof AdapterDeclaration)) {
-			return LinkConstraints.canExistAdapterConnection((AdapterDeclaration) sourceIE,
-					(AdapterDeclaration) targetIE, getParent(),
-					(Connection) getRequest().getConnectionEditPart().getModel());
-		}
-		return false;
+	protected boolean checkSourceAndTarget(final IInterfaceElement sourceIE, final IInterfaceElement targetIE) {
+		return LinkConstraints.canExistAdapterConnection(sourceIE, targetIE, getParent(),
+				(Connection) getRequest().getConnectionEditPart().getModel());
 	}
 
 	@Override
-	protected AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent) {
+	protected AbstractConnectionCreateCommand createConnectionCreateCommand(final FBNetwork parent) {
 		return new AdapterConnectionCreateCommand(parent);
 	}
 }
