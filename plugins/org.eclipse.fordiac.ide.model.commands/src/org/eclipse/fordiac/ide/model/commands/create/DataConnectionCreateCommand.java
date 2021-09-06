@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * The Class DataConnectionCreateCommand.
@@ -37,23 +36,14 @@ public class DataConnectionCreateCommand extends AbstractConnectionCreateCommand
 	}
 
 	@Override
-	public boolean canExecute() {
-		if (!super.canExecute()) {
-			return false;
-		}
-
-		return LinkConstraints.canCreateDataConnection((VarDeclaration) getSource(), (VarDeclaration) getDestination(),
+	protected boolean canExecuteConType() {
+		return LinkConstraints.canCreateDataConnection(getSource(), getDestination(),
 				getParent());
 	}
 
 	@Override
 	protected AbstractConnectionCreateCommand createMirroredConnectionCommand(final FBNetwork fbNetwork) {
 		return new DataConnectionCreateCommand(fbNetwork);
-	}
-
-	@Override
-	protected Class getInterfaceType() {
-		return VarDeclaration.class;
 	}
 
 }

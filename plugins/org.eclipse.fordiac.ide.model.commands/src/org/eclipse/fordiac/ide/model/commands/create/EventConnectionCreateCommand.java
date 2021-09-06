@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
@@ -37,43 +36,13 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 	}
 
 	@Override
-	public boolean canExecute() {
-		if (!super.canExecute()) {
-			return false;
-		}
-
-		if (duplicateConnection()) {
-			return false;
-		}
-
-		return LinkConstraints.canExistEventConnection((Event) getSource(), (Event) getDestination());
-	}
-
-	private boolean duplicateConnection() {
-		for (final Connection con : getSource().getInputConnections()) {
-			// as we are maybe creating a reverse connection we need to check both
-			if ((con.getSource() == getDestination()) || (con.getDestination() == getDestination())) {
-				return true;
-			}
-		}
-		for (final Connection con : getSource().getOutputConnections()) {
-			// as we are maybe creating a reverse connection we need to check both
-			if ((con.getSource() == getDestination()) || (con.getDestination() == getDestination())) {
-				return true;
-			}
-		}
-
-		return false;
+	protected boolean canExecuteConType() {
+		return LinkConstraints.canExistEventConnection(getSource(), getDestination());
 	}
 
 	@Override
 	protected AbstractConnectionCreateCommand createMirroredConnectionCommand(final FBNetwork fbNetwork) {
 		return new EventConnectionCreateCommand(fbNetwork);
-	}
-
-	@Override
-	protected Class getInterfaceType() {
-		return Event.class;
 	}
 
 }

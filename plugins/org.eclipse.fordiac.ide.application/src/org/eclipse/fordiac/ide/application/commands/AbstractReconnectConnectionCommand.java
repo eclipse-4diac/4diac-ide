@@ -92,8 +92,8 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 
 		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
 
+		connectionCreateCmd.execute();  // perform adding the connection first to preserve any error markers
 		deleteConnectionCmd.execute();
-		connectionCreateCmd.execute();
 	}
 
 	protected void doReconnectSource() {
