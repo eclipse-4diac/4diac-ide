@@ -62,8 +62,8 @@ public class ConnectThroughHandler extends AbstractHandler {
 			@SuppressWarnings("unchecked")
 			final
 			List<IInterfaceElement> ieList = (List<IInterfaceElement>) structSel.toList().stream()
-					.filter(InterfaceEditPartForFBNetwork.class::isInstance)
-					.map(val -> ((InterfaceEditPartForFBNetwork) val).getModel()).collect(Collectors.toList());
+			.filter(InterfaceEditPartForFBNetwork.class::isInstance)
+			.map(val -> ((InterfaceEditPartForFBNetwork) val).getModel()).collect(Collectors.toList());
 
 			ieList.sort((arg0, arg1) -> {
 				if (arg0.isIsInput() && !arg1.isIsInput()) {
@@ -86,7 +86,7 @@ public class ConnectThroughHandler extends AbstractHandler {
 			// the second element is an output, both are of the same type
 			if (!element1.getInputConnections().isEmpty() && !element2.getOutputConnections().isEmpty()) {
 				if (element1 instanceof VarDeclaration) {
-					return LinkConstraints.typeCheck((VarDeclaration) element1, (VarDeclaration) element2);
+					return LinkConstraints.typeCheck(element1, element2);
 				}
 				return true;
 			}

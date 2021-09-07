@@ -41,8 +41,6 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -238,29 +236,6 @@ public class ServiceSection extends AbstractServiceSection {
 			executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
 		}
 		sequencesViewer.refresh();
-	}
-
-	private SelectionListener getReorderButtonSelectionListener(final boolean moveUp) {
-		return new SelectionListener() {
-
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
-				if (selection instanceof ServiceSequence) {
-					executeCommand(new ChangeServiceSequenceOrderCommand((ServiceSequence) selection, moveUp));
-				} else if (selection instanceof ServiceTransaction) {
-					executeCommand(new ChangeTransactionOrderCommand((ServiceTransaction) selection, moveUp));
-				} else if (selection instanceof OutputPrimitive) {
-					executeCommand(new ChangeOutputPrimitiveOrderCommand((OutputPrimitive) selection, moveUp));
-				}
-				sequencesViewer.refresh();
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-				// nothing to do here
-			}
-		};
 	}
 
 	@Override

@@ -22,9 +22,9 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 public class FBNetworkElementSetPositionCommand extends SetPositionCommand {
 
-	private final static Consumer<IInterfaceElement> INPUT_CONSUMER = ie -> ie.getInputConnections()
+	private static final Consumer<IInterfaceElement> INPUT_CONSUMER = ie -> ie.getInputConnections()
 			.forEach(con -> con.getRoutingData().setNeedsValidation(true));
-	private final static Consumer<IInterfaceElement> OUTPUT_CONSUMER = ie -> ie.getOutputConnections()
+	private static final Consumer<IInterfaceElement> OUTPUT_CONSUMER = ie -> ie.getOutputConnections()
 			.forEach(con -> con.getRoutingData().setNeedsValidation(true));
 
 	public FBNetworkElementSetPositionCommand(final FBNetworkElement fbe, final ChangeBoundsRequest req,

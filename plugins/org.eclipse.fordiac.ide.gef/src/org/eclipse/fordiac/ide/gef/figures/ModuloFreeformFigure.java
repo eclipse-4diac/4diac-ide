@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.gef.figures;
 import org.eclipse.draw2d.FreeformFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.gef.LayerConstants;
 
 public class ModuloFreeformFigure extends AbstractFreeformFigure {
 	private final ZoomScalableFreeformRootEditPart zoomScalableFreeformRootEditPart;
@@ -54,9 +55,9 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 		if (useFeedbackLayer) {
 			// add handle and feedback layer so that dragging elements result in growing the modulo extend
 			contentsExtent.union(((FreeformFigure) this.zoomScalableFreeformRootEditPart
-					.getLayer(ZoomScalableFreeformRootEditPart.HANDLE_LAYER)).getFreeformExtent());
+					.getLayer(LayerConstants.HANDLE_LAYER)).getFreeformExtent());
 			contentsExtent.union(((FreeformFigure) this.zoomScalableFreeformRootEditPart
-					.getLayer(ZoomScalableFreeformRootEditPart.FEEDBACK_LAYER)).getFreeformExtent());
+					.getLayer(LayerConstants.FEEDBACK_LAYER)).getFreeformExtent());
 		}
 		return contentsExtent;
 	}

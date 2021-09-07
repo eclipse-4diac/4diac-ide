@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter;
@@ -28,14 +28,14 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setPlugin(this);
 	}
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
-		plugin = null;
+	public void stop(final BundleContext context) throws Exception {
+		setPlugin(null);
 		super.stop(context);
 	}
 
@@ -46,6 +46,10 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
+	}
+
+	private static synchronized void setPlugin(final Activator newPlugin) {
+		plugin = newPlugin;
 	}
 
 }

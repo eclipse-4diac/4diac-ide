@@ -175,10 +175,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private boolean isValidStruct(final StructuredType type) {
-		return !type.getMemberVariables().stream()
-				.filter(var -> var.getType() instanceof StructuredType)
-				.anyMatch(var -> var.getTypeName().equals(StructViewingComposite.this.getType().getName())
-					|| !isValidStruct(dataTypeLibrary.getStructuredType(var.getTypeName())));
+		return type.getMemberVariables().stream()
+				.filter(memVar -> memVar.getType() instanceof StructuredType)
+				.noneMatch(memVar -> memVar.getTypeName().equals(StructViewingComposite.this.getType().getName())
+						|| !isValidStruct(dataTypeLibrary.getStructuredType(memVar.getTypeName())));
 	}
 
 	private static void configureTableLayout(final Table table) {

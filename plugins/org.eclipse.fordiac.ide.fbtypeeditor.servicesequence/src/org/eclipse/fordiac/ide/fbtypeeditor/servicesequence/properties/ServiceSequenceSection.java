@@ -184,12 +184,9 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			// Display.getDefault().asyncExec(() ->{
-
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			transactionsViewer.setInput(getType());
-			// });
 		}
 		commandStack = commandStackBuffer;
 	}
