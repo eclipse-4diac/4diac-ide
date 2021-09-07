@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser;
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource;
@@ -621,14 +622,48 @@ public class STAlgorithmFilter {
         CharSequence _xblockexpression_1 = null;
         {
           final VarDeclaration inArgVar = ((PrimaryVariable) inArgRHS).getVar();
+          CharSequence _xifexpression_1 = null;
           EObject _eContainer = ((PrimaryVariable) inArgRHS).getVar().eContainer();
-          final InterfaceList argFBInterfaceList = ((InterfaceList) _eContainer);
-          StringConcatenation _builder = new StringConcatenation();
-          _builder.append("*static_cast<CIEC_ARRAY*>(getDI(");
-          Integer _inputIndex = this.getInputIndex(argFBInterfaceList, inArgVar.getName());
-          _builder.append(_inputIndex);
-          _builder.append("))");
-          _xblockexpression_1 = _builder;
+          if ((_eContainer instanceof InterfaceList)) {
+            CharSequence _xblockexpression_2 = null;
+            {
+              EObject _eContainer_1 = ((PrimaryVariable) inArgRHS).getVar().eContainer();
+              final InterfaceList argFBInterfaceList = ((InterfaceList) _eContainer_1);
+              StringConcatenation _builder = new StringConcatenation();
+              _builder.append("*static_cast<CIEC_ARRAY*>(getDI(");
+              Integer _inputIndex = this.getInputIndex(argFBInterfaceList, inArgVar.getName());
+              _builder.append(_inputIndex);
+              _builder.append("))");
+              _xblockexpression_2 = _builder;
+            }
+            _xifexpression_1 = _xblockexpression_2;
+          } else {
+            CharSequence _xifexpression_2 = null;
+            EObject _eContainer_1 = ((PrimaryVariable) inArgRHS).getVar().eContainer();
+            if ((_eContainer_1 instanceof SimpleFBType)) {
+              CharSequence _xblockexpression_3 = null;
+              {
+                EObject _eContainer_2 = ((PrimaryVariable) inArgRHS).getVar().eContainer();
+                final SimpleFBType fbType = ((SimpleFBType) _eContainer_2);
+                StringConcatenation _builder = new StringConcatenation();
+                _builder.append("*static_cast<CIEC_ARRAY*>(");
+                String _generateGetVariable = this.generateGetVariable(fbType, inArgVar.getName());
+                _builder.append(_generateGetVariable);
+                _builder.append(")");
+                _xblockexpression_3 = _builder;
+              }
+              _xifexpression_2 = _xblockexpression_3;
+            } else {
+              CharSequence _xifexpression_3 = null;
+              EObject _eContainer_2 = ((PrimaryVariable) inArgRHS).getVar().eContainer();
+              if ((_eContainer_2 instanceof StructuredTextAlgorithm)) {
+                _xifexpression_3 = this.generateExpression(inArg.getExpr());
+              }
+              _xifexpression_2 = _xifexpression_3;
+            }
+            _xifexpression_1 = _xifexpression_2;
+          }
+          _xblockexpression_1 = _xifexpression_1;
         }
         _xifexpression = _xblockexpression_1;
       } else {
@@ -731,26 +766,31 @@ public class STAlgorithmFilter {
       final FBType fbType = fbCall.getFb().getType();
       final VarDeclaration varDec = this.getTargetVarDeclaration(fbType, argument);
       CharSequence _xifexpression = null;
-      if (((varDec != null) && varDec.isArray())) {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("*static_cast<CIEC_ARRAY*>(mInternalFBs[");
-        Integer _internalFbIndexFromName = this.internalFbIndexFromName(fbCall.getFb());
-        _builder.append(_internalFbIndexFromName);
-        _builder.append("]->");
-        String _generateGetVariable = this.generateGetVariable(fbType, varDec.getName());
-        _builder.append(_generateGetVariable);
-        _builder.append(")");
-        _xifexpression = _builder;
-      } else {
-        StringConcatenation _builder_1 = new StringConcatenation();
-        _builder_1.append("*static_cast<CIEC_");
-        String _name = varDec.getType().getName();
-        _builder_1.append(_name);
-        _builder_1.append("*>(");
-        String _generateGetVariable_1 = this.generateGetVariable(fbType, varDec.getName());
-        _builder_1.append(_generateGetVariable_1);
-        _builder_1.append(")");
-        _xifexpression = _builder_1;
+      if ((varDec != null)) {
+        CharSequence _xifexpression_1 = null;
+        boolean _isArray = varDec.isArray();
+        if (_isArray) {
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("*static_cast<CIEC_ARRAY*>(mInternalFBs[");
+          Integer _internalFbIndexFromName = this.internalFbIndexFromName(fbCall.getFb());
+          _builder.append(_internalFbIndexFromName);
+          _builder.append("]->");
+          String _generateGetVariable = this.generateGetVariable(fbType, varDec.getName());
+          _builder.append(_generateGetVariable);
+          _builder.append(")");
+          _xifexpression_1 = _builder;
+        } else {
+          StringConcatenation _builder_1 = new StringConcatenation();
+          _builder_1.append("*static_cast<CIEC_");
+          String _name = varDec.getType().getName();
+          _builder_1.append(_name);
+          _builder_1.append("*>(");
+          String _generateGetVariable_1 = this.generateGetVariable(fbType, varDec.getName());
+          _builder_1.append(_generateGetVariable_1);
+          _builder_1.append(")");
+          _xifexpression_1 = _builder_1;
+        }
+        _xifexpression = _xifexpression_1;
       }
       _xblockexpression = _xifexpression;
     }

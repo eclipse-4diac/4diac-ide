@@ -79,6 +79,7 @@ import org.eclipse.xtext.validation.CheckMode
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 
 class STAlgorithmFilter {
 
@@ -288,8 +289,15 @@ class STAlgorithmFilter {
 		val inArgRHS = inArg.expr
 		if (inArgRHS instanceof PrimaryVariable && (inArgRHS as PrimaryVariable).^var.array) {
 			val inArgVar = (inArgRHS as PrimaryVariable).^var
-			val argFBInterfaceList = (inArgRHS as PrimaryVariable).^var.eContainer as InterfaceList
-			'''*static_cast<CIEC_ARRAY*>(getDI(«getInputIndex(argFBInterfaceList, inArgVar.name)»))'''
+			if((inArgRHS as PrimaryVariable).^var.eContainer instanceof InterfaceList) {
+				val argFBInterfaceList = (inArgRHS as PrimaryVariable).^var.eContainer as InterfaceList
+				'''*static_cast<CIEC_ARRAY*>(getDI(«getInputIndex(argFBInterfaceList, inArgVar.name)»))'''				
+			} else if ((inArgRHS as PrimaryVariable).^var.eContainer instanceof SimpleFBType) {
+				val fbType = ((inArgRHS as PrimaryVariable).^var.eContainer as SimpleFBType)
+				'''*static_cast<CIEC_ARRAY*>(«generateGetVariable(fbType, inArgVar.name)»)'''
+			} else if ((inArgRHS as PrimaryVariable).^var.eContainer instanceof StructuredTextAlgorithm) {
+				inArg.expr.generateExpression
+			}
 		} else {
 			return inArg.expr.generateExpression
 		}
@@ -343,10 +351,12 @@ class STAlgorithmFilter {
 	def generateOutAssignmentRHS(FBCall fbCall, OutArgument argument) {
 		val fbType = fbCall.fb.type
 		val varDec = getTargetVarDeclaration(fbType, argument)
-		if (varDec !== null && varDec.array) {
-			'''*static_cast<CIEC_ARRAY*>(mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->«generateGetVariable(fbType, varDec.name)»)'''
-		} else {
-			'''*static_cast<CIEC_«varDec.type.name»*>(«generateGetVariable(fbType, varDec.name)»)'''
+		if(varDec !== null) {
+			if (varDec.array) {
+				'''*static_cast<CIEC_ARRAY*>(mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->«generateGetVariable(fbType, varDec.name)»)'''
+			} else {
+				'''*static_cast<CIEC_«varDec.type.name»*>(«generateGetVariable(fbType, varDec.name)»)'''
+			}
 		}
 	}
 

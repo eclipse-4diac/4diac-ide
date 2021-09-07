@@ -23,6 +23,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.Palette.impl.SubApplicationTypePaletteEntryImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -89,10 +90,18 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
 		if (!(fbnElement.getType() instanceof AdapterFBType)) {
-			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)
-					|| fbnElement instanceof ErrorMarkerFBNElement) {
+			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB))
+			{
 				return LibraryElementTags.FB_ELEMENT;
 			}
+
+			if(fbnElement instanceof ErrorMarkerFBNElement) {
+				if(fbnElement.getPaletteEntry() instanceof SubApplicationTypePaletteEntryImpl) {
+					return LibraryElementTags.SUBAPP_ELEMENT;
+				}
+				return LibraryElementTags.FB_ELEMENT;
+			}
+
 			if (fbnElement instanceof SubApp) {
 				return LibraryElementTags.SUBAPP_ELEMENT;
 			}
