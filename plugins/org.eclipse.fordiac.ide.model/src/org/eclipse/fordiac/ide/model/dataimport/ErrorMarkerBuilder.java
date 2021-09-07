@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
@@ -35,7 +36,11 @@ public class ErrorMarkerBuilder {
 	public ErrorMarkerBuilder(final IMarker marker, final ErrorMarkerRef errorMarkerRef) {
 		this.errorMarkerRef = errorMarkerRef;
 		try {
-			this.attributes = marker.getAttributes();
+			if (marker.exists()) {
+				this.attributes = marker.getAttributes();
+			} else {
+				this.attributes = Collections.emptyMap();
+			}
 		} catch (final CoreException e) {
 			Activator.getDefault().getLog().error("Error Marker not found", e); //$NON-NLS-1$
 		}

@@ -33,12 +33,11 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 		errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel(), this);
 		errorMarkerFBNeworkElementFigure.setOpaque(false);
 		errorMarkerFBNeworkElementFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
-		buildErrorText();
-
+		updateErrorText();
 		return errorMarkerFBNeworkElementFigure;
 	}
 
-	private void buildErrorText() {
+	private void updateErrorText() {
 		final StringBuilder errorText = new StringBuilder();
 
 		if (getModel().getPaletteEntry() != null) {
@@ -65,6 +64,12 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 		if (errorMarkerFBNeworkElementFigure != null) {
 			errorMarkerFBNeworkElementFigure.setErrorMessage(text);
 		}
+	}
+
+	@Override
+	protected void refreshToolTip() {
+		updateErrorText();
+		super.refreshToolTip();
 	}
 
 }

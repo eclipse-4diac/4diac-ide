@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - added Error Marker Handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -39,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -71,7 +73,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 	protected FBNetwork network;
 
 	protected final List<ErrorMarkerBuilder> errorPins;
-	protected ErrorMarkerBuilder errorMarkerFB;
+	protected ErrorMarkerBuilder errorMarkerBuilder;
 	protected PaletteEntry entry;
 
 	protected AbstractUpdateFBNElementCommand(final FBNetworkElement oldElement) {
@@ -131,6 +133,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		network.getNetworkElements().add(newElement);
 		errorPins.forEach(FordiacMarkerHelper::createMarkerInFile);
 
+		if (errorMarkerBuilder != null && newElement instanceof ErrorMarkerRef) {
+			FordiacMarkerHelper.createMarkerInFile(errorMarkerBuilder);
+		}
+
 		connCreateCmds.redo();
 
 		if (mapCmd != null) {
@@ -148,7 +154,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 
 		errorPins.stream().map(ErrorMarkerBuilder::getErrorMarkerRef).forEach(FordiacMarkerHelper::deleteErrorMarker);
 		connCreateCmds.undo();
-		if (errorMarkerFB != null && newElement instanceof ErrorMarkerRef) {
+		if (errorMarkerBuilder != null && newElement instanceof ErrorMarkerRef) {
 			FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) newElement);
 		}
 
@@ -262,11 +268,36 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		if ((!(oldElement instanceof ErrorMarkerFBNElement)) && newElement instanceof ErrorMarkerFBNElement) {
 			final String errorMessage = MessageFormat.format("Type File: {0} could not be loaded for FB", //$NON-NLS-1$
 					entry.getFile() != null ? entry.getFile().getFullPath() : "null type"); //$NON-NLS-1$
-			errorMarkerFB = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement, 0);
-			errorMarkerFB.setErrorMarkerRef((ErrorMarkerRef) newElement);
+			errorMarkerBuilder = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement, 0);
+			errorMarkerBuilder.setErrorMarkerRef((ErrorMarkerRef) newElement);
 			((ErrorMarkerRef) newElement).setErrorMessage(errorMessage);
-			FordiacMarkerHelper.createMarkerInFile(errorMarkerFB);
+			FordiacMarkerHelper.createMarkerInFile(errorMarkerBuilder);
+			moveEntryToErrorLib();
 		}
+
+		if (oldElement instanceof ErrorMarkerFBNElement && newElement instanceof ErrorMarkerFBNElement) {
+			copyErrorMarkerRef();
+		}
+
+	}
+
+
+	private void copyErrorMarkerRef() {
+		final long id = ((ErrorMarkerFBNElement) oldElement).getFileMarkerId();
+		final String errorMessage = ((ErrorMarkerFBNElement) oldElement).getErrorMessage();
+		final FBNetworkElement repairedElement = ((ErrorMarkerFBNElement) oldElement).getRepairedElement();
+		((ErrorMarkerFBNElement) newElement).setFileMarkerId(id);
+		((ErrorMarkerFBNElement) newElement).setErrorMessage(errorMessage);
+		if (repairedElement != null) {
+			((ErrorMarkerFBNElement) newElement).setRepairedElement(repairedElement);
+		}
+	}
+
+	private void moveEntryToErrorLib() {
+		final TypeLibrary typeLibrary = oldElement.getTypeLibrary();
+		typeLibrary.removePaletteEntry(entry);
+		typeLibrary.getErrorTypeLib().addPaletteEntry(entry);
+
 	}
 
 	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement, final IInterfaceElement oldInterface,
