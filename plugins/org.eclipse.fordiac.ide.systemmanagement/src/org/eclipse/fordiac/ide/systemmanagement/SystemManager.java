@@ -77,11 +77,6 @@ public enum SystemManager {
 	/** The listeners. */
 	private final List<DistributedSystemListener> listeners = new ArrayList<>();
 
-	private final Map<IFile, SystemPaletteEntry> automationSystemEntries = new HashMap<>();
-
-
-
-
 	/** Instantiates a new system manager. */
 	SystemManager() {
 		try {
@@ -134,7 +129,6 @@ public enum SystemManager {
 		entry.setFile(systemFile);
 		entry.setType(system);
 		system.setPaletteEntry(entry);
-		automationSystemEntries.put(systemFile, entry);
 		saveSystem(system);
 		return system;
 	}
@@ -159,7 +153,6 @@ public enum SystemManager {
 	public synchronized void removeSystem(final IFile systemFile) {
 		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(systemFile.getProject());
 		final AutomationSystem refSystem = projectSystems.remove(systemFile);
-		automationSystemEntries.remove(systemFile);
 		if (null != refSystem) {
 			closeAllSystemEditors(refSystem);
 			notifyListeners();
@@ -172,14 +165,13 @@ public enum SystemManager {
 	 * systemFile xml file for the system
 	 *
 	 * @return the automation system */
-	public AutomationSystem loadSystem(final IFile systemFile) {
+	private static AutomationSystem initSystem(final IFile systemFile) {
 		if (systemFile.exists()) {
-			final SystemPaletteEntry entry = automationSystemEntries.computeIfAbsent(systemFile, sysFile -> {
-				final SystemPaletteEntry e = PaletteFactory.eINSTANCE.createSystemPaletteEntry();
-				e.setFile(sysFile);
-				return e;
-			});
-			return (AutomationSystem) entry.getType();
+			final SystemPaletteEntry entry = PaletteFactory.eINSTANCE.createSystemPaletteEntry();
+			entry.setFile(systemFile);
+			final AutomationSystem type = (AutomationSystem) entry.getType();
+			type.setPaletteEntry(entry);
+			return type;
 		}
 		return null;
 	}
@@ -221,7 +213,7 @@ public enum SystemManager {
 		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(systemFile.getProject());
 		return projectSystems.computeIfAbsent(systemFile, sysFile -> {
 			final long startTime = System.currentTimeMillis();
-			final AutomationSystem system = loadSystem(systemFile);
+			final AutomationSystem system = initSystem(systemFile);
 			final long endTime = System.currentTimeMillis();
 			Activator.getDefault().logInfo(
 					"Loading time for System (" + systemFile.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -312,7 +304,19 @@ public enum SystemManager {
 	}
 
 	public PaletteEntry getPaletteEntry(final IFile file) {
-		return automationSystemEntries.get(file);
+		final Map<IFile, AutomationSystem> map = allSystemsInWS.get(file.getProject());
+
+		if (map == null) {
+			return null;
+		}
+		final AutomationSystem automationSystem = map.get(file);
+
+		if (automationSystem == null) {
+			return null;
+		}
+
+		return automationSystem.getPaletteEntry();
+
 	}
 
 }

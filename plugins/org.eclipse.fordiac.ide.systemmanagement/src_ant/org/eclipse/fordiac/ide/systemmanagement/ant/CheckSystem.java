@@ -50,7 +50,7 @@ public class CheckSystem extends Task {
 		}
 
 		// load the system to get the error markers is place
-		SystemManager.INSTANCE.loadSystem(systemFile);
+		SystemManager.INSTANCE.getSystem(systemFile);
 		waitMarkerJobsComplete();
 
 		try {
