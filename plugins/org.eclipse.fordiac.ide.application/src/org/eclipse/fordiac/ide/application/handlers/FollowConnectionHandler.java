@@ -136,7 +136,6 @@ public class FollowConnectionHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
-
 		final List<IInterfaceElement> opposites = getConnectionOposites(HandlerUtil.getCurrentSelection(event),
 				getFBNetwork(editor));
 
@@ -169,7 +168,7 @@ public class FollowConnectionHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_NAME);
-		setBaseEnabled(!getConnectionOposites(selection, getFBNetwork(editor)).isEmpty());
+		setBaseEnabled(editor != null && !getConnectionOposites(selection, getFBNetwork(editor)).isEmpty());
 	}
 
 	private static List<IInterfaceElement> getConnectionOposites(final ISelection selection,
