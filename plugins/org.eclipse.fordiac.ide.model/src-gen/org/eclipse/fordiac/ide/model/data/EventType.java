@@ -20,4 +20,11 @@ package org.eclipse.fordiac.ide.model.data;
  * @model
  * @generated */
 public interface EventType extends DataType {
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true" otherRequired="true"
+	 * @generated */
+	@Override
+	boolean isCompatibleWith(DataType other);
 } // EventType

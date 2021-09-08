@@ -22,8 +22,8 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
@@ -133,10 +133,10 @@ public class ConnectorBorder extends AbstractBorder {
 	}
 
 	public final boolean isEvent() {
-		return editPartModelOject instanceof Event;
+		return editPartModelOject.getType() instanceof EventType;
 	}
 
 	public final boolean isAdapter() {
-		return editPartModelOject instanceof AdapterDeclaration;
+		return editPartModelOject.getType() instanceof AdapterType;
 	}
 }

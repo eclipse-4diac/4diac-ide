@@ -23,15 +23,16 @@ import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateComm
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -386,7 +387,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 	}
 
 	protected void reconnectConnections(final Connection oldConn, final IInterfaceElement source,
-			final IInterfaceElement dest, FBNetwork fbn) {
+			final IInterfaceElement dest, final FBNetwork fbn) {
 		// if source or dest is null it means that an interface element is not available
 		// any more
 		final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, fbn);
@@ -399,24 +400,16 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		}
 	}
 
-	protected AbstractConnectionCreateCommand createConnCreateCMD(IInterfaceElement interfaceElement,
+	protected static AbstractConnectionCreateCommand createConnCreateCMD(final IInterfaceElement interfaceElement,
 			final FBNetwork fbn) {
-		if (interfaceElement instanceof ErrorMarkerInterface) {
-			interfaceElement = ((ErrorMarkerInterface) interfaceElement).getRepairedEndpoint();
-		}
-		if (interfaceElement instanceof Event) {
+		final DataType type = interfaceElement.getType();
+		if (type instanceof EventType) {
 			return new EventConnectionCreateCommand(fbn);
 		}
-		if (interfaceElement instanceof AdapterDeclaration) {
+		if (type instanceof AdapterType) {
 			return new AdapterConnectionCreateCommand(fbn);
 		}
-		if (interfaceElement instanceof VarDeclaration) {
-			return new DataConnectionCreateCommand(fbn);
-		}
-		if (interfaceElement instanceof ErrorMarkerInterface) {
-			return new DataConnectionCreateCommand(fbn);
-		}
-		return null;
+		return new DataConnectionCreateCommand(fbn);
 	}
 
 	protected abstract void createNewFB();

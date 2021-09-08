@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.data.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Event Type</b></em>'. <!-- end-user-doc -->
@@ -34,6 +35,14 @@ public class EventTypeImpl extends DataTypeImpl implements EventType {
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.EVENT_TYPE;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public boolean isCompatibleWith(final DataType other) {
+		return (other instanceof EventType);
 	}
 
 } // EventTypeImpl
