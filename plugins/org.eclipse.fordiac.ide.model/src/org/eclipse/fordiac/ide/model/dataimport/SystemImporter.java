@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -79,14 +80,12 @@ public class SystemImporter extends CommonElementImporter {
 		return createAutomationSystem(getFile());
 	}
 
-	/**
-	 * Create an empty automation system model for a given file.
+	/** Create an empty automation system model for a given file.
 	 *
 	 * this can either be used for the importer or for creating a new system
 	 *
 	 * @param systemFile the file where the system should be stored
-	 * @return the automation system model with its basic setup
-	 */
+	 * @return the automation system model with its basic setup */
 	public static AutomationSystem createAutomationSystem(final IFile systemFile) {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
 		system.setName(TypeLibrary.getTypeNameFromFile(systemFile));
@@ -227,9 +226,15 @@ public class SystemImporter extends CommonElementImporter {
 		final String toValue = getAttributeValue(LibraryElementTags.MAPPING_TO_ATTRIBUTE);
 		final FBNetworkElement fromElement = findMappingTargetFromName(fromValue);
 		final FBNetworkElement toElement = findMappingTargetFromName(toValue);
+
+		if (fromElement instanceof SubApp) {
+			FBNetworkHelper.loadSubappNetwork(fromElement);
+		}
+
 		if (null != fromElement && null != toElement) {
 			getElement().getMapping().add(createMappingEntry(toElement, fromElement));
 		}
+
 		// TODO perform some notificatin to the user that the mapping has an issue
 		proceedToEndElementNamed(LibraryElementTags.MAPPING_ELEMENT);
 	}
@@ -345,9 +350,7 @@ public class SystemImporter extends CommonElementImporter {
 		}
 	}
 
-	/**
-	 * Creates the values.
-	 */
+	/** Creates the values. */
 	public static void createParamters(final IVarElement element) {
 		if (element instanceof Device) {
 			element.getVarDeclarations().addAll(
