@@ -21,16 +21,20 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.impl.FBTypePaletteEntryImpl;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /** UpdateFBTypeCommand triggers an update of the type for an FB instance */
@@ -56,13 +60,23 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	@Override
 	protected void createNewFB() {
 		newElement = createCopiedFBEntry(oldElement);
-
-		newElement.setInterface(newElement.getType().getInterfaceList().copy());
-
+		setInterface();
 		newElement.setName(oldElement.getName());
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-
 		createValues();
+	}
+
+	public void setInterface() {
+		newElement.setInterface(newElement.getType().getInterfaceList().copy());
+		if (newElement instanceof Multiplexer) {
+			((Multiplexer)newElement).setStructTypeElementsAtInterface((StructuredType) ((FBTypePaletteEntryImpl) entry)
+					.getFBType().getInterfaceList().getOutputVars().get(0).getType());
+		}
+		if(newElement instanceof Demultiplexer){
+			((Demultiplexer) newElement)
+					.setStructTypeElementsAtInterface((StructuredType) ((FBTypePaletteEntryImpl) entry).getFBType()
+					.getInterfaceList().getInputVars().get(0).getType());
+		}
 	}
 
 	protected void setEntry(final PaletteEntry entry) {
@@ -75,17 +89,15 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 
 	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
 		FBNetworkElement copy;
-		if (entry instanceof SubApplicationTypePaletteEntry) {
+		if (invalidType()) {
+			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
+		} else if (entry instanceof SubApplicationTypePaletteEntry) {
 			copy = LibraryElementFactory.eINSTANCE.createSubApp();
 		} else if (entry instanceof AdapterTypePaletteEntry) {
 			copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
 			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
 		} else if (entry.getType() instanceof CompositeFBType) {
 			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else if (oldElement instanceof ErrorMarkerFBNElement && entry instanceof FBTypePaletteEntry) {
-			copy = createErrorTypeFb();
-		} else if (entry.getFile() == null || !entry.getFile().exists()) {
-			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
 		} else if (isMultiplexer()) {	// $NON-NLS-1$
 			copy = createMultiplexer();
 		} else {
@@ -96,37 +108,34 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		return copy;
 	}
 
+	public boolean invalidType() {
+		return (oldElement instanceof ErrorMarkerFBNElement || entry.getFile() == null || !entry.getFile().exists())
+				&& !reloadErrorType();
+	}
+
 	private FBNetworkElement createMultiplexer() {
-		FBNetworkElement copy;
-		StructManipulator sManipulator;
+		StructManipulator structManipulator;
 		if ("STRUCT_MUX".equals(entry.getType().getName())) { //$NON-NLS-1$
-			sManipulator = LibraryElementFactory.eINSTANCE.createMultiplexer();
+			structManipulator = LibraryElementFactory.eINSTANCE.createMultiplexer();
 		} else {
-			sManipulator = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+			structManipulator = LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		}
-		sManipulator.setStructType(new DataTypeLibrary().getStructuredTypes().get(0));
-		copy = sManipulator;
-		return copy;
+		return structManipulator;
 	}
 
 	private boolean isMultiplexer() {
-		return entry.getType() instanceof ServiceInterfaceFBType && entry.getType().getName().startsWith("STRUCT");
+		return entry instanceof FBTypePaletteEntryImpl && entry.getType() instanceof ServiceInterfaceFBType
+				&& entry.getType().getName().startsWith("STRUCT");
 	}
 
-	public FBNetworkElement createErrorTypeFb() {
-		FBNetworkElement copy;
+	public boolean reloadErrorType() {
 		final TypeLibrary typeLibrary = oldElement.getPaletteEntry().getTypeLibrary();
-		FBTypePaletteEntry fbTypeEntry = typeLibrary.getErrorTypeLib().getFBTypeEntry(oldElement.getType().getName());
-		if (fbTypeEntry == null) {
-			fbTypeEntry = typeLibrary.getBlockTypeLib().getFBTypeEntry(oldElement.getType().getName());
+		final PaletteEntry reloadedType = typeLibrary.find(oldElement.getType().getName());
+		if (reloadedType != null && reloadedType.getFile() != null && reloadedType.getFile().exists()) {
+			typeLibrary.getErrorTypeLib().removePaletteEntry(entry);
+			entry = reloadedType;
+			return true;
 		}
-
-		if (fbTypeEntry != null && fbTypeEntry.getFile() != null) {
-			copy = LibraryElementFactory.eINSTANCE.createFB();
-			copy.setPaletteEntry(fbTypeEntry);
-			return copy;
-		}
-		copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
-		return copy;
+		return false;
 	}
 }

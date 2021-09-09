@@ -11,30 +11,40 @@
  * Contributors:
  *   Daniel Lindhuber, Bianca Wiesmayr
  *     - initial API and implementation and/or initial documentation
+ *   Muttenthaler Benjamin
+ *     - fixed reload of view if file on file system did change
+ *     - use new saveType method of AbstractTypeExporter
+ *     - replaced DataTypeListener by AdapterImpl
+ *     - keep a copy of the datatype object in the view, otherwise the content of the file is changed even the save button was not pressed
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.datatypeeditor.editors;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.stream.XMLStreamException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.datatypeeditor.Activator;
-import org.eclipse.fordiac.ide.datatypeeditor.DataTypeListener;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
+import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -51,6 +61,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -66,22 +77,42 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class DataTypeEditor extends EditorPart
-implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISelectionListener {
+public class DataTypeEditor extends EditorPart implements CommandStackEventListener,
+ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
 
-	private DataType dataType;
-	private IFile file;
 	private final CommandStack commandStack = new CommandStack();
 	private StructViewingComposite editComposite;
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
-	private DataTypeListener listener;
 
 	private ActionRegistry actionRegistry;
 	private final List<String> selectionActions = new ArrayList<>();
 	private final List<String> stackActions = new ArrayList<>();
 	private final List<String> propertyActions = new ArrayList<>();
+
+	private DataTypePaletteEntry dataTypePaletteEntry;
+	private final AtomicReference<StructuredType> dataType = new AtomicReference<>();
+
+	private final Adapter adapter = new AdapterImpl() {
+
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			final Object feature = notification.getFeature();
+			if (null != feature) {
+				if (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass())) {
+					Display.getDefault().asyncExec(() -> {
+						if (null != dataTypePaletteEntry) {
+							setPartName(dataTypePaletteEntry.getFile().getName());
+							setInput(new FileEditorInput(dataTypePaletteEntry.getFile()));
+						}
+					});
+
+				}
+			}
+		}
+	};
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
@@ -100,7 +131,7 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		getCommandStack().removeCommandStackEventListener(this);
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(listener);
+		removeListenerFromDataTypeObj();
 		super.dispose();
 	}
 
@@ -112,16 +143,13 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		final DataTypeExporter exporter = new DataTypeExporter((AnyDerivedType) dataType);
-		try {
-			exporter.saveType(file);
-			commandStack.markSaveLocation();
-			firePropertyChange(IEditorPart.PROP_DIRTY);
-		} catch (final XMLStreamException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-			MessageDialog.openError(getSite().getShell().getShell(), Messages.MessageDialogTitle_SaveError,
-					Messages.MessageDialogContent_SaveError);
-		}
+		removeListenerFromDataTypeObj();
+		dataTypePaletteEntry.setType(EcoreUtil.copy(dataType.get()));
+		AbstractTypeExporter.saveType(dataTypePaletteEntry);
+		addListenerToDataTypeObj();
+
+		commandStack.markSaveLocation();
+		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
 	@Override
@@ -135,39 +163,66 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		importType(input);
 		setInput(input);
 		setSite(site);
+		addListenerToDataTypeObj();
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getCommandStack().addCommandStackEventListener(this);
 		initializeActionRegistry();
 		setActionHandlers(site);
 	}
 
-	private void importType(final IEditorInput input) throws PartInitException {
+	private void addListenerToDataTypeObj() {
+		if (dataTypePaletteEntry != null && dataTypePaletteEntry.getType() != null) {
+			dataTypePaletteEntry.getType().eAdapters().add(adapter);
+		}
+	}
 
+	private void removeListenerFromDataTypeObj() {
+		if (dataTypePaletteEntry != null && dataTypePaletteEntry.getType() != null
+				&& dataTypePaletteEntry.getType().eAdapters().contains(adapter)) {
+			dataTypePaletteEntry.getType().eAdapters().remove(adapter);
+		}
+	}
+
+	private void importType(final IEditorInput input) throws PartInitException {
 		if (input instanceof FileEditorInput) {
-			file = ((FileEditorInput) input).getFile();
+			final IFile file = ((FileEditorInput) input).getFile();
+			try {
+				importFailed = importTypeBasedOnFile(file);
+			} catch (final Exception e) {
+				throw new PartInitException(e.getMessage(), e);
+			}
 		} else if (input instanceof FileStoreEditorInput) {
 			// is called when files are opened via File -> Open File
 			importFailed = true;
 			outsideWorkspace = true;
 		}
-
-		try {
-			if (null != file) {
-				setPartName(getDatatypeNameFromFile(file));
-				final DataTypeImporter importer = new DataTypeImporter(file);
-				importer.loadElement();
-				dataType = importer.getElement();
-				listener = new DataTypeListener(file, this);
-				final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-				workspace.addResourceChangeListener(listener);
-			}
-		} catch (final Exception e) {
-			throw new PartInitException(e.getMessage(), e);
-		}
 	}
 
-	private static String getDatatypeNameFromFile(final IFile file) {
-		return file.getName().substring(0, file.getName().lastIndexOf('.'));
+	private boolean importTypeBasedOnFile(final IFile file) throws CoreException {
+		file.refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor());
+		// exist anymore!
+		if (file.exists()) {
+			dataTypePaletteEntry = (DataTypePaletteEntry) TypeLibrary.getPaletteEntryForFile(file);
+			setPartName(dataTypePaletteEntry.getFile().getName());
+			final DataTypeImporter importer = new DataTypeImporter(file);
+			importer.loadElement();
+			return updateDatatTypeObject(importer);
+		}
+		return true; // import failed
+	}
+
+	private boolean updateDatatTypeObject(final DataTypeImporter importer) {
+		final AnyDerivedType element = importer.getElement();
+		if (element instanceof StructuredType) {
+			if (!dataType.compareAndSet(null, (StructuredType) element)) {
+				dataType.get().getMemberVariables().clear();
+				dataType.get().getMemberVariables().addAll(((StructuredType) element).getMemberVariables());
+			}
+
+			dataTypePaletteEntry.setType(EcoreUtil.copy(dataType.get()));
+			return false;
+		}
+		return true;
 	}
 
 	private void setActionHandlers(final IEditorSite site) {
@@ -194,9 +249,9 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		if ((dataType instanceof StructuredType) && (!importFailed)) {
-			editComposite = new StructViewingComposite(parent, 1, commandStack, (StructuredType) dataType,
-					TypeLibrary.getTypeLibrary(file.getProject()).getDataTypeLibrary(), this);
+		if (dataType.get() != null && (!importFailed)) {
+			editComposite = new StructViewingComposite(parent, 1, commandStack, dataType.get(),
+					dataTypePaletteEntry.getTypeLibrary().getDataTypeLibrary(), this);
 			editComposite.createPartControl(parent);
 			TableWidgetFactory.enableCopyPasteCut(this);
 		} else if (importFailed) {
@@ -294,12 +349,25 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		return actionRegistry;
 	}
 
-	public void updateDataType(final IPath path) {
-		this.file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-		final String name = getDatatypeNameFromFile(file);
-		dataType.setName(name);
-		setPartName(name);
-		setInput(new FileEditorInput(file));
+	@Override
+	public void reloadFile() {
+		try {
+			removeListenerFromDataTypeObj();
+			importType(getEditorInput());
+			setInput(new FileEditorInput(dataTypePaletteEntry.getFile()));
+			editComposite.getViewer().refresh();
+			addListenerToDataTypeObj();
+		} catch (final PartInitException e) {
+			Activator.getDefault()
+			.logError("Error during refreshing struct table after file change detection: " + e.toString()); //$NON-NLS-1$
+		}
+
+	}
+
+	@Override
+	public IFile getFile() {
+		Assert.isNotNull(((FileEditorInput) getEditorInput()).getFile());
+		return ((FileEditorInput) getEditorInput()).getFile();
 	}
 
 }

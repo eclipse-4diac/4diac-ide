@@ -53,14 +53,16 @@ public final class HandlerHelper {
 	}
 
 	public static void selectElement(final Object element, final GraphicalViewer viewer) {
-		final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
-		if (null != editPart) {
-			viewer.flush(); // ensure that the viewer is ready
-			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
-				((AdvancedScrollingGraphicalViewer) viewer).selectAndRevealEditPart(editPart);
-			} else {
-				viewer.select(editPart);
-				viewer.reveal(editPart);
+		if (viewer != null) {
+			final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
+			if (null != editPart) {
+				viewer.flush(); // ensure that the viewer is ready
+				if (viewer instanceof AdvancedScrollingGraphicalViewer) {
+					((AdvancedScrollingGraphicalViewer) viewer).selectAndRevealEditPart(editPart);
+				} else {
+					viewer.select(editPart);
+					viewer.reveal(editPart);
+				}
 			}
 		}
 	}

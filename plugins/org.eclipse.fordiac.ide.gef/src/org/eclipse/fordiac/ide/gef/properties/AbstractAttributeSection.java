@@ -72,19 +72,19 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-		createNewDeleteButton(parent);
+		final AddDeleteWidget buttons = createNewDeleteButton(parent);
 		createInputInfoGroup(parent);
+		configureButtonList(buttons, attributeViewer);
 	}
 
-	private void createNewDeleteButton(final Composite parent) {
+	private AddDeleteWidget createNewDeleteButton(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 
 		final AddDeleteWidget buttons = new AddDeleteWidget();
 		buttons.createControls(composite, getWidgetFactory());
-		attributeViewer = TableWidgetFactory.createPropertyTableViewer(parent, 0);
-		configureButtonList(buttons, attributeViewer);
+		return buttons;
 	}
 
 	private void configureButtonList(final AddDeleteWidget buttons, final TableViewer attributeViewer) {
@@ -110,7 +110,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	}
 
 	private void createInputInfoGroup(final Composite parent) {
-
+		attributeViewer = TableWidgetFactory.createPropertyTableViewer(parent, 0);
 		configureTableLayout();
 		final Table table = attributeViewer.getTable();
 

@@ -36,30 +36,30 @@ import org.eclipse.swt.graphics.Color;
 
 public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 
-	private ECTransition transition;
+	private final ECTransition transition;
 
-	public TransitionBendPointEditPolicy(ECTransition transition) {
+	public TransitionBendPointEditPolicy(final ECTransition transition) {
 		super();
 		this.transition = transition;
 	}
 
 	@Override
-	protected Command getCreateBendpointCommand(BendpointRequest request) {
+	protected Command getCreateBendpointCommand(final BendpointRequest request) {
 		// we don't allow to create additional bendpoints for transitions,
 		// therefore we move them
 		return getMoveBendpointCommand(request);
 	}
 
 	@Override
-	protected Command getDeleteBendpointCommand(BendpointRequest request) {
+	protected Command getDeleteBendpointCommand(final BendpointRequest request) {
 		// we don't allow to delete a bendpoint for transitions, therefore we
 		// move them
 		return getMoveBendpointCommand(request);
 	}
 
 	@Override
-	protected Command getMoveBendpointCommand(BendpointRequest request) {
-		Point p = request.getLocation().getCopy();
+	protected Command getMoveBendpointCommand(final BendpointRequest request) {
+		final Point p = request.getLocation().getCopy();
 		getConnection().translateToRelative(p);
 		return new MoveBendpointCommand(transition, p);
 	}
@@ -70,9 +70,9 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected List createSelectionHandles() {
-		List list = new ArrayList();
-		ConnectionEditPart connEP = (ConnectionEditPart) getHost();
-		PointList points = getConnection().getPoints();
+		final List list = new ArrayList();
+		final ConnectionEditPart connEP = (ConnectionEditPart) getHost();
+		final PointList points = getConnection().getPoints();
 		List bendPoints = (List) getConnection().getRoutingConstraint();
 		int bendPointIndex = 0;
 		Point currBendPoint = null;
@@ -86,7 +86,7 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 		for (int i = 0; i < points.size() - 1; i++) {
 			// If the current user bendpoint matches a bend location, show a move handle
 			if (i < points.size() - 1 && bendPointIndex < bendPoints.size()
-					&& currBendPoint.equals(points.getPoint(i + 1))) {
+					&& points.getPoint(i + 1).equals(currBendPoint)) {
 				list.add(createBendPointMoveHandle(connEP, bendPointIndex, i));
 
 				// Go to the next user bendpoint
@@ -100,8 +100,8 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 		return list;
 	}
 
-	private static BendpointMoveHandle createBendPointMoveHandle(ConnectionEditPart connEP, int bendPointIndex, int i) {
-		BendpointMoveHandle handle = new BendpointMoveHandle(connEP, bendPointIndex, i + 1) {
+	private static BendpointMoveHandle createBendPointMoveHandle(final ConnectionEditPart connEP, final int bendPointIndex, final int i) {
+		final BendpointMoveHandle handle = new BendpointMoveHandle(connEP, bendPointIndex, i + 1) {
 
 			@Override
 			protected Color getBorderColor() {

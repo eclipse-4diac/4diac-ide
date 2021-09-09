@@ -40,6 +40,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
@@ -209,6 +210,12 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	public void addPaletteEntry(final PaletteEntry entry) {
+
+		final FBTypePaletteEntry errorEntry = errorTypeLib.getFBTypeEntry(entry.getLabel());
+		if (errorEntry != null) {
+			errorTypeLib.removePaletteEntry(errorEntry);
+		}
+
 		if (entry instanceof DataTypePaletteEntry) {
 			entry.setPalette(blockTypeLib); // for data type entries the palette will not be automatically set
 			dataTypeLib.addPaletteEntry((DataTypePaletteEntry) entry);
@@ -383,4 +390,28 @@ public final class TypeLibrary implements TypeLibraryTags {
 	public Palette getErrorTypeLib() {
 		return errorTypeLib;
 	}
+
+	public PaletteEntry find(final String name) {
+
+		PaletteEntry entry = blockTypeLib.getSubAppTypeEntry(name);
+
+		if (entry != null) {
+			return entry;
+		}
+
+		entry = blockTypeLib.getFBTypeEntry(name);
+
+		if (entry != null) {
+			return entry;
+		}
+
+		entry = dataTypeLib.getDerivedDataTypes().get(name);
+
+		if (entry != null) {
+			return entry;
+		}
+
+		return blockTypeLib.getAdapterTypeEntry(name);
+	}
+
 }

@@ -66,6 +66,9 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addFBNetworkElements(final FBNetwork network) throws XMLStreamException {
 		for (final FBNetworkElement fbnElement : network.getNetworkElements()) {
+			if (!isExportableErrorMarker(fbnElement)) {
+				continue;
+			}
 			final String nodeName = getFBNElementNodeName(fbnElement);
 			if (null != nodeName) {
 				addStartElement(nodeName);
@@ -144,10 +147,13 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
-		return (endPoint != null) && !(endPoint.getFBNetworkElement() instanceof ErrorMarkerFBNElement)
-				&& (endPoint.eContainer() instanceof InterfaceList);
+		return endPoint != null && isExportableErrorMarker(endPoint.getFBNetworkElement())
+				&& endPoint.eContainer() instanceof InterfaceList;
 	}
 
+	public static boolean isExportableErrorMarker(final FBNetworkElement fbNetworkElement) {
+		return !(fbNetworkElement instanceof ErrorMarkerFBNElement && fbNetworkElement.getPaletteEntry() == null);
+	}
 
 	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement, final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$

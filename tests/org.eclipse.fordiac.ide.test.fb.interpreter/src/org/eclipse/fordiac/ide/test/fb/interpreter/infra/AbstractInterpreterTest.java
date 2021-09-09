@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
@@ -58,11 +58,11 @@ public class AbstractInterpreterTest {
 	static final ModelDeserializer deserializer = new ModelDeserializer();
 	static final ModelSerializer serializer = new ModelSerializer();
 
-	protected BasicFBType loadFBType(String name) {
+	protected static BasicFBType loadFBType(final String name) {
 		return loadFBType(name, true);
 	}
 
-	protected BasicFBType loadFBType(String name, boolean emptyService) {
+	protected static BasicFBType loadFBType(final String name, final boolean emptyService) {
 		final BasicFBType fbt = (BasicFBType) deserializer
 				.loadModel("inputmodels/" + name + ".xmi"); //$NON-NLS-1$ //$NON-NLS-2$
 		if (emptyService) {
@@ -91,7 +91,7 @@ public class AbstractInterpreterTest {
 		return seq;
 	}
 
-	protected ServiceTransaction addTransaction(ServiceSequence seq, FBTransaction fbtrans) {
+	protected static ServiceTransaction addTransaction(final ServiceSequence seq, final FBTransaction fbtrans) {
 		final ServiceTransaction transaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		seq.getServiceTransaction().add(transaction);
 		if (fbtrans.getInputEvent() != null) {
@@ -115,7 +115,7 @@ public class AbstractInterpreterTest {
 		return transaction;
 	}
 
-	public static void setVariable(FBType fb, String name, String value) {
+	public static void setVariable(final FBType fb, final String name, final String value) {
 		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name);
 		if (el instanceof VarDeclaration) {
 			final Value val = ((VarDeclaration) el).getValue();
@@ -128,8 +128,8 @@ public class AbstractInterpreterTest {
 		}
 	}
 
-	private static Collection<Transaction> createTransactions(BasicFBType fb, ServiceSequence seq,
-			BasicFBTypeRuntime runtime) {
+	private static Collection<Transaction> createTransactions(final BasicFBType fb, final ServiceSequence seq,
+			final BasicFBTypeRuntime runtime) {
 		final List<Transaction> transactions = new ArrayList<>();
 		for (final ServiceTransaction st : seq.getServiceTransaction()) {
 			final String inputEvent = st.getInputPrimitive().getEvent();
@@ -164,7 +164,7 @@ public class AbstractInterpreterTest {
 		return runTest(fb, seq, START_STATE);
 	}
 
-	public static BasicFBType runTest(BasicFBType fb, final ServiceSequence seq, final String startStateName)
+	public static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq, final String startStateName)
 			throws Exception {
 		final ResourceSet reset = new ResourceSetImpl();
 		final Resource resource = reset
@@ -203,7 +203,7 @@ public class AbstractInterpreterTest {
 	}
 
 
-	private static void checkResults(ServiceSequence seq, EventManager eventManager) throws Exception {
+	private static void checkResults(final ServiceSequence seq, final EventManager eventManager) throws Exception {
 		final EList<ServiceTransaction> expectedResults = seq.getServiceTransaction();
 		final EList<Transaction> results = eventManager.getTransactions();
 
@@ -239,7 +239,7 @@ public class AbstractInterpreterTest {
 		}
 	}
 
-	private static void checkOutputPrimitive(final Transaction result, int j, final OutputPrimitive p) {
+	private static void checkOutputPrimitive(final Transaction result, final int j, final OutputPrimitive p) {
 		if (!p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)) {
 			// generated output event is correct
 			if (!p.getEvent().equals(result.getOutputEventOccurences().get(j).getEvent().getName())) {
@@ -252,7 +252,7 @@ public class AbstractInterpreterTest {
 		}
 	}
 
-	private static boolean processParameters(String parameters, Transaction result) {
+	private static boolean processParameters(final String parameters, final Transaction result) {
 		if ((parameters == null) || parameters.isBlank()) {
 			return true;
 		}
@@ -268,14 +268,14 @@ public class AbstractInterpreterTest {
 		return true;
 	}
 
-	private static List<String> splitParameterList(String parameters) {
+	private static List<String> splitParameterList(final String parameters) {
 		if (parameters == null) {
 			return Collections.emptyList();
 		}
 		return Arrays.asList(parameters.split(";")); //$NON-NLS-1$
 	}
 
-	private static List<List<String>> getParametersFromString(String parameters) {
+	private static List<List<String>> getParametersFromString(final String parameters) {
 		final List<String> statementList = splitParameterList(parameters);
 		final var parameterList = new ArrayList<List<String>>();
 		for (final String element : statementList) {
@@ -285,7 +285,7 @@ public class AbstractInterpreterTest {
 		return parameterList;
 	}
 
-	private static boolean processParameter(String varName, String expectedValue, BasicFBType basicfbtype) {
+	private static boolean processParameter(final String varName, String expectedValue, final BasicFBType basicfbtype) {
 		if ((expectedValue == null) || expectedValue.isBlank()) {
 			return true;
 		}

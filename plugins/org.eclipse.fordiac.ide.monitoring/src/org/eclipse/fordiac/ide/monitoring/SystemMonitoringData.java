@@ -187,35 +187,51 @@ public class SystemMonitoringData {
 
 	public void addMonitoringElement(final MonitoringBaseElement element) {
 		final PortElement port = element.getPort();
-
 		monitoredElements.put(port.getInterfaceElement(), element);
 
 		if (port instanceof SubAppPortElement) {
-			final PortElement anchor = ((SubappMonitoringElement) element).getAnchor().getPort();
-			final String portString = anchor.getPortString();
-			if (subappElements.containsKey(portString)) {
-				final List<MonitoringElement> subappPins = subappElements.get(portString);
-				subappPins.add((MonitoringElement) element);
-			} else {
-				final List<MonitoringElement> l = new ArrayList<>();
-				l.add((SubappMonitoringElement) element);
-				subappElements.put(portString, l);
-			}
-
+			addSubappMonitoringElement(element);
 		} else {
-
-			// This element has not been created, but there exists a dummy subapp port
-			if (subappElements.containsKey(port.getPortString())) {
-				final List<MonitoringElement> subappPins = subappElements.get(port.getPortString());
-				subappPins.add((MonitoringElement) element);
-			}
+			checkForSubappGroup(element, port);
 			handleConnectedSubappPorts(element);
-
 			monitoredElementsPerPortStrings.put(port.getPortString(), element);
 		}
 
 		if (element instanceof MonitoringElement) {
 			sendAddWatch(element);
+		}
+	}
+
+	public void addSubappMonitoringElement(final MonitoringBaseElement element) {
+		final PortElement anchor = ((SubappMonitoringElement) element).getAnchor().getPort();
+		final String portString = anchor.getPortString();
+		if (subappElements.containsKey(portString)) {
+			final List<MonitoringElement> subappPins = subappElements.get(portString);
+			subappPins.add((MonitoringElement) element);
+		} else {
+			createNewSubappGroup(element, portString);
+		}
+	}
+
+	public void checkForSubappGroup(final MonitoringBaseElement element, final PortElement port) {
+		// This element has not been created, but there exists a dummy subapp port
+		if (subappElements.containsKey(port.getPortString())) {
+			final List<MonitoringElement> subappPins = subappElements.get(port.getPortString());
+			subappPins.add((MonitoringElement) element);
+		}
+	}
+
+	public void createNewSubappGroup(final MonitoringBaseElement element, final String portString) {
+		final List<MonitoringElement> l = new ArrayList<>();
+		l.add((SubappMonitoringElement) element);
+		subappElements.put(portString, l);
+		addExistingElementToSubappGroup(portString, l);
+	}
+
+	public void addExistingElementToSubappGroup(final String portString, final List<MonitoringElement> l) {
+		final MonitoringBaseElement monitoringBaseElement = monitoredElementsPerPortStrings.get(portString);
+		if (monitoringBaseElement != null) {
+			l.add((MonitoringElement) monitoringBaseElement);
 		}
 	}
 

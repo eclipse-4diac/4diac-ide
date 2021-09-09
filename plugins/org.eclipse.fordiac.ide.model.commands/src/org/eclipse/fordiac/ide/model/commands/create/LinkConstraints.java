@@ -240,11 +240,19 @@ public final class LinkConstraints {
 	 * @param internalConnection the internal connection
 	 *
 	 * @return true, if successful */
-	public static boolean canExistEventConnection(final IInterfaceElement source, final IInterfaceElement target) {
+	public static boolean canExistEventConnection(IInterfaceElement source, IInterfaceElement target,
+			final FBNetwork parent) {
 		if (!isEventPin(source) || !isEventPin(target)) {
 			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
+
+		if (isSwapNeeded(source, parent)) {
+			final IInterfaceElement temp = source;
+			source = target;
+			target = temp;
+		}
+
 		if (duplicateConnection(source, target)) {
 			return false;
 		}
@@ -252,19 +260,11 @@ public final class LinkConstraints {
 	}
 
 	private static boolean duplicateConnection(final IInterfaceElement source, final IInterfaceElement destination) {
-		for (final Connection con : source.getInputConnections()) {
-			// as we are maybe creating a reverse connection we need to check both
-			if ((con.getSource() == destination) || (con.getDestination() == destination)) {
+		for (final Connection con : source.getOutputConnections()) {
+			if (con.getDestination() == destination) {
 				return true;
 			}
 		}
-		for (final Connection con : destination.getOutputConnections()) {
-			// as we are maybe creating a reverse connection we need to check both
-			if ((con.getSource() == destination) || (con.getDestination() == destination)) {
-				return true;
-			}
-		}
-
 		return false;
 	}
 

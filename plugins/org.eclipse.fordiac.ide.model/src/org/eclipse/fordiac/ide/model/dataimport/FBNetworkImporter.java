@@ -32,6 +32,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -40,11 +42,14 @@ import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionState
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -55,6 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 
 class FBNetworkImporter extends CommonElementImporter {
 
@@ -243,6 +249,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		final FBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(builder.getSourceFbName());
 		builder.setSrcInterfaceList(sourceFB.getInterface());
 		getFbNetwork().getNetworkElements().add(sourceFB);
+		sourceFB.setName(NameRepository.createUniqueName(sourceFB, sourceFB.getName()));
 		createErrorMarkerInterface(connection, builder, false, e);
 
 	}
@@ -267,20 +274,39 @@ class FBNetworkImporter extends CommonElementImporter {
 				.createErrorMarkerFB(connectionBuilder.getDestFbName());
 		connectionBuilder.setDestInterfaceList(destinationFb.getInterface());
 		getFbNetwork().getNetworkElements().add(destinationFb);
+		destinationFb.setName(NameRepository.createUniqueName(destinationFb, destinationFb.getName()));
 		createErrorMarkerInterface(connection, connectionBuilder, true,e);
 	}
 
 	private void handleMissingSrcAndDestEnpoint(final Connection connection,
 			final ConnectionBuilder connectionBuilder) {
-		final ErrorMarkerInterface srcEndpoint = ConnectionHelper.createErrorMarkerInterface(IecTypes.GenericTypes.ANY,
+		final DataType pinType = determineConnectionType(connection);
+
+		final ErrorMarkerInterface srcEndpoint = ConnectionHelper.createErrorMarkerInterface(pinType,
 				connectionBuilder.getSourcePinName(), false, connectionBuilder.getSrcInterfaceList());
-		final ErrorMarkerInterface destEndpoint = ConnectionHelper.createErrorMarkerInterface(IecTypes.GenericTypes.ANY,
+		final ErrorMarkerInterface destEndpoint = ConnectionHelper.createErrorMarkerInterface(pinType,
 				connectionBuilder.getDestinationPinName(), true, connectionBuilder.getDestInterfaceList());
 		createMissingErrorMarker(connectionBuilder, srcEndpoint, Messages.FBNetworkImporter_ConnectionSourceNotFound);
 		createMissingErrorMarker(connectionBuilder, destEndpoint,
 				Messages.FBNetworkImporter_ConnectionDestinationNotFound);
 		connection.setSource(srcEndpoint);
 		connection.setDestination(destEndpoint);
+	}
+
+	private DataType determineConnectionType(final Connection connection) {
+		if(connection instanceof EventConnection) {
+			return EventTypeLibrary.getInstance().getType(null);
+		} else if(connection instanceof AdapterConnection) {
+			final AdapterTypePaletteEntry entry = getPalette().getAdapterTypeEntry("ANY_ADAPTER"); //$NON-NLS-1$
+			if (null != entry) {
+				return entry.getType();
+			}
+			// we don't have an any_adapter return generic adapter, may not be reparable
+			return LibraryElementFactory.eINSTANCE.createAdapterType();
+		} else if (connection instanceof DataConnection) {
+			return IecTypes.GenericTypes.ANY;
+		}
+		return null;
 	}
 
 	private void createMissingErrorMarker(final ConnectionBuilder builder, final ErrorMarkerInterface endpoint,

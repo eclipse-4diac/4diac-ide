@@ -204,8 +204,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 		} else if (child instanceof TransactionEditPart) {
 			return moveTransaction(child, after);
 		} else if (child instanceof ServiceSequenceEditPart) {
-			final Command cmd = moveServiceSequence(child, after);
-			return cmd;
+			return moveServiceSequence(child, after);
 		}
 		// input primitives can not be reordered
 		return null;
@@ -252,26 +251,18 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			if (sequence.getService().equals(afterS.getService())) {
 				return new ChangeServiceSequenceOrderCommand(sequence, afterS, false);
 			}
-		}
-
-		else if (after instanceof TransactionEditPart) {
+		} else if (after instanceof TransactionEditPart) {
 			final ServiceTransaction afterT = (ServiceTransaction) after;
 			return new ChangeServiceSequenceOrderCommand(sequence, afterT.getServiceSequence(), false);
-		}
-
-		else if (after instanceof AbstractPrimitiveEditPart) {
+		} else if (after instanceof AbstractPrimitiveEditPart) {
 			final Primitive afterP = (Primitive) after;
 			return new ChangeServiceSequenceOrderCommand(sequence, afterP.getServiceTransaction().getServiceSequence(),
 					false);
-		}
-		else if (after == null) {
-			if(getHost().getModel() instanceof SimpleFBTypeImpl) {
-				final SimpleFBTypeImpl fb = (SimpleFBTypeImpl) getHost().getModel();
-				final int indexLastS = fb.getService().getServiceSequence().size() - 1;
-				return new ChangeServiceSequenceOrderCommand(sequence,
-						fb.getService().getServiceSequence().get(indexLastS),
-						false);
-			}
+		} else if ((after == null) && (getHost().getModel() instanceof SimpleFBTypeImpl)) {
+			final SimpleFBTypeImpl fb = (SimpleFBTypeImpl) getHost().getModel();
+			final int indexLastS = fb.getService().getServiceSequence().size() - 1;
+			return new ChangeServiceSequenceOrderCommand(sequence, fb.getService().getServiceSequence().get(indexLastS),
+					false);
 		}
 		return null;
 	}

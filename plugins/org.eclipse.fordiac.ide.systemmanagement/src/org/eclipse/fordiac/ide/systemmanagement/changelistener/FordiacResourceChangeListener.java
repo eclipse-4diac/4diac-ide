@@ -24,8 +24,6 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -42,11 +40,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -60,7 +55,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
-
 
 public class FordiacResourceChangeListener implements IResourceChangeListener {
 
@@ -99,7 +93,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			changedFiles.clear();
 			handleFileRefreshWIzards(editorListener);
 		});
-
 
 	}
 
@@ -140,8 +133,10 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final IFile file = editor.getFile();
 		final String info = MessageFormat.format(Messages.AutomationSystemEditor_Info, file.getFullPath().toOSString());
 		final MessageDialog dialog = new MessageDialog(((IEditorPart) editor).getSite().getShell(),
-				Messages.AutomationSystemEditor_Title,
-				null, info, MessageDialog.INFORMATION, new String[] { Messages.FordiacResourceChangeListener_0, Messages.FordiacResourceChangeListener_1, Messages.FordiacResourceChangeListener_2, Messages.FordiacResourceChangeListener_3 }, 0);
+				Messages.AutomationSystemEditor_Title, null, info, MessageDialog.INFORMATION,
+				new String[] { Messages.FordiacResourceChangeListener_0, Messages.FordiacResourceChangeListener_1,
+						Messages.FordiacResourceChangeListener_2, Messages.FordiacResourceChangeListener_3 },
+				0);
 		return dialog.open();
 	}
 
@@ -313,12 +308,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					if (null != entry) {
 						updatePaletteEntry(file, entry);
 					}
-				} else
-					if (!file.equals(paletteEntryForFile.getFile())) {
-						// After a file has been copied and the copied file is not the same as the founded palette entry
-						// the file and the resulting type must be renamed with a unique name
-						autoRenameExistingType(file, paletteEntryForFile);
-					}
+				} else if (!file.equals(paletteEntryForFile.getFile())) {
+					// After a file has been copied and the copied file is not the same as the founded palette entry
+					// the file and the resulting type must be renamed with a unique name
+					autoRenameExistingType(file, paletteEntryForFile);
+				}
 
 			}
 		}
@@ -462,16 +456,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				}
 
 				private void saveType(final PaletteEntry entry) {
-					if (entry instanceof DataTypePaletteEntry) {
-						final DataTypeExporter exporter = new DataTypeExporter((AnyDerivedType) entry.getType());
-						try {
-							exporter.saveType(entry.getFile());
-						} catch (final XMLStreamException e) {
-							Activator.getDefault().logError(e.getMessage(), e);
-						}
-					} else {
-						AbstractBlockTypeExporter.saveType(entry);
-					}
+					AbstractTypeExporter.saveType(entry);
 				}
 			};
 			job.setRule(newFile.getProject());

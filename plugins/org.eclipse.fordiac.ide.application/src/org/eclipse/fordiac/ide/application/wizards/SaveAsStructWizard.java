@@ -19,17 +19,15 @@ package org.eclipse.fordiac.ide.application.wizards;
 import java.io.File;
 import java.util.List;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -57,19 +55,16 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 	public boolean performFinish() {
 		if (perform()) {
 			final IFile targetFile = getTargetTypeFile();
+			final PaletteEntry entry = createPaletteEntry(targetFile);
 			final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
+			entry.setType(type);
 			InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl);
 
 			TypeManagementPreferencesHelper.setupVersionInfo(type);
 
 			datatypeName = TypeLibrary.getTypeNameFromFile(targetFile);
 			type.setName(datatypeName);
-			final DataTypeExporter exporter = new DataTypeExporter(type);
-			try {
-				exporter.saveType(targetFile);
-			} catch (final XMLStreamException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
+			AbstractTypeExporter.saveType(entry);
 
 			if (newFilePage.getOpenType()) {
 				OpenStructMenu.openStructEditor(targetFile);
@@ -81,6 +76,10 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 
 		}
 		return true;
+	}
+
+	private PaletteEntry createPaletteEntry(final IFile targetTypeFile) {
+		return TypeLibrary.getTypeLibrary(project).createPaletteEntry(targetTypeFile);
 	}
 
 	public boolean replaceSource() {
@@ -108,8 +107,9 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 
 	@Override
 	public IFile getTargetTypeFile() {
-		return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(newFilePage.getContainerFullPath()
-				+ File.separator + newFilePage.getFileName() + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT));
+		final Path path = new Path(newFilePage.getContainerFullPath() + File.separator + newFilePage.getFileName()
+		+ TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT);
+		return ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 	}
 
 }

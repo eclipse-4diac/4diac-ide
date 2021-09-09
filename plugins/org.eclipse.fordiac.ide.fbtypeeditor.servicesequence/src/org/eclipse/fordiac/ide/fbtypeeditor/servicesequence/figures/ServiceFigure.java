@@ -39,7 +39,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
 public final class ServiceFigure extends FreeformLayeredPane {
-	private static final int LEFT_RIGHT_BACKGROUND_WIDTH = 800;
 	private static final int MIDDLE_LINE_WIDTH = 5;
 
 	private Label leftLabel;
@@ -113,10 +112,6 @@ public final class ServiceFigure extends FreeformLayeredPane {
 		layout.marginHeight = 0;
 		layout.verticalSpacing = 0;
 		interfaceLayer.setLayoutManager(layout);
-
-		final int centerMargin = 100;
-		final int topMargin = 5;
-		final int borderMargin = 30;
 
 		leftLabel = createLabel(true);
 		final GridData leftLabelData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
