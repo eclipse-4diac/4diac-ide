@@ -179,13 +179,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 				// if source or dest is null it means that an interface element is not available
 				// any more
 				final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, copiedMappedElement.getFbNetwork());
-				if (null != dccc) {
-					dccc.setSource(source);
-					dccc.setDestination(dest);
-					if (dccc.canExecute()) {
-						dccc.execute();
-						resourceConnCreateCmds.add(dccc);
-					}
+				dccc.setSource(source);
+				dccc.setDestination(dest);
+				if (dccc.canExecute()) {
+					dccc.execute();
+					resourceConnCreateCmds.add(dccc);
 				}
 			}
 		}
@@ -422,10 +420,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		// if source or dest is null it means that an interface element is not available
 		// any more
 		final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, fbn);
-		if (null != dccc) {
-			dccc.setSource(source);
-			dccc.setDestination(dest);
-			dccc.setArrangementConstraints(oldConn.getRoutingData());
+		dccc.setSource(source);
+		dccc.setDestination(dest);
+		dccc.setArrangementConstraints(oldConn.getRoutingData());
+		if (dccc.canExecute()) {
 			dccc.execute();
 			connCreateCmds.add(dccc);
 		}
