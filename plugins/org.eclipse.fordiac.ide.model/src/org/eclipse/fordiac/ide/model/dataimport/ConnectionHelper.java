@@ -111,12 +111,12 @@ public final class ConnectionHelper {
 
 		public String getSourceFbName() {
 			if (source == null) {
-				return "Source FB not found"; //$NON-NLS-1$
+				return Messages.ConnectionHelper_ErrorMarker_Source_Missing;
 			}
 
 			final String[] qualNames = source.split("\\."); //$NON-NLS-1$
 			if (qualNames.length == 0) {
-				return "Source FB NOT FOUND"; //$NON-NLS-1$
+				return Messages.ConnectionHelper_ErrorMarker_Source_Missing;
 			}
 			return qualNames[0];
 		}
@@ -124,13 +124,13 @@ public final class ConnectionHelper {
 		public String getDestFbName() {
 
 			if (destination == null) {
-				return "Destination FB NOT FOUND"; //$NON-NLS-1$
+				return Messages.ConnectionHelper_ErrorMarker_Dest_Missing;
 			}
 
 			final String[] qualNames = destination.split("\\."); //$NON-NLS-1$
 
 			if (qualNames.length == 0) {
-				return "Destination FB NOT FOUND"; //$NON-NLS-1$
+				return Messages.ConnectionHelper_ErrorMarker_Dest_Missing;
 			}
 			return qualNames[0];
 		}
@@ -188,7 +188,7 @@ public final class ConnectionHelper {
 		public String getSourcePinName() {
 
 			if (source == null) {
-				return "pin not found"; //$NON-NLS-1$
+				return Messages.ConnectionHelper_pin_not_found;
 			}
 
 			if (sourceEndpoint != null) {
@@ -206,7 +206,7 @@ public final class ConnectionHelper {
 		public String getDestinationPinName() {
 
 			if (destination == null) {
-				return "pin not found"; //$NON-NLS-1$
+				return Messages.ConnectionHelper_pin_not_found;
 			}
 
 			if (destinationEndpoint != null) {
@@ -215,7 +215,7 @@ public final class ConnectionHelper {
 
 			final String[] qualNames = destination.split("\\."); //$NON-NLS-1$
 			if (qualNames.length < 2) {
-				return "Pin not found"; //$NON-NLS-1$
+				return Messages.ConnectionHelper_pin_not_found;
 			}
 
 			return qualNames[1];

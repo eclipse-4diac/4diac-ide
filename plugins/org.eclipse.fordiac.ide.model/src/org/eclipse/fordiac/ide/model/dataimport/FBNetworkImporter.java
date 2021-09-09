@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
@@ -248,6 +249,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		final FBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(builder.getSourceFbName());
 		builder.setSrcInterfaceList(sourceFB.getInterface());
 		getFbNetwork().getNetworkElements().add(sourceFB);
+		sourceFB.setName(NameRepository.createUniqueName(sourceFB, sourceFB.getName()));
 		createErrorMarkerInterface(connection, builder, false, e);
 
 	}
@@ -272,6 +274,7 @@ class FBNetworkImporter extends CommonElementImporter {
 				.createErrorMarkerFB(connectionBuilder.getDestFbName());
 		connectionBuilder.setDestInterfaceList(destinationFb.getInterface());
 		getFbNetwork().getNetworkElements().add(destinationFb);
+		destinationFb.setName(NameRepository.createUniqueName(destinationFb, destinationFb.getName()));
 		createErrorMarkerInterface(connection, connectionBuilder, true,e);
 	}
 
