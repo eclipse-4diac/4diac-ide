@@ -37,7 +37,7 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 
 	@Override
 	protected boolean canExecuteConType() {
-		return LinkConstraints.canExistEventConnection(getSource(), getDestination());
+		return LinkConstraints.canExistEventConnection(getSource(), getDestination(), getParent());
 	}
 
 	@Override

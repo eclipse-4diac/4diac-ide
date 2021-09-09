@@ -37,7 +37,7 @@ public class ReconnectEventConnectionCommand extends AbstractReconnectConnection
 
 	@Override
 	protected boolean checkSourceAndTarget(final IInterfaceElement sourceIE, final IInterfaceElement targetIE) {
-		return LinkConstraints.canExistEventConnection(sourceIE, targetIE);
+		return LinkConstraints.canExistEventConnection(sourceIE, targetIE, getParent());
 	}
 
 	@Override
