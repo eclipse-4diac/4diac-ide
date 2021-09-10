@@ -121,7 +121,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 		return stAlgorithmFilter.generate(expression, ((BasicFBType) fb), errorList);
 	}
 
-	protected class FileObject {
+	protected static class FileObject {
 		private final String name;
 		private final CharSequence data;
 		private final List<String> errors;
@@ -163,9 +163,9 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param fb reference to the function block
 	 *
 	 * @return the generated code or null on error */
-	public List<ExporterTestBase<T>.FileObject> generateFunctionBlock(final CompilableType fb) {
-		final Set<? extends IExportTemplate> templates = (new ForteNgExportFilter() {
-			Set<? extends IExportTemplate> getTemplateSet(final LibraryElement type) {
+	public List<FileObject> generateFunctionBlock(final CompilableType fb) {
+		final Set<IExportTemplate> templates = (new ForteNgExportFilter() {
+			Set<IExportTemplate> getTemplateSet(final LibraryElement type) {
 				return getTemplates(type);
 			}
 		}).getTemplateSet(functionBlock);
@@ -227,7 +227,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 
 	abstract void setupFunctionBlock();
 
-	protected FBTypePaletteEntry preparePaletteWithTypeLib() {
+	protected static FBTypePaletteEntry preparePaletteWithTypeLib() {
 		final FBTypePaletteEntry pallEntry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
 		final TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
 		pallEntry.setPalette(typelib.getBlockTypeLib());
@@ -240,7 +240,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param dataType     data-type of the variable to be created
 	 *
 	 * @return the created variable-object */
-	protected VarDeclaration createVarDeclaration(final String variableName, final String dataType) {
+	protected static VarDeclaration createVarDeclaration(final String variableName, final String dataType) {
 		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		variable.setName(variableName);
 		variable.setType(dataTypeLib.getType(dataType));
@@ -270,7 +270,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param algorithmText content of the algorithm to be created
 	 *
 	 * @return the created algorithm-object */
-	protected STAlgorithm createSTAlgorithm(final String algorithmName, final String algorithmText) {
+	protected static STAlgorithm createSTAlgorithm(final String algorithmName, final String algorithmText) {
 		final STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		stAlg.setName(algorithmName);
 		stAlg.setText(algorithmText);
@@ -284,7 +284,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param algorithmLanguage language of the algorithm to be created
 	 *
 	 * @return the created algorithm-object */
-	protected OtherAlgorithm createOtherAlgorithm(final String algorithmName, final String algorithmText,
+	protected static OtherAlgorithm createOtherAlgorithm(final String algorithmName, final String algorithmText,
 			final String algorithmLanguage) {
 		final OtherAlgorithm alg = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
 		alg.setName(algorithmName);
@@ -298,7 +298,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param algorithm
 	 *
 	 * @return the cast algorithm-object */
-	protected STAlgorithm castAlgorithm(final Algorithm algorithm) {
+	protected static STAlgorithm castAlgorithm(final Algorithm algorithm) {
 		assertTrue(algorithm instanceof STAlgorithm);
 		return (STAlgorithm) algorithm;
 	}
