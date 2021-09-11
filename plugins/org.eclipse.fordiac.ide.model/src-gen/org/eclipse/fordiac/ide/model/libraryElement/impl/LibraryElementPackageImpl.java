@@ -585,7 +585,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		final Object registeredLibraryElementPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
 		final LibraryElementPackageImpl theLibraryElementPackage = registeredLibraryElementPackage instanceof LibraryElementPackageImpl
 				? (LibraryElementPackageImpl) registeredLibraryElementPackage
-						: new LibraryElementPackageImpl();
+				: new LibraryElementPackageImpl();
 
 		isInited = true;
 
@@ -596,11 +596,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
 		final PalettePackageImpl thePalettePackage = (PalettePackageImpl) (registeredPackage instanceof PalettePackageImpl
 				? registeredPackage
-						: PalettePackage.eINSTANCE);
+				: PalettePackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
 		final DataPackageImpl theDataPackage = (DataPackageImpl) (registeredPackage instanceof DataPackageImpl
 				? registeredPackage
-						: DataPackage.eINSTANCE);
+				: DataPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theLibraryElementPackage.createPackageContents();

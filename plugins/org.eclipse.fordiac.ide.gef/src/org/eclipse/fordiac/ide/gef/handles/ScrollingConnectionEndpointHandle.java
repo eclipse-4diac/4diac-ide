@@ -30,7 +30,7 @@ import org.eclipse.gef.tools.ConnectionEndpointTracker;
 
 public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle {
 
-	public ScrollingConnectionEndpointHandle(ConnectionEditPart owner, int endPoint) {
+	public ScrollingConnectionEndpointHandle(final ConnectionEditPart owner, final int endPoint) {
 		super(owner, endPoint);
 	}
 
@@ -41,10 +41,10 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 	}
 
 	@Override
-	public Dimension getPreferredSize(int wHint, int hHint) {
-		Dimension dim = super.getPreferredSize(wHint, hHint).getCopy();
+	public Dimension getPreferredSize(final int wHint, final int hHint) {
+		final Dimension dim = super.getPreferredSize(wHint, hHint).getCopy();
 
-		double zoomFactor = getZoomFactor();
+		final double zoomFactor = getZoomFactor();
 		if (dim.height * zoomFactor < ConnectionPreferenceValues.MIN_HANDLE_SIZE) {
 			dim.height = (int) (ConnectionPreferenceValues.MIN_HANDLE_SIZE / zoomFactor);
 		}
@@ -64,7 +64,7 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 			return null;
 		}
 		ConnectionEndpointTracker tracker;
-		tracker = new ScrollingConnectionEndpointTracker((ConnectionEditPart) getOwner());
+		tracker = createConnectionEndPointTracker((ConnectionEditPart) getOwner());
 		if (getEndPoint() == ConnectionLocator.SOURCE) {
 			tracker.setCommandName(RequestConstants.REQ_RECONNECT_SOURCE);
 		} else {
@@ -74,15 +74,20 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		return tracker;
 	}
 
+	@SuppressWarnings("static-method")  // allow sub-classes to provide special versions
+	protected ConnectionEndpointTracker createConnectionEndPointTracker(final ConnectionEditPart connectionEditPart) {
+		return new ScrollingConnectionEndpointTracker(connectionEditPart);
+	}
+
 	@Override
-	public void paintFigure(Graphics g) {
-		Rectangle r = getBounds().getShrinked(1, 1);
+	public void paintFigure(final Graphics g) {
+		final Rectangle r = getBounds().getShrinked(1, 1);
 		g.setLineStyle(Graphics.LINE_SOLID);
 		g.setLineWidth((ModifiedMoveHandle.SELECTION_BORDER_WIDTH));
 		g.setXORMode(false);
 		g.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		g.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
-		int radius = (int) (ConnectionPreferenceValues.HANDLE_SIZE * 0.45);
+		final int radius = (int) (ConnectionPreferenceValues.HANDLE_SIZE * 0.45);
 		if (isPrimary()) {
 			// only draw the border for the primary connection selection
 			g.drawRoundRectangle(r, radius, radius);
@@ -94,8 +99,8 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		paintHandleCenter(g, r);
 	}
 
-	protected void paintHandleCenter(Graphics g, Rectangle r) {
-		int shrinkVal = getInnerShrinkVal();
+	protected void paintHandleCenter(final Graphics g, final Rectangle r) {
+		final int shrinkVal = getInnerShrinkVal();
 		r.shrink(shrinkVal, shrinkVal);
 		g.fillRoundRectangle(r, r.height / 2, r.height / 2);
 	}

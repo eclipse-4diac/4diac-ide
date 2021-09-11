@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -16,12 +16,9 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -42,7 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class ConnectionRoutingDataImpl extends EObjectImpl implements ConnectionRoutingData {
 	/** The default value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getDx1()
 	 * @generated
 	 * @ordered */
@@ -50,7 +47,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 
 	/** The cached value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getDx1()
 	 * @generated
 	 * @ordered */
@@ -58,7 +55,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 
 	/** The default value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getDx2()
 	 * @generated
 	 * @ordered */
@@ -66,21 +63,21 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 
 	/** The cached value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getDx2()
 	 * @generated
 	 * @ordered */
 	protected int dx2 = DX2_EDEFAULT;
 
 	/** The default value of the '{@link #getDy() <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getDy()
 	 * @generated
 	 * @ordered */
 	protected static final int DY_EDEFAULT = 0;
 
 	/** The cached value of the '{@link #getDy() <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getDy()
 	 * @generated
 	 * @ordered */
@@ -88,7 +85,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 
 	/** The default value of the '{@link #isNeedsValidation() <em>Needs Validation</em>}' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #isNeedsValidation()
 	 * @generated
 	 * @ordered */
@@ -96,21 +93,21 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 
 	/** The cached value of the '{@link #isNeedsValidation() <em>Needs Validation</em>}' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #isNeedsValidation()
 	 * @generated
 	 * @ordered */
 	protected boolean needsValidation = NEEDS_VALIDATION_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ConnectionRoutingDataImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -118,7 +115,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int getDx1() {
@@ -126,7 +123,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setDx1(int newDx1) {
@@ -138,7 +135,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int getDx2() {
@@ -146,7 +143,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setDx2(int newDx2) {
@@ -158,7 +155,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int getDy() {
@@ -166,7 +163,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setDy(int newDy) {
@@ -178,7 +175,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean isNeedsValidation() {
@@ -186,7 +183,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setNeedsValidation(boolean newNeedsValidation) {
@@ -199,7 +196,31 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public boolean is1SegementData() {
+		return getDx1() == 0;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public boolean is3SegementData() {
+		return getDx1() != 0 && getDy() == 0;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public boolean is5SegementData() {
+		return getDx1() != 0 && getDy() != 0;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -218,7 +239,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -242,7 +263,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -266,7 +287,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -285,7 +306,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {
