@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -81,7 +82,7 @@ public enum SystemManager {
 	SystemManager() {
 		try {
 			// ensure dirty workspaces are cleaned before any type library is loaded
-			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_ONE, null);
+			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
