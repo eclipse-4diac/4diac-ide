@@ -180,7 +180,7 @@ public abstract class CommonElementImporter {
 
 	public void loadElement() {
 		element = createRootModelElement();
-		try (ImporterStreams streams = createInputStreams(file.getContents())) {
+		try (ImporterStreams streams = createInputStreams(getInputStream())) {
 			deleteMarkers();
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(element);
@@ -191,6 +191,10 @@ public abstract class CommonElementImporter {
 		} finally {
 			buildErrorMarker(file);
 		}
+	}
+
+	protected InputStream getInputStream() throws Exception {
+		return file.getContents();
 	}
 
 	protected ErrorMarkerBuilder createErrorMarker(final String message) {
@@ -220,19 +224,21 @@ public abstract class CommonElementImporter {
 	protected abstract IChildHandler getBaseChildrenHandler();
 
 	protected void deleteMarkers() {
-		final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) {
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				try {
-					file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-				} catch (final CoreException e) {
-					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+		if (file.exists()) {
+			final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) {
+				@Override
+				public IStatus runInWorkspace(final IProgressMonitor monitor) {
+					try {
+						file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+					} catch (final CoreException e) {
+						Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+					}
+					return Status.OK_STATUS;
 				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(file.getProject());
-		job.schedule();
+			};
+			job.setRule(file.getProject());
+			job.schedule();
+		}
 	}
 
 	private ImporterStreams createInputStreams(final InputStream fileInputStream) throws XMLStreamException {

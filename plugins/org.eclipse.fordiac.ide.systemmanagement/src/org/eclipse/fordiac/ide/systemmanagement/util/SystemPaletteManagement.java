@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.systemmanagement.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -24,7 +26,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.Activator;
 
@@ -41,7 +42,7 @@ public final class SystemPaletteManagement {
 	public static void copyToolTypeLibToDestination(final IContainer destination) {
 		try {
 			copyDirectory(TypeLibrary.getToolLibFolder(), destination);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
@@ -49,23 +50,23 @@ public final class SystemPaletteManagement {
 	private static void copyDirectory(final IContainer sourceLocation, final IContainer targetLocation)
 			throws IOException, CoreException {
 
-		IProgressMonitor monitor = new NullProgressMonitor();
+		final IProgressMonitor monitor = new NullProgressMonitor();
 
 		if (!targetLocation.exists()) {
 			((IFolder) targetLocation).create(true, true, monitor);
 			targetLocation.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		}
 
-		for (IResource resource : sourceLocation.members()) {
+		for (final IResource resource : sourceLocation.members()) {
 			if (!resource.getName().startsWith(".")) { //$NON-NLS-1$
 				if (resource instanceof IFolder) {
-					IFolder target = targetLocation.getFolder(new Path(resource.getName()));
+					final IFolder target = targetLocation.getFolder(new Path(resource.getName()));
 					copyDirectory((IFolder) resource, target);
 				} else if (resource instanceof IFile) {
-					IFile file = targetLocation.getFile(new Path(resource.getName()));
-					File in = ((IFile) resource).getLocation().toFile();
-					File out = file.getLocation().toFile();
-					ImportUtils.copyFile(in, out);
+					final IFile file = targetLocation.getFile(new Path(resource.getName()));
+					final File in = ((IFile) resource).getLocation().toFile();
+					final File out = file.getLocation().toFile();
+					Files.copy(in.toPath(), out.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				}
 			}
 		}

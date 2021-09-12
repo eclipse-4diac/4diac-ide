@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -31,7 +31,7 @@ public final class TypeManagementPreferencesHelper {
 	}
 
 	public static void setupVersionInfo(LibraryElement type) {
-		VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 
 		// version
 		setupVersion(versionInfo);
@@ -55,24 +55,24 @@ public final class TypeManagementPreferencesHelper {
 		type.getVersionInfo().add(versionInfo);
 	}
 
-	public static void setupVersion(VersionInfo versionInfo) {
+	public static void setupVersion(final VersionInfo versionInfo) {
 		versionInfo.setVersion(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_VERSION));
 	}
 
-	public static void setupOrganization(VersionInfo versionInfo) {
+	public static void setupOrganization(final VersionInfo versionInfo) {
 		versionInfo.setOrganization(
 				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_ORGANIZATION));
 	}
 
-	public static void setupAuthor(VersionInfo versionInfo) {
+	public static void setupAuthor(final VersionInfo versionInfo) {
 		versionInfo.setAuthor(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_AUTHOR));
 	}
 
-	public static void setupDate(VersionInfo versionInfo) {
+	public static void setupDate(final VersionInfo versionInfo) {
 		versionInfo.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()))); //$NON-NLS-1$
 	}
 
-	public static void setupRemarks(VersionInfo versionInfo) {
+	public static void setupRemarks(final VersionInfo versionInfo) {
 		versionInfo.setRemarks(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_REMARKS));
 	}
 
@@ -82,6 +82,10 @@ public final class TypeManagementPreferencesHelper {
 		if (type instanceof AdapterType) {
 			type = ((AdapterType) type).getAdapterFBType();
 			identification = type.getIdentification();
+		}
+
+		if (type.getIdentification() == null) {
+			identification = LibraryElementFactory.eINSTANCE.createIdentification();
 		}
 
 		// Standard.
@@ -105,34 +109,34 @@ public final class TypeManagementPreferencesHelper {
 		type.setIdentification(identification);
 	}
 
-	public static void setupStandard(Identification identification) {
+	public static void setupStandard(final Identification identification) {
 		// If the standard is defined and the preference is empty, don't load it
 		if (!(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_STANDARD).isEmpty())) {
 			identification
-					.setStandard(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_STANDARD));
+			.setStandard(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_STANDARD));
 		}
 	}
 
-	public static void setupClassification(Identification identification) {
+	public static void setupClassification(final Identification identification) {
 		identification.setClassification(
 				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CLASSIFICATION));
 	}
 
-	public static void setupTypeDomain(Identification identification) {
+	public static void setupTypeDomain(final Identification identification) {
 		identification.setApplicationDomain(
 				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_APPLICATION_DOMAIN));
 	}
 
-	public static void setupFunction(Identification identification) {
+	public static void setupFunction(final Identification identification) {
 		identification
-				.setFunction(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_FUNCTION));
+		.setFunction(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_FUNCTION));
 	}
 
-	public static void setupType(Identification identification) {
+	public static void setupType(final Identification identification) {
 		identification.setType(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TYPE));
 	}
 
-	public static void setupDescription(Identification identification) {
+	public static void setupDescription(final Identification identification) {
 		identification.setDescription(
 				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_DESCRIPTION));
 	}
