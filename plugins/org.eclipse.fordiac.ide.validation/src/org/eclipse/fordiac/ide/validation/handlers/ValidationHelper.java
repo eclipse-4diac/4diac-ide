@@ -148,6 +148,9 @@ public final class ValidationHelper {
 
 			if (context instanceof Connection) {
 				marker.setErrorMarkerRef((ErrorMarkerRef) context);
+			} else if (context instanceof VarDeclaration) {
+				marker.addTargetIdentifier(((VarDeclaration) context).getValue());
+				marker.setErrorMarkerRef(((VarDeclaration) context).getValue());
 			}
 
 			marker.createMarkerInResource(iresource);
