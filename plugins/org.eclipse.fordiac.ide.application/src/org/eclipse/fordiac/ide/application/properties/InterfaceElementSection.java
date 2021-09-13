@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -211,13 +212,8 @@ public class InterfaceElementSection extends AbstractSection {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 
-		final boolean b = (null != type) && (getType() instanceof VarDeclaration)
-				&& !(getType().getType() instanceof AdapterType);
-		parameterTextCLabel.setVisible(b);
-		parameterText.setVisible(b);
-		currentParameterTextCLabel.setVisible(b);
-		currentParameterText.setVisible(b);
 		if (null != type) {
+			refreshParameterVisibility();
 			final FBNetworkElement fb = getType().getFBNetworkElement();
 			if (fb != null) {
 				infoSection.setText(fb.getName() + " . " //$NON-NLS-1$
@@ -238,13 +234,7 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 			typeText.setText(itype);
 
-			if (getType().isIsInput()) {
-				connectionSection.setText(Messages.InterfaceElementSection_InConnections);
-			} else {
-				connectionSection.setText(Messages.InterfaceElementSection_OutConnections);
-			}
-
-			connectionsViewer.setInput(getType());
+			refreshConnectionsViewer();
 
 			if (fb != null) {
 				setEditable(!fb.isContainedInTypedInstance());
@@ -252,6 +242,24 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 
 		commandStack = commandStackBuffer;
+	}
+
+	private void refreshParameterVisibility() {
+		final boolean isDataIO = (getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration);
+		parameterTextCLabel.setVisible(isDataIO);
+		parameterText.setVisible(isDataIO);
+		currentParameterTextCLabel.setVisible(isDataIO && getType().isIsInput());
+		currentParameterText.setVisible(isDataIO && getType().isIsInput());
+	}
+
+	private void refreshConnectionsViewer() {
+		if (getType().isIsInput()) {
+			connectionSection.setText(Messages.InterfaceElementSection_InConnections);
+		} else {
+			connectionSection.setText(Messages.InterfaceElementSection_OutConnections);
+		}
+
+		connectionsViewer.setInput(getType());
 	}
 
 	private void setEditable(final boolean editable) {
