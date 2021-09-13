@@ -577,13 +577,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @see #initializePackageContents()
 	 * @generated */
 	public static LibraryElementPackage init() {
-		if (isInited) {
+		if (isInited)
 			return (LibraryElementPackage) EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
-		}
 
 		// Obtain or create and register package
-		final Object registeredLibraryElementPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		final LibraryElementPackageImpl theLibraryElementPackage = registeredLibraryElementPackage instanceof LibraryElementPackageImpl
+		Object registeredLibraryElementPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		LibraryElementPackageImpl theLibraryElementPackage = registeredLibraryElementPackage instanceof LibraryElementPackageImpl
 				? (LibraryElementPackageImpl) registeredLibraryElementPackage
 				: new LibraryElementPackageImpl();
 
@@ -594,11 +593,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
-		final PalettePackageImpl thePalettePackage = (PalettePackageImpl) (registeredPackage instanceof PalettePackageImpl
+		PalettePackageImpl thePalettePackage = (PalettePackageImpl) (registeredPackage instanceof PalettePackageImpl
 				? registeredPackage
 				: PalettePackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
-		final DataPackageImpl theDataPackage = (DataPackageImpl) (registeredPackage instanceof DataPackageImpl
+		DataPackageImpl theDataPackage = (DataPackageImpl) (registeredPackage instanceof DataPackageImpl
 				? registeredPackage
 				: DataPackage.eINSTANCE);
 
@@ -2582,9 +2581,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 *
 	 * @generated */
 	public void createPackageContents() {
-		if (isCreated) {
+		if (isCreated)
 			return;
-		}
 		isCreated = true;
 
 		// Create classes and their features
@@ -2926,9 +2924,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 *
 	 * @generated */
 	public void initializePackageContents() {
-		if (isInitialized) {
+		if (isInitialized)
 			return;
-		}
 		isInitialized = true;
 
 		// Initialize package
@@ -2937,10 +2934,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		final PalettePackage thePalettePackage = (PalettePackage) EPackage.Registry.INSTANCE
+		PalettePackage thePalettePackage = (PalettePackage) EPackage.Registry.INSTANCE
 				.getEPackage(PalettePackage.eNS_URI);
-		final DataPackage theDataPackage = (DataPackage) EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
-		final XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
+		DataPackage theDataPackage = (DataPackage) EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
+		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
 				.getEPackage(XMLTypePackage.eNS_URI);
 
 		// Create type parameters
@@ -2954,6 +2951,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		applicationEClass.getESuperTypes().add(this.getConfigurableObject());
 		basicFBTypeEClass.getESuperTypes().add(this.getBaseFBType());
 		connectionEClass.getESuperTypes().add(this.getConfigurableObject());
+		connectionEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		deviceEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		deviceEClass.getESuperTypes().add(this.getPositionableElement());
 		deviceEClass.getESuperTypes().add(this.getColorizableElement());
@@ -3140,6 +3138,18 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEAttribute(getConnectionRoutingData_Dy(), theXMLTypePackage.getInt(), "dy", "0", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
 				ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnectionRoutingData_NeedsValidation(), theXMLTypePackage.getBoolean(), "needsValidation", //$NON-NLS-1$
+				null, 0, 1, ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(connectionRoutingDataEClass, ecorePackage.getEBoolean(), "is1SegementData", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
+
+		addEOperation(connectionRoutingDataEClass, ecorePackage.getEBoolean(), "is3SegementData", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
+
+		addEOperation(connectionRoutingDataEClass, ecorePackage.getEBoolean(), "is5SegementData", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
 
 		initEClass(deviceEClass, Device.class, "Device", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getDevice_Resource(), this.getResource(), this.getResource_Device(), "resource", null, 0, -1, //$NON-NLS-1$
@@ -3367,8 +3377,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = addEOperation(interfaceListEClass, null, "getAllInterfaceElements", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		final EGenericType g1 = createEGenericType(ecorePackage.getEEList());
-		final EGenericType g2 = createEGenericType(this.getIInterfaceElement());
+		EGenericType g1 = createEGenericType(ecorePackage.getEEList());
+		EGenericType g2 = createEGenericType(this.getIInterfaceElement());
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 
@@ -3482,6 +3492,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				"serviceTransaction", null, 0, -1, ServiceSequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		addEOperation(serviceSequenceEClass, this.getService(), "getService", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(serviceTransactionEClass, ServiceTransaction.class, "ServiceTransaction", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getServiceTransaction_InputPrimitive(), this.getInputPrimitive(), null, "inputPrimitive", null, //$NON-NLS-1$
@@ -3490,6 +3502,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getServiceTransaction_OutputPrimitive(), this.getOutputPrimitive(), null, "outputPrimitive", //$NON-NLS-1$
 				null, 0, -1, ServiceTransaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(serviceTransactionEClass, this.getServiceSequence(), "getServiceSequence", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
 
 		initEClass(serviceInterfaceFBTypeEClass, ServiceInterfaceFBType.class, "ServiceInterfaceFBType", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3690,6 +3705,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(serviceInterfaceEClass, ServiceInterface.class, "ServiceInterface", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 
+		addEOperation(serviceInterfaceEClass, this.getService(), "getService", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(serviceInterfaceEClass, ecorePackage.getEBoolean(), "isLeftInterface", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
+
 		initEClass(iInterfaceElementEClass, IInterfaceElement.class, "IInterfaceElement", IS_ABSTRACT, IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIInterfaceElement_IsInput(), theXMLTypePackage.getBoolean(), "isInput", null, 0, 1, //$NON-NLS-1$
@@ -3771,6 +3791,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				null, 1, 1, AdapterEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		addEOperation(adapterEventEClass, theXMLTypePackage.getString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(serviceEClass, Service.class, "Service", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getService_RightInterface(), this.getServiceInterface(), null, "rightInterface", null, 0, 1, //$NON-NLS-1$
 				Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
@@ -3781,6 +3803,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getService_ServiceSequence(), this.getServiceSequence(), null, "serviceSequence", null, 0, -1, //$NON-NLS-1$
 				Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(serviceEClass, this.getFBType(), "getFBType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(typedConfigureableObjectEClass, TypedConfigureableObject.class, "TypedConfigureableObject", //$NON-NLS-1$
 				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3818,6 +3842,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getPrimitive_Interface(), this.getServiceInterface(), null, "interface", null, 1, 1, //$NON-NLS-1$
 				Primitive.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(primitiveEClass, this.getServiceTransaction(), "getServiceTransaction", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
+
+		addEOperation(primitiveEClass, this.getService(), "getService", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(positionableElementEClass, PositionableElement.class, "PositionableElement", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3946,6 +3975,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				ErrorMarkerRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
 
+		addEOperation(errorMarkerRefEClass, theXMLTypePackage.getBoolean(), "hasError", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$
 		addEEnumLiteral(languageEEnum, Language.C);
@@ -3973,7 +4004,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 *
 	 * @generated */
 	protected void createExtendedMetaDataAnnotations() {
-		final String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
 		addAnnotation(getAdapterType_AdapterFBType(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "Service", //$NON-NLS-1$ //$NON-NLS-2$
 				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$

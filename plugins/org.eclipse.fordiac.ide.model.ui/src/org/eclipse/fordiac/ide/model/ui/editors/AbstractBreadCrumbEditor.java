@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -227,10 +228,21 @@ INavigationLocationProvider, IPersistableEditor {
 
 	protected void gotoConnection(final IMarker marker) {
 		final ErrorMarkerRef errorRef = ErrorMarkerBuilder.getMarkerRef(marker);
-		final FBNetworkElement parent = errorRef instanceof ErrorMarkerInterface
-				? ((ErrorMarkerInterface) errorRef).getFBNetworkElement()
-						: null;
-		selectErrorRef(errorRef, parent);
+		if (errorRef instanceof ErrorMarkerInterface) {
+			final FBNetworkElement parent = ((ErrorMarkerInterface) errorRef).getFBNetworkElement();
+			selectErrorRef(errorRef, parent);
+		} else if (errorRef instanceof Connection) {
+			final EObject toView = errorRef.eContainer().eContainer();
+			final IEditorPart editor = HandlerHelper.openEditor(toView);
+			final Connection conn = (Connection) errorRef;
+			if (conn.getSourceElement() != null) {
+				HandlerHelper.selectElement(((Connection) errorRef).getSourceElement(), editor);
+			} else if (conn.getDestinationElement() != null) {
+				HandlerHelper.selectElement(((Connection) errorRef).getDestinationElement(), editor);
+			}
+			HandlerHelper.selectElement(errorRef, editor);
+		}
+
 	}
 
 	protected void gotoValue(final IMarker marker) {

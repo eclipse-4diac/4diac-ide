@@ -66,20 +66,20 @@ public interface LibraryElementPackage extends EPackage {
 	int INAMED_ELEMENT = 54;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INAMED_ELEMENT__NAME = 0;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INAMED_ELEMENT__COMMENT = 1;
 
 	/** The number of structural features of the '<em>INamed Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INAMED_ELEMENT_FEATURE_COUNT = 2;
@@ -93,27 +93,27 @@ public interface LibraryElementPackage extends EPackage {
 	int CONFIGURABLE_OBJECT = 44;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONFIGURABLE_OBJECT__NAME = INAMED_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONFIGURABLE_OBJECT__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONFIGURABLE_OBJECT__ATTRIBUTES = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Configurable Object</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONFIGURABLE_OBJECT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
@@ -127,59 +127,59 @@ public interface LibraryElementPackage extends EPackage {
 	int IINTERFACE_ELEMENT = 51;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IINTERFACE_ELEMENT__NAME = CONFIGURABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IINTERFACE_ELEMENT__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IINTERFACE_ELEMENT__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IINTERFACE_ELEMENT__IS_INPUT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Input Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IINTERFACE_ELEMENT__INPUT_CONNECTIONS = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Output Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IINTERFACE_ELEMENT__TYPE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/** The feature id for the '<em><b>Type Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IINTERFACE_ELEMENT__TYPE_NAME = CONFIGURABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/** The number of structural features of the '<em>IInterface Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IINTERFACE_ELEMENT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
@@ -193,64 +193,64 @@ public interface LibraryElementPackage extends EPackage {
 	int VAR_DECLARATION = 39;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__NAME = IINTERFACE_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__COMMENT = IINTERFACE_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__IS_INPUT = IINTERFACE_ELEMENT__IS_INPUT;
 
 	/** The feature id for the '<em><b>Input Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__INPUT_CONNECTIONS = IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Output Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__OUTPUT_CONNECTIONS = IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__TYPE = IINTERFACE_ELEMENT__TYPE;
 
 	/** The feature id for the '<em><b>Type Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
 
 	/** The feature id for the '<em><b>Array Size</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__ARRAY_SIZE = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Withs</b></em>' reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION__WITHS = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
@@ -264,7 +264,7 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The number of structural features of the '<em>Var Declaration</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VAR_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
@@ -278,64 +278,64 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_DECLARATION = 0;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__NAME = VAR_DECLARATION__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__COMMENT = VAR_DECLARATION__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__IS_INPUT = VAR_DECLARATION__IS_INPUT;
 
 	/** The feature id for the '<em><b>Input Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__INPUT_CONNECTIONS = VAR_DECLARATION__INPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Output Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__OUTPUT_CONNECTIONS = VAR_DECLARATION__OUTPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__TYPE = VAR_DECLARATION__TYPE;
 
 	/** The feature id for the '<em><b>Type Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__TYPE_NAME = VAR_DECLARATION__TYPE_NAME;
 
 	/** The feature id for the '<em><b>Array Size</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__ARRAY_SIZE = VAR_DECLARATION__ARRAY_SIZE;
 
 	/** The feature id for the '<em><b>Withs</b></em>' reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__WITHS = VAR_DECLARATION__WITHS;
@@ -348,20 +348,20 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_DECLARATION__VALUE = VAR_DECLARATION__VALUE;
 
 	/** The feature id for the '<em><b>Adapter FB</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__ADAPTER_FB = VAR_DECLARATION_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION__PALETTE_ENTRY = VAR_DECLARATION_FEATURE_COUNT + 1;
 
 	/** The number of structural features of the '<em>Adapter Declaration</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_DECLARATION_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
@@ -375,40 +375,40 @@ public interface LibraryElementPackage extends EPackage {
 	int LIBRARY_ELEMENT = 42;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LIBRARY_ELEMENT__NAME = INAMED_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LIBRARY_ELEMENT__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LIBRARY_ELEMENT__VERSION_INFO = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LIBRARY_ELEMENT__IDENTIFICATION = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LIBRARY_ELEMENT__PALETTE_ENTRY = INAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/** The number of structural features of the '<em>Library Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LIBRARY_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 3;
@@ -422,33 +422,33 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_TYPE = 1;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_TYPE__NAME = DataPackage.DATA_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_TYPE__COMMENT = DataPackage.DATA_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_TYPE__VERSION_INFO = DataPackage.DATA_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_TYPE__IDENTIFICATION = DataPackage.DATA_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_TYPE__PALETTE_ENTRY = DataPackage.DATA_TYPE__PALETTE_ENTRY;
@@ -462,7 +462,7 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The number of structural features of the '<em>Adapter Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_TYPE_FEATURE_COUNT = DataPackage.DATA_TYPE_FEATURE_COUNT + 1;
@@ -476,13 +476,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ALGORITHM = 2;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ALGORITHM__NAME = INAMED_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ALGORITHM__COMMENT = INAMED_ELEMENT__COMMENT;
@@ -503,27 +503,27 @@ public interface LibraryElementPackage extends EPackage {
 	int APPLICATION = 3;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int APPLICATION__NAME = CONFIGURABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int APPLICATION__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int APPLICATION__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>FB Network</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int APPLICATION__FB_NETWORK = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
@@ -544,47 +544,47 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPILABLE_TYPE = 43;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILABLE_TYPE__NAME = LIBRARY_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILABLE_TYPE__COMMENT = LIBRARY_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILABLE_TYPE__VERSION_INFO = LIBRARY_ELEMENT__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILABLE_TYPE__IDENTIFICATION = LIBRARY_ELEMENT__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILABLE_TYPE__PALETTE_ENTRY = LIBRARY_ELEMENT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILABLE_TYPE__COMPILER_INFO = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Compilable Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILABLE_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
@@ -598,60 +598,60 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_TYPE = 19;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_TYPE__NAME = COMPILABLE_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_TYPE__COMMENT = COMPILABLE_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_TYPE__VERSION_INFO = COMPILABLE_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_TYPE__IDENTIFICATION = COMPILABLE_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_TYPE__PALETTE_ENTRY = COMPILABLE_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_TYPE__COMPILER_INFO = COMPILABLE_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Interface List</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_TYPE__INTERFACE_LIST = COMPILABLE_TYPE_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Service</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_TYPE__SERVICE = COMPILABLE_TYPE_FEATURE_COUNT + 1;
 
 	/** The number of structural features of the '<em>FB Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 2;
@@ -665,75 +665,75 @@ public interface LibraryElementPackage extends EPackage {
 	int BASE_FB_TYPE = 71;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__NAME = FB_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Interface List</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__INTERFACE_LIST = FB_TYPE__INTERFACE_LIST;
 
 	/** The feature id for the '<em><b>Service</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
 
 	/** The feature id for the '<em><b>Internal Vars</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__INTERNAL_VARS = FB_TYPE_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Internal Fbs</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__INTERNAL_FBS = FB_TYPE_FEATURE_COUNT + 1;
 
 	/** The number of structural features of the '<em>Base FB Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 2;
@@ -747,68 +747,68 @@ public interface LibraryElementPackage extends EPackage {
 	int BASIC_FB_TYPE = 4;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__NAME = BASE_FB_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__COMMENT = BASE_FB_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__VERSION_INFO = BASE_FB_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__IDENTIFICATION = BASE_FB_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__PALETTE_ENTRY = BASE_FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__COMPILER_INFO = BASE_FB_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Interface List</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__INTERFACE_LIST = BASE_FB_TYPE__INTERFACE_LIST;
 
 	/** The feature id for the '<em><b>Service</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__SERVICE = BASE_FB_TYPE__SERVICE;
 
 	/** The feature id for the '<em><b>Internal Vars</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__INTERNAL_VARS = BASE_FB_TYPE__INTERNAL_VARS;
 
 	/** The feature id for the '<em><b>Internal Fbs</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__INTERNAL_FBS = BASE_FB_TYPE__INTERNAL_FBS;
@@ -822,14 +822,14 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Algorithm</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__ALGORITHM = BASE_FB_TYPE_FEATURE_COUNT + 1;
 
 	/** The number of structural features of the '<em>Basic FB Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE_FEATURE_COUNT = BASE_FB_TYPE_FEATURE_COUNT + 2;
@@ -844,26 +844,26 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Compiler</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILER_INFO__COMPILER = 0;
 
 	/** The feature id for the '<em><b>Classdef</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILER_INFO__CLASSDEF = 1;
 
 	/** The feature id for the '<em><b>Header</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILER_INFO__HEADER = 2;
 
 	/** The number of structural features of the '<em>Compiler Info</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILER_INFO_FEATURE_COUNT = 3;
@@ -877,25 +877,25 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPILER = 6;
 
 	/** The feature id for the '<em><b>Language</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILER__LANGUAGE = 0;
 
 	/** The feature id for the '<em><b>Product</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILER__PRODUCT = 1;
 
 	/** The feature id for the '<em><b>Vendor</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILER__VENDOR = 2;
 
 	/** The feature id for the '<em><b>Version</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPILER__VERSION = 3;
@@ -916,62 +916,74 @@ public interface LibraryElementPackage extends EPackage {
 	int CONNECTION = 7;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONNECTION__NAME = CONFIGURABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONNECTION__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONNECTION__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
-	/** The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered */
-	int CONNECTION__RES_TYPE_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
+	int CONNECTION__FILE_MARKER_ID = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int CONNECTION__ERROR_MESSAGE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
+
+	/** The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int CONNECTION__RES_TYPE_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>Broken Connection</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
 	 * @generated
 	 * @ordered */
-	int CONNECTION__BROKEN_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
+	int CONNECTION__BROKEN_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/** The feature id for the '<em><b>Source</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
-	int CONNECTION__SOURCE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
+	int CONNECTION__SOURCE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/** The feature id for the '<em><b>Destination</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
-	int CONNECTION__DESTINATION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
+	int CONNECTION__DESTINATION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
 
 	/** The feature id for the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
-	int CONNECTION__ROUTING_DATA = CONFIGURABLE_OBJECT_FEATURE_COUNT + 4;
+	int CONNECTION__ROUTING_DATA = CONFIGURABLE_OBJECT_FEATURE_COUNT + 6;
 
 	/** The number of structural features of the '<em>Connection</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
 	 * @generated
 	 * @ordered */
-	int CONNECTION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
+	int CONNECTION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 7;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl
 	 * <em>Connection Routing Data</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -982,19 +994,19 @@ public interface LibraryElementPackage extends EPackage {
 	int CONNECTION_ROUTING_DATA = 8;
 
 	/** The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONNECTION_ROUTING_DATA__DX1 = 0;
 
 	/** The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONNECTION_ROUTING_DATA__DX2 = 1;
 
 	/** The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONNECTION_ROUTING_DATA__DY = 2;
@@ -1008,7 +1020,7 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The number of structural features of the '<em>Connection Routing Data</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CONNECTION_ROUTING_DATA_FEATURE_COUNT = 4;
@@ -1023,33 +1035,33 @@ public interface LibraryElementPackage extends EPackage {
 	int TYPED_CONFIGUREABLE_OBJECT = 60;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TYPED_CONFIGUREABLE_OBJECT__NAME = CONFIGURABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TYPED_CONFIGUREABLE_OBJECT__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Typed Configureable Object</em>' class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
@@ -1063,33 +1075,33 @@ public interface LibraryElementPackage extends EPackage {
 	int DEVICE = 9;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE__NAME = TYPED_CONFIGUREABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE__COMMENT = TYPED_CONFIGUREABLE_OBJECT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE__ATTRIBUTES = TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE__POSITION = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 0;
@@ -1103,33 +1115,33 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Var Declarations</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE__VAR_DECLARATIONS = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>Resource</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE__RESOURCE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/** The feature id for the '<em><b>Profile</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE__PROFILE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/** The feature id for the '<em><b>In Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE__IN_CONNECTIONS = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 5;
 
 	/** The number of structural features of the '<em>Device</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 6;
@@ -1143,81 +1155,81 @@ public interface LibraryElementPackage extends EPackage {
 	int DEVICE_TYPE = 10;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__NAME = COMPILABLE_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__COMMENT = COMPILABLE_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__VERSION_INFO = COMPILABLE_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__IDENTIFICATION = COMPILABLE_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__PALETTE_ENTRY = COMPILABLE_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__COMPILER_INFO = COMPILABLE_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Var Declaration</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__VAR_DECLARATION = COMPILABLE_TYPE_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Resource Type Name</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__RESOURCE_TYPE_NAME = COMPILABLE_TYPE_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Resource</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__RESOURCE = COMPILABLE_TYPE_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>FB Network</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__FB_NETWORK = COMPILABLE_TYPE_FEATURE_COUNT + 3;
 
 	/** The feature id for the '<em><b>Profile</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__PROFILE = COMPILABLE_TYPE_FEATURE_COUNT + 4;
 
 	/** The feature id for the '<em><b>Attribute Declarations</b></em>' containment reference list. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__ATTRIBUTE_DECLARATIONS = COMPILABLE_TYPE_FEATURE_COUNT + 5;
@@ -1238,13 +1250,13 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_ACTION = 11;
 
 	/** The feature id for the '<em><b>Algorithm</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_ACTION__ALGORITHM = 0;
 
 	/** The feature id for the '<em><b>Output</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_ACTION__OUTPUT = 1;
@@ -1273,33 +1285,33 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>EC State</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ECC__EC_STATE = 0;
 
 	/** The feature id for the '<em><b>EC Transition</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ECC__EC_TRANSITION = 1;
 
 	/** The feature id for the '<em><b>Start</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ECC__START = 2;
 
 	/** The feature id for the '<em><b>Basic FB Type</b></em>' container reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ECC__BASIC_FB_TYPE = 3;
 
 	/** The number of structural features of the '<em>ECC</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ECC_FEATURE_COUNT = 4;
@@ -1313,47 +1325,47 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_STATE = 13;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_STATE__NAME = INAMED_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_STATE__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_STATE__POSITION = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>EC Action</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_STATE__EC_ACTION = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Out Transitions</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_STATE__OUT_TRANSITIONS = INAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>In Transitions</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_STATE__IN_TRANSITIONS = INAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/** The feature id for the '<em><b>ECC</b></em>' container reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_STATE__ECC = INAMED_ELEMENT_FEATURE_COUNT + 4;
@@ -1375,14 +1387,14 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int POSITIONABLE_ELEMENT__POSITION = 0;
 
 	/** The number of structural features of the '<em>Positionable Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int POSITIONABLE_ELEMENT_FEATURE_COUNT = 1;
@@ -1397,32 +1409,32 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_TRANSITION__POSITION = POSITIONABLE_ELEMENT__POSITION;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_TRANSITION__COMMENT = POSITIONABLE_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Condition Expression</b></em>' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_TRANSITION__CONDITION_EXPRESSION = POSITIONABLE_ELEMENT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Source</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_TRANSITION__SOURCE = POSITIONABLE_ELEMENT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>Destination</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_TRANSITION__DESTINATION = POSITIONABLE_ELEMENT_FEATURE_COUNT + 3;
@@ -1435,14 +1447,14 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_TRANSITION__CONDITION_EVENT = POSITIONABLE_ELEMENT_FEATURE_COUNT + 4;
 
 	/** The feature id for the '<em><b>ECC</b></em>' container reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_TRANSITION__ECC = POSITIONABLE_ELEMENT_FEATURE_COUNT + 5;
 
 	/** The number of structural features of the '<em>EC Transition</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EC_TRANSITION_FEATURE_COUNT = POSITIONABLE_ELEMENT_FEATURE_COUNT + 6;
@@ -1456,65 +1468,65 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT = 15;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT__NAME = IINTERFACE_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT__COMMENT = IINTERFACE_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT__IS_INPUT = IINTERFACE_ELEMENT__IS_INPUT;
 
 	/** The feature id for the '<em><b>Input Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT__INPUT_CONNECTIONS = IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Output Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT__OUTPUT_CONNECTIONS = IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT__TYPE = IINTERFACE_ELEMENT__TYPE;
 
 	/** The feature id for the '<em><b>Type Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
 
 	/** The feature id for the '<em><b>With</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT__WITH = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Event</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
@@ -1528,53 +1540,53 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_NETWORK_ELEMENT = 17;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK_ELEMENT__NAME = TYPED_CONFIGUREABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK_ELEMENT__COMMENT = TYPED_CONFIGUREABLE_OBJECT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK_ELEMENT__ATTRIBUTES = TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK_ELEMENT__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK_ELEMENT__POSITION = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK_ELEMENT__INTERFACE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK_ELEMENT__MAPPING = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/** The number of structural features of the '<em>FB Network Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
@@ -1588,52 +1600,52 @@ public interface LibraryElementPackage extends EPackage {
 	int FB = 16;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB__NAME = FB_NETWORK_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB__COMMENT = FB_NETWORK_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB__ATTRIBUTES = FB_NETWORK_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB__POSITION = FB_NETWORK_ELEMENT__POSITION;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB__INTERFACE = FB_NETWORK_ELEMENT__INTERFACE;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
 
 	/** The number of structural features of the '<em>FB</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
@@ -1647,59 +1659,59 @@ public interface LibraryElementPackage extends EPackage {
 	int SUB_APP = 18;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP__NAME = FB_NETWORK_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP__COMMENT = FB_NETWORK_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP__ATTRIBUTES = FB_NETWORK_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP__POSITION = FB_NETWORK_ELEMENT__POSITION;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP__INTERFACE = FB_NETWORK_ELEMENT__INTERFACE;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
 
 	/** The feature id for the '<em><b>Sub App Network</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP__SUB_APP_NETWORK = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Sub App</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
@@ -1720,38 +1732,38 @@ public interface LibraryElementPackage extends EPackage {
 	int IDENTIFICATION__APPLICATION_DOMAIN = 0;
 
 	/** The feature id for the '<em><b>Classification</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IDENTIFICATION__CLASSIFICATION = 1;
 
 	/** The feature id for the '<em><b>Description</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IDENTIFICATION__DESCRIPTION = 2;
 
 	/** The feature id for the '<em><b>Function</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IDENTIFICATION__FUNCTION = 3;
 
 	/** The feature id for the '<em><b>Standard</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IDENTIFICATION__STANDARD = 4;
 
 	/** The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IDENTIFICATION__TYPE = 5;
 
 	/** The number of structural features of the '<em>Identification</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IDENTIFICATION_FEATURE_COUNT = 6;
@@ -1765,19 +1777,19 @@ public interface LibraryElementPackage extends EPackage {
 	int PRIMITIVE = 62;
 
 	/** The feature id for the '<em><b>Event</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int PRIMITIVE__EVENT = 0;
 
 	/** The feature id for the '<em><b>Parameters</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int PRIMITIVE__PARAMETERS = 1;
 
 	/** The feature id for the '<em><b>Interface</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int PRIMITIVE__INTERFACE = 2;
@@ -1798,26 +1810,26 @@ public interface LibraryElementPackage extends EPackage {
 	int INPUT_PRIMITIVE = 21;
 
 	/** The feature id for the '<em><b>Event</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INPUT_PRIMITIVE__EVENT = PRIMITIVE__EVENT;
 
 	/** The feature id for the '<em><b>Parameters</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INPUT_PRIMITIVE__PARAMETERS = PRIMITIVE__PARAMETERS;
 
 	/** The feature id for the '<em><b>Interface</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INPUT_PRIMITIVE__INTERFACE = PRIMITIVE__INTERFACE;
 
 	/** The number of structural features of the '<em>Input Primitive</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INPUT_PRIMITIVE_FEATURE_COUNT = PRIMITIVE_FEATURE_COUNT + 0;
@@ -1832,56 +1844,56 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Plugs</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INTERFACE_LIST__PLUGS = 0;
 
 	/** The feature id for the '<em><b>Sockets</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INTERFACE_LIST__SOCKETS = 1;
 
 	/** The feature id for the '<em><b>Event Inputs</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INTERFACE_LIST__EVENT_INPUTS = 2;
 
 	/** The feature id for the '<em><b>Event Outputs</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INTERFACE_LIST__EVENT_OUTPUTS = 3;
 
 	/** The feature id for the '<em><b>Input Vars</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INTERFACE_LIST__INPUT_VARS = 4;
 
 	/** The feature id for the '<em><b>Output Vars</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INTERFACE_LIST__OUTPUT_VARS = 5;
 
 	/** The feature id for the '<em><b>Error Marker</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INTERFACE_LIST__ERROR_MARKER = 6;
 
 	/** The number of structural features of the '<em>Interface List</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int INTERFACE_LIST_FEATURE_COUNT = 7;
@@ -1895,38 +1907,38 @@ public interface LibraryElementPackage extends EPackage {
 	int LINK = 23;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LINK__NAME = CONFIGURABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LINK__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LINK__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Segment</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LINK__SEGMENT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Device</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LINK__DEVICE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/** The number of structural features of the '<em>Link</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LINK_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
@@ -1940,19 +1952,19 @@ public interface LibraryElementPackage extends EPackage {
 	int MAPPING = 24;
 
 	/** The feature id for the '<em><b>From</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MAPPING__FROM = 0;
 
 	/** The feature id for the '<em><b>To</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MAPPING__TO = 1;
 
 	/** The number of structural features of the '<em>Mapping</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MAPPING_FEATURE_COUNT = 2;
@@ -1966,26 +1978,26 @@ public interface LibraryElementPackage extends EPackage {
 	int TEXT_ALGORITHM = 46;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TEXT_ALGORITHM__NAME = ALGORITHM__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TEXT_ALGORITHM__COMMENT = ALGORITHM__COMMENT;
 
 	/** The feature id for the '<em><b>Text</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TEXT_ALGORITHM__TEXT = ALGORITHM_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Text Algorithm</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TEXT_ALGORITHM_FEATURE_COUNT = ALGORITHM_FEATURE_COUNT + 1;
@@ -1999,32 +2011,32 @@ public interface LibraryElementPackage extends EPackage {
 	int OTHER_ALGORITHM = 25;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int OTHER_ALGORITHM__NAME = TEXT_ALGORITHM__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int OTHER_ALGORITHM__COMMENT = TEXT_ALGORITHM__COMMENT;
 
 	/** The feature id for the '<em><b>Text</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int OTHER_ALGORITHM__TEXT = TEXT_ALGORITHM__TEXT;
 
 	/** The feature id for the '<em><b>Language</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int OTHER_ALGORITHM__LANGUAGE = TEXT_ALGORITHM_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Other Algorithm</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int OTHER_ALGORITHM_FEATURE_COUNT = TEXT_ALGORITHM_FEATURE_COUNT + 1;
@@ -2038,26 +2050,26 @@ public interface LibraryElementPackage extends EPackage {
 	int OUTPUT_PRIMITIVE = 26;
 
 	/** The feature id for the '<em><b>Event</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int OUTPUT_PRIMITIVE__EVENT = PRIMITIVE__EVENT;
 
 	/** The feature id for the '<em><b>Parameters</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int OUTPUT_PRIMITIVE__PARAMETERS = PRIMITIVE__PARAMETERS;
 
 	/** The feature id for the '<em><b>Interface</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int OUTPUT_PRIMITIVE__INTERFACE = PRIMITIVE__INTERFACE;
 
 	/** The number of structural features of the '<em>Output Primitive</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int OUTPUT_PRIMITIVE_FEATURE_COUNT = PRIMITIVE_FEATURE_COUNT + 0;
@@ -2071,32 +2083,32 @@ public interface LibraryElementPackage extends EPackage {
 	int ATTRIBUTE = 27;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE__NAME = INAMED_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE__TYPE = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Attribute Declaration</b></em>' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE__ATTRIBUTE_DECLARATION = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Value</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE__VALUE = INAMED_ELEMENT_FEATURE_COUNT + 2;
@@ -2117,52 +2129,52 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE = 28;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE__NAME = TYPED_CONFIGUREABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE__COMMENT = TYPED_CONFIGUREABLE_OBJECT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE__ATTRIBUTES = TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Var Declarations</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE__VAR_DECLARATIONS = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>FB Network</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE__FB_NETWORK = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE__X = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE__Y = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
@@ -2176,7 +2188,7 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Device Type Resource</b></em>' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE__DEVICE_TYPE_RESOURCE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 5;
@@ -2197,14 +2209,14 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_NAME = 29;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_NAME__NAME = 0;
 
 	/** The number of structural features of the '<em>Resource Type Name</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_NAME_FEATURE_COUNT = 1;
@@ -2218,54 +2230,54 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE = 30;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE__NAME = COMPILABLE_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE__COMMENT = COMPILABLE_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE__VERSION_INFO = COMPILABLE_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE__IDENTIFICATION = COMPILABLE_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE__PALETTE_ENTRY = COMPILABLE_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE__COMPILER_INFO = COMPILABLE_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Var Declaration</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE__VAR_DECLARATION = COMPILABLE_TYPE_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>FB Network</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE__FB_NETWORK = COMPILABLE_TYPE_FEATURE_COUNT + 1;
@@ -2279,7 +2291,7 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The number of structural features of the '<em>Resource Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 3;
@@ -2293,33 +2305,33 @@ public interface LibraryElementPackage extends EPackage {
 	int SEGMENT = 31;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT__NAME = TYPED_CONFIGUREABLE_OBJECT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT__COMMENT = TYPED_CONFIGUREABLE_OBJECT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT__ATTRIBUTES = TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT__POSITION = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 0;
@@ -2332,27 +2344,27 @@ public interface LibraryElementPackage extends EPackage {
 	int SEGMENT__COLOR = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Width</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT__WIDTH = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>Var Declarations</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT__VAR_DECLARATIONS = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/** The feature id for the '<em><b>Out Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT__OUT_CONNECTIONS = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/** The number of structural features of the '<em>Segment</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 5;
@@ -2366,27 +2378,27 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_SEQUENCE = 32;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_SEQUENCE__NAME = INAMED_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_SEQUENCE__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Service Transaction</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_SEQUENCE__SERVICE_TRANSACTION = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Service Sequence</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_SEQUENCE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
@@ -2401,21 +2413,21 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Input Primitive</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_TRANSACTION__INPUT_PRIMITIVE = 0;
 
 	/** The feature id for the '<em><b>Output Primitive</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_TRANSACTION__OUTPUT_PRIMITIVE = 1;
 
 	/** The number of structural features of the '<em>Service Transaction</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_TRANSACTION_FEATURE_COUNT = 2;
@@ -2429,61 +2441,61 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_INTERFACE_FB_TYPE = 34;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE__NAME = FB_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Interface List</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE__INTERFACE_LIST = FB_TYPE__INTERFACE_LIST;
 
 	/** The feature id for the '<em><b>Service</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
 
 	/** The number of structural features of the '<em>Service Interface FB Type</em>' class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 0;
@@ -2497,26 +2509,26 @@ public interface LibraryElementPackage extends EPackage {
 	int ST_ALGORITHM = 35;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ST_ALGORITHM__NAME = TEXT_ALGORITHM__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ST_ALGORITHM__COMMENT = TEXT_ALGORITHM__COMMENT;
 
 	/** The feature id for the '<em><b>Text</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ST_ALGORITHM__TEXT = TEXT_ALGORITHM__TEXT;
 
 	/** The number of structural features of the '<em>ST Algorithm</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ST_ALGORITHM_FEATURE_COUNT = TEXT_ALGORITHM_FEATURE_COUNT + 0;
@@ -2531,28 +2543,28 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Network Elements</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK__NETWORK_ELEMENTS = 0;
 
 	/** The feature id for the '<em><b>Data Connections</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK__DATA_CONNECTIONS = 1;
 
 	/** The feature id for the '<em><b>Event Connections</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK__EVENT_CONNECTIONS = 2;
 
 	/** The feature id for the '<em><b>Adapter Connections</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int FB_NETWORK__ADAPTER_CONNECTIONS = 3;
@@ -2573,68 +2585,68 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPOSITE_FB_TYPE = 45;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__NAME = FB_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Interface List</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__INTERFACE_LIST = FB_TYPE__INTERFACE_LIST;
 
 	/** The feature id for the '<em><b>Service</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
 
 	/** The feature id for the '<em><b>FB Network</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__FB_NETWORK = FB_TYPE_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Composite FB Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COMPOSITE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
@@ -2648,68 +2660,68 @@ public interface LibraryElementPackage extends EPackage {
 	int SUB_APP_TYPE = 37;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE__NAME = COMPOSITE_FB_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE__COMMENT = COMPOSITE_FB_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE__VERSION_INFO = COMPOSITE_FB_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE__IDENTIFICATION = COMPOSITE_FB_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE__PALETTE_ENTRY = COMPOSITE_FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE__COMPILER_INFO = COMPOSITE_FB_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Interface List</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE__INTERFACE_LIST = COMPOSITE_FB_TYPE__INTERFACE_LIST;
 
 	/** The feature id for the '<em><b>Service</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE__SERVICE = COMPOSITE_FB_TYPE__SERVICE;
 
 	/** The feature id for the '<em><b>FB Network</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE__FB_NETWORK = COMPOSITE_FB_TYPE__FB_NETWORK;
 
 	/** The number of structural features of the '<em>Sub App Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SUB_APP_TYPE_FEATURE_COUNT = COMPOSITE_FB_TYPE_FEATURE_COUNT + 0;
@@ -2723,79 +2735,79 @@ public interface LibraryElementPackage extends EPackage {
 	int AUTOMATION_SYSTEM = 38;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__NAME = LIBRARY_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__COMMENT = LIBRARY_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__VERSION_INFO = LIBRARY_ELEMENT__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__IDENTIFICATION = LIBRARY_ELEMENT__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__PALETTE_ENTRY = LIBRARY_ELEMENT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Application</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__APPLICATION = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__MAPPING = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Palette</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__PALETTE = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>System Configuration</b></em>' containment reference. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
 
 	/** The feature id for the '<em><b>System File</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__SYSTEM_FILE = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
 
 	/** The feature id for the '<em><b>Command Stack</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__COMMAND_STACK = LIBRARY_ELEMENT_FEATURE_COUNT + 5;
 
 	/** The number of structural features of the '<em>Automation System</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 6;
@@ -2809,38 +2821,38 @@ public interface LibraryElementPackage extends EPackage {
 	int VERSION_INFO = 40;
 
 	/** The feature id for the '<em><b>Author</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VERSION_INFO__AUTHOR = 0;
 
 	/** The feature id for the '<em><b>Date</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VERSION_INFO__DATE = 1;
 
 	/** The feature id for the '<em><b>Organization</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VERSION_INFO__ORGANIZATION = 2;
 
 	/** The feature id for the '<em><b>Remarks</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VERSION_INFO__REMARKS = 3;
 
 	/** The feature id for the '<em><b>Version</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VERSION_INFO__VERSION = 4;
 
 	/** The number of structural features of the '<em>Version Info</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VERSION_INFO_FEATURE_COUNT = 5;
@@ -2854,13 +2866,13 @@ public interface LibraryElementPackage extends EPackage {
 	int WITH = 41;
 
 	/** The feature id for the '<em><b>Variables</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int WITH__VARIABLES = 0;
 
 	/** The number of structural features of the '<em>With</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int WITH_FEATURE_COUNT = 1;
@@ -2874,27 +2886,39 @@ public interface LibraryElementPackage extends EPackage {
 	int DATA_CONNECTION = 47;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DATA_CONNECTION__NAME = CONNECTION__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DATA_CONNECTION__COMMENT = CONNECTION__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DATA_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int DATA_CONNECTION__FILE_MARKER_ID = CONNECTION__FILE_MARKER_ID;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int DATA_CONNECTION__ERROR_MESSAGE = CONNECTION__ERROR_MESSAGE;
+
 	/** The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DATA_CONNECTION__RES_TYPE_CONNECTION = CONNECTION__RES_TYPE_CONNECTION;
@@ -2907,26 +2931,26 @@ public interface LibraryElementPackage extends EPackage {
 	int DATA_CONNECTION__BROKEN_CONNECTION = CONNECTION__BROKEN_CONNECTION;
 
 	/** The feature id for the '<em><b>Source</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DATA_CONNECTION__SOURCE = CONNECTION__SOURCE;
 
 	/** The feature id for the '<em><b>Destination</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DATA_CONNECTION__DESTINATION = CONNECTION__DESTINATION;
 
 	/** The feature id for the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DATA_CONNECTION__ROUTING_DATA = CONNECTION__ROUTING_DATA;
 
 	/** The number of structural features of the '<em>Data Connection</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DATA_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
@@ -2940,27 +2964,39 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT_CONNECTION = 48;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT_CONNECTION__NAME = CONNECTION__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT_CONNECTION__COMMENT = CONNECTION__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int EVENT_CONNECTION__FILE_MARKER_ID = CONNECTION__FILE_MARKER_ID;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int EVENT_CONNECTION__ERROR_MESSAGE = CONNECTION__ERROR_MESSAGE;
+
 	/** The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT_CONNECTION__RES_TYPE_CONNECTION = CONNECTION__RES_TYPE_CONNECTION;
@@ -2973,26 +3009,26 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT_CONNECTION__BROKEN_CONNECTION = CONNECTION__BROKEN_CONNECTION;
 
 	/** The feature id for the '<em><b>Source</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT_CONNECTION__SOURCE = CONNECTION__SOURCE;
 
 	/** The feature id for the '<em><b>Destination</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT_CONNECTION__DESTINATION = CONNECTION__DESTINATION;
 
 	/** The feature id for the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT_CONNECTION__ROUTING_DATA = CONNECTION__ROUTING_DATA;
 
 	/** The number of structural features of the '<em>Event Connection</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int EVENT_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
@@ -3006,27 +3042,39 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_CONNECTION = 49;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_CONNECTION__NAME = CONNECTION__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_CONNECTION__COMMENT = CONNECTION__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
+	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int ADAPTER_CONNECTION__FILE_MARKER_ID = CONNECTION__FILE_MARKER_ID;
+
+	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int ADAPTER_CONNECTION__ERROR_MESSAGE = CONNECTION__ERROR_MESSAGE;
+
 	/** The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_CONNECTION__RES_TYPE_CONNECTION = CONNECTION__RES_TYPE_CONNECTION;
@@ -3039,26 +3087,26 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_CONNECTION__BROKEN_CONNECTION = CONNECTION__BROKEN_CONNECTION;
 
 	/** The feature id for the '<em><b>Source</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_CONNECTION__SOURCE = CONNECTION__SOURCE;
 
 	/** The feature id for the '<em><b>Destination</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_CONNECTION__DESTINATION = CONNECTION__DESTINATION;
 
 	/** The feature id for the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_CONNECTION__ROUTING_DATA = CONNECTION__ROUTING_DATA;
 
 	/** The number of structural features of the '<em>Adapter Connection</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
@@ -3072,20 +3120,20 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_INTERFACE = 50;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE__NAME = INAMED_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/** The number of structural features of the '<em>Service Interface</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_INTERFACE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
@@ -3099,20 +3147,20 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_REF = 79;
 
 	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_REF__FILE_MARKER_ID = 0;
 
 	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_REF__ERROR_MESSAGE = 1;
 
 	/** The number of structural features of the '<em>Error Marker Ref</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_REF_FEATURE_COUNT = 2;
@@ -3126,25 +3174,25 @@ public interface LibraryElementPackage extends EPackage {
 	int VALUE = 52;
 
 	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VALUE__FILE_MARKER_ID = ERROR_MARKER_REF__FILE_MARKER_ID;
 
 	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VALUE__ERROR_MESSAGE = ERROR_MARKER_REF__ERROR_MESSAGE;
 
 	/** The feature id for the '<em><b>Value</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VALUE__VALUE = ERROR_MARKER_REF_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Value</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VALUE_FEATURE_COUNT = ERROR_MARKER_REF_FEATURE_COUNT + 1;
@@ -3159,28 +3207,28 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Devices</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SYSTEM_CONFIGURATION__DEVICES = 0;
 
 	/** The feature id for the '<em><b>Segments</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SYSTEM_CONFIGURATION__SEGMENTS = 1;
 
 	/** The feature id for the '<em><b>Links</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SYSTEM_CONFIGURATION__LINKS = 2;
 
 	/** The number of structural features of the '<em>System Configuration</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SYSTEM_CONFIGURATION_FEATURE_COUNT = 3;
@@ -3194,53 +3242,53 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_FB = 55;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_FB__NAME = FB__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_FB__COMMENT = FB__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_FB__ATTRIBUTES = FB__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_FB__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_FB__POSITION = FB__POSITION;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_FB__INTERFACE = FB__INTERFACE;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_FB__MAPPING = FB__MAPPING;
 
 	/** The number of structural features of the '<em>Resource Type FB</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_FB_FEATURE_COUNT = FB_FEATURE_COUNT + 0;
@@ -3254,54 +3302,54 @@ public interface LibraryElementPackage extends EPackage {
 	int SEGMENT_TYPE = 56;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT_TYPE__NAME = COMPILABLE_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT_TYPE__COMMENT = COMPILABLE_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT_TYPE__VERSION_INFO = COMPILABLE_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT_TYPE__IDENTIFICATION = COMPILABLE_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT_TYPE__PALETTE_ENTRY = COMPILABLE_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT_TYPE__COMPILER_INFO = COMPILABLE_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Var Declaration</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT_TYPE__VAR_DECLARATION = COMPILABLE_TYPE_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Segment Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SEGMENT_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 1;
@@ -3315,67 +3363,67 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_FB_TYPE = 57;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__NAME = FB_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Interface List</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__INTERFACE_LIST = FB_TYPE__INTERFACE_LIST;
 
 	/** The feature id for the '<em><b>Service</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
 
 	/** The feature id for the '<em><b>Adapter Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__ADAPTER_TYPE = FB_TYPE_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Adapter FB Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
@@ -3389,73 +3437,73 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_EVENT = 58;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__NAME = EVENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__COMMENT = EVENT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__ATTRIBUTES = EVENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__IS_INPUT = EVENT__IS_INPUT;
 
 	/** The feature id for the '<em><b>Input Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__INPUT_CONNECTIONS = EVENT__INPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Output Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__OUTPUT_CONNECTIONS = EVENT__OUTPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__TYPE = EVENT__TYPE;
 
 	/** The feature id for the '<em><b>Type Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__TYPE_NAME = EVENT__TYPE_NAME;
 
 	/** The feature id for the '<em><b>With</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__WITH = EVENT__WITH;
 
 	/** The feature id for the '<em><b>Adapter Declaration</b></em>' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT__ADAPTER_DECLARATION = EVENT_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Adapter Event</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
@@ -3470,27 +3518,27 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Right Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE__RIGHT_INTERFACE = 0;
 
 	/** The feature id for the '<em><b>Left Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE__LEFT_INTERFACE = 1;
 
 	/** The feature id for the '<em><b>Service Sequence</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE__SERVICE_SEQUENCE = 2;
 
 	/** The number of structural features of the '<em>Service</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SERVICE_FEATURE_COUNT = 3;
@@ -3504,52 +3552,52 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_FB = 61;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB__NAME = FB__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB__COMMENT = FB__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB__ATTRIBUTES = FB__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB__POSITION = FB__POSITION;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB__INTERFACE = FB__INTERFACE;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB__MAPPING = FB__MAPPING;
 
 	/** The feature id for the '<em><b>Adapter Decl</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB__ADAPTER_DECL = FB_FEATURE_COUNT + 0;
@@ -3570,13 +3618,13 @@ public interface LibraryElementPackage extends EPackage {
 	int POSITION = 64;
 
 	/** The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int POSITION__X = 0;
 
 	/** The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int POSITION__Y = 1;
@@ -3597,25 +3645,25 @@ public interface LibraryElementPackage extends EPackage {
 	int COLOR = 65;
 
 	/** The feature id for the '<em><b>Red</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COLOR__RED = 0;
 
 	/** The feature id for the '<em><b>Green</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COLOR__GREEN = 1;
 
 	/** The feature id for the '<em><b>Blue</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COLOR__BLUE = 2;
 
 	/** The number of structural features of the '<em>Color</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COLOR_FEATURE_COUNT = 3;
@@ -3637,7 +3685,7 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The number of structural features of the '<em>Colorizable Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int COLORIZABLE_ELEMENT_FEATURE_COUNT = 1;
@@ -3652,14 +3700,14 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Var Declarations</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IVAR_ELEMENT__VAR_DECLARATIONS = 0;
 
 	/** The number of structural features of the '<em>IVar Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int IVAR_ELEMENT_FEATURE_COUNT = 1;
@@ -3673,32 +3721,32 @@ public interface LibraryElementPackage extends EPackage {
 	int ATTRIBUTE_DECLARATION = 68;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE_DECLARATION__NAME = INAMED_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE_DECLARATION__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE_DECLARATION__TYPE = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Initial Value</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE_DECLARATION__INITIAL_VALUE = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/** The number of structural features of the '<em>Attribute Declaration</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ATTRIBUTE_DECLARATION_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 2;
@@ -3712,14 +3760,14 @@ public interface LibraryElementPackage extends EPackage {
 	int TYPED_ELEMENT = 69;
 
 	/** The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TYPED_ELEMENT__TYPE = 0;
 
 	/** The number of structural features of the '<em>Typed Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TYPED_ELEMENT_FEATURE_COUNT = 1;
@@ -3733,82 +3781,82 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_FB_TYPE = 70;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__NAME = BASE_FB_TYPE__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__COMMENT = BASE_FB_TYPE__COMMENT;
 
 	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__VERSION_INFO = BASE_FB_TYPE__VERSION_INFO;
 
 	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__IDENTIFICATION = BASE_FB_TYPE__IDENTIFICATION;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__PALETTE_ENTRY = BASE_FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__COMPILER_INFO = BASE_FB_TYPE__COMPILER_INFO;
 
 	/** The feature id for the '<em><b>Interface List</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__INTERFACE_LIST = BASE_FB_TYPE__INTERFACE_LIST;
 
 	/** The feature id for the '<em><b>Service</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__SERVICE = BASE_FB_TYPE__SERVICE;
 
 	/** The feature id for the '<em><b>Internal Vars</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__INTERNAL_VARS = BASE_FB_TYPE__INTERNAL_VARS;
 
 	/** The feature id for the '<em><b>Internal Fbs</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__INTERNAL_FBS = BASE_FB_TYPE__INTERNAL_FBS;
 
 	/** The feature id for the '<em><b>Algorithm</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__ALGORITHM = BASE_FB_TYPE_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Simple FB Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE_FEATURE_COUNT = BASE_FB_TYPE_FEATURE_COUNT + 1;
@@ -3822,59 +3870,59 @@ public interface LibraryElementPackage extends EPackage {
 	int STRUCT_MANIPULATOR = 72;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int STRUCT_MANIPULATOR__NAME = FB__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int STRUCT_MANIPULATOR__COMMENT = FB__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int STRUCT_MANIPULATOR__ATTRIBUTES = FB__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int STRUCT_MANIPULATOR__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int STRUCT_MANIPULATOR__POSITION = FB__POSITION;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int STRUCT_MANIPULATOR__INTERFACE = FB__INTERFACE;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int STRUCT_MANIPULATOR__MAPPING = FB__MAPPING;
 
 	/** The feature id for the '<em><b>Struct Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int STRUCT_MANIPULATOR__STRUCT_TYPE = FB_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Struct Manipulator</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int STRUCT_MANIPULATOR_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
@@ -3888,59 +3936,59 @@ public interface LibraryElementPackage extends EPackage {
 	int DEMULTIPLEXER = 73;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEMULTIPLEXER__NAME = STRUCT_MANIPULATOR__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEMULTIPLEXER__COMMENT = STRUCT_MANIPULATOR__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEMULTIPLEXER__ATTRIBUTES = STRUCT_MANIPULATOR__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEMULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEMULTIPLEXER__POSITION = STRUCT_MANIPULATOR__POSITION;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEMULTIPLEXER__INTERFACE = STRUCT_MANIPULATOR__INTERFACE;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEMULTIPLEXER__MAPPING = STRUCT_MANIPULATOR__MAPPING;
 
 	/** The feature id for the '<em><b>Struct Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEMULTIPLEXER__STRUCT_TYPE = STRUCT_MANIPULATOR__STRUCT_TYPE;
 
 	/** The number of structural features of the '<em>Demultiplexer</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int DEMULTIPLEXER_FEATURE_COUNT = STRUCT_MANIPULATOR_FEATURE_COUNT + 0;
@@ -3954,52 +4002,52 @@ public interface LibraryElementPackage extends EPackage {
 	int MULTIPLEXER = 74;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MULTIPLEXER__NAME = STRUCT_MANIPULATOR__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MULTIPLEXER__COMMENT = STRUCT_MANIPULATOR__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MULTIPLEXER__ATTRIBUTES = STRUCT_MANIPULATOR__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MULTIPLEXER__POSITION = STRUCT_MANIPULATOR__POSITION;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MULTIPLEXER__INTERFACE = STRUCT_MANIPULATOR__INTERFACE;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MULTIPLEXER__MAPPING = STRUCT_MANIPULATOR__MAPPING;
 
 	/** The feature id for the '<em><b>Struct Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int MULTIPLEXER__STRUCT_TYPE = STRUCT_MANIPULATOR__STRUCT_TYPE;
@@ -4020,64 +4068,64 @@ public interface LibraryElementPackage extends EPackage {
 	int LOCAL_VARIABLE = 75;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__NAME = VAR_DECLARATION__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__COMMENT = VAR_DECLARATION__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__IS_INPUT = VAR_DECLARATION__IS_INPUT;
 
 	/** The feature id for the '<em><b>Input Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__INPUT_CONNECTIONS = VAR_DECLARATION__INPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Output Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__OUTPUT_CONNECTIONS = VAR_DECLARATION__OUTPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__TYPE = VAR_DECLARATION__TYPE;
 
 	/** The feature id for the '<em><b>Type Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__TYPE_NAME = VAR_DECLARATION__TYPE_NAME;
 
 	/** The feature id for the '<em><b>Array Size</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__ARRAY_SIZE = VAR_DECLARATION__ARRAY_SIZE;
 
 	/** The feature id for the '<em><b>Withs</b></em>' reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__WITHS = VAR_DECLARATION__WITHS;
@@ -4090,20 +4138,20 @@ public interface LibraryElementPackage extends EPackage {
 	int LOCAL_VARIABLE__VALUE = VAR_DECLARATION__VALUE;
 
 	/** The feature id for the '<em><b>Array Start</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__ARRAY_START = VAR_DECLARATION_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Array Stop</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE__ARRAY_STOP = VAR_DECLARATION_FEATURE_COUNT + 1;
 
 	/** The number of structural features of the '<em>Local Variable</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int LOCAL_VARIABLE_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
@@ -4117,58 +4165,58 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_FBN_ELEMENT = 76;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__NAME = FB_NETWORK_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__COMMENT = FB_NETWORK_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__ATTRIBUTES = FB_NETWORK_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__POSITION = FB_NETWORK_ELEMENT__POSITION;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__INTERFACE = FB_NETWORK_ELEMENT__INTERFACE;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
 
 	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
@@ -4182,7 +4230,7 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The number of structural features of the '<em>Error Marker FBN Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 3;
@@ -4196,64 +4244,64 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_INTERFACE = 77;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__NAME = IINTERFACE_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__COMMENT = IINTERFACE_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Is Input</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__IS_INPUT = IINTERFACE_ELEMENT__IS_INPUT;
 
 	/** The feature id for the '<em><b>Input Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__INPUT_CONNECTIONS = IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Output Connections</b></em>' reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__OUTPUT_CONNECTIONS = IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
 
 	/** The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__TYPE = IINTERFACE_ELEMENT__TYPE;
 
 	/** The feature id for the '<em><b>Type Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
 
 	/** The feature id for the '<em><b>File Marker Id</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__FILE_MARKER_ID = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Error Message</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE__ERROR_MESSAGE = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
@@ -4267,7 +4315,7 @@ public interface LibraryElementPackage extends EPackage {
 
 	/** The number of structural features of the '<em>Error Marker Interface</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
@@ -4281,60 +4329,60 @@ public interface LibraryElementPackage extends EPackage {
 	int CFB_INSTANCE = 78;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE__NAME = FB__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE__COMMENT = FB__COMMENT;
 
 	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE__ATTRIBUTES = FB__ATTRIBUTES;
 
 	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE__POSITION = FB__POSITION;
 
 	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE__INTERFACE = FB__INTERFACE;
 
 	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE__MAPPING = FB__MAPPING;
 
 	/** The feature id for the '<em><b>Cfb Network</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE__CFB_NETWORK = FB_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>CFB Instance</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int CFB_INSTANCE_FEATURE_COUNT = FB_FEATURE_COUNT + 1;

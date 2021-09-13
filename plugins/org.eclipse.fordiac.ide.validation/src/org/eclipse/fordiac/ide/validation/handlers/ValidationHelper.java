@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -88,10 +89,10 @@ public final class ValidationHelper {
 						subMonitor.setTaskName(
 								MessageFormat.format("{0}: {1}", createHierarchicalName(object), constraint.getName()));
 						if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
-							final String[] properties = ConstraintHelper
-									.getConstraintProperties(constraint.getName());
-							addValidationMarker(iresource, properties[0], properties[1],
-									createHierarchicalName(object), object.hashCode());
+						final String[] properties = ConstraintHelper
+								.getConstraintProperties(constraint.getName());
+						addValidationMarker(iresource, properties[0], properties[1],
+								createHierarchicalName(object), object.hashCode(), object);
 						}
 					}
 				}
@@ -111,8 +112,7 @@ public final class ValidationHelper {
 
 		private int countObjects(final SubMonitor subMonitor) {
 			int count = 0;
-			for (final TreeIterator<?> iterator = namedElement.eAllContents(); iterator.hasNext();) {
-				iterator.next();
+			for (final TreeIterator<?> iterator = namedElement.eAllContents(); iterator.hasNext(); iterator.next()) {
 				if (subMonitor.isCanceled()) {
 					return -1;
 				}
@@ -122,7 +122,7 @@ public final class ValidationHelper {
 		}
 
 		private static void addValidationMarker(final IResource iresource, final String message, final String severity,
-				final String location, final int lineNumber) {
+				final String location, final int lineNumber, final EObject context) {
 			if (iresource == null) {
 				return;
 			}
@@ -143,6 +143,12 @@ public final class ValidationHelper {
 			marker.addLineNumber(lineNumber);
 
 			marker.setMarkerType(IValidationMarker.TYPE);
+
+			marker.addTargetIdentifier(context);
+
+			if (context instanceof Connection) {
+				marker.setErrorMarkerRef((ErrorMarkerRef) context);
+			}
 
 			marker.createMarkerInResource(iresource);
 		}

@@ -225,6 +225,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseConfigurableObject(connection);
 			if (result == null)
+				result = caseErrorMarkerRef(connection);
+			if (result == null)
 				result = caseINamedElement(connection);
 			if (result == null)
 				result = defaultCase(theEObject);
@@ -673,6 +675,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseConfigurableObject(dataConnection);
 			if (result == null)
+				result = caseErrorMarkerRef(dataConnection);
+			if (result == null)
 				result = caseINamedElement(dataConnection);
 			if (result == null)
 				result = defaultCase(theEObject);
@@ -686,6 +690,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseConfigurableObject(eventConnection);
 			if (result == null)
+				result = caseErrorMarkerRef(eventConnection);
+			if (result == null)
 				result = caseINamedElement(eventConnection);
 			if (result == null)
 				result = defaultCase(theEObject);
@@ -698,6 +704,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				result = caseConnection(adapterConnection);
 			if (result == null)
 				result = caseConfigurableObject(adapterConnection);
+			if (result == null)
+				result = caseErrorMarkerRef(adapterConnection);
 			if (result == null)
 				result = caseINamedElement(adapterConnection);
 			if (result == null)
