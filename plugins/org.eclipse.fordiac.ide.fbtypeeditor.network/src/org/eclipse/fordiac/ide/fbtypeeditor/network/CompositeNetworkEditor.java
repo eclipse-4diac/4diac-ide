@@ -199,7 +199,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	public void gotoMarker(final IMarker marker) {
 		try {
 			final Map<String, Object> attributes = marker.getAttributes();
-			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(attributes)) {
+			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(marker)) {
 				final Object location = attributes.get(IMarker.LOCATION);
 				if (location instanceof String) {
 					final FBNetworkElement fbne = getModel().getElementNamed((String) location);
@@ -215,12 +215,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-		try {
-			return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker.getAttributes());
-		} catch (final CoreException e) {
-			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
-		}
-		return false;
+		return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker);
 	}
 
 	@Override

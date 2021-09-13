@@ -21,9 +21,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -198,18 +196,18 @@ public abstract class CommonElementImporter {
 	}
 
 	protected ErrorMarkerBuilder createErrorMarker(final String message) {
-		final Map<String, Object> attrs = new HashMap<>();
-		attrs.put(IMarker.MESSAGE, message);
-		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarkerBuilder(attrs, getLineNumber());
-		errorMarkerAttributes.add(e);
-		return e;
+		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
+		marker.addLineNumber(getLineNumber());
+		marker.addMessage(message);
+		errorMarkerAttributes.add(marker);
+		return marker;
 	}
 
 	private void buildErrorMarker(final IFile file) {
 		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) { //$NON-NLS-1$
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				errorMarkerAttributes.stream().forEach(a -> FordiacMarkerHelper.createMarkerInFile(a, file));
+				errorMarkerAttributes.stream().forEach(a -> a.createMarkerInFile(file));
 				return Status.OK_STATUS;
 			}
 		};

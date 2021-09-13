@@ -15,7 +15,6 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -83,7 +82,7 @@ public class DeleteInterfaceCommand extends Command {
 	private void undoErrorMarker() {
 		parent.getErrorMarker().add(oldIndex, interfaceElement);
 		if (oldErrorMarker != null) {
-			FordiacMarkerHelper.createMarkerInFile(oldErrorMarker);
+			oldErrorMarker.createMarkerInFile();
 		}
 	}
 
@@ -127,7 +126,7 @@ public class DeleteInterfaceCommand extends Command {
 	}
 
 	private void deleteErrorMarker() {
-		oldErrorMarker = FordiacMarkerHelper
+		oldErrorMarker = ErrorMarkerBuilder
 				.deleteErrorMarker((ErrorMarkerRef) interfaceElement);
 		oldIndex = parent.getErrorMarker().indexOf(interfaceElement);
 		parent.getErrorMarker().remove(interfaceElement);

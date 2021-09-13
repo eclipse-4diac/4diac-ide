@@ -129,10 +129,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		reconnCmds.redo();
 		network.getNetworkElements().remove(oldElement);
 
-		errorPins.forEach(FordiacMarkerHelper::createMarkerInFile);
+		errorPins.forEach(ErrorMarkerBuilder::createMarkerInFile);
 
 		if (errorMarkerBuilder != null && newElement instanceof ErrorMarkerRef) {
-			FordiacMarkerHelper.createMarkerInFile(errorMarkerBuilder);
+			errorMarkerBuilder.createMarkerInFile();
 		}
 
 		if (mapCmd != null) {
@@ -148,10 +148,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			mapCmd.undo();
 		}
 
-		errorPins.stream().map(ErrorMarkerBuilder::getErrorMarkerRef).forEach(FordiacMarkerHelper::deleteErrorMarker);
+		errorPins.stream().map(ErrorMarkerBuilder::getErrorMarkerRef).forEach(ErrorMarkerBuilder::deleteErrorMarker);
 
 		if (errorMarkerBuilder != null && newElement instanceof ErrorMarkerRef) {
-			FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) newElement);
+			ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) newElement);
 		}
 
 		network.getNetworkElements().add(oldElement);
@@ -267,7 +267,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			errorMarkerBuilder = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement, 0);
 			errorMarkerBuilder.setErrorMarkerRef((ErrorMarkerRef) newElement);
 			((ErrorMarkerRef) newElement).setErrorMessage(errorMessage);
-			FordiacMarkerHelper.createMarkerInFile(errorMarkerBuilder);
+			errorMarkerBuilder.createMarkerInFile();
 			moveEntryToErrorLib();
 		}
 
@@ -308,7 +308,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement,
 					0);
 			createErrorMarker.setErrorMarkerRef((ErrorMarkerRef) interfaceElement);
-			FordiacMarkerHelper.createMarkerInFile(createErrorMarker);
+			createErrorMarker.createMarkerInFile();
 			errorPins.add(createErrorMarker);
 		}
 		return interfaceElement;

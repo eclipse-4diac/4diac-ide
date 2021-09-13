@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.validation.handlers;
 import java.text.MessageFormat;
 import java.util.List;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,6 +28,7 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EParameter;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -84,18 +84,15 @@ public final class ValidationHelper {
 					final Variable<EClassifier, EParameter> context = constraint.getSpecification()
 							.getContextVariable();
 					final String contextName = (context.getType().getName());
-					if ((contextName.equals(objectName))
-							&& (!Activator.getDefault().getOclInstance().check(object, constraint))) {
-						try {
+					if (contextName.equals(objectName)) {
+						subMonitor.setTaskName(
+								MessageFormat.format("{0}: {1}", createHierarchicalName(object), constraint.getName()));
+						if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
 							final String[] properties = ConstraintHelper
 									.getConstraintProperties(constraint.getName());
 							addValidationMarker(iresource, properties[0], properties[1],
 									createHierarchicalName(object), object.hashCode());
-						} catch (final CoreException e) {
-							Activator.getDefault().logError(e.getMessage(), e);
 						}
-						subMonitor.setTaskName(MessageFormat.format("{0}: {1}", createHierarchicalName(object),
-								constraint.getName()));
 					}
 				}
 			}
@@ -125,29 +122,29 @@ public final class ValidationHelper {
 		}
 
 		private static void addValidationMarker(final IResource iresource, final String message, final String severity,
-				final String location, final int lineNumber) throws CoreException {
+				final String location, final int lineNumber) {
 			if (iresource == null) {
 				return;
 			}
 
-			final IMarker imarker = iresource.createMarker(IValidationMarker.TYPE);
-			imarker.setAttribute(IMarker.MESSAGE, message);
+			final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
+			marker.addMessage(message);
 			switch (severity) {
-			case "ERROR": //$NON-NLS-1$
-				imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-				break;
 			case "WARNING": //$NON-NLS-1$
-				imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+				marker.setSeverityWarning();
 				break;
 			case "INFO": //$NON-NLS-1$
-				imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
+				marker.setSeverityInfo();
 				break;
 			default:
-				imarker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
 				break;
 			}
-			imarker.setAttribute(IMarker.LOCATION, location);
-			imarker.setAttribute(IMarker.LINE_NUMBER, Integer.valueOf(lineNumber));
+			marker.addLocation(location);
+			marker.addLineNumber(lineNumber);
+
+			marker.setMarkerType(IValidationMarker.TYPE);
+
+			marker.createMarkerInResource(iresource);
 		}
 
 		private static IResource getFile(final INamedElement element) {

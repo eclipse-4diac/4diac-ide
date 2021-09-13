@@ -13,8 +13,6 @@
 package org.eclipse.fordiac.ide.application.handlers;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -25,7 +23,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.EditPart;
@@ -48,11 +46,13 @@ public class AddFBBookMark extends AbstractHandler {
 		if (null != element) {
 			final String description = getDescription(element, event);
 			if (null != description) {
-				final Map<String, Object> attrs = new HashMap<>();
-				attrs.put(IMarker.MESSAGE, description);
-				FordiacMarkerHelper.addTargetIdentifier(element, attrs);
-				FordiacMarkerHelper.addLocation(element, attrs);
-				final CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK, attrs, getFile(element),
+				final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
+				marker.addTargetIdentifier(element);
+				marker.addLocation(element);
+				marker.addMessage(description);
+
+				final CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK, marker.getAttributes(),
+						getFile(element),
 						Messages.AddFBBookMark_AddBookmark);
 				try {
 					PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().execute(op, null,

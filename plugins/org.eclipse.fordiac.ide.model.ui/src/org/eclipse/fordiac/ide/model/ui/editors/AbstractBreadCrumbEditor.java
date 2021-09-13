@@ -22,12 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -216,23 +216,17 @@ INavigationLocationProvider, IPersistableEditor {
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		try {
-			final Map<String, Object> attrs = marker.getAttributes();
-			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(attrs)) {
-				gotoFBNetworkElement(attrs.get(IMarker.LOCATION));
-			} else if (FordiacMarkerHelper.markerTargetsConnection(attrs)) {
-				gotoConnection(marker);
-			} else if (FordiacMarkerHelper.markerTargetsValue(attrs)) {
-				gotoValue(marker);
-			}
-		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+		if (FordiacMarkerHelper.markerTargetsFBNetworkElement(marker)) {
+			gotoFBNetworkElement(marker.getAttribute(IMarker.LOCATION, null));
+		} else if (FordiacMarkerHelper.markerTargetsConnection(marker)) {
+			gotoConnection(marker);
+		} else if (FordiacMarkerHelper.markerTargetsValue(marker)) {
+			gotoValue(marker);
 		}
 	}
 
 	protected void gotoConnection(final IMarker marker) {
-		@SuppressWarnings("boxing")
-		final ErrorMarkerRef errorRef = FordiacMarkerHelper.getMarkerRefById(marker.getId());
+		final ErrorMarkerRef errorRef = ErrorMarkerBuilder.getMarkerRef(marker);
 		final FBNetworkElement parent = errorRef instanceof ErrorMarkerInterface
 				? ((ErrorMarkerInterface) errorRef).getFBNetworkElement()
 						: null;
@@ -240,8 +234,7 @@ INavigationLocationProvider, IPersistableEditor {
 	}
 
 	protected void gotoValue(final IMarker marker) {
-		@SuppressWarnings("boxing")
-		final ErrorMarkerRef errorRef = FordiacMarkerHelper.getMarkerRefById(marker.getId());
+		final ErrorMarkerRef errorRef = ErrorMarkerBuilder.getMarkerRef(marker);
 		final FBNetworkElement parent = errorRef instanceof Value
 				? ((Value) errorRef).getVarDeclaration().getFBNetworkElement()
 						: null;

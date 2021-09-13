@@ -12,10 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.subapptypeeditor.editors;
 
-import java.util.Map;
-
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -234,15 +231,9 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-		try {
-			final Map<String, Object> attrs = marker.getAttributes();
-			return FordiacMarkerHelper.markerTargetsFBNetworkElement(attrs)
-					|| FordiacMarkerHelper.markerTargetsConnection(attrs)
-					|| FordiacMarkerHelper.markerTargetsValue(attrs);
-		} catch (final CoreException e) {
-			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
-		}
-		return false;
+			return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker)
+					|| FordiacMarkerHelper.markerTargetsConnection(marker)
+					|| FordiacMarkerHelper.markerTargetsValue(marker);
 	}
 
 	@Override

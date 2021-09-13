@@ -23,7 +23,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -64,7 +63,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 	@Override
 	public void execute() {
 		if (element instanceof ErrorMarkerRef) {
-			errorMarker = FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) element);
+			errorMarker = ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) element);
 		}
 
 		fbParent = element.getFbNetwork();
@@ -90,7 +89,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 			cmds.undo();
 		}
 		if (element instanceof ErrorMarkerRef && errorMarker != null) {
-			FordiacMarkerHelper.createMarkerInFile(errorMarker);
+			errorMarker.createMarkerInFile();
 		}
 		restoreValueErrorMarkers();
 	}
@@ -102,7 +101,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 		}
 		handleValueErrorMarkers();
 		if (element instanceof ErrorMarkerRef) {
-			errorMarker = FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) element);
+			errorMarker = ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) element);
 		}
 
 		fbParent.getNetworkElements().remove(element);
@@ -131,14 +130,14 @@ public class DeleteFBNetworkElementCommand extends Command {
 	private void handleValueErrorMarkers() {
 		for (final VarDeclaration varIn : element.getInterface().getInputVars()) {
 			if ((varIn.getValue() != null) && (varIn.getValue().hasError())) {
-				valueErrorMarkers.add(FordiacMarkerHelper.deleteErrorMarker(varIn.getValue()));
+				valueErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(varIn.getValue()));
 			}
 		}
 	}
 
 	private void restoreValueErrorMarkers() {
 		for (final ErrorMarkerBuilder errorMarkerBuilder : valueErrorMarkers) {
-			FordiacMarkerHelper.createMarkerInFile(errorMarkerBuilder);
+			errorMarkerBuilder.createMarkerInFile();
 		}
 		valueErrorMarkers.clear();
 	}

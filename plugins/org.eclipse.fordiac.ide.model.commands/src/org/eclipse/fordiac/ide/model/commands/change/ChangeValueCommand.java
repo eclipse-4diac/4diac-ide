@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -119,13 +118,13 @@ public class ChangeValueCommand extends Command {
 
 	private void handleErrorMarker() {
 		if (variable.getValue().hasError()) {
-			oldErrorMarker = FordiacMarkerHelper.deleteErrorMarker(variable.getValue());
+			oldErrorMarker = ErrorMarkerBuilder.deleteErrorMarker(variable.getValue());
 		}
 	}
 
 	private void restoreErrorMarker() {
 		if (oldErrorMarker != null) {
-			FordiacMarkerHelper.createMarkerInFile(oldErrorMarker);
+			oldErrorMarker.createMarkerInFile();
 		}
 	}
 }
