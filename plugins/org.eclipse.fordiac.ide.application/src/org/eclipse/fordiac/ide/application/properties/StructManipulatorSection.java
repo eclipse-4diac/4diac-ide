@@ -13,11 +13,12 @@
  *                     the usability of the struct handling
  *   Lukas Wais - reworked tree structure
  *   Michael Oberlehner  - refactored tree structure
+ *   Sebastian Hollersbacher - changed DropDownBox to autocompletion Textfield
+ *   						   for better usability
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
@@ -25,6 +26,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.StructTreeNode;
 import org.eclipse.fordiac.ide.model.StructTreeNode.StructTreeContentProvider;
@@ -35,8 +37,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.EditPart;
@@ -46,12 +47,8 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
@@ -62,14 +59,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
@@ -77,16 +71,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class StructManipulatorSection extends AbstractSection
-implements CommandStackEventListener {
-	private static final String STRUCT_TYPE = "STRUCT_TYPE"; //$NON-NLS-1$
+public class StructManipulatorSection extends AbstractSection implements CommandStackEventListener {
+	protected TypeSelectionWidget typeSelectionWidget;
 
 	protected CLabel muxLabel;
 	protected TreeViewer memberVarViewer;
-	protected Button openEditorButton;
 	protected boolean initTree = true;
-	protected TableViewer muxStructSelector;
-	protected DataTypeDropdown typeDropDown;
 
 	@Override
 	protected FBNetworkElement getInputType(final Object input) {
@@ -110,111 +100,19 @@ implements CommandStackEventListener {
 		return null;
 	}
 
-	private void disableOpenEditorForAnyType(final String newStructName) {
-		openEditorButton.setEnabled(!"ANY_STRUCT".contentEquals(newStructName)); //$NON-NLS-1$
-	}
-
 	private void createStructSelector(final Composite composite) {
 		final Composite structComp = getWidgetFactory().createComposite(composite);
-		structComp.setLayout(new GridLayout(3, false));
+		structComp.setLayout(new GridLayout(2, false));
 		structComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		muxLabel = getWidgetFactory().createCLabel(structComp, Messages.StructManipulatorSection_STRUCTURED_TYPE);
 
-		createStructSelectionField(structComp);
-
-		openEditorButton = new Button(structComp, SWT.PUSH);
-		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-		openEditorButton.addListener(SWT.Selection,
-				e -> OpenStructMenu.openStructEditor(getType().getStructType().getPaletteEntry().getFile()));
-	}
-
-	private void createStructSelectionField(final Composite parent) {
-		muxStructSelector = createTableViewer(parent);
-
-		muxStructSelector.setCellEditors(createCellEditors());
-		muxStructSelector.setColumnProperties(new String[] { STRUCT_TYPE });
-		muxStructSelector.setContentProvider(new ArrayContentProvider());
-		muxStructSelector.setCellModifier(new ICellModifier() {
-			@Override
-			public void modify(final Object element, final String property, final Object value) {
-				if (STRUCT_TYPE.equals(property) && element != null) {
-					handleStructSelectionChanged(value.toString());
-				}
-			}
-
-			@Override
-			public Object getValue(final Object element, final String property) {
-				if (STRUCT_TYPE.equals(property)) {
-					return getType().getStructType().getName();
-				}
-				return "Could not load";
-			}
-
-			@Override
-			public boolean canModify(final Object element, final String property) {
-				return true;
-			}
-		});
-	}
-
-	private static TableViewer createTableViewer(final Composite parent) {
-		final TableViewer viewer = new TableViewer(parent, SWT.NO_SCROLL | SWT.BORDER);
-		final Table table = viewer.getTable();
-		new TableColumn(table, SWT.NONE).setWidth(150);
-		table.setLinesVisible(false);
-		table.setHeaderVisible(false);
-		return viewer;
-	}
-
-	protected CellEditor[] createCellEditors() {
-		typeDropDown = new DataTypeDropdown(new DataTypeLibrary(), muxStructSelector) {
-			@Override
-			protected List<DataType> getDataTypesSorted() {
-				return super.getDataTypesSorted().stream().filter(Objects::nonNull)
-						.filter(StructuredType.class::isInstance).collect(Collectors.toList());
-			}
-		};
-		return new CellEditor[] { typeDropDown };
+		typeSelectionWidget = new TypeSelectionWidget(getWidgetFactory());
+		typeSelectionWidget.createControls(structComp);
 	}
 
 	protected void refreshStructTypeTable() {
 		memberVarViewer.setInput(getType());
-	}
-
-	protected void handleStructSelectionChanged(final String newStructName) {
-		if (null != getType()) {
-			disableOpenEditorForAnyType(newStructName);
-			if (newStructSelected(newStructName)) {
-				final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
-				final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
-				commandStack.execute(cmd);
-				updateStructManipulatorFB(cmd.getNewMux());
-			}
-		}
-	}
-
-	public boolean newStructSelected(final String newStructName) {
-		return !newStructName.contentEquals(getType().getStructType().getName())
-				&& getDataTypeLib().getStructuredType(newStructName).getName().equals(newStructName);
-	}
-
-	protected static void updateStructManipulatorFB(final StructManipulator newMux) {
-		final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
-		if (null != viewer) {
-			viewer.flush();
-			final Object obj = viewer.getEditPartRegistry().get(newMux);
-			viewer.select((EditPart) obj);
-			final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.findView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
-			if(view instanceof PropertySheet) {
-				((PropertySheet) view).selectionChanged(activeEditor, viewer.getSelection());
-			}
-
-		}
-
 	}
 
 	@Override
@@ -309,7 +207,6 @@ implements CommandStackEventListener {
 		if ((null != getType()) && (null != getType().getFbNetwork()) && !blockRefresh) {
 			refreshStructTypeTable();
 		}
-
 	}
 
 	@Override
@@ -323,7 +220,6 @@ implements CommandStackEventListener {
 		commandStack = getCommandStack(part, input);
 		if (null == commandStack) { // disable all fields
 			muxLabel.setEnabled(false);
-			muxStructSelector.getTable().setEnabled(false);
 			memberVarViewer.setInput(null);
 		}
 
@@ -334,13 +230,41 @@ implements CommandStackEventListener {
 
 		}
 
-		disableOpenEditorForAnyType(getType().getStructType().getName());
-		// set DataTypeLib after it finished loading
-		muxStructSelector.setInput(new String[] { getType().getStructType().getName() });
-		typeDropDown.setDataTypeLibrary(getDataTypeLib());
+		typeSelectionWidget.initialize(getType(), new StructuredTypeSelectionContentProvider(),
+				(newName) -> handleStructSelectionChanged(newName));
 
 		if (commandStack != null) {
 			commandStack.addCommandStackEventListener(this);
+		}
+	}
+
+	private void handleStructSelectionChanged(final String newStructName) {
+		if (null != type && newStructSelected(newStructName)) {
+			final StructuredType newStruct = (StructuredType) getDataTypeLib().getStructuredType(newStructName);
+			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
+			commandStack.execute(cmd);
+			updateStructManipulatorFB(cmd.getNewMux());
+		}
+	}
+
+	private boolean newStructSelected(final String newStructName) {
+		return !newStructName.contentEquals(getType().getStructType().getName())
+				&& getDataTypeLib().getStructuredType(newStructName) instanceof StructuredType;
+	}
+
+	protected static void updateStructManipulatorFB(final StructManipulator newMux) {
+		final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
+		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
+		if (null != viewer) {
+			viewer.flush();
+			final Object obj = viewer.getEditPartRegistry().get(newMux);
+			viewer.select((EditPart) obj);
+			final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.findView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
+			if (view instanceof PropertySheet) {
+				((PropertySheet) view).selectionChanged(activeEditor, viewer.getSelection());
+			}
 		}
 	}
 
@@ -392,4 +316,10 @@ implements CommandStackEventListener {
 		// Currently nothing needs to be done here
 	}
 
+	private class StructuredTypeSelectionContentProvider implements ITypeSelectionContentProvider {
+		@Override
+		public List<DataType> getTypes() {
+			return getDataTypeLib().getStructuredTypesSorted().stream().collect(Collectors.toList());
+		}
+	}
 }

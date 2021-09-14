@@ -22,14 +22,12 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.Messages;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -70,7 +68,7 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private ContentProposalAdapter adapter;
 	private Text textControl;
-	private DataTypeLibrary library;
+	private ITypeSelectionContentProvider contentProvider;
 	private SimpleContentProposalProvider provider;
 	private List<DataType> types;
 	private String[] elementaryTypes;
@@ -83,9 +81,9 @@ public class DataTypeDropdown extends TextCellEditor {
 	private boolean isTraverseNextProcessActive;
 	private boolean isTraversePreviousProcessActive;
 
-	public DataTypeDropdown(final DataTypeLibrary library, final TableViewer viewer) {
+	public DataTypeDropdown(final ITypeSelectionContentProvider contentProvider, final TableViewer viewer) {
 		super(viewer.getTable());
-		this.library = library;
+		this.contentProvider = contentProvider;
 		this.viewer = viewer;
 		types = new ArrayList<>(); // empty list for initial provider creation
 		configureTextControl();
@@ -107,11 +105,6 @@ public class DataTypeDropdown extends TextCellEditor {
 		}
 	}
 
-	public void setDataTypeLibrary(DataTypeLibrary library) {
-		this.library = library;
-		loadContent();
-	}
-
 	/* is called with every opening of the content proposal popup, may lead to performance issues */
 	private void loadContent() {
 		types = getDataTypesSorted(); // get sorted types for convenient order in dialog
@@ -120,8 +113,8 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	// can be overridden to filter the list differently
 	protected List<DataType> getDataTypesSorted() {
-		if (null != library) {
-			return library.getDataTypesSorted().stream().filter(Objects::nonNull).collect(Collectors.toList());
+		if (null != contentProvider) {
+			return contentProvider.getTypes();
 		}
 		return Collections.emptyList();
 	}
@@ -398,7 +391,9 @@ public class DataTypeDropdown extends TextCellEditor {
 				}
 
 				if (elementaries.children.isEmpty()) {
-					return new TypeNode[] { structures };
+					return structures.getChildren().toArray();
+				} else if (structures.children.isEmpty()) {
+					return elementaries.getChildren().toArray();
 				} 
 				
 				return new TypeNode[] { elementaries, structures };

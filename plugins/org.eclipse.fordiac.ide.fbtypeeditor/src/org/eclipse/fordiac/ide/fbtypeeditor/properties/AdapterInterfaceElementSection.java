@@ -16,40 +16,39 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AdapterInterfaceElementSection extends AbstractSection {
+	protected TypeSelectionWidget typeSelectionWidget;
 	private Text nameText;
 	private Text commentText;
-	protected CCombo typeCombo;
 
 	@Override
 	protected IInterfaceElement getInputType(final Object input) {
@@ -96,26 +95,14 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 			addContentAdapter();
 		});
 		getWidgetFactory().createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
-		final Composite typeComp = getWidgetFactory().createComposite(parent);
-		typeComp.setLayout(new GridLayout(2, false));
-		typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), typeComp);
-		final GridData languageComboGridData = new GridData(SWT.FILL, 0, true, false);
-		typeCombo.setLayoutData(languageComboGridData);
-		typeCombo.addListener(SWT.Selection, event -> {
-			final DataType newType = getTypeForSelection(typeCombo.getText());
-			if (null != newType) {
-				executeCommand(new ChangeDataTypeCommand((VarDeclaration) type, newType));
-				refresh();
-			}
-		});
+		typeSelectionWidget = new TypeSelectionWidget(getWidgetFactory());
+		typeSelectionWidget.createControls(parent);
 	}
 
 	@Override
 	protected void setInputCode() {
 		nameText.setEnabled(false);
 		commentText.setEnabled(false);
-		typeCombo.removeAll();
 	}
 
 	@Override
@@ -125,53 +112,24 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		if (null != type) {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			setTypeDropdown();
+			typeSelectionWidget.refresh();
 		}
 		commandStack = commandStackBuffer;
 	}
 
-	Collection<DataType> typeList;
-
-	protected void setTypeDropdown() {
-		typeCombo.removeAll();
-		typeList = getTypes();
-		if (null != typeList) {
-			final List<String> typeNames = new ArrayList<>();
-			for (final DataType type : typeList) {
-				typeNames.add(type.getName());
-			}
-			Collections.sort(typeNames);
-			final String currTypeName = (null != ((VarDeclaration) type).getType())
-					? ((VarDeclaration) type).getType().getName()
-							: ""; // this handles gracefully the case when the adpater type could //$NON-NLS-1$
-			// not be loaded
-			for (int i = 0; i < typeNames.size(); i++) {
-				typeCombo.add(typeNames.get(i));
-				if (typeNames.get(i).equals(currTypeName)) {
-					typeCombo.select(i);
-				}
-			}
-		}
+	@Override
+	public void setInput(IWorkbenchPart part, ISelection selection) {
+		super.setInput(part, selection);
+		typeSelectionWidget.initialize(getType(), getTypeSelectionContentProvider(),
+				(newName) -> handleDataSelectionChanged(newName));
 	}
 
-	protected Collection<DataType> getTypes() {
-		final List<DataType> types = new ArrayList<>();
-		final FBType fbType = (FBType) getType().eContainer().eContainer();
-		final PaletteEntry entry = fbType.getPaletteEntry();
-
-		entry.getPalette().getAdapterTypesSorted().forEach(adaptertype -> types.add(adaptertype.getType()));
-		return types;
-	}
-
-	protected DataType getTypeForSelection(final String text) {
-		if (null != typeList) {
-			for (final DataType dataType : typeList) {
-				if (dataType.getName().equals(text)) {
-					return dataType;
-				}
-			}
+	protected void handleDataSelectionChanged(final String dataName) {
+		final AdapterTypePaletteEntry adapterEntry = getTypeLibrary().getBlockTypeLib().getAdapterTypeEntry(dataName);
+		final DataType newType = adapterEntry == null ? null : adapterEntry.getType();
+		if (newType != null) {
+			commandStack.execute(new ChangeDataTypeCommand((VarDeclaration) getType(), newType));
 		}
-		return null;
 	}
 
 	@Override
@@ -182,5 +140,17 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	@Override
 	protected void setInputInit() {
 		// nothing to be done here
+	}
+
+	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
+		return new AdapterTypeSelectionContentProvider();
+	}
+
+	private class AdapterTypeSelectionContentProvider implements ITypeSelectionContentProvider {
+		@Override
+		public List<DataType> getTypes() {
+			return getTypeLibrary().getBlockTypeLib().getAdapterTypesSorted().stream().map(entry -> entry.getType())
+					.collect(Collectors.toList());
+		}
 	}
 }

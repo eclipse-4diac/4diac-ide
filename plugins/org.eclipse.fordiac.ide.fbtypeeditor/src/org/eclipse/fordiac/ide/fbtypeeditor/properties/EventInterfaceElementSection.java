@@ -16,7 +16,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarContentProvider;
@@ -28,6 +30,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
@@ -125,23 +129,25 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		}
 		commandStack = commandStackBuffer;
 	}
-
+	
 	@Override
-	public void setTypeDropdown() {
-		typeCombo.removeAll();
-		typeCombo.add(FordiacMessages.Event);
-		typeCombo.select(0);
-	}
-
-	@Override
-	protected DataType getTypeForSelection(final String text) {
+	protected void handleDataSelectionChanged(String dataName) {
 		// currently we only have one kind of data type therefore we will return null
 		// here so that it is not changed
-		return null;
 	}
 
 	@Override
 	protected Event getType() {
 		return (Event) super.getType();
+	}
+
+	@Override
+	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
+		return new ITypeSelectionContentProvider() {
+			@Override
+			public List<DataType> getTypes() {
+				return new ArrayList<DataType>(EventTypeLibrary.getInstance().getEventTypes());
+			}
+		};
 	}
 }

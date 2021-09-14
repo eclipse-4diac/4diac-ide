@@ -17,24 +17,23 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.fordiac.ide.fbtypeeditor.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
@@ -46,21 +45,13 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataInterfaceElementSection extends AdapterInterfaceElementSection {
@@ -68,7 +59,6 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	private Text initValueText;
 	private TableViewer withEventsViewer;
 	private Group eventComposite;
-	private Button openEditorButton;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -92,33 +82,6 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 			executeCommand(new ChangeValueCommand((VarDeclaration) type, initValueText.getText()));
 			addContentAdapter();
 		});
-	}
-
-	@Override
-	protected void createTypeAndCommentSection(final Composite parent) {
-		super.createTypeAndCommentSection(parent);
-		openEditorButton = new Button(typeCombo.getParent(), SWT.PUSH);
-		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-		openEditorButton.addListener(SWT.Selection, ev -> {
-			final IWorkbench workbench = PlatformUI.getWorkbench();
-			if (workbench != null) {
-				final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-				if (activeWorkbenchWindow != null) {
-					openStructEditor(activeWorkbenchWindow);
-				}
-			}
-		});
-	}
-
-	private void openStructEditor(final IWorkbenchWindow activeWorkbenchWindow) {
-		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-		final IFile file = getType().getType().getPaletteEntry().getFile();
-		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-		try {
-			activePage.openEditor(new FileEditorInput(file), desc.getId());
-		} catch (final PartInitException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
 	}
 
 	private void createEventSection(final Composite parent) {
@@ -187,7 +150,6 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			openEditorButton.setEnabled(getType().getType() instanceof StructuredType);
 			arraySizeText.setText(0 >= getType().getArraySize() ? "" : (Integer.toString((getType()).getArraySize()))); //$NON-NLS-1$
 			initValueText.setText(null == getType().getValue() ? "" : getType().getValue().getValue()); //$NON-NLS-1$
 			if (getType().eContainer().eContainer() instanceof FBType) {
@@ -204,7 +166,20 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	@Override
-	protected Collection<DataType> getTypes() {
-		return getDataTypeLib().getDataTypesSorted();
+	protected void handleDataSelectionChanged(String dataName) {
+		final DataType newType = getDataTypeLib().getTypeIfExists(dataName);
+		if (newType != null) {
+			commandStack.execute(new ChangeDataTypeCommand((VarDeclaration) getType(), newType));
+		}
+	}
+
+	@Override
+	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
+		return new ITypeSelectionContentProvider() {
+			@Override
+			public List<DataType> getTypes() {
+				return getDataTypeLib().getDataTypesSorted();
+			}
+		};
 	}
 }
