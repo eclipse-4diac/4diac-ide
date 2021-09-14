@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
@@ -94,6 +95,9 @@ implements CommandStackEventListener {
 		}
 		if (input instanceof StructManipulator) {
 			return ((StructManipulator) input);
+		}
+		if(input instanceof StructInterfaceEditPart) {
+			return ((StructInterfaceEditPart) input).getModel().getFBNetworkElement();
 		}
 		return null;
 	}

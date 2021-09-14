@@ -183,22 +183,18 @@
          <propertySection
          	class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
          	id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
-         	tab="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab">
-         	<input
-         		type="org.eclipse.fordiac.ide.application.editparts.DemultiplexerEditPart">
-            </input>
+         	tab="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
+	        filter="org.eclipse.fordiac.ide.application.properties.DemultiplexerFilter">
          </propertySection>
          <propertySection
          	class="org.eclipse.fordiac.ide.application.properties.StructManipulatorSection"
          	id="org.eclipse.fordiac.ide.application.properties.StructManipulatorSection"
-         	tab="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab">
-         	<input
-         		type="org.eclipse.fordiac.ide.application.editparts.MultiplexerEditPart">
-            </input>
+         	tab="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
+	        filter="org.eclipse.fordiac.ide.application.properties.MultiplexerFilter">
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.StructInterfaceElementSection"
-               id="org.eclipse.fordiac.ide.application.properties.StructInterfaceElementSection"
+               class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart">

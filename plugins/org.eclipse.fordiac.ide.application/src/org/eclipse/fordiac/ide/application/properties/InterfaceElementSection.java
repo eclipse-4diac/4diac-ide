@@ -225,7 +225,8 @@ public class InterfaceElementSection extends AbstractSection {
 			String itype = ""; //$NON-NLS-1$
 
 			openEditorButton.setEnabled(
-					(getType().getType() instanceof StructuredType) || (getType().getType() instanceof AdapterType));
+					(getType().getType() instanceof StructuredType && !"ANY_STRUCT".equals(getType().getType().getName()))
+							|| (getType().getType() instanceof AdapterType));
 
 			if (getType() instanceof VarDeclaration) {
 				itype = setParameterAndType();
