@@ -127,11 +127,11 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 
 	private void configureTableLayout(final Table table) {
 		final TableColumn column1 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
-		column1.setText(NAME_PROPERTY);
+		column1.setText(FordiacMessages.Name);
 		final TableColumn column2 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
-		column2.setText(VALUE_PROPERTY);
+		column2.setText(FordiacMessages.InitialValue);
 		final TableColumn column3 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
-		column3.setText(COMMENT_PROPERTY);
+		column3.setText(FordiacMessages.Comment);
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 70));
 		layout.addColumnData(new ColumnWeightData(30, 70));

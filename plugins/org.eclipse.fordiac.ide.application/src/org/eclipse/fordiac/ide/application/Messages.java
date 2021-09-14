@@ -81,6 +81,8 @@ public final class Messages extends NLS {
 
 	public static String InterfaceElementSection_InConnections;
 
+	public static String InterfaceElementSection_Instance;
+
 	public static String InterfaceElementSection_OutConnections;
 
 	public static String InterfaceElementSection_InterfaceElement;
