@@ -262,7 +262,8 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 	@Override
 	public void applyLayout(final LayoutMapping mapping, final IPropertyHolder settings) {
 		clear();
-		calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, 0);
+		final int INSTANCE_COMMENT_OFFSET = 8;
+		calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, INSTANCE_COMMENT_OFFSET);
 
 		final Map<IInterfaceElement, Integer> pins = createPinOffsetData(mapping);
 		final Command layoutCommand = new LayoutCommand(positions, connPoints, fbFigures, pins);
@@ -285,13 +286,23 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 				if (index > 0 && pin.isIsInput() == allIEs.get(index - 1).isIsInput()) {
 					final IInterfaceElement abovePin = allIEs.get(index - 1);
 					final ElkPort abovePort = (ElkPort) mapping.getGraphMap().inverse().get(abovePin);
-					padding -= (int) abovePort.getY();
+					padding -= (int) abovePort.getY() + port.getHeight(); // the port height represents the edit parts
+				}
+				/* For the first input var, additional padding has to be added. This results in "ugly" adapter
+				 * connections but fixes data connections. The exact reason for this additional offset is not yet
+				 * known. */
+				if (isFirstInputVar(interfaceList, pin)) {
+					padding += 8;
 				}
 				pins.put(pin, Integer.valueOf(padding));
 			});
 		}
 
 		return pins;
+	}
+
+	private static boolean isFirstInputVar(final InterfaceList interfaceList, final IInterfaceElement pin) {
+		return !interfaceList.getInputVars().isEmpty() && pin.equals(interfaceList.getInputVars().get(0));
 	}
 
 	private void calculateNodePositionsRecursively(final LayoutMapping mapping, final ElkNode node, final double parentX, final double parentY) {

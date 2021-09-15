@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -59,11 +60,20 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 			super.notifyChanged(notification);
 			switch (notification.getEventType()) {
 			case Notification.ADD:
+				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
+						.equals(notification.getFeature())) {
+					refreshVisuals();
+					break;
+				}
+				//$FALL-THROUGH$
 			case Notification.ADD_MANY:
 			case Notification.MOVE:
 			case Notification.REMOVE:
 			case Notification.REMOVE_MANY:
 				refreshChildren();
+				break;
+			case Notification.SET:
+				refreshVisuals();
 				break;
 			default:
 				break;

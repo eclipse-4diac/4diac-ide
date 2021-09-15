@@ -17,12 +17,13 @@ package org.eclipse.fordiac.ide.elk;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.elk.alg.layered.options.CrossingMinimizationStrategy;
 import org.eclipse.elk.alg.layered.options.LayeredMetaDataProvider;
-import org.eclipse.elk.alg.layered.options.NodePlacementStrategy;
+import org.eclipse.elk.alg.layered.options.LayeringStrategy;
 import org.eclipse.elk.core.LayoutConfigurator;
 import org.eclipse.elk.core.math.ElkPadding;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.options.Direction;
 import org.eclipse.elk.core.options.EdgeRouting;
+import org.eclipse.elk.core.options.HierarchyHandling;
 import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.service.DiagramLayoutEngine;
@@ -71,7 +72,7 @@ public class FordiacLayoutFactory {
 
 	public static ElkPort createFordiacLayoutPort(final InterfaceEditPart editPart, final ElkNode parent, final Point point) {
 		final ElkPort port = ElkGraphUtil.createPort(parent);
-		port.setDimensions(0, 0);
+		port.setDimensions(1, editPart.getFigure().getBounds().height);
 		if (editPart.getParent() instanceof EditorWithInterfaceEditPart) {
 			/* "FIXED_ORDER" port constraint, needs an index and the side */
 			port.setProperty(CoreOptions.PORT_SIDE, editPart.isInput() ? PortSide.EAST : PortSide.WEST);
@@ -87,12 +88,13 @@ public class FordiacLayoutFactory {
 		graph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.layered") //$NON-NLS-1$
 		.setProperty(CoreOptions.EDGE_ROUTING, EdgeRouting.ORTHOGONAL)
 		.setProperty(CoreOptions.DIRECTION, Direction.RIGHT)
-		.setProperty(CoreOptions.SEPARATE_CONNECTED_COMPONENTS, Boolean.FALSE)
-		.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_STRATEGY, NodePlacementStrategy.NETWORK_SIMPLEX)
-		.setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_STRATEGY,CrossingMinimizationStrategy.INTERACTIVE)
+		.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_ORDER)
+		.setProperty(CoreOptions.SPACING_PORT_PORT, Double.valueOf(0))
 		.setProperty(LayeredMetaDataProvider.THOROUGHNESS, Integer.valueOf(10))
-		.setProperty(CoreOptions.PADDING, new ElkPadding(100.0, 19.0)) // specific height padding to compensate for instance comment
-		.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_ORDER);
+		.setProperty(CoreOptions.PADDING, new ElkPadding(50.0, 20.0))
+        .setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_STRATEGY, CrossingMinimizationStrategy.LAYER_SWEEP)
+		.setProperty(CoreOptions.HIERARCHY_HANDLING, HierarchyHandling.INCLUDE_CHILDREN)
+		.setProperty(LayeredMetaDataProvider.LAYERING_STRATEGY, LayeringStrategy.MIN_WIDTH);
 		configureSpacing(graph);
 
 	}
@@ -106,17 +108,13 @@ public class FordiacLayoutFactory {
 	}
 
 	private static void configureUnfoldedSubapp(final ElkNode node) {
-		node.setProperty(CoreOptions.PADDING, new ElkPadding(50.0));
+		node.setProperty(CoreOptions.PADDING, new ElkPadding(100.0));
 		configureSpacing(node);
 	}
 
 	private static void configureSpacing(final ElkNode node) {
-		node.setProperty(CoreOptions.SPACING_NODE_NODE, Double.valueOf(25.0))
-		.setProperty(CoreOptions.SPACING_EDGE_NODE, Double.valueOf(25.0))
-		.setProperty(CoreOptions.SPACING_EDGE_EDGE, Double.valueOf(20.0))
-		.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, Double.valueOf(80.0))
-		.setProperty(LayeredMetaDataProvider.SPACING_EDGE_NODE_BETWEEN_LAYERS, Double.valueOf(20.0))
-		.setProperty(LayeredMetaDataProvider.SPACING_EDGE_EDGE_BETWEEN_LAYERS, Double.valueOf(15.0));
+		node.setProperty(CoreOptions.SPACING_NODE_NODE, Double.valueOf(25))
+		.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, Double.valueOf(80));
 	}
 
 	public static DiagramLayoutEngine.Parameters createLayoutParams() {
@@ -124,7 +122,6 @@ public class FordiacLayoutFactory {
 		params.addLayoutRun(createConfigurator());
 		return params;
 	}
-
 
 	private static LayoutConfigurator createConfigurator() {
 		return new LayoutConfigurator();

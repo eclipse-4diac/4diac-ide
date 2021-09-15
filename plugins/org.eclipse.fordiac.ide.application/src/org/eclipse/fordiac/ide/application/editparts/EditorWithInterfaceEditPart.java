@@ -26,6 +26,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.BorderLayout;
@@ -42,7 +43,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart.InterfaceFigure;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -60,7 +60,7 @@ import org.eclipse.swt.events.ControlListener;
 
 public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditPart {
 	private static final int MIN_INTERFACE_BAR_WIDTH = 200;
-	private static final int TOP_BOTTOM_MARGIN = 10;
+	private static final int TOP_BOTTOM_MARGIN = 1;
 	private static final int LEFT_RIGHT_MARGIN = 10;
 	private static final Insets RIGHT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, 0, TOP_BOTTOM_MARGIN,
 			LEFT_RIGHT_MARGIN);  // no left margin to have interface directly at inner border
@@ -438,11 +438,14 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		final IFigure container = new Figure();
 		container.setLayoutManager(new ToolbarLayout());
 
-		final int textHeight = ((InterfaceFigure) ep.getFigure()).getTextBounds().height();
-		final IFigure paddingFigure = new MinSizeFigure();
-		paddingFigure.setMinimumSize(new Dimension(-1, getYPositionFromAttribute(ep.getModel()) - textHeight));
+		final int yPositionFromAttribute = getYPositionFromAttribute(ep.getModel());
 
-		container.add(paddingFigure);
+		if (yPositionFromAttribute > 0) {
+			final IFigure paddingFigure = new MinSizeFigure();
+			paddingFigure.setMinimumSize(new Dimension(-1, yPositionFromAttribute));
+			container.add(paddingFigure);
+		}
+
 		container.add(ep.getFigure());
 
 		return container;
@@ -480,6 +483,15 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	@Override
 	public DragTracker getDragTracker(final Request req) {
 		return getParent().getDragTracker(req);
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		final List<EditPart> ies = (List<EditPart>) getChildren().stream()
+				.filter(InterfaceEditPart.class::isInstance)
+				.collect(Collectors.toList());
+		ies.forEach(this::removeChild);
+		ies.forEach(ie -> addChild(ie, -1));
 	}
 
 }
