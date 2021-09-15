@@ -252,6 +252,10 @@ public final class Messages extends NLS {
 	public static String Error_SelfInsertion;
 	public static String Error_RecursiveType;
 
+	public static String ConnectionHelper_ErrorMarker_Source_Missing;
+	public static String ConnectionHelper_ErrorMarker_Dest_Missing;
+	public static String ConnectionHelper_pin_not_found;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

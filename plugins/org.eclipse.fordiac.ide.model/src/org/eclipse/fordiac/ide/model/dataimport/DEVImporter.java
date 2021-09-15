@@ -44,7 +44,7 @@ import org.w3c.dom.NodeList;
  * Managing class for importing *.dev files
  */
 
-public final class DEVImporter extends TypeImporter {
+public class DEVImporter extends TypeImporter {
 
 	public DEVImporter(final IFile typeFile) {
 		super(typeFile);

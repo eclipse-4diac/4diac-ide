@@ -14,8 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -49,26 +47,38 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		EditPart source = null;
-		EditPart target = null;
-		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
-			source = request.getConnectionEditPart().getSource();
-			target = request.getTarget();
-		} else if (request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE)) {
-			source = request.getTarget();
-			target = request.getConnectionEditPart().getTarget();
-		}
-		if ((source instanceof InterfaceEditPart) && (target instanceof InterfaceEditPart)) {
-			final IInterfaceElement sourceIE = ((InterfaceEditPart) source).getModel();
-			final IInterfaceElement targetIE = ((InterfaceEditPart) target).getModel();
+		final IInterfaceElement sourceIE = getNewSource();
+		final IInterfaceElement targetIE = getNewDestination();
+		if ((sourceIE != null) && (targetIE != null)) {
 			return checkSourceAndTarget(sourceIE, targetIE);
 		}
-		if (source instanceof SubAppForFBNetworkEditPart) {
-			final boolean unfoldedSource = ((SubAppForFBNetworkEditPart) source).getModel().isUnfolded();
-			// TODO check for the specific connections in unfolded subapps (contained
-			// elements with parent interface)
-		}
 		return false;
+	}
+
+	public IInterfaceElement getNewSource() {
+		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
+			return getConnnection().getSource();
+		}
+		return getRequestTarget();
+	}
+
+	public IInterfaceElement getNewDestination() {
+		if (request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE)) {
+			return getConnnection().getDestination();
+		}
+		return getRequestTarget();
+	}
+
+	private Connection getConnnection() {
+		return (Connection) request.getConnectionEditPart().getModel();
+	}
+
+	private IInterfaceElement getRequestTarget() {
+		final EditPart target = request.getTarget();
+		if (target.getModel() instanceof IInterfaceElement) {
+			return (IInterfaceElement) target.getModel();
+		}
+		return null;
 	}
 
 	@Override
@@ -79,32 +89,15 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 
 	@Override
 	public void execute() {
-		final Connection con = (Connection) request.getConnectionEditPart().getModel();
+		final Connection con = getConnnection();
 		deleteConnectionCmd = new DeleteConnectionCommand(con);
 		connectionCreateCmd = createConnectionCreateCommand(parent);
-
-		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
-			doReconnectTarget();
-		}
-		if (request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE)) {
-			doReconnectSource();
-		}
-
+		connectionCreateCmd.setSource(getNewSource());
+		connectionCreateCmd.setDestination(getNewDestination());
 		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
 
 		connectionCreateCmd.execute();  // perform adding the connection first to preserve any error markers
 		deleteConnectionCmd.execute();
-	}
-
-	protected void doReconnectSource() {
-		connectionCreateCmd.setSource(((InterfaceEditPart) request.getTarget()).getModel());
-		connectionCreateCmd
-		.setDestination(((InterfaceEditPart) request.getConnectionEditPart().getTarget()).getModel());
-	}
-
-	protected void doReconnectTarget() {
-		connectionCreateCmd.setSource(((InterfaceEditPart) request.getConnectionEditPart().getSource()).getModel());
-		connectionCreateCmd.setDestination(((InterfaceEditPart) request.getTarget()).getModel());
 	}
 
 	@Override

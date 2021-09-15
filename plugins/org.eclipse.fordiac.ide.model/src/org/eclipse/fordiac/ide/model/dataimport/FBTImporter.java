@@ -887,7 +887,7 @@ public class FBTImporter extends TypeImporter {
 
 	private void addAdapterEventOutputs(final EList<Event> eventOutputs, final AdapterDeclaration a) {
 		for (final Event event : eventOutputs) {
-			final AdapterEvent ae = ImportUtils.createAdapterEvent(event, a);
+			final AdapterEvent ae = createAdapterEvent(event, a);
 			outputEvents.put(ae.getName(), ae);
 		}
 
@@ -895,9 +895,18 @@ public class FBTImporter extends TypeImporter {
 
 	private void addAdapterEventInputs(final EList<Event> eventInputs, final AdapterDeclaration a) {
 		for (final Event event : eventInputs) {
-			final AdapterEvent ae = ImportUtils.createAdapterEvent(event, a);
+			final AdapterEvent ae = createAdapterEvent(event, a);
 			inputEvents.put(ae.getName(), ae);
 		}
+	}
+
+	private static AdapterEvent createAdapterEvent(final Event event, final AdapterDeclaration a) {
+		final AdapterEvent ae = LibraryElementFactory.eINSTANCE.createAdapterEvent();
+		ae.setName(event.getName());
+		ae.setComment(event.getComment());
+		ae.setAdapterDeclaration(a);
+
+		return ae;
 	}
 
 	/**

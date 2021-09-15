@@ -28,6 +28,30 @@ public final class Messages extends NLS {
 
 	public static String TemplateExportFilter_ErrorDuringTemplateGeneration;
 
+	public static String TemplateExportFilter_FILE_EXISTS;
+
+	public static String TemplateExportFilter_LIST_FOUR_OR_MORE_ELEMENTS;
+
+	public static String TemplateExportFilter_LIST_ONE_ELEMENT;
+
+	public static String TemplateExportFilter_LIST_THREE_ELEMENTS;
+
+	public static String TemplateExportFilter_LIST_TWO_ELEMENTS;
+
+	public static String TemplateExportFilter_MERGE_EDITOR_FAILED;
+
+	public static String TemplateExportFilter_MERGE_LABEL_STRING;
+
+	public static String TemplateExportFilter_NO_DIFFERENCES_MESSAGE;
+
+	public static String TemplateExportFilter_NO_DIFFERENCES_TITLE;
+
+	public static String TemplateExportFilter_OVERWRITE_LABEL_STRING;
+
+	public static String TemplateExportFilter_OVERWRITE_REQUEST;
+
+	public static String TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

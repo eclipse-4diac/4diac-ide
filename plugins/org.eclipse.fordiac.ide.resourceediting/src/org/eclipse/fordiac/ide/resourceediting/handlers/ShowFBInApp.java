@@ -50,7 +50,7 @@ public class ShowFBInApp extends AbstractHandler {
 		final FBNetworkElement appFB = getAppFB(selection);
 
 		final Application app = getApplication(appFB);
-		if (app != null && appFB != null) {
+		if (app != null) {
 			final IEditorPart editor = OpenListenerManager.openEditor(app);
 			HandlerHelper.selectElement(appFB, HandlerHelper.getViewer(editor));
 		}

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2021 Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
@@ -27,6 +29,11 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 
 public class FordiacConnectionDragCreationTool extends ConnectionDragCreationTool {
+
+	// Safety border around the canvas to ensure that during dragging connections the canvas is not growing
+	private static final Insets NEW_CONNECTION_CANVAS_BORDER = new Insets(1,
+			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE, 1,
+			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE);
 
 	public FordiacConnectionDragCreationTool() {
 		super();
@@ -43,6 +50,7 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 							MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
 							+ ConnectionPreferenceValues.HANDLE_SIZE,
 							ConnectionPreferenceValues.HANDLE_SIZE));
+			CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, NEW_CONNECTION_CANVAS_BORDER);
 		}
 		super.mouseDrag(me, viewer);
 	}

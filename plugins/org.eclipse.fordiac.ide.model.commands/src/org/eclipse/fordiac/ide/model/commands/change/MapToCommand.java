@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -100,6 +101,7 @@ public class MapToCommand extends Command {
 		getAutomationSystem().getMapping().add(mapping);
 
 		checkConnections();
+
 		createdConnections.execute();
 	}
 
@@ -170,10 +172,15 @@ public class MapToCommand extends Command {
 	}
 
 	private FBNetworkElement createTargetTypedSubApp() {
+		if (srcElement instanceof SubApp) {
+			FBNetworkHelper.loadSubappNetwork(srcElement);
+		}
+
 		final CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
 				(SubApplicationTypePaletteEntry) srcElement.getPaletteEntry(), getTargetFBNetwork(),
 				srcElement.getPosition().getX(), srcElement.getPosition().getY());
 		cmd.execute();
+
 		return cmd.getSubApp();
 	}
 

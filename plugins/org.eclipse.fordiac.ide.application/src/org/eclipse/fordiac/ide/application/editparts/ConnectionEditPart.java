@@ -35,6 +35,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
+import org.eclipse.fordiac.ide.application.tools.FBNScrollingConnectionEndpointTracker;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
@@ -60,6 +61,7 @@ import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.handles.ConnectionEndpointHandle;
+import org.eclipse.gef.tools.ConnectionEndpointTracker;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -116,6 +118,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			}
 			g.fillRoundRectangle(r, r.height / 2, r.height / 2);
 
+		}
+
+		@Override
+		protected ConnectionEndpointTracker createConnectionEndPointTracker(
+				final org.eclipse.gef.ConnectionEditPart connectionEditPart) {
+			return new FBNScrollingConnectionEndpointTracker(connectionEditPart);
 		}
 	}
 

@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -107,9 +108,10 @@ public final class LinkConstraints {
 			EObject obj = varDecl.eContainer();
 			if (null != obj) {
 				obj = obj.eContainer();
-				if ((obj instanceof CompositeFBType) || (obj instanceof SubApp)) {
-					// data connections from and to interface data ports from composits should also
-					// be allowed from unwithed composite inputs (e.g., parameters for the FB)
+				if ((obj instanceof CompositeFBType) || (obj instanceof SubApp)
+						|| (obj instanceof ErrorMarkerFBNElement)) {
+					// data connections from and to interface data ports from composits, subaps, error markers should
+					// also be allowed from unwithed composite inputs (e.g., parameters for the FB)
 					return true;
 				}
 			}

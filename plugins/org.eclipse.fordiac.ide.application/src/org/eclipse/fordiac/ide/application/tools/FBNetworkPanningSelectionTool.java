@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 				 2018 - 2020 Johannes Kepler University
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008 - 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                           Johannes Kepler University,
+ *                           Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,8 @@
  *               - extracted FBNetworkRootEditPart from FBNetworkEditor
  *               - extracted panning and selection tool added inline connection
  *                 creation
+ *               - added checking code to deactivate connection creation when alt
+ *                 key is not pressed anymore
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.tools;
 
@@ -40,7 +42,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	/**
 	 * Key to indicate that connection creation mode should be activated.
-	 * 
+	 *
 	 * The current default is on most system the Alt key.
 	 */
 	private static final int CONNECTION_CREATION_MOD_KEY = SWT.MOD3;
@@ -96,6 +98,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	@Override
 	public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
+		checkConnCreationState(me); // check if conn creation needs to be deactivated
 		if (null == connectionCreationTool) {
 			super.mouseDown(me, viewer);
 		}
@@ -103,7 +106,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	@Override
 	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
-		if (null != connectionCreationTool) {
+		if (checkConnCreationState(me)) {
 			connectionCreationTool.mouseUp(me, viewer);
 		} else {
 			if (LEFT_MOUSE == me.button) {
@@ -128,7 +131,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 				return;
 			}
 		}
-		if (evt.keyCode == CONNECTION_CREATION_MOD_KEY) { // Ctrl or Command key was pressed
+		if (evt.keyCode == CONNECTION_CREATION_MOD_KEY && (connectionCreationTool == null)) {
 			activateConnectionCreation();
 		}
 		super.keyDown(evt, viewer);
@@ -136,7 +139,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	@Override
 	public void mouseMove(final MouseEvent me, final EditPartViewer viewer) {
-		if (null != connectionCreationTool) {
+		if (checkConnCreationState(me)) {
 			connectionCreationTool.mouseDrag(me, viewer);
 		} else {
 			super.mouseMove(me, viewer);
@@ -145,10 +148,8 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	@Override
 	public void keyUp(final KeyEvent evt, final EditPartViewer viewer) {
-		if ((evt.keyCode == CONNECTION_CREATION_MOD_KEY) && (null != connectionCreationTool)) { // Ctrl or Command key
-																								// was pressed
-			connectionCreationTool.deactivate();
-			connectionCreationTool = null;
+		if ((evt.keyCode == CONNECTION_CREATION_MOD_KEY) && (null != connectionCreationTool)) {
+			deactivateConnectionCreation();
 		}
 		super.keyUp(evt, viewer);
 	}
@@ -162,4 +163,22 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 			connectionCreationTool.startup(getCurrentInput().getMouseLocation());
 		}
 	}
+
+	private void deactivateConnectionCreation() {
+		connectionCreationTool.deactivate();
+		connectionCreationTool = null;
+	}
+
+	private boolean checkConnCreationState(final MouseEvent me) {
+		if (null != connectionCreationTool) {
+			if ((me.stateMask & CONNECTION_CREATION_MOD_KEY) == 0) {
+				// connection key not pressed anymore deactivate connection creation
+				deactivateConnectionCreation();
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
 }

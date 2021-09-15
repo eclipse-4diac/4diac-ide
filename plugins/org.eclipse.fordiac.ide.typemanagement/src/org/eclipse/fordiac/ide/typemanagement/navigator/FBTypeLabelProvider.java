@@ -89,10 +89,12 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	private static boolean fileHasProblems(final IFile element) {
 		IMarker[] problems = null;
-		try {
-			problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+		if (element.exists()) {
+			try {
+				problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			} catch (final CoreException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+			}
 		}
 		return ((null != problems) && (0 < problems.length));
 	}

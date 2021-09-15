@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -37,7 +37,7 @@ import org.eclipse.emf.ecore.EObject;
 public interface ConnectionRoutingData extends EObject {
 	/** Returns the value of the '<em><b>Dx1</b></em>' attribute. The default value is <code>"0"</code>. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Dx1</em>' attribute.
 	 * @see #setDx1(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnectionRoutingData_Dx1()
@@ -47,7 +47,7 @@ public interface ConnectionRoutingData extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx1
 	 * <em>Dx1</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Dx1</em>' attribute.
 	 * @see #getDx1()
 	 * @generated */
@@ -55,7 +55,7 @@ public interface ConnectionRoutingData extends EObject {
 
 	/** Returns the value of the '<em><b>Dx2</b></em>' attribute. The default value is <code>"0"</code>. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Dx2</em>' attribute.
 	 * @see #setDx2(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnectionRoutingData_Dx2()
@@ -65,7 +65,7 @@ public interface ConnectionRoutingData extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx2
 	 * <em>Dx2</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Dx2</em>' attribute.
 	 * @see #getDx2()
 	 * @generated */
@@ -73,7 +73,7 @@ public interface ConnectionRoutingData extends EObject {
 
 	/** Returns the value of the '<em><b>Dy</b></em>' attribute. The default value is <code>"0"</code>. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Dy</em>' attribute.
 	 * @see #setDy(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnectionRoutingData_Dy()
@@ -83,7 +83,7 @@ public interface ConnectionRoutingData extends EObject {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDy
 	 * <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Dy</em>' attribute.
 	 * @see #getDy()
 	 * @generated */
@@ -91,7 +91,7 @@ public interface ConnectionRoutingData extends EObject {
 
 	/** Returns the value of the '<em><b>Needs Validation</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the value of the '<em>Needs Validation</em>' attribute.
 	 * @see #setNeedsValidation(boolean)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnectionRoutingData_NeedsValidation()
@@ -102,10 +102,28 @@ public interface ConnectionRoutingData extends EObject {
 	/** Sets the value of the
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#isNeedsValidation <em>Needs
 	 * Validation</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Needs Validation</em>' attribute.
 	 * @see #isNeedsValidation()
 	 * @generated */
 	void setNeedsValidation(boolean value);
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model required="true"
+	 * @generated */
+	boolean is1SegementData();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model required="true"
+	 * @generated */
+	boolean is3SegementData();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model required="true"
+	 * @generated */
+	boolean is5SegementData();
 
 } // ConnectionRoutingData

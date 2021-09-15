@@ -27,10 +27,8 @@ import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
@@ -74,7 +72,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		}
 		if(newElement instanceof Demultiplexer){
 			((Demultiplexer) newElement)
-					.setStructTypeElementsAtInterface((StructuredType) ((FBTypePaletteEntryImpl) entry).getFBType()
+			.setStructTypeElementsAtInterface((StructuredType) ((FBTypePaletteEntryImpl) entry).getFBType()
 					.getInterfaceList().getInputVars().get(0).getType());
 		}
 	}
@@ -109,7 +107,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	public boolean invalidType() {
-		return (oldElement instanceof ErrorMarkerFBNElement || entry.getFile() == null || !entry.getFile().exists())
+		return (entry.getFile() == null || !entry.getFile().exists())
 				&& !reloadErrorType();
 	}
 
@@ -129,8 +127,8 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	public boolean reloadErrorType() {
-		final TypeLibrary typeLibrary = oldElement.getPaletteEntry().getTypeLibrary();
-		final PaletteEntry reloadedType = typeLibrary.find(oldElement.getType().getName());
+		final TypeLibrary typeLibrary = entry.getTypeLibrary();
+		final PaletteEntry reloadedType = typeLibrary.find(entry.getLabel());
 		if (reloadedType != null && reloadedType.getFile() != null && reloadedType.getFile().exists()) {
 			typeLibrary.getErrorTypeLib().removePaletteEntry(entry);
 			entry = reloadedType;

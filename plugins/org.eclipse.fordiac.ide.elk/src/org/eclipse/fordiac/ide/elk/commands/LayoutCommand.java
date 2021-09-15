@@ -61,6 +61,7 @@ public class LayoutCommand extends Command {
 	public void execute() {
 		saveDataForUndo();
 		updateModelElements();
+		updatePositionAttributes();
 		updateFigures();
 		if (pinPositionAttrCommand.canExecute()) {
 			pinPositionAttrCommand.execute();
@@ -96,6 +97,9 @@ public class LayoutCommand extends Command {
 	private void updateModelElements() {
 		positions.forEach(FBNetworkElement::setPosition);
 		connPoints.forEach(LayoutCommand::updateModel);
+	}
+
+	private void updatePositionAttributes() {
 		pins.forEach(this::updatePositionAttribute);
 	}
 

@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  */
 
-public final class SEGImporter extends TypeImporter {
+public class SEGImporter extends TypeImporter {
 
 	public SEGImporter(final IFile typeFile) {
 		super(typeFile);

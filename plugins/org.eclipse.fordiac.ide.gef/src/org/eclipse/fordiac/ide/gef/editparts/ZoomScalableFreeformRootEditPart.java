@@ -33,12 +33,14 @@ import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.BackgroundFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
+import org.eclipse.fordiac.ide.gef.tools.CanvasHelper;
 import org.eclipse.fordiac.ide.gef.tools.MarqueeDragTracker;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.DragTracker;
@@ -47,7 +49,6 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.GuideLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -173,6 +174,9 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 	private static final Request MARQUEE_REQUEST = new Request(RequestConstants.REQ_SELECTION);
 
+	// Safety border around the canvas to ensure that during dragging marquee selection does not grow the canvas
+	private static final Insets MARQUEE_DRAG_BORDER = new Insets(1, 1, 1, 1);
+
 	/** MarqueeDragTracker which deselects all elements on right click if nothing so that the correct context menu is
 	 * shown. We are only here if there is no element under the cursor.
 	 *
@@ -191,7 +195,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		@Override
 		public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
 			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
-				bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer);
+				CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, MARQUEE_DRAG_BORDER);
 			}
 			super.mouseDown(me, viewer);
 		}
@@ -206,26 +210,9 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 				// Compensate the moved scrolling in the start position for correct dropping of
 				// moved parts
 				setStartLocation(getStartLocation().getTranslated(delta));
-				bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer);
+				CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, MARQUEE_DRAG_BORDER);
 			}
 			super.mouseDrag(me, viewer);
-		}
-
-		protected void bindToContentPane(final MouseEvent me, final AdvancedScrollingGraphicalViewer viewer) {
-			final Rectangle contentPaneBounds = viewer.translateBoundsToRoute(
-					((FreeformGraphicalRootEditPart) viewer.getRootEditPart()).getContentPane());
-
-			final org.eclipse.draw2d.geometry.Point viewLocation = viewer.getViewLocation();
-			me.x += viewLocation.x;
-			me.y += viewLocation.y;
-
-			me.x = Math.max(me.x, contentPaneBounds.getTopLeft().x);
-			me.y = Math.max(me.y, contentPaneBounds.getTopLeft().y);
-
-			me.x = Math.min(me.x, contentPaneBounds.getBottomRight().x - 1);
-			me.y = Math.min(me.y, contentPaneBounds.getBottomRight().y - 1);
-			me.x -= viewLocation.x;
-			me.y -= viewLocation.y;
 		}
 
 		@Override

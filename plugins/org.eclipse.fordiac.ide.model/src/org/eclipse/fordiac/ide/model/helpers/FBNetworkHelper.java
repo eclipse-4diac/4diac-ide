@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -240,5 +241,29 @@ public final class FBNetworkHelper {
 
 	private FBNetworkHelper() {
 		throw new IllegalStateException("FBNetworkHelper is a utility class that can not be instantiated"); //$NON-NLS-1$
+	}
+
+	public static void loadSubappNetwork(final FBNetworkElement network) {
+		if (network instanceof SubApp) {
+			final SubApp subApp = (SubApp) network;
+			subApp.loadSubAppNetwork();
+			parseSubNetworks(subApp.getSubAppNetwork().getNetworkElements());
+		} else if (network instanceof CFBInstance) {
+			final CFBInstance compositeFunctionBlock = (CFBInstance) network;
+			compositeFunctionBlock.loadCFBNetwork();
+			parseSubNetworks(compositeFunctionBlock.getCfbNetwork().getNetworkElements());
+		}
+	}
+
+	private static void parseSubNetworks(final List<FBNetworkElement> networkElements) {
+		for (final FBNetworkElement fbe : networkElements) {
+			if (hasNetwork(fbe)) {
+				loadSubappNetwork(fbe);
+			}
+		}
+	}
+
+	private static boolean hasNetwork(final FBNetworkElement networkElement) {
+		return (networkElement instanceof SubApp || networkElement instanceof CFBInstance);
 	}
 }
