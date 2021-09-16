@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteracto
 import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -68,15 +69,26 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 * @return the monitoring element
 	 */
 	public MonitoringBaseElement getMonitoringElement(final IInterfaceElement port) {
+		final AutomationSystem sys = getAutomationSystem(port);
+		if (sys != null) {
+			final SystemMonitoringData data = systemMonitoringData.get(sys);
+			if (data != null) {
+				return data.getMonitoredElement(port);
+			}
+		}
+		return null;
+	}
+
+	private static AutomationSystem getAutomationSystem(final IInterfaceElement port) {
 		if (port != null) {
 			final FBNetworkElement fbNetworkElement = port.getFBNetworkElement();
 			if (fbNetworkElement != null) {
-				final SystemMonitoringData data = systemMonitoringData.get(fbNetworkElement.getFbNetwork().getAutomationSystem());
-				if (data != null) {
-					return data.getMonitoredElement(port);
+				if (fbNetworkElement instanceof AdapterFB) {
+					return getAutomationSystem(((AdapterFB) fbNetworkElement).getAdapterDecl());
 				}
+				return fbNetworkElement.getFbNetwork().getAutomationSystem();
 			}
-		}
+	}
 		return null;
 	}
 
