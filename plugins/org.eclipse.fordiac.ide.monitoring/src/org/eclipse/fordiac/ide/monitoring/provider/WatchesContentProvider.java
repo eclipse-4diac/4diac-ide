@@ -54,7 +54,8 @@ public class WatchesContentProvider implements ITreeContentProvider {
 		}
 		root = new WatchValueTreeNode(null);
 
-		final Collection<MonitoringBaseElement> elementsToMonitor = MonitoringManager.getInstance().getElementsToMonitor();
+		final Collection<MonitoringBaseElement> elementsToMonitor = MonitoringManager.getInstance()
+				.getAllElementsToMonitor();
 		for (final MonitoringBaseElement element : elementsToMonitor) {
 			if (element != null) {
 				hasValueOnForte = !((MonitoringElement) element).getCurrentValue().equals("N/A"); //$NON-NLS-1$

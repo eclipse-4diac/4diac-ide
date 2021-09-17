@@ -17,8 +17,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
@@ -41,20 +43,24 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 
 	@Override
 	public List<IEditPartCreator> getChildren(final FBNetwork fbNetwork) {
-		final List<IEditPartCreator> arrayList = new ArrayList<>();
-		for (final MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {
-			if (null != element) {
-				if (element.getPort().getFb().getFbNetwork().equals(fbNetwork)) {
-					arrayList.add(element);
-				} else if (element instanceof SubappMonitoringElement || checkResource(element)) {
-					final Object parent = element.getPort().getFb().getFbNetwork().eContainer();
-					if (isInsideMonitoredSubApp(parent, fbNetwork)) {
-						arrayList.add(element);
-					}
-				}
+		if (null != fbNetwork) {
+			final Collection<MonitoringBaseElement> elementList = MonitoringManager.getInstance()
+					.getElementsToMonitor(fbNetwork.getAutomationSystem());
+			return elementList.stream().filter(el -> shouldBeAdded(el, fbNetwork)).collect(Collectors.toList());
+		}
+		return Collections.emptyList();
+	}
+
+	private static boolean shouldBeAdded(final MonitoringBaseElement element, final FBNetwork fbNetwork) {
+		if (element != null && element.getPort().getFb().getFbNetwork() != null) {
+			if (element.getPort().getFb().getFbNetwork().equals(fbNetwork)) {
+				return true;
+			} else if (element instanceof SubappMonitoringElement || checkResource(element)) {
+				final Object parent = element.getPort().getFb().getFbNetwork().eContainer();
+				return isInsideMonitoredSubApp(parent, fbNetwork);
 			}
 		}
-		return arrayList;
+		return false;
 	}
 
 	private static boolean checkResource(final MonitoringBaseElement element) {
