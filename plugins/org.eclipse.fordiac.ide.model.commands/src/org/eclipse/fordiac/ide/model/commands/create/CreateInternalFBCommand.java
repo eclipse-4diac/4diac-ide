@@ -22,17 +22,18 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.gef.commands.Command;
 
-public class CreateInternalFBCommand extends AbstractCreationCommand {
+public class CreateInternalFBCommand extends Command implements CreationCommand {
 
 	/** The element where the internal FB is added to */
-	private BaseFBType baseFbType;
+	private final BaseFBType baseFbType;
 
 	/** Command information */
 	private PaletteEntry fbType;
-	private String name;
-	private int index;
+	private final String name;
+	private final int index;
 
 	/** Created internal FB */
 	private FB internalFB;
@@ -48,7 +49,7 @@ public class CreateInternalFBCommand extends AbstractCreationCommand {
 		this.baseFbType = baseFbType;
 		this.fbType = fbType;
 		if (null == fbType) {
-			EMap<String, FBTypePaletteEntry> typeLib = baseFbType.getTypeLibrary().getBlockTypeLib().getFbTypes();
+			final EMap<String, FBTypePaletteEntry> typeLib = baseFbType.getTypeLibrary().getBlockTypeLib().getFbTypes();
 			this.fbType = typeLib.get(0).getValue();
 		}
 		this.name = (null != name) ? name : DEFAULT_INTERNAL_FB_NAME;
@@ -72,7 +73,7 @@ public class CreateInternalFBCommand extends AbstractCreationCommand {
 	}
 
 	private EList<FB> getInteralFBList() {
-		BaseFBType type = baseFbType;
+		final BaseFBType type = baseFbType;
 		return type.getInternalFbs();
 	}
 

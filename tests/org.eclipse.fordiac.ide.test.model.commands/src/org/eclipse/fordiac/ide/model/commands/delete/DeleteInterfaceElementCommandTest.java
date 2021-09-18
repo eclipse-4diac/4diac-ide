@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommandTest;
+import org.eclipse.fordiac.ide.model.commands.insert.CopyInterfaceElementCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.junit.jupiter.params.provider.Arguments;
@@ -63,46 +63,46 @@ public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 	private static State fbInitializer() {
 		State s = new State();
 		s = FBCreateCommandTest.executeCommand(s);
-		s = InsertInterfaceElementCommandTest.executeCommand(s, FordiacKeywords.DWORD, true);
-		s = InsertInterfaceElementCommandTest.executeCommand(s, FordiacKeywords.DWORD, false);
-		s = InsertInterfaceElementCommandTest.executeEventCommand(s, true);
-		return InsertInterfaceElementCommandTest.executeEventCommand(s, false);
+		s = CopyInterfaceElementCommandTest.executeCommand(s, FordiacKeywords.DWORD, true);
+		s = CopyInterfaceElementCommandTest.executeCommand(s, FordiacKeywords.DWORD, false);
+		s = CopyInterfaceElementCommandTest.executeEventCommand(s, true);
+		return CopyInterfaceElementCommandTest.executeEventCommand(s, false);
 	}
 
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
-				new ExecutionDescription<>("Delete Input", //$NON-NLS-1$
+				new ExecutionDescription<>("Delete Data Input", //$NON-NLS-1$
 						DeleteInterfaceElementCommandTest::executeCommandDeleteInput, //
 						(final State s, final State o, final TestFunction t) -> {
-							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateHasDataOutput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateHasDataOutput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateHasEventInput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
 						}), //
-				new ExecutionDescription<>("Delete Output", //$NON-NLS-1$
+				new ExecutionDescription<>("Delete Data Output", //$NON-NLS-1$
 						DeleteInterfaceElementCommandTest::executeCommandDeleteOutput, //
 						(final State s, final State o, final TestFunction t) -> {
-							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoDataOutput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateHasEventInput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
 						}), //
 				new ExecutionDescription<>("Delete Event Input", //$NON-NLS-1$
 						DeleteInterfaceElementCommandTest::executeCommandDeleteEventInput, //
 						(final State s, final State o, final TestFunction t) -> {
-							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateNoEventInput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoDataOutput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoEventInput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
 						}), //
 				new ExecutionDescription<>("Delete Event Output", //$NON-NLS-1$
 						DeleteInterfaceElementCommandTest::executeCommandDeleteEventOutput, //
 						(final State s, final State o, final TestFunction t) -> {
-							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateNoEventInput(s, t);
-							InsertInterfaceElementCommandTest.verifyStateNoEventOutput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoDataOutput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoEventInput(s, t);
+							CopyInterfaceElementCommandTest.verifyStateNoEventOutput(s, t);
 						}) //
 				);
 
@@ -111,10 +111,10 @@ public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 		commands.addAll(describeCommand("Start with Functionblock", // //$NON-NLS-1$
 				DeleteInterfaceElementCommandTest::fbInitializer, //
 				(final State s, final State o, final TestFunction t) -> {
-					InsertInterfaceElementCommandTest.verifyStateHasDataInput(s, t);
-					InsertInterfaceElementCommandTest.verifyStateHasDataOutput(s, t);
-					InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, t);
-					InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
+					CopyInterfaceElementCommandTest.verifyStateHasDataInput(s, t);
+					CopyInterfaceElementCommandTest.verifyStateHasDataOutput(s, t);
+					CopyInterfaceElementCommandTest.verifyStateHasEventInput(s, t);
+					CopyInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
 				}, //
 				executionDescriptions //
 				));

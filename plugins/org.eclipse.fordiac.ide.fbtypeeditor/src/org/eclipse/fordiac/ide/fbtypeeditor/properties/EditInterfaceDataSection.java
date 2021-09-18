@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -38,10 +37,9 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected InsertInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement toCopy, final boolean isInput,
 			final int index) {
-		final DataType last = getLastUsedDataType(getType().getInterfaceList(), isInput, interfaceElement);
-		return new InsertInterfaceElementCommand(interfaceElement, last, getType().getInterfaceList(), isInput, index);
+		return new CreateInterfaceElementCommand(toCopy, isInput, getType().getInterfaceList(), index);
 	}
 
 	@Override

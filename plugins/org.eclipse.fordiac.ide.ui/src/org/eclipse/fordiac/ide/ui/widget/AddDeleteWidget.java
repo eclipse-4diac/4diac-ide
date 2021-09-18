@@ -15,9 +15,10 @@ package org.eclipse.fordiac.ide.ui.widget;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -115,8 +116,8 @@ public class AddDeleteWidget {
 		deleteButton.addListener(SWT.Selection, deleteListener);
 	}
 
-	public void bindToTableViewer(final TableViewer viewer, final CommandExecutor executor, final CreationCommandProvider addCommand,
-			final CommandProvider deleteCommand) {
+	public void bindToTableViewer(final TableViewer viewer, final CommandExecutor executor,
+			final CreationCommandProvider addCommand, final CommandProvider deleteCommand) {
 
 		final Listener createListener = getAddListener(viewer, executor, addCommand);
 
@@ -125,7 +126,8 @@ public class AddDeleteWidget {
 		bindToTableViewer(viewer, createListener, deleteListener);
 	}
 
-	public void bindToTableViewer(final TableViewer viewer, final Listener createListener, final Listener deleteListener) {
+	public void bindToTableViewer(final TableViewer viewer, final Listener createListener,
+			final Listener deleteListener) {
 
 		addCreateListener(createListener);
 		addDeleteListener(deleteListener);
@@ -192,10 +194,11 @@ public class AddDeleteWidget {
 	private static Listener getAddListener(final TableViewer viewer, final CommandExecutor executor,
 			final CreationCommandProvider commandProvider) {
 		return ev -> {
-			final AbstractCreationCommand cmd = commandProvider.getCommand(getReferencedElement(viewer));
-			executor.executeCommand(cmd);
+			final CreationCommand cmd = commandProvider.getCommand(getReferencedElement(viewer));
+			executor.executeCommand((Command) cmd);
 			viewer.refresh();
-			viewer.setSelection(new StructuredSelection(cmd.getCreatedElement()));
+			final StructuredSelection selection = new StructuredSelection(cmd.getCreatedElement());
+			viewer.setSelection(selection);
 		};
 	}
 

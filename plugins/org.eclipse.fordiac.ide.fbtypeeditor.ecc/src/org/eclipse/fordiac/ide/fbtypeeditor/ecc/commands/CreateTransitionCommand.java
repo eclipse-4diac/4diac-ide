@@ -23,14 +23,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.commands.Command;
 
 /**
  * The Class CreateTransitionCommand.
  */
-public class CreateTransitionCommand extends AbstractCreationCommand {
+public class CreateTransitionCommand extends Command implements CreationCommand {
 	static final Point SELF_TRANS_OFFSET = new Point(10, 50);
 
 	/** The source. */

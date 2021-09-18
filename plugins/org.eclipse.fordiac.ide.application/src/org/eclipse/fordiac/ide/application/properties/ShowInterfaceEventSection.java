@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
@@ -48,7 +47,8 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	protected InsertInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput,
 			final int index) {
 		return null;
 	}

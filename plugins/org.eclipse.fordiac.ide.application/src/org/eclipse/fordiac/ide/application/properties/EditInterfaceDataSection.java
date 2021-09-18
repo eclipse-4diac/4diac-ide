@@ -28,8 +28,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -51,11 +49,10 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected InsertInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput,
 			final int index) {
-		final DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
-		return new InsertSubAppInterfaceElementCommand(interfaceElement, last, getType().getInterface(), isInput,
-				index);
+		return new CreateSubAppInterfaceElementCommand(interfaceElement, isInput, getType().getInterface(), index);
 	}
 
 	@Override

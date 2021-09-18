@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
@@ -29,30 +30,31 @@ import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
+public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 
 	private static final String INTERFACE_ELEMENT = "InterfaceElement"; //$NON-NLS-1$
 
 	public static State executeCommand(final State state, final String typeName, final boolean isInput) {
 		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		element.setIsInput(isInput);
+		element.setIsInput(!isInput); // also test copying from inputs to outputs and vice-versa
 		element.setName(INTERFACE_ELEMENT);
-		element.setTypeName(typeName);
 		final DataType type = getDatatypelib().getType(typeName);
-
-		state.setCommand(new InsertInterfaceElementCommand(element, type,
-				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), isInput, 0));
+		element.setTypeName(typeName);
+		element.setType(type);
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
+				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));
 
 		return commandExecution(state);
 	}
 
 	public static State executeEventCommand(final State state, final boolean isInput) {
-		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createEvent();
 		element.setName(INTERFACE_ELEMENT);
 		final DataType type = EventTypeLibrary.getInstance().getType(null);
-
-		state.setCommand(new InsertInterfaceElementCommand(element, type,
-				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), isInput, 0));
+		element.setType(type);
+		element.setIsInput(!isInput);
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
+				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));
 
 		return commandExecution(state);
 	}
@@ -60,10 +62,9 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 	public static State executeCommandWithoutType(final State state, final boolean isInput) {
 		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		element.setName(INTERFACE_ELEMENT);
-		final DataType type = null;
 
-		state.setCommand(new InsertInterfaceElementCommand(element, type,
-				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), isInput, 0));
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
+				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));
 
 		return disabledCommandExecution(state);
 	}
@@ -72,8 +73,8 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		element.setName(INTERFACE_ELEMENT);
 		final DataType type = getDatatypelib().getType(typeName);
-
-		state.setCommand(new InsertInterfaceElementCommand(element, type, null, isInput, 0));
+		element.setType(type);
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput, null, 0));
 
 		return disabledCommandExecution(state);
 	}
@@ -99,13 +100,13 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 	}
 
 	private static void verifyGetters(final State state, final TestFunction t) {
-		t.test(state.getCommand() instanceof InsertInterfaceElementCommand);
-		final InsertInterfaceElementCommand c = ((InsertInterfaceElementCommand) state.getCommand());
-		t.test(c.isInput(), true);
-		t.test(c.getInterfaceList(), state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface());
-		t.test(c.getDataType(), getDatatypelib().getType(FordiacKeywords.DWORD));
-		t.test(c.getEntry());
-		t.test(c.getInterfaceElement());
+		t.test(state.getCommand() instanceof CreateInterfaceElementCommand);
+		final CreateInterfaceElementCommand c = ((CreateInterfaceElementCommand) state.getCommand());
+		t.test(c.getCreatedElement());
+		t.test(c.getCreatedElement().isIsInput(), true);
+		t.test(c.getCreatedElement().eContainer(),
+				state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface());
+		t.test(c.getCreatedElement().getType(), getDatatypelib().getType(FordiacKeywords.DWORD));
 	}
 
 	public static void verifyStateHasDataOutput(final State state, final TestFunction t) {
@@ -123,7 +124,7 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
-				new ExecutionDescription<>("Add Input", //$NON-NLS-1$
+				new ExecutionDescription<>("Add Data Input", //$NON-NLS-1$
 						(final State s) -> {
 							final State result = executeCommand(s, FordiacKeywords.DWORD, true);
 							verifyGetters(s, tester.get());
@@ -135,7 +136,7 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 							verifyStateNoEventInput(s, t);
 							verifyStateNoEventOutput(s, t);
 						}), //
-				new ExecutionDescription<>("Add Output", //$NON-NLS-1$
+				new ExecutionDescription<>("Add Data Output", //$NON-NLS-1$
 						(final State s) -> executeCommand(s, FordiacKeywords.DWORD, false), //
 						(final State s, final State o, final TestFunction t) -> {
 							verifyStateHasDataInput(s, t);

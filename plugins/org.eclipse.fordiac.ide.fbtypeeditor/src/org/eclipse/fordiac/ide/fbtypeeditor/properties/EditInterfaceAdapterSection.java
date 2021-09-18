@@ -13,14 +13,13 @@
  *               - cleaned command stack handling for property section
  *   Bianca Wiesmayr - create command now has enhanced guess
  *   Daniel Lindhuber - added insert command method
-*******************************************************************************/
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -37,10 +36,10 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
-	protected InsertInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput,
 			final int index) {
-		final AdapterType last = getLastUsedAdapterType(getType().getInterfaceList(), interfaceElement, isInput);
-		return new InsertInterfaceElementCommand(interfaceElement, last, getType().getInterfaceList(), isInput, index);
+		return new CreateInterfaceElementCommand(interfaceElement, isInput, getType().getInterfaceList(), index);
 	}
 
 	@Override

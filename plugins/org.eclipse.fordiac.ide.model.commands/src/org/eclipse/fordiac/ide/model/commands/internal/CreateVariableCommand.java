@@ -25,13 +25,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.gef.commands.Command;
 
 /**
  * abstract command to add a variable to a list of a LibraryElement
  *
  */
-public abstract class CreateVariableCommand extends AbstractCreationCommand {
+public abstract class CreateVariableCommand extends Command implements CreationCommand {
 	/** The type that the variable is added to */
 	private final LibraryElement type;
 

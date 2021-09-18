@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.ui.providers;
 /**
  * Interface for a CommandProvider that returns the created element
  */
-public interface CreationCommandProvider extends CommandProvider {
+public interface CreationCommandProvider {
 
 	/**
 	 * Provide a command for the given reference element
@@ -22,7 +22,6 @@ public interface CreationCommandProvider extends CommandProvider {
 	 * @param refElement reference element for the command
 	 * @return the command
 	 */
-	@Override
-	AbstractCreationCommand getCommand(Object refElement);
+	CreationCommand getCommand(Object refElement);
 
 }

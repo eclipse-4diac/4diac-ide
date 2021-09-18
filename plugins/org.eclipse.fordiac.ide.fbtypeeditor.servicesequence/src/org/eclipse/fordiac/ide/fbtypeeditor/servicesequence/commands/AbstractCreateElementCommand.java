@@ -19,18 +19,18 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.gef.commands.Command;
 
-public abstract class AbstractCreateElementCommand<T> extends AbstractCreationCommand {
+public abstract class AbstractCreateElementCommand<T> extends Command implements CreationCommand {
 	private T newElement;
-	private T refElement;
 	private final EList<T> list;
 	private int index;
 
 
 	protected AbstractCreateElementCommand(final EList<T> list) {
 		this.list = list;
-		calculateInsertionIndex(list, refElement);
+		calculateInsertionIndex(list, null);
 	}
 
 	protected AbstractCreateElementCommand(final EList<T> list, final int index) {
@@ -40,7 +40,6 @@ public abstract class AbstractCreateElementCommand<T> extends AbstractCreationCo
 
 	protected AbstractCreateElementCommand(final EList<T> list, final T refElement) {
 		this(list);
-		this.refElement = refElement;
 		calculateInsertionIndex(list, refElement);
 	}
 
