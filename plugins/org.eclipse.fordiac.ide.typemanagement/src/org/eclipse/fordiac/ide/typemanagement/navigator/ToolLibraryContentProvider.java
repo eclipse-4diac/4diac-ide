@@ -53,9 +53,10 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 			// tool library should be first
 			retval[0] = toolLibFolder;
 
-			for (int i = 0, outputRunner = 1; i < projects.length; i++) {
-				if (!projects[i].getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
-					retval[outputRunner] = projects[i];
+			int outputRunner = 1;
+			for (final IProject project : projects) {
+				if (!project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
+					retval[outputRunner] = project;
 					outputRunner++;
 				}
 			}

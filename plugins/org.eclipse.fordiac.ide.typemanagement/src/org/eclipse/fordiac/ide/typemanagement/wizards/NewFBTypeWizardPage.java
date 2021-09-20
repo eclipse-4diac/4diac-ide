@@ -62,7 +62,7 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private static final Pattern NAME_PATTERN = Pattern.compile("Name=\"\\w+\""); //$NON-NLS-1$
-	private static final Pattern COMMENT_PATTERN = Pattern.compile("Comment=\"[\\w\\s-_]+\""); //$NON-NLS-1$
+	private static final Pattern COMMENT_PATTERN = Pattern.compile("Comment=\"[\\w\\s-]+\""); //$NON-NLS-1$
 
 	private Button openTypeCheckbox;
 	private int openTypeParentHeight = -1;

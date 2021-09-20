@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,20 +23,11 @@ import org.eclipse.jface.viewers.IFilter;
 public class ECActionFilter implements IFilter {
 
 	@Override
-	public boolean select(Object toTest) {
-		if (toTest instanceof ECActionAlgorithmEditPart) {
-			return true;
-		}
-		if (toTest instanceof ECActionOutputEventEditPart) {
-			return true;
-		}
-		if (toTest instanceof ECActionAlgorithm || toTest instanceof ECActionOutputEvent) {
-			return true;
-		}
-		if (toTest instanceof ECAction) {
-			return true;
-		}
-		return false;
+	public boolean select(final Object toTest) {
+		return (toTest instanceof ECActionAlgorithmEditPart || //
+				toTest instanceof ECActionOutputEventEditPart || //
+				(toTest instanceof ECActionAlgorithm || toTest instanceof ECActionOutputEvent) || //
+				toTest instanceof ECAction);
 	}
 
 }

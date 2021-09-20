@@ -177,7 +177,7 @@ public class RuntimeLauncherView {
 		configuredRuntimeComposite.setLayout(new RowLayout());
 		configuredRuntimeComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
-		final Label configuredRuntimeTextLabel = toolkit.createLabel(configuredRuntimeComposite,
+		toolkit.createLabel(configuredRuntimeComposite,
 				"Currently configured runtime: ", SWT.NONE);
 		final Link configuredRuntimePathLabel = new Link(configuredRuntimeComposite, SWT.NONE);
 		toolkit.adapt(configuredRuntimePathLabel, false, false);
