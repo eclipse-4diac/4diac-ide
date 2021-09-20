@@ -1,6 +1,7 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
- * 				 2018, 2020 Johannes Kepler University
+ * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
+ * 		            Johannes Kepler University, 
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *    - initial API and implementation and/or initial documentation
  *  Martin Melik-Merkumians - adds convenience methods
  *  Alois Zoitl - Changed to a per project Type and Data TypeLibrary
+ *              - Added support for project renameing
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -63,10 +65,20 @@ public final class TypeLibrary implements TypeLibraryTags {
 		}
 	}
 
+	public static void renameProject(final IProject oldProject, final IProject newProject) {
+		synchronized (typeLibraryList) {
+			final TypeLibrary typelib = typeLibraryList.remove(oldProject);
+			if (typelib != null) {
+				typelib.project = newProject;
+				typeLibraryList.put(newProject, typelib);
+			}
+		}
+	}
+
 	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
 	private final Palette errorTypeLib = PaletteFactory.eINSTANCE.createPalette();
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
-	private final IProject project;
+	private IProject project;
 
 	/** An array of palette entry creators */
 	private static IPaletteEntryCreator[] paletteCreators = null;
@@ -146,7 +158,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		this.project = project;
 		blockTypeLib.setTypeLibrary(this);
 		errorTypeLib.setTypeLibrary(this);
-		if (null != project) {
+		if (project != null && project.exists()) {
 			loadPaletteFolderMembers(project);
 		}
 	}
