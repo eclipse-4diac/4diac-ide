@@ -64,6 +64,14 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 				}
 				return null;
 			}
+
+			@Override
+			protected void revertOldEditValue(DirectEditRequest request) {
+				if (getHost() instanceof AbstractDirectEditableEditPart) {
+					final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
+					viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getComment());
+				}
+			}
 		});
 	}
 
