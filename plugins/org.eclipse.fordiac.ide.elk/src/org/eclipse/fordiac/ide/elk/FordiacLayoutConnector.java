@@ -42,10 +42,6 @@ import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
-import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerFBNEditPart;
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
@@ -154,19 +150,18 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 	private static void buildGraphRecursively(final LayoutMapping mapping, final ElkNode parentLayoutNode, final GraphicalEditPart currentEditPart) {
 
 		currentEditPart.getChildren().forEach(child -> {
-			if (child instanceof FBEditPart || child instanceof ErrorMarkerFBNEditPart
-					|| child instanceof StructManipulatorEditPart) {
+			if (child instanceof AbstractFBNElementEditPart) {
 				final AbstractFBNElementEditPart childEditPart = (AbstractFBNElementEditPart) child;
 				final ElkNode node = createNode(mapping, childEditPart, parentLayoutNode);
 				buildGraphRecursively(mapping, node, childEditPart);
 			}
-			if (child instanceof SubAppForFBNetworkEditPart) {
-				processSubApp(mapping, (SubAppForFBNetworkEditPart) child, parentLayoutNode);
-			}
 			if (child instanceof InterfaceEditPart) {
 				final InterfaceEditPart ep = ((InterfaceEditPart) child);
-				ep.getTargetConnections().forEach(conn -> saveConnection(mapping, conn));
-				ep.getSourceConnections().forEach(conn -> saveConnection(mapping, conn));
+				if (ep.isInput()) {
+					ep.getTargetConnections().forEach(conn -> saveConnection(mapping, conn));
+				} else {
+					ep.getSourceConnections().forEach(conn -> saveConnection(mapping, conn));
+				}
 				if (ep.getParent() instanceof EditorWithInterfaceEditPart) {
 					/* add all editor interfaces to the elk graph to ensure the right order in the sidebar */
 					getPort(new Point(0, 0), ep, mapping); /* point is irrelevant since the interface element gets moved along the graph border (sidebar) */
@@ -174,23 +169,6 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 			}
 			if (child instanceof ValueEditPart) {
 				createValueLabels(mapping, (ValueEditPart) child);
-			}
-		});
-	}
-
-	private static void processSubApp(final LayoutMapping mapping, final SubAppForFBNetworkEditPart editPart, final ElkNode parentLayoutNode) {
-		final ElkNode node = createNode(mapping, editPart, parentLayoutNode);
-
-		editPart.getChildren().forEach(child -> {
-			if (child instanceof InterfaceEditPart) {
-				final InterfaceEditPart ie = (InterfaceEditPart) child;
-				ie.getTargetConnections().forEach(conn -> saveConnection(mapping, conn));
-				if (editPart.getModel().isUnfolded()) {
-					ie.getSourceConnections().forEach(conn -> saveConnection(mapping, conn));
-				}
-			}
-			if (child instanceof UnfoldedSubappContentEditPart) {
-				buildGraphRecursively(mapping, node, (GraphicalEditPart) child);
 			}
 		});
 	}
