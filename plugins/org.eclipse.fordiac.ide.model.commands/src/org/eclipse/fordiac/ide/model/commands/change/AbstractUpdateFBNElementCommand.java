@@ -44,7 +44,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public abstract class AbstractUpdateFBNElementCommand extends Command{
+public abstract class AbstractUpdateFBNElementCommand extends Command {
 	// Helper data class for storing connection data of resource connection as the
 	// connections are lost during the unmapping process
 	protected static class ConnData {
@@ -57,9 +57,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		}
 	}
 
-
-	protected final CompoundCommand deleteConnCmds = new CompoundCommand();
-	protected final CompoundCommand connCreateCmds = new CompoundCommand();
+	protected final CompoundCommand reconnCmds = new CompoundCommand();
 	protected final CompoundCommand resourceConnCreateCmds = new CompoundCommand();
 
 	protected MapToCommand mapCmd = null;
@@ -81,7 +79,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		this.network = this.oldElement.getFbNetwork();
 		errorPins = new ArrayList<>();
 	}
-
 
 	@Override
 	public void execute() {
@@ -127,17 +124,16 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		if (unmapCmd != null) {
 			unmapCmd.redo();
 		}
-		deleteConnCmds.redo();
 
-		network.getNetworkElements().remove(oldElement);
 		network.getNetworkElements().add(newElement);
+		reconnCmds.redo();
+		network.getNetworkElements().remove(oldElement);
+
 		errorPins.forEach(FordiacMarkerHelper::createMarkerInFile);
 
 		if (errorMarkerBuilder != null && newElement instanceof ErrorMarkerRef) {
 			FordiacMarkerHelper.createMarkerInFile(errorMarkerBuilder);
 		}
-
-		connCreateCmds.redo();
 
 		if (mapCmd != null) {
 			mapCmd.redo();
@@ -153,15 +149,14 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		}
 
 		errorPins.stream().map(ErrorMarkerBuilder::getErrorMarkerRef).forEach(FordiacMarkerHelper::deleteErrorMarker);
-		connCreateCmds.undo();
+
 		if (errorMarkerBuilder != null && newElement instanceof ErrorMarkerRef) {
 			FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) newElement);
 		}
 
-		network.getNetworkElements().remove(newElement);
 		network.getNetworkElements().add(oldElement);
-
-		deleteConnCmds.undo();
+		reconnCmds.undo();
+		network.getNetworkElements().remove(newElement);
 
 		if (unmapCmd != null) {
 			unmapCmd.undo();
@@ -174,11 +169,13 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		for (final ConnData connData : resourceConns) {
 			final IInterfaceElement source = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement,
 					connData.source);
-			final IInterfaceElement dest = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement, connData.dest);
+			final IInterfaceElement dest = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement,
+					connData.dest);
 			if ((source != null) && (dest != null)) {
 				// if source or dest is null it means that an interface element is not available
 				// any more
-				final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, copiedMappedElement.getFbNetwork());
+				final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source,
+						copiedMappedElement.getFbNetwork());
 				dccc.setSource(source);
 				dccc.setDestination(dest);
 				if (dccc.canExecute()) {
@@ -206,8 +203,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 	}
 
 	private boolean isInDeleteConnList(final Connection conn) {
-		for (final Object cmd : deleteConnCmds.getCommands()) {
-			if (((DeleteConnectionCommand) cmd).getConnectionView().equals(conn)) {
+		for (final Object cmd : reconnCmds.getCommands()) {
+			if (cmd instanceof DeleteConnectionCommand
+					&& ((DeleteConnectionCommand) cmd).getConnectionView().equals(conn)) {
 				return true;
 			}
 		}
@@ -252,8 +250,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 				retVal.add(new ConnData(conn.getSource(), conn.getDestination()));
 			} else if (((source.getFBNetworkElement() == resElement)
 					&& (dest.getFBNetworkElement().getOpposite().getFbNetwork() != oldElement.getFbNetwork()))
-					|| ((dest.getFBNetworkElement() == resElement)
-							&& (source.getFBNetworkElement().getOpposite().getFbNetwork() != oldElement.getFbNetwork()))) {
+					|| ((dest.getFBNetworkElement() == resElement) && (source.getFBNetworkElement().getOpposite()
+							.getFbNetwork() != oldElement.getFbNetwork()))) {
 				// one of both ends is a FB coming from a different fb network and therefore
 				// this is also a resource specific connection
 				retVal.add(new ConnData(conn.getSource(), conn.getDestination()));
@@ -279,7 +277,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 
 	}
 
-
 	private void copyErrorMarkerRef() {
 		final long id = ((ErrorMarkerFBNElement) oldElement).getFileMarkerId();
 		final String errorMessage = ((ErrorMarkerFBNElement) oldElement).getErrorMessage();
@@ -300,16 +297,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 
 	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement, final IInterfaceElement oldInterface,
 			final String errorMessage) {
-		return createErrorMarker(newElement, oldInterface, oldInterface.getName(), errorMessage);
-	}
-
-	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement, final IInterfaceElement oldInterface,
-			final String name, final String errorMessage) {
 		final boolean markerExists = newElement.getInterface().getErrorMarker().stream()
-				.anyMatch(e -> e.getName().equals(name));
+				.anyMatch(e -> e.getName().equals(oldInterface.getName()) && e.isIsInput() == oldInterface.isIsInput());
 
 		IInterfaceElement interfaceElement;
-		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(), name,
+		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(), oldInterface.getName(),
 				oldInterface.isIsInput(), newElement.getInterface());
 
 		if (!markerExists) {
@@ -322,21 +314,27 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 		return interfaceElement;
 	}
 
-	private ErrorMarkerInterface createWrongTypeMarker(final IInterfaceElement oldInterface, final IInterfaceElement newInterface,
-			final FBNetworkElement element) {
+	private ErrorMarkerInterface createWrongTypeMarker(final IInterfaceElement oldInterface,
+			final IInterfaceElement newInterface, final FBNetworkElement element) {
 		final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
 				oldInterface.getTypeName(), newInterface.getTypeName());
 		final ErrorMarkerInterface createErrorMarker = (ErrorMarkerInterface) createErrorMarker(element, oldInterface,
-				oldInterface.getName(), errorMessage);
+				errorMessage);
 		createErrorMarker.setErrorMessage(Messages.UpdateFBTypeCommand_wrong_type);
 		return createErrorMarker;
 	}
 
-	private IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface, final FBNetworkElement newElement) {
+	private ErrorMarkerInterface creatMissingMarker(final IInterfaceElement oldInterface,
+			final FBNetworkElement element) {
+		return (ErrorMarkerInterface) createErrorMarker(element, oldInterface,
+				MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()));
+	}
+
+	private IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface,
+			final FBNetworkElement newElement) {
 		IInterfaceElement updatedSelected = newElement.getInterfaceElement(oldInterface.getName());
 		if (updatedSelected == null) {
-			updatedSelected = createErrorMarker(newElement, oldInterface,
-					MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()));
+			updatedSelected = creatMissingMarker(oldInterface, newElement);
 		}
 		return updatedSelected;
 	}
@@ -358,15 +356,21 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 				onOtherFB = connection.getSource();
 			}
 
-			updatedSelected = updateSelectedInterface(onSelectedFB, newElement);
-			updatedOther = onOtherFB.getFBNetworkElement().getInterfaceElement(onOtherFB.getName());
+			if (onSelectedFB != null && onOtherFB != null) {
+				updatedSelected = updateSelectedInterface(onSelectedFB, newElement);
+				if (onSelectedFB.getFBNetworkElement() == onOtherFB.getFBNetworkElement()) {
+					updatedOther = updateSelectedInterface(onOtherFB, newElement);
+				} else {
+					updatedOther = onOtherFB.getFBNetworkElement().getInterfaceElement(onOtherFB.getName());
+				}
 
-			handleReconnect(connection, onSelectedFB, onOtherFB, updatedSelected, updatedOther);
+				handleReconnect(connection, onSelectedFB, onOtherFB, updatedSelected, updatedOther);
+			}
 		}
 	}
 
-	private void handleReconnect(final Connection connection, final IInterfaceElement selected, final IInterfaceElement other,
-			IInterfaceElement updatedSelected, IInterfaceElement updatedOther) {
+	private void handleReconnect(final Connection connection, final IInterfaceElement selected,
+			final IInterfaceElement other, IInterfaceElement updatedSelected, IInterfaceElement updatedOther) {
 		if (!updatedSelected.getType().isCompatibleWith(updatedOther.getType())) {
 			// connection not compatible
 			if (other instanceof ErrorMarkerInterface && other.getType().isCompatibleWith(updatedSelected.getType())) {
@@ -376,6 +380,13 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 			}
 		}
 
+		if (selected.isIsInput() != updatedSelected.isIsInput()) {
+			updatedSelected = creatMissingMarker(selected, newElement);
+		}
+		if (other.isIsInput() != updatedOther.isIsInput()) {
+			updatedOther = other;
+		}
+
 		if (updatedOther instanceof ErrorMarkerInterface) {
 			((ErrorMarkerInterface) updatedOther).setRepairedEndpoint(updatedSelected);
 		}
@@ -383,50 +394,65 @@ public abstract class AbstractUpdateFBNElementCommand extends Command{
 			((ErrorMarkerInterface) updatedSelected).setRepairedEndpoint(updatedOther);
 		}
 
-		if (updatedOther instanceof ErrorMarkerInterface) {
-			reconnectConnections(connection, updatedSelected, updatedOther, connection.getFBNetwork());
-			updatedOther = null;
-		}
-
-		reconnect(connection, updatedSelected, updatedOther);
-	}
-
-	private void reconnect(final Connection connection, final IInterfaceElement updatedSelected,
-			final IInterfaceElement updatedOther) {
-		if (connection.getSourceElement() == oldElement) {
-			doReconnect(connection, updatedSelected, updatedOther);
+		// reconnect/replace connection
+		if (updatedOther instanceof ErrorMarkerInterface
+				&& updatedOther.getFBNetworkElement() != updatedSelected.getFBNetworkElement()) {
+			reconnectConnection(connection, updatedSelected, connection.getSourceElement() == oldElement,
+					connection.getFBNetwork());
 		} else {
-			doReconnect(connection, updatedOther, updatedSelected);
+			if (connection.getSourceElement() == oldElement) {
+				replaceConnection(connection, updatedSelected, updatedOther);
+			} else {
+				replaceConnection(connection, updatedOther, updatedSelected);
+			}
 		}
 	}
 
-	protected void doReconnect(final Connection oldConn, final IInterfaceElement source, final IInterfaceElement dest) {
+	protected void replaceConnection(final Connection oldConn, final IInterfaceElement source,
+			final IInterfaceElement dest) {
 		// the connection may be already in our list if source and dest are on our FB
 		if (!isInDeleteConnList(oldConn)) {
 			final FBNetwork fbn = oldConn.getFBNetwork();
 			// we have to delete the old connection in all cases
 			final DeleteConnectionCommand cmd = new DeleteConnectionCommand(oldConn);
 			cmd.execute();
-			deleteConnCmds.add(cmd);
+			reconnCmds.add(cmd);
 
 			if ((source != null) && (dest != null)) {
-				reconnectConnections(oldConn, source, dest, fbn);
+				// if source or dest is null it means that an interface element is not available
+				// any more
+				final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, fbn);
+				dccc.setSource(source);
+				dccc.setDestination(dest);
+				dccc.setArrangementConstraints(oldConn.getRoutingData());
+				if (dccc.canExecute()) {
+					dccc.execute();
+					reconnCmds.add(dccc);
+				}
 			}
 		}
 	}
 
-	protected void reconnectConnections(final Connection oldConn, final IInterfaceElement source,
-			final IInterfaceElement dest, final FBNetwork fbn) {
-		// if source or dest is null it means that an interface element is not available
-		// any more
-		final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, fbn);
-		dccc.setSource(source);
-		dccc.setDestination(dest);
-		dccc.setArrangementConstraints(oldConn.getRoutingData());
-		if (dccc.canExecute()) {
-			dccc.execute();
-			connCreateCmds.add(dccc);
+	protected void reconnectConnection(final Connection oldConn, final IInterfaceElement selected,
+			final boolean isSourceReconnect, final FBNetwork fbn) {
+		final AbstractReconnectConnectionCommand reconnConnCmd = createReconnCMD(oldConn, selected,
+				isSourceReconnect, fbn);
+		if (reconnConnCmd.canExecute()) {
+			reconnConnCmd.execute();
+			reconnCmds.add(reconnConnCmd);
 		}
+	}
+
+	protected AbstractReconnectConnectionCommand createReconnCMD(final Connection connection,
+			final IInterfaceElement interfaceElement, final boolean isSourceReconnect, final FBNetwork fbn) {
+		final DataType type = interfaceElement.getType();
+		if (type instanceof EventType) {
+			return new ReconnectEventConnectionCommand(connection, isSourceReconnect, interfaceElement, fbn);
+		}
+		if (type instanceof AdapterType) {
+			return new ReconnectAdapterConnectionCommand(connection, isSourceReconnect, interfaceElement, fbn);
+		}
+		return new ReconnectDataConnectionCommand(connection, isSourceReconnect, interfaceElement, fbn);
 	}
 
 	protected static AbstractConnectionCreateCommand createConnCreateCMD(final IInterfaceElement interfaceElement,
