@@ -355,7 +355,7 @@ class STAlgorithmFilter {
 			if (varDec.array) {
 				'''*static_cast<CIEC_ARRAY*>(mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->«generateGetVariable(fbType, varDec.name)»)'''
 			} else {
-				'''*static_cast<CIEC_«varDec.type.name»*>(«generateGetVariable(fbType, varDec.name)»)'''
+				'''*static_cast<CIEC_«varDec.type.name»*>(mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->«generateGetVariable(fbType, varDec.name)»)'''
 			}
 		}
 	}

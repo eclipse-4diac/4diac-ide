@@ -79,16 +79,23 @@ class FBNetworkExporter extends CommonElementExporter {
 				addCommentAttribute(fbnElement);
 				addXYAttributes(fbnElement);
 
-				if ((fbnElement instanceof SubApp) && (!((SubApp) fbnElement).isTyped())) {
+				if (isUntypedSubapp(fbnElement)) {
 					// we have an untyped subapp therefore add the subapp contents to it
-					createUntypedSubAppcontents((SubApp) fbnElement);
+					createUntypedSubAppContents((SubApp) fbnElement);
 				}
 
 				addAttributes(fbnElement.getAttributes());
-				addParamsConfig(fbnElement.getInterface().getInputVars());
+				if (!isUntypedSubapp(fbnElement)) {
+					// for untyped subapp initial values are stored in the vardeclarations
+					addParamsConfig(fbnElement.getInterface().getInputVars());
+				}
 				addEndElement();
 			}
 		}
+	}
+
+	private static boolean isUntypedSubapp(final FBNetworkElement fbnElement) {
+		return (fbnElement instanceof SubApp) && (!((SubApp) fbnElement).isTyped());
 	}
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
@@ -112,7 +119,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		return null;
 	}
 
-	private void createUntypedSubAppcontents(final SubApp element) throws XMLStreamException {
+	private void createUntypedSubAppContents(final SubApp element) throws XMLStreamException {
 		new SubApplicationTypeExporter(this).addInterfaceList(element.getInterface());
 		if (null != element.getSubAppNetwork()) {
 			// if mapped the subapp may be empty
@@ -147,12 +154,12 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
-		return endPoint != null && isExportableErrorMarker(endPoint.getFBNetworkElement())
-				&& endPoint.eContainer() instanceof InterfaceList;
+		return (endPoint != null) && isExportableErrorMarker(endPoint.getFBNetworkElement())
+				&& (endPoint.eContainer() instanceof InterfaceList);
 	}
 
 	public static boolean isExportableErrorMarker(final FBNetworkElement fbNetworkElement) {
-		return !(fbNetworkElement instanceof ErrorMarkerFBNElement && fbNetworkElement.getPaletteEntry() == null);
+		return !((fbNetworkElement instanceof ErrorMarkerFBNElement) && (fbNetworkElement.getPaletteEntry() == null));
 	}
 
 	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement, final FBNetwork fbNetwork) {

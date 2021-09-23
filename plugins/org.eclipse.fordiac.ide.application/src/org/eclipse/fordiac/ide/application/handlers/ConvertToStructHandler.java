@@ -26,6 +26,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
@@ -33,7 +35,9 @@ import org.eclipse.fordiac.ide.application.wizards.SaveAsStructWizard;
 import org.eclipse.fordiac.ide.model.commands.create.CreateStructFromInterfaceElementsCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPart;
@@ -62,8 +66,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 		final FBNetworkElement fb = getNetworkElementFromSelectedPins(sel);
 
 		if ((null != fb) && (null != commandStack) && !varDecls.isEmpty()) {
-			project = fb.getFbNetwork().getAutomationSystem().getSystemFile().getProject();
-
+			project = getProject(fb);
 			// open wizard to save in struct
 			invokeSaveWizard(varDecls, editor);
 
@@ -81,6 +84,16 @@ public class ConvertToStructHandler extends AbstractHandler {
 		}
 
 		return Status.OK_STATUS;
+	}
+
+	private static IProject getProject(final FBNetworkElement fb) {
+		final EObject root = EcoreUtil.getRootContainer(fb);
+		if (root instanceof AutomationSystem) {
+			return ((AutomationSystem) root).getSystemFile().getProject();
+		} else if (root instanceof FBType) {
+			return ((FBType) root).getTypeLibrary().getProject();
+		}
+		return null;
 	}
 
 	@Override

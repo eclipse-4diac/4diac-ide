@@ -784,7 +784,10 @@ public class STAlgorithmFilter {
           _builder_1.append("*static_cast<CIEC_");
           String _name = varDec.getType().getName();
           _builder_1.append(_name);
-          _builder_1.append("*>(");
+          _builder_1.append("*>(mInternalFBs[");
+          Integer _internalFbIndexFromName_1 = this.internalFbIndexFromName(fbCall.getFb());
+          _builder_1.append(_internalFbIndexFromName_1);
+          _builder_1.append("]->");
           String _generateGetVariable_1 = this.generateGetVariable(fbType, varDec.getName());
           _builder_1.append(_generateGetVariable_1);
           _builder_1.append(")");

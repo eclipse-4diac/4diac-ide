@@ -26,10 +26,10 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -127,10 +127,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
-		// can not use instanceof since AdapterImplementation is derived from
-		// VarDeclaration and this would break the addEntry method in the adapter
-		// section
-		if (entry.getClass().equals(VarDeclarationImpl.class)) {
+		if ((entry instanceof VarDeclaration) && !(entry instanceof AdapterDeclaration)) {
 			cmd.add(newInsertCommand((IInterfaceElement) entry, isInputsViewer(), index));
 		}
 	}

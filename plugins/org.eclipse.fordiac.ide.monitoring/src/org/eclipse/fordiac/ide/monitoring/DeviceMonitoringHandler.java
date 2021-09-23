@@ -249,8 +249,8 @@ class DeviceMonitoringHandler implements Runnable {
 			for (final MonitoringElement monitoringElement : collectedSubappPins) {
 				if (monitoringElement instanceof SubappMonitoringElement) {
 					final MonitoringBaseElement anchor = ((SubappMonitoringElement) monitoringElement).getAnchor();
-					if (anchor.getPort().getPortString().equals(portString) && !pins.containsKey(monitoringElement)) {
-						pins.put(monitoringElement, p);
+					if (anchor.getPort().getPortString().equals(portString)) {
+						pins.computeIfAbsent(monitoringElement, e -> p);
 					}
 				}
 			}

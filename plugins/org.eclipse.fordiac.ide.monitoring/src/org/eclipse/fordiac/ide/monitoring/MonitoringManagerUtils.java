@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2018 Profactor GmbH, AIT, fortiss GmbH
- * 							 Johannes Kepler University
+ * 							 Johannes Kepler University,
+ *				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *   Michael Oberlehner - added subapp monitoring
+ *   Lukas Wais - clean up canBeMonitored
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
@@ -46,25 +48,22 @@ public final class MonitoringManagerUtils {
 				if (showError) {
 					ErrorMessenger.popUpErrorMessage(Messages.MonitoringManagerUtils_NoSubappAnchor);
 				}
-				return false;
+			} else {
+				canBeMonitored(anchor, false);
 			}
-			return true;
 		}
 
-		return fbNetworkElement instanceof FB;
-
+		return fbNetworkElement.getResource() != null;
 	}
-
 
 	public static boolean canBeMonitored(final FBNetworkElement obj) {
 		// As a first solution try to find the first interface element and see if we
-		// can monitor it
+		// can monitor it. It is monitorable if it has a resource.
 		final var ies = obj.getInterface().getAllInterfaceElements();
 		return !ies.isEmpty() && canBeMonitored(ies.get(0), false);
 	}
 
-	public static PortElement createPortElement(
-			final IInterfaceElement ie) {
+	public static PortElement createPortElement(final IInterfaceElement ie) {
 		final FBNetworkElement obj = ie.getFBNetworkElement();
 
 		if (obj instanceof FB || obj instanceof SubApp) {
@@ -81,7 +80,6 @@ public final class MonitoringManagerUtils {
 			p = MonitoringFactory.eINSTANCE.createAdapterPortElement();
 		} else if (fb instanceof SubApp) {
 			p = createrSubAppPort(ie);
-
 
 		} else {
 			p = MonitoringBaseFactory.eINSTANCE.createPortElement();

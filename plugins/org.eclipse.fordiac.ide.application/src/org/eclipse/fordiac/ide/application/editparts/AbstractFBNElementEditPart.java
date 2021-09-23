@@ -72,9 +72,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Point;
 
-/**
- * This class implements an EditPart for a FunctionBlock.
- */
+/** This class implements an EditPart for a FunctionBlock. */
 public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart {
 
 	private Device referencedDevice;
@@ -249,13 +247,10 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	/** The listener. */
 	private IPropertyChangeListener listener;
 
-	/**
-	 * Returns an <code>IPropertyChangeListener</code> with implemented
-	 * <code>propertyChange()</code>. e.g. a color change event repaints the
-	 * FunctionBlock.
+	/** Returns an <code>IPropertyChangeListener</code> with implemented <code>propertyChange()</code>. e.g. a color
+	 * change event repaints the FunctionBlock.
 	 *
-	 * @return the preference change listener
-	 */
+	 * @return the preference change listener */
 	@Override
 	public org.eclipse.jface.util.IPropertyChangeListener getPreferenceChangeListener() {
 		if (null == listener) {
@@ -413,7 +408,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			// forward direct edit request to instance name
 			final List<EditPart> children = getChildren();
 			children.stream().filter(InstanceNameEditPart.class::isInstance)
-			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
+					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);

@@ -99,7 +99,7 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 			executeCommand(cmd);
 		});
-		valueCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.Value + ":"); //$NON-NLS-1$
+		valueCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		parameterText = createGroupText(composite, true);
 		parameterText.addModifyListener(e -> {
 			removeContentAdapter();

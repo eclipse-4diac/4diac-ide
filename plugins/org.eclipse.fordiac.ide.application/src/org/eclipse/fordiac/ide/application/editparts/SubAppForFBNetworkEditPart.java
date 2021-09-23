@@ -30,6 +30,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -104,6 +105,29 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 			}
 		};
 	}
+
+	@Override
+	protected Adapter createInterfaceAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				switch (notification.getEventType()) {
+				case Notification.ADD:
+				case Notification.ADD_MANY:
+				case Notification.MOVE:
+				case Notification.REMOVE:
+				case Notification.REMOVE_MANY:
+					refreshChildren();
+					getParent().refresh();
+					break;
+				default:
+					break;
+				}
+			}
+		};
+	}
+
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> children = super.getModelChildren();
@@ -147,7 +171,6 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		return (SubApp) super.getModel();
 	}
 
-
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
@@ -163,6 +186,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 			super.performRequest(request);
 		}
 	}
+
 	private void openSubAppEditor() {
 		SubApp subApp = getModel();
 		if (subAppIsMapped(subApp)) {

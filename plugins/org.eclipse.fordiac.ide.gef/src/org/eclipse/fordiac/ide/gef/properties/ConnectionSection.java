@@ -90,14 +90,9 @@ public class ConnectionSection extends AbstractSection {
 
 	private boolean isViewer() {
 		final EObject sourceBlock = getType().getSource().eContainer().eContainer();
-		if (sourceBlock instanceof CompositeFBType) { // connection to interface
-			return true;
-		}
-		if ((sourceBlock instanceof FBNetworkElement)
-				&& ((FBNetworkElement) sourceBlock).isContainedInTypedInstance()) {
-			return true;
-		}
-		return false;
+		return (sourceBlock instanceof CompositeFBType) || // connection to interface
+				((sourceBlock instanceof FBNetworkElement)
+						&& ((FBNetworkElement) sourceBlock).isContainedInTypedInstance());
 	}
 
 	@Override

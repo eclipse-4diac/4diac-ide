@@ -231,22 +231,24 @@ public enum SystemManager {
 
 	private void loadTagProviders(final IProject project) {
 		final ArrayList<ITagProvider> providers = getTagProviderList(project);
-		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID, "tagProvider"); //$NON-NLS-1$
-		for (final IConfigurationElement element : elems) {
-			try {
-				final Object object = element.createExecutableExtension("Interface"); //$NON-NLS-1$
-				if (object instanceof ITagProvider) {
-					final ITagProvider tagProvider = (ITagProvider) object;
-					if (tagProvider.loadTagConfiguration(project.getLocation())) {
-						providers.add(tagProvider);
+		if (project.exists()) {
+			final IExtensionRegistry registry = Platform.getExtensionRegistry();
+			final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
+					"tagProvider"); //$NON-NLS-1$
+			for (final IConfigurationElement element : elems) {
+				try {
+					final Object object = element.createExecutableExtension("Interface"); //$NON-NLS-1$
+					if (object instanceof ITagProvider) {
+						final ITagProvider tagProvider = (ITagProvider) object;
+						if (tagProvider.loadTagConfiguration(project.getLocation())) {
+							providers.add(tagProvider);
+						}
 					}
+				} catch (final CoreException corex) {
+					Activator.getDefault().logError("Error loading TagProviders!", corex); //$NON-NLS-1$
 				}
-			} catch (final CoreException corex) {
-				Activator.getDefault().logError("Error loading TagProviders!", corex); //$NON-NLS-1$
 			}
 		}
-
 	}
 
 	public ITagProvider getTagProvider(final Class<?> class1, final AutomationSystem system) {

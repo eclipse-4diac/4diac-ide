@@ -150,8 +150,10 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		setSite(site);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		loadSystem();
-		initializeActionRegistry();
-		setActionHandlers(site);
+		if (system != null) {
+			initializeActionRegistry();
+			setActionHandlers(site);
+		}
 	}
 
 	private void loadSystem() {

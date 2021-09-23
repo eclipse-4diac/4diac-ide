@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.InterfaceElementLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -85,7 +84,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
-	protected abstract InsertInterfaceElementCommand newInsertCommand(IInterfaceElement selection, boolean isInput,
+	protected abstract CreateInterfaceElementCommand newInsertCommand(IInterfaceElement selection, boolean isInput,
 			int index);
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);

@@ -108,11 +108,7 @@ public class StructManipulation {
 			list.forEach(varDecl -> {
 				if (null == muxer.getInterfaceElement(varDecl.getName())) {
 					varDecl.setIsInput(true);
-					if (null != varDecl.getValue()) {
-						// if we have a value set it empty to get rid of default values from the struct
-						// type
-						varDecl.getValue().setValue(""); //$NON-NLS-1$
-					}
+					varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
 				}
 			});
 			final Event ev = muxer.getInterface().getEventInputs().get(0);
@@ -135,11 +131,7 @@ public class StructManipulation {
 		final Collection<VarDeclaration> list = EcoreUtil.copyAll(vars);
 		list.forEach(varDecl -> {
 			varDecl.setIsInput(false);
-			if (null != varDecl.getValue()) {
-				// if we have a value set it empty to get rid of default values from the struct
-				// type
-				varDecl.getValue().setValue(""); //$NON-NLS-1$
-			}
+			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		});
 		final List<Event> outputEvents = muxer.getInterface().getEventOutputs();
 

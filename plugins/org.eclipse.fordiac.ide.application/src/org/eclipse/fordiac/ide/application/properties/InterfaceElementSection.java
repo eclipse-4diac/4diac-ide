@@ -17,6 +17,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.text.MessageFormat;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -85,7 +87,6 @@ public class InterfaceElementSection extends AbstractSection {
 	private Button openEditorButton;
 	private Section infoSection;
 	private AddDeleteWidget deleteButton;
-
 
 
 	@Override
@@ -195,7 +196,7 @@ public class InterfaceElementSection extends AbstractSection {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 
-		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.CurrentValue + ":"); //$NON-NLS-1$
+		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		currentParameterText = createGroupText(composite, true);
 		currentParameterText.addModifyListener(e -> {
 			removeContentAdapter();
@@ -216,8 +217,8 @@ public class InterfaceElementSection extends AbstractSection {
 			refreshParameterVisibility();
 			final FBNetworkElement fb = getType().getFBNetworkElement();
 			if (fb != null) {
-				infoSection.setText(fb.getName() + " . " //$NON-NLS-1$
-						+ (getType().getName() != null ? getType().getName() : "")); //$NON-NLS-1$
+				infoSection.setText(
+						MessageFormat.format(Messages.InterfaceElementSection_Instance, fb.getName(), getPinName()));
 			} else { // e.g., IP address of device
 				infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
 			}
@@ -243,6 +244,10 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 
 		commandStack = commandStackBuffer;
+	}
+
+	private Object getPinName() {
+		return getType().getName() != null ? getType().getName() : ""; //$NON-NLS-1$
 	}
 
 	private void refreshParameterVisibility() {

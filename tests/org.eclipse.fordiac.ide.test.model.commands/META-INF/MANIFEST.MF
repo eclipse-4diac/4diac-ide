@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.e4.core.services,
  org.eclipse.osgi.services,
  org.eclipse.e4.core.contexts,
- org.eclipse.fordiac.ide.application
+ org.eclipse.fordiac.ide.application,
+ org.eclipse.fordiac.ide.elk
 Import-Package: 
  org.eclipse.fordiac.ide.gef.editparts,
  org.junit.jupiter.api,

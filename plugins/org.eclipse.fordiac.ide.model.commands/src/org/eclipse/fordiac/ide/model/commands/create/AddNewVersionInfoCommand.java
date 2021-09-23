@@ -23,18 +23,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.gef.commands.Command;
 
 /**
  * The Class AddNewVersionInfoCommand.
  */
-public class AddNewVersionInfoCommand extends AbstractCreationCommand {
+public class AddNewVersionInfoCommand extends Command implements CreationCommand {
 
 	/** The format. */
 	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
 
 	/** The type. */
-	private LibraryElement type;
+	private final LibraryElement type;
 
 	/** The new version info. */
 	private VersionInfo info;

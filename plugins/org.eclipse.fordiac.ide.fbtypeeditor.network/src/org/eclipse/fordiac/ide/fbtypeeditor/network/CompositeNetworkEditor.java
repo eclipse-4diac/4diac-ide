@@ -118,11 +118,8 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		Map map = getGraphicalViewer().getEditPartRegistry();
 
 		for (final Object key : map.keySet()) {
-			if ((key instanceof FB) && (((FB) key) == selectedElement)) {
-				selectedElement = key;
-				break;
-			}
-			if ((key instanceof Connection) && (((Connection) key) == selectedElement)) {
+			if (((key instanceof FB) && (((FB) key) == selectedElement)) || //
+					((key instanceof Connection) && (((Connection) key) == selectedElement))) {
 				selectedElement = key;
 				break;
 			}
