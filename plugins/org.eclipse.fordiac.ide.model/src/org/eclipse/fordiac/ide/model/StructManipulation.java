@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * directly as static helper methods
  *
  */
-public class StructManipulation {
+public final class StructManipulation {
 
 	public static final String STRUCT_ATTRIBUTE = "StructuredType"; //$NON-NLS-1$
 	public static final String CHILDREN_ATTRIBUTE = "VisibleChildren"; //$NON-NLS-1$
@@ -45,14 +45,13 @@ public class StructManipulation {
 	public static final String MUX_NAME = "STRUCT_MUX"; //$NON-NLS-1$
 
 
-	public static void setStructTypeElementsAtInterface(StructManipulator muxer, StructuredType newStructType) {
-
+	public static void setStructTypeElementsAtInterface(final StructManipulator muxer, final StructuredType newStructType) {
 		muxer.setStructType(newStructType);
 		configureAttributes(muxer);
 		setMemberVariablesAsPorts(muxer, newStructType);
 	}
 
-	private static void configureAttributes(StructManipulator muxer) {
+	private static void configureAttributes(final StructManipulator muxer) {
 		final StructuredType struct = muxer.getStructType();
 		if (null == struct) {
 			muxer.deleteAttribute(STRUCT_ATTRIBUTE);
@@ -62,7 +61,7 @@ public class StructManipulation {
 		}
 	}
 
-	public static void setMemberVariablesAsPorts(StructManipulator muxer, StructuredType newStructType) {
+	public static void setMemberVariablesAsPorts(final StructManipulator muxer, final StructuredType newStructType) {
 		if (muxer instanceof Demultiplexer) {
 			if (null == newStructType) {
 				setVariablesAsOutputs(muxer, Collections.emptyList(), null);
@@ -78,15 +77,12 @@ public class StructManipulation {
 		}
 
 		if (muxer instanceof Multiplexer) {
-			if (null == newStructType) {
-				setVariablesAsInputs(muxer, Collections.emptyList(), null);
-			} else {
-				setVariablesAsInputs(muxer, newStructType.getMemberVariables(), newStructType);
-			}
+			setVariablesAsInputs(muxer, newStructType);
 		}
 	}
 
-	public static StructuredType collectVisibleChildren(StructManipulator muxer, StructuredType newStructType) {
+	private static StructuredType collectVisibleChildren(final StructManipulator muxer,
+			final StructuredType newStructType) {
 		final Attribute attr = muxer.getAttribute(CHILDREN_ATTRIBUTE);
 		final StructuredType configuredStruct = DataFactory.eINSTANCE.createStructuredType();
 		configuredStruct.setName(newStructType.getName());
@@ -98,8 +94,7 @@ public class StructManipulation {
 		return configuredStruct;
 	}
 
-	public static void setVariablesAsInputs(StructManipulator muxer, Collection<VarDeclaration> vars,
-			StructuredType newStructType) {
+	private static void setVariablesAsInputs(final StructManipulator muxer, final StructuredType newStructType) {
 		// create member variables of struct as data input ports
 		if (null == newStructType) {
 			muxer.getInterface().getInputVars().clear();
@@ -126,8 +121,8 @@ public class StructManipulation {
 		}
 	}
 
-	public static void setVariablesAsOutputs(StructManipulator muxer, Collection<VarDeclaration> vars,
-			StructuredType newStructType) {
+	private static void setVariablesAsOutputs(final StructManipulator muxer, final Collection<VarDeclaration> vars,
+			final StructuredType newStructType) {
 		final Collection<VarDeclaration> list = EcoreUtil.copyAll(vars);
 		list.forEach(varDecl -> {
 			varDecl.setIsInput(false);
@@ -149,7 +144,7 @@ public class StructManipulation {
 
 	}
 
-	private static Collection<VarDeclaration> getVarDeclarations(StructuredType structType, List<String> varDeclNames) {
+	private static Collection<VarDeclaration> getVarDeclarations(final StructuredType structType, final List<String> varDeclNames) {
 		final List<VarDeclaration> vars = new ArrayList<>();
 		varDeclNames.forEach(name -> {
 			final VarDeclaration varDecl = EcoreUtil.copy(findVarDeclarationInStruct(structType, name));
@@ -161,7 +156,7 @@ public class StructManipulation {
 		return vars;
 	}
 
-	public static VarDeclaration findVarDeclarationInStruct(StructuredType struct, String name) {
+	private static VarDeclaration findVarDeclarationInStruct(final StructuredType struct, final String name) {
 		final String[] subnames = name.split("\\."); //$NON-NLS-1$
 		List<VarDeclaration> members = struct.getMemberVariables();
 		VarDeclaration found = null;

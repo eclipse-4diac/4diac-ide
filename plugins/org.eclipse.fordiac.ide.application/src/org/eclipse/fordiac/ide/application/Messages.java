@@ -117,12 +117,6 @@ public final class Messages extends NLS {
 
 	public static String PasteEditPartsAction_Text;
 
-	public static String ReconnectDataConnectionCommand_LABEL;
-
-	public static String ReconnectEventConnectionCommand_LABEL;
-
-	public static String ReconnectAdapterConnectionCommand_LABEL;
-
 	public static String SaveAsStructWizard_WizardPageName;
 
 	public static String SaveAsStructWizardPage_ConvertSourceElements;

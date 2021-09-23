@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.application.tools;
 
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.application.commands.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingConnectionEndpointTracker;
+import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.gef.RequestConstants;

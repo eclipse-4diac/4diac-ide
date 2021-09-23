@@ -12,7 +12,7 @@
  *    - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.commands;
+package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
@@ -26,19 +26,25 @@ import org.eclipse.gef.requests.ReconnectRequest;
 
 public abstract class AbstractReconnectConnectionCommand extends Command {
 	private final FBNetwork parent;
-	private final ReconnectRequest request;
+	private final Connection connection;
+	private final boolean isSourceReconect;
+	private final IInterfaceElement newTarget;
 	private DeleteConnectionCommand deleteConnectionCmd;
 	private AbstractConnectionCreateCommand connectionCreateCmd;
 
 	protected AbstractReconnectConnectionCommand(final String label, final ReconnectRequest request,
 			final FBNetwork parent) {
-		super(label);
-		this.request = request;
-		this.parent = parent;
+		this(label, (Connection) request.getConnectionEditPart().getModel(),
+				request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET), getRequestTarget(request), parent);
 	}
 
-	public ReconnectRequest getRequest() {
-		return request;
+	protected AbstractReconnectConnectionCommand(final String label, final Connection connection,
+			final boolean isSourceReconnect, final IInterfaceElement newTarget, final FBNetwork parent) {
+		super(label);
+		this.connection = connection;
+		this.isSourceReconect = isSourceReconnect;
+		this.newTarget = newTarget;
+		this.parent = parent;
 	}
 
 	protected FBNetwork getParent() {
@@ -56,24 +62,24 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	}
 
 	public IInterfaceElement getNewSource() {
-		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
+		if (!isSourceReconect) {
 			return getConnnection().getSource();
 		}
-		return getRequestTarget();
+		return newTarget;
 	}
 
 	public IInterfaceElement getNewDestination() {
-		if (request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE)) {
+		if (isSourceReconect) {
 			return getConnnection().getDestination();
 		}
-		return getRequestTarget();
+		return newTarget;
 	}
 
-	private Connection getConnnection() {
-		return (Connection) request.getConnectionEditPart().getModel();
+	protected Connection getConnnection() {
+		return connection;
 	}
 
-	private IInterfaceElement getRequestTarget() {
+	private static IInterfaceElement getRequestTarget(final ReconnectRequest request) {
 		final EditPart target = request.getTarget();
 		if (target.getModel() instanceof IInterfaceElement) {
 			return (IInterfaceElement) target.getModel();
@@ -102,14 +108,14 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 
 	@Override
 	public void redo() {
-		deleteConnectionCmd.redo();
 		connectionCreateCmd.redo();
+		deleteConnectionCmd.redo();
 	}
 
 	@Override
 	public void undo() {
-		connectionCreateCmd.undo();
 		deleteConnectionCmd.undo();
+		connectionCreateCmd.undo();
 	}
 
 	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent);

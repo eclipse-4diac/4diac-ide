@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 				 2018, 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * 		            Johannes Kepler University Linz
+ *                          Primetals Technologies Austria GmbH
  *
  *
  * This program and the accompanying materials are made available under the
@@ -14,7 +15,8 @@
  *   Waldemar Eisenmenger, Martin Melik Merkumians
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Refactored class hierarchy of xml exporters
- *   			 - New Project Explorer layout
+ *               - New Project Explorer layout
+ *               - Added support for project renameing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
@@ -139,6 +141,13 @@ public enum SystemManager {
 		notifyListeners();
 	}
 
+	public synchronized void renameProject(final IProject oldProject, final IProject newProject) {
+		final Map<IFile, AutomationSystem> projectSystems = allSystemsInWS.remove(oldProject);
+		if (projectSystems != null) {
+			allSystemsInWS.put(newProject, projectSystems);
+		}
+	}
+
 	public synchronized AutomationSystem replaceSystemFromFile(final AutomationSystem system, final IFile file) {
 		removeSystem(system);
 		return SystemManager.INSTANCE.getSystem(file);
@@ -157,6 +166,33 @@ public enum SystemManager {
 		if (null != refSystem) {
 			closeAllSystemEditors(refSystem);
 			notifyListeners();
+		}
+	}
+
+	public synchronized void moveSystemToNewProject(final IFile oldSystemFile, final IFile newSystemFile) {
+		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(oldSystemFile.getProject());
+		final AutomationSystem system = projectSystems.remove(oldSystemFile);
+		if (null != system) {
+			system.setSystemFile(newSystemFile);
+			final Map<IFile, AutomationSystem> newProjectSystems = getProjectSystems(oldSystemFile.getProject());
+			newProjectSystems.put(newSystemFile, system);
+			notifyListeners();
+		}
+	}
+
+	/** Search for a system with the old System file and change it to the new file entry
+	 *
+	 * @param targetProject the project where to search for the system file, this may be different the old system file's
+	 *                      project in case of project renames
+	 * @param oldSystemFile
+	 * @param newSystemFile */
+	public synchronized void updateSystemFile(final IProject targetProject, final IFile oldSystemFile,
+			final IFile newSystemFile) {
+		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(targetProject);
+		final AutomationSystem system = projectSystems.remove(oldSystemFile);
+		if (null != system) {
+			system.setSystemFile(newSystemFile);
+			projectSystems.put(newSystemFile, system);
 		}
 	}
 

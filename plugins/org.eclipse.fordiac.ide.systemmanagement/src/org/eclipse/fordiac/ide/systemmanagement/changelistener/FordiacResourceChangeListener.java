@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2012, 2021 TU Wien ACIN, Profactor GmbH, fortiss GmbH, 
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - New Project Explorer layout
+ *               - Fixed handing of project renameing      
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
@@ -255,8 +257,15 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private boolean handleResourceMovedFrom(final IResourceDelta delta) {
-		if (IResource.FILE == delta.getResource().getType()) {
+		switch (delta.getResource().getType()) {
+		case IResource.FILE:
 			handleFileMove(delta);
+			break;
+		case IResource.PROJECT:
+			handleProjectRename(delta);
+			break;
+		default:
+			break;
 		}
 		return true;
 	}
@@ -378,19 +387,67 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		job.schedule();
 	}
 
+	private void handleProjectRename(final IResourceDelta delta) {
+		final IProject oldProject = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(delta.getMovedFromPath().lastSegment());
+		final IProject newProject = delta.getResource().getProject();
+		TypeLibrary.renameProject(oldProject, newProject);
+		systemManager.renameProject(oldProject, newProject);
+	}
+
 	private void handleFileMove(final IResourceDelta delta) {
 		final IFile src = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedFromPath());
 
 		if (src.getParent().equals(delta.getResource().getParent())) {
 			handleFileRename(delta, src);
 		} else {
-			// file was moved update pallette entry
 			final IFile dst = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
-			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
+			if (!src.getProject().equals(dst.getProject())) {
+				if (src.getProject().exists()) {
+					handleFileMoveBetweenProjects(src, dst);
+				} else {
+					handleFileAfterProjectRename(src, dst);
+				}
+			} else {
+				// file was moved update pallette entry
+				final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
+				if (null != entry) {
+					entry.setFile(dst);
+				}
+			}
+		}
+	}
+
+	private void handleFileMoveBetweenProjects(final IFile src, final IFile dst) {
+		if (isSystemFile(src)) {
+			systemManager.moveSystemToNewProject(src, dst);
+		} else {
+			final TypeLibrary srcTypeLib = TypeLibrary.getTypeLibrary(src.getProject());
+			final PaletteEntry entry = srcTypeLib.getPaletteEntry(src);
 			if (null != entry) {
+				srcTypeLib.removePaletteEntry(entry);
+				entry.setFile(dst);
+				final TypeLibrary dstTypeLib = TypeLibrary.getTypeLibrary(src.getProject());
+				dstTypeLib.addPaletteEntry(entry);
+			}
+		}
+	}
+
+	private void handleFileAfterProjectRename(final IFile src, final IFile dst) {
+		if (isSystemFile(src)) {
+			systemManager.updateSystemFile(dst.getProject(), src, dst);  // if loaded the system should already be in
+			// the list of the new project
+		} else {
+			final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(dst.getProject());
+			final PaletteEntry entry = typeLib.getPaletteEntry(src);
+			if (entry == null) {
+				// we have to create the entry
+				typeLib.createPaletteEntry(dst);
+			} else {
 				entry.setFile(dst);
 			}
 		}
+
 	}
 
 	private void handleFileRename(final IResourceDelta delta, final IFile src) {

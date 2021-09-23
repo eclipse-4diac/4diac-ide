@@ -38,6 +38,9 @@ public final class Messages extends NLS {
 	public static String LinkConstraints_STATUSMessage_NotCompatible;
 	public static String MapToCommand_STATUSMessage_AlreadyMapped;
 	public static String MapToCommand_STATUSMessage_TypeNotSupported;
+	public static String ReconnectDataConnectionCommand_LABEL;
+	public static String ReconnectEventConnectionCommand_LABEL;
+	public static String ReconnectAdapterConnectionCommand_LABEL;
 	public static String ViewSetPositionCommand_LABEL_Move;
 	public static String WithExists;
 	public static String ConnectingIncompatibleInterfaceTypes;

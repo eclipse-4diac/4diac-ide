@@ -11,9 +11,9 @@
  *   Gerhard Ebenhofer, Filip Andren, Alois Zoitl
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.commands;
+package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
@@ -22,24 +22,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.requests.ReconnectRequest;
 
-/**
- * A command for reconnecting data connections.
- */
+/** A command for reconnecting data connections. */
 public class ReconnectDataConnectionCommand extends AbstractReconnectConnectionCommand {
 
-	/**
-	 * A command for reconnecting data connection.
+	/** A command for reconnecting data connection.
 	 *
-	 * @param request the request
-	 */
+	 * @param request the request */
 	public ReconnectDataConnectionCommand(final ReconnectRequest request, final FBNetwork parent) {
 		super(Messages.ReconnectDataConnectionCommand_LABEL, request, parent);
 	}
 
+	public ReconnectDataConnectionCommand(final Connection connection, final boolean isSourceReconnect,
+			final IInterfaceElement newTarget, final FBNetwork parent) {
+		super(Messages.ReconnectDataConnectionCommand_LABEL, connection, isSourceReconnect, newTarget, parent);
+	}
+
 	@Override
 	protected boolean checkSourceAndTarget(final IInterfaceElement sourceIE, final IInterfaceElement targetIE) {
-		return LinkConstraints.canExistDataConnection(sourceIE, targetIE, getParent(),
-				(Connection) getRequest().getConnectionEditPart().getModel());
+		return LinkConstraints.canExistDataConnection(sourceIE, targetIE, getParent(), getConnnection());
 	}
 
 	@Override
