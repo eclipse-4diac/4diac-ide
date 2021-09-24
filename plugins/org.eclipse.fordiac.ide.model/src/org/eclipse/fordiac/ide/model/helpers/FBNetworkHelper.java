@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -61,6 +62,36 @@ public final class FBNetworkHelper {
 		checkForAdapterFBs(dstNetwork, destInterface);
 		createConnections(srcNetwork, dstNetwork, destInterface);
 		return dstNetwork;
+	}
+
+	/** Take the src FBNetwork and copy it into a new network with the members of the srce network as resource type fbs.
+	 *
+	 * @param srcNetwork    the FBNetwork to copy
+	 * @param destInterface if not null the interface of the component the new FBNetwork should be contained in
+	 * @return the copied FBNetwork */
+	public static FBNetwork createResourceFBNetwork(final FBNetwork resourceTypeNetwork,
+			final InterfaceList destInterface) {
+		final FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+		createResourceTypeFBs(resourceTypeNetwork.getNetworkElements(), dstNetwork);
+		checkForAdapterFBs(dstNetwork, destInterface);
+		createConnections(resourceTypeNetwork, dstNetwork, destInterface);
+		return dstNetwork;
+	}
+
+	private static void createResourceTypeFBs(
+			final EList<FBNetworkElement> networkElements, final FBNetwork dstNetwork) {
+		networkElements.forEach(fb -> createResourceTypeFB(fb, dstNetwork));
+	}
+
+	private static void createResourceTypeFB(final FBNetworkElement srcFb, final FBNetwork dstNetwork) {
+		final FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
+		dstNetwork.getNetworkElements().add(copy);
+		copy.setPaletteEntry(srcFb.getPaletteEntry());
+		copy.setName(srcFb.getName()); // name should be last so that checks
+		// are working correctly
+		final InterfaceList interfaceList = InterfaceListCopier.copy(srcFb.getInterface(), true);
+		copy.setInterface(interfaceList);
+		copy.setPosition(EcoreUtil.copy(srcFb.getPosition()));
 	}
 
 	private static void checkForAdapterFBs(final FBNetwork dstNetwork, final InterfaceList destInterface) {

@@ -22,7 +22,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
+import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -67,7 +67,7 @@ public class DeviceCreateCommand extends Command {
 	public void execute() {
 		createDevice();
 		device.setPaletteEntry(entry);
-		SystemImporter.createParamters(device);
+		CommonElementImporter.createParamters(device);
 		setDeviceProfile();
 		device.updatePosition(bounds.getTopLeft());
 		parent.getDevices().add(device);
