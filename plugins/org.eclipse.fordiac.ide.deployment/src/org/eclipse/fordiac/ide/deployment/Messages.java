@@ -66,6 +66,10 @@ public final class Messages extends NLS {
 
 	public static String DownloadRunnable_ReassureOveride;
 
+	public static String DownloadRunnable_Warning;
+
+	public static String DownloadRunnable_DeploymentErrorWarningMessage;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
