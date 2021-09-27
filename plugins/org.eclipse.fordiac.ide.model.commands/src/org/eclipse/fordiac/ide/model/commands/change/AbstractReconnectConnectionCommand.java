@@ -35,7 +35,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	protected AbstractReconnectConnectionCommand(final String label, final ReconnectRequest request,
 			final FBNetwork parent) {
 		this(label, (Connection) request.getConnectionEditPart().getModel(),
-				request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET), getRequestTarget(request), parent);
+				request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE), getRequestTarget(request), parent);
 	}
 
 	protected AbstractReconnectConnectionCommand(final String label, final Connection connection,
