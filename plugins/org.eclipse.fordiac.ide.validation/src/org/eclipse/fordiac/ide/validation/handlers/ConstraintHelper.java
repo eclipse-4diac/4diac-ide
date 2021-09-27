@@ -14,15 +14,50 @@ package org.eclipse.fordiac.ide.validation.handlers;
 
 import java.util.ResourceBundle;
 
+import org.eclipse.core.resources.IMarker;
+
 public final class ConstraintHelper {
 	private static final String FORDIAC_CONSTRAINT_PROPERTIES = "constraints"; //$NON-NLS-1$
-	private static ResourceBundle fordiacConstraintProperties = ResourceBundle.getBundle(FORDIAC_CONSTRAINT_PROPERTIES);
+	private static final ResourceBundle constraintProperties = ResourceBundle.getBundle(FORDIAC_CONSTRAINT_PROPERTIES);
 
-	public static String[] getConstraintProperties(final String name) {
-		return fordiacConstraintProperties.getString(name).split(";"); //$NON-NLS-1$
+	private final String message;
+	private final int severity;
+
+	public ConstraintHelper(final String information) {
+		final String WARNING_PREFIX = "WARNING;"; //$NON-NLS-1$
+		final String INFO_PREFIX = "INFO;"; //$NON-NLS-1$
+		final String ERROR_PREFIX = "ERROR;"; //$NON-NLS-1$
+
+		if (information.startsWith(WARNING_PREFIX)) {
+			severity = IMarker.SEVERITY_WARNING;
+			message = computeTranslatedMessage(information.substring(WARNING_PREFIX.length()));
+		} else if (information.startsWith(INFO_PREFIX)) {
+			severity = IMarker.SEVERITY_INFO;
+			message = computeTranslatedMessage(information.substring(INFO_PREFIX.length()));
+		} else if (information.startsWith(ERROR_PREFIX)) {
+			severity = IMarker.SEVERITY_ERROR;
+			message = computeTranslatedMessage(information.substring(ERROR_PREFIX.length()));
+		} else {
+			severity = IMarker.SEVERITY_ERROR;
+			message = information;
+		}
 	}
 
-	private ConstraintHelper() {
-		throw new UnsupportedOperationException();
+	public String getMessage() {
+		return message;
+	}
+
+	public int getSeverity() {
+		return severity;
+	}
+
+	private static String computeTranslatedMessage(final String message) {
+		if (message.startsWith("[") && message.endsWith("]")) { //$NON-NLS-1$ //$NON-NLS-2$
+			final String key = message.substring(1, message.length() - 1);
+			if (constraintProperties.containsKey(key)) {
+				return constraintProperties.getString(key);
+			}
+		}
+		return message;
 	}
 }

@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.validation.handlers;
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -47,6 +48,7 @@ import org.eclipse.ocl.ecore.Constraint;
 import org.eclipse.ocl.expressions.Variable;
 
 public final class ValidationHelper {
+
 
 	private static class OCLJob extends Job {
 		private final INamedElement namedElement;
@@ -89,10 +91,9 @@ public final class ValidationHelper {
 						subMonitor.setTaskName(
 								MessageFormat.format("{0}: {1}", createHierarchicalName(object), constraint.getName()));
 						if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
-						final String[] properties = ConstraintHelper
-								.getConstraintProperties(constraint.getName());
-						addValidationMarker(iresource, properties[0], properties[1],
-								createHierarchicalName(object), object.hashCode(), object);
+							final ConstraintHelper properties = new ConstraintHelper(constraint.getName());
+							addValidationMarker(iresource, properties.getMessage(), properties.getSeverity(),
+									createHierarchicalName(object), object.hashCode(), object);
 						}
 					}
 				}
@@ -121,7 +122,7 @@ public final class ValidationHelper {
 			return count;
 		}
 
-		private static void addValidationMarker(final IResource iresource, final String message, final String severity,
+		private static void addValidationMarker(final IResource iresource, final String message, final int severity,
 				final String location, final int lineNumber, final EObject context) {
 			if (iresource == null) {
 				return;
@@ -130,10 +131,10 @@ public final class ValidationHelper {
 			final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
 			marker.addMessage(message);
 			switch (severity) {
-			case "WARNING": //$NON-NLS-1$
+			case IMarker.SEVERITY_WARNING:
 				marker.setSeverityWarning();
 				break;
-			case "INFO": //$NON-NLS-1$
+			case IMarker.SEVERITY_INFO:
 				marker.setSeverityInfo();
 				break;
 			default:
