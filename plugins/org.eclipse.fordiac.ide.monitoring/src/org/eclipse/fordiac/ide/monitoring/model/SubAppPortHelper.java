@@ -32,71 +32,80 @@ public final class SubAppPortHelper {
 	public static IInterfaceElement findAnchorInterfaceElement(final IInterfaceElement subappPin) {
 
 		final boolean isInput = subappPin.isIsInput();
-
-		final EList<Connection> connections = isInput ? subappPin.getOutputConnections()
-				: subappPin.getInputConnections();
-
-		if (connections.isEmpty()) {
+		if (hasEmptyConnections(subappPin, isInput)) {
 			return null;
 		}
 
 		IInterfaceElement current = subappPin;
 		while ((current.getFBNetworkElement() instanceof SubApp)) {
-			final EList<Connection> outConns = isInput ? current.getOutputConnections() : current.getInputConnections();
+			final EList<Connection> outConns = getConnections(current, isInput);
 			if (outConns.isEmpty()) {
 				return null;
 			}
-			final Connection connection = outConns.get(0);
-			current = isInput ? connection.getDestination() : connection.getSource();
+			current = assignNextInterfaceElement(isInput, outConns);
 		}
 		return current;
 
 	}
 
-	public static String findConnectedMonitoredSubappPort(final IInterfaceElement ie,
+	public static String findConnectedMonitoredSubappPort(IInterfaceElement interfaceElement,
 			final Map<String, List<MonitoringElement>> subappElements) {
 
-		final boolean isInput = !ie.isIsInput();
+		final boolean searchDirection = !interfaceElement.isIsInput();
 
-		final EList<Connection> connections = isInput ? ie.getOutputConnections()
-				: ie.getInputConnections();
-
-		if (connections.isEmpty()) {
-			return null;
-		}
-
-		IInterfaceElement current = ie;
 		do {
-			final EList<Connection> outConns = isInput ? current.getOutputConnections() : current.getInputConnections();
-			if (outConns.isEmpty()) {
+			final EList<Connection> connections = getConnections(interfaceElement, searchDirection);
+
+			if (connections.isEmpty()) {
 				return null;
 			}
-			final Connection connection = outConns.get(0);
-			current = isInput ? connection.getDestination() : connection.getSource();
 
-			final PortElement createPortElement = MonitoringManagerUtils
-					.createPortElement(current.getFBNetworkElement(), current);
-			String portString = createPortElement.getPortString();
+			interfaceElement = assignNextInterfaceElement(searchDirection, connections);
 
-			final MonitoringBaseElement monitoringElement = MonitoringManager.getInstance()
-					.getMonitoringElement(createPortElement.getInterfaceElement());
-			if (monitoringElement instanceof SubappMonitoringElement) {
-				final SubappMonitoringElement e = (SubappMonitoringElement) monitoringElement;
-				portString = e.getAnchor().getPort().getPortString();
-				if (subappElements.containsKey(portString)) {
-					return portString;
-				}
+			if (!interfaceElement.getFBNetworkElement().isMapped()) {
+				return null;
+			}
+			final PortElement subappPortCanidate = MonitoringManagerUtils
+					.createPortElement(interfaceElement.getFBNetworkElement(), interfaceElement);
+
+			if (subAppAnchorFound(subappElements, subappPortCanidate)) {
+				return subappPortCanidate.getPortString();
 			}
 
-			if (subappElements.containsKey(portString)) {
-				return portString;
-			}
-
-		} while ((current.getFBNetworkElement() instanceof SubApp));
+		} while ((interfaceElement.getFBNetworkElement() instanceof SubApp));
 
 		return null;
 	}
 
+	public static IInterfaceElement assignNextInterfaceElement(final boolean isInput,
+			final List<Connection> connections) {
+		final Connection connection = connections.get(0);
+		return isInput ? connection.getDestination() : connection.getSource();
+	}
+
+	public static boolean hasEmptyConnections(final IInterfaceElement ie, final boolean isInput) {
+		final EList<Connection> connections = getConnections(ie, isInput);
+		return connections.isEmpty();
+	}
+
+	public static EList<Connection> getConnections(final IInterfaceElement ie, final boolean isInput) {
+		return isInput ? ie.getOutputConnections()
+				: ie.getInputConnections();
+	}
+
+	public static boolean subAppAnchorFound(final Map<String, List<MonitoringElement>> subappElements,
+			final PortElement createPortElement) {
+
+		final MonitoringBaseElement monitoringElement = MonitoringManager.getInstance()
+				.getMonitoringElement(createPortElement.getInterfaceElement());
+
+		if (!(monitoringElement instanceof SubappMonitoringElement)) {
+			return false;
+		}
+		final MonitoringBaseElement anchor = ((SubappMonitoringElement) monitoringElement).getAnchor();
+
+		return subappElements.containsKey(anchor.getPort().getPortString());
+	}
 
 	private SubAppPortHelper() {
 		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
