@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.export.ui.wizard;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Activator;
 import org.eclipse.fordiac.ide.export.ui.Messages;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -107,7 +109,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	private final List<LibraryElement> collectExportees() {
 		final List<Object> resources = page.getSelectedResources();
 		final List<LibraryElement> exportees = resources.parallelStream().filter(IFile.class::isInstance)
-				.map(exportee -> TypeLibrary.getPaletteEntryForFile((IFile) exportee).getType())
+				.map(exportee -> TypeLibrary.getPaletteEntryForFile((IFile) exportee)).filter(Objects::nonNull)
+				.map(PaletteEntry::getType)
 				.collect(Collectors.toList());
 
 		if (page.enableCMakeLists()) {
