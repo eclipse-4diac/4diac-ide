@@ -212,7 +212,7 @@ public class MapToCommand extends Command {
 	private void checkConnections() {
 		for (final IInterfaceElement interfaceElement : srcElement.getInterface().getAllInterfaceElements()) {
 			if (interfaceElement instanceof ErrorMarkerInterface) {
-				// Error marker do not get handled here
+				// Error marker do not get mapped
 			} else if (interfaceElement.isIsInput()) {
 				checkInputConnections(interfaceElement);
 			} else {
@@ -224,8 +224,9 @@ public class MapToCommand extends Command {
 	private void checkInputConnections(final IInterfaceElement interfaceElement) {
 		for (final Connection connection : interfaceElement.getInputConnections()) {
 			final Resource res = connection.getSourceElement().getResource();
-			if (resource.equals(res)) {
+			if (resource.equals(res) && !(connection.getSource() instanceof ErrorMarkerInterface)) {
 				// we need to create a connection in the target resource
+				// connections to error markers will not get mapped
 				addConnectionCreateCommand(
 						connection.getSourceElement().getOpposite()
 								.getInterfaceElement(connection.getSource().getName()),
@@ -238,8 +239,9 @@ public class MapToCommand extends Command {
 		for (final Connection connection : interfaceElement.getOutputConnections()) {
 			if (!isSelfConnection(connection)) { // leave self-connection to be handled by the inputs
 				final Resource res = connection.getDestinationElement().getResource();
-				if (resource.equals(res)) {
+				if (resource.equals(res) && !(connection.getDestination() instanceof ErrorMarkerInterface)) {
 					// we need to create a connection in the target resource
+					// connections to error markers will not get mapped
 					final IInterfaceElement destination = connection.getDestinationElement().getOpposite()
 							.getInterfaceElement(connection.getDestination().getName());
 					addConnectionCreateCommand(targetElement.getInterfaceElement(interfaceElement.getName()),

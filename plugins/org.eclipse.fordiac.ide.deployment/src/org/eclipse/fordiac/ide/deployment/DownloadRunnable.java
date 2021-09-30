@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2021 Profactor GmbH, fortiss GmbH,
  * 							 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,8 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked deployment to detect if monitoring was enabled
+ *               - added message dialog informing about error responses from
+ *                 devices
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment;
 
@@ -48,13 +50,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-class DownloadRunnable implements IRunnableWithProgress {
+class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 
 	private final List<DeviceDeploymentData> deploymentData;
 	private final IDeviceManagementCommunicationHandler overrideDevMgmCommHandler;
 	private final IDeploymentListener outputView;
 	private final String profile;
 	private IProgressMonitor curMonitor;
+	private boolean errorOccured = false;
 
 	/**
 	 * flag indicating if an existing resource should automatically be overriden or
@@ -110,6 +113,9 @@ class DownloadRunnable implements IRunnableWithProgress {
 			deployDevice(devData);
 		}
 		reenableMonitoring();
+		if (errorOccured) {
+			showDeploymenErrorDialog();
+		}
 		monitor.done();
 	}
 
@@ -209,12 +215,14 @@ class DownloadRunnable implements IRunnableWithProgress {
 		if (null != outputView) {
 			executor.addDeploymentListener(outputView);
 		}
+		executor.addDeploymentListener(this);
 	}
 
 	private void removeDeploymentListener(final IDeviceManagementInteractor executor) {
 		if (null != outputView) {
 			executor.removeDeploymentListener(outputView);
 		}
+		executor.removeDeploymentListener(this);
 	}
 
 	private int calculateWorkAmount() {
@@ -379,6 +387,37 @@ class DownloadRunnable implements IRunnableWithProgress {
 		}
 		// if the user selects ReplaceAll we don't need to do anything special
 		overrideAll = true;
+	}
+
+	private static void showDeploymenErrorDialog() {
+		Display.getDefault().syncExec(() -> {
+			final Shell shell = Display.getDefault().getActiveShell();
+			MessageDialog.openWarning(shell, Messages.DownloadRunnable_Warning,
+					Messages.DownloadRunnable_DeploymentErrorWarningMessage);
+		});
+	}
+
+
+	@Override
+	public void connectionOpened() {
+		// we don't need to do anything on connection opened
+	}
+
+	@Override
+	public void postCommandSent(final String info, final String destination, final String command) {
+		// we don't need to do anything on command sent
+	}
+
+	@Override
+	public void postResponseReceived(final String response, final String source) {
+		if (response.contains("Reason")) { //$NON-NLS-1$
+			errorOccured = true;
+		}
+	}
+
+	@Override
+	public void connectionClosed() {
+		// we don't need to do anything on connection closed
 	}
 
 }

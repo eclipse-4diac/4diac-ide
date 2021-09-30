@@ -90,6 +90,12 @@ abstract class CommonElementExporter {
 
 		@Override
 		public int read(final byte[] b, final int off, final int len) throws IOException {
+			if (len == 0) {
+				return 0;
+			}
+			if (available() == 0) {
+				return -1;
+			}
 			final int readLen = Math.min(available(), len);
 			currentDataBuffer.get(b, off, readLen);
 			return readLen;

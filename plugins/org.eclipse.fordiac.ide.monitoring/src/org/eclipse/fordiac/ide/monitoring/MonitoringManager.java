@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.monitoring;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +89,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 				}
 				return fbNetworkElement.getFbNetwork().getAutomationSystem();
 			}
-	}
+		}
 		return null;
 	}
 
@@ -140,7 +141,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		return false;
 	}
 
-	public Collection<MonitoringBaseElement> getElementsToMonitor() {
+	public Collection<MonitoringBaseElement> getAllElementsToMonitor() {
 		final List<MonitoringBaseElement> elements = new ArrayList<>();
 
 		for (final SystemMonitoringData data : systemMonitoringData.values()) {
@@ -148,6 +149,17 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		}
 		return elements;
 	}
+
+	public Collection<MonitoringBaseElement> getElementsToMonitor(final AutomationSystem sys) {
+		if(sys != null) {
+			final SystemMonitoringData sysData = systemMonitoringData.get(sys);
+			if(sysData != null) {
+				return sysData.getMonitoredElements();
+			}
+		}
+		return Collections.emptyList();
+	}
+
 
 	/**
 	 * Enable system.

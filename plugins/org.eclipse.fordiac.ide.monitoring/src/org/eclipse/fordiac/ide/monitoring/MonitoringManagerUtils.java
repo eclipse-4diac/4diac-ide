@@ -53,7 +53,7 @@ public final class MonitoringManagerUtils {
 			}
 		}
 
-		return fbNetworkElement.getResource() != null;
+		return fbNetworkElement != null && fbNetworkElement.getResource() != null;
 	}
 
 	public static boolean canBeMonitored(final FBNetworkElement obj) {

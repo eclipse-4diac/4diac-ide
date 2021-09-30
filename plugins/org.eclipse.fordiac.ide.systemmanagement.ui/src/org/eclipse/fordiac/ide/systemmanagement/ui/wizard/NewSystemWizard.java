@@ -12,13 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
@@ -60,11 +64,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 				@Override
 				protected void execute(final IProgressMonitor monitor) {
 					final IProgressMonitor monitorToUse = (null == monitor) ? new NullProgressMonitor() : monitor;
-
-					final IPath targetPath = ResourcesPlugin.getWorkspace().getRoot().getLocation()
-							.append(page.getContainerFullPath());
-					final IContainer location = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(targetPath);
-					final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(location, page.getSystemName());
+					final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(getSystemLocation(), page.getSystemName());
 					TypeManagementPreferencesHelper.setupVersionInfo(system);
 					createInitialApplication(monitorToUse, system);
 				}
@@ -79,6 +79,17 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 		}
 		// everything worked fine
 		return true;
+	}
+
+	private final IContainer getSystemLocation() {
+		final IPath targetPath = getTargetFile().getParent().getLocation();
+		return ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(targetPath);
+	}
+
+	private final IFile getTargetFile() {
+		final String sysName = page.getSystemName();
+		final IWorkspaceRoot wsr = ResourcesPlugin.getWorkspace().getRoot();
+		return wsr.getFile(new Path(page.getContainerFullPath() + File.separator + sysName));
 	}
 
 	private void createInitialApplication(final IProgressMonitor monitor, final AutomationSystem system) {
