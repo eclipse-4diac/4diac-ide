@@ -3,10 +3,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.export,
  org.eclipse.compare,
- org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)"
+ org.eclipse.fordiac.ide.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.14.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Bundle-Name: Compare exported FBs (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.export.compare.Activator
 Bundle-ManifestVersion: 2
