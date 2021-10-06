@@ -25,7 +25,7 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)",
+ org.eclipse.fordiac.ide.ui,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.emf.edit,
  org.eclipse.emf.ecore.edit,
@@ -36,7 +36,7 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.14.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Bundle-Name: Graphical Utilites (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.gef.Activator
 Bundle-ManifestVersion: 2

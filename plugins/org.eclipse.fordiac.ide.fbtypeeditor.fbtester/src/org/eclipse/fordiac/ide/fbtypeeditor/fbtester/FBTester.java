@@ -176,8 +176,8 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		final Composite interfaceEditing = new Composite(s, SWT.BORDER);
 		interfaceEditing.setLayout(new GridLayout(2, false));
 
-		final Label testConfiguraionLabel = new Label(interfaceEditing, SWT.NONE);
-		testConfiguraionLabel.setText(Messages.FBTester_TestConfiguration);
+		final Label testConfigurationLabel = new Label(interfaceEditing, SWT.NONE);
+		testConfigurationLabel.setText(Messages.FBTester_TestConfiguration);
 
 		final CCombo configurationCombo = ComboBoxWidgetFactory.createCombo(interfaceEditing);
 		configurationCombo.setItems(getTestConfigurations().toArray(new String[0]));
@@ -198,18 +198,26 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		configurationParent.setLayout(stack);
 		configurationParent.setLayoutData(configurationParentData);
 		createTestConfigurations(configurationParent);
+		preselectFirstConfiguration(configurationCombo, stack);
 
 		final SashForm horizontal = new SashForm(s, SWT.HORIZONTAL | SWT.SMOOTH);
-
-		final Composite testData = new Composite(horizontal, SWT.NONE);
-		testData.setLayout(new GridLayout(1, true));
-		createTestData(testData);
+		// TODO add logic for automatically executing test cases
+		/* final Composite testData = new Composite(horizontal, SWT.NONE); testData.setLayout(new GridLayout(1, true));
+		 * createTestData(testData); */
 
 		final Composite graphicalEditor = new Composite(horizontal, SWT.NONE);
 		graphicalEditor.setLayout(new FillLayout());
-		s.setWeights(30, 70);
-		horizontal.setWeights(50, 50);
+		/* s.setWeights(30, 70); horizontal.setWeights(50, 50); */
 		super.createPartControl(graphicalEditor);
+	}
+
+	private void preselectFirstConfiguration(CCombo configurationCombo, StackLayout stack) {
+		if (configurationCombo.getItems().length > 0) {
+			configurationCombo.select(0);
+		}
+		final IFBTestConfiguration testConfiguration = configurations.get(configurationCombo.getText());
+		stack.topControl = testConfiguration.getControl();
+		configurationParent.layout();
 	}
 
 	private void createTestData(final Composite parent) {
@@ -420,7 +428,8 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
 		final ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
-		final ZoomScalableFreeformRootEditPart root = new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry());
+		final ZoomScalableFreeformRootEditPart root = new ZoomScalableFreeformRootEditPart(getSite(),
+				getActionRegistry());
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditpartFactory());
 		// configure the context menu provider
@@ -441,7 +450,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	public ZoomManager getZoomManger() {
-		return ((ScalableFreeformRootEditPart) (getGraphicalViewer().getRootEditPart())).getZoomManager();
+		return ((ScalableFreeformRootEditPart) getGraphicalViewer().getRootEditPart()).getZoomManager();
 	}
 
 	protected FBInterfaceEditPartFactory getEditpartFactory() {
