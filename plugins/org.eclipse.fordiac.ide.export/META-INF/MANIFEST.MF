@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.0.qualifier
-Bundle-Name: Export Utils (Incubation)
+Bundle-Name: Export Utils
 Bundle-Activator: org.eclipse.fordiac.ide.export.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export;singleton:=true

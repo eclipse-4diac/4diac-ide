@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Model Command Tests (Incubation)
+Bundle-Name: Model Command Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model.commands
 Bundle-Version: 2.0.0.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.model.commands

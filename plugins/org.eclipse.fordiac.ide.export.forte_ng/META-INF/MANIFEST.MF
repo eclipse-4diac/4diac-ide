@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: FORTE Export for FORTE V1.0.x New Generation (Incubation)
+Bundle-Name: FORTE Export for FORTE V1.0.x New Generation
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export.forte_ng;singleton:=true
 Bundle-Version: 2.0.0.qualifier
 Bundle-Vendor: Eclipse 4diac

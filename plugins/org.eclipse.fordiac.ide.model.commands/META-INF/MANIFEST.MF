@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Commands (Incubation)
+Bundle-Name: Commands
 Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.commands;singleton:=true
 Bundle-Activator: org.eclipse.fordiac.ide.model.commands.ModelCommandsPlugin

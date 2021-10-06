@@ -75,7 +75,7 @@
 						<product>
 							<id>org.eclipse.fordiac.ide.product</id>
 							<rootFolder>4diac-ide</rootFolder>
-							<archiveFileName>4diac-ide-incubation_${unqualifiedVersion}</archiveFileName>
+							<archiveFileName>4diac-ide_${unqualifiedVersion}</archiveFileName>
 						</product>
 					</products>
 				</configuration>
@@ -165,7 +165,7 @@
 								<configuration>
 									<volumeName>4diac-ide</volumeName>
 									<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>
-									<source>${project.build.directory}/products/4diac-ide-incubation_${unqualifiedVersion}-macosx.cocoa.x86_64.tar.gz</source>
+									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.x86_64.tar.gz</source>
 									<dmgFilename>4diac-ide.dmg</dmgFilename>
 									<sign>true</sign>
 								</configuration>
