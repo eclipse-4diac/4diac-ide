@@ -68,8 +68,9 @@ public final class SubAppPortHelper {
 			final PortElement subappPortCanidate = MonitoringManagerUtils
 					.createPortElement(interfaceElement.getFBNetworkElement(), interfaceElement);
 
-			if (subAppAnchorFound(subappElements, subappPortCanidate)) {
-				return subappPortCanidate.getPortString();
+			final String anchor = searchSubappAnchor(subappElements, subappPortCanidate);
+			if (subappElements.containsKey(anchor)) {
+				return anchor;
 			}
 
 		} while ((interfaceElement.getFBNetworkElement() instanceof SubApp));
@@ -93,18 +94,18 @@ public final class SubAppPortHelper {
 				: ie.getInputConnections();
 	}
 
-	public static boolean subAppAnchorFound(final Map<String, List<MonitoringElement>> subappElements,
+	public static String searchSubappAnchor(final Map<String, List<MonitoringElement>> subappElements,
 			final PortElement createPortElement) {
 
 		final MonitoringBaseElement monitoringElement = MonitoringManager.getInstance()
 				.getMonitoringElement(createPortElement.getInterfaceElement());
 
 		if (!(monitoringElement instanceof SubappMonitoringElement)) {
-			return false;
+			return ""; //$NON-NLS-1$
 		}
 		final MonitoringBaseElement anchor = ((SubappMonitoringElement) monitoringElement).getAnchor();
 
-		return subappElements.containsKey(anchor.getPort().getPortString());
+		return anchor.getPort().getPortString();
 	}
 
 	private SubAppPortHelper() {

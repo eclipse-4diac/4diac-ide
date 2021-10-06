@@ -28,6 +28,10 @@ public class UntypeSubAppCommand extends Command {
 		typeEntry = (SubApplicationTypePaletteEntry) subapp.getPaletteEntry();
 	}
 
+	public SubApp getSubapp() {
+		return subapp;
+	}
+
 	@Override
 	public boolean canExecute() {
 		return null != typeEntry;

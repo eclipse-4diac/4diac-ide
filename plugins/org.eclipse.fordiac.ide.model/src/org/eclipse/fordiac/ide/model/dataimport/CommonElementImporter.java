@@ -37,14 +37,19 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
@@ -52,8 +57,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
@@ -61,7 +68,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -598,6 +607,122 @@ public abstract class CommonElementImporter {
 		if (null != value) {
 			device.setProfile(value);
 		}
+	}
+
+	protected Resource parseResource() throws TypeImportException, XMLStreamException {
+		final Resource resource = LibraryElementFactory.eINSTANCE.createResource();
+		resource.setDeviceTypeResource(false); // TODO model refactoring - check if a resource of given name is already
+		// in the list then it would be a device type resource
+		readNameCommentAttributes(resource);
+		parseResourceType(resource);
+		final FBNetwork fbNetwork = createResourceTypeNetwork(resource);
+		resource.setFBNetwork(fbNetwork);
+
+		processChildren(LibraryElementTags.RESOURCE_ELEMENT, name -> {
+			switch (name) {
+			case LibraryElementTags.FBNETWORK_ELEMENT:
+				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations())
+				.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
+				break;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(resource);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
+			case LibraryElementTags.PARAMETER_ELEMENT:
+				final VarDeclaration parameter = parseParameter();
+				if (null != parameter) {
+					final VarDeclaration devParam = getParamter(resource.getVarDeclarations(), parameter.getName());
+					if (null != devParam) {
+						devParam.setValue(parameter.getValue());
+					} else {
+						parameter.setIsInput(true);
+						resource.getVarDeclarations().add(parameter);
+					}
+				}
+				break;
+			default:
+				return false;
+			}
+			return true;
+		});
+		return resource;
+	}
+
+	private void parseResourceType(final Resource resource) {
+		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		if (typeName != null) {
+			final ResourceTypeEntry entry = getPalette().getResourceTypeEntry(typeName);
+			if (null != entry) {
+				resource.setPaletteEntry(entry);
+				createParamters(resource);
+			}
+		}
+	}
+
+	/** Creates the values. */
+	public static void createParamters(final IVarElement element) {
+		if (element instanceof Device) {
+			element.getVarDeclarations().addAll(
+					EcoreUtil.copyAll(((DeviceTypePaletteEntry) ((TypedConfigureableObject) element).getPaletteEntry())
+							.getDeviceType().getVarDeclaration()));
+		}
+		if (element instanceof Resource) {
+			element.getVarDeclarations().addAll(
+					EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getPaletteEntry())
+							.getResourceType().getVarDeclaration()));
+		}
+		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
+			varDecl.setValue(value);
+			final VarDeclaration typeVar = getTypeVariable(varDecl);
+			if (null != typeVar && null != typeVar.getValue()) {
+				value.setValue(typeVar.getValue().getValue());
+			}
+		}
+	}
+
+	private static VarDeclaration getTypeVariable(final VarDeclaration variable) {
+		EList<VarDeclaration> varList = null;
+		if (variable.eContainer() instanceof Device) {
+			final Device dev = (Device) variable.eContainer();
+			if (null != dev.getType()) {
+				varList = dev.getType().getVarDeclaration();
+			}
+		} else if (variable.eContainer() instanceof Resource) {
+			final Resource res = (Resource) variable.eContainer();
+			if (null != res.getType()) {
+				varList = res.getType().getVarDeclaration();
+			}
+		}
+
+		if (null != varList) {
+			return getParamter(varList, variable.getName());
+		}
+		return null;
+	}
+
+	protected static VarDeclaration getParamter(final EList<VarDeclaration> paramList, final String name) {
+		for (final VarDeclaration varDecl : paramList) {
+			if (varDecl.getName().equals(name)) {
+				return varDecl;
+			}
+		}
+		return null;
+	}
+
+	private static FBNetwork createResourceTypeNetwork(final Resource resource) {
+		FBNetwork resourceFBNetwork = null;
+
+		if (resource.getType() != null && resource.getType().getFBNetwork() != null) {
+			// create a dummy interface list so that we can use the copyFBNetwork method
+			final InterfaceList il = LibraryElementFactory.eINSTANCE.createInterfaceList();
+			il.getInputVars().addAll(resource.getVarDeclarations());
+			resourceFBNetwork = FBNetworkHelper.createResourceFBNetwork(resource.getType().getFBNetwork(), il);
+			resource.getVarDeclarations().addAll(il.getInputVars());  // ensure that the data inputs are back with us.
+		} else {
+			resourceFBNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+		}
+		return resourceFBNetwork;
 	}
 
 }

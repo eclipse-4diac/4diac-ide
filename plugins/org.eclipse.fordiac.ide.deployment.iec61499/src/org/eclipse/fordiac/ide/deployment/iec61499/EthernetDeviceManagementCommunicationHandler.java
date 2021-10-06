@@ -86,11 +86,9 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 		}
 	}
 
-	private String handleResponse(final String destination) throws IOException {
-		@SuppressWarnings("unused")
-		final
-		byte b = inputStream.readByte();
-		final short size = inputStream.readShort();
+	private String handleResponse() throws IOException {
+		inputStream.readByte();
+		final int size = inputStream.readUnsignedShort();
 		final StringBuilder response = new StringBuilder(size);
 		for (int i = 0; i < size; i++) {
 			response.append((char) inputStream.readByte());
@@ -101,7 +99,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 	@Override
 	public String getInfo(final String destination) {
 		String info = mgrInfo.toString();
-		if (!destination.equals("")) { //$NON-NLS-1$
+		if (!"".equals(destination)) { //$NON-NLS-1$
 			info += ": " + destination; //$NON-NLS-1$
 		}
 		return info;
@@ -118,7 +116,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 			outputStream.writeShort(request.length());
 			outputStream.writeBytes(request);
 			outputStream.flush();
-			response = handleResponse(destination);
+			response = handleResponse();
 		}
 		return response;
 	}
