@@ -16,15 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.metrics.Messages;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 
 public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
-	static final String[] CONDITIONS = { "IF", "FOR", "WHILE", "REPEAT" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	static final String[] CONDITIONS = { FordiacKeywords.IF, FordiacKeywords.FOR, FordiacKeywords.WHILE,
+			FordiacKeywords.REPEAT };
 
 	@Override
 	public List<MetricResult> getResults() {
@@ -53,7 +56,7 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 		data.transitions = ecc.getECTransition().size();
 
 		for (final Algorithm alg : basicFBType.getAlgorithm()) {
-			data.loc += calculateLOC(alg.toString());
+			data.loc += calculateLOC(alg);
 		}
 
 		data.internalVar = basicFBType.getInternalVars().size();
@@ -85,14 +88,16 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 	}
 
 	// LOC of algorithm, blank lines and comments are not counted
-	private static int calculateLOC(final String algString) {
-		int loc = 0;
-		//cut overhead
-		final int indStart = algString.indexOf("text:"); //$NON-NLS-1$
-		final int indEnd = algString.lastIndexOf(')');
-		final String trimmedAlgString = algString.substring(indStart, indEnd);
+	private static int calculateLOC(final Algorithm alg) {
 
-		final String[] lines = trimmedAlgString.split("\\r?\\n"); //$NON-NLS-1$
+		if (!(alg instanceof STAlgorithm)) {
+			return -1;
+		}
+		final String algString = ((STAlgorithm) alg).getText();
+
+		int loc = 0;
+
+		final String[] lines = algString.split("\\r?\\n"); //$NON-NLS-1$
 
 		boolean isComment = false;
 		int indCommentStart1;
@@ -134,7 +139,7 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 		for (final String cond : CONDITIONS) {
 			int lastIndex = 0;
 			while (-1 != lastIndex) {
-				if (cond.equals("REPEAT")) { //$NON-NLS-1$
+				if (cond.equals(FordiacKeywords.REPEAT)) {
 					saveIndex = algText.indexOf(cond + "\\r?\\n", lastIndex); //$NON-NLS-1$
 				} else {
 					saveIndex = algText.indexOf(cond + " ", lastIndex); //$NON-NLS-1$

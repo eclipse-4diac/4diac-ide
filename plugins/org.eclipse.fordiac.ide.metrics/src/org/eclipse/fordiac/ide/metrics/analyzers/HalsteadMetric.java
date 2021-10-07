@@ -15,9 +15,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -62,10 +64,12 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 	}
 
 	private static void analyzeAction(final ECAction action, final HalsteadData data) {
-		if (!data.actions.contains("Action " + data.actionCount)) {
+		final String actionCount = MessageFormat.format(Messages.HalsteadNumberOfActions,
+				Integer.valueOf(data.actionCount));
+		if (!data.actions.contains(actionCount)) {
 			data.uniqueOperator += 1;
 		}
-		data.actions.add("Action " + data.actionCount);
+		data.actions.add(actionCount);
 
 		if (null != action.getOutput()) {
 			if (!data.event.contains(action.getOutput().getName())) {
@@ -114,10 +118,10 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 
 		final HalsteadData hData= (HalsteadData) this.data;
 
-		results.add(new MetricResult("Distinct operators n1 ",hData.n1));
-		results.add(new MetricResult("Distinct operands n2", hData.n2));
-		results.add(new MetricResult("Total number of operators N1", hData.n1Major));
-		results.add(new MetricResult("Total number of operands N2", hData.n2Major));
+		results.add(new MetricResult(Messages.HalsteadDisctinctOperatorsN1,hData.n1));
+		results.add(new MetricResult(Messages.HalsteadDisctinctOperatorsN2, hData.n2));
+		results.add(new MetricResult(Messages.HalsteadTotalNumberOfOperatorsN1, hData.n1Major));
+		results.add(new MetricResult(Messages.HalsteadTotalNumberOfOperatorsN2, hData.n2Major));
 
 		final double nMAjor = hData.n1Major + hData.n2Major;
 		final double n = hData.n1 + hData.n2;
@@ -127,13 +131,13 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 		final double d = hData.n1 / 2 * hData.n2Major / hData.n2;
 		final double e = d * v;
 
-		results.add(new MetricResult("Program Length N", nMAjor));
-		results.add(new MetricResult("Program vocabulary n", n));
-		results.add(new MetricResult("Estimated length N^", nHat));
-		results.add(new MetricResult("Purity ratio PR", pr));
-		results.add(new MetricResult("Program volume V", v));
-		results.add(new MetricResult("Difficulty D", d));
-		results.add(new MetricResult("Program Effort E", e));
+		results.add(new MetricResult(Messages.HalsteadProgramLength, nMAjor));
+		results.add(new MetricResult(Messages.HalsteadProgramVocabulary, n));
+		results.add(new MetricResult(Messages.HalsteadEstimatedLength, nHat));
+		results.add(new MetricResult(Messages.HalsteadPurityRatio, pr));
+		results.add(new MetricResult(Messages.HalsteadProgramVolume, v));
+		results.add(new MetricResult(Messages.HalsteadDifficulty, d));
+		results.add(new MetricResult(Messages.HalsteadProgramEffort, e));
 
 		return results;
 	}

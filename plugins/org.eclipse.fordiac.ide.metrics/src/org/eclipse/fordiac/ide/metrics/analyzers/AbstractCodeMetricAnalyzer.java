@@ -15,7 +15,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -46,6 +48,10 @@ public abstract class AbstractCodeMetricAnalyzer {
 	}
 
 	public abstract List<MetricResult> getResults();
+
+	public static List<MetricResult> removeDuplicateResults(final Collection<MetricResult> m) {
+		return m.stream().distinct().collect(Collectors.toList());
+	}
 
 	protected MetricData analyzeSubApp(final SubApp subApp, final boolean calcAvg) {
 		if (subApp.isTyped()) {

@@ -15,9 +15,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -34,29 +36,16 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	List<MetricResult> metrics = new ArrayList<>();
 	double ccapp = 0.0;
 
+	private static String formatResultName(final String name) {
+		return MessageFormat.format(Messages.CyclomaticNumber, name);
+	}
+
 	@Override
 	public void calculateMetrics(final INamedElement element) {
 		super.calculateMetrics(element);
-		final CyclomaticData cData = (CyclomaticData) this.data;
-		metrics.add(0, new MetricResult("Cyclomatic Number " + element.getName(), cData.cc));
-		metrics = removeDuplicates(metrics);
-	}
-
-	private static List<MetricResult> removeDuplicates(final List<MetricResult> list) {
-		final List<MetricResult> newList = new ArrayList<>();
-		boolean dupl = false;
-		for (final MetricResult m : list) {
-			for (final MetricResult n : newList) {
-				if (m.equals(n)) {
-					dupl = true;
-				}
-			}
-			if (!dupl) {
-				newList.add(m);
-			}
-			dupl = false;
-		}
-		return newList;
+		final ComplexityData cData = (ComplexityData) this.data;
+		metrics.add(0, new MetricResult(formatResultName(element.getName()), cData.cc));
+		metrics = removeDuplicateResults(metrics);
 	}
 
 	@Override
@@ -66,7 +55,7 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 
 	@Override
 	protected MetricData analyzeBFB(final BasicFBType basicFBType) {
-		final CyclomaticData data = new CyclomaticData();
+		final ComplexityData data = new ComplexityData();
 		final ECC ecc = basicFBType.getECC();
 
 		double ccfb = (ecc.getECTransition().size() - ecc.getECState().size() + 2);
@@ -80,7 +69,7 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 		}
 
 		data.cc += ccfb;
-		metrics.add(new MetricResult("Cyclomatic Number " + basicFBType.getName(), ccfb));
+		metrics.add(new MetricResult(formatResultName(basicFBType.getName()), ccfb));
 		return data;
 	}
 
@@ -92,7 +81,7 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 			int lastIndex = 0;
 			while (-1 != lastIndex) {
 				if (cond.equals(FordiacKeywords.REPEAT)) {
-					saveIndex = algText.indexOf(cond + "\r\n", lastIndex); //$NON-NLS-1$
+					saveIndex = algText.indexOf(cond + "\\r?\\n", lastIndex); //$NON-NLS-1$
 				} else {
 					saveIndex = algText.indexOf(cond + " ", lastIndex); //$NON-NLS-1$
 				}
@@ -111,14 +100,14 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	@Override
 	protected MetricData analyzeCFB(final CompositeFBType compositeFBType) {
 		final MetricData data = analyzeFBNetwork(compositeFBType.getFBNetwork(), true);
-		metrics.add(new MetricResult("Cyclomatic Number " + compositeFBType.getName(), ((CyclomaticData) data).cc));
+		metrics.add(new MetricResult(formatResultName(compositeFBType.getName()), ((ComplexityData) data).cc));
 		return data;
 
 	}
 
 	@Override
 	protected MetricData createDataType() {
-		return new CyclomaticData();
+		return new ComplexityData();
 	}
 
 }

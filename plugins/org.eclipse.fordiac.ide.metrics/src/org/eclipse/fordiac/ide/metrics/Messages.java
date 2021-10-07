@@ -36,6 +36,21 @@ public final class Messages extends NLS {
 	public static String NumberOfIndependentPaths;
 	public static String NumberOfInterfaceElements;
 
+	public static String CyclomaticNumber;
+
+	public static String HalsteadDifficulty;
+	public static String HalsteadDisctinctOperatorsN1;
+	public static String HalsteadDisctinctOperatorsN2;
+	public static String HalsteadEstimatedLength;
+	public static String HalsteadNumberOfActions;
+	public static String HalsteadProgramEffort;
+	public static String HalsteadProgramLength;
+	public static String HalsteadProgramVocabulary;
+	public static String HalsteadProgramVolume;
+	public static String HalsteadPurityRatio;
+	public static String HalsteadTotalNumberOfOperatorsN1;
+	public static String HalsteadTotalNumberOfOperatorsN2;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

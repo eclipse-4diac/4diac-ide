@@ -13,13 +13,13 @@
 
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
-class CyclomaticData extends MetricData{
+class ComplexityData extends MetricData{
 	double cc = 0;
 
 	@Override
 	protected void add(MetricData data) {
-		if (data instanceof CyclomaticData) {
-			cc += ((CyclomaticData) data).cc;
+		if (data instanceof ComplexityData) {
+			cc += ((ComplexityData) data).cc;
 		}
 
 	}
