@@ -36,6 +36,7 @@ public final class Messages extends NLS {
 	public static String NumberOfIndependentPaths;
 	public static String NumberOfInterfaceElements;
 
+	public static String CognitiveComplexity;
 	public static String CyclomaticNumber;
 
 	public static String HalsteadDifficulty;
