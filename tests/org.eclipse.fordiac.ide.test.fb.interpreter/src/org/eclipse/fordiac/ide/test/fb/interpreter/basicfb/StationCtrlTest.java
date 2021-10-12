@@ -19,16 +19,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.junit.Test;
 
 public class StationCtrlTest extends AbstractInterpreterTest {
 
-	public StationCtrlTest() {
-		// do nothing
-	}
-
-	@Test
-	public void test() throws Exception {
+	@Override
+	public void test() {
 		final BasicFBType fb = loadFBType("StationCtrl"); //$NON-NLS-1$
 		fb.getService().getServiceSequence().clear();
 		ServiceSequence seq = addServiceSequence(fb.getService());

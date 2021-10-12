@@ -17,17 +17,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.junit.Test;
 
 public class EventMergeTest extends AbstractInterpreterTest {
 
-
-	public EventMergeTest() {
-		// do nothing
-	}
-
-	@Test
-	public void testEI1() throws Exception {
+	@Override
+	public void test() {
 		final BasicFBType fb = loadFBType("E_MERGE"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 

@@ -49,14 +49,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.test.fb.interpreter.ModelDeserializer;
 import org.eclipse.fordiac.ide.test.fb.interpreter.ModelSerializer;
+import org.junit.Test;
 
-public class AbstractInterpreterTest {
+public abstract class AbstractInterpreterTest {
 	private static final String EXTERNAL_INTERFACE = "external"; //$NON-NLS-1$
 	private static final String INTERNAL_INTERFACE = "internal"; //$NON-NLS-1$
 	public static final String START_STATE = "START"; //$NON-NLS-1$
 
 	static final ModelDeserializer deserializer = new ModelDeserializer();
 	static final ModelSerializer serializer = new ModelSerializer();
+
+	@Test
+	public abstract void test() throws IllegalArgumentException;
 
 	protected static BasicFBType loadFBType(final String name) {
 		return loadFBType(name, true);
@@ -134,11 +138,11 @@ public class AbstractInterpreterTest {
 		for (final ServiceTransaction st : seq.getServiceTransaction()) {
 			final String inputEvent = st.getInputPrimitive().getEvent();
 			if (inputEvent != null) {
-				final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 				final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
 				if (eventPin == null) {
 					throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist");  //$NON-NLS-1$//$NON-NLS-2$
 				}
+				final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 				eventOccurrence.setEvent(eventPin);
 				final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createTransaction();
 				transaction.setInputEventOccurrence(eventOccurrence);
@@ -160,12 +164,12 @@ public class AbstractInterpreterTest {
 	}
 
 
-	public static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq) throws Exception {
+	public static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq) throws IllegalArgumentException {
 		return runTest(fb, seq, START_STATE);
 	}
 
 	public static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq, final String startStateName)
-			throws Exception {
+			throws IllegalArgumentException {
 		final ResourceSet reset = new ResourceSetImpl();
 		final Resource resource = reset
 				.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -203,12 +207,13 @@ public class AbstractInterpreterTest {
 	}
 
 
-	private static void checkResults(final ServiceSequence seq, final EventManager eventManager) throws Exception {
+	private static void checkResults(final ServiceSequence seq, final EventManager eventManager)
+			throws IllegalArgumentException {
 		final EList<ServiceTransaction> expectedResults = seq.getServiceTransaction();
 		final EList<Transaction> results = eventManager.getTransactions();
 
 		if (expectedResults.size() != results.size()) { // correct test data
-			throw new IllegalArgumentException("test data is incorrect");
+			throw new IllegalArgumentException("test data is incorrect"); //$NON-NLS-1$
 		}
 
 		for (int i = 0; i < expectedResults.size(); i++) {
@@ -222,14 +227,14 @@ public class AbstractInterpreterTest {
 		// input event was correctly generated
 		if (!result.getInputEventOccurrence().getEvent().getName()
 				.equals(expectedResult.getInputPrimitive().getEvent())) {
-			throw new IllegalArgumentException("Input event was not generated correctly");
+			throw new IllegalArgumentException("Input event was not generated correctly"); //$NON-NLS-1$
 		}
 
 		// no unwanted output event occurrences
 		final long outputEvents = expectedResult.getOutputPrimitive().stream()
 				.filter(p -> !p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)).count();
 		if (outputEvents != result.getOutputEventOccurences().size()) {
-			throw new IllegalArgumentException("Unwanted output event occurrence");
+			throw new IllegalArgumentException("Unwanted output event occurrence"); //$NON-NLS-1$
 		}
 
 		// check all output primitives
@@ -243,11 +248,11 @@ public class AbstractInterpreterTest {
 		if (!p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)) {
 			// generated output event is correct
 			if (!p.getEvent().equals(result.getOutputEventOccurences().get(j).getEvent().getName())) {
-				throw new IllegalArgumentException("Generated output event is incorrect");
+				throw new IllegalArgumentException("Generated output event is incorrect"); //$NON-NLS-1$
 			}
 			// the associated data is correct
 			if (!processParameters(p.getParameters(), result)) {
-				throw new IllegalArgumentException("Parameter values do not match the data");
+				throw new IllegalArgumentException("Parameter values do not match the data"); //$NON-NLS-1$
 			}
 		}
 	}
@@ -294,14 +299,18 @@ public class AbstractInterpreterTest {
 			final Value val = ((VarDeclaration) el).getValue();
 			// special treatment for bools: 1 = TRUE, 0 = FALSE
 			if (FordiacKeywords.BOOL.equalsIgnoreCase(((VarDeclaration) el).getTypeName())) {
-				if ("1".equals(val.getValue())) { //$NON-NLS-1$
-					val.setValue("TRUE"); //$NON-NLS-1$
-				} else if ("0".equals(val.getValue())) { //$NON-NLS-1$
-					val.setValue("FALSE"); //$NON-NLS-1$
-				} else if ("1".equals(expectedValue)) { //$NON-NLS-1$
-					expectedValue = "TRUE"; //$NON-NLS-1$
-				} else if ("0".equals(expectedValue)) { //$NON-NLS-1$
-					expectedValue = "FALSE"; //$NON-NLS-1$
+				final String BOOL_FALSE = "FALSE"; //$NON-NLS-1$
+				final String BOOL_TRUE = "TRUE"; //$NON-NLS-1$
+				final String BOOL_ZERO = "0"; //$NON-NLS-1$
+				final String BOOL_ONE = "1"; //$NON-NLS-1$
+				if (BOOL_ONE.equals(val.getValue())) {
+					val.setValue(BOOL_TRUE);
+				} else if (BOOL_ZERO.equals(val.getValue())) {
+					val.setValue(BOOL_FALSE);
+				} else if (BOOL_ONE.equals(expectedValue)) {
+					expectedValue = BOOL_TRUE;
+				} else if (BOOL_ZERO.equals(expectedValue)) {
+					expectedValue = BOOL_FALSE;
 				}
 			}
 			// compare the value from the BasicFBType with the primitive
