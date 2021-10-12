@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -29,6 +30,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RepeatStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
 
 public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	static final String[] CONDITIONS = { FordiacKeywords.IF, FordiacKeywords.FOR, FordiacKeywords.WHILE,
@@ -74,28 +83,67 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 		return data;
 	}
 
-	private static double analyzeAlgorithm(final Algorithm algorithm) {
-		double ccAlg = 0.0;
-		final String algText = algorithm.toString();
-		int saveIndex = 0;
-		for (final String cond : CONDITIONS) {
-			int lastIndex = 0;
-			while (-1 != lastIndex) {
-				if (cond.equals(FordiacKeywords.REPEAT)) {
-					saveIndex = algText.indexOf(cond + "\\r?\\n", lastIndex); //$NON-NLS-1$
-				} else {
-					saveIndex = algText.indexOf(cond + " ", lastIndex); //$NON-NLS-1$
-				}
-				if (0 != saveIndex) {
-					lastIndex = saveIndex;
-					if (-1 != lastIndex) {
-						ccAlg++;
-						lastIndex += cond.length();
-					}
-				}
-			}
+	public static double analyzeAlgorithm(final Algorithm alg) {
+		if (!(alg instanceof STAlgorithm)) {
+			return -1;
 		}
-		return ccAlg;
+
+		final STAlgorithmFilter filter = new STAlgorithmFilter();
+		final List<String> errors = new ArrayList<>();
+		final var ast = filter.parse((STAlgorithm) alg, errors);
+		return errors.isEmpty() ? //
+				calculateCyclomaticComplexity(ast.getStatements())//
+				: -1;
+	}
+
+	private static double calculateCyclomaticComplexity(final StatementList list) {
+		return 1 + countForks(list);
+	}
+
+	private static double countForks(final StatementList list) {
+		// calculate the cyclocmatic complexity by counting forks
+		return list.getStatements().stream().mapToDouble(CyclomaticComplexity::dispatchCountStatements).sum();
+	}
+
+	private static double dispatchCountStatements(final Statement stmt) {
+		if (stmt instanceof IfStatement) {
+			final IfStatement ifStmt = (IfStatement) stmt;
+
+			double elseCount = 0;
+			if (ifStmt.getElse() != null) {
+				elseCount = countForks(ifStmt.getElse().getStatements());
+			}
+
+			return 1 + countForks(ifStmt.getStatments()) + //
+					elseCount + //
+					ifStmt.getElseif().size() + //
+					ifStmt.getElseif().stream().mapToDouble(v -> countForks(v.getStatements()))
+					.sum();
+		}
+		if (stmt instanceof ForStatement) {
+			final ForStatement forStmt = (ForStatement) stmt;
+			return 1 + countForks(forStmt.getStatements());
+		}
+		if (stmt instanceof WhileStatement) {
+			final WhileStatement whileStmt = (WhileStatement) stmt;
+			return 1 + countForks(whileStmt.getStatements());
+		}
+		if (stmt instanceof RepeatStatement) {
+			final RepeatStatement repeatStmt = (RepeatStatement) stmt;
+			return 1 + countForks(repeatStmt.getStatements());
+		}
+		if (stmt instanceof CaseStatement) {
+			final CaseStatement caseStmt = (CaseStatement) stmt;
+			double elseCount = 0;
+			if (caseStmt.getElse() != null) {
+				elseCount = countForks(caseStmt.getElse().getStatements());
+			}
+			return 1 + elseCount + //
+					caseStmt.getCase().size() + //
+					caseStmt.getCase().stream().mapToDouble(v -> countForks(v.getStatements()))
+					.sum();
+		}
+		return 0;
 	}
 
 	@Override

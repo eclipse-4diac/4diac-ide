@@ -15,21 +15,21 @@ package org.eclipse.fordiac.ide.metrics.analyzers;
 public class SpiderChartBFBData extends MetricData {
 	int states;
 	int transitions;
-	int loc;
+	double loc;
 	int actions;
 	int internalVar;
 	int independentPaths; // cyclomatic complexity
 	int interfaceEl;
 
-	
+
 	// these two methods are not necessary yet, because the SCBFB Measures can only be applied to BFBs
 	@Override
-	protected void add(MetricData data) {
+	protected void add(final MetricData data) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	protected void divide(int div) {
+	protected void divide(final int div) {
 		// TODO Auto-generated method stub
 	}
 }

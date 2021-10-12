@@ -15,8 +15,9 @@ package org.eclipse.fordiac.ide.metrics.analyzers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.metrics.Messages;
-import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -25,10 +26,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RepeatStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
 
 public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
-	static final String[] CONDITIONS = { FordiacKeywords.IF, FordiacKeywords.FOR, FordiacKeywords.WHILE,
-			FordiacKeywords.REPEAT };
 
 	@Override
 	public List<MetricResult> getResults() {
@@ -89,72 +96,73 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 	}
 
 	// LOC of algorithm, blank lines and comments are not counted
-	private static int calculateLOC(final Algorithm alg) {
+	private static double calculateLOC(final Algorithm alg) {
 
 		if (!(alg instanceof STAlgorithm)) {
-			return -1;
+			return Double.NaN;
 		}
-		final String algString = ((STAlgorithm) alg).getText();
 
-		int loc = 0;
+		final STAlgorithmFilter filter = new STAlgorithmFilter();
+		final List<String> errors = new ArrayList<>();
+		final var ast = filter.parse((STAlgorithm) alg, errors);
+		return errors.isEmpty() ? //
+				countStatements(ast.getStatements()) + //
+				countLocalVariables(ast.getLocalVariables()) //
+				: Double.NaN;
 
-		final String[] lines = algString.split("\\r?\\n"); //$NON-NLS-1$
+	}
 
-		boolean isComment = false;
-		int indCommentStart1;
-		int indCommentStart2;
-		int indCommentEnd1;
-		int indCommentEnd2;
-		for (final String s : lines) {
-			if (!s.isEmpty()) {
-				indCommentStart1 = s.trim().indexOf("(*"); //$NON-NLS-1$
-				indCommentStart2 = s.trim().indexOf("/*"); //$NON-NLS-1$
-				if ((indCommentStart1 > 0) || (indCommentStart2 > 0)) { // blockcomment starts somewhere in this line
-					isComment = true;
-					loc++;
-				} else if ((indCommentStart1 == 0) || (indCommentStart2 == 0)) { // blockcomment starts at the beginning
-					isComment = true;
-				} else if (!isComment && !s.trim().startsWith("//")) { //$NON-NLS-1$
-					loc++;
-				}
+	private static int countLocalVariables(final EList<VarDeclaration> vars) {
+		if (vars.isEmpty()) {
+			return 0;
+		}
+		return vars.size() + 2;
+	}
 
-				indCommentEnd1 = s.trim().indexOf("*)"); //$NON-NLS-1$
-				indCommentEnd2 = s.trim().indexOf("*/"); //$NON-NLS-1$
-				if (isComment && ((indCommentEnd1 != -1) || (indCommentEnd2 != -1))) { // end of blockcomment
-					isComment = false;
-					if (((indCommentEnd1 < s.trim().length() - 2) && (indCommentEnd1 != -1))
-							|| ((indCommentEnd2 < s.trim().length() - 2) && (indCommentEnd2 != -1))) { // code after
-						// comment
-						loc++;
-					}
-				}
+	private static int countStatements(final StatementList list) {
+		return list.getStatements().stream().mapToInt(SpiderChartBFBMeasures::dispatchCountStatements).sum();
+	}
+
+	private static int dispatchCountStatements(final Statement stmt) {
+		if (stmt instanceof IfStatement) {
+			final IfStatement ifStmt = (IfStatement) stmt;
+
+			int elseCount = 0;
+			if (ifStmt.getElse() != null) {
+				elseCount = 1 + countStatements(ifStmt.getElse().getStatements());
 			}
+
+			return 2 + countStatements(ifStmt.getStatments()) + //
+					elseCount + //
+					ifStmt.getElseif().size() + //
+					ifStmt.getElseif().stream().mapToInt(v -> countStatements(v.getStatements())).sum();
 		}
-		return loc;
+		if (stmt instanceof ForStatement) {
+			final ForStatement forStmt = (ForStatement) stmt;
+			return 2 + countStatements(forStmt.getStatements());
+		}
+		if (stmt instanceof WhileStatement) {
+			final WhileStatement whileStmt = (WhileStatement) stmt;
+			return 2 + countStatements(whileStmt.getStatements());
+		}
+		if (stmt instanceof RepeatStatement) {
+			final RepeatStatement repeatStmt = (RepeatStatement) stmt;
+			return 2 + countStatements(repeatStmt.getStatements());
+		}
+		if (stmt instanceof CaseStatement) {
+			final CaseStatement caseStmt = (CaseStatement) stmt;
+			int elseCount = 0;
+			if (caseStmt.getElse() != null) {
+				elseCount = 1 + countStatements(caseStmt.getElse().getStatements());
+			}
+			return 2 + elseCount + //
+					caseStmt.getCase().stream().mapToInt(v -> countStatements(v.getStatements())).sum();
+		}
+		return 1;
 	}
 
 	private static double analyzeAlgorithm(final Algorithm algorithm) {
-		double ccAlg = 0.0;
-		final String algText = algorithm.toString();
-		int saveIndex = 0;
-		for (final String cond : CONDITIONS) {
-			int lastIndex = 0;
-			while (-1 != lastIndex) {
-				if (cond.equals(FordiacKeywords.REPEAT)) {
-					saveIndex = algText.indexOf(cond + "\\r?\\n", lastIndex); //$NON-NLS-1$
-				} else {
-					saveIndex = algText.indexOf(cond + " ", lastIndex); //$NON-NLS-1$
-				}
-				if (0 != saveIndex) {
-					lastIndex = saveIndex;
-					if (-1 != lastIndex) {
-						ccAlg++;
-						lastIndex += cond.length();
-					}
-				}
-			}
-		}
-		return ccAlg;
+		return CyclomaticComplexity.analyzeAlgorithm(algorithm);
 	}
 
 	@Override
