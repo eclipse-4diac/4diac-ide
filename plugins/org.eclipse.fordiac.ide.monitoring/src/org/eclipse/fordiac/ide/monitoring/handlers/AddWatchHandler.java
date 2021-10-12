@@ -128,14 +128,16 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		if (port instanceof AdapterPortElement) {
 			element = MonitoringFactory.eINSTANCE.createMonitoringAdapterElement();
 		} else if (port instanceof SubAppPortElement) {
-			element = createSubappElement(port);
+			element = createSubappElement(port, manager);
 		} else {
 			element = MonitoringFactory.eINSTANCE.createMonitoringElement();
 		}
 
 		element.setPort(port);
 
-		manager.addMonitoringElement(element);
+		if (!manager.containsPort(port.getInterfaceElement())) {
+			manager.addMonitoringElement(element);
+		}
 		if (port instanceof AdapterPortElement) {
 			final MonitoringAdapterElement adpaterElement = (MonitoringAdapterElement) element;
 			createMonitoringElementsForAdapterInterface(manager, adpaterElement);
@@ -143,14 +145,19 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		return element;
 	}
 
-	public static MonitoringBaseElement createSubappElement(final PortElement port) {
-		MonitoringBaseElement element;
-		element = MonitoringFactory.eINSTANCE.createSubappMonitoringElement();
+	public static MonitoringBaseElement createSubappElement(final PortElement port, final MonitoringManager manager) {
+		final MonitoringBaseElement element = MonitoringFactory.eINSTANCE.createSubappMonitoringElement();
 		final MonitoringBaseElement anchor = MonitoringFactory.eINSTANCE.createMonitoringElement();
 		final PortElement anchorPort = MonitoringManagerUtils
 				.createPortElement(((SubAppPortElement) port).getAnchor());
 		anchor.setPort(anchorPort);
 		((SubappMonitoringElement) element).setAnchor(anchor);
+		final MonitoringBaseElement monitoringElement = manager.getMonitoringElement(anchorPort.getInterfaceElement());
+		if (monitoringElement == null) {
+			manager.addMonitoringElement(anchor);
+		} else {
+			((SubappMonitoringElement) element).setAnchor(monitoringElement);
+		}
 		return element;
 	}
 
