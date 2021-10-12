@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2019 fortiss GmbH
- *               2020 Johannes Kepler University Linz
+ *               2020, 2021 Johannes Kepler University Linz
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Ernst Blecha - add multibit partial access
+ *   Ernst Blecha - expose abstract syntax tree after parsing
  */
 package org.eclipse.fordiac.ide.export.forte_ng.st;
 
@@ -213,24 +214,31 @@ public class STAlgorithmFilter {
     return stalg.getLocalVariables();
   }
   
+  public StructuredTextAlgorithm parse(final STAlgorithm alg, final List<String> errors) {
+    final XtextResource resource = this.parseAlgorithm(alg);
+    final IParseResult parseResult = resource.getParseResult();
+    final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
+    final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+    boolean _isEmpty = issues.isEmpty();
+    boolean _not = (!_isEmpty);
+    if (_not) {
+      final Function1<Issue, String> _function = (Issue it) -> {
+        return MessageFormat.format("{0}, Line {1}: {2}", alg.getName(), Long.toString((it.getLineNumber()).intValue()), it.getMessage());
+      };
+      errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
+      return null;
+    }
+    EObject _rootASTElement = parseResult.getRootASTElement();
+    return ((StructuredTextAlgorithm) _rootASTElement);
+  }
+  
   public CharSequence generate(final STAlgorithm alg, final List<String> errors) {
     CharSequence _xblockexpression = null;
     {
-      final XtextResource resource = this.parseAlgorithm(alg);
-      final IParseResult parseResult = resource.getParseResult();
-      final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
-      final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
-      boolean _isEmpty = issues.isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
-        final Function1<Issue, String> _function = (Issue it) -> {
-          return MessageFormat.format("{0}, Line {1}: {2}", alg.getName(), Long.toString((it.getLineNumber()).intValue()), it.getMessage());
-        };
-        errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
+      final StructuredTextAlgorithm stalg = this.parse(alg, errors);
+      if ((stalg == null)) {
         return null;
       }
-      EObject _rootASTElement = parseResult.getRootASTElement();
-      final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
       _xblockexpression = this.generateStructuredTextAlgorithm(stalg);
     }
     return _xblockexpression;

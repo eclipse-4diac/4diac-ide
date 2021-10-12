@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
- *               2020 Johannes Kepler University Linz
+ *               2020, 2021 Johannes Kepler University Linz
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Ernst Blecha - add multibit partial access
+ *   Ernst Blecha - expose abstract syntax tree after parsing
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.export.forte_ng.st
@@ -145,7 +146,7 @@ class STAlgorithmFilter {
 		return stalg.localVariables
 	}
 
-	def generate(STAlgorithm alg, List<String> errors) {
+	def parse(STAlgorithm alg, List<String> errors) {
 		val resource = alg.parseAlgorithm
 		val parseResult = resource.parseResult
 		val validator = resource.resourceServiceProvider.resourceValidator
@@ -156,7 +157,12 @@ class STAlgorithmFilter {
 			])
 			return null
 		}
-		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
+		return parseResult.rootASTElement as StructuredTextAlgorithm
+	}
+
+	def generate(STAlgorithm alg, List<String> errors) {
+		val stalg = parse(alg, errors)
+		if (stalg === null) { return null }
 		stalg.generateStructuredTextAlgorithm
 	}
 
