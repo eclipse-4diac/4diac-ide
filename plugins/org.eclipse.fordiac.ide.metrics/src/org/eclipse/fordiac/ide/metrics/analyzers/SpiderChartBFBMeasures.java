@@ -50,6 +50,7 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 		data.states = ecc.getECState().size();
 
 		data.independentPaths = (ecc.getECTransition().size() - ecc.getECState().size() + 2);
+		data.transitions = ecc.getECTransition().size();
 
 		for (final Algorithm alg : basicFBType.getAlgorithm()) {
 			data.loc += calculateLOC(alg.toString());
@@ -78,13 +79,13 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 		count += interfaceList.getEventOutputs().size();
 		interfaceList.getPlugs().forEach(plug -> adpCount[0] += countInterfaceElements(plug.getType().getInterfaceList()));
 		interfaceList.getSockets()
-				.forEach(socket -> adpCount[0] += countInterfaceElements(socket.getType().getInterfaceList()));
+		.forEach(socket -> adpCount[0] += countInterfaceElements(socket.getType().getInterfaceList()));
 		count += adpCount[0];
 		return count;
 	}
 
 	// LOC of algorithm, blank lines and comments are not counted
-	protected int calculateLOC(final String algString) {
+	private static int calculateLOC(final String algString) {
 		int loc = 0;
 		//cut overhead
 		final int indStart = algString.indexOf("text:"); //$NON-NLS-1$
