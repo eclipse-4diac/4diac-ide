@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.0.qualifier
-Bundle-Name: Service Sequence Editor (Incubation)
+Bundle-Name: Service Sequence Editor
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;singleton:=true

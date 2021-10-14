@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: FB Interpreter (Incubation)
+Bundle-Name: FB Interpreter
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.fb.interpreter
 Bundle-Version: 2.0.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.test.fb.interpreter.Activator

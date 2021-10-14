@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Structured Text UI (Incubation)
+Bundle-Name: Structured Text UI
 Bundle-Vendor: Eclipse 4diac
 Bundle-Version: 2.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.structuredtext.ui;singleton:=true
