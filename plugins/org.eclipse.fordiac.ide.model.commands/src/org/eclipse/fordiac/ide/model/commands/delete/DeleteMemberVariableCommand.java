@@ -23,10 +23,10 @@ public class DeleteMemberVariableCommand extends DeleteVariableCommand {
 	 * Instantiates a command to remove a variable from a struct.
 	 *
 	 * @param type the StructuredType from which the member variable is deleted
-	 * @param var  the var that should be deleted
+	 * @param varToDelete  the var that should be deleted
 	 */
-	public DeleteMemberVariableCommand(final StructuredType type, final VarDeclaration var) {
-		super(type, var);
+	public DeleteMemberVariableCommand(final StructuredType type, final VarDeclaration varToDelete) {
+		super(type, varToDelete);
 	}
 
 	@Override

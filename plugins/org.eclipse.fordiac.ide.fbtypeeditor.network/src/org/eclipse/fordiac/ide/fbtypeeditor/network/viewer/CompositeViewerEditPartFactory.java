@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.AdapterFBEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -31,14 +30,15 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 /** A factory for creating ECCEditPart objects. */
 public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 
-	protected final FBNetworkElement fbInstance;
-	protected final EditPart fbEditPart;
+	private final FBNetworkElement fbInstance;
 
-	public CompositeViewerEditPartFactory(final GraphicalEditor editor, final FBNetworkElement fbInstance,
-			final EditPart fbEditPart) {
+	protected FBNetworkElement getFbInstance() {
+		return fbInstance;
+	}
+
+	public CompositeViewerEditPartFactory(final GraphicalEditor editor, final FBNetworkElement fbInstance) {
 		super(editor);
 		this.fbInstance = fbInstance;
-		this.fbEditPart = fbEditPart;
 	}
 
 	/** Maps an object to an EditPart.
@@ -53,7 +53,7 @@ public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFact
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof IInterfaceElement) {
 			final IInterfaceElement iElement = (IInterfaceElement) modelElement;
-			if (iElement.eContainer().eContainer() instanceof CompositeFBType) {
+			if (fbInstance == iElement.eContainer().eContainer()) {
 				return new CompositeInternalInterfaceEditPartRO();
 			}
 			return new InterfaceEditPartForFBNetworkRO();
@@ -84,12 +84,7 @@ public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFact
 
 	@Override
 	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
-		final CompositeNetworkViewerEditPart compositeNetEP = new CompositeNetworkViewerEditPart();
-		compositeNetEP.setFbInstance(fbInstance);
-		if (fbEditPart.getParent() instanceof CompositeNetworkViewerEditPart) {
-			compositeNetEP.setparentInstanceViewerEditPart((CompositeNetworkViewerEditPart) fbEditPart.getParent());
-		}
-		return compositeNetEP;
+		return new CompositeNetworkViewerEditPart();
 	}
 
 }

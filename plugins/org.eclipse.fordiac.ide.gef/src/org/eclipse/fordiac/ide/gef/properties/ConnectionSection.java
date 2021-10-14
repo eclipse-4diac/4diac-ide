@@ -17,8 +17,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -45,7 +47,7 @@ public class ConnectionSection extends AbstractSection {
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		Composite composite = getWidgetFactory().createComposite(parent);
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, Messages.ConnectionSection_Source);
@@ -63,13 +65,20 @@ public class ConnectionSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			if (null != getType().getSource()) {
 				sourceText.setText(
 						getFBNameFromIInterfaceElement(getType().getSource()) + "." + getType().getSource().getName()); //$NON-NLS-1$
+				if (isViewer()) {
+					commentText.setEditable(false);
+					commentText.setEnabled(false);
+				} else {
+					commentText.setEditable(true);
+					commentText.setEnabled(true);
+				}
 			}
 			if (null != getType().getDestination()) {
 				targetText.setText(getFBNameFromIInterfaceElement(getType().getDestination()) + "." //$NON-NLS-1$
@@ -79,26 +88,35 @@ public class ConnectionSection extends AbstractSection {
 		commandStack = commandStackBuffer;
 	}
 
+	private boolean isViewer() {
+		final EObject sourceBlock = getType().getSource().eContainer().eContainer();
+		return (sourceBlock instanceof CompositeFBType) || // connection to interface
+				((sourceBlock instanceof FBNetworkElement)
+						&& ((FBNetworkElement) sourceBlock).isContainedInTypedInstance());
+	}
+
 	@Override
-	protected Connection getInputType(Object input) {
-		Object inputHelper = input instanceof EditPart ? ((EditPart) input).getModel() : input;
+	protected Connection getInputType(final Object input) {
+		final Object inputHelper = input instanceof EditPart ? ((EditPart) input).getModel() : input;
 		if (inputHelper instanceof Connection) {
 			return ((Connection) inputHelper);
 		}
 		return null;
 	}
 
-	private static String getFBNameFromIInterfaceElement(IInterfaceElement element) {
+	private static String getFBNameFromIInterfaceElement(final IInterfaceElement element) {
 		return element.eContainer().eContainer() instanceof FBNetworkElement
 				? ((FBNetworkElement) element.eContainer().eContainer()).getName()
-				: ""; //$NON-NLS-1$
+						: ""; //$NON-NLS-1$
 	}
 
 	@Override
 	protected void setInputCode() {
+		// nothing needed to be done here
 	}
 
 	@Override
 	protected void setInputInit() {
+		// nothing needed to be done here
 	}
 }

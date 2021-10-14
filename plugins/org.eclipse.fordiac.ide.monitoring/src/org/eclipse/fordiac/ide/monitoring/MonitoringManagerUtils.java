@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2018 Profactor GmbH, AIT, fortiss GmbH
- * 							 Johannes Kepler University
+ * 							 Johannes Kepler University,
+ *				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,22 +13,23 @@
  *   Gerhard Ebenhofer, Filip Andren, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Michael Oberlehner - added subapp monitoring
+ *   Lukas Wais - clean up canBeMonitored
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
-import java.util.ArrayList;
-
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeNetworkViewerEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
+import org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement;
+import org.eclipse.fordiac.ide.monitoring.model.SubAppPortHelper;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 
 public final class MonitoringManagerUtils {
 
@@ -35,45 +37,50 @@ public final class MonitoringManagerUtils {
 		throw new AssertionError(); // class should not be instantiated
 	}
 
-	public static boolean canBeMonitored(final org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart editPart) {
-		final PortElement port = MonitoringManagerUtils.createPortElement(editPart); // FIXME think how we can get away
-		// without creating a port element
-		return ((port != null) && (port.getPortString() != null));
-	}
+	public static boolean canBeMonitored(final IInterfaceElement ie, final boolean showError) {
 
-	public static boolean canBeMonitored(final FBEditPart obj) {
-		// As a first solution try to find the first interface editpart and see if we
-		// can monitoring
-		for (final Object child : obj.getChildren()) {
-			if (child instanceof InterfaceEditPart) {
-				return canBeMonitored((InterfaceEditPart) child);
+		final FBNetworkElement fbNetworkElement = ie.getFBNetworkElement();
+
+		if (fbNetworkElement instanceof SubApp) {
+			final IInterfaceElement anchor = SubAppPortHelper.findAnchorInterfaceElement(ie);
+
+			if (anchor == null) {
+				if (showError) {
+					ErrorMessenger.popUpErrorMessage(Messages.MonitoringManagerUtils_NoSubappAnchor);
+				}
+			} else {
+				canBeMonitored(anchor, false);
 			}
 		}
-		return false;
+
+		return fbNetworkElement != null && fbNetworkElement.getResource() != null;
 	}
 
-	public static PortElement createPortElement(
-			final org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart editPart) {
-		if (editPart.getParent() instanceof FBEditPart
-				&& editPart.getParent().getParent() instanceof CompositeNetworkViewerEditPart) {
-			return createCompositeInternalPortString(editPart);
-		}
+	public static boolean canBeMonitored(final FBNetworkElement obj) {
+		// As a first solution try to find the first interface element and see if we
+		// can monitor it. It is monitorable if it has a resource.
+		final var ies = obj.getInterface().getAllInterfaceElements();
+		return !ies.isEmpty() && canBeMonitored(ies.get(0), false);
+	}
 
-		final FBNetworkElement obj = editPart.getModel().getFBNetworkElement();
-		if (obj instanceof FB) {
-			final FB fb = (FB) obj;
-			return createPortElement(fb, editPart);
+	public static PortElement createPortElement(final IInterfaceElement ie) {
+		final FBNetworkElement obj = ie.getFBNetworkElement();
+
+		if (obj instanceof FB || obj instanceof SubApp) {
+			return createPortElement(obj, ie);
 		}
 
 		return null;
 
 	}
 
-	private static PortElement createPortElement(final FBNetworkElement fb,
-			final org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart ep) {
+	public static PortElement createPortElement(final FBNetworkElement fb, final IInterfaceElement ie) {
 		PortElement p;
-		if (ep.getModel() instanceof AdapterDeclaration) {
+		if (ie instanceof AdapterDeclaration) {
 			p = MonitoringFactory.eINSTANCE.createAdapterPortElement();
+		} else if (fb instanceof SubApp) {
+			p = createrSubAppPort(ie);
+
 		} else {
 			p = MonitoringBaseFactory.eINSTANCE.createPortElement();
 		}
@@ -84,41 +91,20 @@ public final class MonitoringManagerUtils {
 		}
 
 		p.setResource(res);
-		// TODO adapt or remove this
-		if (fb instanceof FB) {
-			p.setFb((FB) fb);
+
+		if (fb instanceof FB || fb instanceof SubApp) {
+			p.setFb(fb);
 		}
 		setupFBHierarchy(fb, p);
-		p.setInterfaceElement(ep.getModel());
+		p.setInterfaceElement(ie);
 		return p;
 	}
 
-	private static PortElement createCompositeInternalPortString(
-			final org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart editPart) {
-
-		final FBEditPart fbep = (FBEditPart) editPart.getParent();
-		final CompositeNetworkViewerEditPart cnep = (CompositeNetworkViewerEditPart) editPart.getParent().getParent();
-
-		final ArrayList<CompositeNetworkViewerEditPart> parents = new ArrayList<>();
-
-		CompositeNetworkViewerEditPart root = cnep;
-		parents.add(0, root);
-		while (root.getparentInstanceViewerEditPart() != null) {
-			parents.add(0, root.getparentInstanceViewerEditPart());
-			root = root.getparentInstanceViewerEditPart();
-		}
-
-		final FBNetworkElement fb = root.getFbInstance();
-		final PortElement pe = createPortElement(fb, editPart);
-		if (pe != null) {
-			pe.setFb(fbep.getModel());
-
-			for (final CompositeNetworkViewerEditPart compositeNetworkEditPart : parents) {
-				pe.getHierarchy().add(compositeNetworkEditPart.getFbInstance().getName());
-			}
-			return pe;
-		}
-		return null;
+	public static PortElement createrSubAppPort(final IInterfaceElement ie) {
+		final SubAppPortElement subAppPort = MonitoringFactory.eINSTANCE.createSubAppPortElement();
+		final IInterfaceElement anchor = SubAppPortHelper.findAnchorInterfaceElement(ie);
+		subAppPort.setAnchor(anchor);
+		return subAppPort;
 	}
 
 	private static void setupFBHierarchy(final FBNetworkElement element, final PortElement p) {

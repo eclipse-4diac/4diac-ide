@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016, 2017, 2019 fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,39 +16,33 @@
  *               - extracted fbnetwork copying code into helper class for re-use
  *               - moved replace source subapp to an wizard option
  *   Lukas Wais  - Adaption to work with new super class
- *   Lukas Wais,
- *   Michael Oberlehner - Refactored code for better readability
+ *   Lukas Wais, Michael Oberlehner - Refactored code for better readability
+ *   Alois Zoitl - used new type creation class to ensure correct type creation
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.application.wizards;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.CommandUtil;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
-import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -97,70 +91,51 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 	@Override
 	public boolean performFinish() {
 		if (perform()) {
-			final File[] fileList = getFilesFromTemplateFolder();
-			if (null == fileList) {
-				return false;
-			}
-			createSubAppTemplateCopy(fileList);
-			createSupApplication();
-		}
-		return true;
-	}
+			final File template = getSubappTemplate();
+			if (template == null) {
+				MessageDialog.openError(getShell(), Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorTitle,
+						Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage);
+			} else {
+				final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(getTargetTypeFile(), template) {
+					@Override
+					protected void performTypeSpecificSetup(final LibraryElement type) {
+						performTypeSetup((SubAppType) type);
+					}
+				};
+				final PaletteEntry entry = creator.createTypeFromTemplate();
+				if (entry != null) {
+					// replace needs to be called before opening the type editor so that we get the correct command
+					// stack
+					if (newFilePage.getReplaceSource()) {
+						replaceWithType(entry);
+					}
 
-	private void createSupApplication() {
-		final PaletteEntry entry = getPaletteEntry();
-		final LibraryElement type = entry.getType();
-		type.setName(TypeLibrary.getTypeNameFromFile(entry.getFile()));
-
-		TypeManagementPreferencesHelper.setupIdentification(type);
-		TypeManagementPreferencesHelper.setupVersionInfo(type);
-		performTypeSetup((SubAppType) type);
-		AbstractBlockTypeExporter.saveType(entry);
-		entry.setType(type);
-
-		if (newFilePage.getOpenType()) {
-			openTypeEditor(entry);
-		}
-
-		if (newFilePage.getReplaceSource()) {
-			replaceWithType(entry);
-		}
-	}
-
-	private boolean createSubAppTemplateCopy(final File[] fileList) {
-		if (null != fileList) {
-			for (final File file : fileList) {
-				final String fileName = file.getName().toUpperCase();
-				if (fileName.endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING)) {
-					final IFile targetTypeFile = getTargetTypeFile();
-					try {
-						ImportUtils.copyFile(file, targetTypeFile);
-						return true;
-					} catch (IOException | CoreException e) {
-						ApplicationPlugin.getDefault().logError(e.getMessage(), e);
+					if (newFilePage.getOpenType()) {
+						openTypeEditor(entry);
 					}
 				}
 			}
 		}
-		return false;
+		return true;
+	}
+
+	private static File getSubappTemplate() {
+		final File[] fileList = getFilesFromTemplateFolder();
+		if (fileList != null) {
+			for (final File file : fileList) {
+				final String fileName = file.getName().toUpperCase();
+				if (fileName.endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING)) {
+					return file;
+				}
+			}
+		}
+		return null;
 	}
 
 	private static File[] getFilesFromTemplateFolder() {
 		final String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
 		final File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
 		return templateFolder.listFiles();
-	}
-
-	private PaletteEntry getPaletteEntry() {
-		final IFile targetTypeFile = getTargetTypeFile();
-		PaletteEntry newEntry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
-		if (null == newEntry) {
-			// refresh the palette and retry to fetch the entry
-			TypeLibrary.refreshTypeLib(targetTypeFile);
-			newEntry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
-		}
-
-		return newEntry;
 	}
 
 	private static void openTypeEditor(final PaletteEntry entry) {

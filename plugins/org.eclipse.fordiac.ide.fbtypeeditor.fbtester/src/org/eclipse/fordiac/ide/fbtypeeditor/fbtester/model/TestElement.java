@@ -41,8 +41,8 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	private String value;
 
 	private static final int NR_OF_HISTORY = 500;
-	private List<String> historyValues = new ArrayList<>(NR_OF_HISTORY);
-	private List<Integer> historyCycles = new ArrayList<>(NR_OF_HISTORY);
+	private final List<String> historyValues = new ArrayList<>(NR_OF_HISTORY);
+	private final List<Integer> historyCycles = new ArrayList<>(NR_OF_HISTORY);
 	private int currentInt = 0;
 
 	/**
@@ -66,9 +66,9 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 *
 	 * @param value the new value
 	 */
-	public void setValue(String value) {
+	public void setValue(final String value) {
 		this.value = value;
-		for (ISetValueListener valueListener : valueListeners) {
+		for (final ISetValueListener valueListener : valueListeners) {
 			valueListener.setValue(this, value);
 		}
 	}
@@ -90,7 +90,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 *
 	 * @param fb the new fb
 	 */
-	public void setFb(FB fb) {
+	public void setFb(final FB fb) {
 		this.fb = fb;
 	}
 
@@ -108,7 +108,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 *
 	 * @param monitoringElement the new monitoring element
 	 */
-	public void setMonitoringElement(String monitoringElement) {
+	public void setMonitoringElement(final String monitoringElement) {
 		this.monitoringElement = monitoringElement;
 	}
 
@@ -144,7 +144,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 *
 	 * @param element the new element
 	 */
-	public void setElement(IInterfaceElement element) {
+	public void setElement(final IInterfaceElement element) {
 		this.element = element;
 	}
 
@@ -189,7 +189,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 *
 	 * @param listener the listener
 	 */
-	public void addSetValueListener(ISetValueListener listener) {
+	public void addSetValueListener(final ISetValueListener listener) {
 		if (!valueListeners.contains(listener)) {
 			valueListeners.add(listener);
 		}
@@ -203,7 +203,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 *
 	 * @param listener the listener
 	 */
-	public void addTriggerEventListener(ITriggerEventListener listener) {
+	public void addTriggerEventListener(final ITriggerEventListener listener) {
 		if (!eventListners.contains(listener)) {
 			eventListners.add(listener);
 		}
@@ -213,7 +213,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 * Send event.
 	 */
 	public void sendEvent() {
-		for (ITriggerEventListener eventListner : eventListners) {
+		for (final ITriggerEventListener eventListner : eventListners) {
 			eventListner.sendEvent(this);
 		}
 	}
@@ -223,9 +223,9 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 *
 	 * @param value the value
 	 */
-	public void updateValue(final String value, int cycle) {
+	public void updateValue(final String value, final int cycle) {
 		historyValues.add(currentInt % NR_OF_HISTORY, value);
-		historyCycles.add(currentInt % NR_OF_HISTORY, cycle);
+		historyCycles.add(currentInt % NR_OF_HISTORY, Integer.valueOf(cycle));
 		currentInt++;
 		Display.getDefault().asyncExec(() -> getPart().setValue(value));
 	}

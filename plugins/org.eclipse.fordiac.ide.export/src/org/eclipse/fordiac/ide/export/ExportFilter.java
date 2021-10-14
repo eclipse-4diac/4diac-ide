@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 			2018, TU Wien/ACIN
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,14 +23,14 @@ import java.util.List;
  */
 public abstract class ExportFilter implements IExportFilter {
 
-	private List<String> errors = new ArrayList<String>();
-	private List<String> warnings = new ArrayList<String>();
-	private List<String> infos = new ArrayList<String>();
+	private final List<String> errors = new ArrayList<>();
+	private final List<String> warnings = new ArrayList<>();
+	private final List<String> infos = new ArrayList<>();
 
 	/**
 	 * Instantiates a new export filter.
 	 */
-	public ExportFilter() {
+	protected ExportFilter() {
 
 	}
 

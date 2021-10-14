@@ -64,7 +64,7 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 		} else if (type instanceof StructuredType) {
 			return FordiacImage.ICON_DATA_TYPE.getImage();
 		} else if (type instanceof AdapterFBType) {
-			return FordiacImage.ICON_ADAPTER.getImage();
+			return FordiacImage.ICON_ADAPTER_TYPE.getImage();
 		} else {
 			return FordiacImage.ICON_SIFB.getImage();
 		}

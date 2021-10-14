@@ -22,10 +22,10 @@ public abstract class AbstractChangeElementNameWithOppositeCommand extends Chang
 	 */
 	private ChangeNameCommand oppositeChange = null;
 
-	public AbstractChangeElementNameWithOppositeCommand(final INamedElement element, String name) {
+	protected AbstractChangeElementNameWithOppositeCommand(final INamedElement element, final String name) {
 		super(element, name);
 
-		INamedElement oppositeElement = getOppositeElement(element);
+		final INamedElement oppositeElement = getOppositeElement(element);
 		if (null != oppositeElement) {
 			oppositeChange = new ChangeNameCommand(oppositeElement, name);
 		}

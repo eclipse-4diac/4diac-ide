@@ -15,8 +15,8 @@
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceSequenceEditor"
             contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="false"
-            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editor1"
-            name="Servicesequence Editor">
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceSequenceEditor"
+            name="Service Sequence Editor">
       </editor>
    </extension>
    <extension
@@ -87,38 +87,149 @@
                filter="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.InputPrimitiveFilter"
                id="property.section.inputPrimitive"
                tab="property.tab.inputPrimitive">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.OutputPrimitiveSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.OutputPrimitiveFilter"
                id="property.section.outputPrimitive"
                tab="property.tab.outputPrimitive">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.TransactionSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.TransactionFilter"
                id="property.section.transaction"
                tab="property.tab.transaction">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.TransactionEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction">
-            </input>
          </propertySection>
       </propertySections>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.ExpandServiceSequenceHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.RunServiceSequenceHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.RecordServiceSequenceHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
+            name="Expand/Collapse Service Sequence">
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
+            name="Run Service Sequence">
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
+            name="Record Service Sequence">
+      </command>      
+   </extension>
+   <extension
+           point="org.eclipse.ui.menus">
+	<menuContribution
+         locationURI="popup:org.eclipse.ui.popup.any?after=editGroup">  
+      <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
+            label="Expand Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="false">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+        		
+            		</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
+            label="Run Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="false">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+        		
+            		</with>
+            </visibleWhen>
+       </command>
+	</menuContribution> 
+	<menuContribution
+            locationURI="menu:navigate?after=additions">
+    <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
+            label="Expand Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="false">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+        		
+            		</with>
+            </visibleWhen>
+       </command>
+   	</menuContribution> 
+   <menuContribution
+            locationURI="menu:org.eclipse.4diac.ide.source.menu">
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
+            label="Run Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="true">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+            		</with>
+            </visibleWhen>
+       </command>
+	       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
+            label="Record Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="true">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+            		</with>
+            </visibleWhen>
+       </command>
+	</menuContribution> 
+   </extension>
 </plugin>

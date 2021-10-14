@@ -42,68 +42,70 @@ import org.eclipse.swt.widgets.Display;
 public abstract class TemplateExportFilter extends ExportFilter {
 
 	// Prepare the button labels
-	private static final String MERGE_LABEL_STRING = "Merge";
-	private static final String OVERWRITE_LABEL_STRING = "Overwrite";
 	private static final String[] BUTTON_LABELS = new String[] { //
-			OVERWRITE_LABEL_STRING, //
-			MERGE_LABEL_STRING, //
+			Messages.TemplateExportFilter_OVERWRITE_LABEL_STRING, //
+			Messages.TemplateExportFilter_MERGE_LABEL_STRING, //
 			JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY)//
 	};
 
 	// extract the button ids from the label-array (avoid magic numbers)
-	private static final int BUTTON_OVERWRITE = Arrays.asList(BUTTON_LABELS).indexOf(OVERWRITE_LABEL_STRING);
-	private static final int BUTTON_MERGE = Arrays.asList(BUTTON_LABELS).indexOf(MERGE_LABEL_STRING);
+	private static final int BUTTON_OVERWRITE = Arrays.asList(BUTTON_LABELS)
+			.indexOf(Messages.TemplateExportFilter_OVERWRITE_LABEL_STRING);
+	private static final int BUTTON_MERGE = Arrays.asList(BUTTON_LABELS)
+			.indexOf(Messages.TemplateExportFilter_MERGE_LABEL_STRING);
 
-	public TemplateExportFilter() {
+	protected TemplateExportFilter() {
 	}
 
-	private static final String PREFIX_ERRORMESSAGE_WITH_TYPENAME = "{0}: {1}";
-
-	private static List<String> reformat(LibraryElement type, List<String> messages) {
+	private static List<String> reformat(final LibraryElement type, final List<String> messages) {
 		return messages.stream().map(
-				v -> (null != type) ? (MessageFormat.format(PREFIX_ERRORMESSAGE_WITH_TYPENAME, type.getName(), v)) : v)
+				v -> (null != type)
+				? (MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
+						type.getName(), v))
+						: v)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public final void export(IFile typeFile, String destination, boolean forceOverwrite) throws ExportException {
+	public final void export(final IFile typeFile, final String destination, final boolean forceOverwrite) throws ExportException {
 		this.export(typeFile, destination, forceOverwrite, null);
 	}
 
-	private String stringsToTextualList(List<String> list) {
-		String textualList = "";
+	@SuppressWarnings("squid:S109")
+	private static String stringsToTextualList(final List<String> list) {
+		String textualList = ""; //$NON-NLS-1$
 		if (list.size() == 1) {
-			textualList = MessageFormat.format("{0}", list.get(0));
+			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_ONE_ELEMENT, list.get(0));
 		} else if (list.size() == 2) {
-			textualList = MessageFormat.format("{0} and {1}", list.get(0), list.get(1));
+			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_TWO_ELEMENTS, list.get(0), list.get(1));
 		} else if (list.size() == 3) {
-			textualList = MessageFormat.format("{0}, {1} and {2}", list.get(0), list.get(1), list.get(2));
+			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_THREE_ELEMENTS, list.get(0), list.get(1), list.get(2));
 		} else if (list.size() > 3) {
-			textualList = MessageFormat.format("{0}, {1}, {2}, ...", list.get(0), list.get(1), list.get(2));
+			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_FOUR_OR_MORE_ELEMENTS, list.get(0), list.get(1), list.get(2));
 		}
 		return textualList;
 	}
 
 	@Override
-	public void export(IFile typeFile, String destination, boolean forceOverwrite, LibraryElement type)
+	public void export(final IFile typeFile, final String destination, final boolean forceOverwrite, final LibraryElement type)
 			throws ExportException {
 		try {
 
-			DelayedFiles files = generateFileContent(destination, type);
+			final DelayedFiles files = generateFileContent(destination, type);
 
 			// set a default value for the result of the MessageDialog that does not
 			// conflict with the current state
 			int res = BUTTON_OVERWRITE;
 
 			// check if any of the files to be written are already existent
-			boolean filesExisted = files.exist();
+			final boolean filesExisted = files.exist();
 
 			if (!forceOverwrite && filesExisted) {
 				// create a message dialog to ask about merging if forceOverwrite is not set
-				String msg = MessageFormat.format(
-						"Overwrite {0}?\nMerge will create a backup of the original file and open an editor to merge the files manually!",
+				final String msg = MessageFormat.format(
+						Messages.TemplateExportFilter_OVERWRITE_REQUEST,
 						stringsToTextualList(files.getFilenames()));
-				MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(), "File Exists", null,
+				final MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(), Messages.TemplateExportFilter_FILE_EXISTS, null,
 						msg, MessageDialog.QUESTION_WITH_CANCEL, BUTTON_LABELS, 0);
 
 				res = msgDiag.open();
@@ -111,11 +113,11 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 			// from here on forceOverwrite and the BUTTON_OVERWRITE can be handled the same
 			// way
-			boolean overwrite = forceOverwrite || (BUTTON_OVERWRITE == res);
+			final boolean overwrite = forceOverwrite || (BUTTON_OVERWRITE == res);
 
 			if (overwrite || (BUTTON_MERGE == res)) {
 				// write the files that were prepared
-				Iterable<StoredFiles> writtenFiles = files.write(overwrite);
+				final Iterable<StoredFiles> writtenFiles = files.write(overwrite);
 
 				// check differences of the files using the compare editor
 				if (!overwrite) {
@@ -130,8 +132,8 @@ public abstract class TemplateExportFilter extends ExportFilter {
 		}
 	}
 
-	private DelayedFiles generateFileContent(String destination, LibraryElement type) throws ExportException {
-		DelayedFiles files = new DelayedFiles();
+	private DelayedFiles generateFileContent(final String destination, final LibraryElement type) throws ExportException {
+		final DelayedFiles files = new DelayedFiles();
 
 		final Path destinationPath = Paths.get(destination);
 		final Set<? extends IExportTemplate> templates = this.getTemplates(type);
@@ -151,13 +153,13 @@ public abstract class TemplateExportFilter extends ExportFilter {
 		return files;
 	}
 
-	private static void openMergeEditor(Iterable<StoredFiles> writtenFiles) throws ExportException {
-		boolean diffs = false;
-		ICompareEditorOpener opener = CompareEditorOpenerUtil.getOpener();
+	private static void openMergeEditor(final Iterable<StoredFiles> writtenFiles) throws ExportException {
+		final ICompareEditorOpener opener = CompareEditorOpenerUtil.getOpener();
 		if (null == opener) {
-			throw new ExportException("Unable to create merge editor. Files have been written to disk.");
+			throw new ExportException(Messages.TemplateExportFilter_MERGE_EDITOR_FAILED);
 		}
-		for (StoredFiles sf : writtenFiles) {
+		boolean diffs = false;
+		for (final StoredFiles sf : writtenFiles) {
 			if ((null != sf.getNewFile()) && (null != sf.getOldFile())) {
 				opener.setName(sf.getNewFile().getName());
 				opener.setTitle(sf.getNewFile().getName());
@@ -172,11 +174,11 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 		if (!diffs) {
 			// there were no differences - inform the user
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No Differences",
-					"There where no differences between the orignal file and the newly generated one!");
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(), Messages.TemplateExportFilter_NO_DIFFERENCES_TITLE,
+					Messages.TemplateExportFilter_NO_DIFFERENCES_MESSAGE);
 		}
 	}
 
-	protected abstract Set<? extends IExportTemplate> getTemplates(LibraryElement type);
+	protected abstract Set<IExportTemplate> getTemplates(LibraryElement type);
 
 }

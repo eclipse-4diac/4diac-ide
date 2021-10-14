@@ -32,7 +32,7 @@ public class CreateMemberVariableCommand extends CreateVariableCommand {
 	 * @param struct          the structured type that gets a new member
 	 */
 	public CreateMemberVariableCommand(final StructuredType struct) {
-		super(struct, struct.getMemberVariables().size() == 0 ? 0 : struct.getMemberVariables().size() - 1, null, null);
+		super(struct, struct.getMemberVariables().isEmpty() ? 0 : struct.getMemberVariables().size() - 1, null, null);
 	}
 
 	/**

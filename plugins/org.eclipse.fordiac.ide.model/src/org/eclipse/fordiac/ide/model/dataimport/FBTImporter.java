@@ -2,6 +2,7 @@
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2018 TU Wien/ACIN
  * 				 2020 Johannes Kepler University, Linz
+ *               2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +16,7 @@
  *  Peter Gsellmann - incorporating simple fb
  *  Alois Zoitl - Changed XML parsing to Staxx cursor interface for improved
  *  			  parsing performance
+ *  Martin Melik Merkumians - added import of internal FBs
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -31,6 +33,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -46,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -544,12 +548,12 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException
 	 */
-	private void parseST(final STAlgorithm st) throws TypeImportException, XMLStreamException {
+	private void parseST(final STAlgorithm st) throws XMLStreamException {
 		parseAlgorithmText(st);
 		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
 	}
 
-	private void parseAlgorithmText(final TextAlgorithm alg) throws TypeImportException, XMLStreamException {
+	private void parseAlgorithmText(final TextAlgorithm alg) throws XMLStreamException {
 		final String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
 		if (null != text) {
 			alg.setText(text);
@@ -736,6 +740,19 @@ public class FBTImporter extends TypeImporter {
 				type.getInternalVars().add(v);
 				return true;
 			}
+			if (LibraryElementTags.FB_ELEMENT.equals(name)) {
+				final FB fb = LibraryElementFactory.eINSTANCE.createFB();
+				readNameCommentAttributes(fb);
+				final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+				final FBTypePaletteEntry entry = getTypeEntry(typeFbElement);
+				if (null != entry) {
+					fb.setPaletteEntry(entry);
+					fb.setInterface(fb.getType().getInterfaceList().copy());
+					parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
+					type.getInternalFbs().add(fb);
+					return true;
+				}
+			}
 			return false;
 		});
 	}
@@ -845,8 +862,8 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException
 	 */
-	private void parseAdapterList(final EList<AdapterDeclaration> adpaterList, final String adpaterListName, final boolean isInput)
-			throws TypeImportException, XMLStreamException {
+	private void parseAdapterList(final EList<AdapterDeclaration> adpaterList, final String adpaterListName,
+			final boolean isInput) throws TypeImportException, XMLStreamException {
 		processChildren(adpaterListName, name -> {
 			if (LibraryElementTags.ADAPTER_DECLARATION_ELEMENT.equals(name)) {
 				final AdapterDeclaration a = parseAdapterDeclaration();
@@ -870,7 +887,7 @@ public class FBTImporter extends TypeImporter {
 
 	private void addAdapterEventOutputs(final EList<Event> eventOutputs, final AdapterDeclaration a) {
 		for (final Event event : eventOutputs) {
-			final AdapterEvent ae = ImportUtils.createAdapterEvent(event, a);
+			final AdapterEvent ae = createAdapterEvent(event, a);
 			outputEvents.put(ae.getName(), ae);
 		}
 
@@ -878,9 +895,18 @@ public class FBTImporter extends TypeImporter {
 
 	private void addAdapterEventInputs(final EList<Event> eventInputs, final AdapterDeclaration a) {
 		for (final Event event : eventInputs) {
-			final AdapterEvent ae = ImportUtils.createAdapterEvent(event, a);
+			final AdapterEvent ae = createAdapterEvent(event, a);
 			inputEvents.put(ae.getName(), ae);
 		}
+	}
+
+	private static AdapterEvent createAdapterEvent(final Event event, final AdapterDeclaration a) {
+		final AdapterEvent ae = LibraryElementFactory.eINSTANCE.createAdapterEvent();
+		ae.setName(event.getName());
+		ae.setComment(event.getComment());
+		ae.setAdapterDeclaration(a);
+
+		return ae;
 	}
 
 	/**
@@ -915,6 +941,16 @@ public class FBTImporter extends TypeImporter {
 		final PositionableElement pos = LibraryElementFactory.eINSTANCE.createPositionableElement();
 		getXandY(pos);
 		adapterPositions.put(a.getName(), pos);
+
+		processChildren(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT, name -> {
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
+				parseGenericAttributeNode(a);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			}
+			return false;
+		});
+
 		proceedToEndElementNamed(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
 		return a;
 	}
@@ -974,15 +1010,21 @@ public class FBTImporter extends TypeImporter {
 		final List<String> withVars = new ArrayList<>();
 
 		processChildren(eventName, name -> {
-			if (LibraryElementTags.WITH_ELEMENT.equals(name)) {
+			switch (name) {
+			case LibraryElementTags.WITH_ELEMENT:
 				final String val = getAttributeValue(LibraryElementTags.VAR_ATTRIBUTE);
 				if (null != val) {
 					withVars.add(val);
 				}
 				proceedToEndElementNamed(LibraryElementTags.WITH_ELEMENT);
 				return true;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(e);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			default:
+				return false;
 			}
-			return false;
 		});
 
 		if (!withVars.isEmpty()) {

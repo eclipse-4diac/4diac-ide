@@ -16,8 +16,8 @@
 package org.eclipse.fordiac.ide.monitoring.views;
 
 import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesContentProvider;
@@ -37,21 +37,30 @@ import org.eclipse.ui.part.ViewPart;
 public class WatchesView extends ViewPart {
 
 	private FilteredTree filteredTree;
+	private final WatchesContentProvider provider = new WatchesContentProvider();
 
-	private IMonitoringListener listener = new IMonitoringListener() {
+	private final IMonitoringListener listener = new IMonitoringListener() {
 
 		@Override
-		public void notifyTriggerEvent(PortElement port) {
+		public void notifyTriggerEvent(final PortElement port) {
 			// currently nothing to do
 		}
 
 		@Override
-		public void notifyRemovePort(PortElement port) {
+		public void notifyRemovePort(final PortElement port) {
 			filteredTree.getViewer().refresh();
 		}
 
 		@Override
-		public void notifyAddPort(PortElement port) {
+		public void notifyAddPort(final PortElement port) {
+			if (!filteredTree.isDisposed()) {
+				filteredTree.getViewer().refresh();
+			}
+		}
+
+		@Override
+		public void notifyWatchesChanged() {
+			provider.update();
 			if (!filteredTree.isDisposed()) {
 				filteredTree.getViewer().refresh();
 			}
@@ -59,14 +68,14 @@ public class WatchesView extends ViewPart {
 	};
 
 	@Override
-	public void createPartControl(Composite parent) {
-		Composite root = new Composite(parent, SWT.NONE);
+	public void createPartControl(final Composite parent) {
+		final Composite root = new Composite(parent, SWT.NONE);
 		root.setLayout(new GridLayout());
-		PatternFilter patternFilter = new PatternFilter();
+		final PatternFilter patternFilter = new PatternFilter();
 
 		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL, patternFilter, true, true);
 
-		GridData treeGridData = new GridData();
+		final GridData treeGridData = new GridData();
 		treeGridData.grabExcessHorizontalSpace = true;
 		treeGridData.grabExcessVerticalSpace = true;
 		treeGridData.horizontalAlignment = SWT.FILL;
@@ -74,37 +83,44 @@ public class WatchesView extends ViewPart {
 
 		filteredTree.setLayoutData(treeGridData);
 
-		TreeViewerColumn column1 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		final TreeViewerColumn column1 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
 		column1.getColumn().setText("Watched Element");
 		column1.getColumn().setWidth(340);
-		TreeViewerColumn column2 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		final TreeViewerColumn column2 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
 		column2.getColumn().setText("Value");
 		column2.getColumn().setWidth(100);
 		column2.setEditingSupport(new EditingSupport(column2.getViewer()) {
 
 			@Override
-			protected void setValue(Object element, Object value) {
-				if ((element instanceof MonitoringElement)
-						&& (((MonitoringElement) element).getPort().getInterfaceElement() instanceof VarDeclaration)) {
-					MonitoringManager.getInstance().writeValue((MonitoringElement) element, (String) value);
+			protected void setValue(final Object element, final Object value) {
+				if (element instanceof WatchValueTreeNode) {
+					final MonitoringBaseElement monitoringBaseElement = ((WatchValueTreeNode) element)
+							.getMonitoringBaseElement();
+					MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement,
+							(String) value);
 				}
+
 			}
 
 			@Override
-			protected Object getValue(Object element) {
-				if (element instanceof MonitoringElement) {
-					return ((MonitoringElement) element).getCurrentValue();
+			protected Object getValue(final Object element) {
+				if (element instanceof WatchValueTreeNode) {
+					return ((WatchValueTreeNode) element).getValue();
 				}
 				return ""; //$NON-NLS-1$
 			}
 
 			@Override
-			protected CellEditor getCellEditor(Object element) {
+			protected CellEditor getCellEditor(final Object element) {
 				return new TextCellEditor(filteredTree.getViewer().getTree());
 			}
 
 			@Override
-			protected boolean canEdit(Object element) {
+			protected boolean canEdit(final Object element) {
+				// TODO REMOVE that check after forcing is possible
+				if (element instanceof WatchValueTreeNode && ((WatchValueTreeNode) element).isStructNode()) {
+					return ((WatchValueTreeNode) element).isStructRootNode();
+				}
 				return true;
 			}
 		});
@@ -112,7 +128,8 @@ public class WatchesView extends ViewPart {
 		filteredTree.getViewer().getTree().setHeaderVisible(true);
 		filteredTree.getViewer().getTree().setLinesVisible(true);
 
-		filteredTree.getViewer().setContentProvider(new WatchesContentProvider());
+		filteredTree.getViewer().setContentProvider(provider);
+
 		filteredTree.getViewer().setLabelProvider(new WatchesLabelProvider());
 		filteredTree.getViewer().setInput(new Object());
 
@@ -120,12 +137,12 @@ public class WatchesView extends ViewPart {
 	}
 
 	private void addWatchesAdapters() {
-		MonitoringManager.getInstance().addWatchesAdapter(listener);
+		MonitoringManager.getInstance().addMonitoringListener(listener);
 	}
 
 	@Override
 	public void dispose() {
-		MonitoringManager.getInstance().removeWatchesAdapter(listener);
+		MonitoringManager.getInstance().removeMonitoringListener(listener);
 		super.dispose();
 	}
 

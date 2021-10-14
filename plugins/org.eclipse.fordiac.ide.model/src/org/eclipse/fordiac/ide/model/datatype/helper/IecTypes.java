@@ -35,9 +35,11 @@ import org.eclipse.fordiac.ide.model.data.CharType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
+import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.DintType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
 import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LintType;
 import org.eclipse.fordiac.ide.model.data.LrealType;
@@ -90,6 +92,8 @@ public final class IecTypes {
 		public static final CharType CHAR = DataFactory.eINSTANCE.createCharType();
 		public static final WcharType WCHAR = DataFactory.eINSTANCE.createWcharType();
 
+		public static final DateType DATE = DataFactory.eINSTANCE.createDateType();
+		public static final LdateType LDATE = DataFactory.eINSTANCE.createLdateType();
 		public static final DateAndTimeType DATE_AND_TIME = DataFactory.eINSTANCE.createDateAndTimeType();
 		public static final LdtType LDT = DataFactory.eINSTANCE.createLdtType();
 		public static final TimeOfDayType TIME_OF_DAY = DataFactory.eINSTANCE.createTimeOfDayType();
@@ -124,15 +128,28 @@ public final class IecTypes {
 			CHAR.setName(FordiacKeywords.CHAR);
 			WCHAR.setName(FordiacKeywords.WCHAR);
 
+			DATE.setName(FordiacKeywords.DATE);
+			LDATE.setName(FordiacKeywords.LDATE);
 			DATE_AND_TIME.setName(FordiacKeywords.DATE_AND_TIME);
-			LDT.setName(FordiacKeywords.LDT);
+			LDT.setName(FordiacKeywords.LDATE_AND_TIME);
 			TIME_OF_DAY.setName(FordiacKeywords.TIME_OF_DAY);
-			LTOD.setName(FordiacKeywords.LTOD);
+			LTOD.setName(FordiacKeywords.LTIME_OF_DAY);
 		}
 
 		public static DataType[] getAllElementaryType() {
 			return new DataType[] { REAL, LREAL, USINT, UINT, UDINT, ULINT, SINT, INT, DINT, LINT, TIME, LTIME, BOOL,
-					BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE_AND_TIME, LDT, TIME_OF_DAY, LTOD };
+					BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE, LDATE, DATE_AND_TIME, LDT,
+					TIME_OF_DAY, LTOD };
+		}
+
+		public static DataType getTypeByName(final String name) {
+			final var allElementaryTypes = getAllElementaryType();
+			for (final DataType type : allElementaryTypes) {
+				if (type.getName().equalsIgnoreCase(name)) {
+					return type;
+				}
+			}
+			return null;
 		}
 
 		private ElementaryTypes() {

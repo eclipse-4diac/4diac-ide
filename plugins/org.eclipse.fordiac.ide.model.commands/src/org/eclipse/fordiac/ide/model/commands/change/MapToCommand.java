@@ -25,9 +25,11 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -73,17 +75,13 @@ public class MapToCommand extends Command {
 		return supports;
 	}
 
-	private boolean deviceSupportsType() {
+	private static boolean deviceSupportsType() {
 		return true;
 	}
 
-	/**
-	 * Steps needed for the mapping command: 1. If already mapped create unmapp
-	 * command and execute it 2. Create FB in target FBNetwork (use FBnetwork create
-	 * command) 3. Create Mapping entry 4. Determine list of connections that need
-	 * to be created in target FBNetwork 5. Execute the create connection command
-	 * for these
-	 */
+	/** Steps needed for the mapping command: 1. If already mapped create unmapp command and execute it 2. Create FB in
+	 * target FBNetwork (use FBnetwork create command) 3. Create Mapping entry 4. Determine list of connections that
+	 * need to be created in target FBNetwork 5. Execute the create connection command for these */
 	@Override
 	public void execute() {
 		if (srcElement.isMapped()) {
@@ -100,14 +98,12 @@ public class MapToCommand extends Command {
 		getAutomationSystem().getMapping().add(mapping);
 
 		checkConnections();
+
 		createdConnections.execute();
 	}
 
-	/**
-	 * Steps 1. handle broken and unbroken connections 2. for each connection create
-	 * command -> execute undo 3. for FBcreate command -> execute undo 4. remove
-	 * mapping entry 5. if unmapp command is not null -> execute undo
-	 */
+	/** Steps 1. handle broken and unbroken connections 2. for each connection create command -> execute undo 3. for
+	 * FBcreate command -> execute undo 4. remove mapping entry 5. if unmapp command is not null -> execute undo */
 	@Override
 	public void undo() {
 		createdConnections.undo();
@@ -123,11 +119,8 @@ public class MapToCommand extends Command {
 		}
 	}
 
-	/**
-	 * Steps 1. if unmapp command is not null -> execute redo 2. for FBcreate
-	 * command -> execute redo 3. readd mapping entry 3. for each connection create
-	 * command -> execute redo 4. handle broken and unbroken connections
-	 */
+	/** Steps 1. if unmapp command is not null -> execute redo 2. for FBcreate command -> execute redo 3. readd mapping
+	 * entry 3. for each connection create command -> execute redo 4. handle broken and unbroken connections */
 	@Override
 	public void redo() {
 		if (null != unmappFromExistingTarget) {
@@ -170,10 +163,15 @@ public class MapToCommand extends Command {
 	}
 
 	private FBNetworkElement createTargetTypedSubApp() {
+		if (srcElement instanceof SubApp) {
+			FBNetworkHelper.loadSubappNetwork(srcElement);
+		}
+
 		final CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
 				(SubApplicationTypePaletteEntry) srcElement.getPaletteEntry(), getTargetFBNetwork(),
 				srcElement.getPosition().getX(), srcElement.getPosition().getY());
 		cmd.execute();
+
 		return cmd.getSubApp();
 	}
 
@@ -213,7 +211,9 @@ public class MapToCommand extends Command {
 
 	private void checkConnections() {
 		for (final IInterfaceElement interfaceElement : srcElement.getInterface().getAllInterfaceElements()) {
-			if (interfaceElement.isIsInput()) {
+			if (interfaceElement instanceof ErrorMarkerInterface) {
+				// Error marker do not get mapped
+			} else if (interfaceElement.isIsInput()) {
 				checkInputConnections(interfaceElement);
 			} else {
 				checkOutputConnections(interfaceElement);
@@ -224,11 +224,12 @@ public class MapToCommand extends Command {
 	private void checkInputConnections(final IInterfaceElement interfaceElement) {
 		for (final Connection connection : interfaceElement.getInputConnections()) {
 			final Resource res = connection.getSourceElement().getResource();
-			if (resource.equals(res)) {
+			if (resource.equals(res) && !(connection.getSource() instanceof ErrorMarkerInterface)) {
 				// we need to create a connection in the target resource
+				// connections to error markers will not get mapped
 				addConnectionCreateCommand(
 						connection.getSourceElement().getOpposite()
-						.getInterfaceElement(connection.getSource().getName()),
+								.getInterfaceElement(connection.getSource().getName()),
 						targetElement.getInterfaceElement(interfaceElement.getName()));
 			}
 		}
@@ -238,8 +239,9 @@ public class MapToCommand extends Command {
 		for (final Connection connection : interfaceElement.getOutputConnections()) {
 			if (!isSelfConnection(connection)) { // leave self-connection to be handled by the inputs
 				final Resource res = connection.getDestinationElement().getResource();
-				if (resource.equals(res)) {
+				if (resource.equals(res) && !(connection.getDestination() instanceof ErrorMarkerInterface)) {
 					// we need to create a connection in the target resource
+					// connections to error markers will not get mapped
 					final IInterfaceElement destination = connection.getDestinationElement().getOpposite()
 							.getInterfaceElement(connection.getDestination().getName());
 					addConnectionCreateCommand(targetElement.getInterfaceElement(interfaceElement.getName()),
@@ -252,7 +254,7 @@ public class MapToCommand extends Command {
 		}
 	}
 
-	private boolean isSelfConnection(final Connection connection) {
+	private static boolean isSelfConnection(final Connection connection) {
 		return connection.getSourceElement() == connection.getDestinationElement();
 	}
 
@@ -287,44 +289,32 @@ public class MapToCommand extends Command {
 
 	// This code is here to serve as template for handling the connections to be
 	// deleted
-	/*
-	 * public void oldExecute() { boolean deletedConnections = false;
+	/* public void oldExecute() { boolean deletedConnections = false;
 	 *
-	 * uiResourceEditor.getResourceElement().getFBNetwork().getMappedFBs().add(
-	 * mappedFBView.getFb());
+	 * uiResourceEditor.getResourceElement().getFBNetwork().getMappedFBs().add( mappedFBView.getFb());
 	 *
-	 * for (InterfaceElementView interfaceElement : fbView.getInterfaceElements()) {
-	 * for (ConnectionView connectionView : interfaceElement.getInConnections()) {
-	 * if (connectionView.getSource().eContainer() instanceof FBView) { FBView
-	 * sourceFBView = ((FBView)
-	 * connectionView.getSource().eContainer()).getMappedFB(); if (sourceFBView !=
-	 * null && sourceFBView.getFb().getResource()
-	 * .equals(uiResourceEditor.getResourceElement().getFBNetwork())) {
+	 * for (InterfaceElementView interfaceElement : fbView.getInterfaceElements()) { for (ConnectionView connectionView
+	 * : interfaceElement.getInConnections()) { if (connectionView.getSource().eContainer() instanceof FBView) { FBView
+	 * sourceFBView = ((FBView) connectionView.getSource().eContainer()).getMappedFB(); if (sourceFBView != null &&
+	 * sourceFBView.getFb().getResource() .equals(uiResourceEditor.getResourceElement().getFBNetwork())) {
 	 * ConnectionView newConnection = UiFactory.eINSTANCE.createConnectionView();
 	 * newConnection.setConnectionElement(connectionView.getConnectionElement());
-	 * newConnection.setDestination(connectionView.getDestination().
-	 * getMappedInterfaceElement());
-	 * newConnection.setSource(connectionView.getSource().getMappedInterfaceElement(
-	 * )); uiResourceEditor.getConnections().add(newConnection);
+	 * newConnection.setDestination(connectionView.getDestination(). getMappedInterfaceElement());
+	 * newConnection.setSource(connectionView.getSource().getMappedInterfaceElement( ));
+	 * uiResourceEditor.getConnections().add(newConnection);
 	 * ConnectionUtil.addConnectionToResource(newConnection.getConnectionElement(),
-	 * uiResourceEditor.getResourceElement());
-	 * connectionView.getConnectionElement().setBrokenConnection(false);
+	 * uiResourceEditor.getResourceElement()); connectionView.getConnectionElement().setBrokenConnection(false);
 	 * System.out.println("notBroken: " + connectionView);
 	 *
-	 * for (ConnectionView temp :
-	 * connectionView.getSource().getMappedInterfaceElement() .getOutConnections())
-	 * { System.out.println( "Is Resource Connection " +
-	 * temp.getConnectionElement().isResourceConnection()); if
-	 * (temp.getConnectionElement().isResourceConnection()) {
-	 * DeleteConnectionCommand deleteCMD = new DeleteConnectionCommand(temp);
-	 * deleteCMD.execute(); deletedConnections = true; } } } else {
+	 * for (ConnectionView temp : connectionView.getSource().getMappedInterfaceElement() .getOutConnections()) {
+	 * System.out.println( "Is Resource Connection " + temp.getConnectionElement().isResourceConnection()); if
+	 * (temp.getConnectionElement().isResourceConnection()) { DeleteConnectionCommand deleteCMD = new
+	 * DeleteConnectionCommand(temp); deleteCMD.execute(); deletedConnections = true; } } } else {
 	 * System.out.println("isBroken: " + connectionView);
-	 * connectionView.getConnectionElement().setBrokenConnection(true); // nothing
-	 * to do } } } } if (deletedConnections) { MessageBox informUser = new
-	 * MessageBox(Display.getDefault().getActiveShell());
-	 * informUser.setText("Warning"); informUser.setMessage(
-	 * "Remapping required deletion of Connections added within the Resource - please check your network"
-	 * ); informUser.open(); // TODO check whether markers could be used! } }
-	 */
+	 * connectionView.getConnectionElement().setBrokenConnection(true); // nothing to do } } } } if (deletedConnections)
+	 * { MessageBox informUser = new MessageBox(Display.getDefault().getActiveShell()); informUser.setText("Warning");
+	 * informUser.setMessage(
+	 * "Remapping required deletion of Connections added within the Resource - please check your network" );
+	 * informUser.open(); // TODO check whether markers could be used! } } */
 
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2013 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,25 +24,27 @@ public class FordiacNature implements IProjectNature {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.resources.IProjectNature#configure()
 	 */
 	@Override
 	public void configure() throws CoreException {
+		// currently nothing to be done here
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.resources.IProjectNature#deconfigure()
 	 */
 	@Override
 	public void deconfigure() throws CoreException {
+		// currently nothing to be done here
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.resources.IProjectNature#getProject()
 	 */
 	@Override
@@ -52,7 +54,7 @@ public class FordiacNature implements IProjectNature {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.resources.IProjectNature#setProject(org.eclipse.core.
 	 * resources.IProject)
 	 */

@@ -45,18 +45,18 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	@Override
-	public Image getImage(Object element) {
+	public Image getImage(final Object element) {
 		if (element instanceof IFile) {
 			return getImageForFile((IFile) element);
 		}
 		return super.getImage(element);
 	}
 
-	public static Image getImageForFile(IFile element) {
+	public static Image getImageForFile(final IFile element) {
 		Image image = null;
 
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			image = FordiacImage.ICON_ADAPTER.getImage();
+			image = FordiacImage.ICON_ADAPTER_TYPE.getImage();
 		} else if (TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
 			image = FordiacImage.ICON_SUB_APP_TYPE.getImage();
 		} else if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
@@ -70,8 +70,8 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		return image;
 	}
 
-	private static Image getImageForFBTypeFile(IFile element) {
-		FBType type = getFBTypeFromFile(element);
+	private static Image getImageForFBTypeFile(final IFile element) {
+		final FBType type = getFBTypeFromFile(element);
 
 		if (type instanceof BasicFBType) {
 			return FordiacImage.ICON_BASIC_FB.getImage();
@@ -87,17 +87,19 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		return checkUnloadedFBType(element);
 	}
 
-	private static boolean fileHasProblems(IFile element) {
+	private static boolean fileHasProblems(final IFile element) {
 		IMarker[] problems = null;
-		try {
-			problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-		} catch (CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+		if (element.exists()) {
+			try {
+				problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			} catch (final CoreException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+			}
 		}
 		return ((null != problems) && (0 < problems.length));
 	}
 
-	private static Image checkUnloadedFBType(IFile element) {
+	private static Image checkUnloadedFBType(final IFile element) {
 		Image image = null;
 		try (Scanner scanner = new Scanner(element.getContents())) {
 			if (null != scanner.findWithinHorizon("BasicFB", 0)) { //$NON-NLS-1$
@@ -115,7 +117,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 
@@ -123,14 +125,14 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 		if (element instanceof IFile) {
 			return getTextForFBFile((IFile) element);
 		}
 		return super.getText(element);
 	}
 
-	private static String getTextForFBFile(IFile element) {
+	private static String getTextForFBFile(final IFile element) {
 		String text = null;
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
@@ -141,14 +143,14 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	@Override
-	public String getDescription(Object anElement) {
+	public String getDescription(final Object anElement) {
 		if (anElement instanceof IFile) {
 			return getDescriptionForFBFile((IFile) anElement);
 		}
 		return null;
 	}
 
-	private static String getDescriptionForFBFile(IFile fbtFile) {
+	private static String getDescriptionForFBFile(final IFile fbtFile) {
 		FBType type = null;
 		if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())) {
 			type = getFBTypeFromFile(fbtFile);
@@ -162,7 +164,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		return null;
 	}
 
-	private static String generateTypeDescriptionString(FBType type) {
+	private static String generateTypeDescriptionString(final FBType type) {
 		String description = type.getName() + ": "; //$NON-NLS-1$
 		if (null != type.getComment()) {
 			description += type.getComment();
@@ -170,16 +172,16 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		return description;
 	}
 
-	private static FBType getAdapterTypeForFile(IFile file) {
-		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
+	private static FBType getAdapterTypeForFile(final IFile file) {
+		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (entry instanceof AdapterTypePaletteEntry) {
 			return ((AdapterTypePaletteEntry) entry).getType().getAdapterFBType();
 		}
 		return null;
 	}
 
-	private static FBType getFBTypeFromFile(IFile file) {
-		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
+	private static FBType getFBTypeFromFile(final IFile file) {
+		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (entry instanceof FBTypePaletteEntry) {
 			return ((FBTypePaletteEntry) entry).getFBType();
 		}

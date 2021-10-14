@@ -26,11 +26,12 @@ public class UnmapAllHandler extends UnmapHandler {
 	protected List<?> getSelectedElements(Object evaluationContext) {
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_EDITOR_NAME);
-		final FBNetwork fbnetwork = editor.getAdapter(FBNetwork.class);
-		if (null != fbnetwork) {
-			return fbnetwork.getNetworkElements();
+		if (editor != null) { // check needed for command quick search
+			final FBNetwork fbnetwork = editor.getAdapter(FBNetwork.class);
+			if (null != fbnetwork) {
+				return fbnetwork.getNetworkElements();
+			}
 		}
 		return Collections.emptyList();
 	}
 }
-

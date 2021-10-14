@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,21 +11,27 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Extract export process into own class for better code
+ *                 readability and addressing several sonar issues
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.ui.wizard;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Activator;
 import org.eclipse.fordiac.ide.export.ui.Messages;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -48,12 +55,13 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	private static final String FORDIAC_EXPORT_SECTION = "4DIAC_EXPORT_SECTION"; //$NON-NLS-1$
 
 	private IStructuredSelection selection;
+	private SelectFBTypesWizardPage page;
 
-	/**
-	 * Instantiates a new fordiac export wizard.
-	 */
-	public FordiacExportWizard() {
-		IDialogSettings settings = Activator.getDefault().getDialogSettings();
+	@Override
+	public void init(final IWorkbench workbench, final IStructuredSelection currentSelection) {
+		final List<IResource> selectedResources = IDE.computeSelectedResources(currentSelection);
+		this.selection = new StructuredSelection(selectedResources);
+		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
 
 		if (null == settings.getSection(FORDIAC_EXPORT_SECTION)) {
 			// section does not exist create a section
@@ -63,13 +71,6 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		setWindowTitle(Messages.FordiacExportWizard_LABEL_Window_Title);
 	}
 
-	private SelectFBTypesWizardPage page;
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.jface.wizard.Wizard#addPages()
-	 */
 	@Override
 	public void addPages() {
 		super.addPages();
@@ -80,96 +81,116 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		addPage(page);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
-	 */
 	@Override
 	public boolean performFinish() {
 		page.saveWidgetValues();
 
-		final IConfigurationElement conf;
-		final IExportFilter filter;
+		final Exporter exporter = new Exporter(page.getSelectedExportFilter(), collectExportees(), page.getDirectory(),
+				page.overwriteWithoutWarning());
 		try {
-			conf = page.getSelectedExportFilter();
-			filter = (IExportFilter) conf.createExecutableExtension(Messages.FordiacExportWizard_Class);
-		} catch (CoreException e) {
-			MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-			msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
-			msg.open();
-			Activator.getDefault().logError(msg.getMessage(), e);
-			return true;
-		}
-
-		IRunnableWithProgress op = monitor -> {
-			@SuppressWarnings("unchecked")
-			List<IFile> resources = page.getSelectedResources();
-			String outputDirectory = page.getDirectory();
-
-			List<LibraryElement> exportees = resources.parallelStream().filter(object -> object instanceof IFile)
-					.map(exportee -> TypeLibrary.getPaletteEntryForFile(exportee).getType())
-					.collect(Collectors.toList());
-
-			if (page.enableCMakeLists()) {
-				exportees.add(new CMakeListsMarker());
-			}
-
-			monitor.beginTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingSelectedTypesUsingExporter,
-					conf.getAttribute("name")), resources.size()); //$NON-NLS-1$
-
-			for (LibraryElement type : exportees) {
-
-				try {
-					if (type instanceof CMakeListsMarker) {
-						monitor.subTask("Exporting CMakeLists.txt");
-						filter.export(null, outputDirectory, page.overwriteWithoutWarning(), type);
-					} else {
-						monitor.subTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingType,
-								type.getPaletteEntry().getLabel()));
-						filter.export(type.getPaletteEntry().getFile(), outputDirectory, page.overwriteWithoutWarning(),
-								type);
-					}
-
-				} catch (ExportException e) {
-					MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-					msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
-					msg.open();
-				}
-
-				monitor.worked(1);
-
-			}
-
-			monitor.done();
-
-		};
-
-		try {
-			new ProgressMonitorDialog(getShell()).run(false, false, op);
-		} catch (Exception e) {
-			MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-			msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
-			msg.open();
-		}
-
-		if ((!filter.getErrors().isEmpty()) || (!filter.getWarnings().isEmpty())) {
-			new ExportStatusMessageDialog(getShell(), filter.getWarnings(), filter.getErrors()).open();
+			new ProgressMonitorDialog(getShell()).run(false, false, exporter);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();  // mark interruption
+			showExceptionErrorDialog(e);
+		} catch (final Exception e) {
+			showExceptionErrorDialog(e);
 		}
 
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
-	 * org.eclipse.jface.viewers.IStructuredSelection)
-	 */
-	@Override
-	public void init(final IWorkbench workbench, final IStructuredSelection currentSelection) {
-		List<IResource> selectedResources = IDE.computeSelectedResources(currentSelection);
-		this.selection = new StructuredSelection(selectedResources);
+	protected static void showExceptionErrorDialog(final Exception e) {
+		Activator.getDefault().logError(e.getMessage(), e);
+		final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
+		msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
+		msg.open();
+	}
+
+	private final List<LibraryElement> collectExportees() {
+		final List<Object> resources = page.getSelectedResources();
+		final List<LibraryElement> exportees = resources.parallelStream().filter(IFile.class::isInstance)
+				.map(exportee -> TypeLibrary.getPaletteEntryForFile((IFile) exportee)).filter(Objects::nonNull)
+				.map(PaletteEntry::getType)
+				.collect(Collectors.toList());
+
+		if (page.enableCMakeLists()) {
+			exportees.add(new CMakeListsMarker());
+		}
+		return exportees;
+	}
+
+	private static class Exporter implements IRunnableWithProgress {
+
+		private final List<LibraryElement> exportees;
+		private final String outputDirectory;
+		private final IConfigurationElement conf;
+		private final boolean overwriteWithoutWarning;
+
+		public Exporter(final IConfigurationElement conf, final List<LibraryElement> exportees,
+				final String outputDirectory, final boolean overwriteWithoutWarning) {
+			this.conf = conf;
+			this.exportees = exportees;
+			this.outputDirectory = outputDirectory;
+			this.overwriteWithoutWarning = overwriteWithoutWarning;
+		}
+
+		@Override
+		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+			monitor.beginTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingSelectedTypesUsingExporter,
+					conf.getAttribute("name")), exportees.size()); //$NON-NLS-1$
+
+			final IExportFilter filter = createExportFilter();
+			if (null != filter) {
+				for (final LibraryElement type : exportees) {
+					exportElement(monitor, filter, type);
+					monitor.worked(1);
+				}
+				showErrorWarningSummary(filter);
+			}
+			monitor.done();
+		}
+
+		private void exportElement(final IProgressMonitor monitor, final IExportFilter filter,
+				final LibraryElement type) {
+			try {
+				if (type instanceof CMakeListsMarker) {
+					monitor.subTask(Messages.FordiacExportWizard_ExportingCMakeLists);
+					filter.export(null, outputDirectory, overwriteWithoutWarning, type);
+				} else {
+					monitor.subTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingType,
+							type.getPaletteEntry().getLabel()));
+					filter.export(type.getPaletteEntry().getFile(), outputDirectory, overwriteWithoutWarning,
+							type);
+				}
+
+			} catch (final ExportException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+				final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
+				msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
+				msg.open();
+			}
+		}
+
+		private IExportFilter createExportFilter() {
+			IExportFilter filter = null;
+			try {
+				filter = (IExportFilter) conf.createExecutableExtension("class"); //$NON-NLS-1$
+			} catch (final CoreException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+				final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
+				msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
+				msg.open();
+			}
+			return filter;
+		}
+
+		private static void showErrorWarningSummary(final IExportFilter filter) {
+			if ((!filter.getErrors().isEmpty()) || (!filter.getWarnings().isEmpty())) {
+				new ExportStatusMessageDialog(Display.getDefault().getActiveShell(), filter.getWarnings(),
+						filter.getErrors()).open();
+			}
+		}
+
 	}
 
 }

@@ -26,9 +26,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECState
 import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 
 class BasicFBImplTemplate extends ForteFBTemplate {
 
@@ -52,9 +52,13 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		«generateFBInterfaceSpecDefinition»
 
 		«IF !type.internalVars.isEmpty»
-		  «generateInternalVarDefinition(type)»
-		  
-        «ENDIF»
+		«generateInternalVarDefinition(type)»
+		
+		«ENDIF»
+		«IF !type.internalFbs.isEmpty»
+		
+		«generateInteralFbDeclarations(type)»
+        «ENDIF»	
 		«IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
 		«generateInitialValueAssignmentDefinition(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars)»
 		

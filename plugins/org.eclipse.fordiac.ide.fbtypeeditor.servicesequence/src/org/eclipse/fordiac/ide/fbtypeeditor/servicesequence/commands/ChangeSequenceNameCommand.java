@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014 fortiss GmbH
- * 
+ *               2021 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - clean up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
@@ -17,11 +19,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeSequenceNameCommand extends Command {
-	private ServiceSequence sequence;
-	private String name;
+	private final ServiceSequence sequence;
+	private final String name;
 	private String oldName;
 
-	public ChangeSequenceNameCommand(String name, ServiceSequence sequence) {
+	public ChangeSequenceNameCommand(final String name, final ServiceSequence sequence) {
 		this.sequence = sequence;
 		this.name = name;
 	}
@@ -29,16 +31,20 @@ public class ChangeSequenceNameCommand extends Command {
 	@Override
 	public void execute() {
 		oldName = sequence.getName();
-		redo();
+		setName(name);
 	}
 
 	@Override
 	public void undo() {
-		sequence.setName(oldName);
+		setName(oldName);
 	}
 
 	@Override
 	public void redo() {
+		setName(name);
+	}
+
+	private void setName(final String name) {
 		sequence.setName(name);
 	}
 }

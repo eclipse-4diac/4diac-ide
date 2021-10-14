@@ -25,11 +25,17 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
+import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -48,14 +54,12 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPersistableEditor;
-import org.eclipse.ui.NavigationLocation;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
-public abstract class AbstractBreadCrumbEditor extends MultiPageEditorPart
+public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEditor
 implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker,
 INavigationLocationProvider, IPersistableEditor {
 
@@ -64,7 +68,7 @@ INavigationLocationProvider, IPersistableEditor {
 	private static final String TAG_GRAPHICAL_VIEWER_HOR_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_HOR_SCROLL"; //$NON-NLS-1$
 	private static final String TAG_GRAPHICAL_VIEWER_VER_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_VER_SCROLL"; //$NON-NLS-1$
 
-	private final Map<Object, Integer> modelToEditorNum = new HashMap<>();
+	private Map<Object, Integer> modelToEditorNum = new HashMap<>();
 
 	private BreadcrumbWidget breadcrumb;
 	// the memento we got for recreating the editor state
@@ -121,12 +125,20 @@ INavigationLocationProvider, IPersistableEditor {
 		return pageContainer;
 	}
 
-	void handleBreadCrumbSelection(final Object element) {
+	protected void handleBreadCrumbSelection(final Object element) {
 		final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor).intValue();
 		if (-1 != pagenum) {
 			setActivePage(pagenum);
-			getSite().getPage().getNavigationHistory().markLocation(this);
+			getSite().getPage().getNavigationHistory().markLocation(getNavigationLocationProvider());
 		}
+	}
+
+	protected IEditorPart getNavigationLocationProvider() {
+		// if the breadcrumb editor is embedded into an other editor part this should help
+		if (getSite().getPart() instanceof IEditorPart) {
+			return (IEditorPart) getSite().getPart();
+		}
+		return this;
 	}
 
 	private int createEditor(final Object model) {
@@ -142,7 +154,35 @@ INavigationLocationProvider, IPersistableEditor {
 		return -1;
 	}
 
+	@Override
+	public boolean closeChildEditor(final IEditorPart childEditor) {
+		final int pageIndex = pages.indexOf(childEditor);
+		if (pageIndex != -1) {
+			removePage(pageIndex);
+			updateEditorMapping(pageIndex);
+			return true;
+		}
+		return false;
+	}
 
+	private void updateEditorMapping(final int pageIndex) {
+		final Map<Object, Integer> newModelToEditorNum = new HashMap<>();
+
+		modelToEditorNum.forEach((obj, index) -> {
+			final int intIndex = index.intValue();
+			if (intIndex != pageIndex) {
+				if (intIndex < pageIndex) {
+					// keep the old index entry
+					newModelToEditorNum.put(obj, Integer.valueOf(intIndex));
+				} else {
+					// we where before the removed entry so our index is one lower
+					newModelToEditorNum.put(obj, Integer.valueOf(intIndex - 1));
+				}
+			}
+		});
+
+		modelToEditorNum = newModelToEditorNum;
+	}
 
 	@Override
 	public boolean isDirty() {
@@ -155,7 +195,7 @@ INavigationLocationProvider, IPersistableEditor {
 			return adapter.cast(getCommandStack());
 		}
 		if (adapter == IGotoMarker.class) {
-			return adapter.cast(this);
+			return adapter.cast(getNavigationLocationProvider());
 		}
 		return super.getAdapter(adapter);
 	}
@@ -180,9 +220,39 @@ INavigationLocationProvider, IPersistableEditor {
 			final Map<String, Object> attrs = marker.getAttributes();
 			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(attrs)) {
 				gotoFBNetworkElement(attrs.get(IMarker.LOCATION));
+			} else if (FordiacMarkerHelper.markerTargetsConnection(attrs)) {
+				gotoConnection(marker);
+			} else if (FordiacMarkerHelper.markerTargetsValue(attrs)) {
+				gotoValue(marker);
 			}
 		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
+		}
+	}
+
+	protected void gotoConnection(final IMarker marker) {
+		@SuppressWarnings("boxing")
+		final ErrorMarkerRef errorRef = FordiacMarkerHelper.getMarkerRefById(marker.getId());
+		final FBNetworkElement parent = errorRef instanceof ErrorMarkerInterface
+				? ((ErrorMarkerInterface) errorRef).getFBNetworkElement()
+						: null;
+		selectErrorRef(errorRef, parent);
+	}
+
+	protected void gotoValue(final IMarker marker) {
+		@SuppressWarnings("boxing")
+		final ErrorMarkerRef errorRef = FordiacMarkerHelper.getMarkerRefById(marker.getId());
+		final FBNetworkElement parent = errorRef instanceof Value
+				? ((Value) errorRef).getVarDeclaration().getFBNetworkElement()
+						: null;
+		selectErrorRef(errorRef, parent);
+	}
+
+	private void selectErrorRef(final ErrorMarkerRef errorRef, final FBNetworkElement parent) {
+		if (null != parent) {
+			final EObject toView = parent.eContainer().eContainer();
+			getBreadcrumb().setInput(toView);
+			HandlerHelper.selectElement(errorRef, getActiveEditor());
 		}
 	}
 
@@ -246,10 +316,7 @@ INavigationLocationProvider, IPersistableEditor {
 			final Integer yLocation = memento.getInteger(TAG_GRAPHICAL_VIEWER_VER_SCROLL);
 			if ((null != xLocation) && (yLocation != null)) {
 				// we have to wait to set the scroll position until the editor is drawn and the canvas is setup
-				Display.getDefault().asyncExec(() -> {
-					canvas.scrollTo(xLocation.intValue(), yLocation.intValue());
-				});
-
+				Display.getDefault().asyncExec(() -> canvas.scrollTo(xLocation.intValue(), yLocation.intValue()));
 			}
 		}
 
@@ -274,79 +341,4 @@ INavigationLocationProvider, IPersistableEditor {
 	 *                 model element should be provided
 	 * @return the model element for which the first editor should be shown. */
 	protected abstract Object getInitialModel(String itemPath);
-
-	private static class BreadcrumbNavigationLocation extends NavigationLocation {
-
-		private final Object model;
-		private final AdapterFactoryContentProvider contentProvider;
-		private final AdapterFactoryLabelProvider labelProvider;
-
-		protected BreadcrumbNavigationLocation(final AbstractBreadCrumbEditor editorPart, final Object model) {
-			super(editorPart);
-			this.model = model;
-			contentProvider = editorPart.getBreadcrumb().getContentProvider();
-			labelProvider = editorPart.getBreadcrumb().getLabelProvider();
-		}
-
-		@Override
-		public String getText() {
-			final StringBuilder sb = new StringBuilder();
-			generateItemPath(sb, model, contentProvider, labelProvider);
-			return sb.substring(1);
-		}
-
-		public static void generateItemPath(final StringBuilder sb, final Object model,
-				final AdapterFactoryContentProvider adapterFactoryContentProvider,
-				final AdapterFactoryLabelProvider adapterFactoryLabelProvider) {
-			if (model == null) {
-				return;
-			}
-			generateItemPath(sb, adapterFactoryContentProvider.getParent(model), adapterFactoryContentProvider,
-					adapterFactoryLabelProvider);
-			sb.append("."); //$NON-NLS-1$
-			sb.append(adapterFactoryLabelProvider.getText(model));
-		}
-
-		private Object getModel() {
-			return model;
-		}
-
-		@Override
-		protected AbstractBreadCrumbEditor getEditorPart() {
-			return (AbstractBreadCrumbEditor) super.getEditorPart();
-		}
-
-		@Override
-		public void saveState(final IMemento memento) {
-			// TODO consider if and how editor state can be saved
-		}
-
-		@Override
-		public void restoreState(final IMemento memento) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void restoreLocation() {
-			final IEditorPart part= getEditorPart();
-			if (part instanceof AbstractBreadCrumbEditor) {
-				final AbstractBreadCrumbEditor editor= getEditorPart();
-				editor.getBreadcrumb().setInput(model);
-			}
-		}
-
-		@Override
-		public boolean mergeInto(final INavigationLocation currentLocation) {
-			if (currentLocation instanceof BreadcrumbNavigationLocation) {
-				return this.model == ((BreadcrumbNavigationLocation) currentLocation).getModel();
-			}
-			return false;
-		}
-
-		@Override
-		public void update() {
-			// TODO Auto-generated method stub
-		}
-
-	}
 }

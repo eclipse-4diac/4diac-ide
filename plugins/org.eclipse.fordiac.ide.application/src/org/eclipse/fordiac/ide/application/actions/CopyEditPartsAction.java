@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
 import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -48,20 +49,20 @@ public class CopyEditPartsAction extends SelectionAction {
 	 *
 	 * @param editor the editor
 	 */
-	public CopyEditPartsAction(IEditorPart editor) {
+	public CopyEditPartsAction(final IEditorPart editor) {
 		super(editor);
 		setId(ActionFactory.COPY.getId());
 		setText(Messages.CopyEditPartsAction_Text);
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		final ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		for (Object obj : getSelectedObjects()) {
+		for (final Object obj : getSelectedObjects()) {
 			if (obj instanceof EditPart) {
-				Object model = ((EditPart) obj).getModel();
+				final Object model = ((EditPart) obj).getModel();
 				if (model instanceof FBNetworkElement) {
 					return true;
 				}
@@ -72,16 +73,18 @@ public class CopyEditPartsAction extends SelectionAction {
 
 	@Override
 	public void run() {
-		List<Object> templates = getSelectedTemplates();
-		Clipboard.getDefault().setContents(templates);
+		final List<Object> templates = getSelectedTemplates();
+
+		final CopyPasteMessage info = new CopyPasteMessage(CopyStatus.COPY, templates);
+		Clipboard.getDefault().setContents(info);
 	}
 
 	protected List<Object> getSelectedTemplates() {
-		Set<Connection> connectionSet = new HashSet<>();
-		List<Object> templates = new ArrayList<>();
-		for (Object obj : getSelectedObjects()) {
+		final Set<Connection> connectionSet = new HashSet<>();
+		final List<Object> templates = new ArrayList<>();
+		for (final Object obj : getSelectedObjects()) {
 			if (obj instanceof EditPart) {
-				Object model = ((EditPart) obj).getModel();
+				final Object model = ((EditPart) obj).getModel();
 				if (model instanceof FBNetworkElement) {
 					templates.add(model);
 					templates.addAll(getAllFBNElementConnections((FBNetworkElement) model, connectionSet));
@@ -91,11 +94,11 @@ public class CopyEditPartsAction extends SelectionAction {
 		return templates;
 	}
 
-	private static Collection<ConnectionReference> getAllFBNElementConnections(FBNetworkElement model,
-			Set<Connection> connectionSet) {
-		List<ConnectionReference> connections = new ArrayList<>();
+	private static Collection<ConnectionReference> getAllFBNElementConnections(final FBNetworkElement model,
+			final Set<Connection> connectionSet) {
+		final List<ConnectionReference> connections = new ArrayList<>();
 
-		for (IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
+		for (final IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
 			getConnectionList(elem).stream().filter(conn -> !connectionSet.contains(conn)).forEach(conn -> {
 				connectionSet.add(conn);
 				connections.add(new ConnectionReference(conn));
@@ -104,7 +107,7 @@ public class CopyEditPartsAction extends SelectionAction {
 		return connections;
 	}
 
-	private static EList<Connection> getConnectionList(IInterfaceElement elem) {
+	private static EList<Connection> getConnectionList(final IInterfaceElement elem) {
 		return elem.isIsInput() ? elem.getInputConnections() : elem.getOutputConnections();
 	}
 

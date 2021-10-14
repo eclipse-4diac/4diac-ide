@@ -62,6 +62,7 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS);
+			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS);
 		}
 		return childrenFeatures;
 	}
@@ -106,6 +107,7 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 
 		switch (notification.getFeatureID(BaseFBType.class)) {
 		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
+		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		default:
@@ -130,6 +132,21 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
 				LibraryElementFactory.eINSTANCE.createLocalVariable()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				LibraryElementFactory.eINSTANCE.createFB()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				LibraryElementFactory.eINSTANCE.createResourceTypeFB()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				LibraryElementFactory.eINSTANCE.createAdapterFB()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				LibraryElementFactory.eINSTANCE.createDemultiplexer()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				LibraryElementFactory.eINSTANCE.createMultiplexer()));
 	}
 
 }

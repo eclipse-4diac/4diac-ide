@@ -24,28 +24,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.InterfaceElementLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
@@ -91,7 +84,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
-	protected abstract InsertInterfaceElementCommand newInsertCommand(IInterfaceElement selection, boolean isInput,
+	protected abstract CreateInterfaceElementCommand newInsertCommand(IInterfaceElement selection, boolean isInput,
 			int index);
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
@@ -99,17 +92,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	protected abstract ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp);
 
 	protected abstract String[] fillTypeCombo();
-
-	protected final TypeLibrary getTypeLibrary() {
-		final EObject root = EcoreUtil.getRootContainer(getType());
-
-		if (root instanceof FBType) {
-			return ((FBType) root).getTypeLibrary();
-		} else if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getPalette().getTypeLibrary();
-		}
-		throw new IllegalStateException("Interface edit section shown for wrong element: " + getType()); //$NON-NLS-1$
-	}
 
 	@Override
 	protected abstract INamedElement getInputType(Object input);
@@ -265,16 +247,17 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	}
 
 	// subclasses need to override this method if they use a different type dropdown
+	@SuppressWarnings("static-method")
 	protected Object getTypeValue(final Object element, final TableViewer viewer, final int TYPE_COLUMN_INDEX) {
 		final String type = ((IInterfaceElement) element).getTypeName();
 		final List<String> items = Arrays
 				.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
-		return items.indexOf(type);
+		return Integer.valueOf(items.indexOf(type));
 	}
 
 	// subclasses need to override this method if they use a different type dropdown
 	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
-		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
+		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value).intValue()];
 		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
 	}
 
@@ -285,6 +268,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	@Override
 	protected void setInputCode() {
+		// nothing to be done here
 	}
 
 	@Override
@@ -339,14 +323,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		}
 	}
 
-	protected Palette getPalette() {
-		return getTypeLibrary().getBlockTypeLib();
-	}
-
-	protected DataTypeLibrary getDataTypeLib() {
-		return getTypeLibrary().getDataTypeLibrary();
-	}
-
 	protected class InterfaceCellModifier implements ICellModifier {
 		private static final int TYPE_COLUMN_INDEX = 1;
 		protected TableViewer viewer;
@@ -391,7 +367,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 				break;
 			case TYPE_COL:
 				if (data instanceof AdapterDeclaration) {
-					final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
+					final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value).intValue()];
 					final DataType newType = getPalette().getAdapterTypeEntry(dataTypeName).getType();
 					cmd = newChangeTypeCommand((VarDeclaration) data, newType);
 				} else {

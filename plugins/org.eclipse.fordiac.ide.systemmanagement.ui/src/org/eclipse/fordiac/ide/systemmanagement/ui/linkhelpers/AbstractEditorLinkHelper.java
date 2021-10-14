@@ -20,6 +20,10 @@ import org.eclipse.ui.navigator.ILinkHelper;
 
 public abstract class AbstractEditorLinkHelper implements ILinkHelper {
 
+	protected AbstractEditorLinkHelper() {
+		// empty protected default constructor
+	}
+
 	protected static IEditorPart activateEditor(final IWorkbenchPage aPage, final IEditorInput editorInput) {
 		final IEditorPart editor = aPage.findEditor(editorInput);
 		if (null != editor) {

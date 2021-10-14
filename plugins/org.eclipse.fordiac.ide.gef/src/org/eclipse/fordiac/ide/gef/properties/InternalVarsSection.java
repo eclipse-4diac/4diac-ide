@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -75,7 +74,6 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 
 	private TableViewer internalVarsViewer;
 	private DataTypeDropdown typeDropDown;
-	private DataTypeLibrary dataLib;
 
 	@Override
 	protected BaseFBType getType() {
@@ -115,21 +113,21 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	private DataType getDataType() {
-		final VarDeclaration var = getLastSelectedVariable();
-		return (null != var) ? var.getType() : null;
+		final VarDeclaration varInternal = getLastSelectedVariable();
+		return (null != varInternal) ? varInternal.getType() : null;
 	}
 
 	private String getName() {
-		final VarDeclaration var = getLastSelectedVariable();
-		return (null != var) ? var.getName() : null;
+		final VarDeclaration varInternal = getLastSelectedVariable();
+		return (null != varInternal) ? varInternal.getName() : null;
 	}
 
 	private int getInsertionIndex() {
-		final VarDeclaration var = getLastSelectedVariable();
-		if (null == var) {
+		final VarDeclaration varInternal = getLastSelectedVariable();
+		if (null == varInternal) {
 			return getType().getInternalVars().size();
 		}
-		return getType().getInternalVars().indexOf(var) + 1;
+		return getType().getInternalVars().indexOf(varInternal) + 1;
 	}
 
 	private VarDeclaration getLastSelectedVariable() {
@@ -163,7 +161,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	private CellEditor[] createCellEditors(final Table table) {
 		final TextCellEditor varNameEditor = new TextCellEditor(table);
 		((Text) varNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		typeDropDown = new DataTypeDropdown(dataLib, internalVarsViewer);
+		typeDropDown = new DataTypeDropdown(getDataTypeLib(), internalVarsViewer);
 		return new CellEditor[] { varNameEditor, typeDropDown, new TextCellEditor(table), new TextCellEditor(table),
 				new TextCellEditor(table) };
 	}
@@ -185,7 +183,6 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 
 	@Override
 	protected void setInputInit() {
-		dataLib = getType().getTypeLibrary().getDataTypeLibrary();
 		internalVarsViewer.setCellEditors(createCellEditors(internalVarsViewer.getTable()));
 	}
 
@@ -197,18 +194,18 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			final VarDeclaration var = (VarDeclaration) element;
+			final VarDeclaration varInternal = (VarDeclaration) element;
 			switch (property) {
 			case IV_NAME:
-				return var.getName();
+				return varInternal.getName();
 			case IV_TYPE:
-				return var.getTypeName();
+				return varInternal.getTypeName();
 			case IV_COMMENT:
-				return var.getComment();
+				return varInternal.getComment();
 			case IV_ARRAY:
-				return Integer.toString(var.getArraySize());
+				return Integer.toString(varInternal.getArraySize());
 			default:
-				return var.getValue() == null ? "" : var.getValue().getValue(); //$NON-NLS-1$
+				return varInternal.getValue() == null ? "" : varInternal.getValue().getValue(); //$NON-NLS-1$
 			}
 		}
 

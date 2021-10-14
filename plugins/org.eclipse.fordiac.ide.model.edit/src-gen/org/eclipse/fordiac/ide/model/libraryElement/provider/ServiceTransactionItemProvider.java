@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
  *
  * @generated */
 public class ServiceTransactionItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
@@ -104,7 +104,6 @@ IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, II
 		return getString("_UI_ServiceTransaction_type"); //$NON-NLS-1$
 	}
 
-
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
 	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -134,12 +133,12 @@ IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, II
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors
-		.add(createChildParameter(LibraryElementPackage.Literals.SERVICE_TRANSACTION__INPUT_PRIMITIVE,
-				LibraryElementFactory.eINSTANCE.createInputPrimitive()));
+				.add(createChildParameter(LibraryElementPackage.Literals.SERVICE_TRANSACTION__INPUT_PRIMITIVE,
+						LibraryElementFactory.eINSTANCE.createInputPrimitive()));
 
 		newChildDescriptors
-		.add(createChildParameter(LibraryElementPackage.Literals.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE,
-				LibraryElementFactory.eINSTANCE.createOutputPrimitive()));
+				.add(createChildParameter(LibraryElementPackage.Literals.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE,
+						LibraryElementFactory.eINSTANCE.createOutputPrimitive()));
 	}
 
 	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->

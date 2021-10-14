@@ -131,21 +131,21 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private DataType getDataType() {
-		final VarDeclaration var = getLastSelectedVariable();
-		return (null != var) ? var.getType() : null;
+		final VarDeclaration memVar = getLastSelectedVariable();
+		return (null != memVar) ? memVar.getType() : null;
 	}
 
 	private String getVarName() {
-		final VarDeclaration var = getLastSelectedVariable();
-		return (null != var) ? var.getName() : null;
+		final VarDeclaration memVar = getLastSelectedVariable();
+		return (null != memVar) ? memVar.getName() : null;
 	}
 
 	private int getInsertionIndex() {
-		final VarDeclaration alg = getLastSelectedVariable();
-		if (null == alg) {
+		final VarDeclaration memVar = getLastSelectedVariable();
+		if (null == memVar) {
 			return getType().getMemberVariables().size();
 		}
-		return getType().getMemberVariables().indexOf(alg) + 1;
+		return getType().getMemberVariables().indexOf(memVar) + 1;
 	}
 
 	private VarDeclaration getLastSelectedVariable() {
@@ -166,11 +166,19 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			protected List<DataType> getDataTypesSorted() {
 				return super.getDataTypesSorted().stream().filter(Objects::nonNull)
 						.filter(type -> !type.getName().equals(StructViewingComposite.this.getType().getName()))
+						.filter(type -> !(type instanceof StructuredType) || isValidStruct((StructuredType) type))
 						.collect(Collectors.toList());
 			}
 		};
 		return new CellEditor[] { new TextCellEditor(table), typeDropDown, new TextCellEditor(table),
 				new TextCellEditor(table), new TextCellEditor(table) };
+	}
+
+	private boolean isValidStruct(final StructuredType type) {
+		return type.getMemberVariables().stream()
+				.filter(memVar -> memVar.getType() instanceof StructuredType)
+				.noneMatch(memVar -> memVar.getTypeName().equals(StructViewingComposite.this.getType().getName())
+						|| !isValidStruct(dataTypeLibrary.getStructuredType(memVar.getTypeName())));
 	}
 
 	private static void configureTableLayout(final Table table) {
@@ -206,18 +214,18 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			final VarDeclaration var = (VarDeclaration) element;
+			final VarDeclaration memVar = (VarDeclaration) element;
 			switch (property) {
 			case NAME:
-				return var.getName();
+				return memVar.getName();
 			case TYPE:
-				return var.getTypeName();
+				return memVar.getTypeName();
 			case COMMENT:
-				return var.getComment();
+				return memVar.getComment();
 			case INIT:
-				return (var.getValue() == null) ? "" : var.getValue().getValue(); //$NON-NLS-1$
+				return (memVar.getValue() == null) ? "" : memVar.getValue().getValue(); //$NON-NLS-1$
 			case ARRAY:
-				return (var.getArraySize() > 0) ? Integer.toString(var.getArraySize()) : ""; //$NON-NLS-1$
+				return (memVar.getArraySize() > 0) ? Integer.toString(memVar.getArraySize()) : ""; //$NON-NLS-1$
 			default:
 				return "Could not load"; //$NON-NLS-1$
 			}
@@ -295,7 +303,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	@Override
 	public ISelection getSelection() {
-		// for now return the whole object so that property sheets and otehr stuff can filter on it.
+		// for now return the whole object so that property sheets and other stuff can filter on it.
 		return new StructuredSelection(this);
 	}
 }

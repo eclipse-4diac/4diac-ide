@@ -43,7 +43,7 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
  *
  * @generated */
 public class ServiceSequenceItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
@@ -70,12 +70,12 @@ IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, II
 	 * @generated */
 	protected void addNamePropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
-		.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-				getResourceLocator(), getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_INamedElement_type"),  //$NON-NLS-1$
-				LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, true, false, false,
-				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_INamedElement_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/** This adds a property descriptor for the Comment feature. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -83,12 +83,12 @@ IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, II
 	 * @generated */
 	protected void addCommentPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
-		.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-				getResourceLocator(), getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_INamedElement_type"),  //$NON-NLS-1$
-				LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT, true, false, false,
-				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_INamedElement_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/** This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
@@ -166,8 +166,8 @@ IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, II
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors
-		.add(createChildParameter(LibraryElementPackage.Literals.SERVICE_SEQUENCE__SERVICE_TRANSACTION,
-				LibraryElementFactory.eINSTANCE.createServiceTransaction()));
+				.add(createChildParameter(LibraryElementPackage.Literals.SERVICE_SEQUENCE__SERVICE_TRANSACTION,
+						LibraryElementFactory.eINSTANCE.createServiceTransaction()));
 	}
 
 	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->

@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 
 
-public class GenericDataTypeCompatibility {
+public final class GenericDataTypeCompatibility {
 
 	public static boolean isAnyUnsignedCompatibleWith(final DataType other) {
 		return other instanceof AnyUnsignedType || ElementaryDataTypeCompatibility.isAnyIntCompatibleWith(other);
@@ -82,6 +82,10 @@ public class GenericDataTypeCompatibility {
 
 	public static boolean isAnyDateCompatibleWith(final DataType other) {
 		return other instanceof AnyDateType || ElementaryDataTypeCompatibility.isAnyElementaryCompatibleWith(other);
+	}
+
+	private GenericDataTypeCompatibility() {
+		throw new UnsupportedOperationException();
 	}
 
 }

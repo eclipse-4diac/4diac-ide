@@ -16,6 +16,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_HORIZONTAL;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_VERTICAL;
+
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
@@ -37,7 +40,6 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -49,12 +51,12 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
+import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.*;
 
 public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart {
 	private static final Insets OUTPUT_EVENT_INSETS = new Insets(MARGIN_VERTICAL, MARGIN_HORIZONTAL, MARGIN_VERTICAL,
@@ -62,7 +64,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			refreshEventLabel();
 		}
@@ -70,26 +72,38 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	private final Adapter interfaceAdapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getEventType() == Notification.REMOVE) {
-				if ((notification.getOldValue() == getAction().getOutput())
+			switch (notification.getEventType()) {
+			case Notification.REMOVE:
+				handleRemove(notification);
+				break;
+			case Notification.SET:
+				handleSet(notification);
+				break;
+			default:
+				break;
+			}
+		}
+
+		private void handleSet(final Notification notification) {
+			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)) {
+				if ((getAction().getOutput().getName().equals(notification.getNewValue()))
 						|| ((getAction().getOutput() instanceof AdapterEvent)
-								&& (notification.getOldValue() instanceof AdapterDeclaration)
-								&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification
-										.getOldValue()))) {
-					executeCommand(new ChangeOutputCommand(getAction(), null));
+								&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration().getName()
+										.equals(notification.getNewValue())))) {
+					refreshEventLabel();
 				}
-			} else if (notification.getEventType() == Notification.SET) {
-				if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)) {
-					if (getAction().getOutput().getName().equals(notification.getNewValue())) {
-						refreshEventLabel();
-					} else if ((getAction().getOutput() instanceof AdapterEvent)
-							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration().getName()
-									.equals(notification.getNewValue()))) {
-						refreshEventLabel();
-					}
-				}
+			}
+		}
+
+		private void handleRemove(final Notification notification) {
+			if ((notification.getOldValue() == getAction().getOutput())
+					|| ((getAction().getOutput() instanceof AdapterEvent)
+							&& (notification.getOldValue() instanceof AdapterDeclaration)
+							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification
+							.getOldValue()))) {
+				executeCommand(new ChangeOutputCommand(getAction(), null));
 			}
 		}
 	};
@@ -120,7 +134,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		if (isActive()) {
 			super.deactivate();
 			getAction().eAdapters().remove(adapter);
-			FBType fbType = ECCContentAndLabelProvider.getFBType(getAction());
+			final FBType fbType = ECCContentAndLabelProvider.getFBType(getAction());
 			if (fbType != null) {
 				fbType.getInterfaceList().eAdapters().remove(interfaceAdapter);
 			}
@@ -136,14 +150,14 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 				return new DeleteECActionCommand(getAction());
 			}
 		});
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					Integer value = (Integer) request.getCellEditor().getValue();
+					final Integer value = (Integer) request.getCellEditor().getValue();
 					if (null != value) {
-						int selected = value.intValue();
-						List<Event> events = ECCContentAndLabelProvider
+						final int selected = value.intValue();
+						final List<Event> events = ECCContentAndLabelProvider
 								.getOutputEvents(ECCContentAndLabelProvider.getFBType(getAction()));
 						Event ev = null;
 						if ((0 <= selected) && (selected < events.size())) {
@@ -160,8 +174,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 				// handled by the direct edit manager
 			}
 		});
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy() {
-		});
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
 	}
 
 	@Override
@@ -183,9 +196,9 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	@Override
 	public void performDirectEdit() {
-		List<String> eventNames = ECCContentAndLabelProvider
+		final List<String> eventNames = ECCContentAndLabelProvider
 				.getOutputEventNames(ECCContentAndLabelProvider.getFBType(getAction()));
-		int selected = (getAction().getOutput() != null) ? eventNames.indexOf(getAction().getOutput().getName())
+		final int selected = (getAction().getOutput() != null) ? eventNames.indexOf(getAction().getOutput().getName())
 				: eventNames.size() - 1;
 		((ComboDirectEditManager) getManager()).updateComboData(eventNames);
 		((ComboDirectEditManager) getManager()).setSelectedItem(selected);
@@ -212,7 +225,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	@Override
 	protected IFigure createFigure() {
-		Label eventLabel = new Label();
+		final Label eventLabel = new Label();
 		eventLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
 		eventLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR));
 		eventLabel.setOpaque(true);

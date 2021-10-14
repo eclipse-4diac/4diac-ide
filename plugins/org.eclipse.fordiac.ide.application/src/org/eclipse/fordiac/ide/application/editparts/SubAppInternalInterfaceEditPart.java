@@ -16,6 +16,8 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
@@ -23,8 +25,9 @@ import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
@@ -108,10 +111,26 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 		return null;
 	}
 
+	@Override
+	protected Adapter createContentAdapter() {
+		return new UntypedSubappIEAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				final Object feature = notification.getFeature();
+
+				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getAttribute_Value().equals(feature)) {
+					updatePadding(getYPositionFromAttribute(getModel()));
+				}
+				super.notifyChanged(notification);
+			}
+		};
+	}
+
 	private void goToParent() {
-		final IEditorPart newEditor = BreadcrumbUtil.openParentEditor(getModel().getFBNetworkElement());
+		final IEditorPart newEditor = HandlerHelper.openParentEditor(getModel().getFBNetworkElement());
 		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
-		BreadcrumbUtil.selectElement(getModel(), viewer);
+		HandlerHelper.selectElement(getModel(), viewer);
 	}
 
 	private FBNetwork getSubappNetwork() {

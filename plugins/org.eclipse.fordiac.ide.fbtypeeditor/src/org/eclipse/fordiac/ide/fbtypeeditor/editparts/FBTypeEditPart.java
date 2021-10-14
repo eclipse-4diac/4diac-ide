@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -36,9 +35,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
 public class FBTypeEditPart extends AbstractConnectableEditPart {
@@ -54,16 +51,16 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	private final Adapter adapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if ((LibraryElementPackage.eINSTANCE.getVersionInfo().equals(feature))
 						|| (LibraryElementPackage.eINSTANCE.getVersionInfo_Version().equals(feature))) {
 					getFigure().updateVersionInfoLabel();
 				}
 
-				Display.getDefault().asyncExec(() -> {
+				Display.getDefault().syncExec(() -> {
 					if ((null != getParent()) && (null != getFigure()) && (getFigure().isShowing())) {
 						refresh();
 					}
@@ -77,13 +74,19 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		super.activate();
 		getModel().eAdapters().add(adapter);
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+		// position the FB at 0,0
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), new Rectangle(0, 0, -1, -1));
 	}
 
 	@Override
 	public void deactivate() {
 		super.deactivate();
+		if (controlListener != null) {
+			getParent().getViewer().getControl().removeControlListener(controlListener);
+		}
 		getModel().eAdapters().remove(adapter);
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+
 	}
 
 	private IPropertyChangeListener getFontChangeListener() {
@@ -108,13 +111,9 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	}
 
 	@Override
-	public void setSelected(int value) {
+	public void setSelected(final int value) {
+		// nothing to be done here
 	}
-
-//	@Override
-//	public void refreshName() {
-//		Display.getDefault().asyncExec(() -> getNameLabel().setText(getINamedElement().getName()));
-//	}
 
 	@Override
 	protected List<Object> getModelChildren() {
@@ -136,7 +135,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		if (null == plugcont) {
 			plugcont = new PlugContainer(getModel());
 		}
-		ArrayList<Object> temp = new ArrayList<>(6);
+		final ArrayList<Object> temp = new ArrayList<>(6);
 		temp.add(eic);
 		temp.add(eoc);
 		temp.add(vic);
@@ -159,9 +158,9 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceContainerEditPart) {
-			Figure cont = getContainer(childEditPart);
+			final Figure cont = getContainer(childEditPart);
 			if (null != cont) {
 				cont.add(child);
 			}
@@ -171,7 +170,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		}
 	}
 
-	private Figure getContainer(EditPart childEditPart) {
+	private Figure getContainer(final EditPart childEditPart) {
 		if (childEditPart.getModel() instanceof EventInputContainer) {
 			return getFigure().getEventInputs();
 		}
@@ -194,10 +193,10 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	}
 
 	@Override
-	protected void removeChildVisual(EditPart childEditPart) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+	protected void removeChildVisual(final EditPart childEditPart) {
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceContainerEditPart) {
-			Figure cont = getContainer(childEditPart);
+			final Figure cont = getContainer(childEditPart);
 			if (null != cont) {
 				cont.remove(child);
 			}
@@ -206,44 +205,10 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		}
 	}
 
-	private void update(final Rectangle bounds) {
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
-	}
-
 	@Override
 	public void refresh() {
 		super.refresh();
 		getFigure().getTypeLabel().setText(getModel().getName());
-	}
-
-	@Override
-	protected void refreshVisuals() {
-		if (controlListener == null) {
-			controlListener = new ControlListener() {
-
-				@Override
-				public void controlResized(final ControlEvent e) {
-					Point p = getParent().getViewer().getControl().getSize();
-					Dimension dim = getFigure().getPreferredSize(-1, -1);
-
-					Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
-					// rectangle rect = new Rectangle()
-
-					update(rect);
-				}
-
-				@Override
-				public void controlMoved(final ControlEvent e) {
-
-				}
-
-			};
-			getParent().getViewer().getControl().addControlListener(controlListener);
-		}
-		Point p = getParent().getViewer().getControl().getSize();
-		Dimension dim = getFigure().getPreferredSize(-1, -1);
-		Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
-		update(rect);
 	}
 
 }

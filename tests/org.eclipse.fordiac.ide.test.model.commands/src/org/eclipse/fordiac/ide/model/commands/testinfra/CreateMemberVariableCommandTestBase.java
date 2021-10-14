@@ -70,13 +70,13 @@ public abstract class CreateMemberVariableCommandTestBase
 		// test series 1
 		commands.addAll(describeCommand("Autofilled Command", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				(StateVerifier<State>) CreateMemberVariableCommandTestBase::verifyDefaultInitialValues, //
 				autofilledExecutionDescriptions //
 		));
 		// test series 2
 		commands.addAll(describeCommand("Configured Command", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				(StateVerifier<State>) CreateMemberVariableCommandTestBase::verifyDefaultInitialValues, //
 				configuredExecutionDescriptions //
 		));
 		return commands;

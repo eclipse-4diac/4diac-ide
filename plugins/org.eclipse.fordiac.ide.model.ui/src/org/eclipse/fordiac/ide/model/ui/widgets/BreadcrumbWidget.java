@@ -24,9 +24,8 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -57,8 +56,13 @@ public class BreadcrumbWidget implements ISelectionProvider {
 	}
 
 	public void setInput(final Object input) {
+		if (!items.isEmpty() && getActiveItem().getModel().equals(input)) {
+			return;
+		}
+
 		if (isValidBreadcrumbInput(input)) {
 			items.forEach(BreadcrumbItem::dispose);
+			items.clear();
 			toolbar.requestLayout();
 			createBreadcrumbItems(input);
 			toolbar.pack();
@@ -160,6 +164,6 @@ public class BreadcrumbWidget implements ISelectionProvider {
 	}
 
 	private static boolean isCompositeType(final Object input) {
-		return (input instanceof FB && ((FB) input).getType() instanceof CompositeFBType);
+		return (input instanceof CFBInstance);
 	}
 }

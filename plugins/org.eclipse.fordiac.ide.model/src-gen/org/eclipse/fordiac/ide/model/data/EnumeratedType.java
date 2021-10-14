@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -36,7 +36,7 @@ public interface EnumeratedType extends ValueType {
 	 * more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Enumerated Value</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedType_EnumeratedValue()
 	 * @model containment="true" required="true" extendedMetaData="kind='element' name='EnumeratedValue'

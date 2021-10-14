@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -107,7 +106,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		return new EthernetDeviceManagementCommunicationHandler();
 	}
 
-	private static String getValidType(final FB fb) {
+	private static String getValidType(final FBNetworkElement fb) {
 		if (fb != null && fb.getPaletteEntry() != null) {
 			if (fb instanceof StructManipulator) {
 				// the _1 is needed for 4diac FORTE to separate type name from configuration
@@ -161,10 +160,10 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	private static String encodeXMLChars(final String value) {
 		String retVal = value;
-		retVal = retVal.replaceAll("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
-		retVal = retVal.replaceAll("'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
-		retVal = retVal.replaceAll("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
-		retVal = retVal.replaceAll(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
+		retVal = retVal.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
+		retVal = retVal.replace("'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
+		retVal = retVal.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
+		retVal = retVal.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		return retVal;
 	}
 
@@ -210,7 +209,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startResource(final Resource res) throws DeploymentException {
-		final String request = MessageFormat.format(START, id++);
+		final String request = MessageFormat.format(START, Integer.valueOf(id));
+		id++;
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -221,7 +221,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startDevice(final Device dev) throws DeploymentException {
-		final String request = MessageFormat.format(START, id++);
+		final String request = MessageFormat.format(START, Integer.valueOf(id));
+		id++;
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {
@@ -232,7 +233,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void writeDeviceParameter(final Device device, final String parameter, final String value) throws DeploymentException {
-		final String request = MessageFormat.format(getWriteParameterMessage(), id++, value, parameter);
+		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(id), value, parameter);
+		id++;
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {

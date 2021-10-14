@@ -208,7 +208,6 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		action.setImageDescriptor(image);
 	}
 
-	@SuppressWarnings("unchecked")
 	private UpdateFBTypeAction createChangeFBTypeAction(final PaletteEntry entry) {
 		final UpdateFBTypeAction action = new UpdateFBTypeAction(editor, entry);
 		getRegistry().registerAction(action);

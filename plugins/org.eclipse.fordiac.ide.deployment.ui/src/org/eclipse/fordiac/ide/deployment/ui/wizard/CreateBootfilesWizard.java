@@ -76,7 +76,8 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 					workLoad.size());
 			for (final Entry<Device, List<Object>> entry : workLoad.entrySet()) {
 				final String fileName = MessageFormat.format(Messages.CreateBootfilesWizard_IProgressMonitorMonitor,
-						outputDirectory, File.separatorChar, entry.getKey().getAutomationSystem().getName(),
+						outputDirectory, Character.valueOf(File.separatorChar),
+						entry.getKey().getAutomationSystem().getName(),
 						entry.getKey().getName());
 
 				BootFileDeviceManagementCommunicationHandler.createBootFile(entry.getValue(), fileName, getShell());
@@ -87,14 +88,21 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, iop);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();  // mark interruption
+			showExceptionErrorDialog(e);
 		} catch (final Exception e) {
-			final MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
-			msg.setMessage(Messages.CreateBootfilesWizard_BootFileCreationError + e.getMessage());
-			msg.open();
-			Activator.getDefault().logError(msg.getMessage(), e);
+			showExceptionErrorDialog(e);
 		}
 
 		return true;
+	}
+
+	protected void showExceptionErrorDialog(final Exception e) {
+		final MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
+		msg.setMessage(Messages.CreateBootfilesWizard_BootFileCreationError + e.getMessage());
+		msg.open();
+		Activator.getDefault().logError(msg.getMessage(), e);
 	}
 
 	private Map<Device, List<Object>> prepareWorkload() {

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,14 +20,9 @@ import org.eclipse.jface.viewers.IFilter;
 public class SimpleFBFilter implements IFilter {
 
 	@Override
-	public boolean select(Object toTest) {
-		if (toTest instanceof FBTypeRootEditPart) {
-			if (((FBTypeRootEditPart) toTest).getModel() instanceof SimpleFBTypeImpl) {
-				return true;
-			}
-		}
-
-		return false;
+	public boolean select(final Object toTest) {
+		return (toTest instanceof FBTypeRootEditPart
+				&& ((FBTypeRootEditPart) toTest).getModel() instanceof SimpleFBTypeImpl);
 	}
 
 }

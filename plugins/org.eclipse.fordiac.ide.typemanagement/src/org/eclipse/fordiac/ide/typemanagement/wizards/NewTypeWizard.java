@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2010 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2010 - 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University Linz,
+ *                           Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,34 +11,25 @@
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch
- *     - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
  *   Jose Cabral - Add preferences
  *   Alois Zoitl - moved openEditor helper function to EditorUtils
  *   Daniel Lindhuber, Bianca Wiesmayr, Ernst Blecha
- *     - extended for Data Type creation
+ *               - extended for Data Type creation
+ *   Alois Zoitl - reworked type loading to avoid race conditions with resource
+ *                 change listener and type saving.
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
 import java.io.File;
 import java.text.MessageFormat;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
-import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -77,25 +69,29 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
-		String typeName = page1.getFileName();
-		File template = page1.getTemplate();
+
+		final File template = page1.getTemplate();
 		if (!checkTemplateAvailable(template.getAbsolutePath())) {
 			return false;
 		}
-		IFile targetTypeFile = ResourcesPlugin.getWorkspace().getRoot()
-				.getFile(new Path(page1.getContainerFullPath() + File.separator + typeName));
-		try {
-			ImportUtils.copyFile(template, targetTypeFile);
-			String fileEnding = typeName.substring(typeName.lastIndexOf('.'), typeName.length());
-			return (fileEnding.equalsIgnoreCase("." + TypeLibraryTags.DATA_TYPE_FILE_ENDING)) //$NON-NLS-1$
-					? finishDataTypeCreation(targetTypeFile) : finishFBTypeCreation(targetTypeFile);
-		} catch (Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+		final IFile targetTypeFile = getTargetFile();
+		entry = new TypeFromTemplateCreator(getTargetFile(), template).createTypeFromTemplate();
+		if (entry != null) {
+			if (page1.getOpenType()) {
+				openTypeEditor(targetTypeFile);
+			}
+			return true;
 		}
 		return false;
 	}
 
-	private static boolean checkTemplateAvailable(String templatePath) {
+	private IFile getTargetFile() {
+		final String typeName = page1.getFileName();
+		return ResourcesPlugin.getWorkspace().getRoot()
+				.getFile(new Path(page1.getContainerFullPath() + File.separator + typeName));
+	}
+
+	private static boolean checkTemplateAvailable(final String templatePath) {
 		if (!new File(templatePath).exists()) {
 			templateNotAvailable(templatePath);
 			return false;
@@ -103,49 +99,14 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	private static void templateNotAvailable(String templatePath) {
-		MessageBox mbx = new MessageBox(Display.getDefault().getActiveShell());
+	private static void templateNotAvailable(final String templatePath) {
+		final MessageBox mbx = new MessageBox(Display.getDefault().getActiveShell());
 		mbx.setMessage(MessageFormat.format(Messages.NewFBTypeWizard_TemplateNotAvailable, templatePath));
 		mbx.open();
 	}
 
-	private boolean finishDataTypeCreation(IFile targetTypeFile) {
-		StructuredType type = DataFactory.eINSTANCE.createStructuredType();
-		TypeManagementPreferencesHelper.setupVersionInfo(type);
-		type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));
-		DataTypeExporter exporter = new DataTypeExporter(type);
-		try {
-			exporter.saveType(targetTypeFile);
-		} catch (XMLStreamException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
-		if (page1.getOpenType()) {
-			openTypeEditor(targetTypeFile);
-		}
-		return true;
-	}
-
-	private boolean finishFBTypeCreation(IFile targetTypeFile) {
-		entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
-		if (null == entry) {
-			// refresh the palette and retry to fetch the entry
-			TypeLibrary.refreshTypeLib(targetTypeFile);
-			entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
-		}
-		LibraryElement type = entry.getType();
-		type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));
-		TypeManagementPreferencesHelper.setupIdentification(type);
-		TypeManagementPreferencesHelper.setupVersionInfo(type);
-		AbstractBlockTypeExporter.saveType(entry);
-		entry.setType(type);
-		if (page1.getOpenType()) {
-			openTypeEditor(entry.getFile());
-		}
-		return true;
-	}
-
-	private static void openTypeEditor(IFile file) {
-		IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+	private static void openTypeEditor(final IFile file) {
+		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
 		EditorUtils.openEditor(new FileEditorInput(file), desc.getId());
 	}
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,11 +23,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 
 public class ECAlgorithmToolTipFigure extends FlowPage {
 
-	private final Border TOOLTIP_BORDER = new MarginBorder(2, 2, 2, 2);
+	private static final Border TOOLTIP_BORDER = new MarginBorder(2, 2, 2, 2);
 
 	private Algorithm alg;
 
-	private TextFlow algContent;
+	private final TextFlow algContent;
 
 	public ECAlgorithmToolTipFigure() {
 		setBorder(TOOLTIP_BORDER);
@@ -38,7 +38,7 @@ public class ECAlgorithmToolTipFigure extends FlowPage {
 	}
 
 	@Override
-	public Dimension getPreferredSize(int w, int h) {
+	public Dimension getPreferredSize(final int w, final int h) {
 		Dimension d = super.getPreferredSize(-1, -1);
 		boolean update = false;
 		if (d.width > 350) {
@@ -55,7 +55,7 @@ public class ECAlgorithmToolTipFigure extends FlowPage {
 		return d;
 	}
 
-	public void setAlgorithm(Algorithm alg) {
+	public void setAlgorithm(final Algorithm alg) {
 		this.alg = alg;
 		updateLabels();
 	}

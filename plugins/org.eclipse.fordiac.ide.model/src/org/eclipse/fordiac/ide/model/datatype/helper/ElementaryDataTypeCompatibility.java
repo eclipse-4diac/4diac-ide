@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 
-public class ElementaryDataTypeCompatibility {
+public final class ElementaryDataTypeCompatibility {
 
 	public static boolean isRealCompatibleWith(final DataType other) {
 		return other == ElementaryTypes.REAL || isLRealCompatibleWith(other);
@@ -161,6 +161,10 @@ public class ElementaryDataTypeCompatibility {
 
 	private static boolean isAnyDateCompatibleWith(final DataType other) {
 		return other == GenericTypes.ANY_DATE || isAnyElementaryCompatibleWith(other);
+	}
+
+	private ElementaryDataTypeCompatibility() {
+		throw new UnsupportedOperationException();
 	}
 
 }

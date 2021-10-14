@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import org.eclipse.draw2d.Connection;
+import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.Graphics;
@@ -35,7 +36,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.SharedCursors;
 import org.eclipse.gef.tools.AbstractTool;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.gef.util.EditPartUtilities;
@@ -113,7 +113,7 @@ public class MarqueeDragTracker extends AbstractTool implements DragTracker {
 	 * {@link #BEHAVIOR_NODES_CONTAINED}.
 	 */
 	public MarqueeDragTracker() {
-		setDefaultCursor(SharedCursors.CROSS);
+		setDefaultCursor(Cursors.CROSS);
 		setUnloadWhenFinished(false);
 	}
 
@@ -586,9 +586,9 @@ public class MarqueeDragTracker extends AbstractTool implements DragTracker {
 		}
 		super.setViewer(viewer);
 		if (viewer instanceof GraphicalViewer) {
-			setDefaultCursor(SharedCursors.CROSS);
+			setDefaultCursor(Cursors.CROSS);
 		} else {
-			setDefaultCursor(SharedCursors.NO);
+			setDefaultCursor(Cursors.NO);
 		}
 	}
 

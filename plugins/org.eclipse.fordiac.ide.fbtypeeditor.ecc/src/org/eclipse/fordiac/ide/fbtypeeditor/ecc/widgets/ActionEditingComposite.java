@@ -24,13 +24,13 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeActionOrderCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ActionContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeActionOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;

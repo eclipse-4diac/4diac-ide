@@ -18,12 +18,22 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
+import org.eclipse.ui.IEditorPart;
 
 /**
  * The edit part for interface elements of FBs and Subapps shown in FBNetwork
@@ -68,6 +78,40 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 		return connections;
 	}
 
+	@Override
+	public void performRequest(final Request request) {
+		if ((request.getType() == RequestConstants.REQ_OPEN) && canGoInto()) {
+			// REQ_OPEN -> doubleclick
+			goInto();
+			return;
+		}
+		super.performRequest(request);
+	}
+
+	private boolean canGoInto() {
+		final FBNetworkElement element = getModel().getFBNetworkElement();
+		return ((element instanceof SubApp) || (element instanceof CFBInstance));
+	}
+
+	protected void goInto() {
+		FBNetworkElement element = getModel().getFBNetworkElement();
+		IInterfaceElement selectionElement = getModel();
+		if ((element instanceof SubApp) && (needsOppositeSubapp((SubApp) element))) {
+			// we are mapped and the mirrored subapp located in the resource, get the one
+			// from the application
+			element = element.getOpposite();
+			selectionElement = element.getInterfaceElement(selectionElement.getName());
+		}
+		final IEditorPart newEditor = OpenListenerManager.openEditor(element);
+		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
+		HandlerHelper.selectElement(selectionElement, viewer);
+	}
+
+	private static boolean needsOppositeSubapp(final SubApp subapp) {
+		//if a subapp is mapped and we are at the resource side we would like to get the opposite subapp
+		return (subapp.isMapped() && EcoreUtil.isAncestor(subapp.getResource(), subapp));
+	}
+
 	protected boolean isUnfoldedSubapp() {
 		if (getModel().getFBNetworkElement() instanceof SubApp) {
 			final SubApp subapp = (SubApp) getModel().getFBNetworkElement();
@@ -77,5 +121,6 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 		}
 		return false;
 	}
+
 
 }

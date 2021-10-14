@@ -5,9 +5,9 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed to a per project Type and Data TypeLibrary
@@ -36,67 +36,71 @@ import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 import org.eclipse.xtext.scoping.impl.SimpleScope
 import org.eclipse.xtext.util.SimpleAttributeResolver
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall
 
 /**
  * This class contains custom scoping description.
  * 
  * see : http://www.eclipse.org/Xtext/documentation.html#scoping
  * on how and when to use it 
- *
+ * 
  */
 class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
 
 	def scope_DataType(EObject context, EReference ref) {
-	    val rootElement = EcoreUtil.getRootContainer(context) as StructuredTextAlgorithm;
-	    val res = rootElement.eResource as XtextResource;
-        val candidates = (res.resourceSet.resources.get(0)?.contents?.get(0) as FBType).typeLibrary.dataTypeLibrary.dataTypes
+		val rootElement = EcoreUtil.getRootContainer(context) as StructuredTextAlgorithm;
+		val res = rootElement.eResource as XtextResource;
+		val candidates = (res.resourceSet.resources.get(0)?.contents?.get(0) as FBType).typeLibrary.dataTypeLibrary.
+			dataTypes
 		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
-        return new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), false)
+		return new SimpleScope(
+			Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), false)
 	}
 
 	def scope_AdapterVariable_var(AdapterVariable context, EReference ref) {
 		val type = context.type
-		
-		if(type === null) {
+
+		if (type === null) {
 			return IScope.NULLSCOPE
 		}
 		val candidates = type.getScopeCandidates
-		
-		if(candidates.isEmpty){
+
+		if (candidates.isEmpty) {
 			return IScope.NULLSCOPE
 		}
-		
+
 		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
-		new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), false)
+		new SimpleScope(
+			Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), false)
 	}
-		
-	def getType(AdapterVariable variable){
+
+	def getType(AdapterVariable variable) {
 		val head = variable.curr;
-        switch (head) {
-        	AdapterRoot: head.adapter.type
-        	AdapterVariable: head.^var.type
-        	default: null
-        }
+		switch (head) {
+			AdapterRoot: head.adapter.type
+			AdapterVariable: head.^var.type
+			default: null
+		}
 	}
-	
-	def dispatch List<VarDeclaration> getScopeCandidates(AdapterType context){
+
+	def dispatch List<VarDeclaration> getScopeCandidates(AdapterType context) {
 		val candidates = new ArrayList<VarDeclaration>
 		candidates.addAll(context.interfaceList.inputVars)
 		candidates.addAll(context.interfaceList.outputVars)
 		return candidates
 	}
-	
-	def dispatch List<VarDeclaration> getScopeCandidates(StructuredType context){
+
+	def dispatch List<VarDeclaration> getScopeCandidates(StructuredType context) {
 		new ArrayList<VarDeclaration>(context.memberVariables)
 	}
 
-	def dispatch List<VarDeclaration> getScopeCandidates(DataType context){
+	def dispatch List<VarDeclaration> getScopeCandidates(DataType context) {
 		Collections.emptyList()
 	}
-	
-	def scope_VarDeclaration(Variable context, EReference ref){
+
+	def scope_VarDeclaration(Variable context, EReference ref) {
 		val type = context as DataType
-		if(type === null) {
+		if (type === null) {
 			return IScope.NULLSCOPE
 		}
 	}

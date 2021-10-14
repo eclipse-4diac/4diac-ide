@@ -26,6 +26,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.BorderLayout;
@@ -42,7 +43,10 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -56,7 +60,7 @@ import org.eclipse.swt.events.ControlListener;
 
 public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditPart {
 	private static final int MIN_INTERFACE_BAR_WIDTH = 200;
-	private static final int TOP_BOTTOM_MARGIN = 10;
+	private static final int TOP_BOTTOM_MARGIN = 1;
 	private static final int LEFT_RIGHT_MARGIN = 10;
 	private static final Insets RIGHT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, 0, TOP_BOTTOM_MARGIN,
 			LEFT_RIGHT_MARGIN);  // no left margin to have interface directly at inner border
@@ -250,7 +254,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		};
 		commentContainer.setBorder(border);
 		final ToolbarLayout layout = new ToolbarLayout();
-		layout.setMinorAlignment(ToolbarLayout.ALIGN_CENTER);
+		layout.setMinorAlignment(OrderedLayout.ALIGN_CENTER);
 		layout.setStretchMinorAxis(false);
 		commentContainer.setOpaque(true);
 
@@ -357,11 +361,6 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		}
 	}
 
-	public void enableElkLayouting(final InterfaceEditPart part) {
-		removeChildVisual(part);
-		getContentPane().add(part.getFigure());
-	}
-
 	/**
 	 * Removes the childEditParts figures from the correct container.
 	 *
@@ -379,7 +378,8 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	}
 
 	public void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
-		final IFigure child = childEditPart.getFigure();
+		// we need to get the parent here for handling the padding figure
+		final IFigure child = childEditPart.getFigure().getParent();
 		final IFigure container = getChildVisualContainer(childEditPart);
 		if (child.getParent() == container) {
 			container.remove(child);
@@ -430,8 +430,35 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			}
 		}
 		final int containerSize = targetFigure.getChildren().size();
-		targetFigure.add(child, (index >= containerSize) ? containerSize : index);
+		targetFigure.add(createSideBarFigure(childEditPart), (index >= containerSize) ? containerSize : index);
 		child.setVisible(isVarVisible(childEditPart));
+	}
+
+	private static IFigure createSideBarFigure(final InterfaceEditPart ep) {
+		final IFigure container = new Figure();
+		container.setLayoutManager(new ToolbarLayout());
+
+		final int yPositionFromAttribute = getYPositionFromAttribute(ep.getModel());
+
+		if (yPositionFromAttribute > 0) {
+			final IFigure paddingFigure = new MinSizeFigure();
+			paddingFigure.setMinimumSize(new Dimension(-1, yPositionFromAttribute));
+			container.add(paddingFigure);
+		}
+
+		container.add(ep.getFigure());
+
+		return container;
+	}
+
+	private static int getYPositionFromAttribute(final IInterfaceElement ie) {
+		final Attribute attribute = ie.getAttribute(FordiacKeywords.INTERFACE_Y_POSITION);
+
+		if (attribute != null) {
+			return Integer.parseInt(attribute.getValue());
+		}
+
+		return 0;
 	}
 
 	@SuppressWarnings("static-method") // this method can be overridden so that editors can hide certain interface
@@ -456,6 +483,15 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	@Override
 	public DragTracker getDragTracker(final Request req) {
 		return getParent().getDragTracker(req);
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		final List<EditPart> ies = (List<EditPart>) getChildren().stream()
+				.filter(InterfaceEditPart.class::isInstance)
+				.collect(Collectors.toList());
+		ies.forEach(this::removeChild);
+		ies.forEach(ie -> addChild(ie, -1));
 	}
 
 }

@@ -31,15 +31,15 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 	private static final String ELEMENT2_NAME = "MyInput"; //$NON-NLS-1$
 	private static final String ELEMENT3_NAME = "DI2"; //$NON-NLS-1$
 
-	private static State executeCommandInputWithoutName(State state) {
+	private static State executeCommandInputWithoutName(final State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.BOOL),
 				getTypeInterfaceList(state), /* isInput */ true, /* index */ 0));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyInterfaceListWithName(InterfaceList interfacelist, String element, String type,
-			TestFunction t) {
+	private static void verifyInterfaceListWithName(final InterfaceList interfacelist, final String element, final String type,
+			final TestFunction t) {
 		t.test(!interfacelist.getInputVars().isEmpty());
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
@@ -48,49 +48,47 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getInterfaceElement(element).getTypeName(), type);
 	}
 
-	private static void verifyStateInputWithoutName(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = getTypeInterfaceList(state);
-		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
+	private static void verifyStateInputWithoutName(final State state, final State oldState, final TestFunction t) {
+		final InterfaceList interfacelist = getTypeInterfaceList(state);
+		final InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
 		verifyInterfaceListWithName(interfacelist, ELEMENT1_NAME, FordiacKeywords.BOOL, t);
 		t.test(interfacelist.getInputVars().size(), oldInterfacelist.getInputVars().size() + 1);
 	}
 
-	private static State executeCommandInputWithName(State state) {
+	private static State executeCommandInputWithName(final State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.DWORD),
 				ELEMENT2_NAME, getTypeInterfaceList(state), /* isInput */ true, /* index */ 1));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyStateInputWithName(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = getTypeInterfaceList(state);
-		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
+	private static void verifyStateInputWithName(final State state, final State oldState, final TestFunction t) {
+		final InterfaceList interfacelist = getTypeInterfaceList(state);
+		final InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
 		verifyInterfaceListWithName(interfacelist, ELEMENT2_NAME, FordiacKeywords.DWORD, t);
 		t.test(interfacelist.getInputVars().size(), oldInterfacelist.getInputVars().size() + 1);
 	}
 
-	private static State executeCommandInputWithNameNull(State state) {
+	private static State executeCommandInputWithNameNull(final State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.DWORD), null,
 				getTypeInterfaceList(state), /* isInput */ true, /* index */ 1));
 
 		final State result = commandExecution(state);
 
-		assertion.test(state.getCommand() instanceof CreateInterfaceElementCommand);
+		tester.get().test(state.getCommand() instanceof CreateInterfaceElementCommand);
 		final CreateInterfaceElementCommand c = ((CreateInterfaceElementCommand) state.getCommand());
-		assertion.test(c.isInput(), true);
-		assertion.test(c.getInterfaceList(), getTypeInterfaceList(state));
-		assertion.test(c.getDataType(), getDatatypelib().getType(FordiacKeywords.DWORD));
-		assertion.test(getTypeInterfaceList(state).getInterfaceElement(ELEMENT3_NAME), c.getInterfaceElement());
-		assertion.test(c.getCreatedElement(), c.getInterfaceElement());
+		tester.get().test(c.getInterfaceList(), getTypeInterfaceList(state));
+		tester.get().test(getTypeInterfaceList(state).getInterfaceElement(ELEMENT3_NAME), c.getCreatedElement());
+		tester.get().test(c.getCreatedElement(), c.getCreatedElement());
 
 		return result;
 	}
 
-	private static void verifyStateInputWithNameNull(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = getTypeInterfaceList(state);
-		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
+	private static void verifyStateInputWithNameNull(final State state, final State oldState, final TestFunction t) {
+		final InterfaceList interfacelist = getTypeInterfaceList(state);
+		final InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
 		verifyInterfaceListWithName(interfacelist, ELEMENT3_NAME, FordiacKeywords.DWORD, t);
 		t.test(interfacelist.getInputVars().size(), oldInterfacelist.getInputVars().size() + 1);
@@ -102,23 +100,23 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 				new ExecutionDescription<>("Add Input without name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithoutName, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithoutName //
-				), //
+						), //
 				new ExecutionDescription<>("Add Input with name \"" + ELEMENT2_NAME + "\"", // //$NON-NLS-1$ //$NON-NLS-2$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithName, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithName //
-				), //
+						), //
 				new ExecutionDescription<>("Add Input with null as name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithNameNull, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithNameNull //
-				) //
-		);
+						) //
+				);
 
 		final Collection<ExecutionDescription<State>> reordering = createReordering(
-				(State s) -> getTypeInterfaceList(s).getInputVars(), ELEMENT1_NAME, ELEMENT3_NAME, ELEMENT2_NAME);
+				(final State s) -> getTypeInterfaceList(s).getInputVars(), ELEMENT1_NAME, ELEMENT3_NAME, ELEMENT2_NAME);
 
 		final Collection<ExecutionDescription<State>> updateFBandValidate = createUpdateAndValidate(
-				(State s, State o, TestFunction t) -> {
-					InterfaceList interfacelist = getInstanceInterfaceList(s);
+				(final State s, final State o, final TestFunction t) -> {
+					final InterfaceList interfacelist = getInstanceInterfaceList(s);
 
 					verifyInterfaceListWithName(interfacelist, ELEMENT1_NAME, FordiacKeywords.BOOL, t);
 					verifyInterfaceListWithName(interfacelist, ELEMENT2_NAME, FordiacKeywords.DWORD, t);
@@ -131,7 +129,7 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 						executionDescriptions.stream(), //
 						reordering.stream()), //
 				updateFBandValidate.stream() //
-		).collect(Collectors.toList()));
+				).collect(Collectors.toList()));
 	}
 
 }

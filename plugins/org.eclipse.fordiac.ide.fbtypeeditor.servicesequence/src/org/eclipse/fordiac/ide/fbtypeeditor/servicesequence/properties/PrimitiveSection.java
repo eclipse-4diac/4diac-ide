@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ *               2019, 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,165 +12,175 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
+ *   Melanie Winter - updated section, use comboboxes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
+import java.util.Arrays;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveInterfaceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveParameterCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.PrimitiveEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.InterfaceSelectorButton;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class PrimitiveSection extends AbstractServiceSection {
 
-	private Text eventText;
-	private Text parametersText;
-	private CCombo serviceInterfaceCombo;
-	private Button buttonNone;
-	private Button buttonTrue;
-	private Button buttonFalse;
-	private Group qiGroup;
 
-	private PrimitiveEditPart editPart;
+	private Text parametersText;
+	private CCombo eventCombo;
+	private CCombo dataQualifyingCombo;
+	private Button checkBox;
+	private Text customEventText;
+	private InterfaceSelectorButton interfaceSelector;
+	private static final int ASCII_UNDERSCORE = 95;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createEventSection(getLeftComposite());
-		createPrimitiveSection(getLeftComposite());
-		createQISection(getRightComposite());
+		Group primitiveSpecification;
+		primitiveSpecification = getWidgetFactory().createGroup(getLeftComposite(),
+				Messages.PrimitiveSection_CreateControls_PrimitiveSpecification);
+		primitiveSpecification.setLayout(new GridLayout());
+		primitiveSpecification.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		createEventSection(primitiveSpecification);
+		createCustomEventSection(primitiveSpecification);
+		createPrimitiveSection(primitiveSpecification);
+		fillDataQualifyingDropdown();
+		dataQualifyingCombo.setToolTipText(Messages.PrimitiveSection_DataQualifyingToolTip);
 	}
 
-	protected void createEventSection(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+
+	protected void createEventSection(final Group parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
+		composite.setLayout(new GridLayout(3, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		composite.pack();
+
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreateEventSection_Event);
-		eventText = createGroupText(composite, true);
-		eventText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangePrimitiveEventCommand(getType(), eventText.getText()));
-				setRadioButton();
-				addContentAdapter();
-			}
+
+		final Composite eventComposite = getWidgetFactory().createComposite(composite);
+		eventComposite.setLayout(new GridLayout(1, true));
+		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+
+		eventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), eventComposite);
+		eventCombo.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		eventCombo.addListener(SWT.Selection, event -> {
+			final String newEventName = eventCombo.getText() + dataQualifyingCombo.getText();
+			executeCommand(new ChangePrimitiveEventCommand(getType(), newEventName));
+			refresh();
+		});
+
+		final Composite dataQualifyingComposite = getWidgetFactory().createComposite(composite);
+		dataQualifyingComposite.setLayout(new GridLayout(1, true));
+		dataQualifyingComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.NONE, false, false));
+		dataQualifyingComposite.setSize(STANDARD_LABEL_WIDTH, getMinimumHeight());
+		dataQualifyingComposite.setToolTipText(Messages.PrimitiveSection_DataQualifyingToolTip);
+
+		dataQualifyingCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), dataQualifyingComposite);
+		dataQualifyingCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+		dataQualifyingCombo.addListener(SWT.Selection, event -> {
+			final String newEventName = eventCombo.getText() + dataQualifyingCombo.getText();
+			executeCommand(new ChangePrimitiveEventCommand(getType(), newEventName));
+			refresh();
 		});
 	}
 
-	protected void createQISection(Composite parent) {
-		qiGroup = getWidgetFactory().createGroup(parent, "QI"); //$NON-NLS-1$
-		qiGroup.setLayout(new RowLayout(SWT.VERTICAL));
-		qiGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		buttonNone = getWidgetFactory().createButton(qiGroup, Messages.PrimitiveSection_None, SWT.RADIO);
-		buttonNone.addSelectionListener(new SelectionAdapter() {
+	private void createCustomEventSection(final Composite parent) {
+		final Composite customEventComposite = getWidgetFactory().createComposite(parent);
+		customEventComposite.setLayout(new GridLayout(3, false));
+		customEventComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+
+		getWidgetFactory().createCLabel(customEventComposite, Messages.PrimitiveSection_CustomEvent);
+
+		checkBox = new Button(customEventComposite, SWT.CHECK);
+		customEventText = createGroupText(customEventComposite, true);
+
+		if (isCustomEvent()) {
+			checkBox.setSelection(true);
+		}
+
+		checkBox.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
-				changeEventText(Messages.PrimitiveSection_None);
+			public void widgetSelected(final SelectionEvent e) {
+				if (checkBox.getSelection()) {
+					executeCommand(new ChangePrimitiveEventCommand(getType(), "")); //$NON-NLS-1$
+				} else {
+					customEventText.setText(""); //$NON-NLS-1$
+					eventCombo.select(0);
+					executeCommand(new ChangePrimitiveEventCommand(getType(), eventCombo.getText()));
+				}
 				refresh();
 			}
 		});
-		buttonTrue = getWidgetFactory().createButton(qiGroup, "true", SWT.RADIO); //$NON-NLS-1$
-		buttonTrue.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				changeEventText("true"); //$NON-NLS-1$
-				refresh();
-			}
+
+		customEventText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangePrimitiveEventCommand(getType(), customEventText.getText()));
+			addContentAdapter();
 		});
-		buttonFalse = getWidgetFactory().createButton(qiGroup, "false", SWT.RADIO); //$NON-NLS-1$
-		buttonFalse.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				changeEventText("false"); //$NON-NLS-1$
-				refresh();
-			}
-		});
-		qiGroup.setVisible(false);
 	}
 
-	private void changeEventText(String button) {
-		if (null != editPart) {
-			String event = getType().getEvent().replace("+", "").replace("-", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			switch (button) {
-			case "true": //$NON-NLS-1$
-				editPart.getNameLabel().setText(event + "+"); //$NON-NLS-1$
-				executeCommand(new ChangePrimitiveEventCommand(getType(), event + "+")); //$NON-NLS-1$
-				break;
-			case "false": //$NON-NLS-1$
-				editPart.getNameLabel().setText(event + "-"); //$NON-NLS-1$
-				executeCommand(new ChangePrimitiveEventCommand(getType(), event + "-")); //$NON-NLS-1$
-				break;
-			default:
-				editPart.getNameLabel().setText(event);
-				executeCommand(new ChangePrimitiveEventCommand(getType(), event));
-				break;
+	private boolean isCustomEvent() {
+		if (getType() != null) {
+			final FBType fb = getType().getService().getFBType();
+			for (final Event event : getRelevantEvents(fb)) {
+				if (event.getName().equals(getType().getEvent())) {
+					return false;
+				}
 			}
 		}
+		return true;
 	}
 
-	protected void createPrimitiveSection(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	protected void createPrimitiveSection(final Group parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Interface);
-		serviceInterfaceCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
-		serviceInterfaceCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		serviceInterfaceCombo.addListener(SWT.Selection, event -> {
-			executeCommand(
-					new ChangePrimitiveInterfaceCommand((Service) getType().eContainer().eContainer().eContainer(),
-							getType(), serviceInterfaceCombo.getText()));
+
+		interfaceSelector = new InterfaceSelectorButton(composite, cmd -> {
+			executeCommand(cmd);
 			refresh();
 		});
-		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Parameters);
-		parametersText = createGroupText(composite, true);
-		parametersText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangePrimitiveParameterCommand(getType(), parametersText.getText()));
-				addContentAdapter();
-			}
+
+		getWidgetFactory().createCLabel(composite, Messages.TransactionSection_Parameter);
+		parametersText = createGroupText(composite, true, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		parametersText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangePrimitiveParameterCommand(getType(), parametersText.getText()));
+			addContentAdapter();
 		});
 	}
 
 	@Override
-	protected Primitive getInputType(Object input) {
-		if (input instanceof InputPrimitiveEditPart || input instanceof OutputPrimitiveEditPart) {
-			editPart = (PrimitiveEditPart) input;
-			return ((PrimitiveEditPart) input).getCastedModel();
+	protected Primitive getInputType(final Object input) {
+		if ((input instanceof InputPrimitiveEditPart) || (input instanceof OutputPrimitiveEditPart)) {
+			return ((AbstractPrimitiveEditPart) input).getModel();
 		}
-		if (input instanceof InputPrimitive || input instanceof OutputPrimitive) {
-			IEditorPart editor = EditorUtils.getCurrentActiveEditor();
-			GraphicalViewer view = editor.getAdapter(GraphicalViewer.class);
-			editPart = (PrimitiveEditPart) view.getEditPartRegistry().get(input);
+		if ((input instanceof InputPrimitive) || (input instanceof OutputPrimitive)) {
 			return ((Primitive) input);
 		}
 		return null;
@@ -179,95 +189,109 @@ public class PrimitiveSection extends AbstractServiceSection {
 	@Override
 	protected void setInputCode() {
 		parametersText.setEnabled(false);
-		serviceInterfaceCombo.removeAll();
-		eventText.setEnabled(false);
 	}
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			parametersText.setText(getType().getParameters() != null ? getType().getParameters() : ""); //$NON-NLS-1$
-			setServiceInterfaceDropdown();
-			eventText.setText(getType().getEvent());
-			if (containsQI()) {
-				setRadioButton();
-				if (type instanceof OutputPrimitive) {
-					qiGroup.setText("QO"); //$NON-NLS-1$
-				} else {
-					qiGroup.setText("QI"); //$NON-NLS-1$
-				}
-				qiGroup.setVisible(true);
-			}
+			interfaceSelector.setType(getType());
+			setEventDropdown();
+			setDataQualifyingDropdown();
+
+			final IInterfaceElement qiData = getType().getService().getFBType().getInterfaceList()
+					.getInterfaceElement("QI"); //$NON-NLS-1$
+
+			dataQualifyingCombo.setEnabled(qiData != null);
+			customEventText.setEnabled(checkBox.getSelection());
+			eventCombo.setEnabled(!checkBox.getSelection());
+			dataQualifyingCombo.setEnabled(!checkBox.getSelection());
 		}
 		commandStack = commandStackBuffer;
 	}
+
+
 
 	@Override
 	protected Primitive getType() {
 		return (Primitive) type;
 	}
 
-	protected FBType getFB() {
-		return (FBType) getType().eContainer().eContainer().eContainer().eContainer();
+	protected FBType getFBType() {
+		return getType().getService().getFBType();
 	}
 
-	protected boolean containsQI() {
-		if (type instanceof InputPrimitive) {
-			for (VarDeclaration var : getFB().getInterfaceList().getInputVars()) {
-				if (var.getName().equals("QI")) { //$NON-NLS-1$
-					return true;
+	private void fillDataQualifyingDropdown() {
+		dataQualifyingCombo.removeAll();
+		dataQualifyingCombo.add(""); //$NON-NLS-1$
+		dataQualifyingCombo.add("+"); //$NON-NLS-1$
+		dataQualifyingCombo.add("-"); //$NON-NLS-1$
+
+	}
+
+	private void setDataQualifyingDropdown() {
+		final String currentEvent = getType().getEvent();
+		int index = 0;
+
+		if (!currentEvent.isEmpty()) {
+			final String lastChar = String.valueOf(currentEvent.charAt(currentEvent.length() - 1));
+			final String[] itemsArray = dataQualifyingCombo.getItems();
+			for (int i = 0; i < itemsArray.length; i++) {
+				if (lastChar.equals(itemsArray[i])) {
+					index = i;
 				}
 			}
-		} else if (type instanceof OutputPrimitive) {
-			for (VarDeclaration var : getFB().getInterfaceList().getOutputVars()) {
-				if (var.getName().equals("QO")) { //$NON-NLS-1$
-					return true;
-				}
+		}
+		dataQualifyingCombo.select(index);
+	}
+
+	public void setEventDropdown() {
+		eventCombo.removeAll();
+		final FBType fb = getType().getService().getFBType();
+		for (final Event event : getRelevantEvents(fb)) {
+			eventCombo.add(event.getName());
+		}
+
+		selectCurrentEventInCombo();
+	}
+
+	private void selectCurrentEventInCombo() {
+
+		String currentEvent = getType().getEvent();
+
+		// handle qualifier QI
+		if(!currentEvent.isEmpty()) {
+			final char lastChar = currentEvent.charAt(currentEvent.length() - 1);
+			if (!(Character.isLetterOrDigit(lastChar) || (lastChar == ASCII_UNDERSCORE))) {
+				currentEvent = currentEvent.substring(0, currentEvent.length()-1);
 			}
 		}
-		return false;
-	}
 
-	public void setRadioButton() {
-		if (getType().getEvent().endsWith("+")) { //$NON-NLS-1$
-			buttonTrue.setSelection(true);
-			buttonFalse.setSelection(false);
-			buttonNone.setSelection(false);
+		// select event in combobox
+		final int index = Arrays.asList(eventCombo.getItems()).indexOf(currentEvent);
+		if (index >= 0) {
+			eventCombo.select(index);
+			checkBox.setSelection(false);
+			customEventText.setText(""); //$NON-NLS-1$
 		} else {
-			if (getType().getEvent().endsWith("-")) { //$NON-NLS-1$
-				buttonFalse.setSelection(true);
-				buttonNone.setSelection(false);
-				buttonTrue.setSelection(false);
-			} else {
-				buttonNone.setSelection(true);
-				buttonFalse.setSelection(false);
-				buttonTrue.setSelection(false);
-			}
+			// set custom event
+			checkBox.setSelection(true);
+			customEventText.setText(currentEvent);
 		}
 	}
 
-	protected boolean isLeftInterfaceSelected() {
-		if (serviceInterfaceCombo.getText().equals(serviceInterfaceCombo.getItem(0))) {
-			return true;
+	private EList<Event> getRelevantEvents(final FBType fb) {
+		if (getType() instanceof InputPrimitive) {
+			return fb.getInterfaceList().getEventInputs();
 		}
-		return false;
+		return fb.getInterfaceList().getEventOutputs();
 	}
 
-	public void setServiceInterfaceDropdown() {
-		serviceInterfaceCombo.removeAll();
-		Service s = (Service) getType().eContainer().eContainer().eContainer();
-		serviceInterfaceCombo.add(s.getLeftInterface().getName());
-		serviceInterfaceCombo.add(s.getRightInterface().getName());
-		if (serviceInterfaceCombo.getItem(0).equals(getType().getInterface().getName())) {
-			serviceInterfaceCombo.select(0);
-		} else {
-			serviceInterfaceCombo.select(1);
-		}
-	}
 
 	@Override
 	protected void setInputInit() {
+		// currently nothing to be done here
 	}
 }

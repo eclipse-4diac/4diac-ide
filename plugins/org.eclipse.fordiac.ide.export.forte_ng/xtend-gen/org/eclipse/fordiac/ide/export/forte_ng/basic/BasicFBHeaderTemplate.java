@@ -86,9 +86,24 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     {
-      boolean _isEmpty = this.type.getInternalVars().isEmpty();
+      boolean _isEmpty = this.type.getInternalFbs().isEmpty();
       boolean _not = (!_isEmpty);
       if (_not) {
+        _builder.append("static const size_t csmAmountOfInternalFBs = ");
+        int _size = this.type.getInternalFbs().size();
+        _builder.append(_size);
+        _builder.append(";");
+        _builder.newLineIfNotEmpty();
+        CharSequence _generateInternalFbDefinition = this.generateInternalFbDefinition();
+        _builder.append(_generateInternalFbDefinition);
+        _builder.newLineIfNotEmpty();
+        _builder.newLine();
+      }
+    }
+    {
+      boolean _isEmpty_1 = this.type.getInternalVars().isEmpty();
+      boolean _not_1 = (!_isEmpty_1);
+      if (_not_1) {
         CharSequence _generateInternalVarDelcaration = this.generateInternalVarDelcaration(this.type);
         _builder.append(_generateInternalVarDelcaration);
         _builder.newLineIfNotEmpty();
@@ -99,9 +114,9 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
       EList<VarDeclaration> _outputVars = this.type.getInterfaceList().getOutputVars();
       Iterable<VarDeclaration> _plus = Iterables.<VarDeclaration>concat(_inputVars, _outputVars);
       EList<VarDeclaration> _internalVars = this.type.getInternalVars();
-      boolean _isEmpty_1 = IterableExtensions.isEmpty(Iterables.<VarDeclaration>concat(_plus, _internalVars));
-      boolean _not_1 = (!_isEmpty_1);
-      if (_not_1) {
+      boolean _isEmpty_2 = IterableExtensions.isEmpty(Iterables.<VarDeclaration>concat(_plus, _internalVars));
+      boolean _not_2 = (!_isEmpty_2);
+      if (_not_2) {
         CharSequence _generateInitialValueAssignmentDeclaration = this.generateInitialValueAssignmentDeclaration();
         _builder.append(_generateInitialValueAssignmentDeclaration);
         _builder.newLineIfNotEmpty();
@@ -147,36 +162,96 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     _builder.newLine();
     _builder.append("public:");
     _builder.newLine();
-    _builder.append("  ");
-    CharSequence _fBClassName = this.getFBClassName();
-    _builder.append(_fBClassName, "  ");
-    _builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :");
-    _builder.newLineIfNotEmpty();
-    _builder.append("      ");
-    String _baseClass = this.baseClass();
-    _builder.append(_baseClass, "      ");
-    _builder.append("(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
     {
-      boolean _isEmpty_2 = this.type.getInternalVars().isEmpty();
-      boolean _not_2 = (!_isEmpty_2);
-      if (_not_2) {
-        _builder.append("&scm_stInternalVars");
+      boolean _isEmpty_3 = this.type.getInternalFbs().isEmpty();
+      if (_isEmpty_3) {
+        _builder.append("  ");
+        CharSequence _fBClassName = this.getFBClassName();
+        _builder.append(_fBClassName, "  ");
+        _builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :");
+        _builder.newLineIfNotEmpty();
+        _builder.append("  ");
+        _builder.append("    ");
+        String _baseClass = this.baseClass();
+        _builder.append(_baseClass, "      ");
+        _builder.append("(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
+        {
+          boolean _isEmpty_4 = this.type.getInternalVars().isEmpty();
+          boolean _not_3 = (!_isEmpty_4);
+          if (_not_3) {
+            _builder.append("&scm_stInternalVars");
+          } else {
+            _builder.append("nullptr");
+          }
+        }
+        _builder.append(", m_anFBConnData, m_anFBVarsData) {");
+        _builder.newLineIfNotEmpty();
       } else {
-        _builder.append("nullptr");
+        _builder.append("  ");
+        CharSequence _fBClassName_1 = this.getFBClassName();
+        _builder.append(_fBClassName_1, "  ");
+        _builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :");
+        _builder.newLineIfNotEmpty();
+        _builder.append("  ");
+        _builder.append("    ");
+        String _baseClass_1 = this.baseClass();
+        _builder.append(_baseClass_1, "      ");
+        _builder.append("(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
+        {
+          boolean _isEmpty_5 = this.type.getInternalVars().isEmpty();
+          boolean _not_4 = (!_isEmpty_5);
+          if (_not_4) {
+            _builder.append("&scm_stInternalVars");
+          } else {
+            _builder.append("nullptr");
+          }
+        }
+        _builder.append(", m_anFBConnData, m_anFBVarsData, scmInternalFBs, csmAmountOfInternalFBs) {");
+        _builder.newLineIfNotEmpty();
       }
     }
-    _builder.append(", m_anFBConnData, m_anFBVarsData) {");
-    _builder.newLineIfNotEmpty();
     _builder.append("  ");
     _builder.append("};");
     _builder.newLine();
     _builder.newLine();
-    _builder.append("  ");
-    _builder.append("virtual ~");
-    CharSequence _fBClassName_1 = this.getFBClassName();
-    _builder.append(_fBClassName_1, "  ");
-    _builder.append("() = default;");
-    _builder.newLineIfNotEmpty();
+    {
+      boolean _isEmpty_6 = this.type.getInternalFbs().isEmpty();
+      boolean _not_5 = (!_isEmpty_6);
+      if (_not_5) {
+        _builder.append("  ");
+        _builder.append("virtual ~");
+        CharSequence _fBClassName_2 = this.getFBClassName();
+        _builder.append(_fBClassName_2, "  ");
+        _builder.append("() {");
+        _builder.newLineIfNotEmpty();
+        _builder.append("  ");
+        _builder.append("  ");
+        _builder.append("for(size_t i = 0; i < csmAmountOfInternalFBs; ++i){");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append("    ");
+        _builder.append("delete mInternalFBs[i];");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append("  ");
+        _builder.append("}");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append("  ");
+        _builder.append("delete[] mInternalFBs;");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append("};");
+        _builder.newLine();
+      } else {
+        _builder.append("  ");
+        _builder.append("virtual ~");
+        CharSequence _fBClassName_3 = this.getFBClassName();
+        _builder.append(_fBClassName_3, "  ");
+        _builder.append("() = default;");
+        _builder.newLineIfNotEmpty();
+      }
+    }
     _builder.append("};");
     _builder.newLine();
     _builder.newLine();
@@ -192,6 +267,14 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"basicfb.h\"");
     _builder.newLine();
+    {
+      boolean _isEmpty = this.type.getInternalFbs().isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        _builder.append("#include \"typelib.h\"");
+        _builder.newLine();
+      }
+    }
     EList<VarDeclaration> _inputVars = this.type.getInterfaceList().getInputVars();
     EList<VarDeclaration> _outputVars = this.type.getInterfaceList().getOutputVars();
     Iterable<VarDeclaration> _plus = Iterables.<VarDeclaration>concat(_inputVars, _outputVars);

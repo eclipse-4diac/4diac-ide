@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 
 public abstract class StructManipulatorEditPart extends AbstractFBNElementEditPart {
-	public StructManipulatorEditPart() {
+	protected StructManipulatorEditPart() {
 		super();
 	}
 
@@ -35,36 +35,24 @@ public abstract class StructManipulatorEditPart extends AbstractFBNElementEditPa
 		return (StructManipulator) super.getModel();
 	}
 
-	private Adapter multiplexInterfaceAdapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			switch (notification.getEventType()) {
-			case Notification.ADD:
-			case Notification.ADD_MANY:
-			case Notification.MOVE:
-			case Notification.REMOVE:
-				// case Notification.REMOVE_MANY:
-				refresh();
-				break;
-			default:
-				break;
+	@Override
+	protected Adapter createInterfaceAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				switch (notification.getEventType()) {
+				case Notification.ADD:
+				case Notification.ADD_MANY:
+				case Notification.MOVE:
+				case Notification.REMOVE:
+					refresh();
+					break;
+				default:
+					break;
+				}
 			}
-		}
-	};
-
-	@Override
-	public void activate() {
-		super.activate();
-		if ((null != getModel()) && !getModel().getInterface().eAdapters().contains(multiplexInterfaceAdapter)) {
-			getModel().getInterface().eAdapters().add(multiplexInterfaceAdapter);
-		}
+		};
 	}
 
-	@Override
-	public void deactivate() {
-		super.deactivate();
-		if (null != getModel()) {
-			getModel().getInterface().eAdapters().remove(multiplexInterfaceAdapter);
-		}
-	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - make border equal width on all sides
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.draw2d;
 
@@ -20,17 +21,14 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.swt.SWT;
 
-/**
- * The Class AdvancedLineBorder.
- * 
- * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
- */
+/** The Class AdvancedLineBorder: Allows selecting the directions, where a border is required */
 public class AdvancedLineBorder extends LineBorder {
+
+	private static final int ALPHA_MAX_VALUE = 255;
 
 	private int side = PositionConstants.NONE;
 	private int style = SWT.LINE_SOLID;
-
-	private int alpha = 255;
+	private int alpha = ALPHA_MAX_VALUE;
 
 	/**
 	 * Sets the placement of line Valid values are (or any combinations)
@@ -42,10 +40,10 @@ public class AdvancedLineBorder extends LineBorder {
 	 * <LI><EM>{@link PositionConstants#NONE}</EM>
 	 * </UL>
 	 * .
-	 * 
+	 *
 	 * @param side the side
 	 */
-	public AdvancedLineBorder(int side) {
+	public AdvancedLineBorder(final int side) {
 		super();
 		this.side = side;
 	}
@@ -69,11 +67,11 @@ public class AdvancedLineBorder extends LineBorder {
 	 * <LI><EM>{@link SWT#LINE_SOLID}</EM>
 	 * </UL>
 	 * .
-	 * 
+	 *
 	 * @param side  the side
 	 * @param style the style
 	 */
-	public AdvancedLineBorder(int side, int style) {
+	public AdvancedLineBorder(final int side, final int style) {
 		super();
 		this.side = side;
 		this.style = style;
@@ -86,13 +84,8 @@ public class AdvancedLineBorder extends LineBorder {
 		super();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.draw2d.LineBorder#getInsets(org.eclipse.draw2d.IFigure)
-	 */
 	@Override
-	public Insets getInsets(IFigure figure) {
+	public Insets getInsets(final IFigure figure) {
 		int north = 0;
 		int east = 0;
 		int south = 0;
@@ -113,14 +106,8 @@ public class AdvancedLineBorder extends LineBorder {
 		return new Insets(north, west, south, east);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.draw2d.LineBorder#paint(org.eclipse.draw2d.IFigure,
-	 * org.eclipse.draw2d.Graphics, org.eclipse.draw2d.geometry.Insets)
-	 */
 	@Override
-	public void paint(IFigure figure, Graphics graphics, Insets insets) {
+	public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
 		graphics.setAlpha(alpha);
 		tempRect.setBounds(getPaintRectangle(figure, insets));
 
@@ -131,37 +118,28 @@ public class AdvancedLineBorder extends LineBorder {
 
 		graphics.setLineStyle(style);
 
+		final int yLowerBound = tempRect.y + tempRect.height - getWidth() / 4;
 		if ((side & PositionConstants.NORTH) != 0) {
-			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x + tempRect.width - getWidth(), tempRect.y);
+			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x + tempRect.width, tempRect.y);
 		}
 		if ((side & PositionConstants.EAST) != 0) {
-			graphics.drawLine(tempRect.x + tempRect.width - getWidth(), tempRect.y,
-					tempRect.x + tempRect.width - getWidth(), tempRect.y + tempRect.height - getWidth());
+			final int xRightBound = tempRect.x + tempRect.width - getWidth() / 4;
+			graphics.drawLine(xRightBound, tempRect.y, xRightBound, yLowerBound);
 		}
 		if ((side & PositionConstants.SOUTH) != 0) {
-			graphics.drawLine(tempRect.x, tempRect.y + tempRect.height - getWidth(), tempRect.x + tempRect.width,
-					tempRect.y + tempRect.height - getWidth());
+			graphics.drawLine(tempRect.x, yLowerBound, tempRect.x + tempRect.width, yLowerBound);
 		}
 		if ((side & PositionConstants.WEST) != 0) {
-			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x, tempRect.y + tempRect.height - getWidth());
+			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x, yLowerBound);
 		}
-		if ((side & PositionConstants.NONE) != 0) {
-			// nothing to do!
-		}
-
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.draw2d.LineBorder#setStyle(int)
-	 */
 	@Override
-	public void setStyle(int style) {
+	public void setStyle(final int style) {
 		this.style = style;
 	}
 
-	public void setAlpha(int alpha) {
+	public void setAlpha(final int alpha) {
 		if (this.alpha != alpha) {
 			this.alpha = alpha;
 		}
@@ -173,7 +151,7 @@ public class AdvancedLineBorder extends LineBorder {
 
 	@Override
 	public boolean isOpaque() {
-		return alpha > 254;
+		return alpha >= ALPHA_MAX_VALUE;
 	}
 
 }

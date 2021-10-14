@@ -90,7 +90,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * when that field is accessed. Clients should not invoke it directly. Instead,
 	 * they should simply access that field to obtain the package. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
@@ -257,7 +257,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * Complete the initialization of the package and its meta-model. This method is
 	 * guarded to have no affect on any invocation but its first. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public void initializePackageContents() {
@@ -294,7 +294,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getQualifiedString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(portElementEClass, PortElement.class, "PortElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getPortElement_Fb(), theLibraryElementPackage.getFB(), null, "fb", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPortElement_Fb(), theLibraryElementPackage.getFBNetworkElement(), null, "fb", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPortElement_InterfaceElement(), theLibraryElementPackage.getIInterfaceElement(), null, "interfaceElement", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPortElement_Resource(), theLibraryElementPackage.getResource(), null, "resource", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getPortElement_Hierarchy(), theXMLTypePackage.getString(), "hierarchy", null, 0, -1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

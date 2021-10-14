@@ -21,16 +21,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeAlgorithmOrderCommand extends Command {
-	private final Algorithm var;
+	private final Algorithm alg;
 	private final EList<Algorithm> type;
 	private final int oldIndex;
 	private int newIndex;
 
-	public ChangeAlgorithmOrderCommand(final EList<Algorithm> type, final Algorithm var, int indexChanged) {
+	public ChangeAlgorithmOrderCommand(final EList<Algorithm> type, final Algorithm alg, int indexChanged) {
 		this.type = type;
-		this.var = var;
+		this.alg = alg;
 
-		oldIndex = type.indexOf(var);
+		oldIndex = type.indexOf(alg);
 
 		// move up : -1
 		// move down : +1
@@ -48,13 +48,13 @@ public class ChangeAlgorithmOrderCommand extends Command {
 		}
 	}
 
-	public ChangeAlgorithmOrderCommand(final EList<Algorithm> type, final Algorithm var, boolean moveUp) {
-		this(type, var, moveUp ? -1 : 1);
+	public ChangeAlgorithmOrderCommand(final EList<Algorithm> type, final Algorithm alg, boolean moveUp) {
+		this(type, alg, moveUp ? -1 : 1);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (null != var) && (type.size() > 1) && (type.size() > newIndex);
+		return (null != alg) && (type.size() > 1) && (type.size() > newIndex);
 	}
 
 	@Override
@@ -73,6 +73,6 @@ public class ChangeAlgorithmOrderCommand extends Command {
 	}
 
 	private void moveTo(int index) {
-		type.move(index, var);
+		type.move(index, alg);
 	}
 }

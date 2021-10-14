@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -31,31 +31,29 @@ public class ActionContentProvider implements ITreeContentProvider {
 	}
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
+	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof ECState && null != ((ECState) parentElement).getECAction()) {
 			return ((ECState) parentElement).getECAction().toArray();
 		}
 		if (parentElement instanceof BasicFBType) {
 			return ((BasicFBType) parentElement).getAlgorithm().toArray();
 		}
-		return null;
+		return new Object[0];
 	}
 
 	@Override
-	public Object getParent(Object element) {
+	public Object getParent(final Object element) {
 		if (element instanceof ECState) {
 			return ((ECState) element).getECC();
 		}
-		if (element instanceof ECAction) {
-			if (null != ((ECAction) element).getECState()) {
-				return ((ECAction) element).getECState().getECC().getBasicFBType();
-			}
+		if ((element instanceof ECAction) && (null != ((ECAction) element).getECState())) {
+			return ((ECAction) element).getECState().getECC().getBasicFBType();
 		}
 		return null;
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
+	public boolean hasChildren(final Object element) {
 		if (element instanceof ECState) {
 			return !((ECState) element).getECAction().isEmpty();
 		}

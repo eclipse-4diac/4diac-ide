@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.jface.viewers.Viewer;
 
 public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 
@@ -35,25 +34,15 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	}
 
 	@Override
-	public void dispose() {
-		super.dispose();
-		// TODO add resource monitoring
-	}
-
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	}
-
-	@Override
-	public Object[] getElements(Object inputElement) {
+	public Object[] getElements(final Object inputElement) {
 		return getChildren(inputElement);
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof IFile) {
-			IFile element = (IFile) parentElement;
-			PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(element);
+			final IFile element = (IFile) parentElement;
+			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(element);
 			if (null != entry) {
 				parentElement = entry.getType();
 				if (parentElement instanceof AdapterType) {
@@ -65,29 +54,25 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 				|| (parentElement instanceof SystemConfiguration) || (parentElement instanceof FB)
 				|| (parentElement instanceof Device) || (parentElement instanceof Resource)
 				|| (parentElement instanceof SubApp)) {
-			return null;
+			return new Object[0];
 		}
 		return super.getChildren(parentElement);
 	}
 
 	@Override
-	public Object getParent(Object element) {
-		Object retVal = null;
+	public Object getParent(final Object element) {
 		if (element instanceof IFile) {
 			return ((IResource) element).getParent();
-		} else {
-			retVal = super.getParent(element);
-			// FIXME check for the correct elements and return the IFile for them
-//			if(retval instanceof FBType){
-//
-//			}
-
 		}
-		return retVal;
+		return super.getParent(element);
+		// FIXME check for the correct elements and return the IFile for them
+		//			if(retval instanceof FBType){
+		//
+		//			}
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
+	public boolean hasChildren(final Object element) {
 		if ((element instanceof AutomationSystem) || (element instanceof Application)
 				|| (element instanceof SystemConfiguration) || (element instanceof FB) || (element instanceof Device)
 				|| (element instanceof Resource) || (element instanceof SubApp)) {

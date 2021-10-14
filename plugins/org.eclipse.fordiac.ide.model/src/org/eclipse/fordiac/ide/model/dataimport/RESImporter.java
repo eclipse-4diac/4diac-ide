@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  */
 
-public final class RESImporter extends TypeImporter {
+public class RESImporter extends TypeImporter {
 
 	public RESImporter(final IFile typeFile) {
 		super(typeFile);

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2014 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -37,7 +37,7 @@ public class VirtualDNSTagProvider implements ITagProvider {
 	private VirtualDNSManagement virtualDNSManagement;
 
 	/** The options. */
-	private static Map<String, Object> options = new HashMap<String, Object>();
+	private static Map<String, Object> options = new HashMap<>();
 	/** The Constant ENCODING_UTF_8. */
 	private static final String ENCODING_UTF_8 = "UTF-8";//$NON-NLS-1$
 
@@ -46,29 +46,27 @@ public class VirtualDNSTagProvider implements ITagProvider {
 		virtualResSet.getAdapterFactories().add(new VirtualDNSAdapterFactory());
 
 		options.put(XMLResource.OPTION_ENCODING, ENCODING_UTF_8);
-		options.put(XMLResource.OPTION_DISABLE_NOTIFY, true);
-		// TODO check whether the following options are faster
+		options.put(XMLResource.OPTION_DISABLE_NOTIFY, Boolean.TRUE);
 		options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
 		options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
-		// options.put(XMLResource.OPTION_ZIP, Boolean.TRUE)
 	}
 
 	@Override
-	public boolean loadTagConfiguration(IPath loadPath) {
-		IPath path = loadPath.append(VIRTUAL_DNS_FILE_NAME);
+	public boolean loadTagConfiguration(final IPath loadPath) {
+		final IPath path = loadPath.append(VIRTUAL_DNS_FILE_NAME);
 		if (path.toFile().exists()) {
 
-			URI uri = URI.createFileURI(path.toOSString());
+			final URI uri = URI.createFileURI(path.toOSString());
 			Resource resource = null;
 			resource = virtualResSet.getResource(uri, true);
 			try {
 				resource.load(options);
-				EObject rootObject = resource.getContents().get(0);
+				final EObject rootObject = resource.getContents().get(0);
 				if (rootObject instanceof VirtualDNSManagement) {
 					virtualDNSManagement = (VirtualDNSManagement) rootObject;
 					return true;
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				return false;
 			}
 		}
@@ -76,11 +74,11 @@ public class VirtualDNSTagProvider implements ITagProvider {
 	}
 
 	@Override
-	public boolean saveTagConfiguration(IPath savePath) {
+	public boolean saveTagConfiguration(final IPath savePath) {
 		boolean ok = true;
-		IPath path = savePath.append(VIRTUAL_DNS_FILE_NAME);
-		URI uri = URI.createFileURI(path.toOSString());
-		File modelfile = new File(path.toOSString());
+		final IPath path = savePath.append(VIRTUAL_DNS_FILE_NAME);
+		final URI uri = URI.createFileURI(path.toOSString());
+		final File modelfile = new File(path.toOSString());
 		Resource resource = null;
 		try {
 
@@ -93,7 +91,7 @@ public class VirtualDNSTagProvider implements ITagProvider {
 			resource.getContents().clear();
 			resource.getContents().add(virtualDNSManagement);
 			resource.save(options);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			ok = false;
 		}
@@ -106,7 +104,7 @@ public class VirtualDNSTagProvider implements ITagProvider {
 	}
 
 	@Override
-	public String getReplacedString(String value) {
+	public String getReplacedString(final String value) {
 		return virtualDNSManagement.getReplacedString(value);
 	}
 

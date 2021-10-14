@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,7 +20,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Primitive</b></em>'. <!-- end-user-doc -->
  * <p>
@@ -75,14 +77,14 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	protected ServiceInterface interface_;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected PrimitiveImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -90,7 +92,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getEvent() {
@@ -98,19 +100,20 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setEvent(String newEvent) {
-		String oldEvent = event;
+		final String oldEvent = event;
 		event = newEvent;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__EVENT, oldEvent,
 					event));
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getParameters() {
@@ -118,55 +121,74 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setParameters(String newParameters) {
-		String oldParameters = parameters;
+		final String oldParameters = parameters;
 		parameters = newParameters;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__PARAMETERS,
 					oldParameters, parameters));
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ServiceInterface getInterface() {
-		if (interface_ != null && interface_.eIsProxy()) {
-			InternalEObject oldInterface = (InternalEObject) interface_;
+		if ((interface_ != null) && interface_.eIsProxy()) {
+			final InternalEObject oldInterface = (InternalEObject) interface_;
 			interface_ = (ServiceInterface) eResolveProxy(oldInterface);
 			if (interface_ != oldInterface) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.PRIMITIVE__INTERFACE, oldInterface, interface_));
+				}
 			}
 		}
 		return interface_;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public ServiceInterface basicGetInterface() {
 		return interface_;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setInterface(ServiceInterface newInterface) {
-		ServiceInterface oldInterface = interface_;
+		final ServiceInterface oldInterface = interface_;
 		interface_ = newInterface;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__INTERFACE,
 					oldInterface, interface_));
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public ServiceTransaction getServiceTransaction() {
+		return (ServiceTransaction) this.eContainer();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public Service getService() {
+		return getServiceTransaction().getServiceSequence().getService();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -176,8 +198,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 		case LibraryElementPackage.PRIMITIVE__PARAMETERS:
 			return getParameters();
 		case LibraryElementPackage.PRIMITIVE__INTERFACE:
-			if (resolve)
+			if (resolve) {
 				return getInterface();
+			}
 			return basicGetInterface();
 		default:
 			return super.eGet(featureID, resolve, coreType);
@@ -185,7 +208,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -206,7 +229,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -227,7 +250,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -244,14 +267,15 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (event: "); //$NON-NLS-1$
 		result.append(event);
 		result.append(", parameters: "); //$NON-NLS-1$

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,8 @@
  *   Alois Zoitl - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.subapptypeeditor.editors;
+
+import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -24,23 +26,25 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.subapptypeeditor.Activator;
 import org.eclipse.fordiac.ide.subapptypeeditor.providers.TypedSubappProviderAdapterFactory;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -58,18 +62,25 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		if (!(input instanceof FBTypeEditorInput)) {
-			throw new IllegalArgumentException("SubAppNetworkBreadCrumbEditor is only suitable for FBTypeEditorInputs");
+			throw new IllegalArgumentException("SubAppNetworkBreadCrumbEditor is only suitable for FBTypeEditorInputs"); //$NON-NLS-1$
 		}
 
 		IEditorSite siteToUse = site;
+		ISelectionProvider selProvider = null;
 		if (siteToUse instanceof MultiPageEditorSite) {
 			siteToUse = (IEditorSite) ((MultiPageEditorSite) siteToUse).getMultiPageEditor().getSite();
+			selProvider = siteToUse.getSelectionProvider();
 		}
 
 		super.init(siteToUse, input);
 
+		if (selProvider != null) {
+			// restore the outer selection provider
+			siteToUse.setSelectionProvider(selProvider);
+		}
+
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
-		setPartName("FB Network");
+		setPartName("FB Network"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -89,14 +100,15 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	protected void createPages() {
+	protected void addPages() {
 		try {
 			final TypedSubAppNetworkEditor initialEditor = new TypedSubAppNetworkEditor();
 			initialEditor.setCommonCommandStack(getCommandStack());
 			final int pagenum = addPage(initialEditor, getEditorInput());
-			getModelToEditorNumMapping().put(getSubAppType(), pagenum); // need to use the file as reference as
-			// this is
-			// provided by the content providers
+			getModelToEditorNumMapping().put(getSubAppType(), Integer.valueOf(pagenum)); // need to use the file as
+			// reference as this is
+			// provided by the content
+			// providers
 		} catch (final PartInitException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
@@ -105,7 +117,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	protected EditorPart createEditorPart(final Object model) {
 		if (model instanceof SubApp) {
-			if (((SubApp) model).getType() != null) {
+			if (((SubApp) model).isTyped()) {
 				return new SubappInstanceViewer();
 			}
 			final UnTypedSubAppNetworkEditor editor = new UnTypedSubAppNetworkEditor();
@@ -114,7 +126,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			return editor;
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+		if (model instanceof CFBInstance) {
 			return new CompositeInstanceViewer();
 		}
 
@@ -124,29 +136,17 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	protected IEditorInput createEditorInput(final Object model) {
 		if (model instanceof SubApp) {
-			if (((SubApp) model).getType() != null) {
-				return createSubappInstanceViewerInput(model);
+			final SubApp subApp = (SubApp) model;
+			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
+				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
-			return new SubApplicationEditorInput((SubApp) model);
+			return new SubApplicationEditorInput(subApp);
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
-			return createCompositeInstanceViewerInput(model);
+		if (model instanceof CFBInstance) {
+			return new CompositeAndSubAppInstanceViewerInput((FB) model);
 		}
 		return null;
-	}
-
-	private static IEditorInput createSubappInstanceViewerInput(final Object model) {
-		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
-
-	}
-
-	private static IEditorInput createCompositeInstanceViewerInput(final Object model) {
-		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
 	}
 
 	@Override
@@ -197,7 +197,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		// TODO implement fb search and select
 	}
 
-
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		// TODO Auto-generated method stub
@@ -220,7 +219,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 				}
 				getBreadcrumb().setInput(selectedElement);
 				if (null != refElement) {
-					BreadcrumbUtil.selectElement(refElement, getActiveEditor());
+					HandlerHelper.selectElement(refElement, getActiveEditor());
 				}
 				return true;
 			}
@@ -236,11 +235,27 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
 		try {
-			return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker.getAttributes());
+			final Map<String, Object> attrs = marker.getAttributes();
+			return FordiacMarkerHelper.markerTargetsFBNetworkElement(attrs)
+					|| FordiacMarkerHelper.markerTargetsConnection(attrs)
+					|| FordiacMarkerHelper.markerTargetsValue(attrs);
 		} catch (final CoreException e) {
 			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
 		}
 		return false;
+	}
+
+	@Override
+	public void reloadType(final FBType type) {
+		if (type instanceof SubAppType) {
+			getEditorInput().setFbType(type);
+			removePage(getActivePage());
+			createPages();
+			getBreadcrumb().setInput(type);
+		} else {
+			EditorUtils.CloseEditor.run(this);
+		}
+
 	}
 
 }

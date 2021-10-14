@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014,2016 TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -39,12 +39,12 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	private StyledText text;
 	private String newLine = ""; //$NON-NLS-1$
 
-	public ExportStatusMessageDialog(Shell parentShell, final List<String> warnings, final List<String> errors) {
+	public ExportStatusMessageDialog(final Shell parentShell, final List<String> warnings, final List<String> errors) {
 		super(parentShell, Messages.ExportStatusMessageDialog_4diacIDETypeExportErrors,
 				Messages.ExportStatusMessageDialog_DuringTypeExportTheFollowingIssuesHaveBeenIdentified,
 				new Status(IStatus.INFO, Activator.PLUGIN_ID,
 						MessageFormat.format(Messages.ExportStatusMessageDialog_ExportStatusMessageDialog,
-								errors.size(), warnings.size())),
+								Integer.valueOf(errors.size()), Integer.valueOf(warnings.size()))),
 				IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
 
 		this.warnings = warnings;
@@ -52,14 +52,14 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	}
 
 	@Override
-	protected Control createMessageArea(Composite parent) {
-		Control retval = super.createMessageArea(parent);
+	protected Control createMessageArea(final Composite parent) {
+		final Control retval = super.createMessageArea(parent);
 
 		new Label(parent, SWT.NONE); // simple placeholder label
 
-		Composite main = new Composite(parent, SWT.NONE);
+		final Composite main = new Composite(parent, SWT.NONE);
 		main.setLayout(new GridLayout());
-		GridData fillBoth = new GridData();
+		final GridData fillBoth = new GridData();
 		fillBoth.grabExcessHorizontalSpace = true;
 		fillBoth.grabExcessVerticalSpace = true;
 		fillBoth.horizontalAlignment = GridData.FILL;
@@ -67,7 +67,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 
 		main.setLayoutData(fillBoth);
 
-		GridData fillText = new GridData();
+		final GridData fillText = new GridData();
 		fillText.grabExcessHorizontalSpace = true;
 		fillText.grabExcessVerticalSpace = true;
 		fillText.horizontalAlignment = GridData.FILL;
@@ -91,7 +91,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		StyleRange style1 = new StyleRange();
 
 		if (!warnings.isEmpty()) {
-			String warning = Messages.ExportStatusMessageDialog_WarningsNotEmpty;
+			final String warning = Messages.ExportStatusMessageDialog_WarningsNotEmpty;
 			text.append(warning);
 			style1.start = count;
 			style1.length = warning.length();
@@ -105,7 +105,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		}
 
 		if (!errors.isEmpty()) {
-			String error = Messages.ExportStatusMessageDialog_ErrorsNotEmpty;
+			final String error = Messages.ExportStatusMessageDialog_ErrorsNotEmpty;
 			text.append(error);
 			style1 = new StyleRange();
 			style1.start = count;
@@ -116,10 +116,10 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		}
 	}
 
-	private int addLines(List<String> messages) {
+	private int addLines(final List<String> messages) {
 		int count = 0;
 
-		for (String string : messages) {
+		for (final String string : messages) {
 			if (null != string) {
 				count += string.length();
 				text.append(string);

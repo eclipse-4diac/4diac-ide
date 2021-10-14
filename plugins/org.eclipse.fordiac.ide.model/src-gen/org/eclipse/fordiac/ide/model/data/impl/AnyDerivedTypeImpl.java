@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -37,21 +37,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
 	/** The cached value of the '{@link #getCompilerInfo() <em>Compiler Info</em>}' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getCompilerInfo()
 	 * @generated
 	 * @ordered */
 	protected CompilerInfo compilerInfo;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AnyDerivedTypeImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -59,7 +59,7 @@ public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public CompilerInfo getCompilerInfo() {
@@ -85,14 +85,14 @@ public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public CompilerInfo basicGetCompilerInfo() {
 		return compilerInfo;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public NotificationChain basicSetCompilerInfo(CompilerInfo newCompilerInfo, NotificationChain msgs) {
 		CompilerInfo oldCompilerInfo = compilerInfo;
@@ -109,7 +109,7 @@ public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setCompilerInfo(CompilerInfo newCompilerInfo) {
@@ -130,7 +130,7 @@ public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -143,7 +143,7 @@ public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -158,7 +158,7 @@ public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -173,7 +173,7 @@ public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -188,7 +188,7 @@ public class AnyDerivedTypeImpl extends AnyTypeImpl implements AnyDerivedType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {

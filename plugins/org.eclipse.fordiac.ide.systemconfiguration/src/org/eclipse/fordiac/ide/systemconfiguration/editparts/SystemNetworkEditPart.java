@@ -80,6 +80,7 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 						break;
 					case Notification.SET:
 						break;
+					default:
 					}
 				}
 			};

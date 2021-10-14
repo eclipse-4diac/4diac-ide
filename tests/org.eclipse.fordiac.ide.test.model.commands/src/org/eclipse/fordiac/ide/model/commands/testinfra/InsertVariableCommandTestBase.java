@@ -39,7 +39,7 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 			list.clear();
 		}
 
-		private State(State s) {
+		private State(final State s) {
 			list = new BasicEList<>();
 			ECollections.setEList(list, (List<VarDeclaration>) EcoreUtil.copyAll(s.list));
 			varDec = EcoreUtil.copy(s.varDec);
@@ -54,7 +54,7 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 			return varDec;
 		}
 
-		public void setVarDec(VarDeclaration varDec) {
+		public void setVarDec(final VarDeclaration varDec) {
 			this.varDec = varDec;
 		}
 
@@ -64,43 +64,26 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 
 	}
 
-	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+	protected static Collection<Arguments> createCommands(final List<ExecutionDescription<?>> executionDescriptions) {
 		final Collection<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				(StateVerifier<State>) InsertVariableCommandTestBase::verifyDefaultInitialValues, //
 				executionDescriptions //
-		));
+				));
 
 		return commands;
 	}
 
-	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
+			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
 				CommandTestBase::defaultRedoCommand);
 	}
 
-	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
+	protected static void verifyDefaultInitialValues(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getList().isEmpty());
-	}
-
-	protected static boolean validateVarDeclaration(VarDeclaration newVar, VarDeclaration oldVar) {
-		/*
-		 * can not check the name because if it is already taken a unique one will be
-		 * generated
-		 */
-		if (!newVar.getType().getName().equals(oldVar.getType().getName())) {
-			return false;
-		}
-		if (!newVar.getComment().equals(oldVar.getComment())) {
-			return false;
-		}
-		if (newVar.getArraySize() != oldVar.getArraySize()) {
-			return false;
-		}
-		return true;
 	}
 
 }

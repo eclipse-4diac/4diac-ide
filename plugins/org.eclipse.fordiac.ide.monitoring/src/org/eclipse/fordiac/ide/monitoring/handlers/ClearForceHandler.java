@@ -28,10 +28,10 @@ public class ClearForceHandler extends AbstractMonitoringHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
 		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		VarDeclaration var = ForceHandler.getVariable(selection.getFirstElement());
-		if (null != var) {
+		VarDeclaration variable = ForceHandler.getVariable(selection.getFirstElement());
+		if (null != variable) {
 			MonitoringManager manager = MonitoringManager.getInstance();
-			MonitoringBaseElement element = manager.getMonitoringElement(var);
+			MonitoringBaseElement element = manager.getMonitoringElement(variable);
 			if (element instanceof MonitoringElement) {
 				manager.forceValue((MonitoringElement) element, ""); //$NON-NLS-1$
 			}
@@ -51,9 +51,9 @@ public class ClearForceHandler extends AbstractMonitoringHandler {
 
 			if (1 == sel.size()) {
 				// only allow to force a value if only one element is selected
-				VarDeclaration var = ForceHandler.getVariable(sel.getFirstElement());
-				if (null != var) {
-					MonitoringBaseElement element = manager.getMonitoringElement(var);
+				VarDeclaration variable = ForceHandler.getVariable(sel.getFirstElement());
+				if (null != variable) {
+					MonitoringBaseElement element = manager.getMonitoringElement(variable);
 					needToAdd = (element instanceof MonitoringElement && ((MonitoringElement) element).isForce());
 				}
 			}

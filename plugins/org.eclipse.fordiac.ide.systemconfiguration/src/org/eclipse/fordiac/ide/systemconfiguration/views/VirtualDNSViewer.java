@@ -131,7 +131,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		delete.addListener(SWT.Selection, e -> {
 			management.getAvailableDNSCollections().remove(selectedCollection);
 			updateAvailableCollections();
-			SystemManager.INSTANCE.saveTagProvider(system, provider);
+			SystemManager.saveTagProvider(system, provider);
 		});
 
 		selected = new Button(sectionClient, SWT.CHECK);
@@ -211,6 +211,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 			@Override
 			public void dragFinished(final DragSourceEvent event) {
 				if (event.detail == DND.DROP_MOVE) {
+					// currently nothing to be done here
 				}
 			}
 
@@ -264,7 +265,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 						((VirtualDNSEntry) element).setName(value.toString());
 						filteredTree.getViewer().refresh();
 
-						SystemManager.INSTANCE.saveTagProvider(system, provider);
+						SystemManager.saveTagProvider(system, provider);
 					}
 				}
 			}
@@ -300,7 +301,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				if (element instanceof VirtualDNSEntry) {
 					((VirtualDNSEntry) element).setValue(value.toString());
 					filteredTree.getViewer().refresh();
-					SystemManager.INSTANCE.saveTagProvider(system, provider);
+					SystemManager.saveTagProvider(system, provider);
 				}
 			}
 
@@ -336,7 +337,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 		for (final VirtualDNSCollection collection : dnsCollection) {
 			availableDNS.add(collection.getName());
-			SystemManager.INSTANCE.saveTagProvider(system, provider);
+			SystemManager.saveTagProvider(system, provider);
 		}
 
 		availableDNS.select(index);
@@ -388,6 +389,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void setFocus() {
+		// currently nothing to be done here
 	}
 
 	@Override
@@ -481,7 +483,8 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		} // add else for Window.CANCEL if needed
 	}
 
-	private void cloneActiveVirtualDNSEntries(final VirtualDNSCollection collection, final VirtualDNSCollection activeVirtualDNS) {
+	private static void cloneActiveVirtualDNSEntries(final VirtualDNSCollection collection,
+			final VirtualDNSCollection activeVirtualDNS) {
 
 		for (final VirtualDNSEntry srcEntry : activeVirtualDNS.getVirtualDNSEntries()) {
 			final VirtualDNSEntry entry = VirtualDNSFactory.eINSTANCE.createVirtualDNSEntry();
@@ -526,7 +529,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 			entry.setValue(DEFAULT_VALUE);
 			if (selectedCollection != null) {
 				selectedCollection.getVirtualDNSEntries().add(entry);
-				SystemManager.INSTANCE.saveTagProvider(system, provider);
+				SystemManager.saveTagProvider(system, provider);
 			}
 			filteredTree.getViewer().refresh();
 
@@ -559,7 +562,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				final VirtualDNSEntry entry = (VirtualDNSEntry) ((IStructuredSelection) filteredTree.getViewer()
 						.getSelection()).getFirstElement();
 				selectedCollection.getVirtualDNSEntries().remove(entry);
-				SystemManager.INSTANCE.saveTagProvider(system, provider);
+				SystemManager.saveTagProvider(system, provider);
 				filteredTree.getViewer().refresh();
 			}
 		}

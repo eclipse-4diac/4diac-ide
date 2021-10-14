@@ -58,7 +58,7 @@ public class InsertVariableCommand extends Command {
 		getVariableList().remove(varDecl);
 	}
 
-	public EList<VarDeclaration> getVariableList() {
+	private EList<VarDeclaration> getVariableList() {
 		return list;
 	}
 

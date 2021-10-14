@@ -22,10 +22,12 @@ import java.text.MessageFormat;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -45,7 +47,7 @@ public final class LinkConstraints {
 	 * @param internalConnection the internal connection
 	 *
 	 * @return true, if a data connection can be created (the source and target type are compatible */
-	public static boolean canCreateDataConnection(final VarDeclaration source, final VarDeclaration target,
+	public static boolean canCreateDataConnection(final IInterfaceElement source, final IInterfaceElement target,
 			final FBNetwork parent) {
 		return canExistDataConnection(source, target, parent, null);
 	}
@@ -59,62 +61,57 @@ public final class LinkConstraints {
 	 * @param reConnect          is it a reconnection or not
 	 *
 	 * @return true, if successful */
-	public static boolean canExistDataConnection(VarDeclaration source, VarDeclaration target, final FBNetwork parent,
+	public static boolean canExistDataConnection(IInterfaceElement source, IInterfaceElement target,
+			final FBNetwork parent,
 			final Connection con) {
-		if (source != null && source != target) {
-			if (((source instanceof AdapterDeclaration) && (!(target instanceof AdapterDeclaration)))
-					|| (!(source instanceof AdapterDeclaration) && (target instanceof AdapterDeclaration))) {
-				// don't check if we try to create a connection from data to adapter or vice
-				// versa
-				// TODO model refactoring - remove this when AdapterDeclaration is not inherited
-				// from VarDeclaration any more
-				return false;
-			}
 
-			if (isSwapNeeded(source, parent)) {
-				final VarDeclaration temp = source;
-				source = target;
-				target = temp;
-			}
-
-			if (!sourceAndDestCheck(source, target)) {
-				ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
-				return false;
-			}
-
-			if (!hasAlreadyInputConnectionsCheck(source, target, con)) {
-				ErrorMessenger.popUpErrorMessage(MessageFormat
-						.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
-				return false;
-			}
-
-			if (!typeCheck(source, target)) {
-				ErrorMessenger
-				.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
-						(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
-								(null != target.getType()) ? target.getType().getName() : FordiacMessages.NA));
-				return false;
-			}
-
-			return isWithConstraintOK(source) && isWithConstraintOK(target);
+		if (!isDataPin(source) || !isDataPin(target)) {
+			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
+			return false;
 		}
-		return false;
+
+		if (isSwapNeeded(source, parent)) {
+			final IInterfaceElement temp = source;
+			source = target;
+			target = temp;
+		}
+
+		if (!sourceAndDestCheck(source, target)) {
+			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
+			return false;
+		}
+
+		if (!hasAlreadyInputConnectionsCheck(source, target, con)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
+			return false;
+		}
+
+		if (!typeCheck(source, target)) {
+			ErrorMessenger
+			.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+					(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
+							(null != target.getType()) ? target.getType().getName() : FordiacMessages.NA));
+			return false;
+		}
+
+		return isWithConstraintOK(source) && isWithConstraintOK(target);
 	}
 
 	/** Elements which are not linked by a with construct are not allowed to be connected
 	 *
 	 * @param varDecl
 	 * @return */
-	public static boolean isWithConstraintOK(final VarDeclaration varDecl) {
-		if ((!(varDecl instanceof AdapterDeclaration)) && (varDecl.getWiths().isEmpty())) { // elements which are not
-			// connect by withs are not
-			// allowed to be connected
+	public static boolean isWithConstraintOK(final IInterfaceElement varDecl) {
+		if ((!(varDecl instanceof ErrorMarkerInterface)) && (((VarDeclaration) varDecl).getWiths().isEmpty())) {
+			// data in or outputs which are not connect by withs are not allowed to be connected
 			EObject obj = varDecl.eContainer();
 			if (null != obj) {
 				obj = obj.eContainer();
-				if ((obj instanceof CompositeFBType) || (obj instanceof SubApp)) {
-					// data connections from and to interface data ports from composits should also
-					// be allowed from unwithed composite inputs (e.g., parameters for the FB)
+				if ((obj instanceof CompositeFBType) || (obj instanceof SubApp)
+						|| (obj instanceof ErrorMarkerFBNElement)) {
+					// data connections from and to interface data ports from composits, subaps, error markers should
+					// also be allowed from unwithed composite inputs (e.g., parameters for the FB)
 					return true;
 				}
 			}
@@ -126,7 +123,7 @@ public final class LinkConstraints {
 		return true;
 	}
 
-	private static boolean hasAlreadyOutputConnectionsCheck(final VarDeclaration source, final Connection con) {
+	private static boolean hasAlreadyOutputConnectionsCheck(final IInterfaceElement source, final Connection con) {
 		for (final Connection connection : source.getOutputConnections()) {
 			if (!connection.equals(con)) {
 				return true;
@@ -144,7 +141,7 @@ public final class LinkConstraints {
 	 *
 	 * @return true, if successful
 	 */
-	public static boolean typeCheck(final VarDeclaration source, final VarDeclaration target) {
+	public static boolean typeCheck(final IInterfaceElement source, final IInterfaceElement target) {
 		return source.getType().isCompatibleWith(target.getType());
 	}
 
@@ -154,7 +151,7 @@ public final class LinkConstraints {
 	 * @param con
 	 *
 	 * @return true, if successful */
-	private static boolean hasAlreadyInputConnectionsCheck(final VarDeclaration src, final VarDeclaration target,
+	private static boolean hasAlreadyInputConnectionsCheck(final IInterfaceElement src, final IInterfaceElement target,
 			final Connection con) {
 		boolean hasOnlyBrokenCons = true;
 
@@ -195,7 +192,7 @@ public final class LinkConstraints {
 		return source.isIsInput();
 	}
 
-	private static FBNetwork getContainingFBNetwork(final VarDeclaration target) {
+	private static FBNetwork getContainingFBNetwork(final IInterfaceElement target) {
 		FBNetwork retVal = null;
 		EObject obj = target.eContainer();
 		if (null != obj) {
@@ -245,60 +242,94 @@ public final class LinkConstraints {
 	 * @param internalConnection the internal connection
 	 *
 	 * @return true, if successful */
-	public static boolean canExistEventConnection(final Event source, final Event target) {
-		if (source != null && target != null) {
-			return sourceAndDestCheck(source, target);
+	public static boolean canExistEventConnection(IInterfaceElement source, IInterfaceElement target,
+			final FBNetwork parent) {
+		if (!isEventPin(source) || !isEventPin(target)) {
+			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
+			return false;
+		}
+
+		if (isSwapNeeded(source, parent)) {
+			final IInterfaceElement temp = source;
+			source = target;
+			target = temp;
+		}
+
+		if (duplicateConnection(source, target)) {
+			return false;
+		}
+		return sourceAndDestCheck(source, target);
+	}
+
+	private static boolean duplicateConnection(final IInterfaceElement source, final IInterfaceElement destination) {
+		for (final Connection con : source.getOutputConnections()) {
+			if (con.getDestination() == destination) {
+				return true;
+			}
 		}
 		return false;
 	}
 
-	public static boolean canExistAdapterConnection(AdapterDeclaration source, AdapterDeclaration target,
+	private static boolean isEventPin(final IInterfaceElement pin) {
+		return (pin != null && pin.getType() instanceof EventType);
+	}
+
+	private static boolean isDataPin(final IInterfaceElement pin) {
+		return (pin != null && !(pin.getType() instanceof EventType) && !(pin.getType() instanceof AdapterType));
+	}
+
+	private static boolean isAdapterPin(final IInterfaceElement pin) {
+		return (pin != null && pin.getType() instanceof AdapterType);
+	}
+
+	public static boolean canExistAdapterConnection(IInterfaceElement source, IInterfaceElement target,
 			final FBNetwork parent, final Connection con) {
-		if (source != null && target != null && source != target) {
-			if (isSwapNeeded(source, parent)) {
-				final AdapterDeclaration temp = source;
-				source = target;
-				target = temp;
-			}
-
-			if (!sourceAndDestCheck(source, target)) {
-				ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
-				return false;
-			}
-
-			if (!hasAlreadyInputConnectionsCheck(source, target, con)) {
-				ErrorMessenger.popUpErrorMessage(MessageFormat
-						.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
-				return false;
-			}
-
-			if (hasAlreadyOutputConnectionsCheck(source, con)) {
-				ErrorMessenger.popUpErrorMessage(MessageFormat
-						.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyOutputConnection, source.getName()));
-				return false;
-			}
-
-			if (!adapaterTypeCompatibilityCheck(source, target)) {
-				ErrorMessenger
-				.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
-						(null != source.getType()) ? source.getType().getName() : FordiacMessages.ND,
-								(null != target.getType()) ? target.getType().getName() : FordiacMessages.ND));
-				return false;
-			}
-
-			return true;
+		if (!isAdapterPin(source) || !isAdapterPin(target)) {
+			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
+			return false;
 		}
-		return false;
+		if (isSwapNeeded(source, parent)) {
+			final IInterfaceElement temp = source;
+			source = target;
+			target = temp;
+		}
+
+		if (!sourceAndDestCheck(source, target)) {
+			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
+			return false;
+		}
+
+		if (!hasAlreadyInputConnectionsCheck(source, target, con)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
+			return false;
+		}
+
+		if (hasAlreadyOutputConnectionsCheck(source, con)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyOutputConnection, source.getName()));
+			return false;
+		}
+
+		if (!adapaterTypeCompatibilityCheck(source, target)) {
+			ErrorMessenger
+			.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+					(null != source.getType()) ? source.getType().getName() : FordiacMessages.ND,
+							(null != target.getType()) ? target.getType().getName() : FordiacMessages.ND));
+			return false;
+		}
+
+		return true;
 	}
 
-	public static boolean canCreateAdapterConnection(final AdapterDeclaration source, final AdapterDeclaration target,
+	public static boolean canCreateAdapterConnection(final IInterfaceElement source, final IInterfaceElement target,
 			final FBNetwork parent) {
 		return canExistAdapterConnection(source, target, parent, null);
 	}
 
 
-	private static boolean adapaterTypeCompatibilityCheck(final AdapterDeclaration source,
-			final AdapterDeclaration target) {
+	private static boolean adapaterTypeCompatibilityCheck(final IInterfaceElement source,
+			final IInterfaceElement target) {
 		if (((source.getType().getName().equals(ANY_ADAPTER)) && (!target.getType().getName().equals(ANY_ADAPTER)))
 				|| ((!source.getType().getName().equals(ANY_ADAPTER))
 						&& (target.getType().getName().equals(ANY_ADAPTER)))) {

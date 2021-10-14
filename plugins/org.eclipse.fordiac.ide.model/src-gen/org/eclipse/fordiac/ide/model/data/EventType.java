@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,4 +20,11 @@ package org.eclipse.fordiac.ide.model.data;
  * @model
  * @generated */
 public interface EventType extends DataType {
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true" otherRequired="true"
+	 * @generated */
+	@Override
+	boolean isCompatibleWith(DataType other);
 } // EventType

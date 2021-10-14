@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University, Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,22 +11,27 @@
  * Contributors:
  *   Michael Jaeger, Bianca Wiesmayr
  *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - comment field
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.properties;
 
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataTypeInfoSection extends AbstractSection {
 
 	private TypeInfoWidget typeInfoWidget;
+	private Text commentText;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -34,8 +40,32 @@ public class DataTypeInfoSection extends AbstractSection {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		createCommentField(composite);
 		typeInfoWidget = new TypeInfoWidget(getWidgetFactory());
 		typeInfoWidget.createControls(composite);
+	}
+
+	private void createCommentField(final Composite composite) {
+		final Composite container = new Composite(composite, SWT.SHADOW_NONE);
+		container.setLayout(new GridLayout(2, false));
+		container.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+
+		getWidgetFactory().createLabel(container, FordiacMessages.Comment + ":"); // $NON-NLS-1$
+		commentText = createGroupText(container, true);
+		commentText.addModifyListener(e -> {
+			/*
+			 * Without this if statement the editor would be "dirty" from the get-go:
+			 *  - editor listens for changes on the type
+			 *  - first load also triggers refresh
+			 *  - refresh sets comment text (always, even if the comment is empty)
+			 *  - the ChangeCommentCommand makes a change to the type
+			 *  Therefore, restricting command execution does the trick.
+			 */
+			if (!commentText.getText().equals(getType().getComment())) {
+				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			}
+		});
+			
 	}
 
 	@Override
@@ -59,6 +89,7 @@ public class DataTypeInfoSection extends AbstractSection {
 	@Override
 	public void refresh() {
 		if (null != getType()) {
+			commentText.setText((null != getType().getComment()) ? getType().getComment() : "");
 			typeInfoWidget.refresh();
 		}
 	}

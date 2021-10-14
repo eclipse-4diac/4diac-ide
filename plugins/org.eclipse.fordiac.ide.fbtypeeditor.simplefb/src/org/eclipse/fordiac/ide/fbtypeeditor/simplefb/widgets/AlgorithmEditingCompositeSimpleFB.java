@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 TU Wien/ACIN, Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Peter Gsellmann 
+ *   Peter Gsellmann
  *   - initial implementation and/or initial documentation
  *   Martin Melik-Merkumians
  *   - changes access modifiers for OO encapsulation
@@ -29,9 +29,9 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 
 	@Override
 	public void createControls(final Composite parent, final FormToolkit toolkit) {
-		Composite container = toolkit.createComposite(parent);
+		final Composite container = toolkit.createComposite(parent);
 
-		GridLayout gridLayout = new GridLayout();
+		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		container.setLayout(gridLayout);
 
@@ -39,8 +39,8 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 	}
 
 	@Override
-	protected AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(BaseFBType fbType,
-			Algorithm oldAlgorithm, String algorithmType) {
+	protected AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(final BaseFBType fbType,
+			final Algorithm oldAlgorithm, final String algorithmType) {
 		return new ChangeAlgorithmTypeCommandSimpleFB(fbType, oldAlgorithm, algorithmType);
 	}
 

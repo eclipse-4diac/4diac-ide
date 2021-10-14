@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.export.ui.Messages;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -61,7 +62,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	private static final String STORE_DIRECTORY_NAMES_ID = "SelectFBTypesWizardPage.STORE_DIRECTORY_NAMES_ID"; //$NON-NLS-1$
 
 	private static final String STORE_CURRENT_FILTER_SELECTION_ID = "SelectFBTypesWizardPage.STORE_CURRENT_FILTER_SELECTION_ID"; //$NON-NLS-1$
-	
+
 	private static final String STORE_OVERWRITE_CHECKBOX = "SelectFBTypesWizardPage.STORE_OVERWRITE_CHECKBOX"; //$NON-NLS-1$
 
 	/**
@@ -81,17 +82,14 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		final IConfigurationElement[] elems = registry
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.export.exportFilter"); //$NON-NLS-1$
 		Arrays.sort(elems, (o1, o2) -> {
-			int sortIndex1 = 0;
 			try {
-				sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
-			} catch (final NumberFormatException e1) {
-			}
-			int sortIndex2 = 0;
-			try {
-				sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
+				final int sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
+				final int sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
+				return sortIndex1 - sortIndex2;
 			} catch (final NumberFormatException e2) {
+				Activator.getDefault().logError(e2.getMessage(), e2);
 			}
-			return sortIndex1 - sortIndex2;
+			return 0;
 		});
 		exportFilters.clear();
 		exportFilters.addAll(Arrays.asList(elems));
@@ -250,7 +248,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 			// Saves current export filter for next session.
 			getDialogSettings().put(STORE_CURRENT_FILTER_SELECTION_ID, getSelectedExportFilter().getAttribute(NAME));
-			
+
 			getDialogSettings().put(STORE_OVERWRITE_CHECKBOX, overwrite.getSelection());
 		}
 	}
@@ -265,7 +263,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		layout.numColumns = 3;
 		destinationSelectionGroup.setLayout(layout);
 		destinationSelectionGroup
-				.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
+		.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
 		destinationSelectionGroup.setFont(font);
 
 		final Label destinationLabel = new Label(destinationSelectionGroup, SWT.NONE);
@@ -326,6 +324,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	@Override
 	public void handleEvent(final Event event) {
+		// currently nothing to be done here
 	}
 
 	@Override // this overide is needed to make it public for access by the wizard

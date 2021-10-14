@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -42,7 +42,7 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
 public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	/** The cached value of the '{@link #getSubranges() <em>Subranges</em>}' containment reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getSubranges()
 	 * @generated
 	 * @ordered */
@@ -50,7 +50,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 
 	/** The default value of the '{@link #getInitialValues() <em>Initial Values</em>}' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getInitialValues()
 	 * @generated
 	 * @ordered */
@@ -58,7 +58,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 
 	/** The cached value of the '{@link #getInitialValues() <em>Initial Values</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getInitialValues()
 	 * @generated
 	 * @ordered */
@@ -66,21 +66,21 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 
 	/** The cached value of the '{@link #getBaseType() <em>Base Type</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getBaseType()
 	 * @generated
 	 * @ordered */
 	protected DataType baseType;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ArrayTypeImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -88,18 +88,18 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<Subrange> getSubranges() {
 		if (subranges == null) {
-			subranges = new EObjectContainmentEList<Subrange>(Subrange.class, this, DataPackage.ARRAY_TYPE__SUBRANGES);
+			subranges = new EObjectContainmentEList<>(Subrange.class, this, DataPackage.ARRAY_TYPE__SUBRANGES);
 		}
 		return subranges;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getInitialValues() {
@@ -107,7 +107,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setInitialValues(String newInitialValues) {
@@ -119,7 +119,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DataType getBaseType() {
@@ -136,14 +136,14 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public DataType basicGetBaseType() {
 		return baseType;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setBaseType(DataType newBaseType) {
@@ -155,7 +155,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -168,7 +168,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -187,7 +187,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -210,7 +210,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -231,7 +231,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -249,7 +249,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {

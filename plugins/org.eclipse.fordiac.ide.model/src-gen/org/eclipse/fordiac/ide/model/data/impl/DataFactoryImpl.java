@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -52,6 +52,7 @@ import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LintType;
 import org.eclipse.fordiac.ide.model.data.LrealType;
@@ -76,11 +77,11 @@ import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.data.WstringType;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	/** Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public static DataFactory init() {
 		try {
@@ -95,14 +96,14 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public DataFactoryImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EObject create(EClass eClass) {
@@ -211,13 +212,15 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 			return createTimeOfDayType();
 		case DataPackage.LTOD_TYPE:
 			return createLtodType();
+		case DataPackage.LDATE_TYPE:
+			return createLdateType();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
@@ -230,7 +233,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
@@ -243,7 +246,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyDerivedType createAnyDerivedType() {
@@ -252,7 +255,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ArrayType createArrayType() {
@@ -261,7 +264,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DirectlyDerivedType createDirectlyDerivedType() {
@@ -270,7 +273,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EnumeratedType createEnumeratedType() {
@@ -279,7 +282,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EnumeratedValue createEnumeratedValue() {
@@ -288,7 +291,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public StructuredType createStructuredType() {
@@ -297,7 +300,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Subrange createSubrange() {
@@ -306,7 +309,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SubrangeType createSubrangeType() {
@@ -315,7 +318,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ValueType createValueType() {
@@ -324,7 +327,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ElementaryType createElementaryType() {
@@ -333,7 +336,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DerivedType createDerivedType() {
@@ -342,7 +345,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EventType createEventType() {
@@ -351,7 +354,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyType createAnyType() {
@@ -360,7 +363,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyElementaryType createAnyElementaryType() {
@@ -369,7 +372,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyMagnitudeType createAnyMagnitudeType() {
@@ -378,7 +381,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyNumType createAnyNumType() {
@@ -387,7 +390,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyRealType createAnyRealType() {
@@ -396,7 +399,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public RealType createRealType() {
@@ -405,7 +408,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LrealType createLrealType() {
@@ -414,7 +417,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyIntType createAnyIntType() {
@@ -423,7 +426,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyUnsignedType createAnyUnsignedType() {
@@ -432,7 +435,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public UsintType createUsintType() {
@@ -441,7 +444,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public UintType createUintType() {
@@ -450,7 +453,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public UdintType createUdintType() {
@@ -459,7 +462,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public UlintType createUlintType() {
@@ -468,7 +471,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnySignedType createAnySignedType() {
@@ -477,7 +480,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SintType createSintType() {
@@ -486,7 +489,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public IntType createIntType() {
@@ -495,7 +498,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DintType createDintType() {
@@ -504,7 +507,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LintType createLintType() {
@@ -513,7 +516,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyDurationType createAnyDurationType() {
@@ -522,7 +525,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public TimeType createTimeType() {
@@ -531,7 +534,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LtimeType createLtimeType() {
@@ -540,7 +543,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyBitType createAnyBitType() {
@@ -549,7 +552,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public BoolType createBoolType() {
@@ -558,7 +561,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ByteType createByteType() {
@@ -567,7 +570,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public WordType createWordType() {
@@ -576,7 +579,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DwordType createDwordType() {
@@ -585,7 +588,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LwordType createLwordType() {
@@ -594,7 +597,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyCharsType createAnyCharsType() {
@@ -603,7 +606,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyStringType createAnyStringType() {
@@ -612,7 +615,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public StringType createStringType() {
@@ -621,7 +624,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public WstringType createWstringType() {
@@ -630,7 +633,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyCharType createAnyCharType() {
@@ -639,7 +642,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public CharType createCharType() {
@@ -648,7 +651,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public WcharType createWcharType() {
@@ -657,7 +660,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyDateType createAnyDateType() {
@@ -666,7 +669,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DateAndTimeType createDateAndTimeType() {
@@ -675,7 +678,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LdtType createLdtType() {
@@ -684,7 +687,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DateType createDateType() {
@@ -693,7 +696,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public TimeOfDayType createTimeOfDayType() {
@@ -702,7 +705,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LtodType createLtodType() {
@@ -711,7 +714,16 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public LdateType createLdateType() {
+		LdateTypeImpl ldateType = new LdateTypeImpl();
+		return ldateType;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	public BaseType1 createBaseType1FromString(EDataType eDataType, String initialValue) {
 		BaseType1 result = BaseType1.get(initialValue);
@@ -722,14 +734,14 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertBaseType1ToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DataPackage getDataPackage() {
@@ -737,7 +749,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @deprecated
 	 * @generated */
 	@Deprecated

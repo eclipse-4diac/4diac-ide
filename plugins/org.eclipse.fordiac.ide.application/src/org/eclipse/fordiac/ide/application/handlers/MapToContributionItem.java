@@ -46,12 +46,12 @@ public class MapToContributionItem extends ContributionItem {
 		super();
 	}
 
-	public MapToContributionItem(String id) {
+	public MapToContributionItem(final String id) {
 		super(id);
 	}
 
 	@Override
-	public void fill(Menu menu, int index) {
+	public void fill(final Menu menu, final int index) {
 		if (getParent() instanceof MenuManager) {
 			((IMenuManager) getParent()).addMenuListener(mapToListener);
 			((IMenuManager) getParent()).setRemoveAllWhenShown(true);
@@ -69,7 +69,7 @@ public class MapToContributionItem extends ContributionItem {
 		return ((fbnetwork != null) && !(fbnetwork.isSubApplicationNetwork() || fbnetwork.isCFBTypeNetwork()));
 	}
 
-	private void createDeviceMenu(IMenuManager maptoMenu) {
+	private void createDeviceMenu(final IMenuManager maptoMenu) {
 		final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
@@ -90,7 +90,7 @@ public class MapToContributionItem extends ContributionItem {
 		}
 	}
 
-	private boolean isFBorSubAppSelected(ISelection selection) {
+	private static boolean isFBorSubAppSelected(final ISelection selection) {
 		if (selection instanceof StructuredSelection) {
 			for (final Object element : ((IStructuredSelection) selection).toArray()) {
 				if ((element instanceof AbstractFBNElementEditPart)
@@ -102,7 +102,7 @@ public class MapToContributionItem extends ContributionItem {
 		return false;
 	}
 
-	private void createDeviceMenuEntry(IMenuManager maptoMenu, Device device) {
+	private static void createDeviceMenuEntry(final IMenuManager maptoMenu, final Device device) {
 		final MenuManager deviceMenu = new MenuManager();
 		deviceMenu.setMenuText(device.getName() == null ? FordiacMessages.Device : device.getName());
 		deviceMenu.setImageDescriptor(FordiacImage.ICON_DEVICE.getImageDescriptor());
@@ -112,28 +112,25 @@ public class MapToContributionItem extends ContributionItem {
 		createResourceMenu(deviceMenu, device);
 	}
 
-	private void createResourceMenu(MenuManager parentMenuManager, Device device) {
-		final IMenuListener listener = new IMenuListener() {
-			@Override
-			public void menuAboutToShow(IMenuManager manager) {
-				final List<Resource> resources = device.getResource();
-				final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.getActiveEditor();
-				for (final Resource resource : resources) {
-					final IAction action = new MapAction(activeEditor, resource);
-					action.setText(resource.getName() == null ? FordiacMessages.Resource : resource.getName());
-					action.setImageDescriptor(FordiacImage.ICON_RESOURCE.getImageDescriptor());
-					parentMenuManager.add(action);
-				}
+	private static void createResourceMenu(final MenuManager parentMenuManager, final Device device) {
+		final IMenuListener listener = manager -> {
+			final List<Resource> resources = device.getResource();
+			final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.getActiveEditor();
+			for (final Resource resource : resources) {
+				final IAction action = new MapAction(activeEditor, resource);
+				action.setText(resource.getName() == null ? FordiacMessages.Resource : resource.getName());
+				action.setImageDescriptor(FordiacImage.ICON_RESOURCE.getImageDescriptor());
+				parentMenuManager.add(action);
 			}
 		};
 		parentMenuManager.addMenuListener(listener);
 	}
 
-	private void createEmptyMenuEntry(IMenuManager maptoMenu, String message) {
+	private static void createEmptyMenuEntry(final IMenuManager maptoMenu, final String message) {
 		final ContributionItem emptyMenu = new ContributionItem() {
 			@Override
-			public void fill(Menu menu, int index) {
+			public void fill(final Menu menu, final int index) {
 				final MenuItem item = (index == -1) ? new MenuItem(menu, SWT.None) : new MenuItem(menu, SWT.None, index);
 				item.setText(message);
 				item.setEnabled(false);

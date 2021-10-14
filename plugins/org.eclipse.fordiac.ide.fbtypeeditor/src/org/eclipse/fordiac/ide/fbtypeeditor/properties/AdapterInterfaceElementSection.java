@@ -27,8 +27,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -40,8 +40,6 @@ import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -54,7 +52,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	protected CCombo typeCombo;
 
 	@Override
-	protected IInterfaceElement getInputType(Object input) {
+	protected IInterfaceElement getInputType(final Object input) {
 		if (input instanceof InterfaceEditPart) {
 			return ((InterfaceEditPart) input).getCastedModel();
 		}
@@ -79,39 +77,33 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		createTypeAndCommentSection(getLeftComposite());
 	}
 
-	protected void createTypeAndCommentSection(Composite parent) {
+	protected void createTypeAndCommentSection(final Composite parent) {
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(parent, true);
 		nameText.addVerifyListener(new IdentifierVerifyListener());
-		nameText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
-				addContentAdapter();
-			}
+		nameText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
+			addContentAdapter();
 		});
 		getWidgetFactory().createCLabel(parent, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createGroupText(parent, true);
-		commentText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
-				addContentAdapter();
-			}
+		commentText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			addContentAdapter();
 		});
 		getWidgetFactory().createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
-		Composite typeComp = getWidgetFactory().createComposite(parent);
+		final Composite typeComp = getWidgetFactory().createComposite(parent);
 		typeComp.setLayout(new GridLayout(2, false));
 		typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), typeComp);
-		GridData languageComboGridData = new GridData(SWT.FILL, 0, true, false);
+		final GridData languageComboGridData = new GridData(SWT.FILL, 0, true, false);
 		typeCombo.setLayoutData(languageComboGridData);
 		typeCombo.addListener(SWT.Selection, event -> {
-			DataType newType = getTypeForSelection(typeCombo.getText());
+			final DataType newType = getTypeForSelection(typeCombo.getText());
 			if (null != newType) {
 				executeCommand(new ChangeDataTypeCommand((VarDeclaration) type, newType));
 				refresh();
@@ -128,7 +120,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
@@ -144,15 +136,15 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		typeCombo.removeAll();
 		typeList = getTypes();
 		if (null != typeList) {
-			List<String> typeNames = new ArrayList<>();
-			for (DataType type : typeList) {
+			final List<String> typeNames = new ArrayList<>();
+			for (final DataType type : typeList) {
 				typeNames.add(type.getName());
 			}
 			Collections.sort(typeNames);
-			String currTypeName = (null != ((VarDeclaration) type).getType())
+			final String currTypeName = (null != ((VarDeclaration) type).getType())
 					? ((VarDeclaration) type).getType().getName()
-					: ""; // this handles gracefully the case when the adpater type could //$NON-NLS-1$
-							// not be loaded
+							: ""; // this handles gracefully the case when the adpater type could //$NON-NLS-1$
+			// not be loaded
 			for (int i = 0; i < typeNames.size(); i++) {
 				typeCombo.add(typeNames.get(i));
 				if (typeNames.get(i).equals(currTypeName)) {
@@ -163,17 +155,17 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	}
 
 	protected Collection<DataType> getTypes() {
-		List<DataType> types = new ArrayList<>();
-		FBType fbType = (FBType) getType().eContainer().eContainer();
-		PaletteEntry entry = fbType.getPaletteEntry();
+		final List<DataType> types = new ArrayList<>();
+		final FBType fbType = (FBType) getType().eContainer().eContainer();
+		final PaletteEntry entry = fbType.getPaletteEntry();
 
 		entry.getPalette().getAdapterTypesSorted().forEach(adaptertype -> types.add(adaptertype.getType()));
 		return types;
 	}
 
-	protected DataType getTypeForSelection(String text) {
+	protected DataType getTypeForSelection(final String text) {
 		if (null != typeList) {
-			for (DataType dataType : typeList) {
+			for (final DataType dataType : typeList) {
 				if (dataType.getName().equals(text)) {
 					return dataType;
 				}
@@ -189,5 +181,6 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
+		// nothing to be done here
 	}
 }

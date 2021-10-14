@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2013, 2016, 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2011, 2021 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,25 +11,23 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Clean-up and making the implementation more robust
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.handlers;
-
-import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.expressions.IEvaluationContext;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
-import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
@@ -40,40 +39,29 @@ import org.eclipse.ui.handlers.HandlerUtil;
  */
 public class ShowFBInApp extends AbstractHandler {
 
-	/**
-	 * The constructor.
-	 */
-	public ShowFBInApp() {
-	}
 
 	/**
 	 * the command has been executed, so extract extract the needed information from
 	 * the application context.
 	 */
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof IStructuredSelection) {
-			Object first = ((IStructuredSelection) selection).getFirstElement();
-			if (first instanceof AbstractFBNElementEditPart) {
-				FBNetworkElement fb = ((AbstractFBNElementEditPart) first).getModel();
-				FBNetworkElement appFB = fb.getOpposite();
-				Application app = getApplication(appFB);
-				if (app != null && appFB != null) {
-					IEditorPart editor = OpenListenerManager.openEditor(app);
-					if (editor instanceof FBNetworkEditor) {
-						AdvancedScrollingGraphicalViewer viewer = ((FBNetworkEditor) editor).getViewer();
-						if (viewer != null) {
-							Object fbToSelect = viewer.getEditPartRegistry().get(appFB);
-							if (fbToSelect instanceof EditPart) {
-								viewer.selectAndRevealEditPart((EditPart) fbToSelect);
-							}
-						}
-					}
-				}
-			}
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final FBNetworkElement appFB = getAppFB(selection);
+
+		final Application app = getApplication(appFB);
+		if (app != null) {
+			final IEditorPart editor = OpenListenerManager.openEditor(app);
+			HandlerHelper.selectElement(appFB, HandlerHelper.getViewer(editor));
 		}
-		return null;
+		return Status.OK_STATUS;
+	}
+
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		final FBNetworkElement appFB = getAppFB(selection);
+		setBaseEnabled(appFB != null && getApplication(appFB) != null);
 	}
 
 	/**
@@ -82,31 +70,22 @@ public class ShowFBInApp extends AbstractHandler {
 	 * @param fbView
 	 * @return the application of the fbView if available
 	 */
-	private static Application getApplication(FBNetworkElement fb) {
+	private static Application getApplication(final FBNetworkElement fb) {
 		if (fb != null) {
 			return fb.getFbNetwork().getApplication();
 		}
 		return null;
 	}
 
-	@Override
-	public void setEnabled(Object evaluationContext) {
-		IEvaluationContext ctx = (IEvaluationContext) evaluationContext;
-		Object obj = ctx.getDefaultVariable();
-
-		if (obj instanceof List) {
-			List<?> list = (List<?>) obj;
-			if (!list.isEmpty()) {
-				obj = list.get(0);
+	private static FBNetworkElement getAppFB(final Object selection) {
+		if (selection instanceof IStructuredSelection && ((IStructuredSelection) selection).size() == 1) {
+			final Object first = ((IStructuredSelection) selection).getFirstElement();
+			if (first instanceof EditPart && ((EditPart) first).getModel() instanceof FBNetworkElement) {
+				final FBNetworkElement fb = (FBNetworkElement) ((EditPart) first).getModel();
+				return fb.getOpposite();
 			}
 		}
-		if (obj instanceof AbstractFBNElementEditPart) {
-			FBNetworkElement fb = ((AbstractFBNElementEditPart) obj).getModel();
-			FBNetworkElement appFB = fb.getOpposite();
-			Application app = getApplication(appFB);
-			setBaseEnabled((app != null && appFB != null));
-		} else {
-			setBaseEnabled(false);
-		}
+		return null;
 	}
+
 }

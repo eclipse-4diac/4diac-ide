@@ -35,6 +35,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
+import org.eclipse.fordiac.ide.application.tools.FBNScrollingConnectionEndpointTracker;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
@@ -60,6 +61,7 @@ import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.handles.ConnectionEndpointHandle;
+import org.eclipse.gef.tools.ConnectionEndpointTracker;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -117,6 +119,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			g.fillRoundRectangle(r, r.height / 2, r.height / 2);
 
 		}
+
+		@Override
+		protected ConnectionEndpointTracker createConnectionEndPointTracker(
+				final org.eclipse.gef.ConnectionEditPart connectionEditPart) {
+			return new FBNScrollingConnectionEndpointTracker(connectionEditPart);
+		}
 	}
 
 	private static final float[] BROKEN_CONNECTION_DASH_PATTERN = new float[] { 5.0f, 5.0f };
@@ -146,11 +154,11 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			getFigure().setForegroundColor(getDataConnectioncolor());
 		}
 		if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON) && (getModel() instanceof DataConnection)) {
-			getFigure().setVisible(!((Boolean) event.getNewValue()));
+			getFigure().setVisible(!((Boolean) event.getNewValue()).booleanValue());
 		}
 		if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON)
 				&& (getModel() instanceof EventConnection)) {
-			getFigure().setVisible(!((Boolean) event.getNewValue()));
+			getFigure().setVisible(!((Boolean) event.getNewValue()).booleanValue());
 		}
 	};
 
@@ -158,7 +166,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	protected void createEditPolicies() {
 		// Selection handle edit policy.
 		// Makes the connection show a feedback, when selected by the user.
-		// installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new DisableConnectionHandleRoleEditPolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new FeedbackConnectionEndpointEditPolicy() {
 			@Override
 			protected ConnectionEndpointHandle createConnectionEndPointHandle(

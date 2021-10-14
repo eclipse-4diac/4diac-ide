@@ -25,19 +25,19 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public class DeleteMemberVariableCommandTest extends DeleteMemberVariableCommandTestBase {
 
-	private static State executeDeletion(State state, VarDeclaration var) {
-		state.setCommand(new DeleteMemberVariableCommand(state.getStructuredType(), var));
+	private static State executeDeletion(State state, VarDeclaration variable) {
+		state.setCommand(new DeleteMemberVariableCommand(state.getStructuredType(), variable));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyDeletion(State state, State oldState, TestFunction t, VarDeclaration var) {
+	private static void verifyDeletion(State state, State oldState, TestFunction t, VarDeclaration variable) {
 		// verify that old variables are still there
 		t.test((oldState.getStructuredType().getMemberVariables().size() - 1), state.getStructuredType()
 				.getMemberVariables().size());
 		// verify that new variable is not in member variables anymore
 		for (final VarDeclaration member : state.getStructuredType().getMemberVariables()) {
-			t.test(!member.getName().equals(var.getName()));
+			t.test(!member.getName().equals(variable.getName()));
 		}
 	}
 

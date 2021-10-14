@@ -32,14 +32,14 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 	private static final String ELEMENT2_NAME = "MyOutput"; //$NON-NLS-1$
 	private static final String ELEMENT3_NAME = "EO2"; //$NON-NLS-1$
 
-	private static State executeCommandOutputWithoutName(State state) {
+	private static State executeCommandOutputWithoutName(final State state) {
 		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null),
 				getTypeInterfaceList(state), /* isInput */ false, /* index */ 0));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyInterfaceListWithName(InterfaceList interfacelist, String element, TestFunction t) {
+	private static void verifyInterfaceListWithName(final InterfaceList interfacelist, final String element, final TestFunction t) {
 		t.test(interfacelist.getInputVars().isEmpty());
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
@@ -48,50 +48,48 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 		t.test(interfacelist.getInterfaceElement(element).getTypeName(), EVENT_TYPE);
 	}
 
-	private static void verifyStateOutputWithoutName(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = getTypeInterfaceList(state);
-		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
+	private static void verifyStateOutputWithoutName(final State state, final State oldState, final TestFunction t) {
+		final InterfaceList interfacelist = getTypeInterfaceList(state);
+		final InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
 		verifyInterfaceListWithName(interfacelist, ELEMENT1_NAME, t);
 		t.test(interfacelist.getEventOutputs().size(), oldInterfacelist.getEventOutputs().size() + 1);
 	}
 
-	private static State executeCommandOutputWithName(State state) {
+	private static State executeCommandOutputWithName(final State state) {
 		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), ELEMENT2_NAME,
 				getTypeInterfaceList(state), /* isInput */ false, /* index */ 1));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyStateOutputWithName(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = getTypeInterfaceList(state);
-		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
+	private static void verifyStateOutputWithName(final State state, final State oldState, final TestFunction t) {
+		final InterfaceList interfacelist = getTypeInterfaceList(state);
+		final InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
 		verifyInterfaceListWithName(interfacelist, ELEMENT2_NAME, t);
 		t.test(interfacelist.getEventOutputs().size(), oldInterfacelist.getEventOutputs().size() + 1);
 
 	}
 
-	private static State executeCommandOutputWithNameNull(State state) {
+	private static State executeCommandOutputWithNameNull(final State state) {
 		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), null,
 				getTypeInterfaceList(state), /* isInput */ false, /* index */ 1));
 
 		final State result = commandExecution(state);
 
-		assertion.test(state.getCommand() instanceof CreateInterfaceElementCommand);
+		tester.get().test(state.getCommand() instanceof CreateInterfaceElementCommand);
 		final CreateInterfaceElementCommand c = ((CreateInterfaceElementCommand) state.getCommand());
-		assertion.test(c.isInput(), false);
-		assertion.test(c.getInterfaceList(), getTypeInterfaceList(state));
-		assertion.test(c.getDataType(), EventTypeLibrary.getInstance().getType(null));
-		assertion.test(getTypeInterfaceList(state).getInterfaceElement(ELEMENT3_NAME), c.getInterfaceElement());
-		assertion.test(c.getCreatedElement(), c.getInterfaceElement());
+		tester.get().test(c.getInterfaceList(), getTypeInterfaceList(state));
+		tester.get().test(getTypeInterfaceList(state).getInterfaceElement(ELEMENT3_NAME), c.getCreatedElement());
+		tester.get().test(c.getCreatedElement(), c.getCreatedElement());
 
 		return result;
 	}
 
-	private static void verifyStateOutputWithNameNull(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = getTypeInterfaceList(state);
-		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
+	private static void verifyStateOutputWithNameNull(final State state, final State oldState, final TestFunction t) {
+		final InterfaceList interfacelist = getTypeInterfaceList(state);
+		final InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
 		verifyInterfaceListWithName(interfacelist, ELEMENT3_NAME, t);
 		t.test(interfacelist.getEventOutputs().size(), oldInterfacelist.getEventOutputs().size() + 1);
@@ -104,23 +102,23 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 				new ExecutionDescription<>("Add Event Output without name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandEventOutputsTest::executeCommandOutputWithoutName, //
 						CreateInterfaceElementCommandEventOutputsTest::verifyStateOutputWithoutName //
-				), //
+						), //
 				new ExecutionDescription<>("Add Event Output with name \"" + ELEMENT2_NAME + "\"", // //$NON-NLS-1$ //$NON-NLS-2$
 						CreateInterfaceElementCommandEventOutputsTest::executeCommandOutputWithName, //
 						CreateInterfaceElementCommandEventOutputsTest::verifyStateOutputWithName //
-				), //
+						), //
 				new ExecutionDescription<>("Add Event Output with null as name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandEventOutputsTest::executeCommandOutputWithNameNull, //
 						CreateInterfaceElementCommandEventOutputsTest::verifyStateOutputWithNameNull //
-				) //
-		);
+						) //
+				);
 
 		final Collection<ExecutionDescription<State>> reordering = createReordering(
-				(State s) -> getTypeInterfaceList(s).getEventOutputs(), ELEMENT1_NAME, ELEMENT3_NAME, ELEMENT2_NAME);
+				(final State s) -> getTypeInterfaceList(s).getEventOutputs(), ELEMENT1_NAME, ELEMENT3_NAME, ELEMENT2_NAME);
 
 		final Collection<ExecutionDescription<State>> updateFBandValidate = createUpdateAndValidate(
-				(State s, State o, TestFunction t) -> {
-					InterfaceList interfacelist = getInstanceInterfaceList(s);
+				(final State s, final State o, final TestFunction t) -> {
+					final InterfaceList interfacelist = getInstanceInterfaceList(s);
 
 					verifyInterfaceListWithName(interfacelist, ELEMENT1_NAME, t);
 					verifyInterfaceListWithName(interfacelist, ELEMENT2_NAME, t);
@@ -133,7 +131,7 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 						executionDescriptions.stream(), //
 						reordering.stream()), //
 				updateFBandValidate.stream() //
-		).collect(Collectors.toList()));
+				).collect(Collectors.toList()));
 	}
 
 }

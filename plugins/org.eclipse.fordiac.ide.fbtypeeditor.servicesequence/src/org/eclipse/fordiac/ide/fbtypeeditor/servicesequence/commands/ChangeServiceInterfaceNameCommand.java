@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2015 fortiss GmbH
- * 
+ *               2021 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - clean up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
@@ -19,12 +21,12 @@ import org.eclipse.gef.commands.Command;
 
 public class ChangeServiceInterfaceNameCommand extends Command {
 
-	private FBType fb;
-	private boolean isLeftInterface;
-	private String name;
+	private final FBType fb;
+	private final boolean isLeftInterface;
+	private final String name;
 	private String oldName;
 
-	public ChangeServiceInterfaceNameCommand(String name, FBType fb, boolean isLeftInterface) {
+	public ChangeServiceInterfaceNameCommand(final String name, final FBType fb, final boolean isLeftInterface) {
 		this.fb = fb;
 		this.isLeftInterface = isLeftInterface;
 		this.name = name;
@@ -50,20 +52,20 @@ public class ChangeServiceInterfaceNameCommand extends Command {
 				oldName = fb.getService().getRightInterface().getName();
 			}
 		}
-		redo();
+		setName(name);
 	}
 
 	@Override
 	public void undo() {
-		if (isLeftInterface) {
-			fb.getService().getLeftInterface().setName(oldName);
-		} else {
-			fb.getService().getRightInterface().setName(oldName);
-		}
+		setName(oldName);
 	}
 
 	@Override
 	public void redo() {
+		setName(name);
+	}
+
+	private void setName(final String name) {
 		if (isLeftInterface) {
 			fb.getService().getLeftInterface().setName(name);
 		} else {

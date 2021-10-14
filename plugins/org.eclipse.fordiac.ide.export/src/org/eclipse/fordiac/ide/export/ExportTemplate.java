@@ -32,11 +32,11 @@ public abstract class ExportTemplate implements IExportTemplate {
 	private final List<String> warnings = new ArrayList<>();
 	private final List<String> infos = new ArrayList<>();
 
-	public ExportTemplate(String name) {
+	protected ExportTemplate(final String name) {
 		this(name, Paths.get("")); //$NON-NLS-1$
 	}
 
-	public ExportTemplate(String name, Path prefix) {
+	protected ExportTemplate(final String name, final Path prefix) {
 		this.name = name;
 		this.path = prefix.resolve(name);
 	}
@@ -72,7 +72,7 @@ public abstract class ExportTemplate implements IExportTemplate {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}

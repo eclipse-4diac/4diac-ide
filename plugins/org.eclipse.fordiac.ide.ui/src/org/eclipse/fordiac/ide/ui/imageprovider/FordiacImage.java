@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.ListResourceBundle;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -41,10 +42,12 @@ public enum FordiacImage {
 	// Part Images
 
 	// Icon Images
-	ICON_4DIAC_16, ICON_4DIAC_32, ICON_ADAPTER, ICON_ADD_STATE, ICON_ALGORITHM, ICON_APPLICATION, ICON_BASIC_FB,
+	ICON_4DIAC_16, ICON_4DIAC_32,
+	ICON_ADAPTER_LIST,
+	ICON_ADAPTER_TYPE, ICON_ADD_STATE, ICON_ALGORITHM, ICON_APPLICATION, ICON_BASIC_FB,
 	ICON_CLEAR_DEVICE, ICON_CLEAR_FORCE, ICON_COMPOSITE_FB, ICON_DATA, ICON_DATA_INPUT, ICON_DATA_TYPE,
 	ICON_DATA_OUTPUT, ICON_DELETE_RESOURCE, ICON_DEPLOYMENT_CONSOLE, ICON_DEPLOYMENT_PERSPECTIVE, ICON_DEVICE,
-	ICON_DISCOVER, ICON_DOWNLOAD, ICON_DOWNLOAD_SELECTION_TREE_VIEW, ICON_EC_ACTION, ICON_ECC, ICON_EC_STATE,
+	ICON_DISCOVER, ICON_DOWNLOAD, ICON_EC_ACTION, ICON_ECC, ICON_EC_STATE,
 	ICON_EVENT, ICON_EVENT_INPUT, ICON_EVENT_OUTPUT, ICON_EXPAND_ALL, ICON_EXPORT, ICON_FB, ICON_FB_TYPE,
 	ICON_FB_NETWORK, ICON_FB_TESTER, ICON_FIRMWARE_RESOURCE, ICON_FMU, ICON_FORCE_VALUE, ICON_HIDE_DATA,
 	ICON_HIDE_EVENT, ICON_INTERFACE_EDITOR, ICON_INTERFACE_LIST, ICON_KILL_DEVICE, ICON_RUNTIME_LAUNCHER,
@@ -54,8 +57,13 @@ public enum FordiacImage {
 	ICON_RESOURCE, ICON_RIGHT_INPUT_PRIMITIVE, ICON_RIGHT_OUTPUT_PRIMITIVE, ICON_RUN_DEBUG, ICON_SEGMENT, ICON_SERVICE,
 	ICON_SERVICE_SEQUENCE, ICON_SIFB, ICON_SIMPLE_FB, ICON_SUB_APP, ICON_SUB_APP_TYPE, ICON_SOCKETS, ICON_START,
 	ICON_START_MONITORING, ICON_STOP, ICON_STRUCTURED_TEXT, ICON_SYSTEM, ICON_SYSTEM_CONFIGURATION,
-	ICON_SYSTEM_EXPLORER, ICON_SYSTEM_PERSPECTIVE, ICON_TYPE_NAVIGATOR, ICON_TRANSACTION, ICON_TRIGGER_EVENT,
-	ICON_WATCHES_VIEW, ICON_WATCH_INTERFACE_ELEMENTS,
+	ICON_SYSTEM_EXPLORER,
+	ICON_SYSTEM_PERSPECTIVE,
+	ICON_TYPE_NAVIGATOR,
+	ICON_TRANSACTION,
+	ICON_TRIGGER_EVENT,
+	ICON_WATCHES_VIEW,
+	ICON_WATCH_INTERFACE_ELEMENTS,
 
 	// to be deleted with removing the tester
 	ICON_TesterTemplate,
@@ -67,7 +75,21 @@ public enum FordiacImage {
 
 	private static final String IMAGES_DIRECTORY = "images"; //$NON-NLS-1$
 	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages"; //$NON-NLS-1$
-	private static ResourceBundle foridacImageProperties = ResourceBundle.getBundle(FORDIAC_IMAGE_PROPERTIES);
+	private static ResourceBundle foridacImageProperties = getFordiacImageProperties();
+
+	private static final ResourceBundle getFordiacImageProperties() {
+		try {
+			return ResourceBundle.getBundle(FORDIAC_IMAGE_PROPERTIES);
+		} catch (final MissingResourceException e) {
+			UIPlugin.getDefault().logWarning("Unable to load fordiacimages.properties from image-fragment.", e); //$NON-NLS-1$
+			return new ListResourceBundle() {
+				@Override
+				protected Object[][] getContents() {
+					return new Object[][] {};
+				}
+			};
+		}
+	}
 
 	private static Map<Image, Image> errorImages = new HashMap<>();
 	private static int count = 0;
@@ -77,15 +99,15 @@ public enum FordiacImage {
 		if (image == null) {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEC_FIELD_ERROR);
 		}
-		if (!errorImages.containsKey(image)) {
+
+		return errorImages.computeIfAbsent(image, img -> {
 			final DecorationOverlayIcon overlay = new DecorationOverlayIcon(image,
 					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR),
 					IDecoration.TOP_LEFT);
 			count++;
-			UIPlugin.getDefault().logInfo("createErrorOverlayImage " + count);
-			errorImages.put(image, overlay.createImage());
-		}
-		return errorImages.get(image);
+			UIPlugin.getDefault().logInfo("createErrorOverlayImage " + count); //$NON-NLS-1$
+			return overlay.createImage();
+		});
 	}
 
 	FordiacImage() {
@@ -116,14 +138,11 @@ public enum FordiacImage {
 	}
 
 	public InputStream getImageAsInputStream() throws IOException {
-		InputStream ret = null;
 		final URL fileLocation = getImageURL(this.name());
 		if (null != fileLocation) {
-			ret = fileLocation.openConnection().getInputStream();
-		} else {
-			ret = MISSING.getImageAsInputStream();
+			return fileLocation.openConnection().getInputStream();
 		}
-		return ret;
+		return MISSING.getImageAsInputStream();
 	}
 
 	private static boolean addImageDescriptor(final String name) {

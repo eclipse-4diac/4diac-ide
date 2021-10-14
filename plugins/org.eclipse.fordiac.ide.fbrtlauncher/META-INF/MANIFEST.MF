@@ -5,8 +5,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.debug.core
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.14.0.qualifier
-Bundle-Name: FBRT Launcher (Incubation)
+Bundle-Version: 2.0.0.qualifier
+Bundle-Name: FBRT Launcher
 Bundle-Activator: org.eclipse.fordiac.ide.fbrtlauncher.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbrtlauncher;singleton:=true

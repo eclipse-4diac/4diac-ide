@@ -61,4 +61,17 @@ public interface SubApp extends FBNetworkElement {
 	 * @generated */
 	boolean isUnfolded();
 
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated */
+	boolean isTyped();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc --> <!-- begin-model-doc --> if it is an untyped subapp and the
+	 * fbnetwork is not yet loaded load it from the type <!-- end-model-doc -->
+	 * 
+	 * @model
+	 * @generated */
+	FBNetwork loadSubAppNetwork();
+
 } // SubApp

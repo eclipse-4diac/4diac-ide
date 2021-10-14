@@ -87,13 +87,23 @@ public class SimpleFBImplTemplate extends ForteFBTemplate {
       }
     }
     {
+      boolean _isEmpty_1 = this.type.getInternalFbs().isEmpty();
+      boolean _not_1 = (!_isEmpty_1);
+      if (_not_1) {
+        _builder.newLine();
+        CharSequence _generateInteralFbDeclarations = this.generateInteralFbDeclarations(this.type);
+        _builder.append(_generateInteralFbDeclarations);
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    {
       EList<VarDeclaration> _inputVars = this.type.getInterfaceList().getInputVars();
       EList<VarDeclaration> _outputVars = this.type.getInterfaceList().getOutputVars();
       Iterable<VarDeclaration> _plus = Iterables.<VarDeclaration>concat(_inputVars, _outputVars);
       EList<VarDeclaration> _internalVars = this.type.getInternalVars();
-      boolean _isEmpty_1 = IterableExtensions.isEmpty(Iterables.<VarDeclaration>concat(_plus, _internalVars));
-      boolean _not_1 = (!_isEmpty_1);
-      if (_not_1) {
+      boolean _isEmpty_2 = IterableExtensions.isEmpty(Iterables.<VarDeclaration>concat(_plus, _internalVars));
+      boolean _not_2 = (!_isEmpty_2);
+      if (_not_2) {
         EList<VarDeclaration> _inputVars_1 = this.type.getInterfaceList().getInputVars();
         EList<VarDeclaration> _outputVars_1 = this.type.getInterfaceList().getOutputVars();
         Iterable<VarDeclaration> _plus_1 = Iterables.<VarDeclaration>concat(_inputVars_1, _outputVars_1);

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2013 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,33 +23,34 @@ import org.eclipse.swt.events.ModifyListener;
  * the object created with that class is registered with a component using the
  * component's <code>addRuntimeModifyListener<code> method. When the
  * runtimeModify event occurs, that object's appropriate method is invoked.
- * 
+ *
  * @see RuntimeModifyEvent
  */
 public class RuntimeModifyListener implements ModifyListener {
 
-	private IRuntimeLauncher launcher;
-	private String name;
+	private final IRuntimeLauncher launcher;
+	private final String name;
 
 	/**
 	 * Instantiates a new runtime modify listener.
-	 * 
+	 *
 	 * @param iLauncher the i launcher
 	 * @param name      the name
 	 */
-	RuntimeModifyListener(IRuntimeLauncher iLauncher, String name) {
+	RuntimeModifyListener(final IRuntimeLauncher iLauncher, final String name) {
 		launcher = iLauncher;
 		this.name = name;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.
 	 * ModifyEvent)
 	 */
 	@Override
-	public void modifyText(ModifyEvent e) {
+	public void modifyText(final ModifyEvent e) {
+		// currently nothing to be done here
 	}
 
 	public IRuntimeLauncher getLauncher() {

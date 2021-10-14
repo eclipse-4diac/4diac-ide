@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
  *
  */
 
-public final class ADPImporter extends TypeImporter {
+public class ADPImporter extends TypeImporter {
 
 	private AdapterFBType adapterFBType;
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,7 +25,7 @@ import org.eclipse.ui.IPersistableElement;
  * content is equal.
  */
 public class FBTypeEditorInput implements IEditorInput {
-	private final FBType fbType;
+	private FBType fbType;
 	private final PaletteEntry entry;
 
 	public FBTypeEditorInput(final FBType fbType, final PaletteEntry entry) {
@@ -76,15 +76,18 @@ public class FBTypeEditorInput implements IEditorInput {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj instanceof FBTypeEditorInput) {
-			FBTypeEditorInput input = (FBTypeEditorInput) obj;
+			final FBTypeEditorInput input = (FBTypeEditorInput) obj;
 			return fbType.equals(input.getContent()) && entry.getFile().equals(input.getPaletteEntry().getFile());
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	@Override
 	public int hashCode() {
 		return fbType.hashCode();
+	}
+
+	public void setFbType(final FBType fbType) {
+		this.fbType = fbType;
 	}
 }

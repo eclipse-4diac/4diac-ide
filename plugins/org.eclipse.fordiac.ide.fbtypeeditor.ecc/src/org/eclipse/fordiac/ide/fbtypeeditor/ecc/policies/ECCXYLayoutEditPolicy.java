@@ -34,16 +34,15 @@ import org.eclipse.gef.requests.CreateRequest;
 public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
-		return new ModifiedNonResizeableEditPolicy(0, new Insets(4)) {
-		};
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
+		return new ModifiedNonResizeableEditPolicy(0, new Insets(4));
 	}
 
 	@Override
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
 		if (child.getModel() instanceof ECState) {
-			ECState state = (ECState) child.getModel();
+			final ECState state = (ECState) child.getModel();
 			translateToModelConstraint(constraint);
 			return new SetPositionCommand(state, request, (Rectangle) constraint);
 		}
@@ -51,10 +50,10 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command getAddCommand(Request generic) {
+	protected Command getAddCommand(final Request generic) {
 		if (generic instanceof ChangeBoundsRequest) {
-			ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
-			for (Object editPart : request.getEditParts()) {
+			final ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
+			for (final Object editPart : request.getEditParts()) {
 				if ((editPart instanceof ECActionAlgorithmEditPart)
 						|| (editPart instanceof ECActionOutputEventEditPart)) {
 					// actions should not be moved or resized
@@ -66,14 +65,9 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command createChangeConstraintCommand(final EditPart child, final Object constraint) {
-		return null;
-	}
-
-	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
 		if (request.getNewObjectType().equals(ECState.class) && getHost().getModel() instanceof ECC) {
-			Point point = request.getLocation().getCopy();
+			final Point point = request.getLocation().getCopy();
 			getHostFigure().translateToRelative(point);
 			return new CreateECStateCommand((ECState) request.getNewObject(), point, (ECC) getHost().getModel());
 		}

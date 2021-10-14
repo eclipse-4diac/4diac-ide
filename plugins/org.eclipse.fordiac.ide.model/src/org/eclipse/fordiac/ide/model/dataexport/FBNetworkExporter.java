@@ -23,9 +23,11 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.Palette.impl.SubApplicationTypePaletteEntryImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -64,6 +66,9 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addFBNetworkElements(final FBNetwork network) throws XMLStreamException {
 		for (final FBNetworkElement fbnElement : network.getNetworkElements()) {
+			if (!isExportableErrorMarker(fbnElement)) {
+				continue;
+			}
 			final String nodeName = getFBNElementNodeName(fbnElement);
 			if (null != nodeName) {
 				addStartElement(nodeName);
@@ -74,23 +79,39 @@ class FBNetworkExporter extends CommonElementExporter {
 				addCommentAttribute(fbnElement);
 				addXYAttributes(fbnElement);
 
-				if ((fbnElement instanceof SubApp) && (null == ((SubApp) fbnElement).getType())) {
+				if (isUntypedSubapp(fbnElement)) {
 					// we have an untyped subapp therefore add the subapp contents to it
-					createUntypedSubAppcontents((SubApp) fbnElement);
+					createUntypedSubAppContents((SubApp) fbnElement);
 				}
 
 				addAttributes(fbnElement.getAttributes());
-				addParamsConfig(fbnElement.getInterface().getInputVars());
+				if (!isUntypedSubapp(fbnElement)) {
+					// for untyped subapp initial values are stored in the vardeclarations
+					addParamsConfig(fbnElement.getInterface().getInputVars());
+				}
 				addEndElement();
 			}
 		}
 	}
 
+	private static boolean isUntypedSubapp(final FBNetworkElement fbnElement) {
+		return (fbnElement instanceof SubApp) && (!((SubApp) fbnElement).isTyped());
+	}
+
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
 		if (!(fbnElement.getType() instanceof AdapterFBType)) {
-			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)) {
+			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB))
+			{
 				return LibraryElementTags.FB_ELEMENT;
 			}
+
+			if(fbnElement instanceof ErrorMarkerFBNElement) {
+				if(fbnElement.getPaletteEntry() instanceof SubApplicationTypePaletteEntryImpl) {
+					return LibraryElementTags.SUBAPP_ELEMENT;
+				}
+				return LibraryElementTags.FB_ELEMENT;
+			}
+
 			if (fbnElement instanceof SubApp) {
 				return LibraryElementTags.SUBAPP_ELEMENT;
 			}
@@ -98,7 +119,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		return null;
 	}
 
-	private void createUntypedSubAppcontents(final SubApp element) throws XMLStreamException {
+	private void createUntypedSubAppContents(final SubApp element) throws XMLStreamException {
 		new SubApplicationTypeExporter(this).addInterfaceList(element.getInterface());
 		if (null != element.getSubAppNetwork()) {
 			// if mapped the subapp may be empty
@@ -119,18 +140,26 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addConnection(final Connection connection, final FBNetwork fbNetwork) throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
-		if ((connection.getSource() != null) && (connection.getSource().eContainer() instanceof InterfaceList)) {
+		if (isExportableConnectionEndpoint(connection.getSource())) {
 			getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getSource(), fbNetwork));
 		}
 
-		if ((connection.getDestination() != null)
-				&& (connection.getDestination().eContainer() instanceof InterfaceList)) {
+		if (isExportableConnectionEndpoint(connection.getDestination())) {
 			getWriter().writeAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getDestination(), fbNetwork));
 		}
 		addCommentAttribute(connection);
 		addConnectionCoordinates(connection);
+	}
+
+	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
+		return (endPoint != null) && isExportableErrorMarker(endPoint.getFBNetworkElement())
+				&& (endPoint.eContainer() instanceof InterfaceList);
+	}
+
+	public static boolean isExportableErrorMarker(final FBNetworkElement fbNetworkElement) {
+		return !((fbNetworkElement instanceof ErrorMarkerFBNElement) && (fbNetworkElement.getPaletteEntry() == null));
 	}
 
 	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement, final FBNetwork fbNetwork) {

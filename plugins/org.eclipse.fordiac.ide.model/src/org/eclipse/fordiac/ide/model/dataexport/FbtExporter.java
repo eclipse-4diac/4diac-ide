@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2018 - 2020 Johannes Keppler University, Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *   Alois Zoitl - Refactored class hierarchy of xml exporters
  *               - fixed coordinate system resolution conversion in in- and export
  *               - changed exporting the Saxx cursor api
+ *   Martin Melik Merkumians - adds export of internal FBs
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
@@ -77,7 +79,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 */
 	private void addBasicFB(final BasicFBType type) throws XMLStreamException {
 		addStartElement(LibraryElementTags.BASIC_F_B_ELEMENT);
-		addVarList(type.getInternalVars(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
+		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
 		addECC(type.getECC());
 		for (Algorithm alg : type.getAlgorithm()) {
 			addAlgorithm(alg);
@@ -230,7 +232,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 */
 	private void addSimpleFB(final SimpleFBType type) throws XMLStreamException {
 		addStartElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
-		addVarList(type.getInternalVars(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
+		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
 		addAlgorithm(type.getAlgorithm());
 		addEndElement();
 	}

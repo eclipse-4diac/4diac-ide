@@ -307,13 +307,22 @@ public interface MonitoringPackage extends EPackage {
 	int ADAPTER_MONITORING_EVENT__COMMENT = IEDIT_PART_CREATOR_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_MONITORING_EVENT__ATTRIBUTES = IEDIT_PART_CREATOR_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__IS_INPUT = IEDIT_PART_CREATOR_FEATURE_COUNT + 2;
+	int ADAPTER_MONITORING_EVENT__IS_INPUT = IEDIT_PART_CREATOR_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
@@ -321,7 +330,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 3;
+	int ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
@@ -329,7 +338,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 4;
+	int ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -338,7 +347,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 5;
+	int ADAPTER_MONITORING_EVENT__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
@@ -347,7 +356,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
+	int ADAPTER_MONITORING_EVENT__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>With</b></em>' containment reference list.
@@ -355,7 +364,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__WITH = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
+	int ADAPTER_MONITORING_EVENT__WITH = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Monitoring Event</em>' class.
@@ -363,7 +372,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
+	int ADAPTER_MONITORING_EVENT_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl <em>Adapter Monitoring Var Declaration</em>}' class.
@@ -394,13 +403,22 @@ public interface MonitoringPackage extends EPackage {
 	int ADAPTER_MONITORING_VAR_DECLARATION__COMMENT = IEDIT_PART_CREATOR_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES = IEDIT_PART_CREATOR_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT = IEDIT_PART_CREATOR_FEATURE_COUNT + 2;
+	int ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT = IEDIT_PART_CREATOR_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
@@ -408,7 +426,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 3;
+	int ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
@@ -416,7 +434,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 4;
+	int ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -425,7 +443,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 5;
+	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
@@ -434,7 +452,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
+	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Array Size</b></em>' attribute. <!--
@@ -443,7 +461,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
+	int ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Withs</b></em>' reference list. <!--
@@ -452,7 +470,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__WITHS = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
+	int ADAPTER_MONITORING_VAR_DECLARATION__WITHS = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference. <!--
@@ -461,7 +479,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__VALUE = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
+	int ADAPTER_MONITORING_VAR_DECLARATION__VALUE = IEDIT_PART_CREATOR_FEATURE_COUNT + 10;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Monitoring Var Declaration</em>' class.
@@ -469,7 +487,162 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 10;
+	int ADAPTER_MONITORING_VAR_DECLARATION_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 11;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.SubAppPortElementImpl <em>Sub App Port Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.SubAppPortElementImpl
+	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getSubAppPortElement()
+	 * @generated
+	 */
+	int SUB_APP_PORT_ELEMENT = 6;
+
+	/**
+	 * The feature id for the '<em><b>Fb</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP_PORT_ELEMENT__FB = MonitoringBasePackage.PORT_ELEMENT__FB;
+
+	/**
+	 * The feature id for the '<em><b>Interface Element</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP_PORT_ELEMENT__INTERFACE_ELEMENT = MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT;
+
+	/**
+	 * The feature id for the '<em><b>Resource</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP_PORT_ELEMENT__RESOURCE = MonitoringBasePackage.PORT_ELEMENT__RESOURCE;
+
+	/**
+	 * The feature id for the '<em><b>Hierarchy</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP_PORT_ELEMENT__HIERARCHY = MonitoringBasePackage.PORT_ELEMENT__HIERARCHY;
+
+	/**
+	 * The feature id for the '<em><b>Anchor</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP_PORT_ELEMENT__ANCHOR = MonitoringBasePackage.PORT_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Sub App Port Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP_PORT_ELEMENT_FEATURE_COUNT = MonitoringBasePackage.PORT_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.SubappMonitoringElementImpl <em>Subapp Monitoring Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.SubappMonitoringElementImpl
+	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getSubappMonitoringElement()
+	 * @generated
+	 */
+	int SUBAPP_MONITORING_ELEMENT = 7;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBAPP_MONITORING_ELEMENT__PORT = MONITORING_ELEMENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Offline</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBAPP_MONITORING_ELEMENT__OFFLINE = MONITORING_ELEMENT__OFFLINE;
+
+	/**
+	 * The feature id for the '<em><b>Force</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBAPP_MONITORING_ELEMENT__FORCE = MONITORING_ELEMENT__FORCE;
+
+	/**
+	 * The feature id for the '<em><b>Force Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBAPP_MONITORING_ELEMENT__FORCE_VALUE = MONITORING_ELEMENT__FORCE_VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Current Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBAPP_MONITORING_ELEMENT__CURRENT_VALUE = MONITORING_ELEMENT__CURRENT_VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Sec</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBAPP_MONITORING_ELEMENT__SEC = MONITORING_ELEMENT__SEC;
+
+	/**
+	 * The feature id for the '<em><b>Usec</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBAPP_MONITORING_ELEMENT__USEC = MONITORING_ELEMENT__USEC;
+
+	/**
+	 * The feature id for the '<em><b>Anchor</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBAPP_MONITORING_ELEMENT__ANCHOR = MONITORING_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Subapp Monitoring Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBAPP_MONITORING_ELEMENT_FEATURE_COUNT = MONITORING_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement <em>Element</em>}'.
@@ -571,6 +744,48 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getIEditPartCreator();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement <em>Sub App Port Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Sub App Port Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement
+	 * @generated
+	 */
+	EClass getSubAppPortElement();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement#getAnchor <em>Anchor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Anchor</em>'.
+	 * @see org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement#getAnchor()
+	 * @see #getSubAppPortElement()
+	 * @generated
+	 */
+	EReference getSubAppPortElement_Anchor();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement <em>Subapp Monitoring Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Subapp Monitoring Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement
+	 * @generated
+	 */
+	EClass getSubappMonitoringElement();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement#getAnchor <em>Anchor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Anchor</em>'.
+	 * @see org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement#getAnchor()
+	 * @see #getSubappMonitoringElement()
+	 * @generated
+	 */
+	EReference getSubappMonitoringElement_Anchor();
 
 	/**
 	 * Returns the meta object for class
@@ -714,6 +929,42 @@ public interface MonitoringPackage extends EPackage {
 		 * @generated
 		 */
 		EClass IEDIT_PART_CREATOR = eINSTANCE.getIEditPartCreator();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.SubAppPortElementImpl <em>Sub App Port Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.SubAppPortElementImpl
+		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getSubAppPortElement()
+		 * @generated
+		 */
+		EClass SUB_APP_PORT_ELEMENT = eINSTANCE.getSubAppPortElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Anchor</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUB_APP_PORT_ELEMENT__ANCHOR = eINSTANCE.getSubAppPortElement_Anchor();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.SubappMonitoringElementImpl <em>Subapp Monitoring Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.SubappMonitoringElementImpl
+		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getSubappMonitoringElement()
+		 * @generated
+		 */
+		EClass SUBAPP_MONITORING_ELEMENT = eINSTANCE.getSubappMonitoringElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Anchor</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUBAPP_MONITORING_ELEMENT__ANCHOR = eINSTANCE.getSubappMonitoringElement_Anchor();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterPortElementImpl <em>Adapter Port Element</em>}' class.

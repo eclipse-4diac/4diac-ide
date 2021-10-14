@@ -23,6 +23,7 @@ import java.util.TreeSet;
 
 public final class FordiacKeywords {
 
+	@SuppressWarnings("squid:S2386") // This is a final, immutable Set
 	public static final Set<String> RESERVED_KEYWORDS = getKeywords();
 
 	public enum KeywordTypes {
@@ -223,6 +224,8 @@ public final class FordiacKeywords {
 	@ModelString
 	public static final String ADAPTER_PLUG = "PLUG1"; //$NON-NLS-1$
 
+	@ModelString
+	public static final String INTERFACE_Y_POSITION = "YPOSITION"; //$NON-NLS-1$
 
 
 	private FordiacKeywords() {
@@ -238,6 +241,7 @@ public final class FordiacKeywords {
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
 	private @interface ModelString {
+		// Used only for annotation
 	}
 
 	private static Set<String> getKeywords() {
@@ -250,7 +254,7 @@ public final class FordiacKeywords {
 				try {
 					keywordSet.add((String) field.get(null));
 				} catch (final Exception e) {
-					throw new RuntimeException(e);
+					throw new RuntimeException(e);// NOSONAR
 				}
 			}
 		}

@@ -15,20 +15,33 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementCommand {
 
 	private CreateInterfaceElementCommand mirroredElement = null;
 
-	public CreateSubAppInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput,
+	public CreateSubAppInterfaceElementCommand(final IInterfaceElement copySrc, final boolean isInput,
+			final InterfaceList targetInterfaceList,
 			int index) {
+		super(copySrc, isInput, targetInterfaceList, index);
+	}
+
+	public CreateSubAppInterfaceElementCommand(final DataType dataType, final String name,
+			final InterfaceList interfaceList, final boolean isInput, final int index) {
+		super(dataType, name, interfaceList, isInput, index);
+	}
+
+	public CreateSubAppInterfaceElementCommand(final DataType dataType, final InterfaceList interfaceList,
+			final boolean isInput, final int index) {
 		super(dataType, interfaceList, isInput, index);
 	}
 
-	public CreateSubAppInterfaceElementCommand(DataType dataType, String name, InterfaceList interfaceList,
-			boolean isInput, int index) {
-		super(dataType, name, interfaceList, isInput, index);
+	public CreateSubAppInterfaceElementCommand(final DataType dataType, final String name,
+			final InterfaceList interfaceList,
+			final boolean isInput, final int arraySize, final String value, final int index) {
+		super(dataType, name, interfaceList, isInput, arraySize, value, index);
 	}
 
 	public CreateInterfaceElementCommand getMirroredElement() {
@@ -41,11 +54,7 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 		if (getInterfaceList().getFBNetworkElement().isMapped()) {
 			// the subapp is mapped so we need to created the interface element also in the
 			// opposite entry
-			mirroredElement = new CreateInterfaceElementCommand(getDataType(),
-					getInterfaceList().getFBNetworkElement().getOpposite().getInterface(), isInput(), getIndex());
-			mirroredElement.execute();
-			// Set the same name as the one we have also on the mirrored
-			mirroredElement.getInterfaceElement().setName(getInterfaceElement().getName());
+			mirroredElement = createMirroredInterfaceElement();
 		}
 	}
 

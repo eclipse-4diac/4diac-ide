@@ -15,19 +15,27 @@
 
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
+import java.text.MessageFormat
 import java.util.List
+import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
+import org.eclipse.fordiac.ide.model.FordiacKeywords
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
+import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement
@@ -40,11 +48,13 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ContinueStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IntLiteral
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.OutArgument
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RealLiteral
@@ -69,10 +79,7 @@ import org.eclipse.xtext.validation.CheckMode
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
-import org.eclipse.fordiac.ide.model.FordiacKeywords
-import org.eclipse.emf.common.util.EList
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
-import java.text.MessageFormat
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 
 class STAlgorithmFilter {
 
@@ -89,24 +96,24 @@ class STAlgorithmFilter {
 		// create resource for function block and add copy
 		val fbResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION))
 		fbResource.contents.add(fbType)
-		fbType.interfaceList.sockets.forEach[adp | createAdapterResource(resourceSet, adp)];
-		fbType.interfaceList.plugs.forEach[adp | createAdapterResource(resourceSet, adp)];
-		fbType.interfaceList.inputVars.forEach[v | createStructResource(resourceSet, v)];
-		fbType.interfaceList.outputVars.forEach[v | createStructResource(resourceSet, v)];
-		fbType.internalVars.forEach[v | createStructResource(resourceSet, v)];
+		fbType.interfaceList.sockets.forEach[adp|createAdapterResource(resourceSet, adp)];
+		fbType.interfaceList.plugs.forEach[adp|createAdapterResource(resourceSet, adp)];
+		fbType.interfaceList.inputVars.forEach[v|createStructResource(resourceSet, v)];
+		fbType.interfaceList.outputVars.forEach[v|createStructResource(resourceSet, v)];
+		fbType.internalVars.forEach[v|createStructResource(resourceSet, v)];
 	}
 
 	def void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
 		val adapterResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
 		adapterResource.contents.add(adapter.type.adapterFBType);
 	}
-	
+
 	def void createStructResource(XtextResourceSet resourceSet, VarDeclaration variable) {
 		if (variable.type instanceof StructuredType) {
 			val structResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
 			val type = variable.type as StructuredType;
 			structResource.contents.add(type);
-			type.memberVariables.forEach[v | createStructResource(resourceSet, v)];
+			type.memberVariables.forEach[v|createStructResource(resourceSet, v)];
 		}
 	}
 
@@ -127,14 +134,14 @@ class STAlgorithmFilter {
 		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
 		resource.load(new LazyStringInputStream(alg.text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
 		val stalg = resource.parseResult.rootASTElement as StructuredTextAlgorithm
-		stalg.localVariables.forEach[v | createStructResource(resourceSet, v)]
+		stalg.localVariables.forEach[v|createStructResource(resourceSet, v)]
 		return resource
 	}
 
 	def generateLocalVariables(STAlgorithm alg) {
 		val parseResult = alg.parseAlgorithm.parseResult
 		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
-		stalg.localVariables.forEach[v | v.typeName = v.type.name]
+		stalg.localVariables.forEach[v|v.typeName = v.type.name]
 		return stalg.localVariables
 	}
 
@@ -144,7 +151,9 @@ class STAlgorithmFilter {
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
 		if (!issues.empty) {
-			errors.addAll(issues.map[MessageFormat.format("{0}, Line {1}: {2}", alg.name, Long.toString(it.lineNumber), it.message)])
+			errors.addAll(issues.map [
+				MessageFormat.format("{0}, Line {1}: {2}", alg.name, Long.toString(it.lineNumber), it.message)
+			])
 			return null
 		}
 		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
@@ -253,11 +262,186 @@ class STAlgorithmFilter {
 		throw new UnsupportedOperationException(stmt.eClass + " not supported");
 	}
 
-	def protected dispatch generateStatement(
-		AssignmentStatement stmt) '''«stmt.variable.generateExpression» = «stmt.expression.generateExpression»;'''
+	def protected dispatch generateStatement(AssignmentStatement stmt) '''
+		«stmt.variable.generateExpression» = «stmt.expression.generateExpression»;
+	'''
 
 	def protected dispatch generateStatement(Call stmt) {
 		return stmt.generateExpression
+	}
+
+	def protected dispatch generateStatement(FBCall fbCall) '''
+		«generateInAssignments(fbCall)»
+		mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->receiveInputEvent(«eventIndexFromName(fbCall)», nullptr);
+		«generateOutAssignments(fbCall)»
+	'''
+
+	def generateInAssignments(FBCall call) {
+		val inArgs = call.args.filter(InArgument)
+		'''
+			«FOR inArg : inArgs»
+				«generateInAssigmentExpression(call.fb, inArg)» = «generateInAssigmentRHS(inArg)»;
+			«ENDFOR»
+		'''
+	}
+
+	def generateInAssigmentRHS(InArgument inArg) {
+		val inArgRHS = inArg.expr
+		if (inArgRHS instanceof PrimaryVariable && (inArgRHS as PrimaryVariable).^var.array) {
+			val inArgVar = (inArgRHS as PrimaryVariable).^var
+			if((inArgRHS as PrimaryVariable).^var.eContainer instanceof InterfaceList) {
+				val argFBInterfaceList = (inArgRHS as PrimaryVariable).^var.eContainer as InterfaceList
+				'''*static_cast<CIEC_ARRAY*>(getDI(«getInputIndex(argFBInterfaceList, inArgVar.name)»))'''				
+			} else if ((inArgRHS as PrimaryVariable).^var.eContainer instanceof SimpleFBType) {
+				val fbType = ((inArgRHS as PrimaryVariable).^var.eContainer as SimpleFBType)
+				'''*static_cast<CIEC_ARRAY*>(«generateGetVariable(fbType, inArgVar.name)»)'''
+			} else if ((inArgRHS as PrimaryVariable).^var.eContainer instanceof StructuredTextAlgorithm) {
+				inArg.expr.generateExpression
+			}
+		} else {
+			return inArg.expr.generateExpression
+		}
+	}
+
+	def generateInAssigmentExpression(FB calledFb, InArgument argument) {
+		val varDec = getInputVarDeclaration(calledFb, argument)
+		if (varDec.array) {
+			return '''*static_cast<CIEC_ARRAY*>(mInternalFBs[«internalFbIndexFromName(calledFb)»]->getDI(«getInputIndex(calledFb, argument.^var)»))'''
+		} else {
+			return '''*static_cast<CIEC_«varDec.type.name»*>(mInternalFBs[«internalFbIndexFromName(calledFb)»]->getDI(«getInputIndex(calledFb, argument.^var)»))'''
+		}
+	}
+
+	def getInputVarDeclaration(FB fb, InArgument argument) {
+		fb.interface.inputVars.findFirst[it.name == argument.^var]
+	}
+
+	def getInterfaceElementIndex(EList<? extends IInterfaceElement> interfaceList, String elementName) {
+		var index = 0
+		for (interfaceElement : interfaceList) {
+			if (interfaceElement.name == elementName) {
+				return index
+			}
+			index++
+		}
+		return null
+	}
+
+	def getInputIndex(InterfaceList list, String varName) {
+		getInterfaceElementIndex(list.inputVars, varName)
+	}
+
+	def getInputIndex(FBType fbType, String varName) {
+		getInputIndex(fbType.interfaceList, varName)
+	}
+
+	def getInputIndex(FB fb, String varName) {
+		getInputIndex(fb.interface, varName)
+	}
+
+	def generateOutAssignments(FBCall call) {
+		val outArgs = call.args.filter(OutArgument)
+		'''
+			«FOR outArg : outArgs»
+				«generateOutAssignmentLHS(outArg)» = «generateOutAssignmentRHS(call, outArg)»;
+			«ENDFOR»
+		'''
+	}
+
+	def generateOutAssignmentRHS(FBCall fbCall, OutArgument argument) {
+		val fbType = fbCall.fb.type
+		val varDec = getTargetVarDeclaration(fbType, argument)
+		if(varDec !== null) {
+			if (varDec.array) {
+				'''*static_cast<CIEC_ARRAY*>(mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->«generateGetVariable(fbType, varDec.name)»)'''
+			} else {
+				'''*static_cast<CIEC_«varDec.type.name»*>(mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->«generateGetVariable(fbType, varDec.name)»)'''
+			}
+		}
+	}
+
+	def generateGetVariable(FBType type, String name) {
+		val inputIndex = getInputIndex(type, name)
+		if (inputIndex !== null) {
+			return '''getDI(«inputIndex»)'''
+		}
+
+		val outputIndex = getOutputIndex(type, name)
+		if (outputIndex !== null) {
+			return '''getDO(«outputIndex»)'''
+		}
+
+		val internalVariableIndex = type instanceof BaseFBType ? getInternalVarIndex(type, name) : null;
+		if (internalVariableIndex !== null) {
+			return '''getVarInternal(«getInternalVarIndex(type as BaseFBType, name)»)'''
+		}
+		throw new IllegalArgumentException("Name " + name + " not a variable on FB type " + type.name);
+	}
+
+	def generateOutAssignmentLHS(OutArgument argument) {
+		val goalExpression = argument.expr
+		if (goalExpression instanceof PrimaryVariable) {
+			val outVariable = goalExpression.^var
+			val callingFBType = outVariable.eContainer.eContainer as FBType
+			if (outVariable.array) {
+				return '''*static_cast<CIEC_ARRAY*>(«generateGetVariable(callingFBType, outVariable.name)»)'''
+			} else {
+				'''«argument.expr.generateExpression»'''
+			}
+		}
+	}
+
+	def getVarDeclaration(EList<? extends IInterfaceElement> interfaceList, String varName) {
+		interfaceList.findFirst[it.name == varName] as VarDeclaration
+	}
+
+	def getTargetVarDeclaration(FB fb, OutArgument argument) {
+		getTargetVarDeclaration(fb.type, argument)
+	}
+
+	def getTargetVarDeclaration(FBType fbType, OutArgument argument) {
+		val varName = argument.^var
+		getVarDeclaration(fbType.interfaceList.outputVars, varName) ||
+			getVarDeclaration(fbType.interfaceList.inputVars, varName) ||
+			(fbType instanceof BaseFBType ? getVarDeclaration(fbType.internalVars, varName) : null)
+	}
+
+	def operator_or(VarDeclaration element, VarDeclaration element2) {
+		return element !== null ? element : element2
+	}
+
+	def getOutputIndex(FB fb, String varName) {
+		getInterfaceElementIndex(fb.interface.outputVars, varName)
+	}
+
+	def getOutputIndex(FBType fbType, String varName) {
+		getInterfaceElementIndex(fbType.interfaceList.outputVars, varName)
+	}
+
+	def getInternalVarIndex(FB fb, String varName) {
+		if (fb.type instanceof BaseFBType) {
+			getInternalVarIndex(fb.type as BaseFBType, varName)
+		}
+		return null
+	}
+
+	def getInternalVarIndex(BaseFBType fbType, String varName) {
+		getInterfaceElementIndex(fbType.internalVars, varName)
+	}
+
+	def eventIndexFromName(FBCall fbCall) {
+		getInterfaceElementIndex(fbCall.fb.interface.eventInputs, fbCall.event)
+	}
+
+	def internalFbIndexFromName(FB fb) {
+		val fbType = fb.eContainer as BaseFBType
+		var index = 0;
+		for (internalFb : fbType.internalFbs) {
+			if (fb === internalFb) {
+				return index;
+			}
+			index++;
+		}
 	}
 
 	def protected dispatch generateStatement(ReturnStatement stmt) '''return;'''
@@ -368,7 +552,7 @@ class STAlgorithmFilter {
 		}
 	}
 
-	def protected dispatch generateExpression(TimeLiteral expr){
+	def protected dispatch generateExpression(TimeLiteral expr) {
 		'''«new DatetimeLiteral(expr.literal)»'''
 	}
 
@@ -383,19 +567,17 @@ class STAlgorithmFilter {
 
 	def protected dispatch CharSequence generateExpression(StringLiteral expr) '''"«expr.value.convertToJavaString»"'''
 
+	def protected dispatch CharSequence generateExpression(ArrayVariable expr) '''
+		«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»
+	'''
+
 	def protected dispatch CharSequence generateExpression(
-		ArrayVariable expr) '''«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»'''
+		AdapterVariable expr) '''«expr.curr.generateExpression».«expr.^var.name»()«if(!(expr.eContainer instanceof AdapterVariable))expr.generateBitaccess»'''
 
-	def protected dispatch CharSequence generateExpression(AdapterVariable expr) {
-		'''«expr.curr.generateExpression».«expr.^var.name»()«if(!(expr.eContainer instanceof AdapterVariable))expr.generateBitaccess»'''
-	}
+	def protected dispatch CharSequence generateExpression(AdapterRoot expr) '''«expr.adapter.generateVarAccess»'''
 
-	def protected dispatch CharSequence generateExpression(AdapterRoot expr) {
-		'''«expr.adapter.generateVarAccess»'''
-	}
-
-	def generateStructAdapterVarAccess(EList<VarDeclaration> list)
-		'''«FOR variable : list BEFORE '.' SEPARATOR '.' »«variable.name»()«ENDFOR»'''
+	def generateStructAdapterVarAccess(
+		EList<VarDeclaration> list) '''«FOR variable : list BEFORE '.' SEPARATOR '.'»«variable.name»()«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(
 		PrimaryVariable expr) '''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
@@ -403,7 +585,7 @@ class STAlgorithmFilter {
 	def protected generateVarAccessLocal(LocalVariable variable) '''«EXPORT_PREFIX»«variable.name»'''
 
 	def protected dispatch generateVarAccess(VarDeclaration variable) {
-		if(variable.eContainer.eContainer instanceof AdapterFBType){
+		if (variable.eContainer.eContainer instanceof AdapterFBType) {
 			'''«variable.name»()'''
 		} else {
 			'''«EXPORT_PREFIX»«variable.name»()'''
@@ -419,8 +601,7 @@ class STAlgorithmFilter {
 	def protected generateBitaccess(AdapterVariable variable) {
 		if (null !== variable.part) {
 			val lastvar = variable.^var
-			generateBitaccess(lastvar, lastvar.type.name, variable.extractTypeInformation,
-				variable.part.index)
+			generateBitaccess(lastvar, lastvar.type.name, variable.extractTypeInformation, variable.part.index)
 		}
 	}
 
@@ -472,7 +653,7 @@ class STAlgorithmFilter {
 	}
 
 	def protected dispatch extractTypeInformation(VarDeclaration variable) {
-		variable.type.name 
+		variable.type.name
 	}
 
 }

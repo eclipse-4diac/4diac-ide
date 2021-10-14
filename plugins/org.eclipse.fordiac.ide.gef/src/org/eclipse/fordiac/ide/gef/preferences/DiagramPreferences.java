@@ -60,6 +60,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	public static final String SHOW_RULERS = "ShowRulers"; //$NON-NLS-1$
 
+	public static final String SHOW_COMMENT_AT_PIN = "ShowCommentAtPin"; //$NON-NLS-1$
+
 	public static final String MAX_VALUE_LABEL_SIZE = "MaxValueLabelSize"; //$NON-NLS-1$
 
 	/**
@@ -88,6 +90,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold label size field
 		createGroupLabelSize();
+
+		// Create a Group to hold the interface pin field
+		createGroupInterfacePins();
 	}
 
 	private Group createGroup(final String title) {
@@ -96,7 +101,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		return group;
 	}
 
-	private void configGroup(final Group group) {
+	private static void configGroup(final Group group) {
 		final GridLayout gridLayout = new GridLayout(2, false);
 		final GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
@@ -171,6 +176,14 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				Messages.DiagramPreferences_DefaultRouter, nameArray, router);
 		addField(routerEditor);
 		configGroup(router);
+	}
+
+	private void createGroupInterfacePins() {
+		final Group group = createGroup(Messages.DiagramPreferences_InterfacePins);
+		final BooleanFieldEditor showInput = new BooleanFieldEditor(SHOW_COMMENT_AT_PIN,
+				Messages.DiagramPreferences_InterfacePins_ShowInputComment, group);
+		addField(showInput);
+		configGroup(group);
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019 Profactor GbmH, Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl - initial API and implementation and/or 
+ *   Gerhard Ebenhofer, Alois Zoitl - initial API and implementation and/or
  *   								  initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.print;
@@ -82,14 +82,14 @@ public class PrintPreview extends Dialog {
 
 	private Canvas canvas;
 
-	private Boolean blockCurrentPageUpdate = false;
+	private boolean blockCurrentPageUpdate = false;
 
 	private final String printName;
 	private final IFigure figure;
 
 	/**
 	 * Instantiates a new prints the preview.
-	 * 
+	 *
 	 * @param shell     the shell
 	 * @param viewer    the viewer
 	 * @param printName the print name
@@ -97,7 +97,7 @@ public class PrintPreview extends Dialog {
 	public PrintPreview(final Shell shell, final GraphicalViewer viewer, final String printName) {
 		super(shell);
 		this.printName = printName;
-		LayerManager lm = (LayerManager) viewer.getEditPartRegistry().get(LayerManager.ID);
+		final LayerManager lm = (LayerManager) viewer.getEditPartRegistry().get(LayerManager.ID);
 		figure = lm.getLayer(LayerConstants.PRINTABLE_LAYERS);
 	}
 
@@ -115,11 +115,11 @@ public class PrintPreview extends Dialog {
 	/**
 	 * Adds some GUI elements for defining some print options to the specified
 	 * composite
-	 * 
+	 *
 	 * @param composite The container of the elements
 	 */
 	private void createOptionsGUI(final Composite parent) {
-		GridLayout layout = new GridLayout(6, false);
+		final GridLayout layout = new GridLayout(6, false);
 		layout.marginHeight = 0;
 		parent.setLayout(layout);
 
@@ -150,7 +150,7 @@ public class PrintPreview extends Dialog {
 		combo.add("3.0"); //$NON-NLS-1$
 		combo.select(1);
 		combo.addListener(SWT.Selection, ev -> {
-			double value = Double.parseDouble(combo.getItem(combo.getSelectionIndex()));
+			final double value = Double.parseDouble(combo.getItem(combo.getSelectionIndex()));
 			// calculate from cm to inches
 			setPrinter(printer, value / 2.54);
 		});
@@ -159,7 +159,7 @@ public class PrintPreview extends Dialog {
 
 	/**
 	 * Checks which print option (Tile, Fit Page, ...) is selected.
-	 * 
+	 *
 	 * @return the PrintFigureOperation
 	 */
 	private int getOptionsSelection() {
@@ -178,7 +178,7 @@ public class PrintPreview extends Dialog {
 
 		/* the preview */
 		canvas = new Canvas(composite, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_BOTH);
+		final GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 4;
 		canvas.setLayoutData(gridData);
 
@@ -186,27 +186,27 @@ public class PrintPreview extends Dialog {
 			if (printer == null || printer.isDisposed()) {
 				return;
 			}
-			Rectangle printerBounds = printer.getBounds();
-			Point canvasSize = canvas.getSize();
+			final Rectangle printerBounds = printer.getBounds();
+			final Point canvasSize = canvas.getSize();
 
 			double viewScaleFactor = canvasSize.x * 1.0 / printerBounds.width;
 			viewScaleFactor = Math.min(viewScaleFactor, canvasSize.y * 1.0 / printerBounds.height);
 
-			int offsetX = (canvasSize.x - (int) (viewScaleFactor * printerBounds.width)) / 2;
-			int offsetY = (canvasSize.y - (int) (viewScaleFactor * printerBounds.height)) / 2;
+			final int offsetX = (canvasSize.x - (int) (viewScaleFactor * printerBounds.width)) / 2;
+			final int offsetY = (canvasSize.y - (int) (viewScaleFactor * printerBounds.height)) / 2;
 
 			e.gc.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			// draws the page layout
 			e.gc.fillRectangle(offsetX, offsetY, (int) (viewScaleFactor * printerBounds.width),
 					(int) (viewScaleFactor * printerBounds.height));
 
-			int marginOffsetX = offsetX + (int) (viewScaleFactor * margin.getLeft());
-			int marginOffsetY = offsetY + (int) (viewScaleFactor * margin.getTop());
+			final int marginOffsetX = offsetX + (int) (viewScaleFactor * margin.getLeft());
+			final int marginOffsetY = offsetY + (int) (viewScaleFactor * margin.getTop());
 
-			double scale = getScale();
-			double previewScaleFactor = viewScaleFactor * scale;
+			final double scale = getScale();
+			final double previewScaleFactor = viewScaleFactor * scale;
 
-			Graphics g = new SWTGraphics(e.gc);
+			final Graphics g = new SWTGraphics(e.gc);
 			g.scale(previewScaleFactor);
 			g.translate((int) (marginOffsetX / previewScaleFactor), (int) (marginOffsetY / previewScaleFactor));
 
@@ -215,28 +215,30 @@ public class PrintPreview extends Dialog {
 			g.dispose();
 
 		});
-		double value = Double.parseDouble(combo.getItem(combo.getSelectionIndex()));
+		final double value = Double.parseDouble(combo.getItem(combo.getSelectionIndex()));
 		setPrinter(null, value / 2.54); // calculate from cm to inches
 
 		return composite;
 	}
 
-	private org.eclipse.draw2d.geometry.Point getClipRectLocationForPage(int page, double scale) {
-
-		org.eclipse.draw2d.geometry.Rectangle bounds = figure.getBounds();
-		double scaledPageWidth = margin.getWidth() / scale;
+	private org.eclipse.draw2d.geometry.Point getClipRectLocationForPage(int page, final double scale) {
+		final org.eclipse.draw2d.geometry.Rectangle bounds = figure.getBounds();
+		final double scaledPageWidth = margin.getWidth() / scale;
+		final double scaledPageHeight = margin.getHeight() / scale;
 		page -= 1;
 
-		int cols = (int) Math.ceil(((double) bounds.width()) / scaledPageWidth);
-		return new org.eclipse.draw2d.geometry.Point((int) (bounds.x + (page % cols) * scaledPageWidth),
-				(int) (bounds.y + (page / cols) * margin.getHeight() / scale));
+		final int cols = (int) Math.ceil((bounds.width()) / scaledPageWidth);
+		final int currentColumn = page % cols;
+		final int currentRow = page / cols;
+		return new org.eclipse.draw2d.geometry.Point((int) (bounds.x + currentColumn * scaledPageWidth),
+				(int) (bounds.y + currentRow * scaledPageHeight));
 	}
 
 	private void updatePageNumbers() {
 
-		org.eclipse.draw2d.geometry.Rectangle rectangle = figure.getBounds();
+		final org.eclipse.draw2d.geometry.Rectangle rectangle = figure.getBounds();
 
-		double scale = getScale();
+		final double scale = getScale();
 		numberOfPages = (int) (Math.ceil((rectangle.preciseWidth() * scale) / margin.getWidth())
 				* Math.ceil((rectangle.preciseHeight() * scale) / margin.getHeight()));
 		numberOfPagesLabel.setText(String.valueOf(numberOfPages));
@@ -267,12 +269,12 @@ public class PrintPreview extends Dialog {
 		return scale;
 	}
 
-	private void createButtonArea(Composite parent) {
-		Composite buttonArea = new Composite(parent, SWT.NONE);
-		GridLayout buttonAreaLayout = new GridLayout(7, false);
+	private void createButtonArea(final Composite parent) {
+		final Composite buttonArea = new Composite(parent, SWT.NONE);
+		final GridLayout buttonAreaLayout = new GridLayout(7, false);
 		buttonAreaLayout.marginHeight = 0;
 		buttonArea.setLayout(buttonAreaLayout);
-		GridData buttonLayoutData = new GridData();
+		final GridData buttonLayoutData = new GridData();
 		buttonLayoutData.horizontalAlignment = SWT.FILL; /* grow to fill available width */
 		buttonArea.setLayoutData(buttonLayoutData);
 
@@ -288,8 +290,8 @@ public class PrintPreview extends Dialog {
 
 		new Label(buttonArea, SWT.SEPARATOR | SWT.VERTICAL).setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Composite closeArea = new Composite(buttonArea, SWT.NONE);
-		GridLayout closeAreaLayout = new GridLayout(2, false);
+		final Composite closeArea = new Composite(buttonArea, SWT.NONE);
+		final GridLayout closeAreaLayout = new GridLayout(2, false);
 		closeAreaLayout.marginHeight = 0;
 		closeAreaLayout.marginWidth = 0;
 		closeArea.setLayout(closeAreaLayout);
@@ -304,14 +306,14 @@ public class PrintPreview extends Dialog {
 		closeButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 	}
 
-	private void createPageNavigation(Composite parent) {
-		GridLayout layout = new GridLayout(6, false);
+	private void createPageNavigation(final Composite parent) {
+		final GridLayout layout = new GridLayout(6, false);
 		layout.marginHeight = 0;
 		parent.setLayout(layout);
 		final Label pageLabel = new Label(parent, SWT.NONE);
 		pageLabel.setText(Messages.PrintPreview_LABEL_Page);
 
-		Button left = new Button(parent, SWT.ARROW | SWT.LEFT);
+		final Button left = new Button(parent, SWT.ARROW | SWT.LEFT);
 		left.addListener(SWT.Selection, ev -> {
 			if (currentPage > 1) {
 				setCurrentPage(currentPage - 1);
@@ -319,20 +321,20 @@ public class PrintPreview extends Dialog {
 		});
 
 		currentPageText = new Text(parent, SWT.SINGLE | SWT.BORDER);
-		GC gc = new GC(currentPageText);
-		FontMetrics fm = gc.getFontMetrics();
-		int width = (int) (3 * fm.getAverageCharacterWidth());
-		int height = fm.getHeight();
+		final GC gc = new GC(currentPageText);
+		final FontMetrics fm = gc.getFontMetrics();
+		final int width = (int) (3 * fm.getAverageCharacterWidth());
+		final int height = fm.getHeight();
 		gc.dispose();
 		currentPageText.setSize(currentPageText.computeSize(width, height));
 		currentPageText.setText(String.valueOf(currentPage));
 		currentPageText.addListener(SWT.Modify, ev -> {
 			try {
-				int newCurrentPage = Integer.parseInt(currentPageText.getText());
+				final int newCurrentPage = Integer.parseInt(currentPageText.getText());
 				if (0 < newCurrentPage && newCurrentPage <= numberOfPages) {
 					setCurrentPage(newCurrentPage);
 				}
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// as we have a verify listener we should never be here, still just ignore it
 			}
 		});
@@ -344,7 +346,7 @@ public class PrintPreview extends Dialog {
 		numberOfPagesLabel = new Label(parent, SWT.NONE);
 		numberOfPagesLabel.setText(String.valueOf(numberOfPages));
 
-		Button right = new Button(parent, SWT.ARROW | SWT.RIGHT);
+		final Button right = new Button(parent, SWT.ARROW | SWT.RIGHT);
 		right.addListener(SWT.Selection, ev -> {
 			if (currentPage < numberOfPages) {
 				setCurrentPage(currentPage + 1);
@@ -353,7 +355,7 @@ public class PrintPreview extends Dialog {
 
 	}
 
-	private void pageNumberVerifier(Event ev) {
+	private void pageNumberVerifier(final Event ev) {
 		if (!ev.doit) {
 			// other verifylisteners which are first can already set it
 			return;
@@ -366,7 +368,7 @@ public class PrintPreview extends Dialog {
 		if (ev.character == SWT.NULL) {
 			ev.doit = true;
 		} else {
-			String currentValue = ((Text) ev.widget).getText();
+			final String currentValue = ((Text) ev.widget).getText();
 			String resultingValue = currentValue.substring(0, ev.start) + ev.text + currentValue.substring(ev.end);
 			if (resultingValue.isEmpty()) {
 				resultingValue = String.valueOf(ev.character);
@@ -376,7 +378,7 @@ public class PrintPreview extends Dialog {
 		}
 	}
 
-	private void setCurrentPage(int newCurrentPage) {
+	private void setCurrentPage(final int newCurrentPage) {
 		if (!blockCurrentPageUpdate) {
 			blockCurrentPageUpdate = true;
 			currentPage = newCurrentPage;
@@ -387,16 +389,16 @@ public class PrintPreview extends Dialog {
 	}
 
 	private void performPrinting() {
-		PrintDialog dialog = new PrintDialog(getShell());
+		final PrintDialog dialog = new PrintDialog(getShell());
 		// Prompts the printer dialog to let the user select a printer.
-		PrinterData printerData = dialog.open();
+		final PrinterData printerData = dialog.open();
 
 		if (printerData == null) {
 			return;
 		}
 		// Loads the printer.
 		final Printer newPrinter = new Printer(printerData);
-		double value = Double.parseDouble(combo.getItem(combo.getSelectionIndex()));
+		final double value = Double.parseDouble(combo.getItem(combo.getSelectionIndex()));
 		// calculate from cm to inches
 		setPrinter(newPrinter, value / 2.54);
 		// print the document
@@ -407,7 +409,7 @@ public class PrintPreview extends Dialog {
 
 	/**
 	 * Prints the figure current displayed to the specified printer.
-	 * 
+	 *
 	 * @param printer the printer
 	 */
 	void print(final Printer printer) {
@@ -417,15 +419,15 @@ public class PrintPreview extends Dialog {
 			return;
 		}
 
-		GC gc = new GC(printer);
-		SWTGraphics g = new SWTGraphics(gc);
-		PrinterGraphics graphics = new PrinterGraphics(g, printer);
+		final GC gc = new GC(printer);
+		final SWTGraphics g = new SWTGraphics(gc);
+		final PrinterGraphics graphics = new PrinterGraphics(g, printer);
 
 		graphics.setForegroundColor(figure.getForegroundColor());
 		graphics.setBackgroundColor(figure.getBackgroundColor());
 		graphics.setFont(figure.getFont());
 
-		double scale = getScale();
+		final double scale = getScale();
 
 		graphics.scale(scale);
 		graphics.translate((int) (margin.getLeft() / scale), (int) (margin.getTop() / scale));
@@ -450,7 +452,7 @@ public class PrintPreview extends Dialog {
 
 	/**
 	 * Sets target printer.
-	 * 
+	 *
 	 * @param newPrinter the printer
 	 * @param marginSize the margin size
 	 */
@@ -468,9 +470,9 @@ public class PrintPreview extends Dialog {
 		canvas.redraw();
 	}
 
-	private void drawOnePage(double scale, Graphics g, int pageNumber) {
-		org.eclipse.draw2d.geometry.Point p = getClipRectLocationForPage(pageNumber, scale);
-		org.eclipse.draw2d.geometry.Rectangle clipRect = new org.eclipse.draw2d.geometry.Rectangle(p.x, p.y,
+	private void drawOnePage(final double scale, final Graphics g, final int pageNumber) {
+		final org.eclipse.draw2d.geometry.Point p = getClipRectLocationForPage(pageNumber, scale);
+		final org.eclipse.draw2d.geometry.Rectangle clipRect = new org.eclipse.draw2d.geometry.Rectangle(p.x, p.y,
 				(int) (margin.getWidth() / scale), (int) (margin.getHeight() / scale));
 
 		g.translate(-p.x, -p.y);
@@ -489,20 +491,20 @@ public class PrintPreview extends Dialog {
 
 /**
  * Contains margin information (in pixels) for a print job.
- * 
+ *
  */
 class PrintMargin {
 	// Margin to the left side, in pixels
-	private int left;
+	private final int left;
 
 	// Margins to the right side, in pixels
-	private int right;
+	private final int right;
 
 	// Margins to the top side, in pixels
-	private int top;
+	private final int top;
 
 	// Margins to the bottom side, in pixels
-	private int bottom;
+	private final int bottom;
 
 	private PrintMargin(final int left, final int right, final int top, final int bottom) {
 		this.left = left;
@@ -539,7 +541,7 @@ class PrintMargin {
 	 * Returns a PrintMargin object containing the true border margins for the
 	 * specified printer with the given margin in inches. Note: all four sides share
 	 * the same margin width.
-	 * 
+	 *
 	 * @param printer
 	 * @param margin
 	 * @return
@@ -554,15 +556,15 @@ class PrintMargin {
 	 */
 	static PrintMargin getPrintMargin(final Printer printer, final double marginLeft, final double marginRight,
 			final double marginTop, final double marginBottom) {
-		Rectangle clientArea = printer.getClientArea();
-		Rectangle trim = printer.computeTrim(0, 0, 0, 0);
+		final Rectangle clientArea = printer.getClientArea();
+		final Rectangle trim = printer.computeTrim(0, 0, 0, 0);
 
-		Point dpi = printer.getDPI();
+		final Point dpi = printer.getDPI();
 
-		int leftMargin = (int) (marginLeft * dpi.x) - trim.x;
-		int rightMargin = clientArea.width + trim.width - (int) (marginRight * dpi.x) - trim.x;
-		int topMargin = (int) (marginTop * dpi.y) - trim.y;
-		int bottomMargin = clientArea.height + trim.height - (int) (marginBottom * dpi.y) - trim.y;
+		final int leftMargin = (int) (marginLeft * dpi.x) - trim.x;
+		final int rightMargin = clientArea.width + trim.width - (int) (marginRight * dpi.x) - trim.x;
+		final int topMargin = (int) (marginTop * dpi.y) - trim.y;
+		final int bottomMargin = clientArea.height + trim.height - (int) (marginBottom * dpi.y) - trim.y;
 
 		return new PrintMargin(leftMargin, rightMargin, topMargin, bottomMargin);
 	}

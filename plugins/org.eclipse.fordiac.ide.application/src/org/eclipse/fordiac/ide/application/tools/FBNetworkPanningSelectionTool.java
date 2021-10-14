@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 				 2018 - 2020 Johannes Kepler University
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008 - 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                           Johannes Kepler University,
+ *                           Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,8 @@
  *               - extracted FBNetworkRootEditPart from FBNetworkEditor
  *               - extracted panning and selection tool added inline connection
  *                 creation
+ *               - added checking code to deactivate connection creation when alt
+ *                 key is not pressed anymore
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.tools;
 
@@ -40,7 +42,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	/**
 	 * Key to indicate that connection creation mode should be activated.
-	 * 
+	 *
 	 * The current default is on most system the Alt key.
 	 */
 	private static final int CONNECTION_CREATION_MOD_KEY = SWT.MOD3;
@@ -51,12 +53,12 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 		private EditPart lastConnTarget;
 		private boolean startup = true;
 
-		public InlineConnectionCreationTool(EditPart sourcePart) {
+		public InlineConnectionCreationTool(final EditPart sourcePart) {
 			super();
 			this.sourcePart = sourcePart;
 		}
 
-		public void startup(Point point) {
+		public void startup(final Point point) {
 			startup = true;
 			activate();
 			super.handleButtonDown(LEFT_MOUSE);
@@ -67,7 +69,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 		}
 
 		@Override
-		public void mouseUp(MouseEvent me, EditPartViewer viewer) {
+		public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
 			super.mouseUp(me, viewer);
 			lastConnTarget = getTargetEditPart();
 			startup(new Point(me.x, me.y));
@@ -95,15 +97,16 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 	private InlineConnectionCreationTool connectionCreationTool;
 
 	@Override
-	public void mouseDown(MouseEvent me, EditPartViewer viewer) {
+	public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
+		checkConnCreationState(me); // check if conn creation needs to be deactivated
 		if (null == connectionCreationTool) {
 			super.mouseDown(me, viewer);
 		}
 	}
 
 	@Override
-	public void mouseUp(MouseEvent me, EditPartViewer viewer) {
-		if (null != connectionCreationTool) {
+	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
+		if (checkConnCreationState(me)) {
 			connectionCreationTool.mouseUp(me, viewer);
 		} else {
 			if (LEFT_MOUSE == me.button) {
@@ -114,29 +117,29 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 	}
 
 	@Override
-	public void keyDown(KeyEvent evt, EditPartViewer viewer) {
+	public void keyDown(final KeyEvent evt, final EditPartViewer viewer) {
 		if ((Character.isLetterOrDigit(evt.character)) && (TYPE_DISTANCE > getLocation().getDistance(lastLeftClick))) {
-			EditPart editPart = getCurrentViewer().findObjectAt(getLocation());
+			final EditPart editPart = getCurrentViewer().findObjectAt(getLocation());
 			if (null != editPart) {
-				SelectionRequest request = new SelectionRequest();
+				final SelectionRequest request = new SelectionRequest();
 				request.setLocation(lastLeftClick);
 				request.setType(RequestConstants.REQ_OPEN);
-				Map<String, String> map = new HashMap<>();
+				final Map<String, String> map = new HashMap<>();
 				map.put(String.valueOf(evt.character), String.valueOf(evt.character));
 				request.setExtendedData(map);
 				editPart.performRequest(request);
 				return;
 			}
 		}
-		if (evt.keyCode == CONNECTION_CREATION_MOD_KEY) { // Ctrl or Command key was pressed
+		if (evt.keyCode == CONNECTION_CREATION_MOD_KEY && (connectionCreationTool == null)) {
 			activateConnectionCreation();
 		}
 		super.keyDown(evt, viewer);
 	}
 
 	@Override
-	public void mouseMove(MouseEvent me, EditPartViewer viewer) {
-		if (null != connectionCreationTool) {
+	public void mouseMove(final MouseEvent me, final EditPartViewer viewer) {
+		if (checkConnCreationState(me)) {
 			connectionCreationTool.mouseDrag(me, viewer);
 		} else {
 			super.mouseMove(me, viewer);
@@ -144,18 +147,15 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 	}
 
 	@Override
-	public void keyUp(KeyEvent evt, EditPartViewer viewer) {
-		if ((evt.keyCode == CONNECTION_CREATION_MOD_KEY) && (null != connectionCreationTool)) { // Ctrl or Command key
-																								// was pressed
-			connectionCreationTool.deactivate();
-			connectionCreationTool = null;
+	public void keyUp(final KeyEvent evt, final EditPartViewer viewer) {
+		if ((evt.keyCode == CONNECTION_CREATION_MOD_KEY) && (null != connectionCreationTool)) {
+			deactivateConnectionCreation();
 		}
 		super.keyUp(evt, viewer);
 	}
 
 	private void activateConnectionCreation() {
-		@SuppressWarnings("unchecked")
-		List<Object> editParts = getCurrentViewer().getSelectedEditParts();
+		final List<Object> editParts = getCurrentViewer().getSelectedEditParts();
 		if ((editParts.size() == 1) && (editParts.get(0) instanceof InterfaceEditPart)) {
 			connectionCreationTool = new InlineConnectionCreationTool((EditPart) editParts.get(0));
 			connectionCreationTool.setViewer(getCurrentViewer());
@@ -163,4 +163,22 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 			connectionCreationTool.startup(getCurrentInput().getMouseLocation());
 		}
 	}
+
+	private void deactivateConnectionCreation() {
+		connectionCreationTool.deactivate();
+		connectionCreationTool = null;
+	}
+
+	private boolean checkConnCreationState(final MouseEvent me) {
+		if (null != connectionCreationTool) {
+			if ((me.stateMask & CONNECTION_CREATION_MOD_KEY) == 0) {
+				// connection key not pressed anymore deactivate connection creation
+				deactivateConnectionCreation();
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
 }

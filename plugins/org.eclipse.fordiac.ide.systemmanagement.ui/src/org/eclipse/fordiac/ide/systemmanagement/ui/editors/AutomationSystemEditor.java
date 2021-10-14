@@ -22,7 +22,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -37,7 +36,7 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -47,26 +46,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.listeners.EditorTabCommandStackListener;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
-import org.eclipse.fordiac.ide.systemmanagement.AutomationSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -78,19 +74,20 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements AutomationSystemListener {
+public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements IEditorFileChangeListener {
 
-	private static final int OVERWRITE_CHANGES = 0;
-	private static final int SAVE_CHANGES = 1;
-	private static final int DISCARD_CHANGES = 2;
 	private AutomationSystem system;
 	private DiagramOutlinePage outlinePage;
+	private final EditorTabCommandStackListener subEditorCommandStackListener;
+
+	public AutomationSystemEditor() {
+		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
+	}
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadSystem();
-		SystemManager.INSTANCE.addAutomationSystemListener(this);
 	}
 
 	@Override
@@ -101,7 +98,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	@Override
-	protected void createPages() {
+	protected void addPages() {
 		try {
 			final int pagenum = addPage(new SystemEditor(), getEditorInput());
 			getModelToEditorNumMapping().put(system, Integer.valueOf(pagenum));
@@ -119,6 +116,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			// method
 			if (null != system) {
 				getCommandStack().addCommandStackEventListener(this);
+				getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
 				setPartName(system.getName());
 			}
 		}
@@ -139,16 +137,14 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return new SystemEditor();
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+		if (model instanceof CFBInstance) {
 			return new CompositeInstanceViewer();
 		}
 
 		if (model instanceof SubApp) {
-
-			if (((SubApp) model).getType() != null) {
+			if ((((SubApp) model).isTyped()) || (((SubApp) model).isContainedInTypedInstance())) {
 				return new SubappInstanceViewer();
 			}
-
 			return new SubAppNetworkEditor();
 		}
 
@@ -174,14 +170,15 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return getEditorInput();
 		}
 		if (model instanceof SubApp) {
-			if (((SubApp) model).getType() != null) {
-				return createSubappInstanceViewer(model);
+			final SubApp subApp = (SubApp) model;
+			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
+				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
-			return new SubApplicationEditorInput((SubApp) model);
+			return new SubApplicationEditorInput(subApp);
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
-			return createCompositeInstanceViewer(model);
+		if (model instanceof CFBInstance) {
+			return new CompositeAndSubAppInstanceViewerInput((FB) model);
 		}
 
 		if (model instanceof Application) {
@@ -199,27 +196,12 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		return null;
 	}
 
-	private static IEditorInput createSubappInstanceViewer(final Object model) {
-		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
-
-	}
-
-	private static IEditorInput createCompositeInstanceViewer(final Object model) {
-		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
-	}
-
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		if (null != system) {
-			SystemManager.INSTANCE.removeAutomationSystemListener(this);
 			SystemManager.saveSystem(system);
 			getCommandStack().markSaveLocation();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
-			SystemManager.INSTANCE.addAutomationSystemListener(this);
 		}
 
 	}
@@ -267,11 +249,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			doSave(null);
 			return;
 		}
-		SystemManager.INSTANCE.removeAutomationSystemListener(this);
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 		SystemManager.saveSystem(system, file);
-		SystemManager.INSTANCE.addAutomationSystemListener(this);
-
 	}
 
 	@Override
@@ -351,66 +330,64 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		for (final String element : path) {
 			retVal = network.getElementNamed(element);
 			if (retVal instanceof SubApp) {
-				network = ((SubApp) retVal).getSubAppNetwork();
+				network = getSubAppNetwork((SubApp) retVal);
+			} else if (retVal instanceof CFBInstance) {
+				network = getCFBNetwork((CFBInstance) retVal);
 			} else {
+				return null;
+			}
+			if (null == network) {
+				// we couldn't load the network, memento seems to be broken
 				return null;
 			}
 		}
 		return retVal;
 	}
 
+	private static FBNetwork getSubAppNetwork(final SubApp subApp) {
+		FBNetwork network = subApp.getSubAppNetwork();
+		if (null == network) {
+			network = subApp.loadSubAppNetwork();
+		}
+		return network;
+	}
+
+	private static FBNetwork getCFBNetwork(final CFBInstance cfb) {
+		FBNetwork network = cfb.getCfbNetwork();
+		if (null == network) {
+			network = cfb.loadCFBNetwork();
+		}
+		return network;
+	}
+
+	@Override
+	public IFile getFile() {
+		return system.getSystemFile();
+	}
+
 	@Override
 	public void dispose() {
-		SystemManager.INSTANCE.removeAutomationSystemListener(this);
+		if (null != getCommandStack()) {
+			getCommandStack().removeCommandStackEventListener(subEditorCommandStackListener);
+		}
 		super.dispose();
 	}
 
 	@Override
-	public void automationSystemChanged(final IFile file) {
-		if (file.equals(system.getSystemFile())) {
-			Display.getDefault().asyncExec(() -> openFileChangedDialog(file));
-		}
-	}
+	public void reloadFile() {
+		final CommandStack commandStack = system.getCommandStack();
+		// TODO save state in memento and restore
+		system = SystemManager.INSTANCE.replaceSystemFromFile(system, getFile());
 
-	private void openFileChangedDialog(final IFile file) {
-		final String info = Messages.AutomationSystemEditor_Info.replace("{placeholder}", //$NON-NLS-1$
-				file.getFullPath().toOSString());
-		final MessageDialog dialog = new MessageDialog(getSite().getShell(), Messages.AutomationSystemEditor_Title,
-				null, info, MessageDialog.INFORMATION,
-				new String[] { Messages.AutomationSystemEditor_Overwrite_Changes,
-						Messages.AutomationSystemEditor_Save_Changes, Messages.AutomationSystemEditor_Discard_Changes },
-				0);
-		final int returnCode = dialog.open();
-		handleReturnCode(returnCode, file);
-	}
+		system.setCommandStack(commandStack);
+		getCommandStack().flush();
 
-	private void handleReturnCode(final int returnCode, final IFile file) {
-		switch (returnCode) {
-		case OVERWRITE_CHANGES:
-			doSave(new NullProgressMonitor());
-			break;
-		case SAVE_CHANGES:
-			doSaveAs();
-			replaceSystemFile(file);
-			break;
-		case DISCARD_CHANGES:
-			replaceSystemFile(file);
-			break;
-		default:
-			break;
-		}
-
-	}
-
-
-
-	private void replaceSystemFile(final IFile file) {
-		system = SystemManager.INSTANCE.replaceSystemFromFile(system, file);
 		if (!system.getApplication().isEmpty()) {
 			OpenListenerManager.openEditor(system.getApplication().get(0));
 		} else {
 			EditorUtils.CloseEditor.run(this);
 		}
+
 	}
 
 }

@@ -126,7 +126,7 @@ public class ConnectionCommandsTest extends FBNetworkTestBase {
 	private static Collection<Arguments> twoFunctionBlocks(final List<ExecutionDescription<?>> executionDescriptions) {
 		return describeCommand("Start with two functionblocks", // //$NON-NLS-1$
 				ConnectionCommandsTest::initState, //
-				(final State state, final State oldState, final TestFunction t) -> CommandTestBase.verifyNothing(state, oldState, t), //
+				(StateVerifier<State>) CommandTestBase::verifyNothing, //
 				executionDescriptions //
 				);
 	}
@@ -159,7 +159,8 @@ public class ConnectionCommandsTest extends FBNetworkTestBase {
 
 	private static State deleteFB2(final State state) {
 		state.setCommand(new DeleteFBNetworkElementCommand(state.getFbNetwork().getNetworkElements().get(1)));
-		assertion.test(((DeleteFBNetworkElementCommand)state.getCommand()).getFBNetworkElement(), state.getFbNetwork().getNetworkElements().get(1));
+		tester.get().test(((DeleteFBNetworkElementCommand) state.getCommand()).getFBNetworkElement(),
+				state.getFbNetwork().getNetworkElements().get(1));
 		return commandExecution(state);
 	}
 

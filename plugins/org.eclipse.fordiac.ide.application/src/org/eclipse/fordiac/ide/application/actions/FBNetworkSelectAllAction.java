@@ -26,28 +26,28 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class FBNetworkSelectAllAction extends SelectAllAction {
-	private IWorkbenchPart part;
+	private final IWorkbenchPart part;
 
-	public FBNetworkSelectAllAction(IWorkbenchPart part) {
+	public FBNetworkSelectAllAction(final IWorkbenchPart part) {
 		super(part);
 		this.part = part;
 	}
 
 	@Override
 	public void run() {
-		GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
+		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
 			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer)));
 		}
 	}
 
-	private static List<EditPart> getSelectableEditParts(GraphicalViewer viewer) {
-		List<EditPart> selectableChildren = new ArrayList<>();
-		List<?> children = viewer.getContents().getChildren();
+	private static List<EditPart> getSelectableEditParts(final GraphicalViewer viewer) {
+		final List<EditPart> selectableChildren = new ArrayList<>();
+		final List<?> children = viewer.getContents().getChildren();
 
-		for (Object child : children) {
+		for (final Object child : children) {
 			if (child instanceof AbstractFBNElementEditPart) {
-				EditPart childPart = (EditPart) child;
+				final EditPart childPart = (EditPart) child;
 				if (childPart.isSelectable()) {
 					selectableChildren.add(childPart);
 					addConnectionsTo(selectableChildren, childPart);
@@ -57,16 +57,15 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 		return Collections.unmodifiableList(selectableChildren);
 	}
 
-	private static void addConnectionsTo(List<EditPart> selectableChildren, EditPart child) {
+	private static void addConnectionsTo(final List<EditPart> selectableChildren, final EditPart child) {
 		// the editparts are in charge of managing the connections if we take all source
 		// connections
 		// from one edit part we should get all connections in the end.
 
-		List<?> elementChildren = child.getChildren();
-		for (Object elementChild : elementChildren) {
+		final List<?> elementChildren = child.getChildren();
+		for (final Object elementChild : elementChildren) {
 			if (elementChild instanceof AbstractGraphicalEditPart) {
-				@SuppressWarnings("unchecked") // GEF method returns child edit parts
-				List<EditPart> connections = ((AbstractGraphicalEditPart) elementChild).getSourceConnections();
+				final List<EditPart> connections = ((AbstractGraphicalEditPart) elementChild).getSourceConnections();
 				connections.stream().filter(EditPart::isSelectable).forEach(selectableChildren::add);
 			}
 		}

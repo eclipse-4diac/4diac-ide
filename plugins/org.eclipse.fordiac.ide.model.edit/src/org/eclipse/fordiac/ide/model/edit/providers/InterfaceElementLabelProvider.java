@@ -26,9 +26,9 @@ import org.eclipse.swt.graphics.Image;
  * A label provider that can be used to display data in columns
  */
 public class InterfaceElementLabelProvider extends LabelProvider implements ITableLabelProvider, ITableColorProvider {
-	public static final int NAME_COL_INDEX = 0;
-	public static final int TYPE_COL_INDEX = 1;
-	public static final int COMMENT_COL_INDEX = 2;
+	private static final int NAME_COL_INDEX = 0;
+	private static final int TYPE_COL_INDEX = 1;
+	private static final int COMMENT_COL_INDEX = 2;
 
 	@Override
 	public Image getColumnImage(final Object element, final int columnIndex) {

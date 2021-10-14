@@ -28,6 +28,10 @@ public class SetPositionCommand extends Command {
 	private final ChangeBoundsRequest request;
 	private final PositionableElement positionableElement;
 
+	public PositionableElement getPositionableElement() {
+		return positionableElement;
+	}
+
 	public SetPositionCommand(final PositionableElement positionableElement, final ChangeBoundsRequest req,
 			final Rectangle newBounds) {
 		this.positionableElement = positionableElement;
@@ -53,7 +57,7 @@ public class SetPositionCommand extends Command {
 	public void execute() {
 		oldBounds = new Rectangle(positionableElement.getPosition().getX(), positionableElement.getPosition().getY(),
 				-1, -1);
-		redo();
+		setPosition(newBounds);
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public class SetPositionCommand extends Command {
 		setPosition(oldBounds);
 	}
 
-	private void setPosition(final Rectangle bounds) {
+	protected void setPosition(final Rectangle bounds) {
 		positionableElement.updatePosition(bounds.getTopLeft());
 	}
 }

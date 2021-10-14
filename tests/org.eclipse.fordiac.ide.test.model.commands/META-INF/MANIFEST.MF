@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Model Command Tests (Incubation)
+Bundle-Name: Model Command Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model.commands
-Bundle-Version: 1.14.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.model.commands
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model.commands
 Bundle-RequiredExecutionEnvironment: JavaSE-11
@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.e4.core.services,
  org.eclipse.osgi.services,
  org.eclipse.e4.core.contexts,
- org.eclipse.fordiac.ide.application
+ org.eclipse.fordiac.ide.application,
+ org.eclipse.fordiac.ide.elk
 Import-Package: 
  org.eclipse.fordiac.ide.gef.editparts,
  org.junit.jupiter.api,

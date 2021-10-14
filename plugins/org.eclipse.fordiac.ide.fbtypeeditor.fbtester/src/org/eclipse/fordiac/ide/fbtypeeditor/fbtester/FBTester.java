@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -49,7 +50,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestDataLabelProvider
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
+import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
+import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -66,13 +68,13 @@ import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
-import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -118,7 +120,6 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private FBType type;
 	private String path;
 	private KeyHandler sharedKeyHandler;
-	private StackLayout stack;
 	private TypeLibrary typeLib;
 	private final Map<String, IFBTestConfiguration> configurations = new HashMap<>();
 	private Composite configurationParent;
@@ -127,9 +128,9 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private final Map<String, TableColumn> dataColumns = new HashMap<>();
 	private final List<TestData> testDataCollection = new ArrayList<>();
 
-	private Adapter eContentAdapter = new AdapterImpl() {
+	private final Adapter eContentAdapter = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			testDataViewer.refresh();
 		}
@@ -140,7 +141,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	@Override
-	public void doSave(IProgressMonitor monitor) {
+	public void doSave(final IProgressMonitor monitor) {
 		// not used
 	}
 
@@ -150,10 +151,10 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
 		if (input instanceof FBTypeEditorInput) {
-			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			type = untypedInput.getContent();
 			typeLib = type.getTypeLibrary();
 		}
@@ -172,62 +173,73 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		SashForm s = new SashForm(parent, SWT.VERTICAL | SWT.SMOOTH);
+		final SashForm s = new SashForm(parent, SWT.VERTICAL | SWT.SMOOTH);
 
-		Composite interfaceEditing = new Composite(s, SWT.BORDER);
+		final Composite interfaceEditing = new Composite(s, SWT.BORDER);
 		interfaceEditing.setLayout(new GridLayout(2, false));
 
-		Label testConfiguraionLabel = new Label(interfaceEditing, SWT.NONE);
-		testConfiguraionLabel.setText(Messages.FBTester_TestConfiguration);
+		final Label testConfigurationLabel = new Label(interfaceEditing, SWT.NONE);
+		testConfigurationLabel.setText(Messages.FBTester_TestConfiguration);
 
-		CCombo configurationCombo = ComboBoxWidgetFactory.createCombo(interfaceEditing);
+		final CCombo configurationCombo = ComboBoxWidgetFactory.createCombo(interfaceEditing);
 		configurationCombo.setItems(getTestConfigurations().toArray(new String[0]));
-		GridData configurationComboData = new GridData(SWT.FILL, SWT.TOP, false, false);
+		final GridData configurationComboData = new GridData(SWT.FILL, SWT.TOP, false, false);
 		configurationCombo.setLayoutData(configurationComboData);
+
+		final StackLayout stack = new StackLayout();
+
 		configurationCombo.addListener(SWT.Selection, event -> {
-			IFBTestConfiguration testConfiguration = configurations.get(configurationCombo.getText());
+			final IFBTestConfiguration testConfiguration = configurations.get(configurationCombo.getText());
 			stack.topControl = testConfiguration.getControl();
 			configurationParent.layout();
 		});
 
-		GridData configurationParentData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData configurationParentData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		configurationParentData.horizontalSpan = 2;
 		configurationParent = new Group(interfaceEditing, SWT.NONE);
-		configurationParent.setLayout(stack = new StackLayout());
+		configurationParent.setLayout(stack);
 		configurationParent.setLayoutData(configurationParentData);
 		createTestConfigurations(configurationParent);
+		preselectFirstConfiguration(configurationCombo, stack);
 
-		SashForm horizontal = new SashForm(s, SWT.HORIZONTAL | SWT.SMOOTH);
+		final SashForm horizontal = new SashForm(s, SWT.HORIZONTAL | SWT.SMOOTH);
+		// TODO add logic for automatically executing test cases
+		/* final Composite testData = new Composite(horizontal, SWT.NONE); testData.setLayout(new GridLayout(1, true));
+		 * createTestData(testData); */
 
-		Composite testData = new Composite(horizontal, SWT.NONE);
-		testData.setLayout(new GridLayout(1, true));
-		createTestData(testData);
-
-		Composite graphicalEditor = new Composite(horizontal, SWT.NONE);
+		final Composite graphicalEditor = new Composite(horizontal, SWT.NONE);
 		graphicalEditor.setLayout(new FillLayout());
-		s.setWeights(new int[] { 30, 70 });
-		horizontal.setWeights(new int[] { 50, 50 });
+		/* s.setWeights(30, 70); horizontal.setWeights(50, 50); */
 		super.createPartControl(graphicalEditor);
 	}
 
-	private void createTestData(Composite parent) {
+	private void preselectFirstConfiguration(final CCombo configurationCombo, final StackLayout stack) {
+		if (configurationCombo.getItems().length > 0) {
+			configurationCombo.select(0);
+		}
+		final IFBTestConfiguration testConfiguration = configurations.get(configurationCombo.getText());
+		stack.topControl = testConfiguration.getControl();
+		configurationParent.layout();
+	}
+
+	private void createTestData(final Composite parent) {
 		createTestToolbar(parent);
 		testDataViewer = TableWidgetFactory.createTableViewer(parent, SWT.CHECK);
 
 		testDataViewer.addDoubleClickListener(event -> {
 			if (event.getSelection() instanceof IStructuredSelection) {
-				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+				final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
 				if (selection.getFirstElement() instanceof TestData) {
-					TestData data = (TestData) selection.getFirstElement();
-					for (Entry<String, TestElement> entry : TestingManager.getInstance().getTestElements(type)
+					final TestData data = (TestData) selection.getFirstElement();
+					for (final Entry<String, TestElement> entry : TestingManager.getInstance().getTestElements(type)
 							.entrySet()) {
-						String value = data.getValueFor(entry.getValue().getPortString());
+						final String value = data.getValueFor(entry.getValue().getPortString());
 						if (null != value) {
 							entry.getValue().setValue(value);
 						}
 					}
 					TestElement eventToTrigger = null;
-					for (Entry<String, TestElement> entry : TestingManager.getInstance().getTriggerElements(type)
+					for (final Entry<String, TestElement> entry : TestingManager.getInstance().getTriggerElements(type)
 							.entrySet()) {
 						if (entry.getValue().getInterfaceElement().getName().equals(data.getEvent().getName())) {
 							eventToTrigger = entry.getValue();
@@ -248,7 +260,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		parseTestData();
 		testDataViewer.setContentProvider(new IStructuredContentProvider() {
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				// nothing to do here
 			}
 
@@ -258,55 +270,55 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 			}
 
 			@Override
-			public Object[] getElements(Object inputElement) {
+			public Object[] getElements(final Object inputElement) {
 				return testDataCollection.toArray();
 			}
 		});
 		testDataViewer.setLabelProvider(new TestDataLabelProvider(type, testDataViewer.getTable()));
 		testDataViewer.setInput(new Object());
 
-		MenuManager popupMenu = new MenuManager();
-		IAction newRowAction = new NewTestDataAction();
+		final MenuManager popupMenu = new MenuManager();
+		final IAction newRowAction = new NewTestDataAction();
 		popupMenu.add(newRowAction);
-		IAction saveAction = new SaveTestDataAction();
+		final IAction saveAction = new SaveTestDataAction();
 		popupMenu.add(saveAction);
-		Menu menu = popupMenu.createContextMenu(testDataViewer.getTable());
+		final Menu menu = popupMenu.createContextMenu(testDataViewer.getTable());
 		testDataViewer.getTable().setMenu(menu);
 	}
 
-	private void createTestToolbar(Composite parent) {
-		ToolBar tb = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL);
-		ToolItem runItem = new ToolItem(tb, SWT.NONE);
+	private void createTestToolbar(final Composite parent) {
+		final ToolBar tb = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL);
+		final ToolItem runItem = new ToolItem(tb, SWT.NONE);
 		runItem.setToolTipText(Messages.FBTester_RunselectedTests);
 		runItem.setImage(FordiacImage.ICON_RUN_DEBUG.getImage());
-		ToolItem stopItem = new ToolItem(tb, SWT.NONE);
+		final ToolItem stopItem = new ToolItem(tb, SWT.NONE);
 		stopItem.setToolTipText(Messages.FBTester_Stop);
 		stopItem.setImage(FordiacImage.ICON_STOP.getImage());
-		ToolItem saveItem = new ToolItem(tb, SWT.NONE);
+		final ToolItem saveItem = new ToolItem(tb, SWT.NONE);
 		saveItem.setToolTipText(Messages.FBTester_SaveTestData);
 		saveItem.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_SAVE_EDIT));
 		saveItem.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				saveTestData();
 			}
 		});
-		ToolItem addItem = new ToolItem(tb, SWT.NONE);
+		final ToolItem addItem = new ToolItem(tb, SWT.NONE);
 		addItem.setToolTipText(Messages.FBTester_AddTest);
 		addItem.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		addItem.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				addTest();
 			}
 		});
-		ToolItem deleteItem = new ToolItem(tb, SWT.NONE);
+		final ToolItem deleteItem = new ToolItem(tb, SWT.NONE);
 		deleteItem.setToolTipText(Messages.FBTester_DeleteTest);
 		deleteItem.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		deleteItem.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection) testDataViewer.getSelection()).getFirstElement();
+			public void widgetSelected(final SelectionEvent event) {
+				final Object selection = ((StructuredSelection) testDataViewer.getSelection()).getFirstElement();
 				testDataCollection.remove(selection);
 				testDataViewer.refresh();
 			}
@@ -314,16 +326,16 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	private void configureTableLayout() {
-		TableViewerColumn nameColumn = new TableViewerColumn(testDataViewer, SWT.LEFT);
+		final TableViewerColumn nameColumn = new TableViewerColumn(testDataViewer, SWT.LEFT);
 		nameColumn.getColumn().setWidth(80);
 		nameColumn.getColumn().setText(NAME);
 		nameColumn.getColumn().setData(COLUMN_TYPE, NAME);
 		nameColumn.setEditingSupport(new TestDataEditingSupport(testDataViewer, nameColumn.getColumn()));
-		TableViewerColumn eventCol = new TableViewerColumn(testDataViewer, SWT.LEFT);
+		final TableViewerColumn eventCol = new TableViewerColumn(testDataViewer, SWT.LEFT);
 		eventCol.getColumn().setWidth(80);
 		eventCol.getColumn().setText(EVENT);
 		eventCol.getColumn().setData(COLUMN_TYPE, EVENT);
-		TableViewerColumn expectedEvents = new TableViewerColumn(testDataViewer, SWT.LEFT);
+		final TableViewerColumn expectedEvents = new TableViewerColumn(testDataViewer, SWT.LEFT);
 		expectedEvents.getColumn().setWidth(100);
 		expectedEvents.getColumn().setText(Messages.FBTester_ExpectedEvents);
 		expectedEvents.getColumn().setData(COLUMN_TYPE, EXPECTED_EVENTS);
@@ -331,17 +343,17 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 	private void saveTestData() {
 		if (null != path) {
-			File testDataFile = new File(path + File.separatorChar + type.getName() + ".forte"); //$NON-NLS-1$
+			final File testDataFile = new File(path + File.separatorChar + type.getName() + ".forte"); //$NON-NLS-1$
 			try (FileOutputStream outStream = new FileOutputStream(testDataFile);
 					DataOutputStream dataStream = new DataOutputStream(outStream);
 					BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(dataStream));) {
 
-				for (TestData testData : testDataCollection) {
+				for (final TestData testData : testDataCollection) {
 					writer.write(testData._getLine());
 					writer.newLine();
 				}
 				writer.flush();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		}
@@ -349,34 +361,34 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 	private void parseTestData() {
 		if (null != path) {
-			File testDataFile = new File(path + File.separatorChar + type.getName() + ".forte"); //$NON-NLS-1$
+			final File testDataFile = new File(path + File.separatorChar + type.getName() + ".forte"); //$NON-NLS-1$
 			if (testDataFile.exists()) {
 				try (FileInputStream fstream = new FileInputStream(testDataFile);
 						DataInputStream in = new DataInputStream(fstream);
 						BufferedReader data = new BufferedReader(new InputStreamReader(in));) {
 					String line;
 					while (null != (line = data.readLine())) {
-						TestData testData = createTestData(line);
+						final TestData testData = createTestData(line);
 						testDataCollection.add(testData);
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
 			}
 		}
 	}
 
-	private TestData createTestData(String line) {
-		TestData testData = TestdataFactory.eINSTANCE.createTestData();
+	private TestData createTestData(final String line) {
+		final TestData testData = TestdataFactory.eINSTANCE.createTestData();
 		testData.eAdapters().add(eContentAdapter);
 		testData.setType(type);
 		testData.setLine(line);
 		return testData;
 	}
 
-	private void createInputVariableColumns(TableViewer testData, List<VarDeclaration> list) {
-		for (VarDeclaration input : list) {
-			TableViewerColumn column = new TableViewerColumn(testData, SWT.LEFT);
+	private void createInputVariableColumns(final TableViewer testData, final List<VarDeclaration> list) {
+		for (final VarDeclaration input : list) {
+			final TableViewerColumn column = new TableViewerColumn(testData, SWT.LEFT);
 			column.getColumn().setWidth(40);
 			column.getColumn().setText(input.getName());
 			column.getColumn().setData(COLUMN_TYPE, INPUT_VARIABLE);
@@ -386,9 +398,9 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		}
 	}
 
-	private void createOutputVariableColumns(TableViewer testData, List<VarDeclaration> list) {
-		for (VarDeclaration output : list) {
-			TableViewerColumn column = new TableViewerColumn(testData, SWT.LEFT);
+	private void createOutputVariableColumns(final TableViewer testData, final List<VarDeclaration> list) {
+		for (final VarDeclaration output : list) {
+			final TableViewerColumn column = new TableViewerColumn(testData, SWT.LEFT);
 			column.getColumn().setWidth(40);
 			column.getColumn().setText(output.getName());
 			column.getColumn().setData(COLUMN_TYPE, OUTPUT_VARIABLE);
@@ -400,44 +412,71 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 	@Override
 	public void setFocus() {
+		// nothing to be done here
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		// nothing to be done here
 	}
 
 	@Override
 	protected void initializeGraphicalViewer() {
-		GraphicalViewer viewer = getGraphicalViewer();
+		final GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(getEditorInput());
 	}
 
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
-		ZoomScalableFreeformRootEditPart root = new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry());
+		final ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
+		final ZoomScalableFreeformRootEditPart root = createRootEditPart();
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditpartFactory());
 		// configure the context menu provider
-		ContextMenuProvider cmProvider = new FordiacContextMenuProvider(viewer, root.getZoomManager(),
+		final ContextMenuProvider cmProvider = new FordiacContextMenuProvider(viewer, root.getZoomManager(),
 				getActionRegistry()) {
 			@Override
-			public void buildContextMenu(IMenuManager menu) {
+			public void buildContextMenu(final IMenuManager menu) {
 				super.buildContextMenu(menu);
 
-				IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
+				final IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
 				menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 			}
 		};
 		viewer.setContextMenu(cmProvider);
 		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
-		KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
+		final KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
 		viewer.setKeyHandler(viewerKeyHandler);
 	}
 
+	private ZoomScalableFreeformRootEditPart createRootEditPart() {
+		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
+			@Override
+			protected AbstractFreeformFigure createDrawingAreaContainer() {
+				return new MinSpaceFreeformFigure();
+			}
+
+			@Override
+			protected IFigure createFigure() {
+				final IFigure rootFigure = super.createFigure();
+				final GridLayer grid = (GridLayer) getLayer(GRID_LAYER);
+				if (grid != null) {
+					// it does not make sense to have a grid in the interface layer so hide it
+					grid.setVisible(false);
+				}
+				return rootFigure;
+			}
+
+			@Override
+			protected void refreshGridLayer() {
+				// empty to be sure that grid will not be drawn
+			}
+		};
+	}
+
 	public ZoomManager getZoomManger() {
-		return ((ScalableFreeformRootEditPart) (getGraphicalViewer().getRootEditPart())).getZoomManager();
+		return ((ScalableFreeformRootEditPart) getGraphicalViewer().getRootEditPart()).getZoomManager();
 	}
 
 	protected FBInterfaceEditPartFactory getEditpartFactory() {
@@ -459,29 +498,22 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		return sharedKeyHandler;
 	}
 
-	@Override
-	protected void createGraphicalViewer(Composite parent) {
-		RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
-		super.createGraphicalViewer(rulerComp);
-		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
-	}
-
 	public static List<String> getTestConfigurations() {
-		ArrayList<String> testConfigurations = new ArrayList<>();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint point = registry
+		final ArrayList<String> testConfigurations = new ArrayList<>();
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IExtensionPoint point = registry
 				.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fbtester.fbTesterConfiguration"); //$NON-NLS-1$
 
-		for (IExtension extension : point.getExtensions()) {
-			IConfigurationElement[] elements = extension.getConfigurationElements();
-			for (IConfigurationElement element : elements) {
+		for (final IExtension extension : point.getExtensions()) {
+			final IConfigurationElement[] elements = extension.getConfigurationElements();
+			for (final IConfigurationElement element : elements) {
 				try {
-					Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
+					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof IFBTestConfiguratonCreator) {
-						String label = element.getAttribute("label"); //$NON-NLS-1$
+						final String label = element.getAttribute("label"); //$NON-NLS-1$
 						testConfigurations.add(label);
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					// nothing to do
 				}
 			}
@@ -490,25 +522,25 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	public void createTestConfigurations(final Composite parent) {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint point = registry
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IExtensionPoint point = registry
 				.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fbtester.fbTesterConfiguration"); //$NON-NLS-1$
 
-		for (IExtension extension : point.getExtensions()) {
-			IConfigurationElement[] elements = extension.getConfigurationElements();
+		for (final IExtension extension : point.getExtensions()) {
+			final IConfigurationElement[] elements = extension.getConfigurationElements();
 
-			for (IConfigurationElement element : elements) {
+			for (final IConfigurationElement element : elements) {
 				try {
-					Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
+					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof IFBTestConfiguratonCreator) {
 						((IFBTestConfiguratonCreator) obj).setType(type);
 
-						IFBTestConfiguration configuration = ((IFBTestConfiguratonCreator) obj)
+						final IFBTestConfiguration configuration = ((IFBTestConfiguratonCreator) obj)
 								.createConfigurationPage(parent);
-						String lang = element.getAttribute("label"); //$NON-NLS-1$
+						final String lang = element.getAttribute("label"); //$NON-NLS-1$
 						configurations.put(lang, configuration);
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
 			}
@@ -516,16 +548,16 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	void addTest() {
-		StringBuilder dataLine = new StringBuilder("Testname;"); //$NON-NLS-1$
+		final StringBuilder dataLine = new StringBuilder("Testname;"); //$NON-NLS-1$
 		dataLine.append(type.getName());
 		dataLine.append(";"); //$NON-NLS-1$
 		if (!type.getInterfaceList().getEventInputs().isEmpty()) {
-			Event event = type.getInterfaceList().getEventInputs().get(0);
+			final Event event = type.getInterfaceList().getEventInputs().get(0);
 			dataLine.append(event.getWith().size()).append(";");//$NON-NLS-1$ // nr of inputs are the number of
-																// connected withs
-			for (With with : event.getWith()) {
-				VarDeclaration var = with.getVariables();
-				dataLine.append(var.getName()).append(";val;"); //$NON-NLS-1$
+			// connected withs
+			for (final With with : event.getWith()) {
+				final VarDeclaration variable = with.getVariables();
+				dataLine.append(variable.getName()).append(";val;"); //$NON-NLS-1$
 			}
 			dataLine.append(event.getName()).append(";"); //$NON-NLS-1$
 		}
@@ -539,11 +571,11 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		if (!type.getInterfaceList().getOutputVars().isEmpty()) {
 			dataLine.append(type.getInterfaceList().getOutputVars().size());
 			dataLine.append(";"); //$NON-NLS-1$
-			for (VarDeclaration var : type.getInterfaceList().getOutputVars()) {
-				dataLine.append(var.getName()).append(";val;"); //$NON-NLS-1$
+			for (final VarDeclaration variable : type.getInterfaceList().getOutputVars()) {
+				dataLine.append(variable.getName()).append(";val;"); //$NON-NLS-1$
 			}
 		}
-		TestData testData = createTestData(dataLine.toString());
+		final TestData testData = createTestData(dataLine.toString());
 		testDataCollection.add(testData);
 		testDataViewer.refresh();
 	}
@@ -573,24 +605,32 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	@Override
-	public boolean outlineSelectionChanged(Object selectedElement) {
+	public boolean outlineSelectionChanged(final Object selectedElement) {
 		return false;
 	}
 
 	@Override
-	public void setCommonCommandStack(CommandStack commandStack) {
+	public void setCommonCommandStack(final CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
 
 	@Override
-	public void gotoMarker(IMarker marker) {
+	public void gotoMarker(final IMarker marker) {
 		// For now we don't handle markers in this editor
 	}
 
 	@Override
-	public boolean isMarkerTarget(IMarker marker) {
+	public boolean isMarkerTarget(final IMarker marker) {
 		// For now we don't handle markers in this editor
 		return false;
+	}
+
+	@Override
+	public void reloadType(final FBType type) {
+		this.type = type;
+		final FBTypeEditorInput fbTypeEditorInput = (FBTypeEditorInput) getEditorInput();
+		fbTypeEditorInput.setFbType(type);
+		getGraphicalViewer().setContents(fbTypeEditorInput);
 	}
 
 }

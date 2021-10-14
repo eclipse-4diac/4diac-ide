@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,11 +18,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.eclipse.fordiac.ide.ui.UIPlugin;
+
 public class FordiacImageURLConnection extends URLConnection {
 
 	private String imageName;
 
-	protected FordiacImageURLConnection(URL url) {
+	protected FordiacImageURLConnection(final URL url) {
 		super(url);
 		imageName = url.getAuthority();
 		if (null == imageName) {
@@ -37,9 +39,10 @@ public class FordiacImageURLConnection extends URLConnection {
 	public InputStream getInputStream() throws IOException {
 		InputStream is = null;
 		try {
-			FordiacImage selectedIcon = FordiacImage.valueOf(imageName);
+			final FordiacImage selectedIcon = FordiacImage.valueOf(imageName);
 			is = selectedIcon.getImageAsInputStream();
-		} catch (Exception e) {
+		} catch (final Exception e) {
+			UIPlugin.getDefault().logError(e.getMessage(), e);
 			is = FordiacImage.MISSING.getImageAsInputStream();
 		}
 		return is;
@@ -47,6 +50,7 @@ public class FordiacImageURLConnection extends URLConnection {
 
 	@Override
 	public void connect() throws IOException {
+		// nothing to be done here
 	}
 
 }

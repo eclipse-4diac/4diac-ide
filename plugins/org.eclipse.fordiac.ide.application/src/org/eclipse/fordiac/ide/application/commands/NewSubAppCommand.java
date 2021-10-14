@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.EditPart;
 
 public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
@@ -83,12 +82,11 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 
 	@Override
 	public void undo() {
-		closeOpenedSubApp();
 		if (null != mapSubappCmd) {
 			mapSubappCmd.undo();
 		}
-		addElements.undo(); // this has to be done bevor super.undo() as otherwise addElements does not have
-		// the correct networks.
+		// this has to be done before super.undo() as otherwise addElements does not have the correct networks.
+		addElements.undo();
 		super.undo();
 	}
 
@@ -122,10 +120,6 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	@Override
 	protected String getInitalInstanceName() {
 		return "SubApp"; //$NON-NLS-1$
-	}
-
-	private void closeOpenedSubApp() {
-		BreadcrumbUtil.openParentEditor(getSubApp());
 	}
 
 	private SubApp getSubApp() {

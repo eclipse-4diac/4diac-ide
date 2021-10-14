@@ -18,9 +18,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getCommandStack;
-import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getFBNetwork;
-import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.openEditor;
+import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getCommandStack;
+import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getFBNetwork;
+import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.openEditor;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,20 +31,19 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand.MoveOperation;
+import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -61,12 +60,12 @@ public class MoveToParentHandler extends AbstractHandler {
 
 			if (!fbelements.isEmpty()) {
 				final Rectangle bounds = getParentSubappBounds(editor, fbelements);
+				final int destX = bounds.x;
+				final int destY = bounds.y + bounds.height + 20;
 
-				final CompoundCommand cmd = new CompoundCommand();
-				fbelements.forEach(
-						fbel -> cmd.add(new MoveElementFromSubAppCommand(fbel, bounds, MoveOperation.CONTEXT_MENU)));
+				final MoveElementsFromSubAppCommand cmd = new MoveElementsFromSubAppCommand(fbelements,
+						new Point(destX, destY));
 				getCommandStack(editor).execute(cmd);
-				preventFBPiling(cmd.getCommands());
 
 				// select moved elements in editor
 				selectElements(editor, fbelements);
@@ -77,9 +76,8 @@ public class MoveToParentHandler extends AbstractHandler {
 
 	private static void selectElements(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
 		final GraphicalViewer viewer = getViewer(fbelements.get(0).getFbNetwork(), editor);
-		@SuppressWarnings("unchecked")
 		final List<EditPart> eps = fbelements.stream().map(el -> (EditPart) viewer.getEditPartRegistry().get(el))
-		.collect(Collectors.toList());
+				.collect(Collectors.toList());
 		viewer.setSelection(new StructuredSelection(eps));
 	}
 
@@ -97,9 +95,9 @@ public class MoveToParentHandler extends AbstractHandler {
 			final IEditorPart parent) {
 		if (!getFBNetwork(parent).equals(subappNetwork)) {
 			// source subapp editor, subapp content is not open
-			return BreadcrumbUtil.getViewer(openEditor(subappNetwork.eContainer()));
+			return HandlerHelper.getViewer(openEditor(subappNetwork.eContainer()));
 		}
-		return BreadcrumbUtil.getViewer(parent);
+		return HandlerHelper.getViewer(parent);
 	}
 
 	@Override
@@ -121,10 +119,10 @@ public class MoveToParentHandler extends AbstractHandler {
 	}
 
 	private static List<FBNetworkElement> getSelectedFBNElements(final ISelection selection) {
-		if (!selection.isEmpty() && (selection instanceof IStructuredSelection)) {
+		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
 			final IStructuredSelection sel = (IStructuredSelection) selection;
-			return (List<FBNetworkElement>) sel.toList().stream()
-					.filter(o -> o instanceof AbstractFBNElementEditPart)
+			return ((List<?>) sel.toList()).stream()
+					.filter(AbstractFBNElementEditPart.class::isInstance)
 					.map(ep -> ((AbstractFBNElementEditPart) ep).getModel())
 					.collect(Collectors.toList());
 		}
@@ -133,28 +131,5 @@ public class MoveToParentHandler extends AbstractHandler {
 
 	private static FBNetwork getParentOfParent(final FBNetworkElement fbNetworkElement) {
 		return (FBNetwork) fbNetworkElement.getFbNetwork().eContainer().eContainer();
-	}
-
-	// prevents the FBs from lying on top of one another
-	private static void preventFBPiling(final List<MoveElementFromSubAppCommand> commands) {
-		final int OFFSET = 90;
-		int left = 0;
-		int right = 0;
-		int below = 0;
-		for (final MoveElementFromSubAppCommand cmd : commands) {
-			switch (cmd.getSide()) {
-			case LEFT:
-				cmd.getElement().getPosition().setY(cmd.getElement().getPosition().getY() + (left * OFFSET));
-				left++;
-				break;
-			case RIGHT:
-				cmd.getElement().getPosition().setY(cmd.getElement().getPosition().getY() + (right * OFFSET));
-				right++;
-				break;
-			default:
-				cmd.getElement().getPosition().setY(cmd.getElement().getPosition().getY() + (below * OFFSET));
-				below++;
-			}
-		}
 	}
 }

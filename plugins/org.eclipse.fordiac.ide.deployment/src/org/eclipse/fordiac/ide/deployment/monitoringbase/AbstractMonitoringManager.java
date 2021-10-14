@@ -35,29 +35,29 @@ public abstract class AbstractMonitoringManager {
 	private static final AbstractMonitoringManager dummyMonitoringManager = new AbstractMonitoringManager() {
 
 		@Override
-		public void enableSystem(AutomationSystem system) {
+		public void enableSystem(final AutomationSystem system) {
 			// in the dummy manager we don't do anything here
 		}
 
 		@Override
-		public void enableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+		public void enableSystemSynch(final AutomationSystem system, final IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
 			// in the dummy manager we don't do anything here
 		}
 
 		@Override
-		public void disableSystem(AutomationSystem system) {
+		public void disableSystem(final AutomationSystem system) {
 			// in the dummy manager we don't do anything here
 		}
 
 		@Override
-		public void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+		public void disableSystemSynch(final AutomationSystem system, final IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
 			// in the dummy manager we don't do anything here
 		}
 
 		@Override
-		public boolean isSystemMonitored(AutomationSystem system) {
+		public boolean isSystemMonitored(final AutomationSystem system) {
 			return false;
 		}
 	};
@@ -70,15 +70,15 @@ public abstract class AbstractMonitoringManager {
 	}
 
 	private static AbstractMonitoringManager createMonitoringManager() {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID, "monitoringmanager"); //$NON-NLS-1$
-		for (IConfigurationElement element : elems) {
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID, "monitoringmanager"); //$NON-NLS-1$
+		for (final IConfigurationElement element : elems) {
 			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
+				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof AbstractMonitoringManager) {
 					return (AbstractMonitoringManager) object;
 				}
-			} catch (CoreException corex) {
+			} catch (final CoreException corex) {
 				Activator.getDefault().logError(Messages.AbstractMonitoringManager_ErrorInCreatingMonitoringManager,
 						corex);
 			}
@@ -95,7 +95,7 @@ public abstract class AbstractMonitoringManager {
 	 *
 	 * @param listener the listener
 	 */
-	public void registerMonitoringListener(IMonitoringListener listener) {
+	public void registerMonitoringListener(final IMonitoringListener listener) {
 		if (!monitoringListeners.contains(listener)) {
 			monitoringListeners.add(listener);
 		}
@@ -106,8 +106,8 @@ public abstract class AbstractMonitoringManager {
 	 *
 	 * @param port the port
 	 */
-	public void notifyAddPort(PortElement port) {
-		for (IMonitoringListener monitoringListener : monitoringListeners) {
+	public void notifyAddPort(final PortElement port) {
+		for (final IMonitoringListener monitoringListener : monitoringListeners) {
 			monitoringListener.notifyAddPort(port);
 		}
 	}
@@ -117,8 +117,8 @@ public abstract class AbstractMonitoringManager {
 	 *
 	 * @param port the port
 	 */
-	public void notifyRemovePort(PortElement port) {
-		for (IMonitoringListener monitoringListener : monitoringListeners) {
+	public void notifyRemovePort(final PortElement port) {
+		for (final IMonitoringListener monitoringListener : monitoringListeners) {
 			monitoringListener.notifyRemovePort(port);
 		}
 	}
@@ -128,33 +128,38 @@ public abstract class AbstractMonitoringManager {
 	 *
 	 * @param port the port
 	 */
-	public void notifyTriggerEvent(PortElement port) {
-		for (IMonitoringListener monitoringListener : monitoringListeners) {
+	public void notifyTriggerEvent(final PortElement port) {
+		for (final IMonitoringListener monitoringListener : monitoringListeners) {
 			monitoringListener.notifyTriggerEvent(port);
 		}
 	}
 
-	private List<IMonitoringListener> watchesAdapter = new ArrayList<>();
+	private final List<IMonitoringListener> monitoringListener = new ArrayList<>();
 
-	public void addWatchesAdapter(IMonitoringListener adapter) {
-		if (!watchesAdapter.contains(adapter)) {
-			watchesAdapter.add(adapter);
+	public void addMonitoringListener(final IMonitoringListener adapter) {
+		if (!monitoringListener.contains(adapter)) {
+			monitoringListener.add(adapter);
 		}
 	}
 
-	public void removeWatchesAdapter(IMonitoringListener adapter) {
-		watchesAdapter.remove(adapter);
+	public void removeMonitoringListener(final IMonitoringListener adapter) {
+		monitoringListener.remove(adapter);
 	}
 
-	public void notifyWatchesAdapterPortAdded(PortElement port) {
-		for (IMonitoringListener adapter : watchesAdapter) {
+	public void notifyWatchesAdapterPortAdded(final PortElement port) {
+		for (final IMonitoringListener adapter : monitoringListener) {
 			adapter.notifyAddPort(port);
 		}
 	}
-
-	public void notifyWatchesAdapterPortRemoved(PortElement port) {
-		for (IMonitoringListener adapter : watchesAdapter) {
+	public void notifyWatchesAdapterPortRemoved(final PortElement port) {
+		for (final IMonitoringListener adapter : monitoringListener) {
 			adapter.notifyRemovePort(port);
+		}
+	}
+
+	public void notifyWatchesChanged() {
+		for (final IMonitoringListener adapter : monitoringListener) {
+			adapter.notifyWatchesChanged();
 		}
 	}
 

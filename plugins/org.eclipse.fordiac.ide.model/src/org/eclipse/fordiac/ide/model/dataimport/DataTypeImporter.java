@@ -121,14 +121,11 @@ public class DataTypeImporter extends TypeImporter {
 	 */
 	private void parseStructuredType(final StructuredType struct) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.STRUCTURED_TYPE_ELEMENT, name -> {
-			switch (name) {
-			case LibraryElementTags.VAR_DECLARATION_ELEMENT:
+			if (LibraryElementTags.VAR_DECLARATION_ELEMENT.equals(name)) {
 				struct.getMemberVariables().add(parseVarDeclaration());
-				break;
-			default:
-				return false;
+				return true;
 			}
-			return true;
+			return false;
 		});
 	}
 }

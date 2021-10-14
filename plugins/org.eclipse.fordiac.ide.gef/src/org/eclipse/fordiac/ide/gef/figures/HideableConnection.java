@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015, 2017 Profactor GbmH, fortiss GmbH
- * 				 2018 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2021 Profactor GbmH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,6 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Muddasir Shakil - Added double line for Adapter and Struct connection
- *
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
@@ -20,6 +19,7 @@ import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Geometry;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -35,6 +35,7 @@ import org.eclipse.swt.graphics.Color;
 
 public class HideableConnection extends PolylineConnection {
 
+	private static final int CONNECTION_SELECTION_TOLERANCE = 6;
 	public static final int BEND_POINT_BEVEL_SIZE = 5;
 	private static final int NORMAL_DOUBLE_LINE_WIDTH = 3;
 	private static final int DOUBLE_LINE_AMPLIFICATION = 2;
@@ -131,6 +132,11 @@ public class HideableConnection extends PolylineConnection {
 		}
 	}
 
+	@Override
+	public Rectangle getBounds() {
+		final int CLIPPING_BUFFER = 2;
+		return super.getBounds().getExpanded(CLIPPING_BUFFER, CLIPPING_BUFFER);
+	}
 
 	@Override
 	public void setLineWidth(final int w) {
@@ -139,6 +145,11 @@ public class HideableConnection extends PolylineConnection {
 			width = Math.max(w * DOUBLE_LINE_AMPLIFICATION, NORMAL_DOUBLE_LINE_WIDTH);
 		}
 		super.setLineWidth(width);
+	}
+
+	@Override
+	protected boolean shapeContainsPoint(final int x, final int y) {
+		return Geometry.polylineContainsPoint(getPoints(), x, y, getLineWidth() + CONNECTION_SELECTION_TOLERANCE);
 	}
 
 	private PointList getBeveledPoints() {

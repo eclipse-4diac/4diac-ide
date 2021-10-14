@@ -17,16 +17,12 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
 
 public abstract class AbstractServiceSection extends AbstractSection {
 
-	protected boolean isLeftInterface(Primitive primitive) {
+	protected boolean isLeftInterface(final Primitive primitive) {
 		if (null != primitive) {
-			Service service = (Service) primitive.eContainer().eContainer().eContainer();
-			if (primitive.getInterface().equals(service.getLeftInterface())) {
-				return true;
-			}
+			return primitive.getInterface().isLeftInterface();
 		}
 		return false;
 	}

@@ -47,7 +47,7 @@ public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	}
 
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
 
 		return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
 	}
@@ -78,20 +78,19 @@ public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		return new Rectangle(r);
 	}
 
-	protected EditPart getInsertionReference(Point mousePoint) {
-		@SuppressWarnings("unchecked")
-		List<EditPart> children = getHost().getChildren();
+	protected EditPart getInsertionReference(final Point mousePoint) {
+		final List<EditPart> children = getHost().getChildren();
 		if (!children.isEmpty()) {
-			Transposer transposer = new Transposer();
+			final Transposer transposer = new Transposer();
 			transposer.setEnabled(false);
-			Point requestPoint = transposer.t(mousePoint);
-			Rectangle parentBoundCopy = ((AbstractGraphicalEditPart) getHost()).getFigure().getBounds().getCopy();
+			final Point requestPoint = transposer.t(mousePoint);
+			final Rectangle parentBoundCopy = ((AbstractGraphicalEditPart) getHost()).getFigure().getBounds().getCopy();
 			((AbstractGraphicalEditPart) getHost()).getFigure().translateToAbsolute(parentBoundCopy);
-			Rectangle parentBound = transposer.t(parentBoundCopy);
-			for (EditPart child : children) {
-				Rectangle childBoundCopy = ((AbstractGraphicalEditPart) child).getFigure().getBounds().getCopy();
+			final Rectangle parentBound = transposer.t(parentBoundCopy);
+			for (final EditPart child : children) {
+				final Rectangle childBoundCopy = ((AbstractGraphicalEditPart) child).getFigure().getBounds().getCopy();
 				((AbstractGraphicalEditPart) child).getFigure().translateToAbsolute(childBoundCopy);
-				Rectangle childBound = transposer.t(childBoundCopy);
+				final Rectangle childBound = transposer.t(childBoundCopy);
 				if ((requestPoint.y > parentBound.y) && (requestPoint.y <= childBound.bottom())) {
 					return child;
 				}

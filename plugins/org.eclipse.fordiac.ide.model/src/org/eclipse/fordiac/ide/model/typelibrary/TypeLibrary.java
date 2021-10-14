@@ -1,6 +1,7 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
- * 				 2018, 2020 Johannes Kepler University
+ * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
+ * 		            Johannes Kepler University, 
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *    - initial API and implementation and/or initial documentation
  *  Martin Melik-Merkumians - adds convenience methods
  *  Alois Zoitl - Changed to a per project Type and Data TypeLibrary
+ *              - Added support for project renameing
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -40,6 +42,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
@@ -62,9 +65,20 @@ public final class TypeLibrary implements TypeLibraryTags {
 		}
 	}
 
+	public static void renameProject(final IProject oldProject, final IProject newProject) {
+		synchronized (typeLibraryList) {
+			final TypeLibrary typelib = typeLibraryList.remove(oldProject);
+			if (typelib != null) {
+				typelib.project = newProject;
+				typeLibraryList.put(newProject, typelib);
+			}
+		}
+	}
+
 	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
+	private final Palette errorTypeLib = PaletteFactory.eINSTANCE.createPalette();
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
-	private final IProject project;
+	private IProject project;
 
 	/** An array of palette entry creators */
 	private static IPaletteEntryCreator[] paletteCreators = null;
@@ -143,7 +157,8 @@ public final class TypeLibrary implements TypeLibraryTags {
 	private TypeLibrary(final IProject project) {
 		this.project = project;
 		blockTypeLib.setTypeLibrary(this);
-		if (null != project) {
+		errorTypeLib.setTypeLibrary(this);
+		if (project != null && project.exists()) {
 			loadPaletteFolderMembers(project);
 		}
 	}
@@ -207,6 +222,12 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	public void addPaletteEntry(final PaletteEntry entry) {
+
+		final FBTypePaletteEntry errorEntry = errorTypeLib.getFBTypeEntry(entry.getLabel());
+		if (errorEntry != null) {
+			errorTypeLib.removePaletteEntry(errorEntry);
+		}
+
 		if (entry instanceof DataTypePaletteEntry) {
 			entry.setPalette(blockTypeLib); // for data type entries the palette will not be automatically set
 			dataTypeLib.addPaletteEntry((DataTypePaletteEntry) entry);
@@ -377,4 +398,32 @@ public final class TypeLibrary implements TypeLibraryTags {
 			// invalid location, throw an exception or warn user
 		}
 	}
+
+	public Palette getErrorTypeLib() {
+		return errorTypeLib;
+	}
+
+	public PaletteEntry find(final String name) {
+
+		PaletteEntry entry = blockTypeLib.getSubAppTypeEntry(name);
+
+		if (entry != null) {
+			return entry;
+		}
+
+		entry = blockTypeLib.getFBTypeEntry(name);
+
+		if (entry != null) {
+			return entry;
+		}
+
+		entry = dataTypeLib.getDerivedDataTypes().get(name);
+
+		if (entry != null) {
+			return entry;
+		}
+
+		return blockTypeLib.getAdapterTypeEntry(name);
+	}
+
 }

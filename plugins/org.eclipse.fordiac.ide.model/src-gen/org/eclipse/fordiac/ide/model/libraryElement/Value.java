@@ -13,8 +13,6 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.emf.ecore.EObject;
-
 /** <!-- begin-user-doc --> A representation of the model object '<em><b>Value</b></em>'. <!-- end-user-doc -->
  *
  * <p>
@@ -27,7 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getValue()
  * @model
  * @generated */
-public interface Value extends EObject {
+public interface Value extends ErrorMarkerRef {
 	/** Returns the value of the '<em><b>Value</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Value</em>' attribute isn't clear, there really should be more of a description

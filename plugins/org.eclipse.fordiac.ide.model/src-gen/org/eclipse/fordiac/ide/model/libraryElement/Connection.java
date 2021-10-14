@@ -19,15 +19,13 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1 <em>Dx1</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2 <em>Dx2</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy <em>Dy</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection <em>Res Type
  * Connection</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection <em>Broken
  * Connection</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource <em>Source</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination <em>Destination</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData <em>Routing Data</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection()

@@ -35,7 +35,7 @@ public class ChangeStandardCommandTest extends FBNetworkTestBase {
 		FBCreateCommandTest.verifyState(state, oldState, t);
 	}
 
-	public static void verifyState(State state, State oldState, TestFunction t, String expectedValue) {
+	public static void verifyState(State state, TestFunction t, String expectedValue) {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getStandard(), expectedValue);
 	}
 
@@ -48,11 +48,11 @@ public class ChangeStandardCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<>("Change Standard", //$NON-NLS-1$
 						(State state) -> executeCommand(state, STANDARD_STRING), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, STANDARD_STRING) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, STANDARD_STRING) //
 				), //
 				new ExecutionDescription<>("Change Standard to null", //$NON-NLS-1$
 						(State state) -> executeCommand(state, null), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, "") //$NON-NLS-1$
+						(State s, State o, TestFunction t) -> verifyState(s, t, "") //$NON-NLS-1$
 				) //
 		);
 

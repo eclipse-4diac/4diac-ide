@@ -72,7 +72,7 @@ public class AlgorithmList implements CommandExecutor {
 			case A_NAME:
 				return ((Algorithm) element).getName();
 			case A_LANGUAGE:
-				return (element instanceof STAlgorithm) ? 1 : 0;
+				return (element instanceof STAlgorithm) ? Integer.valueOf(1) : Integer.valueOf(0);
 			default:
 				return ((Algorithm) element).getComment();
 			}
@@ -86,7 +86,7 @@ public class AlgorithmList implements CommandExecutor {
 			if (A_NAME.equals(property)) {
 				cmd = new ChangeNameCommand(data, value.toString());
 			} else if (A_LANGUAGE.equals(property)) {
-				cmd = new ChangeAlgorithmTypeCommand(type, data, ECCSection.getLanguages().get((int) value));
+				cmd = new ChangeAlgorithmTypeCommand(type, data, ECCSection.getLanguages().get(((Integer) value).intValue()));
 			} else {
 				cmd = new ChangeCommentCommand(data, value.toString());
 			}

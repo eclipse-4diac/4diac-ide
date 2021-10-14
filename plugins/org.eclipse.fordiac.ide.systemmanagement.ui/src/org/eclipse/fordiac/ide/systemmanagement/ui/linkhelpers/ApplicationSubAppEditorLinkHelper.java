@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorInput;
@@ -56,7 +56,7 @@ public class ApplicationSubAppEditorLinkHelper extends AbstractEditorLinkHelper 
 			performEditorSelect(aPage, new ApplicationEditorInput((Application) aSelection.getFirstElement()), null);
 		}
 		if ((aSelection.getFirstElement() instanceof SubApp)
-				&& (null != ((SubApp) aSelection.getFirstElement()).getSubAppNetwork())) {
+				&& (!((SubApp) aSelection.getFirstElement()).isTyped())) {
 			// we have an untyped subapp
 			handleUntypedSubApp(aPage, (SubApp) aSelection.getFirstElement());
 		} else if (aSelection.getFirstElement() instanceof FBNetworkElement) {
@@ -68,7 +68,7 @@ public class ApplicationSubAppEditorLinkHelper extends AbstractEditorLinkHelper 
 	private static void performEditorSelect(final IWorkbenchPage aPage, final IEditorInput editorInput,
 			final FBNetworkElement refElement) {
 		final IEditorPart editor = activateEditor(aPage, editorInput);
-		BreadcrumbUtil.selectElement(refElement, editor);
+		HandlerHelper.selectElement(refElement, editor);
 	}
 
 	/**

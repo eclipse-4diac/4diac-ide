@@ -90,6 +90,12 @@ abstract class CommonElementExporter {
 
 		@Override
 		public int read(final byte[] b, final int off, final int len) throws IOException {
+			if (len == 0) {
+				return 0;
+			}
+			if (available() == 0) {
+				return -1;
+			}
 			final int readLen = Math.min(available(), len);
 			currentDataBuffer.get(b, off, readLen);
 			return readLen;
@@ -430,11 +436,11 @@ abstract class CommonElementExporter {
 	}
 
 	protected void addParamsConfig(final EList<VarDeclaration> inputVars) throws XMLStreamException {
-		for (final VarDeclaration var : inputVars) {
-			if ((null != var.getValue()) && !var.getValue().getValue().isEmpty()) {
+		for (final VarDeclaration inVar : inputVars) {
+			if ((null != inVar.getValue()) && !inVar.getValue().getValue().isEmpty()) {
 				addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
-				addNameAttribute(var.getName());
-				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, var.getValue().getValue());
+				addNameAttribute(inVar.getName());
+				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, inVar.getValue().getValue());
 			}
 		}
 	}

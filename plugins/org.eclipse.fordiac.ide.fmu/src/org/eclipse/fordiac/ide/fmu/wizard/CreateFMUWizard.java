@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 - 2018 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,14 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.wizard;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
@@ -47,9 +45,9 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 	public CreateFMUWizard() {
 		setWindowTitle(Messages.FordiacCreateFMUWizard_LABEL_Window_Title);
 
-		IDialogSettings settings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
 
-		IDialogSettings dialogSettings = settings.getSection(FORDIAC_CREATE_FMU_SECTION);
+		final IDialogSettings dialogSettings = settings.getSection(FORDIAC_CREATE_FMU_SECTION);
 		if (dialogSettings == null) {
 			settings.addNewSection(FORDIAC_CREATE_FMU_SECTION);
 		}
@@ -57,7 +55,7 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 	}
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		this.selection = new StructuredSelection(selection.toList());
 	}
 
@@ -83,39 +81,43 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 					page.getLinux64Field().getSelection());
 		}
 
-		IRunnableWithProgress iop = new IRunnableWithProgress() {
-			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		final IRunnableWithProgress iop = monitor -> {
 
-				String outputDirectory = page.getDirectory();
-				Map<Device, List<Resource>> toDeploy = addResourcesAndDevices();
-				// Store the selected libraries to include in the FMU
-				List<String> librariesToAdd = getLibraries();
+			final String outputDirectory = page.getDirectory();
+			final Map<Device, List<Resource>> toDeploy = addResourcesAndDevices();
+			// Store the selected libraries to include in the FMU
+			final List<String> librariesToAdd = getLibraries();
 
-				for (Entry<Device, List<Resource>> entry : toDeploy.entrySet()) {
-					FMUDeviceManagementCommunicationHandler.createFMU(entry.getKey(), entry.getValue(), librariesToAdd,
-							outputDirectory, getShell(), monitor);
+			for (final Entry<Device, List<Resource>> entry : toDeploy.entrySet()) {
+				FMUDeviceManagementCommunicationHandler.createFMU(entry.getKey(), entry.getValue(), librariesToAdd,
+						outputDirectory, getShell(), monitor);
 
-				}
-				monitor.done();
 			}
+			monitor.done();
 		};
 
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, iop);
-		} catch (Exception e) {
-			MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
-			msg.setMessage(Messages.CreateFMUWizard_FMUCreationError + e.getMessage());
-			msg.open();
-			Activator.getDefault().logError(msg.getMessage(), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();  // mark interruption
+			showCreationExceptionDialog(e);
+		} catch (final Exception e) {
+			showCreationExceptionDialog(e);
 		}
 
 		return true;
 	}
 
+	protected void showCreationExceptionDialog(final Exception e) {
+		final MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
+		msg.setMessage(Messages.CreateFMUWizard_FMUCreationError + e.getMessage());
+		msg.open();
+		Activator.getDefault().logError(msg.getMessage(), e);
+	}
+
 	private List<String> getLibraries() {
 
-		List<String> libs = new ArrayList<>();
+		final List<String> libs = new ArrayList<>();
 		if (page.getWin32Field().isEnabled() && page.getWin32Field().getSelection()) {
 			libs.add(PreferenceConstants.P_FMU_WIN32);
 		}
@@ -132,10 +134,10 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 	}
 
 	private Map<Device, List<Resource>> addResourcesAndDevices() {
-		Object[] selectedElements = page.getSelectedElements();
-		HashMap<Device, List<Resource>> toDeploy = new HashMap<>();
+		final Object[] selectedElements = page.getSelectedElements();
+		final HashMap<Device, List<Resource>> toDeploy = new HashMap<>();
 
-		for (Object object : selectedElements) {
+		for (final Object object : selectedElements) {
 			if (object instanceof Resource) {
 				insertResource(toDeploy, (Resource) object);
 			} else if (object instanceof Device) {
@@ -147,17 +149,14 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 		return toDeploy;
 	}
 
-	private void insertResource(Map<Device, List<Resource>> workLoad, Resource res) {
-		List<Resource> resList = getWorkLoadEntryList(workLoad, res.getDevice());
+	private static void insertResource(final Map<Device, List<Resource>> workLoad, final Resource res) {
+		final List<Resource> resList = getWorkLoadEntryList(workLoad, res.getDevice());
 		resList.add(res);
 	}
 
-	private List<Resource> getWorkLoadEntryList(Map<Device, List<Resource>> toDeploy, Device device) {
-		if (!toDeploy.containsKey(device)) {
-			toDeploy.put(device, new ArrayList<Resource>());
-		}
-
-		return toDeploy.get(device);
+	private static List<Resource> getWorkLoadEntryList(final Map<Device, List<Resource>> toDeploy,
+			final Device device) {
+		return toDeploy.computeIfAbsent(device, dev -> new ArrayList<>());
 	}
 
 }

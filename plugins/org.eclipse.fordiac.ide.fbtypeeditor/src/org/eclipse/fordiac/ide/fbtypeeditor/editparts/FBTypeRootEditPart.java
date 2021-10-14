@@ -38,9 +38,9 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		IFigure figure = super.createFigure();
+		final IFigure figure = super.createFigure();
 		// Create the static router for the connection layer
-		ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
+		final ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
 		connLayer.setConnectionRouter(new ShortestPathConnectionRouter(figure));
 		return figure;
 	}
@@ -66,13 +66,14 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 			adapter = new EContentAdapter() {
 				@Override
 				public void notifyChanged(final Notification notification) {
-					int type = notification.getEventType();
+					super.notifyChanged(notification);
+					final int type = notification.getEventType();
 					switch (type) {
 					case Notification.ADD:
 					case Notification.ADD_MANY:
 					case Notification.REMOVE:
 					case Notification.REMOVE_MANY:
-						Display.getDefault().asyncExec(() -> refreshChildren());
+						Display.getDefault().asyncExec(FBTypeRootEditPart.this::refreshChildren);
 						break;
 					case Notification.SET:
 						break;
@@ -98,11 +99,11 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
 	@Override
 	protected List<?> getModelChildren() {
-		ArrayList<Object> children = new ArrayList<>();
+		final ArrayList<Object> children = new ArrayList<>();
 		children.add(getModel());
 
 		getModel().getInterfaceList().getAllInterfaceElements().forEach(interfaceElement -> {
-			CommentTypeField field = new CommentTypeField(interfaceElement);
+			final CommentTypeField field = new CommentTypeField(interfaceElement);
 			children.add(field);
 		});
 		return children;

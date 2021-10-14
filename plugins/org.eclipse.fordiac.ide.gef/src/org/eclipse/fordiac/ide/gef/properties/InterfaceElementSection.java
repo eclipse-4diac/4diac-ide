@@ -16,26 +16,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
@@ -106,7 +99,7 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 			executeCommand(cmd);
 		});
-		valueCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.Value + ":"); //$NON-NLS-1$
+		valueCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		parameterText = createGroupText(composite, true);
 		parameterText.addModifyListener(e -> {
 			removeContentAdapter();
@@ -130,25 +123,6 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 	}
 
-	private TypeLibrary getTypeLib() {
-		final EObject root = EcoreUtil.getRootContainer(getType());
-
-		if (root instanceof FBType) {
-			return ((FBType) root).getTypeLibrary();
-		} else if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getPalette().getTypeLibrary();
-		}
-		return null;
-	}
-
-	private DataTypeLibrary getDataTypeLib() {
-		return getTypeLib().getDataTypeLibrary();
-	}
-
-	private Palette getPalette() {
-		return getTypeLib().getBlockTypeLib();
-	}
-
 	@Override
 	public void refresh() {
 		final CommandStack commandStackBuffer = commandStack;
@@ -159,12 +133,12 @@ public class InterfaceElementSection extends AbstractSection {
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
 			if (getType() instanceof VarDeclaration) {
-				final VarDeclaration var = (VarDeclaration) getType();
-				itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
+				final VarDeclaration variable = (VarDeclaration) getType();
+				itype = variable.getType() != null ? variable.getType().getName() : ""; //$NON-NLS-1$
 				if (getType().isIsInput()) {
 					parameterText.setVisible(true);
 					valueCLabel.setVisible(true);
-					parameterText.setText((var.getValue() != null) ? var.getValue().getValue() : ""); //$NON-NLS-1$
+					parameterText.setText((variable.getValue() != null) ? variable.getValue().getValue() : ""); //$NON-NLS-1$
 				} else {
 					valueCLabel.setVisible(false);
 					parameterText.setVisible(false);
@@ -219,9 +193,11 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
+		// currently nothing needs to be done here
 	}
 
 	@Override
 	protected void setInputCode() {
+		// currently nothing needs to be done here
 	}
 }

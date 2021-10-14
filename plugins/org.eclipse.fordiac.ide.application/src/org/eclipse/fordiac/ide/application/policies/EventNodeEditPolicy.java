@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.application.commands.ReconnectEventConnectionCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateConnectionRequest;

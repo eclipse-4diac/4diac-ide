@@ -35,7 +35,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public ConnectionItemProvider(final AdapterFactory adapterFactory) {
+	public ConnectionItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -43,7 +43,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	 *
 	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -60,7 +60,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	 * -->
 	 *
 	 * @generated */
-	protected void addResTypeConnectionPropertyDescriptor(final Object object) {
+	protected void addResTypeConnectionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Connection_resTypeConnection_feature"), //$NON-NLS-1$
@@ -73,7 +73,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	/** This adds a property descriptor for the Broken Connection feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	protected void addBrokenConnectionPropertyDescriptor(final Object object) {
+	protected void addBrokenConnectionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Connection_brokenConnection_feature"), //$NON-NLS-1$
@@ -84,9 +84,9 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	}
 
 	/** This adds a property descriptor for the Source feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	protected void addSourcePropertyDescriptor(final Object object) {
+	protected void addSourcePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Connection_source_feature"), //$NON-NLS-1$
@@ -98,7 +98,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	/** This adds a property descriptor for the Destination feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	protected void addDestinationPropertyDescriptor(final Object object) {
+	protected void addDestinationPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Connection_destination_feature"), //$NON-NLS-1$
@@ -110,7 +110,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	/** This adds a property descriptor for the Routing Data feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	protected void addRoutingDataPropertyDescriptor(final Object object) {
+	protected void addRoutingDataPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Connection_routingData_feature"), //$NON-NLS-1$
@@ -120,11 +120,11 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public String getText(final Object object) {
-		final String label = ((Connection) object).getName();
+	public String getText(Object object) {
+		String label = ((Connection) object).getName();
 		return label == null || label.length() == 0 ? getString("_UI_Connection_type") : //$NON-NLS-1$
 				getString("_UI_Connection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
@@ -132,10 +132,10 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
 	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Connection.class)) {
@@ -151,10 +151,10 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 
 	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
 	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

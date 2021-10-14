@@ -19,9 +19,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -99,6 +98,9 @@ public class BreadcrumbItem {
 	void dispose() {
 		text.dispose();
 		if (arrow != null) {
+			if (arrow.getImage() != null) {
+				arrow.getImage().dispose();
+			}
 			arrow.dispose();
 		}
 	}
@@ -166,7 +168,7 @@ public class BreadcrumbItem {
 			return Arrays.stream(nestedContentProvider.getChildren(parentElement))
 					.filter(obj -> obj instanceof IFile || obj instanceof SystemConfiguration
 							|| obj instanceof Application || obj instanceof SubApp
-							|| (obj instanceof FB && ((FB) obj).getType() instanceof CompositeFBType)
+							|| (obj instanceof CFBInstance)
 							|| obj instanceof Device || obj instanceof Resource)
 					.collect(Collectors.toList()).toArray();
 		}

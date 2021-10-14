@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019 - 2020 Johannes Kepler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,25 +11,38 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - added positioning calculations
+ *   Daniel Lindhuber - added recursive type insertion check
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Point;
 
@@ -48,6 +62,36 @@ public final class FBNetworkHelper {
 		checkForAdapterFBs(dstNetwork, destInterface);
 		createConnections(srcNetwork, dstNetwork, destInterface);
 		return dstNetwork;
+	}
+
+	/** Take the src FBNetwork and copy it into a new network with the members of the srce network as resource type fbs.
+	 *
+	 * @param srcNetwork    the FBNetwork to copy
+	 * @param destInterface if not null the interface of the component the new FBNetwork should be contained in
+	 * @return the copied FBNetwork */
+	public static FBNetwork createResourceFBNetwork(final FBNetwork resourceTypeNetwork,
+			final InterfaceList destInterface) {
+		final FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+		createResourceTypeFBs(resourceTypeNetwork.getNetworkElements(), dstNetwork);
+		checkForAdapterFBs(dstNetwork, destInterface);
+		createConnections(resourceTypeNetwork, dstNetwork, destInterface);
+		return dstNetwork;
+	}
+
+	private static void createResourceTypeFBs(
+			final EList<FBNetworkElement> networkElements, final FBNetwork dstNetwork) {
+		networkElements.forEach(fb -> createResourceTypeFB(fb, dstNetwork));
+	}
+
+	private static void createResourceTypeFB(final FBNetworkElement srcFb, final FBNetwork dstNetwork) {
+		final FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
+		dstNetwork.getNetworkElements().add(copy);
+		copy.setPaletteEntry(srcFb.getPaletteEntry());
+		copy.setName(srcFb.getName()); // name should be last so that checks
+		// are working correctly
+		final InterfaceList interfaceList = InterfaceListCopier.copy(srcFb.getInterface(), true);
+		copy.setInterface(interfaceList);
+		copy.setPosition(EcoreUtil.copy(srcFb.getPosition()));
 	}
 
 	private static void checkForAdapterFBs(final FBNetwork dstNetwork, final InterfaceList destInterface) {
@@ -128,24 +172,129 @@ public final class FBNetworkHelper {
 	public static void moveFBNetworkByOffset(final Iterable<FBNetworkElement> fbNetwork, final int xOffset, final int yOffset) {
 		for (final FBNetworkElement el : fbNetwork) {
 			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
-			pos.setX(el.getPosition().getX() - xOffset);
-			pos.setY(el.getPosition().getY() - xOffset);
+			pos.setX(el.getPosition().getX() + xOffset);
+			pos.setY(el.getPosition().getY() + yOffset);
 			el.setPosition(pos);
 		}
 	}
 
 	public static Point removeXYOffsetForFBNetwork(final List<FBNetworkElement> fbNetwork) {
 		final Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
-		moveFBNetworkByOffset(fbNetwork, offset.x - X_OFFSET_FROM_TOP_LEFT_CORNER,
-				offset.y - Y_OFFSET_FROM_TOP_LEFT_CORNER);
+		moveFBNetworkByOffset(fbNetwork, -offset.x + X_OFFSET_FROM_TOP_LEFT_CORNER,
+				-offset.y + Y_OFFSET_FROM_TOP_LEFT_CORNER);
 		return offset;
+	}
+
+	public static void moveFBNetworkToDestination(final List<FBNetworkElement> fbnetwork, final Point destination) {
+		final Point current = getTopLeftCornerOfFBNetwork(fbnetwork);
+		final Point offset = new Point(destination.x - current.x, destination.y - current.y);
+		moveFBNetworkByOffset(fbnetwork, offset);
 	}
 
 	public static void moveFBNetworkByOffset(final List<FBNetworkElement> fbNetwork, final Point offset) {
 		moveFBNetworkByOffset(fbNetwork, offset.x, offset.y);
 	}
 
+	public static boolean targetSubappIsInSameFbNetwork(final List<FBNetworkElement> elements,
+			final SubApp targetSubApp) {
+		for (final FBNetworkElement block : elements) {
+			if (!block.getFbNetwork().getNetworkElements().contains(targetSubApp)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean isTypeInsertionSave(final FBType type, final EObject element) {
+		if (type == null || element == null) {
+			return true;
+		}
+		final FBType editorType = getRootType(element);
+		if (editorType != null) {
+			if (type.equals(editorType)) {
+				ErrorMessenger
+				.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
+				return false;
+			}
+			if (containsType(editorType, getChildFBNElements(type))) {
+				ErrorMessenger.popUpErrorMessage(
+						MessageFormat.format(Messages.Error_RecursiveType, type.getName(), editorType.getName()));
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBNetworkElement networkElem) {
+		if (networkElem instanceof SubApp) {
+			final SubApp subapp = (SubApp) networkElem;
+			if (subapp.isTyped()) {
+				return subapp.getType().getFBNetwork().getNetworkElements();
+			}
+			return subapp.getSubAppNetwork().getNetworkElements();
+		}
+		final FBType type = networkElem.getType();
+		if (type != null) {
+			return getChildFBNElements(type);
+		}
+		return new BasicEList<>();
+	}
+
+	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBType type) {
+		if (type instanceof BaseFBType) { // basic and simple fb type
+			return ((BaseFBType) type).getInternalFbs();
+		}
+		if (type instanceof CompositeFBType) { // subapp and composite fb type
+			return ((CompositeFBType) type).getFBNetwork().getNetworkElements();
+		}
+		return new BasicEList<>();
+	}
+
+	private static FBType getRootType(final EObject element) {
+		final EObject root = EcoreUtil.getRootContainer(element);
+		if (root instanceof FBType) {
+			return (FBType) root;
+		}
+		return null;
+	}
+
+	private static boolean containsType(final FBType editorType, final EList<? extends FBNetworkElement> networkElementList) {
+		for (final FBNetworkElement elem : networkElementList) {
+			if (editorType.equals(elem.getType())) {
+				return true;
+			}
+			if (containsType(editorType, getChildFBNElements(elem))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private FBNetworkHelper() {
 		throw new IllegalStateException("FBNetworkHelper is a utility class that can not be instantiated"); //$NON-NLS-1$
+	}
+
+	public static void loadSubappNetwork(final FBNetworkElement network) {
+		if (network instanceof SubApp) {
+			final SubApp subApp = (SubApp) network;
+			subApp.loadSubAppNetwork();
+			parseSubNetworks(subApp.getSubAppNetwork().getNetworkElements());
+		} else if (network instanceof CFBInstance) {
+			final CFBInstance compositeFunctionBlock = (CFBInstance) network;
+			compositeFunctionBlock.loadCFBNetwork();
+			parseSubNetworks(compositeFunctionBlock.getCfbNetwork().getNetworkElements());
+		}
+	}
+
+	private static void parseSubNetworks(final List<FBNetworkElement> networkElements) {
+		for (final FBNetworkElement fbe : networkElements) {
+			if (hasNetwork(fbe)) {
+				loadSubappNetwork(fbe);
+			}
+		}
+	}
+
+	private static boolean hasNetwork(final FBNetworkElement networkElement) {
+		return (networkElement instanceof SubApp || networkElement instanceof CFBInstance);
 	}
 }

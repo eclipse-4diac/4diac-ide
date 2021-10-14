@@ -116,7 +116,9 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+		if (!getModel().getRefElement().isContainedInTypedInstance()
+				&& ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+						|| (request.getType() == RequestConstants.REQ_OPEN))) {
 			performDirectEdit();
 
 		} else {

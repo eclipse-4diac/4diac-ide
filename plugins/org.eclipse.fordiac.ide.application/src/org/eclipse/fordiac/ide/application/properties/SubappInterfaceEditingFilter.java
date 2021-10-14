@@ -15,18 +15,17 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.jface.viewers.IFilter;
 
 public class SubappInterfaceEditingFilter implements IFilter {
 
 	@Override
-	public boolean select(Object toTest) {
+	public boolean select(final Object toTest) {
 		if (toTest instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) toTest).getModel().getType() == null; // only for untyped
+			final SubApp subapp = ((SubAppForFBNetworkEditPart) toTest).getModel();
+			return (!subapp.isTyped()) && !subapp.isContainedInTypedInstance(); // only for untyped
 		}
-		if (toTest instanceof UISubAppNetworkEditPart) {
-			return true;
-		}
-		return false;
+		return (toTest instanceof UISubAppNetworkEditPart);
 	}
 }

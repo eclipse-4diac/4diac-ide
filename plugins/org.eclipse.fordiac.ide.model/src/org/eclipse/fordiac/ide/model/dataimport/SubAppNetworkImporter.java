@@ -19,9 +19,13 @@ import java.text.MessageFormat;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -51,44 +55,54 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 	}
 
 	private void parseSubApp() throws TypeImportException, XMLStreamException {
-		final SubApp subApp = LibraryElementFactory.eINSTANCE.createSubApp();
-
+		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		final FBNetworkElement subApp = createSubapp(type);
 		readNameCommentAttributes(subApp);
 		getXandY(subApp);
 		getFbNetwork().getNetworkElements().add(subApp);
 
-		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (null != type) {
-			configureSubAppInterface(subApp, type);
+		if (type == null) {
+			parseUntypedSubapp((SubApp) subApp);
 		} else {
-			parseUntypedSubapp(subApp);
+			parseFBChildren(subApp, LibraryElementTags.SUBAPP_ELEMENT);
 		}
 
-		for (final VarDeclaration var : subApp.getInterface().getInputVars()) {
-			if (null == var.getValue()) {
-				var.setValue(LibraryElementFactory.eINSTANCE.createValue());
+		for (final VarDeclaration inVar : subApp.getInterface().getInputVars()) {
+			if (null == inVar.getValue()) {
+				inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 		}
+
 		fbNetworkElementMap.put(subApp.getName(), subApp);
-	}
 
-	private void configureSubAppInterface(final SubApp subApp, final String typeName)
-			throws TypeImportException, XMLStreamException {
-		final SubApplicationTypePaletteEntry subEntry = getPalette().getSubAppTypeEntry(typeName);
-
-		if (null != subEntry) {
-			subApp.setPaletteEntry(subEntry);
-			subApp.setInterface(subEntry.getSubApplicationType().getInterfaceList().copy());
-		} else {
-			createErrorMarker(
-					MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", typeName,
+		if ((null == subApp.getPaletteEntry() && type != null) || (subApp instanceof ErrorMarkerRef)) {
+			final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
+					MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", type, //$NON-NLS-1$
 							subApp.getName()),
-					subApp);
-			// put an empty interface list so that the system can load
-			subApp.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+					subApp, getLineNumber());
+			errorMarkerAttributes.add(e);
+			e.setErrorMarkerRef((ErrorMarkerRef) subApp);
 		}
-		parseFBChildren(subApp, LibraryElementTags.SUBAPP_ELEMENT);
+
 	}
+
+	public FBNetworkElement createSubapp(final String type) {
+		final FBNetworkElement subApp = LibraryElementFactory.eINSTANCE.createSubApp();
+		if (type == null) {
+			return subApp;
+		}
+
+		final SubApplicationTypePaletteEntry subEntry = getPalette().getSubAppTypeEntry(type);
+		if (subEntry == null) {
+			return FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
+					LibraryElementFactory.eINSTANCE.createSubAppType().eClass(),
+					PaletteFactory.eINSTANCE.createSubApplicationTypePaletteEntry().eClass());
+		}
+		subApp.setPaletteEntry(subEntry);
+		subApp.setInterface(subEntry.getSubApplicationType().getInterfaceList().copy());
+		return subApp;
+	}
+
 
 	private void parseUntypedSubapp(final SubApp subApp) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> {
@@ -104,11 +118,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 				subAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
 				return true;
 			case LibraryElementTags.PARAMETER_ELEMENT:
-				final VarDeclaration parameter = parseParameter();
-				final VarDeclaration vInput = getVarNamed(subApp.getInterface(), parameter.getName(), true);
-				if (null != vInput) {
-					vInput.setValue(parameter.getValue());
-				}
+				parseParameter(subApp);
 				return true;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseGenericAttributeNode(subApp);

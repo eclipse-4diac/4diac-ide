@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * Copyright (c) 2020 Primetals Technologies Germany GmbH
  *
@@ -11,6 +10,8 @@
  * Contributors:
  *   Bianca Wiesmayr
  *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber
+ *     - updated label provider
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -18,16 +19,19 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.properties.ShowInterfaceEventSection.CellImmutableModifier;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -68,7 +72,8 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected InsertInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput,
 			final int index) {
 		return null;
 	}
@@ -99,6 +104,42 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 			@Override
 			public boolean canModify(final Object element, final String property) {
 				return false;
+			}
+		};
+	}
+
+	@Override
+	protected LabelProvider getLabelProvider() {
+		return new DataLabelProvider() {
+			@Override
+			public String getColumnText(Object element, int columnIndex) {
+				if ((element instanceof VarDeclaration) && (columnIndex == DataLabelProvider.INITIALVALUE_COL_INDEX)) {
+					final VarDeclaration varDecl = (VarDeclaration) element;
+					final FBType fbType = varDecl.getFBNetworkElement().getType();
+					VarDeclaration varDeclType;
+
+					if (fbType != null) {
+						varDeclType = fbType.getInterfaceList().getVariable(varDecl.getName());
+						if ((varDeclType == null) && (varDecl.getFBNetworkElement() instanceof StructManipulator)) {
+							// struct var of a struct manipulator inside a typed subapp/composite
+							varDeclType = ((StructManipulator) varDecl.getFBNetworkElement()).getStructType().getMemberVariables()
+									.stream()
+									.filter(memberVar -> varDecl.getName().equals(memberVar.getName()))
+									.findFirst()
+									.orElse(null);
+						}
+					} else {
+						// var declaration of untyped subapp inside typed subapp/composite
+						varDeclType = varDecl;
+					}
+
+					if ((varDeclType == null) || (varDeclType.getValue() == null)) {
+						return ""; //$NON-NLS-1$
+					}
+
+					return varDeclType.getValue().getValue();
+				}
+				return super.getColumnText(element, columnIndex);
 			}
 		};
 	}

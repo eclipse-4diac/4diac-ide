@@ -24,18 +24,14 @@ import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorDescriptor;
@@ -43,9 +39,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class AdapterInterfaceEditPart extends InterfaceEditPart {
-	private Palette systemPalette;
+	private final Palette systemPalette;
 
-	AdapterInterfaceEditPart(Palette systemPalette) {
+	AdapterInterfaceEditPart(final Palette systemPalette) {
 		this.systemPalette = systemPalette;
 	}
 
@@ -68,29 +64,30 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 		private void setupMouseListener() {
 			addMouseMotionListener(new MouseMotionListener() {
 				@Override
-				public void mouseDragged(MouseEvent me) {
+				public void mouseDragged(final MouseEvent me) {
+					// Nothing to be done here
 				}
 
 				@Override
-				public void mouseEntered(MouseEvent me) {
+				public void mouseEntered(final MouseEvent me) {
 					if (0 != (me.getState() & SWT.CONTROL)) {
 						setDrawUnderline(true);
 					}
 				}
 
 				@Override
-				public void mouseExited(MouseEvent me) {
+				public void mouseExited(final MouseEvent me) {
 					setDrawUnderline(false);
 				}
 
 				@Override
-				public void mouseHover(MouseEvent me) {
+				public void mouseHover(final MouseEvent me) {
 					// currently mouseHover should be the same as mouse moved
 					mouseMoved(me);
 				}
 
 				@Override
-				public void mouseMoved(MouseEvent me) {
+				public void mouseMoved(final MouseEvent me) {
 					if (0 != (me.getState() & SWT.CONTROL)) {
 						if (!isDrawUnderline()) {
 							setDrawUnderline(true);
@@ -107,19 +104,20 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		AdapterInterfaceFigure fig = new AdapterInterfaceFigure();
+		final AdapterInterfaceFigure fig = new AdapterInterfaceFigure();
 		fig.addAncestorListener(new AncestorListener() {
 			@Override
-			public void ancestorRemoved(IFigure ancestor) {
+			public void ancestorRemoved(final IFigure ancestor) {
+				// Nothing to be done here
 			}
 
 			@Override
-			public void ancestorMoved(IFigure ancestor) {
+			public void ancestorMoved(final IFigure ancestor) {
 				update();
 			}
 
 			@Override
-			public void ancestorAdded(IFigure ancestor) {
+			public void ancestorAdded(final IFigure ancestor) {
 				update();
 			}
 
@@ -129,29 +127,21 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					return new ChangeNameCommand(getCastedModel(), (String) request.getCellEditor().getValue());
-				}
-				return null;
-			}
-		});
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy());
 		// allow delete of a FB
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request request) {
+	public DragTracker getDragTracker(final Request request) {
 		if (request instanceof SelectionRequest) {
-			SelectionRequest selRequest = (SelectionRequest) request;
+			final SelectionRequest selRequest = (SelectionRequest) request;
 			if ((selRequest.getLastButtonPressed() == 1) && (selRequest.isControlKeyPressed())) {
 				// open the default editor for the adapter file
-				PaletteEntry entry = systemPalette.getAdapterTypeEntry(getAdapter().getType().getName());
+				final PaletteEntry entry = systemPalette.getAdapterTypeEntry(getAdapter().getType().getName());
 				if (null != entry) {
-					IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+					final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 							.getDefaultEditor(entry.getFile().getName());
 					EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 				}

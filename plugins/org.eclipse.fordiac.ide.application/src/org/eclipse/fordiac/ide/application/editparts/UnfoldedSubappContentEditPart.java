@@ -17,6 +17,9 @@
 
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
@@ -31,8 +34,10 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
@@ -49,15 +54,14 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	private final Adapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)) {
 				p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
 				p.x -= 40;
 				getChildren().forEach(ep->((EditPart)ep).refresh());
 			} else {
+				super.notifyChanged(notification);
 				if(getModel().getNetworkElements().size() != childrenNumber) {
-					super.notifyChanged(notification);
 					childrenNumber = getModel().getNetworkElements().size();
 					p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
 					p.x -= 40;
@@ -66,6 +70,13 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 			}
 		}
 	};
+
+	@Override
+	protected List<?> getModelChildren() {
+		final List<Object> children = new ArrayList<>(getNetworkElements());
+		children.addAll(getFBValues());
+		return children;
+	}
 
 	@Override
 	public void setModel(final Object model) {
@@ -87,7 +98,6 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 		if (isActive()) {
 			super.deactivate();
 			((Notifier) getModel()).eAdapters().remove(adapter);
-
 		}
 	}
 
@@ -125,6 +135,10 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 					constraintRect.x += p.x;
 					constraintRect.y += p.y;
 
+					if(child.getModel() instanceof FBNetworkElement) {
+						return new FBNetworkElementSetPositionCommand((FBNetworkElement) child.getModel(), request,
+								(Rectangle) constraint);
+					}
 					return new SetPositionCommand((PositionableElement) child.getModel(), request,
 							(Rectangle) constraint);
 				}
@@ -141,13 +155,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	@Override
 	protected IFigure createFigure() {
 
-		final IFigure figure = new Figure() {
-			@Override
-			public Dimension getPreferredSize(final int wHint, final int hHint) {
-				final Dimension dim = super.getPreferredSize(wHint, hHint);
-				return dim;
-			}
-		};
+		final IFigure figure = new Figure();
 
 		figure.setOpaque(false);
 		figure.setBorder(new MarginBorder(BORDER_INSET));

@@ -95,7 +95,7 @@ public class SubAppItemProvider extends FBNetworkElementItemProvider {
 	 * @generated not */
 	@Override
 	public Object getImage(Object object) {
-		FordiacImage subappImage = (null != ((SubApp) object).getType()) ? FordiacImage.ICON_SUB_APP_TYPE
+		FordiacImage subappImage = (((SubApp) object).isTyped()) ? FordiacImage.ICON_SUB_APP_TYPE
 				: FordiacImage.ICON_SUB_APP;
 		return overlayImage(object, subappImage.getImage());
 	}

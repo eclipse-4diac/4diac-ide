@@ -79,9 +79,7 @@ public final class FordiacMessages extends NLS {
 	public static String TypeName;  // NOSONAR
 	public static String Unmap;  // NOSONAR
 	public static String Unknown;  // NOSONAR
-	public static String Value;  // NOSONAR
 	public static String DefaultValue;  // NOSONAR
-	public static String CurrentValue;  // NOSONAR
 	public static String Variable;  // NOSONAR
 	public static String Vendor;  // NOSONAR
 	public static String Version;  // NOSONAR

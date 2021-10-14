@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -28,22 +28,24 @@ public class StateContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
+		// currently nothing to be done here
 	}
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+		// currently nothing to be done here
 	}
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
+	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof ECState && null != ((ECState) parentElement).getOutTransitions()) {
 			return ((ECState) parentElement).getOutTransitions().toArray();
 		}
-		return null;
+		return new Object[0];
 	}
 
 	@Override
-	public Object getParent(Object element) {
+	public Object getParent(final Object element) {
 		if (element instanceof ECState) {
 			return ((ECState) element).getECC();
 		}
@@ -51,7 +53,7 @@ public class StateContentProvider implements ITreeContentProvider {
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
+	public boolean hasChildren(final Object element) {
 		if (element instanceof ECState) {
 			return ((ECState) element).getOutTransitions().isEmpty();
 		}

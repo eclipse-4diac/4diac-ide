@@ -49,9 +49,9 @@ public enum DeviceManagementInteractorFactory {
 	 * @return the deployment executor
 	 */
 	public IDeviceManagementInteractor getDeviceManagementInteractor(final Device device,
-			final IDeviceManagementCommunicationHandler overrideComHandler, String profile) {
-		String profileToUse = (null != profile) ? profile : device.getProfile();
-		for (IDeviceManagementInteractorProvider idepExec : getDeviceManagementInteractorList()) {
+			final IDeviceManagementCommunicationHandler overrideComHandler, final String profile) {
+		final String profileToUse = (null != profile) ? profile : device.getProfile();
+		for (final IDeviceManagementInteractorProvider idepExec : getDeviceManagementInteractorList()) {
 			if (idepExec.supports(profileToUse)) {
 				return idepExec.createInteractor(device, overrideComHandler);
 			}
@@ -70,7 +70,7 @@ public enum DeviceManagementInteractorFactory {
 	 * @return list of strings with the names of the profiles
 	 */
 	public List<String> getAvailableProfileNames() {
-		return getDeviceManagementInteractorList().stream().map(interactor -> interactor.getProfileName())
+		return getDeviceManagementInteractorList().stream().map(IDeviceManagementInteractorProvider::getProfileName)
 				.collect(Collectors.toList());
 	}
 
@@ -82,17 +82,17 @@ public enum DeviceManagementInteractorFactory {
 	}
 
 	private static List<IDeviceManagementInteractorProvider> loadDeviceManagmentInteractors() {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
 				"devicemanagementinteractor"); //$NON-NLS-1$
-		ArrayList<IDeviceManagementInteractorProvider> interactors = new ArrayList<>(elems.length);
-		for (IConfigurationElement element : elems) {
+		final ArrayList<IDeviceManagementInteractorProvider> interactors = new ArrayList<>(elems.length);
+		for (final IConfigurationElement element : elems) {
 			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
+				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof IDeviceManagementInteractorProvider) {
 					interactors.add((IDeviceManagementInteractorProvider) object);
 				}
-			} catch (CoreException corex) {
+			} catch (final CoreException corex) {
 				Activator.getDefault().logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
 			}
 		}

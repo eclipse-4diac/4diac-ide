@@ -31,16 +31,16 @@ public class MonitorSystemStateProvider extends State {
 
 	@Override
 	public Object getValue() {
-		IWorkbench wb = PlatformUI.getWorkbench();
+		final IWorkbench wb = PlatformUI.getWorkbench();
 		if (null != wb) {
-			IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+			final IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
 			if (null != win) {
-				IWorkbenchPage page = win.getActivePage();
+				final IWorkbenchPage page = win.getActivePage();
 				if (null != page) {
-					ISelection selection = page.getSelection();
+					final ISelection selection = page.getSelection();
 					if ((selection instanceof TreeSelection)
-							&& isSystemFileSelected(((TreeSelection) selection).getFirstElement())) {
-						AutomationSystem system = SystemManager.INSTANCE
+							&& SystemManager.isSystemFile(((TreeSelection) selection).getFirstElement())) {
+						final AutomationSystem system = SystemManager.INSTANCE
 								.getSystem((IFile) ((TreeSelection) selection).getFirstElement());
 						return Boolean.valueOf(MonitoringManager.getInstance().isSystemMonitored(system));
 					}
@@ -48,17 +48,6 @@ public class MonitorSystemStateProvider extends State {
 			}
 		}
 		return Boolean.FALSE;
-	}
-
-	private boolean isSystemFileSelected(Object selection) {
-		if (selection instanceof IFile) {
-			return SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase(((IFile) selection).getFileExtension()) ? true
-					: false;
-		}
-		return false;
-	}
-
-	public MonitorSystemStateProvider() {
 	}
 
 }

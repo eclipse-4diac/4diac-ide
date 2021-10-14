@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -36,19 +36,19 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.Subrange} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class SubrangeItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public SubrangeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
 	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
@@ -62,7 +62,7 @@ public class SubrangeItemProvider extends ItemProviderAdapter implements IEditin
 	}
 
 	/** This adds a property descriptor for the Lower Limit feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected void addLowerLimitPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
@@ -75,7 +75,7 @@ public class SubrangeItemProvider extends ItemProviderAdapter implements IEditin
 	}
 
 	/** This adds a property descriptor for the Upper Limit feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected void addUpperLimitPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
@@ -88,7 +88,7 @@ public class SubrangeItemProvider extends ItemProviderAdapter implements IEditin
 	}
 
 	/** This returns Subrange.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object getImage(Object object) {
@@ -96,7 +96,7 @@ public class SubrangeItemProvider extends ItemProviderAdapter implements IEditin
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getText(Object object) {
@@ -107,7 +107,7 @@ public class SubrangeItemProvider extends ItemProviderAdapter implements IEditin
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
 	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
@@ -126,7 +126,7 @@ public class SubrangeItemProvider extends ItemProviderAdapter implements IEditin
 
 	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
 	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
@@ -134,7 +134,7 @@ public class SubrangeItemProvider extends ItemProviderAdapter implements IEditin
 	}
 
 	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ResourceLocator getResourceLocator() {

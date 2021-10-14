@@ -48,12 +48,12 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
-	private TypeLibrary typeLib;
+	private final TypeLibrary typeLib;
 	private Label comment;
 
 	private DiagramFontChangeListener fontChangeListener;
 
-	public TypeEditPart(TypeLibrary typeLib) {
+	public TypeEditPart(final TypeLibrary typeLib) {
 		super();
 		this.typeLib = typeLib;
 	}
@@ -87,7 +87,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		public void setText(String s) {
 			if (getCastedModel() instanceof VarDeclaration) {
 				// if is array append array size
-				VarDeclaration varDec = (VarDeclaration) getCastedModel();
+				final VarDeclaration varDec = (VarDeclaration) getCastedModel();
 				if (varDec.isArray()) {
 					s = s + "[" + varDec.getArraySize() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
@@ -136,22 +136,22 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	@Override
 	protected void createEditPolicies() {
 
-		ModifiedNonResizeableEditPolicy handle = new ModifiedNonResizeableEditPolicy();
+		final ModifiedNonResizeableEditPolicy handle = new ModifiedNonResizeableEditPolicy();
 		handle.setDragAllowed(false);
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, handle);
 
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
 			@Override
-			protected void showCurrentEditValue(DirectEditRequest request) {
+			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// nothing to do
 			}
 
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					int index = (Integer) request.getCellEditor().getValue();
+					final int index = ((Integer) request.getCellEditor().getValue()).intValue();
 					if (index > 0 && index < ((ComboDirectEditManager) getManager()).getComboBox().getItemCount()) {
-						String typeName = ((ComboDirectEditManager) getManager()).getComboBox().getItem(index);
+						final String typeName = ((ComboDirectEditManager) getManager()).getComboBox().getItem(index);
 						ChangeDataTypeCommand cmd;
 						if (getCastedModel() instanceof AdapterDeclaration) {
 							// TODO change to own command in order to update cfb internals
@@ -195,12 +195,12 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	@Override
 	public void performDirectEdit() {
 		// First update the list of available types
-		ArrayList<String> dataTypeNames = new ArrayList<>();
+		final ArrayList<String> dataTypeNames = new ArrayList<>();
 		if (getCastedModel() instanceof AdapterDeclaration) {
 			typeLib.getBlockTypeLib().getAdapterTypesSorted()
-					.forEach(adapterType -> dataTypeNames.add(adapterType.getLabel()));
+			.forEach(adapterType -> dataTypeNames.add(adapterType.getLabel()));
 		} else {
-			for (DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted()) {
+			for (final DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted()) {
 				dataTypeNames.add(dataType.getName());
 			}
 		}

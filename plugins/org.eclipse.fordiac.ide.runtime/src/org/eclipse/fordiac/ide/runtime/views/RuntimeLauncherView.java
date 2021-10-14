@@ -177,7 +177,7 @@ public class RuntimeLauncherView {
 		configuredRuntimeComposite.setLayout(new RowLayout());
 		configuredRuntimeComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
-		final Label configuredRuntimeTextLabel = toolkit.createLabel(configuredRuntimeComposite,
+		toolkit.createLabel(configuredRuntimeComposite,
 				"Currently configured runtime: ", SWT.NONE);
 		final Link configuredRuntimePathLabel = new Link(configuredRuntimeComposite, SWT.NONE);
 		toolkit.adapt(configuredRuntimePathLabel, false, false);
@@ -195,14 +195,12 @@ public class RuntimeLauncherView {
 			// needed to update label text and size:
 		});
 
-		launcher.addPathPreferenceChangeListener(ev -> {
-			Display.getDefault().asyncExec(() -> {
-				if (!configuredRuntimeComposite.isDisposed()) {
-					setRuntimePathLink(launcher, configuredRuntimePathLabel);
-					configuredRuntimeComposite.getParent().layout();
-				}
-			});
-		});
+		launcher.addPathPreferenceChangeListener(ev -> Display.getDefault().asyncExec(() -> {
+			if (!configuredRuntimeComposite.isDisposed()) {
+				setRuntimePathLink(launcher, configuredRuntimePathLabel);
+				configuredRuntimeComposite.getParent().layout();
+			}
+		}));
 	}
 
 	private static void setRuntimePathLink(final IRuntimeLauncher launcher, final Link configuredRuntimePathLabel) {

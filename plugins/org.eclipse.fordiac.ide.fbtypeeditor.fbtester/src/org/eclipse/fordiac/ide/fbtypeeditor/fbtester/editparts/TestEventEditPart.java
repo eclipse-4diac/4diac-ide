@@ -15,13 +15,12 @@ package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 import org.eclipse.draw2d.Button;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
 
 /**
  * The Class TestEventEditPart.
  */
-public class TestEventEditPart extends TestEditPart implements SpecificLayerEditPart {
+public class TestEventEditPart extends TestEditPart {
 
 	@Override
 	public void activate() {
@@ -39,6 +38,7 @@ public class TestEventEditPart extends TestEditPart implements SpecificLayerEdit
 
 	@Override
 	protected void createEditPolicies() {
+		// currently nothing to be done here
 	}
 
 	@Override

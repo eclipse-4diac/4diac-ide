@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Error Messages (Incubation)
+Bundle-Name: Error Messages
 Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.ui.errormessages
 Bundle-Activator: org.eclipse.fordiac.ide.ui.errormessages.Activator

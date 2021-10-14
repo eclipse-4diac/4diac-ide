@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.junit.jupiter.params.provider.Arguments;
@@ -28,15 +29,16 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 
 	// create a state description that fits our purpose
 	public static class State extends CommandTestBase.StateBase {
-		private final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		private final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		public State() {
 			super();
-			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			variable.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			variable.setType(IecTypes.ElementaryTypes.STRING);
 		}
 
 		public VarDeclaration getVar() {
-			return var;
+			return variable;
 		}
 
 		@Override
@@ -45,31 +47,30 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 		}
 	}
 
-	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
+			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
 				CommandTestBase::defaultRedoCommand);
 	}
 
-	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+	protected static Collection<Arguments> createCommands(final List<ExecutionDescription<?>> executionDescriptions) {
 		final Collection<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				(StateVerifier<State>) ValueCommandTestBase::verifyDefaultInitialValues, //
 				executionDescriptions //
-		));
+				));
 
 		commands.addAll(describeCommand("Start from set values", // //$NON-NLS-1$
-				() -> setInitialValues(), //
-				(State state, State oldState, TestFunction t) -> verifySetInitialValues(state, oldState, t), //
+				ValueCommandTestBase::setInitialValues, //
+				(StateVerifier<State>) ValueCommandTestBase::verifySetInitialValues, //
 				executionDescriptions //
-		));
+				));
 		return commands;
 	}
 
-	@SuppressWarnings("unused")
-	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
+	protected static void verifyDefaultInitialValues(final State state, final State oldState, final TestFunction t) {
 		final VarDeclaration varDec = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDec.setValue(LibraryElementFactory.eINSTANCE.createValue());
 
@@ -84,8 +85,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 		return state;
 	}
 
-	@SuppressWarnings("unused")
-	protected static void verifySetInitialValues(State state, State oldState, TestFunction t) {
+	protected static void verifySetInitialValues(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getVar().getValue().getValue(), SET_VALUE);
 
 	}

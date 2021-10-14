@@ -81,7 +81,11 @@ public final class Messages extends NLS {
 
 	public static String InterfaceElementSection_InConnections;
 
+	public static String InterfaceElementSection_Instance;
+
 	public static String InterfaceElementSection_OutConnections;
+
+	public static String InterfaceElementSection_InterfaceElement;
 
 	public static String ListFBCreateCommand_FBTypeNotFound;
 
@@ -91,6 +95,10 @@ public final class Messages extends NLS {
 	public static String MapToContributionItem_No_Device;
 
 	public static String MapToContributionItem_No_FB_Or_SubApp_Selected;
+
+	public static String MonitoringEditPart_Not_Available;
+
+	public static String MonitoringEditPart_Forced_ValueDisplay;
 
 	public static String NewInstanceCellEditor_SearchForType;
 
@@ -108,12 +116,6 @@ public final class Messages extends NLS {
 	public static String OpenSubApplicationEditorAction_Name;
 
 	public static String PasteEditPartsAction_Text;
-
-	public static String ReconnectDataConnectionCommand_LABEL;
-
-	public static String ReconnectEventConnectionCommand_LABEL;
-
-	public static String ReconnectAdapterConnectionCommand_LABEL;
 
 	public static String SaveAsStructWizard_WizardPageName;
 
@@ -143,6 +145,10 @@ public final class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_WizardOverrideMessage;
 
+	public static String SaveAsSubApplicationTypeAction_TemplateMissingErrorTitle;
+
+	public static String SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage;
+
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
 
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_NAME;
@@ -159,8 +165,6 @@ public final class Messages extends NLS {
 	public static String UIFBNetworkContextMenuProvider_InsertFB;
 
 	public static String UIFBNetworkContextMenuProvider_ChangeType;
-
-	public static String UntypeSubappCommand_Label;
 
 	public static String UpdateFBTypeAction_Text;
 

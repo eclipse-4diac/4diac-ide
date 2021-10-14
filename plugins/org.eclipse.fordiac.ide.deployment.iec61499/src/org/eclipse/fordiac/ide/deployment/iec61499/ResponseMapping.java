@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,13 +21,13 @@ import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 
 public class ResponseMapping {
-	private Map<String, Object> loadOptions;
+	private final Map<String, Object> loadOptions;
 
 	public ResponseMapping() {
-		loadOptions = new HashMap<String, Object>();
+		loadOptions = new HashMap<>();
 		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
 
-		XMLMapImpl map = new XMLMapImpl();
+		final XMLMapImpl map = new XMLMapImpl();
 		map.setNoNamespacePackage(DevResponsePackage.eINSTANCE);
 
 		// mappings do not seem to make any difference this is why they have been

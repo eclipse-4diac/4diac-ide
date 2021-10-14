@@ -12,7 +12,7 @@
       ecorePackage="palette.ecore#/">
     <genDataTypes ecoreDataType="palette.ecore#//IFile"/>
     <genDataTypes ecoreDataType="palette.ecore#//IProject"/>
-    <genDataTypes ecoreDataType="palette.ecore#//TypeImporter"/>
+    <genDataTypes ecoreDataType="palette.ecore#//CommonElementImporter"/>
     <genDataTypes ecoreDataType="palette.ecore#//XMLStreamException"/>
     <genDataTypes ecoreDataType="palette.ecore#//CoreException"/>
     <genDataTypes ecoreDataType="palette.ecore#//TypeLibrary"/>
@@ -88,7 +88,7 @@
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getProjectRelativeTypePath"
           body="return getFile().getProjectRelativePath().toOSString();"/>
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/loadType" body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.loadType(this);"/>
-      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeImporter"/>
+      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getImporter"/>
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeLibrary"
           body="return getPalette().getTypeLibrary();"/>
     </genClasses>
@@ -99,7 +99,7 @@
           body="if(type instanceof AdapterType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;% org.eclipse.core.runtime.Status %> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no AdapterType as type entry for AdapterTypePaletteEntry&quot;);  //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/setType/type"/>
       </genOperations>
-      <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter"
+      <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getImporter"
           body="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//DataTypePaletteEntry">
@@ -109,7 +109,7 @@
           body="if (type instanceof AnyDerivedType) {&#xA;&#x9;super.setType(type);&#xA;} else {&#xA;&#x9;super.setType(null);&#xA;&#x9;if (null != type) {&#xA;&#x9;&#x9;Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,&#xA;&#x9;&#x9;&#x9;&#x9;&quot;tried to set no AnyDerivedType as type entry for DataTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//DataTypePaletteEntry/setType/type"/>
       </genOperations>
-      <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getTypeImporter"
+      <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getImporter"
           body="return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//DeviceTypePaletteEntry">
@@ -119,7 +119,7 @@
           body="if(type instanceof DeviceType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no DeviceType as type entry for DeviceTypePaletteEntry&quot;);  //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//DeviceTypePaletteEntry/setType/type"/>
       </genOperations>
-      <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getTypeImporter"
+      <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getImporter"
           body="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//FBTypePaletteEntry">
@@ -128,7 +128,7 @@
       <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/setType" body="if(type instanceof FBType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no FBType as type entry for FBTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//FBTypePaletteEntry/setType/type"/>
       </genOperations>
-      <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getTypeImporter"
+      <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getImporter"
           body="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//ResourceTypeEntry">
@@ -137,7 +137,7 @@
       <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/setType" body="if(type instanceof ResourceType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no ResourceType as type entry for ResourceTypeEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//ResourceTypeEntry/setType/type"/>
       </genOperations>
-      <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getTypeImporter"
+      <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getImporter"
           body="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SegmentTypePaletteEntry">
@@ -147,7 +147,7 @@
           body="if(type instanceof SegmentType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SegmentType as type entry for SegmentTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//SegmentTypePaletteEntry/setType/type"/>
       </genOperations>
-      <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getTypeImporter"
+      <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getImporter"
           body="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SubApplicationTypePaletteEntry">
@@ -157,8 +157,18 @@
           body="if(type instanceof SubAppType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//SubApplicationTypePaletteEntry/setType/type"/>
       </genOperations>
-      <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getTypeImporter"
+      <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getImporter"
           body="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(getFile());"/>
+    </genClasses>
+    <genClasses ecoreClass="palette.ecore#//SystemPaletteEntry">
+      <genOperations ecoreOperation="palette.ecore#//SystemPaletteEntry/getImporter"
+          body="return new org.eclipse.fordiac.ide.model.dataimport.SystemImporter(getFile());"/>
+      <genOperations ecoreOperation="palette.ecore#//SystemPaletteEntry/getSystem"
+          body="LibraryElement type = getType();&#xA;if(type instanceof AutomationSystem){&#xA;   return (AutomationSystem)type;&#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="palette.ecore#//SystemPaletteEntry/setSystem"
+          body="if(system instanceof AutomationSystem){&#xA;&#x9;super.setType(system);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no AutomationSystem as type entry for SystemPaletteEntry&quot;);//$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
+        <genParameters ecoreParameter="palette.ecore#//SystemPaletteEntry/setSystem/system"/>
+      </genOperations>
     </genClasses>
   </genPackages>
   <genPackages prefix="LibraryElement" basePackage="org.eclipse.fordiac.ide.model"
@@ -233,6 +243,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx2"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/needsValidation"/>
+      <genOperations ecoreOperation="lib.ecore#//ConnectionRoutingData/is1SegementData"
+          body="return getDx1() == 0;"/>
+      <genOperations ecoreOperation="lib.ecore#//ConnectionRoutingData/is3SegementData"
+          body="return getDx1() != 0 &amp;&amp; getDy() == 0;"/>
+      <genOperations ecoreOperation="lib.ecore#//ConnectionRoutingData/is5SegementData"
+          body="return getDx1() != 0 &amp;&amp; getDy() != 0;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Device">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Device/resource"/>
@@ -285,8 +302,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FB">
-      <genOperations ecoreOperation="lib.ecore#//FB/isResourceFB" body="return org.eclipse.fordiac.ide.model.Annotations.isResourceFB(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FB/isResourceTypeFB" body="return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/isResourceFB" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceFB(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/isResourceTypeFB" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceTypeFB(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof FBType){&#xA;   return (FBType) type; &#xA;}&#xA;return null;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetworkElement">
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//FBNetworkElement/interface"/>
@@ -313,7 +331,9 @@
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
           ecoreFeature="ecore:EReference lib.ecore#//SubApp/subAppNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SubAppType){&#xD;&#xA;   return (SubAppType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
-      <genOperations ecoreOperation="lib.ecore#//SubApp/isUnfolded" body="Attribute attr = this.getAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/isUnfolded" body="org.eclipse.fordiac.ide.model.libraryElement.Attribute attr = this.getAttribute(org.eclipse.fordiac.ide.model.LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$&#xA;"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/isTyped" body="return (getType() != null);"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/loadSubAppNetwork" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
@@ -335,6 +355,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/eventOutputs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/inputVars"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/outputVars"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/errorMarker"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllInterfaceElements"
           body="return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getEvent" body="return org.eclipse.fordiac.ide.model.Annotations.getEvent(this, name);">
@@ -396,10 +417,13 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceSequence">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceSequence/serviceTransaction"/>
+      <genOperations ecoreOperation="lib.ecore#//ServiceSequence/getService" body="return (Service) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/inputPrimitive"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/outputPrimitive"/>
+      <genOperations ecoreOperation="lib.ecore#//ServiceTransaction/getServiceSequence"
+          body="return (ServiceSequence) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceInterfaceFBType"/>
     <genClasses ecoreClass="lib.ecore#//STAlgorithm"/>
@@ -517,7 +541,11 @@
       <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterDestination"
           body="return org.eclipse.fordiac.ide.model.Annotations.getAdapterDestination(this);"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ServiceInterface"/>
+    <genClasses ecoreClass="lib.ecore#//ServiceInterface">
+      <genOperations ecoreOperation="lib.ecore#//ServiceInterface/getService" body="return (Service) this.eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//ServiceInterface/isLeftInterface"
+          body="&#x9;&#x9;final ServiceInterface leftInterface = getService().getLeftInterface();"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//IInterfaceElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//IInterfaceElement/isInput"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/inputConnections"/>
@@ -562,11 +590,13 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterEvent/adapterDeclaration"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterEvent/getName" body="if (getAdapterDeclaration() == null) {&#xA;&#x9;return super.getName();&#xA;}&#xA;return getAdapterDeclaration().getName() + &quot;.&quot; + super.getName(); //$NON-NLS-1$&#xA;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Service">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/rightInterface"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/leftInterface"/>
       <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/serviceSequence"/>
+      <genOperations ecoreOperation="lib.ecore#//Service/getFBType" body="return (FBType) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//TypedConfigureableObject">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TypedConfigureableObject/paletteEntry"/>
@@ -587,6 +617,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/event"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/parameters"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/interface"/>
+      <genOperations ecoreOperation="lib.ecore#//Primitive/getServiceTransaction"
+          body="return (ServiceTransaction) this.eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//Primitive/getService" body="return getServiceTransaction().getServiceSequence().getService();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//PositionableElement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//PositionableElement/position"/>
@@ -627,6 +660,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//BaseFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalVars"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalFbs"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
@@ -641,6 +675,22 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStart"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStop"/>
       <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySize" body="return arrayStop-arrayStart+1;"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerFBNElement/repairedElement"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ErrorMarkerInterface">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/repairedEndpoint"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//CFBInstance">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CFBInstance/cfbNetwork"/>
+      <genOperations ecoreOperation="lib.ecore#//CFBInstance/loadCFBNetwork" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.loadCFBNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//CFBInstance/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof CompositeFBType){&#xA;   return (CompositeFBType) type; &#xA;}&#xA;return null;"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ErrorMarkerRef">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/fileMarkerId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/errorMessage"/>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerRef/hasError" body="return getFileMarkerId() != 0;"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
@@ -709,7 +759,11 @@
     <genClasses ecoreClass="data.ecore#//DerivedType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference data.ecore#//DerivedType/baseType"/>
     </genClasses>
-    <genClasses ecoreClass="data.ecore#//EventType"/>
+    <genClasses ecoreClass="data.ecore#//EventType">
+      <genOperations ecoreOperation="data.ecore#//EventType/isCompatibleWith" body="return (other instanceof EventType);">
+        <genParameters ecoreParameter="data.ecore#//EventType/isCompatibleWith/other"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyType">
       <genOperations ecoreOperation="data.ecore#//AnyType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCompatibleWith(other);">
         <genParameters ecoreParameter="data.ecore#//AnyType/isCompatibleWith/other"/>
@@ -903,5 +957,6 @@
         <genParameters ecoreParameter="data.ecore#//LtodType/isCompatibleWith/other"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="data.ecore#//LdateType"/>
   </genPackages>
 </genmodel:GenModel>

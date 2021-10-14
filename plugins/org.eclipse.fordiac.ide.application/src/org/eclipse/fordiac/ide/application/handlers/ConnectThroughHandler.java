@@ -35,14 +35,14 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class ConnectThroughHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 
-		List<IInterfaceElement> ies = checkSelection(selection);
+		final List<IInterfaceElement> ies = checkSelection(selection);
 
 		if (!ies.isEmpty()) {
-			ConnectThroughCommand cmd = new ConnectThroughCommand(ies.get(0), ies.get(1));
+			final ConnectThroughCommand cmd = new ConnectThroughCommand(ies.get(0), ies.get(1));
 			if (cmd.canExecute()) {
 				editor.getAdapter(CommandStack.class).execute(cmd);
 			}
@@ -51,18 +51,19 @@ public class ConnectThroughHandler extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
-		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
+	public void setEnabled(final Object evaluationContext) {
+		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		setBaseEnabled(!checkSelection((ISelection) selection).isEmpty());
 	}
 
-	private static List<IInterfaceElement> checkSelection(ISelection selection) {
+	private static List<IInterfaceElement> checkSelection(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structSel = (IStructuredSelection) selection;
+			final IStructuredSelection structSel = (IStructuredSelection) selection;
 			@SuppressWarnings("unchecked")
+			final
 			List<IInterfaceElement> ieList = (List<IInterfaceElement>) structSel.toList().stream()
-					.filter(val -> (val instanceof InterfaceEditPartForFBNetwork))
-					.map(val -> ((InterfaceEditPartForFBNetwork) val).getModel()).collect(Collectors.toList());
+			.filter(InterfaceEditPartForFBNetwork.class::isInstance)
+			.map(val -> ((InterfaceEditPartForFBNetwork) val).getModel()).collect(Collectors.toList());
 
 			ieList.sort((arg0, arg1) -> {
 				if (arg0.isIsInput() && !arg1.isIsInput()) {
@@ -80,12 +81,12 @@ public class ConnectThroughHandler extends AbstractHandler {
 		return Collections.emptyList();
 	}
 
-	private static boolean checkSelectedIEs(IInterfaceElement element1, IInterfaceElement element2) {
+	private static boolean checkSelectedIEs(final IInterfaceElement element1, final IInterfaceElement element2) {
 		if ((!element2.isIsInput()) && (element1.getClass().equals(element2.getClass()))) {
 			// the second element is an output, both are of the same type
 			if (!element1.getInputConnections().isEmpty() && !element2.getOutputConnections().isEmpty()) {
 				if (element1 instanceof VarDeclaration) {
-					return LinkConstraints.typeCheck((VarDeclaration) element1, (VarDeclaration) element2);
+					return LinkConstraints.typeCheck(element1, element2);
 				}
 				return true;
 			}

@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 TU Wien ACIN
- * 
+ *               2021 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Melanie Winter - clean up, implemented undo and redo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
@@ -19,44 +21,50 @@ import org.eclipse.gef.commands.Command;
 
 public class MoveOutputPrimitiveToOtherTransactionCommand extends Command {
 
-	private ServiceTransaction srcTransaction;
-	private ServiceTransaction dstTransaction;
-	private OutputPrimitive element;
-	private OutputPrimitive refElement;
+	private final ServiceTransaction srcTransaction;
+	private final ServiceTransaction dstTransaction;
+	private final OutputPrimitive element;
+	private final OutputPrimitive refElement;
+	private int oldIndex;
 
-	public MoveOutputPrimitiveToOtherTransactionCommand(ServiceTransaction srcTransaction,
-			ServiceTransaction dstTransaction, OutputPrimitive element, OutputPrimitive refElement) {
+	public MoveOutputPrimitiveToOtherTransactionCommand(final ServiceTransaction srcTransaction,
+			final ServiceTransaction dstTransaction, final OutputPrimitive element, final OutputPrimitive refElement) {
 		this.srcTransaction = srcTransaction;
 		this.dstTransaction = dstTransaction;
 		this.element = element;
 		this.refElement = refElement;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#canExecute()
-	 */
 	@Override
 	public boolean canExecute() {
 		return ((srcTransaction != null) && (dstTransaction != null) && (element != null));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	@Override
 	public void execute() {
+		oldIndex = srcTransaction.getOutputPrimitive().indexOf(element);
+		move();
+	}
+
+	@Override
+	public void undo() {
+		dstTransaction.getOutputPrimitive().remove(element);
+		srcTransaction.getOutputPrimitive().add(oldIndex, element);
+	}
+
+	@Override
+	public void redo() {
+		move();
+	}
+
+	private void move() {
 		srcTransaction.getOutputPrimitive().remove(element);
 		if (null == refElement) {
 			dstTransaction.getOutputPrimitive().add(element);
 		} else {
-			int index = dstTransaction.getOutputPrimitive().indexOf(refElement);
+			final int index = dstTransaction.getOutputPrimitive().indexOf(refElement);
 			dstTransaction.getOutputPrimitive().add(index, element);
 		}
-		super.execute();
 	}
 
 }

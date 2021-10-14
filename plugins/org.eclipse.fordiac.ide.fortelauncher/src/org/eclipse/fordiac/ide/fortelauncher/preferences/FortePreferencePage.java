@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2016 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -55,11 +55,12 @@ public class FortePreferencePage extends FieldEditorPreferencePage implements IW
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
+		// currently nothing to be done here
 	}
 
 }

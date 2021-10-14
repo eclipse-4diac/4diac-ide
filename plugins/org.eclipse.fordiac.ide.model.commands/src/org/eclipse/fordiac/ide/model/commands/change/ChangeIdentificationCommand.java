@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -32,11 +32,11 @@ public abstract class ChangeIdentificationCommand extends Command {
 
 	/**
 	 * Instantiates a new change comment command.
-	 * 
+	 *
 	 * @param type    which identification information is about to change
 	 * @param comment the comment
 	 */
-	public ChangeIdentificationCommand(LibraryElement type) {
+	protected ChangeIdentificationCommand(final LibraryElement type) {
 		super();
 		if (null == type.getIdentification()) {
 			type.setIdentification(LibraryElementFactory.eINSTANCE.createIdentification());

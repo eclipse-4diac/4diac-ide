@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2015 Luka Lednicki, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -37,35 +37,35 @@ public class GenerateCommAction implements IObjectActionDelegate {
 	}
 
 	@Override
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// currently nothing todo here
+	public void setActivePart(final IAction action, final IWorkbenchPart targetPart) {
+		// currently nothing to do here
 	}
 
 	@Override
-	public void run(IAction action) {
+	public void run(final IAction action) {
 		if (selectedApplication != null) {
-			Palette palette = selectedApplication.getAutomationSystem().getPalette();
-			MediaSpecificGeneratorFactory specificGeneratorFactory = new MediaSpecificGeneratorFactory();
-			EthernetPubSubGenerator ethernetPubSubGenerator = new EthernetPubSubGenerator(palette);
+			final Palette palette = selectedApplication.getAutomationSystem().getPalette();
+			final MediaSpecificGeneratorFactory specificGeneratorFactory = new MediaSpecificGeneratorFactory();
+			final EthernetPubSubGenerator ethernetPubSubGenerator = new EthernetPubSubGenerator(palette);
 			ethernetPubSubGenerator.reset(61550);
 			specificGeneratorFactory.addGenerator(ethernetPubSubGenerator);
 			specificGeneratorFactory.addGenerator(new CanPubSubGenerator(palette));
-			Analyzer analyzer = new Analyzer();
-			CommunicationModel model = analyzer.analyze(selectedApplication);
+			final Analyzer analyzer = new Analyzer();
+			final CommunicationModel model = analyzer.analyze(selectedApplication);
 			ProtocolSelector.doAutomatedProtocolSelection(model);
-			CommFBGenerator generator = new CommFBGenerator(specificGeneratorFactory);
-			generator.removeGeneratedElements(selectedApplication);
+			CommFBGenerator.removeGeneratedElements(selectedApplication);
+			final CommFBGenerator generator = new CommFBGenerator(specificGeneratorFactory);
 			generator.setTransferedData(TransferedData.EXACT);
 			generator.generate(model);
 		}
 	}
 
 	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
+	public void selectionChanged(final IAction action, final ISelection selection) {
 		selectedApplication = null;
 		if (selection instanceof StructuredSelection) {
-			StructuredSelection structuredSelection = (StructuredSelection) selection;
-			Object selectedObject = structuredSelection.getFirstElement();
+			final StructuredSelection structuredSelection = (StructuredSelection) selection;
+			final Object selectedObject = structuredSelection.getFirstElement();
 			if (selectedObject instanceof Application) {
 				selectedApplication = (Application) selectedObject;
 			}

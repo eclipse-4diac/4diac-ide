@@ -25,9 +25,9 @@ public class ValueEditPartChangeEditPolicy extends DirectEditPolicy {
 
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
-		VarDeclaration var = getVarDecl();
-		if (null != var) {
-			return new ChangeValueCommand(var, (String) request.getCellEditor().getValue());
+		VarDeclaration variable = getVarDecl();
+		if (null != variable) {
+			return new ChangeValueCommand(variable, (String) request.getCellEditor().getValue());
 		}
 		return null;
 	}

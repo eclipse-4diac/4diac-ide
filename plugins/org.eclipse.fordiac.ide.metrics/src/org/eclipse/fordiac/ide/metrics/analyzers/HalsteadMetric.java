@@ -11,7 +11,7 @@
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed analysis result to key value pairs
- *   Lisa Sonnleithner - Adjustments to change calculation method to average 
+ *   Lisa Sonnleithner - Adjustments to change calculation method to average
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
@@ -24,41 +24,33 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
-	
-	@Override
-	public void calculateMetrics(INamedElement element) {
-
-		super.calculateMetrics(element);
-
-	}
 
 	@Override
-	protected HalsteadData analyzeBFB(BasicFBType basicFBType) {
-		HalsteadData data = new HalsteadData();
-		ECC ecc = basicFBType.getECC();
-		for (ECTransition trans : ecc.getECTransition()) {
+	protected HalsteadData analyzeBFB(final BasicFBType basicFBType) {
+		final HalsteadData data = new HalsteadData();
+		final ECC ecc = basicFBType.getECC();
+		for (final ECTransition trans : ecc.getECTransition()) {
 			if (!data.transCond.contains(trans.getConditionExpression())) {
 				data.uniqueTrans += 1;
 			}
 			data.transCond.add(trans.getConditionExpression());
 		}
 
-		for (ECState state : ecc.getECState()) {
-			for (ECAction action : state.getECAction()) {
+		for (final ECState state : ecc.getECState()) {
+			for (final ECAction action : state.getECAction()) {
 				analyzeAction(action, data);
 			}
 		}
-		
+
 		data.uniqueOperands += data.uniqueTrans;
 		data.uniqueOperator += data.uniqueTrans;
 		data.operators +=data. actions.size() + data.transCond.size();
 		data.operands += (data.event.size() + data.alg.size() + data.transCond.size());
 
-		for (int i = 0; i < data.opCount.length; i++) {
-			if (data.opCount[i] >= 1.0) {
+		for (final int element : data.opCount) {
+			if (element >= 1.0) {
 				data.uniqueOperatorST++;
 			}
 		}
@@ -69,7 +61,7 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 		return data;
 	}
 
-	private void analyzeAction(ECAction action, HalsteadData data) {
+	private static void analyzeAction(final ECAction action, final HalsteadData data) {
 		if (!data.actions.contains("Action " + data.actionCount)) {
 			data.uniqueOperator += 1;
 		}
@@ -88,14 +80,14 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 		data.actionCount++;
 	}
 
-	private void analyzeAlgorithm(Algorithm algorithm, HalsteadData data) {
+	private static void analyzeAlgorithm(final Algorithm algorithm, final HalsteadData data) {
 		if (!data.alg.contains(algorithm.getName())) {
 			data.uniqueOperands += 1;
 		}
 		data.alg.add(algorithm.getName());
 		String algo = algorithm.toString();
 		int count = 0;
-		for (String op : HalsteadData.ST_OPERATORS) {
+		for (final String op : HalsteadData.ST_OPERATORS) {
 			int lastIndex = 0;
 			while (-1 != lastIndex) {
 				lastIndex = algo.indexOf(op, lastIndex);
@@ -103,37 +95,37 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 					data.operatorST++;
 					data.opCount[count] += 1;
 					data.operandST += HalsteadData.ST_OPERANDS_WEIGHT[count];
-					String sub1 = algo.substring(0, lastIndex);
-					String sub2 = algo.substring(lastIndex + op.length(), algo.length());
+					final String sub1 = algo.substring(0, lastIndex);
+					final String sub2 = algo.substring(lastIndex + op.length(), algo.length());
 					algo = sub1.concat(sub2);
 				}
 			}
 			count++;
 		}
 	}
-	
 
-	
+
+
 
 	@Override
 	public List<MetricResult> getResults() {
 
-		List<MetricResult> results = new ArrayList<>();
-		
-		HalsteadData hData= (HalsteadData) this.data;
-		
+		final List<MetricResult> results = new ArrayList<>();
+
+		final HalsteadData hData= (HalsteadData) this.data;
+
 		results.add(new MetricResult("Distinct operators n1 ",hData.n1));
 		results.add(new MetricResult("Distinct operands n2", hData.n2));
 		results.add(new MetricResult("Total number of operators N1", hData.n1Major));
 		results.add(new MetricResult("Total number of operands N2", hData.n2Major));
-		
-		double nMAjor = hData.n1Major + hData.n2Major;
-		double n = hData.n1 + hData.n2;
-		double nHat = (hData.n1 * Math.log(hData.n1) / Math.log(2) + hData.n2 * Math.log(hData.n2) / Math.log(2));
-		double pr = nHat / nMAjor;
-		double v = nMAjor * Math.log(n) / Math.log(2);
-		double d = hData.n1 / 2 * hData.n2Major / hData.n2;
-		double e = d * v;
+
+		final double nMAjor = hData.n1Major + hData.n2Major;
+		final double n = hData.n1 + hData.n2;
+		final double nHat = (hData.n1 * Math.log(hData.n1) / Math.log(2) + hData.n2 * Math.log(hData.n2) / Math.log(2));
+		final double pr = nHat / nMAjor;
+		final double v = nMAjor * Math.log(n) / Math.log(2);
+		final double d = hData.n1 / 2 * hData.n2Major / hData.n2;
+		final double e = d * v;
 
 		results.add(new MetricResult("Program Length N", nMAjor));
 		results.add(new MetricResult("Program vocabulary n", n));
@@ -148,7 +140,7 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 
 	@Override
 	protected MetricData createDataType() {
-	
+
 		return new HalsteadData();
 	}
 

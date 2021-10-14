@@ -23,6 +23,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
@@ -30,6 +31,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteFBNElementEditPolicy;
@@ -70,17 +72,45 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Point;
 
-/**
- * This class implements an EditPart for a FunctionBlock.
- */
+/** This class implements an EditPart for a FunctionBlock. */
 public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart {
 
 	private Device referencedDevice;
 
 	private DiagramFontChangeListener fontChangeListener;
 
-	public AbstractFBNElementEditPart() {
+	protected AbstractFBNElementEditPart() {
 		super();
+	}
+
+	private Adapter interfaceAdapter;
+
+	private Adapter getInterfaceAdapter() {
+		if (null == interfaceAdapter) {
+			interfaceAdapter = createInterfaceAdapter();
+			Assert.isNotNull(interfaceAdapter);
+		}
+		return interfaceAdapter;
+	}
+
+	protected Adapter createInterfaceAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				switch (notification.getEventType()) {
+				case Notification.ADD:
+				case Notification.ADD_MANY:
+				case Notification.MOVE:
+				case Notification.REMOVE:
+				case Notification.REMOVE_MANY:
+					refreshChildren();
+					break;
+				default:
+					break;
+				}
+			}
+		};
 	}
 
 	@Override
@@ -90,7 +120,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private final Adapter colorChangeListener = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()) {
 				backgroundColorChanged(getFigure());
 			}
@@ -131,6 +161,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		super.activate();
 		updateDeviceListener();
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+		if ((null != getModel()) && !getModel().getInterface().eAdapters().contains(getInterfaceAdapter())) {
+			getModel().getInterface().eAdapters().add(getInterfaceAdapter());
+		}
 	}
 
 	@Override
@@ -140,6 +173,10 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			referencedDevice.eAdapters().remove(colorChangeListener);
 		}
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+
+		if (null != getModel()) {
+			getModel().getInterface().eAdapters().remove(getInterfaceAdapter());
+		}
 	}
 
 	private IPropertyChangeListener getFontChangeListener() {
@@ -150,7 +187,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	public boolean isOnlyThisOrNothingSelected() {
-		@SuppressWarnings("unchecked")
 		final List<EditPart> selection = getViewer().getSelectedEditParts();
 		if (selection.size() > 1) {
 			return false;
@@ -189,7 +225,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
 
 			@Override
-			protected Command getDirectEditCommand(DirectEditRequest request) {
+			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				final Object value = request.getCellEditor().getValue();
 				if (value instanceof PaletteEntry) {
 					return new UpdateFBTypeCommand(getModel(), (PaletteEntry) value);
@@ -198,7 +234,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			}
 
 			@Override
-			protected void showCurrentEditValue(DirectEditRequest request) {
+			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// as we want to change the type we will not show the new type
 			}
 
@@ -211,13 +247,10 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	/** The listener. */
 	private IPropertyChangeListener listener;
 
-	/**
-	 * Returns an <code>IPropertyChangeListener</code> with implemented
-	 * <code>propertyChange()</code>. e.g. a color change event repaints the
-	 * FunctionBlock.
+	/** Returns an <code>IPropertyChangeListener</code> with implemented <code>propertyChange()</code>. e.g. a color
+	 * change event repaints the FunctionBlock.
 	 *
-	 * @return the preference change listener
-	 */
+	 * @return the preference change listener */
 	@Override
 	public org.eclipse.jface.util.IPropertyChangeListener getPreferenceChangeListener() {
 		if (null == listener) {
@@ -233,7 +266,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	protected void backgroundColorChanged(IFigure figure) {
+	protected void backgroundColorChanged(final IFigure figure) {
 		Color color = null;
 		if (getModel() != null) {
 			final Device dev = findDevice();
@@ -266,7 +299,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		}
 	}
 
-	private IFigure getTargetFigure(InterfaceEditPart interfaceEditPart) {
+	private IFigure getTargetFigure(final InterfaceEditPart interfaceEditPart) {
 		if (interfaceEditPart.isInput()) {
 			if (interfaceEditPart.isEvent()) {
 				return getFigure().getEventInputs();
@@ -277,6 +310,10 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			if (interfaceEditPart.isVariable()) {
 				return getFigure().getDataInputs();
 			}
+			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+				return getFigure().getErrorMarkerInput();
+			}
+
 		} else {
 			if (interfaceEditPart.isEvent()) {
 				return getFigure().getEventOutputs();
@@ -287,11 +324,15 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			if (interfaceEditPart.isVariable()) {
 				return getFigure().getDataOutputs();
 			}
+			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+				return getFigure().getErrorMarkerOutput();
+			}
+
 		}
 		return getFigure();
 	}
 
-	private int getInterfaceElementIndex(InterfaceEditPart interfaceEditPart) {
+	private int getInterfaceElementIndex(final InterfaceEditPart interfaceEditPart) {
 		final InterfaceList interfaceList = getModel().getInterface();
 		if (interfaceEditPart.isInput()) {
 			if (interfaceEditPart.isEvent()) {
@@ -303,6 +344,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			if (interfaceEditPart.isVariable()) {
 				return interfaceList.getInputVars().indexOf(interfaceEditPart.getModel());
 			}
+			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+				return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
+			}
 		} else {
 			if (interfaceEditPart.isEvent()) {
 				return interfaceList.getEventOutputs().indexOf(interfaceEditPart.getModel());
@@ -313,8 +357,19 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			if (interfaceEditPart.isVariable()) {
 				return interfaceList.getOutputVars().indexOf(interfaceEditPart.getModel());
 			}
+			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+				return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
+
+			}
 		}
 		return -1;
+	}
+
+	private static int calcErrorMarkerINdex(final InterfaceEditPart interfaceEditPart,
+			final InterfaceList interfaceList) {
+		final int indexOf = interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+		return indexOf - (int) interfaceList.getErrorMarker().subList(0, indexOf).stream()
+				.filter(e -> interfaceEditPart.isInput() ? !e.isIsInput() : e.isIsInput()).count();
 	}
 
 	@Override
@@ -351,9 +406,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			// forward direct edit request to instance name
-			@SuppressWarnings("unchecked")
 			final List<EditPart> children = getChildren();
-			children.stream().filter(e -> e instanceof InstanceNameEditPart)
+			children.stream().filter(InstanceNameEditPart.class::isInstance)
 					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
@@ -408,7 +462,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	public void setTransparency(int value) {
+	public void setTransparency(final int value) {
 		for (final Object ep : getChildren()) {
 			if (ep instanceof AbstractViewEditPart) {
 				((AbstractViewEditPart) ep).setTransparency(value);
@@ -418,7 +472,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request request) {
+	public DragTracker getDragTracker(final Request request) {
 		return new ScrollingDragEditPartsTracker(this);
 	}
 

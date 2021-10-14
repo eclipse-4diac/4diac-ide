@@ -62,7 +62,7 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private static final Pattern NAME_PATTERN = Pattern.compile("Name=\"\\w+\""); //$NON-NLS-1$
-	private static final Pattern COMMENT_PATTERN = Pattern.compile("Comment=\"[\\w\\s-_]+\""); //$NON-NLS-1$
+	private static final Pattern COMMENT_PATTERN = Pattern.compile("Comment=\"[\\w\\s-]+\""); //$NON-NLS-1$
 
 	private Button openTypeCheckbox;
 	private int openTypeParentHeight = -1;
@@ -70,11 +70,11 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private TableViewer templateTableViewer;
 
 	private static class TemplateInfo {
-		private File templateFile;
-		private String templateName;
-		private String templateDescription;
+		private final File templateFile;
+		private final String templateName;
+		private final String templateDescription;
 
-		public TemplateInfo(File templateFile, String templateName, String templateDescription) {
+		public TemplateInfo(final File templateFile, final String templateName, final String templateDescription) {
 			this.templateFile = templateFile;
 			this.templateName = templateName;
 			this.templateDescription = templateDescription;
@@ -86,12 +86,12 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private static class TypeTemplatesLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
+		public Image getColumnImage(final Object element, final int columnIndex) {
 			return null;
 		}
 
 		@Override
-		public String getColumnText(Object element, int columnIndex) {
+		public String getColumnText(final Object element, final int columnIndex) {
 			if (element instanceof TemplateInfo) {
 				switch (columnIndex) {
 				case 0:
@@ -106,7 +106,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		}
 	}
 
-	public NewFBTypeWizardPage(IStructuredSelection selection) {
+	public NewFBTypeWizardPage(final IStructuredSelection selection) {
 		super(Messages.NewFBTypeWizardPage_NewTypePage, selection);
 		this.setTitle(Messages.NewFBTypeWizardPage_CreateNewType);
 		this.setDescription(Messages.NewFBTypeWizardPage_CreateNewTypeFromTemplateType);
@@ -117,7 +117,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	@Override
 	public void createControl(final Composite parent) {
 		super.createControl(parent);
-		Composite composite = (Composite) getControl();
+		final Composite composite = (Composite) getControl();
 		// Show description on opening
 		setErrorMessage(null);
 		setMessage(null);
@@ -136,7 +136,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		}
 
 		// use super.getFileName here to get the type name without extension
-		String errorMessage = IdentifierVerifyer.isValidIdentifierWithErrorMessage(super.getFileName());
+		final String errorMessage = IdentifierVerifyer.isValidIdentifierWithErrorMessage(super.getFileName());
 		if (null != errorMessage) {
 			setErrorMessage(errorMessage);
 			return false;
@@ -158,20 +158,18 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	private boolean isDuplicate() {
 		// here: getContainerFullPath().segment(0) --> name of the selected project
-		TypeLibrary lib = TypeLibrary
+		final TypeLibrary lib = TypeLibrary
 				.getTypeLibrary(ResourcesPlugin.getWorkspace().getRoot().getProject(getContainerFullPath().segment(0)));
 
-		String[] s = getTemplate().getName().split("\\."); //$NON-NLS-1$
-		String fileExtension = s[s.length - 1].toUpperCase();
+		final String[] s = getTemplate().getName().split("\\."); //$NON-NLS-1$
+		final String fileExtension = s[s.length - 1].toUpperCase();
 		if (fileExtension.equals(TypeLibraryTags.DATA_TYPE_FILE_ENDING)) {
 			return isDtpDuplicate(lib);
-		} else {
-			return isSubFbtAdpDuplicate(lib, fileExtension);
 		}
-
+		return isSubFbtAdpDuplicate(lib, fileExtension);
 	}
 
-	private boolean isSubFbtAdpDuplicate(TypeLibrary lib, String fileExtension) {
+	private boolean isSubFbtAdpDuplicate(final TypeLibrary lib, final String fileExtension) {
 		EMap<String, ?> map = null;
 
 		switch (fileExtension) {
@@ -190,14 +188,14 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		return (null != map) && (map.containsKey(super.getFileName()));
 	}
 
-	private boolean isDtpDuplicate(TypeLibrary lib) {
-		Map<String, ?> map = lib.getDataTypeLibrary().getDerivedDataTypes();
+	private boolean isDtpDuplicate(final TypeLibrary lib) {
+		final Map<String, ?> map = lib.getDataTypeLibrary().getDerivedDataTypes();
 		return map.containsKey(super.getFileName());
 	}
 
 	public File getTemplate() {
 		if (templateTableViewer.getSelection() instanceof StructuredSelection) {
-			Object selection = templateTableViewer.getStructuredSelection().getFirstElement();
+			final Object selection = templateTableViewer.getStructuredSelection().getFirstElement();
 			return (selection instanceof TemplateInfo) ? ((TemplateInfo) selection).templateFile : null;
 		}
 		return null;
@@ -212,7 +210,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	public String getFileName() {
 		String retval = super.getFileName();
 		if (null != getTemplate()) {
-			String[] splited = getTemplate().getName().split("\\."); //$NON-NLS-1$
+			final String[] splited = getTemplate().getName().split("\\."); //$NON-NLS-1$
 			if (2 == splited.length) {
 				retval = retval + "." + splited[1]; //$NON-NLS-1$
 			}
@@ -225,13 +223,13 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	@Override
-	protected void createAdvancedControls(Composite parent) {
+	protected void createAdvancedControls(final Composite parent) {
 		createTemplateTypeSelection(parent);
 		super.createAdvancedControls(parent);
 	}
 
-	private void createTemplateTypeSelection(Composite parent) {
-		Label fbTypeTypeLabel = new Label(parent, SWT.NONE);
+	private void createTemplateTypeSelection(final Composite parent) {
+		final Label fbTypeTypeLabel = new Label(parent, SWT.NONE);
 		fbTypeTypeLabel.setText(FordiacMessages.SelectType + ":"); //$NON-NLS-1$
 		fbTypeTypeLabel.setFont(parent.getFont());
 
@@ -245,30 +243,30 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 		templateTableViewer.addSelectionChangedListener(ev -> handleEvent(null));
 
-		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		final GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = 250;
 		templateTableViewer.getControl().setLayoutData(data);
 	}
 
-	private static void configureTypeTableLayout(Table table) {
+	private static void configureTypeTableLayout(final Table table) {
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(FordiacMessages.Name);
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(FordiacMessages.Description);
 
-		TableLayout tabLayout = new TableLayout();
+		final TableLayout tabLayout = new TableLayout();
 		tabLayout.addColumnData(new ColumnWeightData(1, 30));
 		tabLayout.addColumnData(new ColumnWeightData(2, 70));
 		table.setLayout(tabLayout);
 	}
 
 	private void loadTypeTemplates() {
-		String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
-		File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
-		FileFilter ff = createTemplatesFileFilter();
+		final String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
+		final File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
+		final FileFilter ff = createTemplatesFileFilter();
 		if (templateFolder.isDirectory()) {
-			File[] files = templateFolder.listFiles(ff);
+			final File[] files = templateFolder.listFiles(ff);
 			if (null != files) {
 				Arrays.sort(files);
 				templateList = new TemplateInfo[files.length];
@@ -287,39 +285,31 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 	}
 
-	private static TemplateInfo createTemplateFileInfo(File f) {
-		Scanner scanner = null;
+	private static TemplateInfo createTemplateFileInfo(final File f) {
 		String name = f.getName();
 		String description = ""; //$NON-NLS-1$
-		try {
-			// we need a new scanner
-			scanner = new Scanner(f);
-			name = scanner.findWithinHorizon(NAME_PATTERN, 0);
+		try (Scanner nameScanner = new Scanner(f); Scanner commentScanner = new Scanner(f)) {
+			name = nameScanner.findWithinHorizon(NAME_PATTERN, 0);
 			name = name.substring(6, name.length() - 1);
-			scanner.close();
-			// we need a new scanner as name and comment may be in arbitrary order
-			scanner = new Scanner(f);
-			description = scanner.findWithinHorizon(COMMENT_PATTERN, 0);
+
+			// we need a second scanner as name and comment may be in arbitrary order
+			description = commentScanner.findWithinHorizon(COMMENT_PATTERN, 0);
 			if (null == description) {
 				description = Messages.NewFBTypeWizardPage_InvalidOrNoComment;
 			} else {
 				description = description.substring(9, description.length() - 1);
 			}
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			Activator.getDefault().logError(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
-		} finally {
-			if (null != scanner) {
-				scanner.close();
-			}
 		}
 		return new TemplateInfo(f, name, description);
 	}
 
 	@Override
 	protected void handleAdvancedButtonSelect() {
-		Shell shell = getShell();
-		Point shellSize = shell.getSize();
-		Composite composite = (Composite) getControl();
+		final Shell shell = getShell();
+		final Point shellSize = shell.getSize();
+		final Composite composite = (Composite) getControl();
 
 		if (null != openTypeCheckbox) {
 			openTypeCheckbox.dispose();
@@ -328,7 +318,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		} else {
 			openTypeCheckbox = createOpenTypeGroup(composite);
 			if (-1 == openTypeParentHeight) {
-				Point groupSize = openTypeCheckbox.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+				final Point groupSize = openTypeCheckbox.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 				openTypeParentHeight = groupSize.y;
 			}
 			shell.setSize(shellSize.x, shellSize.y + openTypeParentHeight);
@@ -336,7 +326,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		super.handleAdvancedButtonSelect();
 	}
 
-	private Button createOpenTypeGroup(Composite parent) {
+	private Button createOpenTypeGroup(final Composite parent) {
 		openTypeCheckbox = new Button(parent, SWT.CHECK);
 		openTypeCheckbox.setText(Messages.NewFBTypeWizardPage_OpenTypeForEditingWhenDone);
 		openTypeCheckbox.setSelection(true);

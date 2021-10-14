@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2021 Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +19,7 @@ package org.eclipse.fordiac.ide.gef.tools;
 import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
@@ -36,6 +38,15 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 
 public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracker {
+
+	// Safety border around the canvas to ensure that during dragging connections the canvas is not growing
+	private static final Insets CONNECTION_CANVAS_BORDER = new Insets(
+			ConnectionPreferenceValues.HANDLE_SIZE,
+			MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
+			+ ConnectionPreferenceValues.HANDLE_SIZE,
+			ConnectionPreferenceValues.HANDLE_SIZE,
+			ConnectionPreferenceValues.HANDLE_SIZE);
+
 
 	private static final class InlineConnectionDragCreationTool extends FordiacConnectionDragCreationTool {
 		private final EditPart originalSource;
@@ -72,6 +83,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 		super(cep);
 	}
 
+
 	@Override
 	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
 		if (isActive() && (viewer instanceof AdvancedScrollingGraphicalViewer)) {
@@ -86,6 +98,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 			// Compensate the moved scrolling in the start position for correct dropping of
 			// moved parts
 			setStartLocation(getStartLocation().getTranslated(delta));
+			CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, getCanvasBorder());
 		}
 		if (null != conCreationTool) {
 			getCurrentInput().setInput(me);
@@ -95,6 +108,11 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 		} else {
 			super.mouseDrag(me, viewer);
 		}
+	}
+
+	@SuppressWarnings("static-method")  // allow sub-classes to override the border calculation
+	protected Insets getCanvasBorder() {
+		return CONNECTION_CANVAS_BORDER;
 	}
 
 	@Override
@@ -204,4 +222,5 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 		}
 		super.commitDrag();
 	}
+
 }

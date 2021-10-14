@@ -67,18 +67,18 @@ public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editpa
 	}
 
 	@Override
-	public boolean understandsRequest(Request req) {
+	public boolean understandsRequest(final Request req) {
 		// should be readonly in fb tester
 		return false;
 	}
 
 	@Override
-	public void performRequest(Request request) {
+	public void performRequest(final Request request) {
 		// should be readonly in fb tester
 	}
 
 	@Override
-	public void setSelected(int value) {
+	public void setSelected(final int value) {
 		// should be readonly in fb tester
 	}
 
@@ -109,7 +109,7 @@ public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editpa
 
 				@Override
 				public void controlMoved(final ControlEvent e) {
-
+					// currently nothing to be done here
 				}
 
 			};
@@ -124,10 +124,10 @@ public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editpa
 
 	private void updatePosition() {
 		if (getParent() != null && getParent().getViewer() != null && getParent().getViewer().getControl() != null) {
-			Point p = getParent().getViewer().getControl().getSize();
-			Dimension dim = getFigure().getPreferredSize(-1, -1);
+			final Point p = getParent().getViewer().getControl().getSize();
+			final Dimension dim = getFigure().getPreferredSize(-1, -1);
 
-			Rectangle rect = new Rectangle(p.x / 2 - dim.width / 2, p.y / 2 - dim.height / 2, -1, -1);
+			final Rectangle rect = new Rectangle(p.x / 2 - dim.width / 2, p.y / 2 - dim.height / 2, -1, -1);
 			update(rect);
 		}
 	}

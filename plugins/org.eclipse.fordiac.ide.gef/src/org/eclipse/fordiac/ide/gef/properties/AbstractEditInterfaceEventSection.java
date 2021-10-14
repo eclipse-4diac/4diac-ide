@@ -32,9 +32,7 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
-		return new EventInterfaceContentProvider(false) {
-
-		};
+		return new EventInterfaceContentProvider(false);
 	}
 
 	@Override

@@ -16,17 +16,14 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.TransactionFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.DeleteTransactionEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.TransactionLayoutEditPolicy;
-import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.policies.HighlightEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -36,27 +33,21 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.swt.SWT;
 
-/**
- * The Class TransactionEditPart.
- */
 public class TransactionEditPart extends AbstractGraphicalEditPart {
 
-	private Adapter adapter = new AdapterImpl() {
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (getCastedModel().eAdapters().contains(adapter)) {
-				refresh();
-			}
+			refresh();
 		}
 	};
 
 	@Override
 	public void activate() {
 		if (!isActive()) {
-			getCastedModel().eAdapters().add(adapter);
+			getModel().eAdapters().add(adapter);
 		}
 		super.activate();
 	}
@@ -64,89 +55,71 @@ public class TransactionEditPart extends AbstractGraphicalEditPart {
 	@Override
 	public void deactivate() {
 		if (isActive()) {
-			getCastedModel().eAdapters().remove(adapter);
+			getModel().eAdapters().remove(adapter);
 		}
 		super.deactivate();
 	}
 
-	public static class TransactionFigure extends Figure {
-		public TransactionFigure() {
-			GridLayout layout = new GridLayout();
-			layout.marginWidth = 0;
-			layout.horizontalSpacing = 0;
-			setBorder(new AdvancedLineBorder(PositionConstants.NORTH, SWT.LINE_DASH));
-			setLayoutManager(layout);
-		}
-	}
 
 	@Override
 	protected IFigure createFigure() {
 		return new TransactionFigure();
 	}
 
-	/**
-	 * Gets the casted model.
-	 *
-	 * @return the casted model
-	 */
-	public ServiceTransaction getCastedModel() {
-		return (ServiceTransaction) getModel();
+	@Override
+	public ServiceTransaction getModel() {
+		return (ServiceTransaction) super.getModel();
 	}
 
 	public OutputPrimitive getPossibleOutputPrimitive(final InputPrimitive inputPrimitive) {
-		try {
-			int index = getModelChildren().indexOf(inputPrimitive);
-			if (getModelChildren().get(index + 1) instanceof OutputPrimitive) {
-				return (OutputPrimitive) getModelChildren().get(index + 1);
+		final int index = getModelChildren().indexOf(inputPrimitive);
+		Assert.isTrue(index >= 0); // input primitive should be among model children
+		if (index < (getModelChildren().size() - 1)) {
+			final Primitive primitive = getModelChildren().get(index + 1);
+			if (primitive instanceof OutputPrimitive) {
+				return (OutputPrimitive) primitive;
 			}
-		} catch (IndexOutOfBoundsException e) {
-			return null;
 		}
 		return null;
 	}
 
 	public InputPrimitive getPossibleInputPrimitive(final Primitive outputPrimitive) {
-		try {
-			int index = getModelChildren().indexOf(outputPrimitive);
-			if (getModelChildren().get(index - 1) instanceof InputPrimitive) {
-				return (InputPrimitive) getModelChildren().get(index - 1);
+		final int index = getModelChildren().indexOf(outputPrimitive);
+		if ((index > 0) && (index < getModelChildren().size())) {
+			final Primitive primitive = getModelChildren().get(index - 1);
+			if (primitive instanceof InputPrimitive) {
+				return (InputPrimitive) primitive;
 			}
-		} catch (IndexOutOfBoundsException e) {
-			return null;
 		}
 		return null;
 	}
 
 	@Override
-	protected List<?> getModelChildren() {
-		ServiceTransaction transaction = getCastedModel();
-		ArrayList<Object> children = new ArrayList<>();
+	protected List<Primitive> getModelChildren() {
+		final ServiceTransaction transaction = getModel();
+		final List<Primitive> primitives = new ArrayList<>();
 		if (transaction.getInputPrimitive() != null) {
-			children.add(transaction.getInputPrimitive());
+			primitives.add(transaction.getInputPrimitive());
 		}
 		if (!transaction.getOutputPrimitive().isEmpty()) {
-			children.addAll(transaction.getOutputPrimitive());
+			primitives.addAll(transaction.getOutputPrimitive());
 		}
-		return children;
+		return primitives;
 	}
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof InputPrimitiveEditPart || childEditPart instanceof OutputPrimitiveEditPart) {
-			TransactionFigure thisFigure = (TransactionFigure) getFigure();
-			IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-			GridData childData = new GridData();
-			childData.grabExcessHorizontalSpace = true;
-			childData.horizontalAlignment = GridData.FILL;
-			thisFigure.getLayoutManager().setConstraint(child, childData);
+		if ((childEditPart instanceof InputPrimitiveEditPart) || (childEditPart instanceof OutputPrimitiveEditPart)) {
+			final TransactionFigure thisFigure = (TransactionFigure) getFigure();
+			final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 			thisFigure.add(child, childEditPart instanceof InputPrimitiveEditPart ? 0 : index);
 		}
 	}
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof InputPrimitiveEditPart || childEditPart instanceof OutputPrimitiveEditPart) {
-			IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		if ((childEditPart instanceof InputPrimitiveEditPart) || (childEditPart instanceof OutputPrimitiveEditPart)) {
+			final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 			((TransactionFigure) getFigure()).remove(child);
 		}
 	}

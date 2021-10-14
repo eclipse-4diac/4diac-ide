@@ -12,7 +12,8 @@
             extensions="fbt, adp"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor"
-            name="FB Type Editor">
+            name="FB Type Editor"
+            matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy">
       </editor>
    </extension>
    <extension
@@ -55,7 +56,7 @@
          <propertyTab
                category="interface"
                id="property.tab.adapter"
-               image="fordiacimage://ICON_ADAPTER"
+               image="fordiacimage://ICON_ADAPTER_LIST"
                label="Adapter">
          </propertyTab>
          <propertyTab
@@ -82,7 +83,7 @@
                afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData"
                category="fb"
                id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters"
-               image="fordiacimage://ICON_ADAPTER"
+               image="fordiacimage://ICON_ADAPTER_LIST"
                indented="true"
                label="Edit Adapters">
          </propertyTab>

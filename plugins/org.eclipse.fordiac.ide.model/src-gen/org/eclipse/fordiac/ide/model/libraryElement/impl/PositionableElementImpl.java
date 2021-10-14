@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -35,8 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
  *
  * @generated */
 public class PositionableElementImpl extends EObjectImpl implements PositionableElement {
-	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getPosition()
 	 * @generated
@@ -44,14 +45,14 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	protected Position position;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	protected PositionableElementImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -59,45 +60,78 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public Position getPosition() {
 		if (position != null && position.eIsProxy()) {
-			final InternalEObject oldPosition = (InternalEObject) position;
+			InternalEObject oldPosition = (InternalEObject) position;
 			position = (Position) eResolveProxy(oldPosition);
 			if (position != oldPosition) {
-				if (eNotificationRequired()) {
+				InternalEObject newPosition = (InternalEObject) position;
+				NotificationChain msgs = oldPosition.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, null, null);
+				if (newPosition.eInternalContainer() == null) {
+					msgs = newPosition.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, null, msgs);
+				}
+				if (msgs != null)
+					msgs.dispatch();
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, oldPosition, position));
-				}
 			}
 		}
 		return position;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	public Position basicGetPosition() {
 		return position;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	@Override
-	public void setPosition(final Position newPosition) {
-		final Position oldPosition = position;
+	public NotificationChain basicSetPosition(Position newPosition, NotificationChain msgs) {
+		Position oldPosition = position;
 		position = newPosition;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION,
-					oldPosition, position));
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, oldPosition, newPosition);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
+		return msgs;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
+	 * @generated */
+	@Override
+	public void setPosition(Position newPosition) {
+		if (newPosition != position) {
+			NotificationChain msgs = null;
+			if (position != null)
+				msgs = ((InternalEObject) position).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, null, msgs);
+			if (newPosition != null)
+				msgs = ((InternalEObject) newPosition).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, null, msgs);
+			msgs = basicSetPosition(newPosition, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION,
+					newPosition, newPosition));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated */
 	@Override
 	public void updatePosition(final int x, final int y) {
@@ -105,6 +139,7 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 				.createPosition();
 		pos.setX(x);
 		pos.setY(y);
+
 		setPosition(pos);
 	}
 
@@ -117,15 +152,27 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
-			if (resolve) {
+			return basicSetPosition(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+		switch (featureID) {
+		case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
+			if (resolve)
 				return getPosition();
-			}
 			return basicGetPosition();
 		default:
 			return super.eGet(featureID, resolve, coreType);
@@ -133,10 +180,10 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
 			setPosition((Position) newValue);
@@ -148,10 +195,10 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
 		case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
 			setPosition((Position) null);
@@ -163,10 +210,10 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
 			return position != null;

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -38,7 +38,7 @@ public class QueryResponseHandler extends DefaultHandler {
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+	public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) {
 		if (qName.equalsIgnoreCase("Response")) { //$NON-NLS-1$
 			response = true;
 		} else if (qName.equalsIgnoreCase("NameList")) { //$NON-NLS-1$
@@ -50,11 +50,11 @@ public class QueryResponseHandler extends DefaultHandler {
 	}
 
 	@Override
-	public void characters(char ch[], int start, int length) throws SAXException {
+	public void characters(final char[] ch, final int start, final int length) throws SAXException {
 		if (response && nameList) {
-			String query = new String(ch, start, length);
-			Pattern pattern = Pattern.compile(PATTERN);
-			Matcher matcher = pattern.matcher(query);
+			final String query = new String(ch, start, length);
+			final Pattern pattern = Pattern.compile(PATTERN);
+			final Matcher matcher = pattern.matcher(query);
 			while (matcher.find()) {
 				queryResult.add(matcher.group());
 			}

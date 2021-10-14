@@ -12,11 +12,11 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Moved position calculation to the comment type edit part
+ *   Virendra Ashiwal - extracted "getnumEventwith" method out of calculateWithPos() method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.draw2d.AncestorListener;
@@ -29,14 +29,12 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
-import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -49,8 +47,6 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
@@ -76,16 +72,16 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		}
 
 		@Override
-		public int getIntersectionStyle(Point location) {
+		public int getIntersectionStyle(final Point location) {
 			if (isInput()) {
-				Rectangle bounds = getBounds().getCopy();
+				final Rectangle bounds = getBounds().getCopy();
 				bounds.width = 5;
 				if (bounds.intersects(new Rectangle(location, new Dimension(1, 1)))) {
 					return InteractionStyleFigure.REGION_CONNECTION;
 				}
 				return InteractionStyleFigure.REGION_DRAG;
 			}
-			Rectangle bounds = getBounds().getCopy();
+			final Rectangle bounds = getBounds().getCopy();
 			bounds.x = bounds.x + (bounds.width - 5);
 			bounds.width = 5;
 			if (bounds.intersects(new Rectangle(location, new Dimension(1, 1)))) {
@@ -101,20 +97,20 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 	@Override
 	protected IFigure createFigure() {
-		IFigure fig = new InterfaceFigure();
+		final IFigure fig = new InterfaceFigure();
 		fig.addAncestorListener(new AncestorListener() {
 			@Override
-			public void ancestorRemoved(IFigure ancestor) {
+			public void ancestorRemoved(final IFigure ancestor) {
 				// nothing to do here
 			}
 
 			@Override
-			public void ancestorMoved(IFigure ancestor) {
+			public void ancestorMoved(final IFigure ancestor) {
 				update();
 			}
 
 			@Override
-			public void ancestorAdded(IFigure ancestor) {
+			public void ancestorAdded(final IFigure ancestor) {
 				update();
 			}
 
@@ -125,8 +121,8 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	protected void update() {
 		if (getCastedModel() instanceof Event && null != sourceConnections) {
-			for (Object con : sourceConnections) {
-				WithEditPart with = (WithEditPart) con;
+			for (final Object con : sourceConnections) {
+				final WithEditPart with = (WithEditPart) con;
 				with.updateWithPos();
 			}
 		}
@@ -140,16 +136,15 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return (IInterfaceElement) getModel();
 	}
 
-	@SuppressWarnings("rawtypes")
-	public void setInOutConnectionsWith(int with) {
-		for (Iterator iterator = getSourceConnections().iterator(); iterator.hasNext();) {
-			ConnectionEditPart cep = (ConnectionEditPart) iterator.next();
+	public void setInOutConnectionsWith(final int with) {
+		for (final Object element : getSourceConnections()) {
+			final ConnectionEditPart cep = (ConnectionEditPart) element;
 			if (cep.getFigure() instanceof PolylineConnection) {
 				((PolylineConnection) cep.getFigure()).setLineWidth(with);
 			}
 		}
-		for (Iterator iterator = getTargetConnections().iterator(); iterator.hasNext();) {
-			ConnectionEditPart cep = (ConnectionEditPart) iterator.next();
+		for (final Object element : getTargetConnections()) {
+			final ConnectionEditPart cep = (ConnectionEditPart) element;
 			if (cep.getFigure() instanceof PolylineConnection) {
 				((PolylineConnection) cep.getFigure()).setLineWidth(with);
 			}
@@ -159,16 +154,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					return new ChangeNameCommand(getCastedModel(), (String) request.getCellEditor().getValue());
-				}
-				return null;
-			}
-
-		});
 
 		// allow delete of a FB
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
@@ -205,24 +190,34 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
-		int pos = calculateWithPos(connection, isInput());
+		final int pos = calculateWithPos((With) connection.getModel(), isInput());
 		if (isInput()) {
 			return new InputWithAnchor(getFigure(), pos, this);
-
 		}
 		return new OutputWithAnchor(getFigure(), pos, this);
 	}
 
-	private static int calculateWithPos(final ConnectionEditPart connection, boolean isInput) {
-		int pos = 1;
-		With with = (With) connection.getModel();
-		Event event = (Event) with.eContainer();
 
-		InterfaceList interfaceList = (InterfaceList) event.eContainer();
+	public static int calculateWithPos(final With with, final boolean isInput) {
+		final Event event = (Event) with.eContainer();
+		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		if (null != interfaceList) {
-			pos += ((isInput) ? interfaceList.getEventInputs() : interfaceList.getEventOutputs()).indexOf(event);
+				return getnumEventwith( isInput?interfaceList.getEventInputs():interfaceList.getEventOutputs(), event);
 		}
-		return pos;
+		return 0;
+	}
+	
+	protected static int getnumEventwith(final EList<Event> eList, final Event event) {
+		int nrOfEventWITH = 0;
+		for (final Event ele : eList) {
+			if (!ele.getWith().isEmpty()) {
+				nrOfEventWITH++;
+			}
+			if (ele == event) {
+				break;
+			}
+		}
+		return nrOfEventWITH;
 	}
 
 	@Override

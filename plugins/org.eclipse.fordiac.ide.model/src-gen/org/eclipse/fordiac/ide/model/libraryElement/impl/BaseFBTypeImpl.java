@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -34,6 +35,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * <ul>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getInternalVars <em>Internal
  * Vars</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getInternalFbs <em>Internal
+ * Fbs</em>}</li>
  * </ul>
  *
  * @generated */
@@ -45,6 +48,14 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 	 * @generated
 	 * @ordered */
 	protected EList<VarDeclaration> internalVars;
+
+	/** The cached value of the '{@link #getInternalFbs() <em>Internal Fbs</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see #getInternalFbs()
+	 * @generated
+	 * @ordered */
+	protected EList<FB> internalFbs;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -77,10 +88,24 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 	 * 
 	 * @generated */
 	@Override
+	public EList<FB> getInternalFbs() {
+		if (internalFbs == null) {
+			internalFbs = new EObjectContainmentEList<FB>(FB.class, this,
+					LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS);
+		}
+		return internalFbs;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 			return ((InternalEList<?>) getInternalVars()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
+			return ((InternalEList<?>) getInternalFbs()).basicRemove(otherEnd, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -94,6 +119,8 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 		switch (featureID) {
 		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 			return getInternalVars();
+		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
+			return getInternalFbs();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -110,6 +137,10 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 			getInternalVars().clear();
 			getInternalVars().addAll((Collection<? extends VarDeclaration>) newValue);
 			return;
+		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
+			getInternalFbs().clear();
+			getInternalFbs().addAll((Collection<? extends FB>) newValue);
+			return;
 		default:
 			super.eSet(featureID, newValue);
 			return;
@@ -125,6 +156,9 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 			getInternalVars().clear();
 			return;
+		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
+			getInternalFbs().clear();
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -139,6 +173,8 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 		switch (featureID) {
 		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 			return internalVars != null && !internalVars.isEmpty();
+		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
+			return internalFbs != null && !internalFbs.isEmpty();
 		default:
 			return super.eIsSet(featureID);
 		}

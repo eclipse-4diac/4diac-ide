@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -51,26 +51,26 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 	public void createFieldEditors() {
 
 		// Create a Group to hold the compare editor fields
-		Group compare = new Group(getFieldEditorParent(), SWT.NONE);
+		final Group compare = new Group(getFieldEditorParent(), SWT.NONE);
 		compare.setText(Messages.FORTEExportPreferences_CompareEditorForMerging);
-		GridLayout routerLayout = new GridLayout(2, false);
+		final GridLayout routerLayout = new GridLayout(2, false);
 
-		Map<String, ICompareEditorOpener> compareEditorOpeners = CompareEditorOpenerUtil.getCompareEditorOpeners();
+		final Map<String, ICompareEditorOpener> compareEditorOpeners = CompareEditorOpenerUtil.getCompareEditorOpeners();
 
-		Set<String> keySet = compareEditorOpeners.keySet();
-		String nameArray[][] = new String[keySet.size()][2];
+		final Set<String> keySet = compareEditorOpeners.keySet();
+		final String[][] nameArray = new String[keySet.size()][2];
 		int i = 0;
-		for (String key : keySet) {
+		for (final String key : keySet) {
 			nameArray[i][0] = key;
 			nameArray[i][1] = key;
 			i++;
 		}
 
-		ComboFieldEditor compareEditor = new ComboFieldEditor(PreferenceConstants.P_COMPARE_EDITOR,
+		final ComboFieldEditor compareEditor = new ComboFieldEditor(PreferenceConstants.P_COMPARE_EDITOR,
 				Messages.FORTEExportPreferences_DefaultCompareEditorOpener, nameArray, compare);
 		addField(compareEditor);
 
-		GridData comparedata = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData comparedata = new GridData(GridData.FILL_HORIZONTAL);
 		comparedata.grabExcessHorizontalSpace = true;
 		comparedata.horizontalSpan = 2;
 
@@ -81,11 +81,11 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 		// Currently nothing to do here
 	}
 

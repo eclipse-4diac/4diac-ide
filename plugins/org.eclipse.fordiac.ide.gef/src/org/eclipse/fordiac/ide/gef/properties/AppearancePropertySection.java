@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -54,18 +53,17 @@ public class AppearancePropertySection extends AbstractPropertySection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		Composite composite = getWidgetFactory().createFlatFormComposite(parent);
-		FormLayout layout = (FormLayout) composite.getLayout();
+		final Composite composite = getWidgetFactory().createFlatFormComposite(parent);
+		final FormLayout layout = (FormLayout) composite.getLayout();
 		layout.spacing = 3;
 		initializeControls(composite);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
 		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
+		final Object input = ((IStructuredSelection) selection).getFirstElement();
 		if (input instanceof AbstractViewEditPart
 				&& ((AbstractViewEditPart) input).getModel() instanceof ColorizableElement) {
 			colorizableElement = (ColorizableElement) ((AbstractViewEditPart) input).getModel();
@@ -75,8 +73,7 @@ public class AppearancePropertySection extends AbstractPropertySection {
 			}
 		}
 		selectedViews.clear();
-		for (Iterator iterator = ((IStructuredSelection) selection).iterator(); iterator.hasNext();) {
-			Object object = iterator.next();
+		for (final Object object : ((IStructuredSelection) selection)) {
 			if (object instanceof AbstractViewEditPart
 					&& ((AbstractViewEditPart) object).getModel() instanceof ColorizableElement) {
 				selectedViews.add((ColorizableElement) ((AbstractViewEditPart) object).getModel());
@@ -90,13 +87,13 @@ public class AppearancePropertySection extends AbstractPropertySection {
 	@Override
 	public void refresh() {
 		if (colorizableElement != null && colorizableElement.getColor() != null) {
-			org.eclipse.fordiac.ide.model.libraryElement.Color color = colorizableElement.getColor();
-			this.color.dispose();
-			this.color = new Color(null, new RGB(color.getRed(), color.getGreen(), color.getBlue()));
+			final org.eclipse.fordiac.ide.model.libraryElement.Color col = colorizableElement.getColor();
+			color.dispose();
+			color = new Color(null, new RGB(col.getRed(), col.getGreen(), col.getBlue()));
 			colorLabel.setBackground(this.color);
 		} else {
-			this.color.dispose();
-			this.color = new Color(null, new RGB(255, 255, 255));
+			color.dispose();
+			color = new Color(null, new RGB(255, 255, 255));
 			colorLabel.setBackground(this.color);
 		}
 
@@ -109,7 +106,7 @@ public class AppearancePropertySection extends AbstractPropertySection {
 
 	protected void createColorsGroup(final Composite parent) {
 		colorsGroup = getWidgetFactory().createGroup(parent, Messages.AppearancePropertySection_LABLE_Color);
-		GridLayout layout = new GridLayout(1, false);
+		final GridLayout layout = new GridLayout(1, false);
 		colorsGroup.setLayout(layout);
 		// Start with Celtics green
 		color = new Color(null, new RGB(255, 255, 255));
@@ -117,32 +114,31 @@ public class AppearancePropertySection extends AbstractPropertySection {
 		colorLabel = getWidgetFactory().createLabel(colorsGroup, ""); //$NON-NLS-1$
 		colorLabel.setText("          "); //$NON-NLS-1$
 		colorLabel.setBackground(color);
-		GridData gd = new GridData();
+		final GridData gd = new GridData();
 		gd.grabExcessHorizontalSpace = true;
 		colorLabel.setLayoutData(gd);
-		Button chooseColorBtn = new Button(colorsGroup, SWT.PUSH);
+		final Button chooseColorBtn = new Button(colorsGroup, SWT.PUSH);
 		chooseColorBtn.setText(Messages.AppearancePropertySection_LABEL_BackgroundColor);
 		chooseColorBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
 				// Create the color-change dialog
-				ColorDialog dlg = new ColorDialog(colorsGroup.getShell());
+				final ColorDialog dlg = new ColorDialog(colorsGroup.getShell());
 				// Set the selected color in the dialog from
 				// user's selected color
 				dlg.setRGB(colorLabel.getBackground().getRGB());
 				// Change the title bar text
 				dlg.setText(Messages.AppearancePropertySection_LABEL_ChooseColor);
 				// Open the dialog and retrieve the selected color
-				RGB rgb = dlg.open();
+				final RGB rgb = dlg.open();
 				if (rgb != null) {
 					// Dispose the old color, create the
 					// new one, and set into the label
 					Command cmd;
-					if (selectedViews.size() > 0) {
+					if (!selectedViews.isEmpty()) {
 						cmd = new CompoundCommand(Messages.AppearancePropertySection_ChangeBackgroundColor);
-						for (ColorizableElement colorizableElement : selectedViews) {
-							ChangeBackgroundcolorCommand tmp = new ChangeBackgroundcolorCommand(colorizableElement,
-									rgb);
+						for (final ColorizableElement ce : selectedViews) {
+							final ChangeBackgroundcolorCommand tmp = new ChangeBackgroundcolorCommand(ce, rgb);
 							((CompoundCommand) cmd).add(tmp);
 						}
 					} else {
@@ -150,7 +146,7 @@ public class AppearancePropertySection extends AbstractPropertySection {
 					}
 					if (cmd.canExecute()) {
 						((SystemConfiguration) colorizableElement.eContainer()).getAutomationSystem().getCommandStack()
-								.execute(cmd);
+						.execute(cmd);
 						color.dispose();
 						color = new Color(null, rgb);
 						colorLabel.setBackground(color);

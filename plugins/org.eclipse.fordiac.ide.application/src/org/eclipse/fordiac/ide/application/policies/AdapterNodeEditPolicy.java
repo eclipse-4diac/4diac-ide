@@ -14,9 +14,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.application.commands.ReconnectAdapterConnectionCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.change.ReconnectAdapterConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;

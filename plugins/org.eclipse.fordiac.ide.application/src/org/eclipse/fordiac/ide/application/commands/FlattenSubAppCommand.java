@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, AIT, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *   Gerhard Ebenhofer, Matthias Plasch, Filip Andren, Alois Zoitl, Monika Wenger
  *   - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - fix positioning of fbnetwork
+ *   Lukas Wais - implemented unique naming for FBs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -20,6 +22,8 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
+import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -53,6 +57,7 @@ public class FlattenSubAppCommand extends Command {
 	private final CompoundCommand deleteCommands = new CompoundCommand();
 	private final CompoundCommand createCommands = new CompoundCommand();
 	private final CompoundCommand mappCommands = new CompoundCommand();
+	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private final Point fbnetworkPosInSubapp;
 
 	public FlattenSubAppCommand(final SubApp subapp) {
@@ -66,7 +71,8 @@ public class FlattenSubAppCommand extends Command {
 	@Override
 	public void execute() {
 		elements.addAll(subapp.getSubAppNetwork().getNetworkElements());
-		FBNetworkHelper.moveFBNetworkByOffset(elements, getOriginalPositionX(), getOriginalPositionY());
+		// add elements to parent
+		FBNetworkHelper.moveFBNetworkByOffset(elements, -getOriginalPositionX(), -getOriginalPositionY());
 
 		checkConnections();
 		createMapCommands();
@@ -89,7 +95,21 @@ public class FlattenSubAppCommand extends Command {
 		createCommands.execute();
 		mappCommands.execute();
 
+		// check unique names
+		for (final FBNetworkElement fbNetworkElement : elements) {
+			ensureUniqueName(fbNetworkElement);
+		}
+		setUniqueName.execute();
+
 		ElementSelector.selectViewObjects(elements);
+	}
+
+	private void ensureUniqueName(final FBNetworkElement element) {
+		// ensure unique name in new network
+		if (!NameRepository.isValidName(element, element.getName())) {
+			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
+			setUniqueName.add(new ChangeNameCommand(element, uniqueName));
+		}
 	}
 
 	@Override
@@ -97,7 +117,7 @@ public class FlattenSubAppCommand extends Command {
 		deleteCommands.redo();
 		subapp.getSubAppNetwork().getNetworkElements().removeAll(elements);
 		parent.getNetworkElements().addAll(elements);
-		FBNetworkHelper.moveFBNetworkByOffset(elements, getOriginalPositionX(), getOriginalPositionY());
+		FBNetworkHelper.moveFBNetworkByOffset(elements, -getOriginalPositionX(), -getOriginalPositionY());
 
 		subapp.getSubAppNetwork().getEventConnections().removeAll(transferEventConnections);
 		parent.getEventConnections().addAll(transferEventConnections);
@@ -109,6 +129,7 @@ public class FlattenSubAppCommand extends Command {
 		parent.getAdapterConnections().addAll(transferAdapterConnections);
 
 		createCommands.redo();
+		setUniqueName.redo();
 		mappCommands.redo();
 	}
 
@@ -129,6 +150,7 @@ public class FlattenSubAppCommand extends Command {
 		parent.getAdapterConnections().removeAll(transferAdapterConnections);
 		subapp.getSubAppNetwork().getAdapterConnections().addAll(transferAdapterConnections);
 
+		setUniqueName.undo();
 		deleteCommands.undo();
 	}
 
@@ -155,7 +177,8 @@ public class FlattenSubAppCommand extends Command {
 		}
 	}
 
-	private <T extends Connection> void checkConnectionList(final List<T> connectionList, final List<T> transferConnectionList) {
+	private <T extends Connection> void checkConnectionList(final List<T> connectionList,
+			final List<T> transferConnectionList) {
 		for (final T connection : connectionList) {
 			if ((connection.getSourceElement() != subapp) && (connection.getDestinationElement() != subapp)) {
 				// it is an internal connection transfer it
@@ -166,7 +189,7 @@ public class FlattenSubAppCommand extends Command {
 					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
 						for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
 							createCommands
-							.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
+									.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
 						}
 					}
 				} else if (connection.getSourceElement() == subapp) {
@@ -203,5 +226,4 @@ public class FlattenSubAppCommand extends Command {
 		}
 		return cmd;
 	}
-
 }

@@ -89,8 +89,8 @@ public class LuaConstants {
     {
       if ((event instanceof AdapterEvent)) {
         _builder.append("AEI_");
-        String _replaceAll = ((AdapterEvent)event).getName().replaceAll("\\.", "_");
-        _builder.append(_replaceAll);
+        String _replace = ((AdapterEvent)event).getName().replace(".", "_");
+        _builder.append(_replace);
       } else {
         _builder.append("EI_");
         String _name = event.getName();
@@ -105,8 +105,8 @@ public class LuaConstants {
     {
       if ((event instanceof AdapterEvent)) {
         _builder.append("AEO_");
-        String _replaceAll = ((AdapterEvent)event).getName().replaceAll("\\.", "_");
-        _builder.append(_replaceAll);
+        String _replace = ((AdapterEvent)event).getName().replace(".", "_");
+        _builder.append(_replace);
       } else {
         _builder.append("EO_");
         String _name = event.getName();
@@ -672,8 +672,8 @@ public class LuaConstants {
   public static CharSequence luaSendAdapterOutputEvent(final Event event) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("fb(AEO_");
-    String _replaceAll = event.getName().replaceAll("\\.", "_");
-    _builder.append(_replaceAll);
+    String _replace = event.getName().replace(".", "_");
+    _builder.append(_replace);
     _builder.append(")");
     return _builder;
   }

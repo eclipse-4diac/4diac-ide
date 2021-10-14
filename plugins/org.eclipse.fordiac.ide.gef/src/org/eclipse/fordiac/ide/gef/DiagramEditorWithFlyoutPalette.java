@@ -66,6 +66,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -137,23 +138,29 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 		if (viewer.getControl() instanceof FigureCanvas) {
 			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-			final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
-					.getRootEditPart();
+
 			Display.getDefault().asyncExec(() -> {
 				viewer.flush();
 				// if an editpart is selected then the viewer has bee created with something to be shown centered
 				// therefore we will not show the initial position
 				// do not use getSelection() here because it will return always at least one element
 				if (viewer.getSelectedEditParts().isEmpty()) {
-					final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
-					canvas.scrollTo(drawingAreaBounds.x - DiagramEditor.INITIAL_SCROLL_OFFSET,
-							drawingAreaBounds.y - DiagramEditor.INITIAL_SCROLL_OFFSET);
+					final Point scrollPos = getInitialScrollPos();
+					canvas.scrollTo(scrollPos.x, scrollPos.y);
 				} else {
 					// if we have a selected edit part we want to show it in the middle
 					viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
 				}
 			});
 		}
+	}
+
+	protected Point getInitialScrollPos() {
+		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
+				.getRootEditPart();
+		final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
+		return new Point(drawingAreaBounds.x - DiagramEditor.INITIAL_SCROLL_OFFSET,
+				drawingAreaBounds.y - DiagramEditor.INITIAL_SCROLL_OFFSET);
 	}
 
 	@Override

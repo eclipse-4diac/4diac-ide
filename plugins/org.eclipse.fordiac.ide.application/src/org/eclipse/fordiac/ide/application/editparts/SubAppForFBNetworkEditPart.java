@@ -2,6 +2,7 @@
  * Copyright (c) 2008 - 2017 Profactor GmbH, AIT, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
  *               2020 Primetals Technologies Germany GmbH
+ *               2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,6 +20,7 @@
  *               - added update support for removing or readding subapp type
  *   Bianca Wiesmayr, Alois Zoitl - unfolded subapp
  *   Daniel Lindhuber - instance comment
+ *   				  - root refresh for monitoring elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -45,23 +47,6 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	private UnfoldedSubappContentNetwork subappContents;
 	private InstanceComment instanceComment;
 
-	private final Adapter subAppInterfaceAdapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			switch (notification.getEventType()) {
-			case Notification.ADD:
-			case Notification.ADD_MANY:
-			case Notification.MOVE:
-			case Notification.REMOVE:
-			case Notification.REMOVE_MANY:
-				refreshChildren();
-				break;
-			default:
-				break;
-			}
-		}
-	};
-
 	@Override
 	public Adapter createContentAdapter() {
 		return new AdapterImpl() {
@@ -79,6 +64,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 							.equals(notification.getFeature())) {
 						refreshChildren();
 						refreshInterfaceEditParts();
+						refreshRoot();
 					}
 					break;
 				case Notification.REMOVE:
@@ -90,6 +76,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 							.equals(notification.getFeature())) {
 						refreshChildren();
 						refreshInterfaceEditParts();
+						refreshRoot();
 					}
 					break;
 				case Notification.SET:
@@ -102,7 +89,13 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 				backgroundColorChanged(getFigure());
 			}
 
-			@SuppressWarnings("unchecked")
+			private void refreshRoot() {
+				final EditPart root = getRoot();
+				if (root != null) {
+					root.getChildren().forEach(child -> ((EditPart) child).refresh());
+				}
+			}
+
 			private void refreshInterfaceEditParts() {
 				getChildren().forEach(ep -> {
 					if (ep instanceof InterfaceEditPart) {
@@ -112,6 +105,29 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 			}
 		};
 	}
+
+	@Override
+	protected Adapter createInterfaceAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				switch (notification.getEventType()) {
+				case Notification.ADD:
+				case Notification.ADD_MANY:
+				case Notification.MOVE:
+				case Notification.REMOVE:
+				case Notification.REMOVE_MANY:
+					refreshChildren();
+					getParent().refresh();
+					break;
+				default:
+					break;
+				}
+			}
+		};
+	}
+
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> children = super.getModelChildren();
@@ -141,22 +157,6 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	}
 
 	@Override
-	public void activate() {
-		super.activate();
-		if ((null != getModel()) && !getModel().getInterface().eAdapters().contains(subAppInterfaceAdapter)) {
-			getModel().getInterface().eAdapters().add(subAppInterfaceAdapter);
-		}
-	}
-
-	@Override
-	public void deactivate() {
-		super.deactivate();
-		if (null != getModel()) {
-			getModel().getInterface().eAdapters().remove(subAppInterfaceAdapter);
-		}
-	}
-
-	@Override
 	protected IFigure createFigureForModel() {
 		return new SubAppForFbNetworkFigure(getModel(), this);
 	}
@@ -170,7 +170,6 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	public SubApp getModel() {
 		return (SubApp) super.getModel();
 	}
-
 
 	@Override
 	protected void createEditPolicies() {
@@ -187,6 +186,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 			super.performRequest(request);
 		}
 	}
+
 	private void openSubAppEditor() {
 		SubApp subApp = getModel();
 		if (subAppIsMapped(subApp)) {

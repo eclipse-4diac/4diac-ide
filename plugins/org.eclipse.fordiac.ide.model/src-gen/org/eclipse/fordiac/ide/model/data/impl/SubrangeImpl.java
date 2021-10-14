@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
 public class SubrangeImpl extends EObjectImpl implements Subrange {
 	/** The default value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getLowerLimit()
 	 * @generated
 	 * @ordered */
@@ -41,7 +41,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 
 	/** The cached value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getLowerLimit()
 	 * @generated
 	 * @ordered */
@@ -49,7 +49,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 
 	/** The default value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getUpperLimit()
 	 * @generated
 	 * @ordered */
@@ -57,21 +57,21 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 
 	/** The cached value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getUpperLimit()
 	 * @generated
 	 * @ordered */
 	protected int upperLimit = UPPER_LIMIT_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected SubrangeImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -79,7 +79,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int getLowerLimit() {
@@ -87,7 +87,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setLowerLimit(int newLowerLimit) {
@@ -99,7 +99,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public int getUpperLimit() {
@@ -107,7 +107,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setUpperLimit(int newUpperLimit) {
@@ -119,7 +119,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -134,7 +134,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -152,7 +152,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -170,7 +170,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -185,7 +185,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {

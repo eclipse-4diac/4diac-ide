@@ -63,6 +63,12 @@
                id="property.tab.ivars"
                label="Internal Vars">
          </propertyTab>
+         <propertyTab
+               afterTab="property.tab.ivars"
+               category="ecc"
+               id="property.tab.ifbs"
+               label="Internal FBs">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -107,6 +113,15 @@
                filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCFilter"
                id="property.section.ivars"
                tab="property.tab.ivars">
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.InternalFbsSectionBasic"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCFilter"
+               id="property.section.ifbs"
+               tab="property.tab.ifbs">
             <input
                   type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart">
             </input>

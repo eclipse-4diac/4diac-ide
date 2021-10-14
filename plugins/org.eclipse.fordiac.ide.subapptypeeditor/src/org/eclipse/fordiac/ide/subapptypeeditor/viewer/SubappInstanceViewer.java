@@ -12,13 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.subapptypeeditor.viewer;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.AbstractFbNetworkInstanceViewer;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.subapptypeeditor.editparts.SubappViewerEditPartFactory;
 import org.eclipse.gef.EditPartFactory;
 
@@ -27,15 +23,22 @@ public class SubappInstanceViewer extends AbstractFbNetworkInstanceViewer {
 
 	@Override
 	public EditPartFactory getEditPartFactory() {
-		return new SubappViewerEditPartFactory(this, fbNetworkElement, fbEditPart);
+		return new SubappViewerEditPartFactory(this, getFbNetworkElement());
 	}
 
 	@Override
-	protected CompositeFBType createFbType(final CompositeFBType type, final InterfaceList interfaceList) {
-		final SubAppType typeCopy = LibraryElementFactory.eINSTANCE.createSubAppType();
-		typeCopy.setInterfaceList(EcoreUtil.copy(interfaceList));
-		typeCopy.setFBNetwork(FBNetworkHelper.copyFBNetWork(type.getFBNetwork(), typeCopy.getInterfaceList()));
-		return typeCopy;
+	public FBNetwork getModel() {
+		FBNetwork network = getFbNetworkElement().getSubAppNetwork();
+		if (null == network) {
+			// the contained network has not been loaded yet, load it now.
+			network = getFbNetworkElement().loadSubAppNetwork();
+		}
+		return network;
+	}
+
+	@Override
+	protected SubApp getFbNetworkElement() {
+		return (SubApp) super.getFbNetworkElement();
 	}
 
 }

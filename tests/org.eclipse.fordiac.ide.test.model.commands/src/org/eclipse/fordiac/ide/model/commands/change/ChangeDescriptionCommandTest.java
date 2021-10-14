@@ -31,7 +31,7 @@ public class ChangeDescriptionCommandTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	public static void verifyState(State state, State oldState, TestFunction t, String expectedValue) {
+	public static void verifyState(State state, TestFunction t, String expectedValue) {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getDescription(), expectedValue);
 	}
 
@@ -44,11 +44,11 @@ public class ChangeDescriptionCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<>("Change Description", //$NON-NLS-1$
 						(State state) -> executeCommand(state, DESCRIPTION_STRING), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, DESCRIPTION_STRING) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, DESCRIPTION_STRING) //
 				), //
 				new ExecutionDescription<>("Change Description", //$NON-NLS-1$
 						(State state) -> executeCommand(state, null), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, "") //$NON-NLS-1$
+						(State s, State o, TestFunction t) -> verifyState(s, t, "") //$NON-NLS-1$
 				) //
 		);
 

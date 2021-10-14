@@ -29,10 +29,10 @@ public class DeleteInternalVariableCommand extends DeleteVariableCommand {
 	 * Instantiates a command to remove a variable from a list.
 	 *
 	 * @param type the BasicFBType from which the internal var is deleted
-	 * @param var  the var that should be deleted
+	 * @param varToDelete  the var that should be deleted
 	 */
-	public DeleteInternalVariableCommand(final BaseFBType type, final VarDeclaration var) {
-		super(type, var);
+	public DeleteInternalVariableCommand(final BaseFBType type, final VarDeclaration varToDelete) {
+		super(type, varToDelete);
 	}
 
 	@Override

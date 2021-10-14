@@ -19,34 +19,36 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class ConnectionsHelper {
+public final class ConnectionsHelper {
 
-	public static EList<Connection> getConnections(IInterfaceElement oppositeIE) {
-		IInterfaceElement fbOppostiteIE = oppositeIE.getFBNetworkElement().getOpposite()
+	public static EList<Connection> getConnections(final IInterfaceElement oppositeIE) {
+		final IInterfaceElement fbOppostiteIE = oppositeIE.getFBNetworkElement().getOpposite()
 				.getInterfaceElement(oppositeIE.getName());
 
 		if (null != fbOppostiteIE) {
-			final EList<Connection> connections = (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
+			return (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
 					: fbOppostiteIE.getOutputConnections();
-
-			return connections;
 		}
 		return null;
 	}
 
-	public static IInterfaceElement getOppositeInterfaceElement(IInterfaceElement ie, Connection connection) {
-		IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite().getInterfaceElement(ie.getName());
+	public static IInterfaceElement getOppositeInterfaceElement(final IInterfaceElement ie, final Connection connection) {
+		final IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite().getInterfaceElement(ie.getName());
 
 		if (null != fbOppostiteIE) {
-			IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput()) ? connection.getSource()
+			final IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput()) ? connection.getSource()
 					: connection.getDestination();
 
 			if ((null != connectionOpposite) && connectionOpposite.getFBNetworkElement().isMapped()) {
-				FBNetworkElement mappedOppositeElement = connectionOpposite.getFBNetworkElement().getOpposite();
+				final FBNetworkElement mappedOppositeElement = connectionOpposite.getFBNetworkElement().getOpposite();
 				return mappedOppositeElement.getInterfaceElement(connectionOpposite.getName());
 			}
 
 		}
 		return null;
+	}
+
+	private ConnectionsHelper() {
+		throw new UnsupportedOperationException("Helper class ConnectionsHelper should not be instantiated!"); //$NON-NLS-1$
 	}
 }

@@ -57,8 +57,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated */
 public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
-	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getPosition()
 	 * @generated
@@ -83,7 +83,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/** The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getResource()
 	 * @generated
 	 * @ordered */
@@ -107,21 +107,21 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/** The cached value of the '{@link #getInConnections() <em>In Connections</em>}' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getInConnections()
 	 * @generated
 	 * @ordered */
 	protected EList<Link> inConnections;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	protected DeviceImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -129,147 +129,173 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public Position getPosition() {
 		if (position != null && position.eIsProxy()) {
-			final InternalEObject oldPosition = (InternalEObject) position;
+			InternalEObject oldPosition = (InternalEObject) position;
 			position = (Position) eResolveProxy(oldPosition);
 			if (position != oldPosition) {
-				if (eNotificationRequired()) {
+				InternalEObject newPosition = (InternalEObject) position;
+				NotificationChain msgs = oldPosition.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__POSITION, null, null);
+				if (newPosition.eInternalContainer() == null) {
+					msgs = newPosition.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__POSITION, null, msgs);
+				}
+				if (msgs != null)
+					msgs.dispatch();
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__POSITION,
 							oldPosition, position));
-				}
 			}
 		}
 		return position;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	public Position basicGetPosition() {
 		return position;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	@Override
-	public void setPosition(final Position newPosition) {
-		final Position oldPosition = position;
+	public NotificationChain basicSetPosition(Position newPosition, NotificationChain msgs) {
+		Position oldPosition = position;
 		position = newPosition;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__POSITION, oldPosition,
-					position));
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.DEVICE__POSITION, oldPosition, newPosition);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
+		return msgs;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
+	 * @generated */
+	@Override
+	public void setPosition(Position newPosition) {
+		if (newPosition != position) {
+			NotificationChain msgs = null;
+			if (position != null)
+				msgs = ((InternalEObject) position).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__POSITION, null, msgs);
+			if (newPosition != null)
+				msgs = ((InternalEObject) newPosition).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__POSITION, null, msgs);
+			msgs = basicSetPosition(newPosition, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__POSITION, newPosition,
+					newPosition));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated */
 	@Override
 	public EList<Resource> getResource() {
 		if (resource == null) {
-			resource = new EObjectContainmentWithInverseEList<>(Resource.class, this,
+			resource = new EObjectContainmentWithInverseEList<Resource>(Resource.class, this,
 					LibraryElementPackage.DEVICE__RESOURCE, LibraryElementPackage.RESOURCE__DEVICE);
 		}
 		return resource;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
-			final InternalEObject oldColor = (InternalEObject) color;
+			InternalEObject oldColor = (InternalEObject) color;
 			color = (Color) eResolveProxy(oldColor);
 			if (color != oldColor) {
-				final InternalEObject newColor = (InternalEObject) color;
+				InternalEObject newColor = (InternalEObject) color;
 				NotificationChain msgs = oldColor.eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
 					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR,
 							null, msgs);
 				}
-				if (msgs != null) {
+				if (msgs != null)
 					msgs.dispatch();
-				}
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__COLOR,
 							oldColor, color));
-				}
 			}
 		}
 		return color;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	public Color basicGetColor() {
 		return color;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	public NotificationChain basicSetColor(final Color newColor, NotificationChain msgs) {
-		final Color oldColor = color;
+	public NotificationChain basicSetColor(Color newColor, NotificationChain msgs) {
+		Color oldColor = color;
 		color = newColor;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.DEVICE__COLOR, oldColor, newColor);
-			if (msgs == null) {
+			if (msgs == null)
 				msgs = notification;
-			} else {
+			else
 				msgs.add(notification);
-			}
 		}
 		return msgs;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void setColor(final Color newColor) {
+	public void setColor(Color newColor) {
 		if (newColor != color) {
 			NotificationChain msgs = null;
-			if (color != null) {
+			if (color != null)
 				msgs = ((InternalEObject) color).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
-			}
-			if (newColor != null) {
+			if (newColor != null)
 				msgs = ((InternalEObject) newColor).eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
-			}
 			msgs = basicSetColor(newColor, msgs);
-			if (msgs != null) {
+			if (msgs != null)
 				msgs.dispatch();
-			}
-		} else if (eNotificationRequired()) {
+		} else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__COLOR, newColor,
 					newColor));
-		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
-			varDeclarations = new EObjectContainmentEList.Resolving<>(VarDeclaration.class, this,
+			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this,
 					LibraryElementPackage.DEVICE__VAR_DECLARATIONS);
 		}
 		return varDeclarations;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public String getProfile() {
@@ -277,32 +303,31 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void setProfile(final String newProfile) {
-		final String oldProfile = profile;
+	public void setProfile(String newProfile) {
+		String oldProfile = profile;
 		profile = newProfile;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__PROFILE, oldProfile,
 					profile));
-		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EList<Link> getInConnections() {
 		if (inConnections == null) {
-			inConnections = new EObjectWithInverseResolvingEList<>(Link.class, this,
+			inConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this,
 					LibraryElementPackage.DEVICE__IN_CONNECTIONS, LibraryElementPackage.LINK__DEVICE);
 		}
 		return inConnections;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public AutomationSystem getAutomationSystem() {
@@ -310,7 +335,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public SystemConfiguration getSystemConfiguration() {
@@ -318,12 +343,12 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public DeviceType getType() {
 		// this cannot be moved to the annotation class because there we don't have the super access!!!
-		final org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
 		if (type instanceof DeviceType) {
 			return (DeviceType) type;
 		}
@@ -331,7 +356,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public Resource getResourceNamed(final String name) {
@@ -339,7 +364,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public void updatePosition(final int x, final int y) {
@@ -347,6 +372,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				.createPosition();
 		pos.setX(x);
 		pos.setY(y);
+
 		setPosition(pos);
 	}
 
@@ -359,40 +385,37 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
-			final InternalEObject oldColor = (InternalEObject) color;
+			InternalEObject oldColor = (InternalEObject) color;
 			color = (Color) eResolveProxy(oldColor);
 			if (color != oldColor) {
-				final InternalEObject newColor = (InternalEObject) color;
+				InternalEObject newColor = (InternalEObject) color;
 				NotificationChain msgs = oldColor.eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
 					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR,
 							null, msgs);
 				}
-				if (msgs != null) {
+				if (msgs != null)
 					msgs.dispatch();
-				}
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__COLOR,
 							oldColor, color));
-				}
 			}
 		}
 		return color;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
-	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID,
-			final NotificationChain msgs) {
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.DEVICE__RESOURCE:
 			return ((InternalEList<InternalEObject>) (InternalEList<?>) getResource()).basicAdd(otherEnd, msgs);
@@ -404,12 +427,13 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
-			final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+		case LibraryElementPackage.DEVICE__POSITION:
+			return basicSetPosition(null, msgs);
 		case LibraryElementPackage.DEVICE__COLOR:
 			return basicSetColor(null, msgs);
 		case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
@@ -424,20 +448,18 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case LibraryElementPackage.DEVICE__POSITION:
-			if (resolve) {
+			if (resolve)
 				return getPosition();
-			}
 			return basicGetPosition();
 		case LibraryElementPackage.DEVICE__COLOR:
-			if (resolve) {
+			if (resolve)
 				return getColor();
-			}
 			return basicGetColor();
 		case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
 			return getVarDeclarations();
@@ -453,11 +475,11 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case LibraryElementPackage.DEVICE__POSITION:
 			setPosition((Position) newValue);
@@ -487,10 +509,10 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
 		case LibraryElementPackage.DEVICE__POSITION:
 			setPosition((Position) null);
@@ -517,10 +539,10 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case LibraryElementPackage.DEVICE__POSITION:
 			return position != null;
@@ -540,10 +562,10 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public int eBaseStructuralFeatureID(final int derivedFeatureID, final Class<?> baseClass) {
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (derivedFeatureID) {
 			case LibraryElementPackage.DEVICE__POSITION:
@@ -572,10 +594,10 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public int eDerivedStructuralFeatureID(final int baseFeatureID, final Class<?> baseClass) {
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (baseFeatureID) {
 			case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
@@ -604,15 +626,14 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
+		if (eIsProxy())
 			return super.toString();
-		}
 
-		final StringBuilder result = new StringBuilder(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (profile: "); //$NON-NLS-1$
 		result.append(profile);
 		result.append(')');

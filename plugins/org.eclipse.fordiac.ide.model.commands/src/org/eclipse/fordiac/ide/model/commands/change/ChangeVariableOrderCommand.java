@@ -19,16 +19,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeVariableOrderCommand extends Command {
-	private final VarDeclaration var;
+	private final VarDeclaration variable;
 	private final EList<VarDeclaration> type;
 	private final int oldIndex;
 	private int newIndex;
 
-	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration var, int indexChanged) {
+	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration variable, int indexChanged) {
 		this.type = type;
-		this.var = var;
+		this.variable = variable;
 
-		oldIndex = type.indexOf(var);
+		oldIndex = type.indexOf(variable);
 
 		// move up : -1
 		// move down : +1
@@ -46,13 +46,13 @@ public class ChangeVariableOrderCommand extends Command {
 		}
 	}
 
-	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration var, boolean moveUp) {
-		this(type, var, moveUp ? -1 : 1);
+	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration variable, boolean moveUp) {
+		this(type, variable, moveUp ? -1 : 1);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (null != var) && (type.size() > 1) && (type.size() > newIndex);
+		return (null != variable) && (type.size() > 1) && (type.size() > newIndex);
 	}
 
 	@Override
@@ -71,6 +71,6 @@ public class ChangeVariableOrderCommand extends Command {
 	}
 
 	private void moveTo(int index) {
-		type.move(index, var);
+		type.move(index, variable);
 	}
 }

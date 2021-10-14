@@ -45,7 +45,9 @@ public class CMakeListsTemplate extends ForteFBTemplate {
     _builder.newLine();
     _builder.append("# If you want to set your own name independent of storage location you can use");
     _builder.newLine();
-    _builder.append("# forte_add_module(\"YOUR_MODULE_NAME_HERE\" \"short description of your module\")");
+    _builder.append("# forte_add_module(\"YOUR_MODULE_NAME_HERE\" <ON/OFF> \"short description of your module\")");
+    _builder.newLine();
+    _builder.append("# ON/OFF to specify if the module shall be added by default or not");
     _builder.newLine();
     _builder.append("# Additional parameters can be added to specify dependencies on other modules");
     _builder.newLine();

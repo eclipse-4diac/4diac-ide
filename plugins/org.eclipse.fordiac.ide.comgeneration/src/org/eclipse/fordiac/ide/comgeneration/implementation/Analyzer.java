@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 Luka Lednicki, fortiss GmbH
- * 				 2018 Johannes Kepler University	
- * 
+ * 				 2018 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Luka Lednicki, Gerd Kainz, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - cleaned up some code fix for multiple data connections   
+ *   Alois Zoitl - cleaned up some code fix for multiple data connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.comgeneration.implementation;
 
@@ -35,43 +35,44 @@ public class Analyzer {
 
 	private CommunicationModel communicationModel;
 
-	public CommunicationModel analyze(Application application) {
+	public CommunicationModel analyze(final Application application) {
 		communicationModel = new CommunicationModel();
-		for (EventConnection connection : application.getFBNetwork().getEventConnections()) {
+		for (final EventConnection connection : application.getFBNetwork().getEventConnections()) {
 			collectChannels(connection);
 		}
-		for (DataConnection connection : application.getFBNetwork().getDataConnections()) {
+		for (final DataConnection connection : application.getFBNetwork().getDataConnections()) {
 			collectChannels(connection);
 		}
 		collectMediaInformation();
 		return communicationModel;
 	}
 
-	public void collectChannels(Connection connection) {
+	public void collectChannels(final Connection connection) {
 		if (connection.getSourceElement().isMapped() && connection.getDestinationElement().isMapped()
 				&& connection.getSourceElement().getResource() != connection.getDestinationElement().getResource()) {
 			// we only not to add this connection if both ends are mapped to two different
 			// resources
 
-			List<Event> sourceEvents = getSourceEvents(connection);
-			Resource sourceResource = connection.getSourceElement().getResource();
-			Resource destinationResource = connection.getDestinationElement().getResource();
+			final List<Event> sourceEvents = getSourceEvents(connection);
+			final Resource sourceResource = connection.getSourceElement().getResource();
+			final Resource destinationResource = connection.getDestinationElement().getResource();
 
-			FBNetworkElement mappedElement = connection.getDestinationElement().getOpposite();
-			boolean local = sourceResource.getDevice() == destinationResource.getDevice();
+			final FBNetworkElement mappedElement = connection.getDestinationElement().getOpposite();
+			final boolean local = sourceResource.getDevice() == destinationResource.getDevice();
 
-			for (Event sourceEvent : sourceEvents) {
-				CommunicationChannel channel = getComChannel(local, sourceEvent, connection);
+			for (final Event sourceEvent : sourceEvents) {
+				final CommunicationChannel channel = getComChannel(local, sourceEvent, connection);
 				if (null != channel) {
-					CommunicationChannelDestination destination = channel.getDestination(destinationResource);
+					final CommunicationChannelDestination destination = channel.getDestination(destinationResource);
 
 					destination.getConnection().add(connection);
-					int portIndex = getPortIndex(connection, sourceEvent);
+					final int portIndex = getPortIndex(connection, sourceEvent);
 
-					List<IInterfaceElement> destinationPortList = destination.getDestinationPorts().get(portIndex);
+					List<IInterfaceElement> destinationPortList = destination.getDestinationPorts()
+							.get(Integer.valueOf(portIndex));
 					if (null == destinationPortList) {
 						destinationPortList = new ArrayList<>();
-						destination.getDestinationPorts().put(portIndex, destinationPortList);
+						destination.getDestinationPorts().put(Integer.valueOf(portIndex), destinationPortList);
 					}
 					destinationPortList.add(mappedElement.getInterfaceElement(connection.getDestination().getName()));
 				}
@@ -79,13 +80,13 @@ public class Analyzer {
 		}
 	}
 
-	private static int getPortIndex(Connection connection, Event sourceEvent) {
+	private static int getPortIndex(final Connection connection, final Event sourceEvent) {
 		int portIndex = -2;
 		if (connection instanceof EventConnection) {
 			portIndex = -1;
 		} else if (connection instanceof DataConnection) {
 			portIndex = 0;
-			for (With with : sourceEvent.getWith()) {
+			for (final With with : sourceEvent.getWith()) {
 				if (with.getVariables().getName().equals(connection.getSource().getName())) {
 					break;
 				}
@@ -95,13 +96,13 @@ public class Analyzer {
 		return portIndex;
 	}
 
-	private static List<Event> getSourceEvents(Connection connection) {
-		List<Event> sourceEvents = new ArrayList<>();
-		FBNetworkElement mappedElement = connection.getSourceElement().getOpposite();
+	private static List<Event> getSourceEvents(final Connection connection) {
+		final List<Event> sourceEvents = new ArrayList<>();
+		final FBNetworkElement mappedElement = connection.getSourceElement().getOpposite();
 		if (connection instanceof EventConnection) {
 			sourceEvents.add((Event) mappedElement.getInterfaceElement(connection.getSource().getName()));
 		} else if (connection instanceof DataConnection) {
-			for (With with : ((VarDeclaration) connection.getSource()).getWiths()) {
+			for (final With with : ((VarDeclaration) connection.getSource()).getWiths()) {
 				if (with.eContainer() instanceof Event) {
 					sourceEvents.add((Event) mappedElement.getInterfaceElement(((Event) with.eContainer()).getName()));
 				}
@@ -110,7 +111,7 @@ public class Analyzer {
 		return sourceEvents;
 	}
 
-	private CommunicationChannel getComChannel(boolean local, Event sourceEvent, Connection connection) {
+	private CommunicationChannel getComChannel(final boolean local, final Event sourceEvent, final Connection connection) {
 		CommunicationChannel channel = communicationModel.getChannels().get(sourceEvent);
 		if (null == channel) {
 			if (connection instanceof EventConnection) {
@@ -129,25 +130,25 @@ public class Analyzer {
 	}
 
 	private void collectMediaInformation() {
-		for (CommunicationChannel channel : communicationModel.getChannels().values()) {
+		for (final CommunicationChannel channel : communicationModel.getChannels().values()) {
 			collectMediaInformation(channel);
 		}
 	}
 
-	private static void collectMediaInformation(CommunicationChannel channel) {
-		for (CommunicationChannelDestination destination : channel.getDestinations()) {
+	private static void collectMediaInformation(final CommunicationChannel channel) {
+		for (final CommunicationChannelDestination destination : channel.getDestinations()) {
 			collectMediaInformation(destination);
 		}
 	}
 
-	private static void collectMediaInformation(CommunicationChannelDestination destination) {
-		Device sourceDevice = (Device) destination.getCommunicationChannel().getSourceResource().eContainer();
-		Device destinationDevice = (Device) destination.getDestinationResource().eContainer();
-		for (Link sourceLink : sourceDevice.getInConnections()) {
-			for (Link destinationLink : destinationDevice.getInConnections()) {
+	private static void collectMediaInformation(final CommunicationChannelDestination destination) {
+		final Device sourceDevice = (Device) destination.getCommunicationChannel().getSourceResource().eContainer();
+		final Device destinationDevice = (Device) destination.getDestinationResource().eContainer();
+		for (final Link sourceLink : sourceDevice.getInConnections()) {
+			for (final Link destinationLink : destinationDevice.getInConnections()) {
 				if (sourceLink.getSegment() == destinationLink.getSegment()) {
 					destination.getAvailableMedia()
-							.add(new CommunicationMediaInfo(sourceLink, destinationLink, sourceLink.getSegment()));
+					.add(new CommunicationMediaInfo(sourceLink, destinationLink, sourceLink.getSegment()));
 				}
 			}
 		}

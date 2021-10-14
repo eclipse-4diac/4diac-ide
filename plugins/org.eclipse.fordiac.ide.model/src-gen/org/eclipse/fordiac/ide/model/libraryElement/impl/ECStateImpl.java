@@ -85,8 +85,8 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	 * @ordered */
 	protected String comment = COMMENT_EDEFAULT;
 
-	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getPosition()
 	 * @generated
@@ -95,7 +95,7 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 
 	/** The cached value of the '{@link #getECAction() <em>EC Action</em>}' containment reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getECAction()
 	 * @generated
 	 * @ordered */
@@ -111,21 +111,21 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 
 	/** The cached value of the '{@link #getInTransitions() <em>In Transitions</em>}' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getInTransitions()
 	 * @generated
 	 * @ordered */
 	protected EList<ECTransition> inTransitions;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	protected ECStateImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -133,19 +133,19 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EList<ECAction> getECAction() {
 		if (eCAction == null) {
-			eCAction = new EObjectContainmentWithInverseEList<>(ECAction.class, this,
+			eCAction = new EObjectContainmentWithInverseEList<ECAction>(ECAction.class, this,
 					LibraryElementPackage.EC_STATE__EC_ACTION, LibraryElementPackage.EC_ACTION__EC_STATE);
 		}
 		return eCAction;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public String getComment() {
@@ -153,58 +153,90 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void setComment(final String newComment) {
-		final String oldComment = comment;
+	public void setComment(String newComment) {
+		String oldComment = comment;
 		comment = newComment;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__COMMENT, oldComment,
 					comment));
-		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public Position getPosition() {
 		if (position != null && position.eIsProxy()) {
-			final InternalEObject oldPosition = (InternalEObject) position;
+			InternalEObject oldPosition = (InternalEObject) position;
 			position = (Position) eResolveProxy(oldPosition);
 			if (position != oldPosition) {
-				if (eNotificationRequired()) {
+				InternalEObject newPosition = (InternalEObject) position;
+				NotificationChain msgs = oldPosition.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EC_STATE__POSITION, null, null);
+				if (newPosition.eInternalContainer() == null) {
+					msgs = newPosition.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EC_STATE__POSITION, null, msgs);
+				}
+				if (msgs != null)
+					msgs.dispatch();
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EC_STATE__POSITION,
 							oldPosition, position));
-				}
 			}
 		}
 		return position;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	public Position basicGetPosition() {
 		return position;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	@Override
-	public void setPosition(final Position newPosition) {
-		final Position oldPosition = position;
+	public NotificationChain basicSetPosition(Position newPosition, NotificationChain msgs) {
+		Position oldPosition = position;
 		position = newPosition;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__POSITION, oldPosition,
-					position));
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.EC_STATE__POSITION, oldPosition, newPosition);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
+		return msgs;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
+	 * @generated */
+	@Override
+	public void setPosition(Position newPosition) {
+		if (newPosition != position) {
+			NotificationChain msgs = null;
+			if (position != null)
+				msgs = ((InternalEObject) position).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EC_STATE__POSITION, null, msgs);
+			if (newPosition != null)
+				msgs = ((InternalEObject) newPosition).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EC_STATE__POSITION, null, msgs);
+			msgs = basicSetPosition(newPosition, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__POSITION, newPosition,
+					newPosition));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated */
 	@Override
 	public String getName() {
@@ -212,43 +244,42 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void setName(final String newName) {
-		final String oldName = name;
+	public void setName(String newName) {
+		String oldName = name;
 		name = newName;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__NAME, oldName, name));
-		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EList<ECTransition> getOutTransitions() {
 		if (outTransitions == null) {
-			outTransitions = new EObjectWithInverseResolvingEList<>(ECTransition.class, this,
+			outTransitions = new EObjectWithInverseResolvingEList<ECTransition>(ECTransition.class, this,
 					LibraryElementPackage.EC_STATE__OUT_TRANSITIONS, LibraryElementPackage.EC_TRANSITION__SOURCE);
 		}
 		return outTransitions;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EList<ECTransition> getInTransitions() {
 		if (inTransitions == null) {
-			inTransitions = new EObjectWithInverseResolvingEList<>(ECTransition.class, this,
+			inTransitions = new EObjectWithInverseResolvingEList<ECTransition>(ECTransition.class, this,
 					LibraryElementPackage.EC_STATE__IN_TRANSITIONS, LibraryElementPackage.EC_TRANSITION__DESTINATION);
 		}
 		return inTransitions;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public boolean isStartState() {
@@ -256,7 +287,7 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public void updatePosition(final int x, final int y) {
@@ -264,6 +295,7 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 				.createPosition();
 		pos.setX(x);
 		pos.setY(y);
+
 		setPosition(pos);
 	}
 
@@ -276,67 +308,60 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public ECC getECC() {
-		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC) {
+		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC)
 			return null;
-		}
 		return (ECC) eContainer();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	public ECC basicGetECC() {
-		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC) {
+		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC)
 			return null;
-		}
 		return (ECC) eInternalContainer();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	public NotificationChain basicSetECC(final ECC newECC, NotificationChain msgs) {
+	public NotificationChain basicSetECC(ECC newECC, NotificationChain msgs) {
 		msgs = eBasicSetContainer((InternalEObject) newECC, LibraryElementPackage.EC_STATE__ECC, msgs);
 		return msgs;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void setECC(final ECC newECC) {
+	public void setECC(ECC newECC) {
 		if (newECC != eInternalContainer()
 				|| (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC && newECC != null)) {
-			if (EcoreUtil.isAncestor(this, newECC)) {
+			if (EcoreUtil.isAncestor(this, newECC))
 				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
-			}
 			NotificationChain msgs = null;
-			if (eInternalContainer() != null) {
+			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
-			}
-			if (newECC != null) {
+			if (newECC != null)
 				msgs = ((InternalEObject) newECC).eInverseAdd(this, LibraryElementPackage.ECC__EC_STATE, ECC.class,
 						msgs);
-			}
 			msgs = basicSetECC(newECC, msgs);
-			if (msgs != null) {
+			if (msgs != null)
 				msgs.dispatch();
-			}
-		} else if (eNotificationRequired()) {
+		} else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__ECC, newECC, newECC));
-		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
-	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.EC_STATE__EC_ACTION:
 			return ((InternalEList<InternalEObject>) (InternalEList<?>) getECAction()).basicAdd(otherEnd, msgs);
@@ -345,9 +370,8 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		case LibraryElementPackage.EC_STATE__IN_TRANSITIONS:
 			return ((InternalEList<InternalEObject>) (InternalEList<?>) getInTransitions()).basicAdd(otherEnd, msgs);
 		case LibraryElementPackage.EC_STATE__ECC:
-			if (eInternalContainer() != null) {
+			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
-			}
 			return basicSetECC((ECC) otherEnd, msgs);
 		default:
 			return super.eInverseAdd(otherEnd, featureID, msgs);
@@ -355,12 +379,13 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
-			final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+		case LibraryElementPackage.EC_STATE__POSITION:
+			return basicSetPosition(null, msgs);
 		case LibraryElementPackage.EC_STATE__EC_ACTION:
 			return ((InternalEList<?>) getECAction()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.EC_STATE__OUT_TRANSITIONS:
@@ -375,10 +400,10 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public NotificationChain eBasicRemoveFromContainerFeature(final NotificationChain msgs) {
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
 		case LibraryElementPackage.EC_STATE__ECC:
 			return eInternalContainer().eInverseRemove(this, LibraryElementPackage.ECC__EC_STATE, ECC.class, msgs);
@@ -388,19 +413,18 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case LibraryElementPackage.EC_STATE__NAME:
 			return getName();
 		case LibraryElementPackage.EC_STATE__COMMENT:
 			return getComment();
 		case LibraryElementPackage.EC_STATE__POSITION:
-			if (resolve) {
+			if (resolve)
 				return getPosition();
-			}
 			return basicGetPosition();
 		case LibraryElementPackage.EC_STATE__EC_ACTION:
 			return getECAction();
@@ -409,9 +433,8 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		case LibraryElementPackage.EC_STATE__IN_TRANSITIONS:
 			return getInTransitions();
 		case LibraryElementPackage.EC_STATE__ECC:
-			if (resolve) {
+			if (resolve)
 				return getECC();
-			}
 			return basicGetECC();
 		default:
 			return super.eGet(featureID, resolve, coreType);
@@ -419,11 +442,11 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case LibraryElementPackage.EC_STATE__NAME:
 			setName((String) newValue);
@@ -456,10 +479,10 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
 		case LibraryElementPackage.EC_STATE__NAME:
 			setName(NAME_EDEFAULT);
@@ -489,10 +512,10 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case LibraryElementPackage.EC_STATE__NAME:
 			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
@@ -514,10 +537,10 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public int eBaseStructuralFeatureID(final int derivedFeatureID, final Class<?> baseClass) {
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (derivedFeatureID) {
 			case LibraryElementPackage.EC_STATE__POSITION:
@@ -530,10 +553,10 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public int eDerivedStructuralFeatureID(final int baseFeatureID, final Class<?> baseClass) {
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (baseFeatureID) {
 			case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
@@ -546,15 +569,14 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
+		if (eIsProxy())
 			return super.toString();
-		}
 
-		final StringBuilder result = new StringBuilder(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$

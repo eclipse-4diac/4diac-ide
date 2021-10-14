@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Service Interface</b></em>'. <!-- end-user-doc
@@ -65,14 +66,14 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	protected String comment = COMMENT_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ServiceInterfaceImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -80,7 +81,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getName() {
@@ -88,19 +89,20 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setName(String newName) {
-		String oldName = name;
+		final String oldName = name;
 		name = newName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_INTERFACE__NAME,
 					oldName, name));
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getComment() {
@@ -108,19 +110,37 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setComment(String newComment) {
-		String oldComment = comment;
+		final String oldComment = comment;
 		comment = newComment;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_INTERFACE__COMMENT,
 					oldComment, comment));
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public Service getService() {
+		return (Service) this.eContainer();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public boolean isLeftInterface() {
+		final ServiceInterface leftInterface = getService().getLeftInterface();
+		return this.equals(leftInterface);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -135,7 +155,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -153,7 +173,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -171,7 +191,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -186,14 +206,15 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$

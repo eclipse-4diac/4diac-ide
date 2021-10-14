@@ -17,7 +17,7 @@ package org.eclipse.fordiac.ide.model.Palette;
 
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 
-import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -45,9 +45,9 @@ public interface DataTypePaletteEntry extends PaletteEntry {
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.CommonElementImporter"
 	 * @generated */
 	@Override
-	TypeImporter getTypeImporter();
+	CommonElementImporter getImporter();
 
 } // DataTypePaletteEntry

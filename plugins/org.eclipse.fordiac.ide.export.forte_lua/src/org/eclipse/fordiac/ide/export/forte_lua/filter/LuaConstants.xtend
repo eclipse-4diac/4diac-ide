@@ -58,10 +58,10 @@ class LuaConstants {
 	def static luaStateName(ECState state) '''ECC_«state.name»'''
 
 	def static luaInputEventName(
-		Event event) '''«IF event instanceof AdapterEvent»AEI_«event.name.replaceAll("\\.","_")»«ELSE»EI_«event.name»«ENDIF»'''
+		Event event) '''«IF event instanceof AdapterEvent»AEI_«event.name.replace('.','_')»«ELSE»EI_«event.name»«ENDIF»'''
 
 	def static luaOutputEventName(
-		Event event) '''«IF event instanceof AdapterEvent»AEO_«event.name.replaceAll("\\.","_")»«ELSE»EO_«event.name»«ENDIF»'''
+		Event event) '''«IF event instanceof AdapterEvent»AEO_«event.name.replace('.','_')»«ELSE»EO_«event.name»«ENDIF»'''
 
 	def static luaAdapterInputEventName(Event event, String adapterName) '''AEI_«adapterName»_«event.name»'''
 
@@ -226,7 +226,7 @@ class LuaConstants {
 
 	def static luaSendOutputEvent(Event event) '''fb(«event.luaOutputEventName»)'''
 
-	def static luaSendAdapterOutputEvent(Event event) '''fb(AEO_«event.name.replaceAll("\\.", "_")»)'''
+	def static luaSendAdapterOutputEvent(Event event) '''fb(AEO_«event.name.replace('.','_')»)'''
 
 	def static getEventWith(Event event, List<Integer> with, List<VarDeclaration> vars) {
 		if (event.with.empty) {

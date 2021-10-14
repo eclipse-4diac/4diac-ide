@@ -4,3 +4,4 @@
 **/*.xtendbin
 **/*java._trace
 /.sonarlint/
+**/*.orig

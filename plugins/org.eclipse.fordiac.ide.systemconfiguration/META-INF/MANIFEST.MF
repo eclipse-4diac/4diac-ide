@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.ui.views.properties.tabbed,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.util,
- org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)",
+ org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.resourceediting,
  org.eclipse.ui.navigator,
  org.eclipse.fordiac.ide.deployment,
@@ -23,8 +23,8 @@ Require-Bundle: org.eclipse.ui.views.properties.tabbed,
  org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.14.0.qualifier
-Bundle-Name: System Configuration (Incubation)
+Bundle-Version: 2.0.0.qualifier
+Bundle-Name: System Configuration
 Bundle-Activator: org.eclipse.fordiac.ide.systemconfiguration.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemconfiguration;singleton:=true

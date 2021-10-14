@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Sandor Bacsi
+ *               2021 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,35 +10,86 @@
  *
  * Contributors:
  *   Sandor Bacsi - initial API and implementation and/or initial documentation
+ *   Ernst Blecha - additional constraints, remove BOOL and TIME constraint
  *******************************************************************************/
 import 'platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore'
 
 package libraryElement
 
---FBs which do not have any input connections on event inputs
---Problem: Unreachable FB
+-- FBs which do not have any input connections on event inputs
+-- Problem: Unreachable FB
 context FB
 inv UnreachableFB: self.interface.eventInputs.inputConnections->size() > 0
 
---If data inputs does not have input connections it should have a value which is not empty and not spaces
+context FB
+-- FB comment field should have a value which is not empty and not spaces
+-- Problem: FB is not commented good enough
+inv FBCommentFieldMustHaveValue: self.comment <> '' and Sequence{1..self.comment.size()}->select(i | self.comment.substring(i, i) = ' ')->size() <> self.comment.size()
+
+-- CFBs which do not have any input connections on event inputs
+-- Problem: Unreachable FB
+context CFBInstance
+inv UnreachableCFB: self.interface.eventInputs.inputConnections->size() > 0
+
+-- Subapps which do not have any input connections on event inputs
+-- Problem: Unreachable Subapp
+context SubApp
+inv UnreachableSubApp: self.interface.eventInputs.inputConnections->size() > 0
+
+-- Subapplication with no content
+-- Problem: Empty Subapplication
+context SubApp
+inv EmptySubApp: self.subAppNetwork.networkElements->size() > 0
+
+-- Subapplication that has no internal connections and no internally set values
+-- Problem: Lazy Subapplication
+context SubApp
+inv LazySubApp:
+	self.subAppNetwork.networkElements->forAll(
+		interface.inputVars->forAll(
+			value.value <> '' or 
+			(not (
+				inputConnections->size() = 1 and
+				inputConnections->forAll(getSourceElement() = self)
+			))
+		)
+		or
+		interface.outputVars->forAll(
+			(not (
+				outputConnections->size() = 1 and
+				outputConnections->forAll(getDestinationElement() = self)
+			))
+		)
+		or
+		interface.eventOutputs->forAll(
+			(not (
+				outputConnections->size() = 1 and
+				outputConnections->forAll(getDestinationElement() = self)
+			))
+		)
+		or
+		interface.eventInputs->forAll(
+			(not (
+				inputConnections->size() = 1 and
+				inputConnections->forAll(getSourceElement() = self)
+			))
+		)
+	)
+
+-- If data inputs does not have input connections it should have a value which is not empty and not spaces
 context VarDeclaration
 inv DataInputMustHaveValue: self.isInput implies (self.inputConnections->size() = 0 implies (self.value.value <> '' and Sequence{1..self.value.value.size()}->select(i | self.value.value.substring(i, i) = ' ')->size() <> self.value.value.size()))
 
--- FB comment field should have a value which is not empty and not spaces
--- Problem: FB is not commented good enough
-context FB
-inv FBCommentFieldMustHaveValue: self.comment <> '' and Sequence{1..self.comment.size()}->select(i | self.comment.substring(i, i) = ' ')->size() <> self.comment.size()
-
--- Validation of TIME
--- TODO: Cover all test cases of ForteNgDateTimeExpressionTest.xtend(?)
-context VarDeclaration
-inv TimeFormat : self.typeName ='TIME' and self.value.value <> '' implies (self.value.value.matches('(T|t|LT|lt|TIME|time|LTIME|ltime){1}#[0-9]+(ns|us|ms|s|m|h|){1}'))
-
--- Validation of BOOL
-context VarDeclaration
-inv BoolFormat : self.typeName ='BOOL' and self.value.value <> '' implies (self.value.value.toLower() = 'true' or self.value.value.toLower() ='false')
-
 -- If the particular input event is connected, then the associated data should be connected or configured
 context Event
-inv AssociatedDataMustBeConfigured: self.inputConnections->size() > 0 implies (self.with.variables->forAll(variable | variable.inputConnections->size() > 0 or variable.value.value <> '')) 
+inv AssociatedDataMustBeConfigured: self.inputConnections->size() > 0 implies (self.with.variables->forAll(variable | variable.inputConnections->size() > 0 or variable.value.value <> ''))
+
+context DataConnection
+inv DuplicateDataConnection:
+	self.getFBNetwork().dataConnections->forAll(connection | self <> connection implies self.source <> connection.source or self.destination <> connection.destination)
+
+context EventConnection
+inv DuplicateEventConnection:
+	self.getFBNetwork().eventConnections->forAll(connection | self <> connection implies self.source <> connection.source or self.destination <> connection.destination) 
+		
 endpackage

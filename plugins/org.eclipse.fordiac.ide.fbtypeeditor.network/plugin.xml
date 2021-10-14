@@ -73,12 +73,14 @@
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                category="FB-Network"
                id="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
+               image="fordiacimage://ICON_EVENT"
                indented="true"
                label="Edit Events">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
                category="FB-Network"
+               image="fordiacimage://ICON_DATA"
                id="org.eclipse.fordiac.ide.application.property.tab.EditData"
                indented="true"
                label="Edit Data">
@@ -86,6 +88,7 @@
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
                category="FB-Network"
+               image="fordiacimage://ICON_ADAPTER_LIST"
                id="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
                indented="true"
                label="Edit Adapters">

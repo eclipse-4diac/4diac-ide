@@ -46,7 +46,11 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 		  «generateFBInterfaceDeclaration»
 
 		  «generateFBInterfaceSpecDeclaration»
-
+		«IF !type.internalFbs.empty»
+		  static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
+		  «generateInternalFbDefinition»
+		  
+		«ENDIF»
         «IF !type.internalVars.isEmpty»
 		  «generateInternalVarDelcaration(type)»
 
@@ -64,11 +68,25 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 		  «type.generateBasicFBDataArray»
 
 		public:
-		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : 
+		  «IF type.internalFbs.empty»
+		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
 		       «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
+		  «ELSE»
+		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+		  	   «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData, scmInternalFBs, csmAmountOfInternalFBs) {
+		  «ENDIF»
 		  };
 
+		  «IF !type.internalFbs.empty»
+		  virtual ~«FBClassName»() {
+		    for(size_t i = 0; i < csmAmountOfInternalFBs; ++i){
+		      delete mInternalFBs[i];
+		    }
+		    delete[] mInternalFBs;
+		  };
+		  «ELSE»
 		  virtual ~«FBClassName»() = default;
+		  «ENDIF»
 		};
 
 		«generateIncludeGuardEnd»
@@ -77,6 +95,9 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 
 	override protected generateHeaderIncludes() '''
 		#include "simplefb.h"
+		«IF !type.internalFbs.isEmpty»
+		#include "typelib.h"
+		«ENDIF»
 		«(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).generateTypeIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
 		

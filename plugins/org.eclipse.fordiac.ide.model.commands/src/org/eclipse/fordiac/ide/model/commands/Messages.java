@@ -24,6 +24,7 @@ public final class Messages extends NLS {
 	public static String AdapterConnectionNotAllowed;
 	public static String ChangeBackgroundcolorCommand_LABEL_ChangeColor;
 	public static String ChangeValueCommand_LABEL_ChangeValue;
+	public static String ChangeValueCommand_ConstantValuesNoAllowedOnAny;
 	public static String CreateSubAppInstanceCommand_CreateSubapplicationInstance;
 	public static String DeleteConnectionCommand_DeleteConnection;
 	public static String DeleteFBNetworkElement;
@@ -37,9 +38,17 @@ public final class Messages extends NLS {
 	public static String LinkConstraints_STATUSMessage_NotCompatible;
 	public static String MapToCommand_STATUSMessage_AlreadyMapped;
 	public static String MapToCommand_STATUSMessage_TypeNotSupported;
+	public static String ReconnectDataConnectionCommand_LABEL;
+	public static String ReconnectEventConnectionCommand_LABEL;
+	public static String ReconnectAdapterConnectionCommand_LABEL;
 	public static String ViewSetPositionCommand_LABEL_Move;
 	public static String WithExists;
 	public static String ConnectingIncompatibleInterfaceTypes;
+	public static String UntypeSubappCommand_Label;
+
+	public static String UpdateFBTypeCommand_Pin_not_found;
+	public static String UpdateFBTypeCommand_type_mismatch;
+	public static String UpdateFBTypeCommand_wrong_type;
 
 	static {
 		// initialize resource bundle

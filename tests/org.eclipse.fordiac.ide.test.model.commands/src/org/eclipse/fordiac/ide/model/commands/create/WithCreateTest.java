@@ -164,7 +164,7 @@ public class WithCreateTest extends FBNetworkTestBase {
 	}
 
 	private static void verifyAddExistingWith(State state, State oldState, TestFunction t) {
-		if (!state.getViaUndo()) {
+		if (!state.isViaUndo()) {
 			t.test(state.getMessages().size(), 1);
 			t.test(state.getMessages().get(0), Messages.WithExists);
 		}
@@ -173,51 +173,51 @@ public class WithCreateTest extends FBNetworkTestBase {
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
-				new ExecutionDescription<State>("Prepare Functionblocks", //$NON-NLS-1$
+				new ExecutionDescription<>("Prepare Functionblocks", //$NON-NLS-1$
 						WithCreateTest::createInterfaceElements, //
 						WithCreateTest::verifyFBCreation //
 				), //
-				new ExecutionDescription<State>("Add with at functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Add with at functionblock", //$NON-NLS-1$
 						WithCreateTest::addWith, //
 						WithCreateTest::verifyAddWith //
 				), //
-				new ExecutionDescription<State>("Update Network Elements", //$NON-NLS-1$
+				new ExecutionDescription<>("Update Network Elements", //$NON-NLS-1$
 						WithCreateTest::updateNetworkElements, //
 						WithCreateTest::verifyUpdateNetworkElementsAddedWith //
 				), //
-				new ExecutionDescription<State>("Delete With from functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Delete With from functionblock", //$NON-NLS-1$
 						WithCreateTest::deleteWith, //
 						WithCreateTest::verifyDeleteWith //
 				), //
-				new ExecutionDescription<State>("Update Network Elements", //$NON-NLS-1$
+				new ExecutionDescription<>("Update Network Elements", //$NON-NLS-1$
 						WithCreateTest::updateNetworkElements, //
 						WithCreateTest::verifyUpdateNetworkElementsDeletedWith //
 				), //
-				new ExecutionDescription<State>("Create With without inferface data", //$NON-NLS-1$
+				new ExecutionDescription<>("Create With without inferface data", //$NON-NLS-1$
 						WithCreateTest::nullAll, //
 						CommandTestBase::verifyNothing //
 				), //
-				new ExecutionDescription<State>("Create With without event", //$NON-NLS-1$
+				new ExecutionDescription<>("Create With without event", //$NON-NLS-1$
 						WithCreateTest::nullEvent, //
 						CommandTestBase::verifyNothing //
 				), //
-				new ExecutionDescription<State>("Create With without input", //$NON-NLS-1$
+				new ExecutionDescription<>("Create With without input", //$NON-NLS-1$
 						WithCreateTest::nullInput, //
 						CommandTestBase::verifyNothing //
 				), //
-				new ExecutionDescription<State>("Create With on event-output", //$NON-NLS-1$
+				new ExecutionDescription<>("Create With on event-output", //$NON-NLS-1$
 						WithCreateTest::onEventOutput, //
 						WithCreateTest::verifyNothing //
 				), //
-				new ExecutionDescription<State>("Create With on output", //$NON-NLS-1$
+				new ExecutionDescription<>("Create With on output", //$NON-NLS-1$
 						WithCreateTest::onOutput, //
 						WithCreateTest::verifyNothing //
 				), //
-				new ExecutionDescription<State>("Add with at functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Add with at functionblock", //$NON-NLS-1$
 						WithCreateTest::addWith, //
 						WithCreateTest::verifyAddWith //
 				), //
-				new ExecutionDescription<State>("Add with at functionblock that already exists", //$NON-NLS-1$
+				new ExecutionDescription<>("Add with at functionblock that already exists", //$NON-NLS-1$
 						WithCreateTest::addExistingWith, //
 						WithCreateTest::verifyAddExistingWith //
 				) //

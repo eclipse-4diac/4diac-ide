@@ -61,7 +61,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class TypeInfoWidget implements CommandExecutor {
 
-	private FormToolkit widgetFactory;
+	private final FormToolkit widgetFactory;
 
 	private Consumer<Command> commandExecutor;
 
@@ -82,7 +82,7 @@ public class TypeInfoWidget implements CommandExecutor {
 	private static final String DATE_PROPERTY = "date"; //$NON-NLS-1$
 	private static final String REMARKS_PROPERTY = "remarks"; //$NON-NLS-1$
 
-	public TypeInfoWidget(FormToolkit widgetFactory) {
+	public TypeInfoWidget(final FormToolkit widgetFactory) {
 		this.widgetFactory = widgetFactory;
 	}
 
@@ -91,7 +91,7 @@ public class TypeInfoWidget implements CommandExecutor {
 	}
 
 	public Composite createControls(final Composite parent) {
-		Composite rootComposite = getWidgetFactory().createComposite(parent);
+		final Composite rootComposite = getWidgetFactory().createComposite(parent);
 		rootComposite.setLayout(new GridLayout(2, true));
 		rootComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createControls(createComposite(rootComposite), createComposite(rootComposite));
@@ -103,8 +103,8 @@ public class TypeInfoWidget implements CommandExecutor {
 		createVersionInfoGroup(rightComposite);
 	}
 
-	private void createIdentificationGroup(Composite parent) {
-		Group identificationGroup = createGroup(parent, FordiacMessages.Identification);
+	private void createIdentificationGroup(final Composite parent) {
+		final Group identificationGroup = createGroup(parent, FordiacMessages.Identification);
 		identificationGroup.setLayout(new GridLayout(2, false));
 		identificationGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Standard + ":"); //$NON-NLS-1$
@@ -118,7 +118,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.ApplicationDomain + ":"); //$NON-NLS-1$
 		domainText = createGroupText(identificationGroup, true);
 		domainText
-				.addModifyListener(e -> executeCommand(new ChangeApplicationDomainCommand(type, domainText.getText())));
+		.addModifyListener(e -> executeCommand(new ChangeApplicationDomainCommand(type, domainText.getText())));
 
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Function + ":"); //$NON-NLS-1$
 		functionText = createGroupText(identificationGroup, true);
@@ -128,18 +128,18 @@ public class TypeInfoWidget implements CommandExecutor {
 		typeText = createGroupText(identificationGroup, true);
 		typeText.addModifyListener(e -> executeCommand(new ChangeIdentifcationTypeCommand(type, typeText.getText())));
 
-		Label label = getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Description + ":"); //$NON-NLS-1$
+		final Label label = getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Description + ":"); //$NON-NLS-1$
 		label.setLayoutData(new GridData(SWT.NONE, SWT.TOP, false, false));
 		descriptionText = getWidgetFactory().createText(identificationGroup, "", //$NON-NLS-1$
 				SWT.WRAP | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		GridData descriptionTextData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData descriptionTextData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		descriptionText.setLayoutData(descriptionTextData);
 		descriptionText
-				.addModifyListener(e -> executeCommand(new ChangeDescriptionCommand(type, descriptionText.getText())));
+		.addModifyListener(e -> executeCommand(new ChangeDescriptionCommand(type, descriptionText.getText())));
 	}
 
-	private void createVersionInfoGroup(Composite parent) {
-		Group versionInfoGroup = createGroup(parent, FordiacMessages.VersionInfo);
+	private void createVersionInfoGroup(final Composite parent) {
+		final Group versionInfoGroup = createGroup(parent, FordiacMessages.VersionInfo);
 		versionInfoGroup.setLayout(new GridLayout(2, false));
 		versionInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -149,7 +149,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		versionViewer = TableWidgetFactory.createPropertyTableViewer(versionInfoGroup);
 		configureTableLayout(versionViewer.getTable());
 
-		Table table = versionViewer.getTable();
+		final Table table = versionViewer.getTable();
 
 		versionViewer.setContentProvider(new VersionContentProvider());
 		versionViewer.setLabelProvider(new VersionLabelProvider());
@@ -185,8 +185,8 @@ public class TypeInfoWidget implements CommandExecutor {
 
 			@Override
 			public void modify(final Object element, final String property, final Object value) {
-				TableItem tableItem = (TableItem) element;
-				VersionInfo data = (VersionInfo) tableItem.getData();
+				final TableItem tableItem = (TableItem) element;
+				final VersionInfo data = (VersionInfo) tableItem.getData();
 				Command cmd = null;
 				switch (property) {
 				case VERSION_PROPERTY:
@@ -211,18 +211,18 @@ public class TypeInfoWidget implements CommandExecutor {
 		});
 	}
 
-	private static void configureTableLayout(Table table) {
-		TableColumn column1 = new TableColumn(table, SWT.LEFT);
+	private static void configureTableLayout(final Table table) {
+		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(FordiacMessages.Version);
-		TableColumn column2 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
 		column2.setText(FordiacMessages.Organization);
-		TableColumn column3 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
 		column3.setText(FordiacMessages.Author);
-		TableColumn column4 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column4 = new TableColumn(table, SWT.LEFT);
 		column4.setText(FordiacMessages.Date);
-		TableColumn column5 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column5 = new TableColumn(table, SWT.LEFT);
 		column5.setText(FordiacMessages.Remarks);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 70));
 		layout.addColumnData(new ColumnWeightData(20, 90));
 		layout.addColumnData(new ColumnWeightData(20, 90));
@@ -232,29 +232,31 @@ public class TypeInfoWidget implements CommandExecutor {
 	}
 
 	private Composite createComposite(final Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent, SWT.NONE);
+		final Composite composite = getWidgetFactory().createComposite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		return composite;
 	}
 
-	private Text createGroupText(Composite group, boolean editable) {
-		Text text = getWidgetFactory().createText(group, "", SWT.BORDER); //$NON-NLS-1$
+	private Text createGroupText(final Composite group, final boolean editable) {
+		final Text text = getWidgetFactory().createText(group, "", SWT.BORDER); //$NON-NLS-1$
 		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		text.setEditable(editable);
 		text.setEnabled(editable);
 		return text;
 	}
 
-	public void initialize(LibraryElement type, Consumer<Command> commandExecutor) {
+	public void initialize(final LibraryElement type, final Consumer<Command> commandExecutor) {
 		this.commandExecutor = commandExecutor;
 		this.type = type;
 	}
 
 	public void refresh() {
 		if (null != type) {
+			final Consumer<Command> commandExecutorBuffer = commandExecutor;
+			commandExecutor = null;
 			if (null != type.getIdentification()) {
-				Identification id = type.getIdentification();
+				final Identification id = type.getIdentification();
 				standardText.setText((null != id.getStandard()) ? id.getStandard() : ""); //$NON-NLS-1$
 				classificationText.setText((null != id.getClassification()) ? id.getClassification() : ""); //$NON-NLS-1$
 				domainText.setText((null != id.getApplicationDomain()) ? id.getApplicationDomain() : ""); //$NON-NLS-1$
@@ -265,22 +267,25 @@ public class TypeInfoWidget implements CommandExecutor {
 			if (null != type.getVersionInfo()) {
 				versionViewer.setInput(type);
 			}
+			commandExecutor = commandExecutorBuffer;
 		}
 	}
 
 	@Override
-	public void executeCommand(Command cmd) {
-		commandExecutor.accept(cmd);
+	public void executeCommand(final Command cmd) {
+		if (commandExecutor != null) {
+			commandExecutor.accept(cmd);
+		}
 	}
 
-	private Group createGroup(Composite parent, String text) {
-		Group group = new Group(parent, SWT.SHADOW_NONE);
+	private Group createGroup(final Composite parent, final String text) {
+		final Group group = new Group(parent, SWT.SHADOW_NONE);
 		group.setText(text);
 		getWidgetFactory().adapt(group);
 		return group;
 	}
 
-	public void setEnabled(boolean enablement) {
+	public void setEnabled(final boolean enablement) {
 		standardText.setEnabled(enablement);
 		classificationText.setEnabled(enablement);
 		domainText.setEnabled(enablement);

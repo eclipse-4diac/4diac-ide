@@ -23,17 +23,17 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public class FBCreateCommandTest extends FBNetworkTestBase {
 
-	public static State executeCommand(State state) {
+	public static State executeCommand(final State state) {
 		state.setCommand(new FBCreateCommand(state.getFunctionblock(), state.getFbNetwork(), 0, 0));
 
-		assertion.test(state.getCommand() instanceof FBCreateCommand);
+		tester.get().test(state.getCommand() instanceof FBCreateCommand);
 		final FBCreateCommand c = (FBCreateCommand) state.getCommand();
-		assertion.test(c.getPaletteEntry(), state.getFunctionblock());
+		tester.get().test(c.getPaletteEntry(), state.getFunctionblock());
 
 		return commandExecution(state);
 	}
 
-	public static void verifyState(State state, State oldState, TestFunction t) {
+	public static void verifyState(final State state, final State oldState, final TestFunction t) {
 		t.test(!state.getFbNetwork().isSubApplicationNetwork());
 		t.test(!state.getFbNetwork().getNetworkElements().isEmpty());
 		t.test(state.getFbNetwork().getElementNamed(FBNetworkTestBase.State.FUNCTIONBLOCK_NAME));
@@ -64,11 +64,11 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
-				new ExecutionDescription<State>("Add Functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						FBCreateCommandTest::verifyState //
-				) //
-		);
+						) //
+				);
 
 		return createCommands(executionDescriptions);
 	}

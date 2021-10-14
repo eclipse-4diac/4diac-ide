@@ -11,13 +11,14 @@
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed analysis result to key value pairs
- *   Lisa Sonnleithner - Adjustments to change calculation method to average 
+ *   Lisa Sonnleithner - Adjustments to change calculation method to average
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -27,24 +28,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
-	static final String[] CONDITIONS = { "IF", "FOR", "WHILE", "REPEAT" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	static final String[] CONDITIONS = { FordiacKeywords.IF, FordiacKeywords.FOR, FordiacKeywords.WHILE,
+			FordiacKeywords.REPEAT };
 
 	List<MetricResult> metrics = new ArrayList<>();
 	double ccapp = 0.0;
 
 	@Override
-	public void calculateMetrics(INamedElement element) {
+	public void calculateMetrics(final INamedElement element) {
 		super.calculateMetrics(element);
-		CyclomaticData cData = (CyclomaticData) this.data;
+		final CyclomaticData cData = (CyclomaticData) this.data;
 		metrics.add(0, new MetricResult("Cyclomatic Number " + element.getName(), cData.cc));
 		metrics = removeDuplicates(metrics);
 	}
 
-	private List<MetricResult> removeDuplicates(List<MetricResult> list) {
-		List<MetricResult> newList = new ArrayList<>();
+	private static List<MetricResult> removeDuplicates(final List<MetricResult> list) {
+		final List<MetricResult> newList = new ArrayList<>();
 		boolean dupl = false;
-		for (MetricResult m : list) {
-			for (MetricResult n : newList) {
+		for (final MetricResult m : list) {
+			for (final MetricResult n : newList) {
 				if (m.equals(n)) {
 					dupl = true;
 				}
@@ -63,14 +65,14 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	}
 
 	@Override
-	protected MetricData analyzeBFB(BasicFBType basicFBType) {
-		CyclomaticData data = new CyclomaticData();
-		ECC ecc = basicFBType.getECC();
+	protected MetricData analyzeBFB(final BasicFBType basicFBType) {
+		final CyclomaticData data = new CyclomaticData();
+		final ECC ecc = basicFBType.getECC();
 
 		double ccfb = (ecc.getECTransition().size() - ecc.getECState().size() + 2);
 
-		for (ECState state : ecc.getECState()) {
-			for (ECAction action : state.getECAction()) {
+		for (final ECState state : ecc.getECState()) {
+			for (final ECAction action : state.getECAction()) {
 				if (null != action.getAlgorithm()) {
 					ccfb += analyzeAlgorithm(action.getAlgorithm());
 				}
@@ -82,17 +84,17 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 		return data;
 	}
 
-	private static double analyzeAlgorithm(Algorithm algorithm) {
+	private static double analyzeAlgorithm(final Algorithm algorithm) {
 		double ccAlg = 0.0;
-		String algText = algorithm.toString();
+		final String algText = algorithm.toString();
 		int saveIndex = 0;
-		for (String cond : CONDITIONS) {
+		for (final String cond : CONDITIONS) {
 			int lastIndex = 0;
 			while (-1 != lastIndex) {
-				if (cond.equals("REPEAT")) {
-					saveIndex = algText.indexOf(cond + "\r\n", lastIndex);
+				if (cond.equals(FordiacKeywords.REPEAT)) {
+					saveIndex = algText.indexOf(cond + "\r\n", lastIndex); //$NON-NLS-1$
 				} else {
-					saveIndex = algText.toString().indexOf(cond + " ", lastIndex);
+					saveIndex = algText.indexOf(cond + " ", lastIndex); //$NON-NLS-1$
 				}
 				if (0 != saveIndex) {
 					lastIndex = saveIndex;
@@ -107,8 +109,8 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	}
 
 	@Override
-	protected MetricData analyzeCFB(CompositeFBType compositeFBType) {
-		MetricData data = analyzeFBNetwork(((CompositeFBType) compositeFBType).getFBNetwork(), true);
+	protected MetricData analyzeCFB(final CompositeFBType compositeFBType) {
+		final MetricData data = analyzeFBNetwork(compositeFBType.getFBNetwork(), true);
 		metrics.add(new MetricResult("Cyclomatic Number " + compositeFBType.getName(), ((CyclomaticData) data).cc));
 		return data;
 

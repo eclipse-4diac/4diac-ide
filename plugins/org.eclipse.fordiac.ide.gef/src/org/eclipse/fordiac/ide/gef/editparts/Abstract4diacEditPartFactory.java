@@ -21,9 +21,9 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 
-	private GraphicalEditor editor;
+	private final GraphicalEditor editor;
 
-	public Abstract4diacEditPartFactory(GraphicalEditor editor) {
+	protected Abstract4diacEditPartFactory(final GraphicalEditor editor) {
 		super();
 		this.editor = editor;
 	}
@@ -33,7 +33,7 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 	}
 
 	@Override
-	public EditPart createEditPart(EditPart context, Object modelElement) {
+	public EditPart createEditPart(final EditPart context, final Object modelElement) {
 		// get EditPart for model element
 		EditPart part = null;
 		try {
@@ -50,7 +50,7 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 			if (null != part) {
 				part.setModel(modelElement);
 			}
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			Activator.getDefault().logError(Messages.Abstract4diacEditPartFactory_ERROR_CantCreatePartForModelElement,
 					e);
 		}
@@ -64,7 +64,7 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 	 */
 	protected abstract EditPart getPartForElement(EditPart context, Object modelElement);
 
-	protected RuntimeException createEditpartCreationException(final Object modelElement) {
+	protected static RuntimeException createEditpartCreationException(final Object modelElement) {
 		return new RuntimeException(MessageFormat.format(
 				Messages.Abstract4diacEditPartFactory_LABEL_RUNTIMEException_CantCreateModelForElement,
 				((modelElement != null) ? modelElement.getClass().getName() : "null"))); //$NON-NLS-1$

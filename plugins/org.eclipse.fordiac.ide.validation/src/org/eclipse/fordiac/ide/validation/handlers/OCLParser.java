@@ -39,33 +39,22 @@ public class OCLParser {
 	private OCLParser() {
 	}
 
-	public static List<Constraint> loadOCLConstraints(INamedElement element) {
-		InputStream in = null;
+	public static List<Constraint> loadOCLConstraints(final INamedElement element) {
 		String constraintFile;
-		List<Constraint> constraints = new ArrayList<>();
-		Bundle bundle = Activator.getDefault().getBundle();
+		final List<Constraint> constraints = new ArrayList<>();
+		final Bundle bundle = Activator.getDefault().getBundle();
 		constraintFile = getOCLFile(element);
-		try {
-			URL url = FileLocator.find(bundle, new Path(CONSTRAINT_DIRECTORY + IPath.SEPARATOR + constraintFile));
-			url = FileLocator.toFileURL(url);
-			in = url.openStream();
-			OCLInput document = new OCLInput(in);
+		final URL url = FileLocator.find(bundle, new Path(CONSTRAINT_DIRECTORY + IPath.SEPARATOR + constraintFile));
+		try (InputStream in = FileLocator.toFileURL(url).openStream()) {
+			final OCLInput document = new OCLInput(in);
 			constraints.addAll(Activator.getDefault().getOclInstance().parse(document));
-
 		} catch (ParserException | IOException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
-		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException ioe) {
-					Activator.getDefault().logError(ioe.getMessage(), ioe);
-				}
 		}
 		return constraints;
 	}
 
-	private static String getOCLFile(INamedElement element) {
+	private static String getOCLFile(final INamedElement element) {
 		if (element instanceof FBType) {
 			return CONSTRAINT_FILE_FBTYPE;
 		}

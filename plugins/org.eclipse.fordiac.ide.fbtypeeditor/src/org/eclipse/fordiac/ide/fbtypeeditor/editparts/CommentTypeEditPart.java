@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * 				 2019 - 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Moved position calculation to the comment type edit part
+ *   Virendra Ashiwal - Regulate Space at both side of FB (between FB and its interfaces) based on number of WITH connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -26,13 +27,14 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
-class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart {
+class CommentTypeEditPart extends AbstractGraphicalEditPart {
 
 	private static final int WITH_SIZE = 10;
 	private static final int DISTANCE_TO_FB_BORDER = 15;
@@ -122,22 +124,28 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 		}
 	}
 
+
 	private Point calculatePos() {
 		if (null != referencedInterface) {
 			final Rectangle bounds = referencedInterface.getFigure().getBounds();
 			final InterfaceList interfaceList = ((InterfaceList) getInterfaceElement().eContainer());
 			int dx = 0;
 			if (getInterfaceElement().isIsInput()) {
-				final int nrOfInputEvents = interfaceList.getEventInputs().size();
-				dx = -DISTANCE_TO_FB_BORDER - getFigureWidth() - nrOfInputEvents * WITH_SIZE;
+				final int countInputEvWITH = getNrEvWITH(interfaceList.getEventInputs());
+				dx = -DISTANCE_TO_FB_BORDER - getFigureWidth() - countInputEvWITH * WITH_SIZE;
 			} else {
-				final int nrOfOutputEvents = interfaceList.getEventOutputs().size();
-				dx = DISTANCE_TO_FB_BORDER + bounds.width + nrOfOutputEvents * WITH_SIZE;
-			}
+				final int countOutputEvWITH = getNrEvWITH(interfaceList.getEventOutputs());
+				dx = DISTANCE_TO_FB_BORDER + bounds.width + countOutputEvWITH * WITH_SIZE;
+			} 
 			return new Point(bounds.x + dx, bounds.y);
 		}
 		return new Point(0, 0);
 	}
+
+	private static int getNrEvWITH(EList<Event> eList) {
+		return (int)eList.stream().filter(ev -> !ev.getWith().isEmpty()).count();
+	}
+
 
 	private int getFigureWidth() {
 		return getFigure().getPreferredSize().width;

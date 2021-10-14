@@ -1,27 +1,34 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -45,6 +52,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getInputVars <em>Input Vars</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getOutputVars <em>Output
  * Vars</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getErrorMarker <em>Error
+ * Marker</em>}</li>
  * </ul>
  *
  * @generated */
@@ -96,6 +105,14 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 * @ordered */
 	protected EList<VarDeclaration> outputVars;
+
+	/** The cached value of the '{@link #getErrorMarker() <em>Error Marker</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see #getErrorMarker()
+	 * @generated
+	 * @ordered */
+	protected EList<IInterfaceElement> errorMarker;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -188,6 +205,18 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * 
 	 * @generated */
 	@Override
+	public EList<IInterfaceElement> getErrorMarker() {
+		if (errorMarker == null) {
+			errorMarker = new EObjectContainmentEList<IInterfaceElement>(IInterfaceElement.class, this,
+					LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER);
+		}
+		return errorMarker;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public EList<IInterfaceElement> getAllInterfaceElements() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);
 	}
@@ -258,6 +287,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 			return ((InternalEList<?>) getInputVars()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 			return ((InternalEList<?>) getOutputVars()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
+			return ((InternalEList<?>) getErrorMarker()).basicRemove(otherEnd, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -281,6 +312,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 			return getInputVars();
 		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 			return getOutputVars();
+		case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
+			return getErrorMarker();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -317,6 +350,10 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 			getOutputVars().clear();
 			getOutputVars().addAll((Collection<? extends VarDeclaration>) newValue);
 			return;
+		case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
+			getErrorMarker().clear();
+			getErrorMarker().addAll((Collection<? extends IInterfaceElement>) newValue);
+			return;
 		default:
 			super.eSet(featureID, newValue);
 			return;
@@ -347,6 +384,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 			getOutputVars().clear();
 			return;
+		case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
+			getErrorMarker().clear();
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -371,6 +411,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 			return inputVars != null && !inputVars.isEmpty();
 		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 			return outputVars != null && !outputVars.isEmpty();
+		case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
+			return errorMarker != null && !errorMarker.isEmpty();
 		default:
 			return super.eIsSet(featureID);
 		}

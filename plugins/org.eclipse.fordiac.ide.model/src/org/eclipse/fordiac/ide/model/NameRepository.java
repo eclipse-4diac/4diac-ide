@@ -20,8 +20,6 @@ import static org.eclipse.fordiac.ide.model.FordiacKeywords.RESERVED_KEYWORDS;
 
 import java.text.MessageFormat;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
@@ -46,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -53,9 +52,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 
 public final class NameRepository {
-
-	private static final Pattern END_IN_NUMBER_PATTERN = Pattern.compile("^.*\\d$"); //$NON-NLS-1$
-	private static final Pattern GET_LAST_NUMBER_PATTERN = Pattern.compile("\\d+$"); //$NON-NLS-1$
 
 	private NameRepository() {
 		// empty private constructor
@@ -66,7 +62,7 @@ public final class NameRepository {
 		final Palette blockTypeLib = typeLibrary.getBlockTypeLib();
 		String typeName = type.getName();
 
-		if(type instanceof DataType) {
+		if (type instanceof DataType) {
 			final DataTypeLibrary dataTypeLibrary = typeLibrary.getDataTypeLibrary();
 			while (dataTypeLibrary.getTypeIfExists(typeName) != null) {
 				typeName = createUniqueName(type.getName(), typeName);
@@ -98,7 +94,6 @@ public final class NameRepository {
 		return null;
 
 	}
-
 
 	/**
 	 * Check and if necessary adapt the given name proposal so that it is a valid
@@ -144,14 +139,14 @@ public final class NameRepository {
 			return false;
 		}
 		if (element instanceof IInterfaceElement && RESERVED_KEYWORDS.contains(nameProposal)) {
-			ErrorMessenger.popUpErrorMessage(
-					MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
+			ErrorMessenger
+			.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
 			return false;
 		}
 
 		if (getRefNames(element).contains(nameProposal)) {
-			ErrorMessenger.popUpErrorMessage(
-					MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
+			ErrorMessenger
+			.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
 			return false;
 		}
 
@@ -170,7 +165,11 @@ public final class NameRepository {
 		} else if (refElement instanceof Device) {
 			elementsList = ((Device) refElement).getSystemConfiguration().getDevices();
 		} else if (refElement instanceof FBNetworkElement) {
-			elementsList = ((FBNetworkElement) refElement).getFbNetwork().getNetworkElements();
+			if (refElement.eContainer() instanceof BaseFBType) {
+				elementsList = ((BaseFBType) (refElement.eContainer())).getInternalFbs();
+			} else {
+				elementsList = ((FBNetworkElement) refElement).getFbNetwork().getNetworkElements();
+			}
 		} else if (refElement instanceof Resource) {
 			elementsList = ((Resource) refElement).getDevice().getResource();
 		} else if (refElement instanceof Segment) {
@@ -195,27 +194,26 @@ public final class NameRepository {
 				}
 				elementsList = elements;
 			}
+		} else if (refElement instanceof ServiceSequence) {
+			final ServiceSequence seq = (ServiceSequence) refElement;
+			elementsList = seq.getService().getServiceSequence();
 		} else {
 			throw new IllegalArgumentException(
-					"Refenrence list for given class not available: " + refElement.getClass().toString()); //$NON-NLS-1$
+					"Reference list for given class not available: " + refElement.getClass().toString()); //$NON-NLS-1$
 		}
 
 		return elementsList.stream().filter(element -> element != refElement).map(INamedElement::getName)
 				.collect(Collectors.toSet());
 	}
 
-	/**
-	 * Generating a unique name for a name proposal which is definitely not in the
-	 * list of given existing names
+	/** Generating a unique name for a name proposal which is definitely not in the list of given existing names
 	 *
-	 * If the proposed name is already found in the list an '_' and a consecutive
-	 * number is appended to the proposed name. The number incremented until a
-	 * unique name is found.
+	 * If the proposed name is already found in the list an '_' and a consecutive number is appended to the proposed
+	 * name. The number incremented until a unique name is found.
 	 *
 	 * @param existingNameList the list of names already existing in the context
 	 * @param nameProposal     a proposal for a name as starting point
-	 * @return a unique name
-	 */
+	 * @return a unique name */
 	private static String getUniqueName(final Set<String> existingNameList, final String nameProposal) {
 		String temp = nameProposal;
 		while (existingNameList.contains(temp)) {
@@ -224,16 +222,51 @@ public final class NameRepository {
 		return temp;
 	}
 
-	private static String createUniqueName(final String nameProposal, String temp) {
-		if (END_IN_NUMBER_PATTERN.matcher(temp).matches()) {
-			final Matcher matchNumber = GET_LAST_NUMBER_PATTERN.matcher(temp);
-			matchNumber.find();
-			final int number = Integer.parseInt(temp.substring(matchNumber.start(), matchNumber.end())) + 1;
-			temp = temp.substring(0, matchNumber.start()) + number; // $NON-NLS-1$
-		} else {
-			temp = nameProposal + "_" + 1; //$NON-NLS-1$
+	static String createUniqueName(final String nameProposal, final String temp) {
+		final String digits = extractDigitsFromEnd(temp);
+		if (!"".equals(digits)) { //$NON-NLS-1$
+			try {
+				// if we are close to the limits of int we need to check if we have an overflow: check the exception
+				final long newNumber = Integer.parseInt(digits) + 1L;
+				// if the number was fine during conversion we need to check that we did not go over while incrementing
+				if (newNumber > Integer.MAX_VALUE) {
+					return createFallbackProposal(nameProposal);
+				}
+
+				return temp.substring(0, temp.length() - digits.length())
+						+ zeroPrefixedNumber(newNumber, digits.length());
+			} catch (final NumberFormatException e) {
+				return createFallbackProposal(nameProposal);
+			}
+
 		}
-		return temp;
+		return createFallbackProposal(nameProposal);
+	}
+
+	private static String zeroPrefixedNumber(final long number, final int digits) {
+		final String zeroPrefixedDecimal = "%0" + digits + "d"; //$NON-NLS-1$ //$NON-NLS-2$
+		return String.format(zeroPrefixedDecimal, Long.valueOf(number));
+	}
+
+	private static String createFallbackProposal(final String nameProposal) {
+		return nameProposal + "_1"; //$NON-NLS-1$
+	}
+
+	private static String extractDigitsFromEnd(final String data) {
+		final int MAX_LENGTH_INTEGER = 10;
+		final StringBuilder sb = new StringBuilder();
+		int c = 0;
+		for (int i = data.length() - 1; i > 0 && c <= MAX_LENGTH_INTEGER; i--, c++) {
+			if (data.charAt(i) >= '0' && data.charAt(i) <= '9') {
+				sb.insert(0, data.charAt(i));
+			} else {
+				break;
+			}
+		}
+		if (c > MAX_LENGTH_INTEGER) {
+			return ""; //$NON-NLS-1$
+		}
+		return sb.toString();
 	}
 
 	private static String checkReservedKeyWords(final String name) {

@@ -76,10 +76,11 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 					case Notification.ADD_MANY:
 					case Notification.REMOVE:
 					case Notification.REMOVE_MANY:
-						Display.getDefault().asyncExec(() -> refreshChildren());
+						Display.getDefault().asyncExec(FBTypeRootEditPart.this::refreshChildren);
 						break;
 					case Notification.SET:
 						break;
+					default:
 					}
 				}
 			};
@@ -141,6 +142,6 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	}
 
 	protected static void createValues(final FB fB) {
-		fB.getInterface().getInputVars().forEach(var -> var.setValue(LibraryElementFactory.eINSTANCE.createValue()));
+		fB.getInterface().getInputVars().forEach(inputVar -> inputVar.setValue(LibraryElementFactory.eINSTANCE.createValue()));
 	}
 }

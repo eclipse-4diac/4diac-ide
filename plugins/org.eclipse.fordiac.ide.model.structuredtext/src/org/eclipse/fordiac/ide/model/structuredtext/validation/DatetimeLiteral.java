@@ -14,9 +14,14 @@
 package org.eclipse.fordiac.ide.model.structuredtext.validation;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
+
+@SuppressWarnings("squid:S1941") // Constants are far away from their use, because the code is too complex
 public class DatetimeLiteral {
 
 	public enum Type {
@@ -58,10 +63,11 @@ public class DatetimeLiteral {
 
 	static final long BASE_TEN = 10;
 	static final long MAX_COUNT_DIGITS_NS = 9; // This limit is due to the defined resolution: nanoseconds //
-												// (100000000 nanoseconds are 1 second); allow maximum 9 digits
-												// otherwise digits would be dropped and precision would not match
+	// (100000000 nanoseconds are 1 second); allow maximum 9 digits
+	// otherwise digits would be dropped and precision would not match
 	static final long MAX_COUNT_DIGITS = 19; // This limit is due to the defined maximum bitsize of time&date types: 64
-												// bits limit you to 19 digits in base ten
+	// bits limit you to 19 digits in base ten
+	static final long MAX_INPUT_LENGTH = 200; // any valid DATETIME i came up with was shorter than this
 
 	static final String LITERAL_SEPERATOR = "#"; //$NON-NLS-1$
 
@@ -83,6 +89,7 @@ public class DatetimeLiteral {
 
 	// prepare the "cheap" regex'es for splitting the string apart
 	static final String DIGIT_SEPERATOR = "(_)?"; //$NON-NLS-1$
+	@SuppressWarnings("squid:S5998") // input length is limited to MAX_INPUT_LENGTH
 	static final String UNSIGNED_INT_REGEX = "[0-9](" + DIGIT_SEPERATOR + "[0-9])*"; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String DECIMAL_REGEX = "\\." + UNSIGNED_INT_REGEX; //$NON-NLS-1$
 	static final String FIXPOINT_REGEX = UNSIGNED_INT_REGEX + "(" + DECIMAL_REGEX + ")?"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -109,7 +116,7 @@ public class DatetimeLiteral {
 			+ SECONDS_REGEX + ")|(" + MILLISECONDS_REGEX + ")|(" + MICROSECONDS_REGEX + ")|(" + NANOSECONDS_REGEX //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			+ "))"; //$NON-NLS-1$
 
-	static final String DURATION_VALUE_REGEX = "(\\+|-)?" + INTERVAL_REGEX; //$NON-NLS-1$
+	static final String DURATION_VALUE_REGEX = "([\\+-])?" + INTERVAL_REGEX; //$NON-NLS-1$
 
 	static final String DATE_VALUE_REGEX = UNSIGNED_INT_REGEX + DATE_SEPERATOR + UNSIGNED_INT_REGEX + DATE_SEPERATOR
 			+ UNSIGNED_INT_REGEX;
@@ -135,8 +142,13 @@ public class DatetimeLiteral {
 	static final Pattern decimalPattern = Pattern.compile(DECIMAL_REGEX);
 	static final Pattern unitPattern = Pattern.compile(UNIT_REGEX);
 
-	public DatetimeLiteral(String string) {
+	public DatetimeLiteral(final String string) {
 		final String literal = string;
+
+		if (string.length() > MAX_INPUT_LENGTH) {
+			type = Type.INVALID;
+			return;
+		}
 
 		determineType(literal);
 
@@ -174,31 +186,27 @@ public class DatetimeLiteral {
 	private void determineType(final String literal) {
 		final String uppercase = literal.toUpperCase();
 
-		if (uppercase.startsWith("TOD" + LITERAL_SEPERATOR) //$NON-NLS-1$
-				|| uppercase.startsWith("TIME_OF_DAY" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+		if (detectType(uppercase, FordiacKeywords.TOD, FordiacKeywords.TIME_OF_DAY)) {
 			type = Type.TOD;
-		} else if (uppercase.startsWith("LTOD" + LITERAL_SEPERATOR) //$NON-NLS-1$
-				|| uppercase.startsWith("LTIME_OF_DAY" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+		} else if (detectType(uppercase, FordiacKeywords.LTOD, FordiacKeywords.LTIME_OF_DAY)) {
 			type = Type.LTOD;
-		} else if (uppercase.startsWith("DT" + LITERAL_SEPERATOR) //$NON-NLS-1$
-				|| uppercase.startsWith("DATE_AND_TIME" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+		} else if (detectType(uppercase, "DT", FordiacKeywords.DATE_AND_TIME)) { //$NON-NLS-1$
 			type = Type.DT;
-		} else if (uppercase.startsWith("LDT" + LITERAL_SEPERATOR) //$NON-NLS-1$
-				|| uppercase.startsWith("LDATE_AND_TIME" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+		} else if (detectType(uppercase, "LDT", FordiacKeywords.LDATE_AND_TIME)) { //$NON-NLS-1$
 			type = Type.LDT;
-		} else if (uppercase.startsWith("T" + LITERAL_SEPERATOR) // //$NON-NLS-1$
-				|| uppercase.startsWith("TIME" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+		} else if (detectType(uppercase, "T", FordiacKeywords.TIME)) { //$NON-NLS-1$
 			type = Type.T;
-		} else if (uppercase.startsWith("LT" + LITERAL_SEPERATOR) //$NON-NLS-1$
-				|| uppercase.startsWith("LTIME" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+		} else if (detectType(uppercase, "LT", FordiacKeywords.LTIME)) { //$NON-NLS-1$
 			type = Type.LT;
-		} else if (uppercase.startsWith("D" + LITERAL_SEPERATOR) // //$NON-NLS-1$
-				|| uppercase.startsWith("DATE" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+		} else if (detectType(uppercase, "D", FordiacKeywords.DATE)) { //$NON-NLS-1$
 			type = Type.D;
-		} else if (uppercase.startsWith("LD" + LITERAL_SEPERATOR) //$NON-NLS-1$
-				|| uppercase.startsWith("LDATE" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+		} else if (detectType(uppercase, "LD", FordiacKeywords.LDATE)) { //$NON-NLS-1$
 			type = Type.LD;
 		}
+	}
+
+	private static boolean detectType(final String input, final String shortName, final String longName) {
+		return input.startsWith(shortName + LITERAL_SEPERATOR) || input.startsWith(longName + LITERAL_SEPERATOR);
 	}
 
 	public boolean isValid() {
@@ -219,29 +227,29 @@ public class DatetimeLiteral {
 			return;
 		}
 
-		String[] matches = unsignedIntPattern.matcher(data).results().map(MatchResult::group).toArray(String[]::new);
+		final String[] matches = unsignedIntPattern.matcher(data).results().map(MatchResult::group).toArray(String[]::new);
 
 		if ((matches.length != LENGTH_WITHOUT_NANOSECOND) && (matches.length != LENGTH_WITH_NANOSECOND)) {
 			type = Type.INVALID;
 			return;
 		}
 
-		hour = Long.parseLong(matches[INDEX_HOUR].replace(UNDERSCORE, EMPTY));
-		minute = Long.parseLong(matches[INDEX_MINUTE].replace(UNDERSCORE, EMPTY));
-		second = Long.parseLong(matches[INDEX_SECOND].replace(UNDERSCORE, EMPTY));
+		hour = Long.valueOf(matches[INDEX_HOUR].replace(UNDERSCORE, EMPTY));
+		minute = Long.valueOf(matches[INDEX_MINUTE].replace(UNDERSCORE, EMPTY));
+		second = Long.valueOf(matches[INDEX_SECOND].replace(UNDERSCORE, EMPTY));
 
 		if (matches.length == LENGTH_WITH_NANOSECOND) {
-			String decimals = matches[INDEX_NANOSECOND].replace(UNDERSCORE, EMPTY);
-			int places = decimals.length();
+			final String decimals = matches[INDEX_NANOSECOND].replace(UNDERSCORE, EMPTY);
+			final int places = decimals.length();
 
 			if (places > MAX_COUNT_DIGITS_NS) {
 				type = Type.INVALID;
 				return;
 			}
 
-			int divider = (int) Math.pow(BASE_TEN, places);
+			final int divider = (int) Math.pow(BASE_TEN, places);
 
-			nanosecond = (Long.parseLong(decimals) * MS_PER_S * US_PER_MS * NS_PER_US) / divider;
+			nanosecond = Long.valueOf((Long.parseLong(decimals) * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 		}
 
 		validateTOD();
@@ -249,17 +257,17 @@ public class DatetimeLiteral {
 	}
 
 	private void validateTOD() {
-		if ((hour < 0) || (hour > MAX_H)) {
+		if ((hour.longValue() < 0) || (hour.longValue() > MAX_H)) {
 			type = Type.INVALID;
 			return;
 		}
 
-		if ((minute < 0) || (minute > MAX_M)) {
+		if ((minute.longValue() < 0) || (minute.longValue() > MAX_M)) {
 			type = Type.INVALID;
 			return;
 		}
 
-		if ((second < 0) || (second > MAX_S)) {
+		if ((second.longValue() < 0) || (second.longValue() > MAX_S)) {
 			type = Type.INVALID;
 		}
 	}
@@ -281,37 +289,37 @@ public class DatetimeLiteral {
 			return;
 		}
 
-		String[] matches = unsignedIntPattern.matcher(data).results().map(MatchResult::group).toArray(String[]::new);
+		final String[] matches = unsignedIntPattern.matcher(data).results().map(MatchResult::group).toArray(String[]::new);
 
 		if ((matches.length != LENGTH_WITHOUT_NANOSECONDS) && (matches.length != LENGTH_WITH_NANOSECONDS)) {
 			type = Type.INVALID;
 			return;
 		}
 
-		year = Long.parseLong(matches[INDEX_YEAR].replace(UNDERSCORE, EMPTY));
-		month = Long.parseLong(matches[INDEX_MONTH].replace(UNDERSCORE, EMPTY));
-		day = Long.parseLong(matches[INDEX_DAY].replace(UNDERSCORE, EMPTY));
+		year = Long.valueOf(matches[INDEX_YEAR].replace(UNDERSCORE, EMPTY));
+		month = Long.valueOf(matches[INDEX_MONTH].replace(UNDERSCORE, EMPTY));
+		day = Long.valueOf(matches[INDEX_DAY].replace(UNDERSCORE, EMPTY));
 		validateD();
 		if (type == Type.INVALID) {
 			return;
 		}
 
-		hour = Long.parseLong(matches[INDEX_HOUR].replace(UNDERSCORE, EMPTY));
-		minute = Long.parseLong(matches[INDEX_MINUTE].replace(UNDERSCORE, EMPTY));
-		second = Long.parseLong(matches[INDEX_SECOND].replace(UNDERSCORE, EMPTY));
+		hour = Long.valueOf(matches[INDEX_HOUR].replace(UNDERSCORE, EMPTY));
+		minute = Long.valueOf(matches[INDEX_MINUTE].replace(UNDERSCORE, EMPTY));
+		second = Long.valueOf(matches[INDEX_SECOND].replace(UNDERSCORE, EMPTY));
 
 		if (matches.length == LENGTH_WITH_NANOSECONDS) {
-			String decimals = matches[INDEX_NANOSECOND].replace(UNDERSCORE, EMPTY);
-			int places = decimals.length();
+			final String decimals = matches[INDEX_NANOSECOND].replace(UNDERSCORE, EMPTY);
+			final int places = decimals.length();
 
 			if (places > MAX_COUNT_DIGITS_NS) {
 				type = Type.INVALID;
 				return;
 			}
 
-			int divider = (int) Math.pow(BASE_TEN, places);
+			final int divider = (int) Math.pow(BASE_TEN, places);
 
-			nanosecond = (Long.parseLong(decimals) * MS_PER_S * US_PER_MS * NS_PER_US) / divider;
+			nanosecond = Long.valueOf((Long.parseLong(decimals) * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 		}
 
 		validateTOD();
@@ -332,34 +340,34 @@ public class DatetimeLiteral {
 			isNegative = true;
 		}
 
-		String[] matches = fixpointWithUnitPattern.matcher(data).results().map(MatchResult::group)
+		final String[] matches = fixpointWithUnitPattern.matcher(data).results().map(MatchResult::group)
 				.toArray(String[]::new);
 
-		for (String match : matches) {
-			String[] value = unsignedIntPattern.matcher(match).results().map(MatchResult::group).toArray(String[]::new);
-			String[] decimal = decimalPattern.matcher(match).results().map(MatchResult::group).toArray(String[]::new);
-			String[] unit = unitPattern.matcher(match).results().map(MatchResult::group).toArray(String[]::new);
+		for (final String match : matches) {
+			final String[] value = unsignedIntPattern.matcher(match).results().map(MatchResult::group).toArray(String[]::new);
+			final String[] decimal = decimalPattern.matcher(match).results().map(MatchResult::group).toArray(String[]::new);
+			final String[] unit = unitPattern.matcher(match).results().map(MatchResult::group).toArray(String[]::new);
 
 			if (decimal.length > 1) {
 				type = Type.INVALID;
 				return;
 			}
 
-			long intValue = Long.parseLong(value[0].replace(UNDERSCORE, EMPTY));
-			String decimals = decimal.length == 1 ? decimal[0].substring(1).replace(UNDERSCORE, EMPTY) : "0"; //$NON-NLS-1$
-			long intDecimal = Long.parseLong(decimals);
-			int places = decimals.length();
+			final long intValue = Long.parseLong(value[0].replace(UNDERSCORE, EMPTY));
+			final String decimals = decimal.length == 1 ? decimal[0].substring(1).replace(UNDERSCORE, EMPTY) : "0"; //$NON-NLS-1$
+			final long intDecimal = Long.parseLong(decimals);
+			final int places = decimals.length();
 
 			if (places > MAX_COUNT_DIGITS) {
 				type = Type.INVALID;
 				return;
 			}
 
-			long divider = (int) Math.pow(BASE_TEN, places);
+			final long divider = (int) Math.pow(BASE_TEN, places);
 
 			switch (unit[0]) {
 			case UNIT_D:
-				day = intValue;
+				day = Long.valueOf(intValue);
 				fillFromNs((intDecimal * H_PER_D * M_PER_H * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 				break;
 			case UNIT_H:
@@ -367,7 +375,7 @@ public class DatetimeLiteral {
 					type = Type.INVALID;
 					return;
 				}
-				hour = intValue;
+				hour = Long.valueOf(intValue);
 				fillFromNs((intDecimal * M_PER_H * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 				break;
 			case UNIT_M:
@@ -375,7 +383,7 @@ public class DatetimeLiteral {
 					type = Type.INVALID;
 					return;
 				}
-				minute = intValue;
+				minute = Long.valueOf(intValue);
 				fillFromNs((intDecimal * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 				break;
 			case UNIT_S:
@@ -383,7 +391,7 @@ public class DatetimeLiteral {
 					type = Type.INVALID;
 					return;
 				}
-				second = intValue;
+				second = Long.valueOf(intValue);
 				fillFromNs((intDecimal * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 				break;
 			case UNIT_MS:
@@ -391,7 +399,7 @@ public class DatetimeLiteral {
 					type = Type.INVALID;
 					return;
 				}
-				millisecond = intValue;
+				millisecond = Long.valueOf(intValue);
 				fillFromNs((intDecimal * US_PER_MS * NS_PER_US) / divider);
 				break;
 			case UNIT_US:
@@ -399,11 +407,11 @@ public class DatetimeLiteral {
 					type = Type.INVALID;
 					return;
 				}
-				microsecond = intValue;
+				microsecond = Long.valueOf(intValue);
 				fillFromNs((intDecimal * NS_PER_US) / divider);
 				break;
 			case UNIT_NS:
-				nanosecond = intValue;
+				nanosecond = Long.valueOf(intValue);
 				if (intDecimal != 0) {
 					type = Type.INVALID;
 					return;
@@ -416,43 +424,31 @@ public class DatetimeLiteral {
 
 		}
 
-		if ((//
-		(null != nanosecond) && //
-				((null != microsecond) || (null != millisecond) || (null != second) || (null != minute)
-						|| (null != hour) || (null != day)) //
-				&& (nanosecond > MAX_KILO)) || //
-				(//
-				(null != microsecond) && //
-						((null != millisecond) || (null != second) || (null != minute) || (null != hour)
-								|| (null != day)) //
-						&& (microsecond > MAX_KILO))
+		if (verifyValueLimit(nanosecond, MAX_KILO, microsecond, millisecond, second, minute, hour, day)
 				|| //
-				(//
-				(null != millisecond) && //
-						((null != second) || (null != minute) || (null != hour) || (null != day)) //
-						&& (millisecond > MAX_KILO))
+				verifyValueLimit(microsecond, MAX_KILO, millisecond, second, minute, hour, day)
 				|| //
-				(//
-				(null != second) && //
-						((null != minute) || (null != hour) || (null != day)) //
-						&& (second > MAX_S))
+				verifyValueLimit(millisecond, MAX_KILO, second, minute, hour, day)
 				|| //
-				(//
-				(null != minute) && //
-						((null != hour) || (null != day)) //
-						&& (minute > MAX_M))
+				verifyValueLimit(second, MAX_S, minute, hour, day)
 				|| //
-				(//
-				(null != hour) && //
-						((null != day)) //
-						&& (hour > MAX_H))//
-		) {
+				verifyValueLimit(minute, MAX_M, hour, day)
+				|| //
+				verifyValueLimit(hour, MAX_H, day)
+				) {
 			type = Type.INVALID;
 		}
 
 	}
 
-	private void fillFromNs(long nanoseconds) {
+	private static boolean verifyValueLimit(final Long element, final long limit, final Long... biggerElements) {
+		// if any of the bigger parts of a time-literal is given, the smaller parts must not exceed their respective
+		// limit
+		return (element != null) && Arrays.stream(biggerElements).anyMatch(Objects::nonNull)
+				&& element.longValue() > limit;
+	}
+
+	private void fillFromNs(final long nanoseconds) {
 		long nanosecondTemp = nanoseconds;
 		long temp = nanosecondTemp / (M_PER_H * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US);
 		if (temp != 0) {
@@ -460,7 +456,7 @@ public class DatetimeLiteral {
 				type = Type.INVALID;
 				return;
 			}
-			hour = temp;
+			hour = Long.valueOf(temp);
 		}
 		nanosecondTemp = nanosecondTemp % (M_PER_H * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US);
 		temp = nanosecondTemp / (S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US);
@@ -469,7 +465,7 @@ public class DatetimeLiteral {
 				type = Type.INVALID;
 				return;
 			}
-			minute = temp;
+			minute = Long.valueOf(temp);
 		}
 		nanosecondTemp = nanosecondTemp % (S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US);
 		temp = nanosecondTemp / (MS_PER_S * US_PER_MS * NS_PER_US);
@@ -478,7 +474,7 @@ public class DatetimeLiteral {
 				type = Type.INVALID;
 				return;
 			}
-			second = temp;
+			second = Long.valueOf(temp);
 		}
 		nanosecondTemp = nanosecondTemp % (MS_PER_S * US_PER_MS * NS_PER_US);
 		temp = nanosecondTemp / (US_PER_MS * NS_PER_US);
@@ -487,7 +483,7 @@ public class DatetimeLiteral {
 				type = Type.INVALID;
 				return;
 			}
-			millisecond = temp;
+			millisecond = Long.valueOf(temp);
 		}
 		nanosecondTemp = nanosecondTemp % (US_PER_MS * NS_PER_US);
 		temp = nanosecondTemp / (NS_PER_US);
@@ -496,7 +492,7 @@ public class DatetimeLiteral {
 				type = Type.INVALID;
 				return;
 			}
-			microsecond = temp;
+			microsecond = Long.valueOf(temp);
 		}
 		temp = nanosecondTemp % (NS_PER_US);
 		if (temp != 0) {
@@ -504,44 +500,48 @@ public class DatetimeLiteral {
 				type = Type.INVALID;
 				return;
 			}
-			nanosecond = temp;
+			nanosecond = Long.valueOf(temp);
 		}
 	}
 
 	private String toInterval() {
-		StringBuilder s = new StringBuilder();
+		final StringBuilder s = new StringBuilder();
 		if (isNegative) {
 			s.append(MINUS);
 		}
-		if ((null != day) && (day != 0)) {
+		if (hasValueFor(day)) {
 			s.append(day);
 			s.append(UNIT_D);
 		}
-		if ((null != hour) && (hour != 0)) {
+		if (hasValueFor(hour)) {
 			s.append(hour);
 			s.append(UNIT_H);
 		}
-		if ((null != minute) && (minute != 0)) {
+		if (hasValueFor(minute)) {
 			s.append(minute);
 			s.append(UNIT_M);
 		}
-		if ((null != second) && (second != 0)) {
+		if (hasValueFor(second)) {
 			s.append(second);
 			s.append(UNIT_S);
 		}
-		if ((null != millisecond) && (millisecond != 0)) {
+		if (hasValueFor(millisecond)) {
 			s.append(millisecond);
 			s.append(UNIT_MS);
 		}
-		if ((null != microsecond) && (microsecond != 0)) {
+		if (hasValueFor(microsecond)) {
 			s.append(microsecond);
 			s.append(UNIT_US);
 		}
-		if ((null != nanosecond) && (nanosecond != 0)) {
+		if (hasValueFor(nanosecond)) {
 			s.append(nanosecond);
 			s.append(UNIT_NS);
 		}
 		return s.toString();
+	}
+
+	private static boolean hasValueFor(final Long element) {
+		return element != null && element.longValue() != 0;
 	}
 
 	private void parseD() {
@@ -556,16 +556,16 @@ public class DatetimeLiteral {
 			return;
 		}
 
-		String[] matches = unsignedIntPattern.matcher(data).results().map(MatchResult::group).toArray(String[]::new);
+		final String[] matches = unsignedIntPattern.matcher(data).results().map(MatchResult::group).toArray(String[]::new);
 
 		if (matches.length != LENGTH) {
 			type = Type.INVALID;
 			return;
 		}
 
-		year = Long.parseLong(matches[INDEX_YEAR].replace(UNDERSCORE, EMPTY));
-		month = Long.parseLong(matches[INDEX_MONTH].replace(UNDERSCORE, EMPTY));
-		day = Long.parseLong(matches[INDEX_DAY].replace(UNDERSCORE, EMPTY));
+		year = Long.valueOf(matches[INDEX_YEAR].replace(UNDERSCORE, EMPTY));
+		month = Long.valueOf(matches[INDEX_MONTH].replace(UNDERSCORE, EMPTY));
+		day = Long.valueOf(matches[INDEX_DAY].replace(UNDERSCORE, EMPTY));
 
 		validateD();
 
@@ -584,35 +584,48 @@ public class DatetimeLiteral {
 		final long CENTURY = 100;
 		final long QUATERNARYCENTURY = 400;
 
-		if (day < 1) {
+		final int JANUARY = 1;
+		final int FEBRUARY = 2;
+		final int MARCH = 3;
+		final int APRIL = 4;
+		final int MAY = 5;
+		final int JUNE = 6;
+		final int JULY = 7;
+		final int AUGUST = 8;
+		final int SEPTEMBER = 9;
+		final int OCTOBER = 10;
+		final int NOVEMBER = 11;
+		final int DECEMBER = 12;
+
+		if (day.longValue() < JANUARY) {
 			type = Type.INVALID;
 			return;
 		}
 
 		switch (month.intValue()) {
-		case 2:
-			boolean isLeapYear = ((((year % QUATERNARY) == 0) && ((year % CENTURY) != 0))
-					|| ((year % QUATERNARYCENTURY) == 0));
-			if (day > (isLeapYear ? DAYS_FEB_LEAPYEAR : DAYS_FEB_NON_LEAPYEAR)) {
+		case FEBRUARY:
+			final boolean isLeapYear = ((((year.longValue() % QUATERNARY) == 0) && ((year.longValue() % CENTURY) != 0))
+					|| ((year.longValue() % QUATERNARYCENTURY) == 0));
+			if (day.longValue() > (isLeapYear ? DAYS_FEB_LEAPYEAR : DAYS_FEB_NON_LEAPYEAR)) {
 				type = Type.INVALID;
 			}
 			break;
-		case 1:
-		case 3:
-		case 5:
-		case 7:
-		case 8:
-		case 10:
-		case 12:
-			if (day > DAYS_LONG_MONTH) {
+		case JANUARY:
+		case MARCH:
+		case MAY:
+		case JULY:
+		case AUGUST:
+		case OCTOBER:
+		case DECEMBER:
+			if (day.longValue() > DAYS_LONG_MONTH) {
 				type = Type.INVALID;
 			}
 			break;
-		case 4:
-		case 6:
-		case 9:
-		case 11:
-			if (day > DAYS_SHORT_MONTH) {
+		case APRIL:
+		case JUNE:
+		case SEPTEMBER:
+		case NOVEMBER:
+			if (day.longValue() > DAYS_SHORT_MONTH) {
 				type = Type.INVALID;
 			}
 			break;
@@ -622,7 +635,7 @@ public class DatetimeLiteral {
 	}
 
 	private String toDate() {
-		StringBuilder s = new StringBuilder();
+		final StringBuilder s = new StringBuilder();
 		s.append(year);
 		s.append(DATE_SEPERATOR);
 		s.append(String.format(TWO_DIGIT_NUMBER, month));
@@ -632,13 +645,13 @@ public class DatetimeLiteral {
 	}
 
 	private String toTimeOfDay() {
-		StringBuilder s = new StringBuilder();
+		final StringBuilder s = new StringBuilder();
 		s.append(String.format(TWO_DIGIT_NUMBER, hour));
 		s.append(TIMEOFDAY_SEPERATOR);
 		s.append(String.format(TWO_DIGIT_NUMBER, minute));
 		s.append(TIMEOFDAY_SEPERATOR);
 		s.append(String.format(TWO_DIGIT_NUMBER, second));
-		if ((null != nanosecond) && (nanosecond != 0)) {
+		if ((null != nanosecond) && (nanosecond.longValue() != 0)) {
 			s.append(TIMEOFDAY_SEPERATOR_DECIMALS);
 			s.append(nanosecond);
 		}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2015, 2016 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,4 +20,6 @@ public interface IMonitoringListener {
 	void notifyTriggerEvent(PortElement port);
 
 	void notifyRemovePort(PortElement port);
+
+	void notifyWatchesChanged();
 }

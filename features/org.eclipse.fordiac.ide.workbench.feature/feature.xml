@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.workbench.feature"
       label="Workbench Base"
-      version="1.14.0.qualifier"
+      version="2.0.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
@@ -492,6 +492,13 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.ui.errormessages"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.fb.interpreter"
          download-size="0"
          install-size="0"
          version="0.0.0"

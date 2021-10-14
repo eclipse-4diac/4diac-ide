@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -32,7 +32,7 @@ public interface SubrangeType extends DerivedType {
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Subrange</em>' containment reference.
 	 * @see #setSubrange(Subrange)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getSubrangeType_Subrange()
@@ -43,7 +43,7 @@ public interface SubrangeType extends DerivedType {
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.SubrangeType#getSubrange <em>Subrange</em>}'
 	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value the new value of the '<em>Subrange</em>' containment reference.
 	 * @see #getSubrange()
 	 * @generated */

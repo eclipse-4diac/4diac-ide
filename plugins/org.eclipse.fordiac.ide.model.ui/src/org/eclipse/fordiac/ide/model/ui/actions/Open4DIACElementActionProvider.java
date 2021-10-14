@@ -31,15 +31,12 @@ import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 public class Open4DIACElementActionProvider extends CommonActionProvider {
 
 	private Open4DIACElementAction openAction;
-
-	private ICommonViewerWorkbenchSite viewSite = null;
-
 	private boolean contribute = false;
 
 	@Override
 	public void init(final ICommonActionExtensionSite aConfig) {
 		if (aConfig.getViewSite() instanceof ICommonViewerWorkbenchSite) {
-			viewSite = (ICommonViewerWorkbenchSite) aConfig.getViewSite();
+			final ICommonViewerWorkbenchSite viewSite = (ICommonViewerWorkbenchSite) aConfig.getViewSite();
 			openAction = new Open4DIACElementAction(viewSite.getPart());
 			contribute = true;
 		}

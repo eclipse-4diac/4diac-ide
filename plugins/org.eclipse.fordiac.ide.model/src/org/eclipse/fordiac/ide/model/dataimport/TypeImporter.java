@@ -51,13 +51,13 @@ public abstract class TypeImporter extends CommonElementImporter {
 	 * @throws XMLStreamException
 	 */
 	protected VarDeclaration parseVarDeclaration() throws TypeImportException, XMLStreamException {
-		VarDeclaration v = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		final VarDeclaration v = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		readNameCommentAttributes(v);
 
-		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
-			DataType dataType = getDataTypeLibrary().getType(typeName);
+			final DataType dataType = getDataTypeLibrary().getType(typeName);
 			v.setTypeName(typeName);
 			if (dataType != null) {
 				v.setType(dataType);
@@ -66,23 +66,33 @@ public abstract class TypeImporter extends CommonElementImporter {
 			throw new TypeImportException(Messages.Import_ERROR_InputVariableTypeNotDefined);
 		}
 
-		String arraySize = getAttributeValue(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
+		final String arraySize = getAttributeValue(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
 		if (null != arraySize) {
 			try {
 				v.setArraySize(Integer.parseInt(arraySize));
-			} catch (NumberFormatException nfe) {
+			} catch (final NumberFormatException nfe) {
 				throw new TypeImportException(Messages.Import_ERROR_ArraySize_NumberFormat, nfe);
 			}
 		} else {
 			v.setArraySize(-1);
 		}
 
-		String initialValue = getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE);
+		final String initialValue = getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE);
 		if (null != initialValue) {
-			Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
+			final Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
 			varInitialization.setValue(initialValue);
 			v.setValue(varInitialization);
 		}
+		
+		processChildren(LibraryElementTags.VAR_DECLARATION_ELEMENT, name -> {
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
+				parseGenericAttributeNode(v);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			}
+			return false;
+		});
+
 		proceedToEndElementNamed(LibraryElementTags.VAR_DECLARATION_ELEMENT);
 		return v;
 	}

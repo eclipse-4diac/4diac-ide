@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -19,21 +19,17 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Service Transaction</b></em>'. <!--
@@ -52,7 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransaction {
 	/** The cached value of the '{@link #getInputPrimitive() <em>Input Primitive</em>}' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getInputPrimitive()
 	 * @generated
 	 * @ordered */
@@ -60,21 +56,21 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 
 	/** The cached value of the '{@link #getOutputPrimitive() <em>Output Primitive</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getOutputPrimitive()
 	 * @generated
 	 * @ordered */
 	protected EList<OutputPrimitive> outputPrimitive;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected ServiceTransactionImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -82,7 +78,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public InputPrimitive getInputPrimitive() {
@@ -90,59 +86,72 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public NotificationChain basicSetInputPrimitive(InputPrimitive newInputPrimitive, NotificationChain msgs) {
-		InputPrimitive oldInputPrimitive = inputPrimitive;
+		final InputPrimitive oldInputPrimitive = inputPrimitive;
 		inputPrimitive = newInputPrimitive;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, oldInputPrimitive, newInputPrimitive);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setInputPrimitive(InputPrimitive newInputPrimitive) {
 		if (newInputPrimitive != inputPrimitive) {
 			NotificationChain msgs = null;
-			if (inputPrimitive != null)
+			if (inputPrimitive != null) {
 				msgs = ((InternalEObject) inputPrimitive).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, null,
 						msgs);
-			if (newInputPrimitive != null)
+			}
+			if (newInputPrimitive != null) {
 				msgs = ((InternalEObject) newInputPrimitive).eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, null,
 						msgs);
+			}
 			msgs = basicSetInputPrimitive(newInputPrimitive, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, newInputPrimitive, newInputPrimitive));
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<OutputPrimitive> getOutputPrimitive() {
 		if (outputPrimitive == null) {
-			outputPrimitive = new EObjectContainmentEList<OutputPrimitive>(OutputPrimitive.class, this,
+			outputPrimitive = new EObjectContainmentEList<>(OutputPrimitive.class, this,
 					LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE);
 		}
 		return outputPrimitive;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public ServiceSequence getServiceSequence() {
+		return (ServiceSequence) this.eContainer();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -157,7 +166,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -172,7 +181,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -192,7 +201,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -210,7 +219,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -218,7 +227,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
 			return inputPrimitive != null;
 		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
-			return outputPrimitive != null && !outputPrimitive.isEmpty();
+			return (outputPrimitive != null) && !outputPrimitive.isEmpty();
 		default:
 			return super.eIsSet(featureID);
 		}

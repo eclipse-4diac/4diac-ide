@@ -23,14 +23,13 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 
-public class CommentEditPart extends AbstractInterfaceElementEditPart implements EditPart {
+public class CommentEditPart extends AbstractInterfaceElementEditPart {
 
 	private Label comment;
 
@@ -53,7 +52,7 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart implements
 
 	@Override
 	protected void createEditPolicies() {
-		ModifiedNonResizeableEditPolicy handle = new ModifiedNonResizeableEditPolicy();
+		final ModifiedNonResizeableEditPolicy handle = new ModifiedNonResizeableEditPolicy();
 		handle.setDragAllowed(false);
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, handle);
 
@@ -64,6 +63,14 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart implements
 					return new ChangeCommentCommand(getCastedModel(), (String) request.getCellEditor().getValue());
 				}
 				return null;
+			}
+
+			@Override
+			protected void revertOldEditValue(DirectEditRequest request) {
+				if (getHost() instanceof AbstractDirectEditableEditPart) {
+					final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
+					viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getComment());
+				}
 			}
 		});
 	}

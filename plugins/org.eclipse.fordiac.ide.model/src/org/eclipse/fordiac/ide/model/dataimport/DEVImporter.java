@@ -22,19 +22,15 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -44,7 +40,7 @@ import org.w3c.dom.NodeList;
  * Managing class for importing *.dev files
  */
 
-public final class DEVImporter extends TypeImporter {
+public class DEVImporter extends TypeImporter {
 
 	public DEVImporter(final IFile typeFile) {
 		super(typeFile);
@@ -105,55 +101,6 @@ public final class DEVImporter extends TypeImporter {
 			}
 			return true;
 		};
-	}
-
-	/**
-	 * Parses the resource.
-	 *
-	 * @return the resource
-	 * @throws XMLStreamException
-	 *
-	 * @throws DevTypeImportException the dev type import exception
-	 */
-	private Resource parseResource() throws TypeImportException, XMLStreamException {
-		final Resource res = LibraryElementFactory.eINSTANCE.createResource();
-
-		readNameCommentAttributes(res);
-
-		final String resType = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (null != resType) {
-			res.setPaletteEntry(getPalette().getResourceTypeEntry(resType));
-		} else {
-			throw new TypeImportException(Messages.DEVImporter_ERROR_ResourceTypeHasToBeSet);
-		}
-
-		final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
-		if (null != x) {
-			res.setX(x);
-		}
-		final String y = getAttributeValue(LibraryElementTags.Y_ATTRIBUTE);
-		if (null != y) {
-			res.setY(y);
-		}
-
-		processChildren(LibraryElementTags.DEVICE_ELEMENT, name -> {
-			switch (name) {
-			case LibraryElementTags.PARAMETER_ELEMENT:
-				res.getVarDeclarations().add(parseParameter());
-				break;
-			case LibraryElementTags.FBNETWORK_ELEMENT:
-				final ResDevFBNetworkImporter networkImporter = new ResDevFBNetworkImporter(this,
-						res.getVarDeclarations());
-				res.setFBNetwork(networkImporter.getFbNetwork());
-				networkImporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
-				break;
-			default:
-				return false;
-			}
-			return true;
-		});
-
-		return res;
 	}
 
 	/**

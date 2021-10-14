@@ -49,4 +49,11 @@ public interface AdapterEvent extends Event {
 	 * @generated */
 	void setAdapterDeclaration(AdapterDeclaration value);
 
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * @generated */
+	@Override
+	String getName();
+
 } // AdapterEvent

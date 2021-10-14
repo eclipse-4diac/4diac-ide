@@ -37,13 +37,13 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class DeleteHandler extends AbstractHandler {
-	private Map<AutomationSystem, CompoundCommand> commandMap = new HashMap<>();
+	private final Map<AutomationSystem, CompoundCommand> commandMap = new HashMap<>();
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
-			for (Object element : ((StructuredSelection) selection).toList()) {
+			for (final Object element : ((StructuredSelection) selection).toList()) {
 				createDeleteCommand(element);
 			}
 			executeDeleteCommands();
@@ -62,7 +62,7 @@ public class DeleteHandler extends AbstractHandler {
 
 	// check if the selected object is an Application, Resource or Device
 	// and create a corresponding DeleteCommand for it, which is added to the Map
-	private void createDeleteCommand(Object element) {
+	private void createDeleteCommand(final Object element) {
 		if (element instanceof Application) {
 			enlistCommand(((Application) element).getAutomationSystem(),
 					new DeleteApplicationCommand((Application) element));
@@ -73,19 +73,14 @@ public class DeleteHandler extends AbstractHandler {
 		}
 	}
 
-	private void enlistCommand(AutomationSystem automationSystem, Command cmd) {
+	private void enlistCommand(final AutomationSystem automationSystem, final Command cmd) {
 		if (cmd.canExecute()) {
 			getCommandList(automationSystem).add(cmd);
 		}
 	}
 
-	private CompoundCommand getCommandList(AutomationSystem automationSystem) {
-		CompoundCommand commandList = commandMap.get(automationSystem);
-		if (null == commandList) {
-			commandList = new CompoundCommand();
-			commandMap.put(automationSystem, commandList);
-		}
-		return commandList;
+	private CompoundCommand getCommandList(final AutomationSystem automationSystem) {
+		return commandMap.computeIfAbsent(automationSystem, sys -> new CompoundCommand());
 	}
 
 }

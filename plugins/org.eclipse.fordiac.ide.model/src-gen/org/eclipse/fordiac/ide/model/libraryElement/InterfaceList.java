@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventOutputs <em>Event Outputs</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInputVars <em>Input Vars</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutputVars <em>Output Vars</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getErrorMarker <em>Error Marker</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList()
@@ -121,6 +122,16 @@ public interface InterfaceList extends EObject {
 	 * @model containment="true" extendedMetaData="kind='element' name='OutputVars' namespace='##targetNamespace'"
 	 * @generated */
 	EList<VarDeclaration> getOutputVars();
+
+	/** Returns the value of the '<em><b>Error Marker</b></em>' containment reference list. The list contents are of
+	 * type {@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Error Marker</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList_ErrorMarker()
+	 * @model containment="true" extendedMetaData="kind='element' name='ErrorMarker' namespace='##targetNamespace'"
+	 * @generated */
+	EList<IInterfaceElement> getErrorMarker();
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 

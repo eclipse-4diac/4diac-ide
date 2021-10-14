@@ -26,36 +26,34 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 
 		@Override
 		public Object getClone() {
-			return new State(this);
+			return new State(); // No need to copy, this command will not succeed in execution
 		}
 
 		public State() {
-		}
-
-		private State(State s) {
+			// currently nothing to be done here
 		}
 
 	}
 
-	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
+			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
 				CommandTestBase::disabledUndoCommand, CommandTestBase::disabledRedoCommand);
 	}
 
-	private static State executeCommand(State state) {
+	private static State executeCommand(final State state) {
 		state.setCommand(UnexecutableCommand.INSTANCE);
 		return disabledCommandExecution(state);
 	}
 
-	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+	protected static Collection<Arguments> createCommands(final List<ExecutionDescription<?>> executionDescriptions) {
 		final List<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> CommandTestBase.verifyNothing(state, oldState, t), //
+				(StateVerifier<State>) CommandTestBase::verifyNothing, //
 				executionDescriptions //
-		));
+				));
 
 		return commands;
 	}
@@ -66,8 +64,8 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 				new ExecutionDescription<>("Check if unexecutable command is not executable", //$NON-NLS-1$
 						UnexecutableCommandTest::executeCommand, //
 						CommandTestBase::verifyNothing //
-				) //
-		);
+						) //
+				);
 
 		return createCommands(executionDescriptions);
 	}

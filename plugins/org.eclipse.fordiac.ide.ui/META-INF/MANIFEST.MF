@@ -20,8 +20,8 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.fordiac.ide.ui.errormessages
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.14.0.qualifier
-Bundle-Name: Common UI Controls (Incubation)
+Bundle-Version: 2.0.0.qualifier
+Bundle-Name: Common UI Controls
 Bundle-Activator: org.eclipse.fordiac.ide.ui.UIPlugin
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.ui;singleton:=true

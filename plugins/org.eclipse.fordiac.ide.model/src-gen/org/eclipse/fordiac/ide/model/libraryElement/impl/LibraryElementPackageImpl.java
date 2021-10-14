@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -15,11 +15,11 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import static org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage.RESOURCE;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-
 import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -28,19 +28,12 @@ import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
-
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
-
 import org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl;
-
 import org.eclipse.fordiac.ide.model.data.DataPackage;
-
 import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
-
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -54,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
@@ -69,6 +63,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -117,415 +114,434 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-
 import org.eclipse.gef.commands.CommandStack;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class LibraryElementPackageImpl extends EPackageImpl implements LibraryElementPackage {
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass adapterDeclarationEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass adapterTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass algorithmEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass applicationEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass basicFBTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass compilerInfoEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass compilerEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass connectionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass connectionRoutingDataEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass deviceEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass deviceTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass ecActionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass eccEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass ecStateEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass ecTransitionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass eventEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass fbEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass fbNetworkElementEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass subAppEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass fbTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass identificationEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass inputPrimitiveEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass interfaceListEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass linkEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass mappingEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass otherAlgorithmEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass outputPrimitiveEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass attributeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass resourceEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass resourceTypeNameEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass resourceTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass segmentEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass serviceSequenceEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass serviceTransactionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass serviceInterfaceFBTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass stAlgorithmEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass fbNetworkEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass subAppTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass automationSystemEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass varDeclarationEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass versionInfoEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass withEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass libraryElementEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass compilableTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass configurableObjectEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass compositeFBTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass textAlgorithmEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass dataConnectionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass eventConnectionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass adapterConnectionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass serviceInterfaceEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass iInterfaceElementEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass valueEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass systemConfigurationEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass iNamedElementEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass resourceTypeFBEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass segmentTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass adapterFBTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass adapterEventEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass serviceEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass typedConfigureableObjectEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass adapterFBEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass primitiveEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass positionableElementEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass positionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass colorEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass colorizableElementEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass iVarElementEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass attributeDeclarationEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass typedElementEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass simpleFBTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass baseFBTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass structManipulatorEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass demultiplexerEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass multiplexerEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass localVariableEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	private EClass errorMarkerFBNElementEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	private EClass errorMarkerInterfaceEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	private EClass cfbInstanceEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	private EClass errorMarkerRefEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	private EEnum languageEEnum = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType iProjectEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType iFileEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType commandStackEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType pointEDataType = null;
 
@@ -535,7 +551,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also
 	 * performs initialization of the package, or returns the registered package, if one already exists. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#eNS_URI
 	 * @see #init()
@@ -545,7 +561,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private static boolean isInited = false;
 
@@ -555,18 +571,19 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * This method is used to initialize {@link LibraryElementPackage#eINSTANCE} when that field is accessed. Clients
 	 * should not invoke it directly. Instead, they should simply access that field to obtain the package. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated */
 	public static LibraryElementPackage init() {
-		if (isInited)
+		if (isInited) {
 			return (LibraryElementPackage) EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
+		}
 
 		// Obtain or create and register package
-		Object registeredLibraryElementPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		LibraryElementPackageImpl theLibraryElementPackage = registeredLibraryElementPackage instanceof LibraryElementPackageImpl
+		final Object registeredLibraryElementPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		final LibraryElementPackageImpl theLibraryElementPackage = registeredLibraryElementPackage instanceof LibraryElementPackageImpl
 				? (LibraryElementPackageImpl) registeredLibraryElementPackage
 				: new LibraryElementPackageImpl();
 
@@ -577,11 +594,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
-		PalettePackageImpl thePalettePackage = (PalettePackageImpl) (registeredPackage instanceof PalettePackageImpl
+		final PalettePackageImpl thePalettePackage = (PalettePackageImpl) (registeredPackage instanceof PalettePackageImpl
 				? registeredPackage
 				: PalettePackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
-		DataPackageImpl theDataPackage = (DataPackageImpl) (registeredPackage instanceof DataPackageImpl
+		final DataPackageImpl theDataPackage = (DataPackageImpl) (registeredPackage instanceof DataPackageImpl
 				? registeredPackage
 				: DataPackage.eINSTANCE);
 
@@ -604,7 +621,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAdapterDeclaration() {
@@ -612,7 +629,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAdapterDeclaration_AdapterFB() {
@@ -620,7 +637,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAdapterDeclaration_PaletteEntry() {
@@ -628,7 +645,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAdapterType() {
@@ -636,7 +653,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAdapterType_AdapterFBType() {
@@ -644,7 +661,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAlgorithm() {
@@ -652,7 +669,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getApplication() {
@@ -660,7 +677,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getApplication_FBNetwork() {
@@ -668,7 +685,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getBasicFBType() {
@@ -676,7 +693,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getBasicFBType_ECC() {
@@ -684,7 +701,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getBasicFBType_Algorithm() {
@@ -692,7 +709,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getCompilerInfo() {
@@ -700,7 +717,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getCompilerInfo_Compiler() {
@@ -708,7 +725,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getCompilerInfo_Classdef() {
@@ -716,7 +733,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getCompilerInfo_Header() {
@@ -724,7 +741,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getCompiler() {
@@ -732,7 +749,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getCompiler_Language() {
@@ -740,7 +757,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getCompiler_Product() {
@@ -748,7 +765,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getCompiler_Vendor() {
@@ -756,7 +773,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getCompiler_Version() {
@@ -764,7 +781,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getConnection() {
@@ -772,7 +789,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getConnection_ResTypeConnection() {
@@ -780,7 +797,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getConnection_BrokenConnection() {
@@ -788,7 +805,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getConnection_Source() {
@@ -796,7 +813,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getConnection_Destination() {
@@ -804,7 +821,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getConnection_RoutingData() {
@@ -812,7 +829,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getConnectionRoutingData() {
@@ -820,7 +837,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getConnectionRoutingData_Dx1() {
@@ -828,7 +845,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getConnectionRoutingData_Dx2() {
@@ -836,7 +853,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getConnectionRoutingData_Dy() {
@@ -844,7 +861,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public EAttribute getConnectionRoutingData_NeedsValidation() {
+		return (EAttribute) connectionRoutingDataEClass.getEStructuralFeatures().get(3);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public EClass getDevice() {
@@ -852,7 +877,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getDevice_Resource() {
@@ -860,7 +885,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getDevice_Profile() {
@@ -868,7 +893,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getDevice_InConnections() {
@@ -876,7 +901,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDeviceType() {
@@ -884,7 +909,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getDeviceType_VarDeclaration() {
@@ -892,7 +917,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getDeviceType_ResourceTypeName() {
@@ -900,7 +925,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getDeviceType_Resource() {
@@ -908,7 +933,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getDeviceType_FBNetwork() {
@@ -916,7 +941,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getDeviceType_Profile() {
@@ -924,7 +949,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getDeviceType_AttributeDeclarations() {
@@ -932,7 +957,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getECAction() {
@@ -940,7 +965,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECAction_Algorithm() {
@@ -948,7 +973,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECAction_Output() {
@@ -956,7 +981,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECAction_ECState() {
@@ -964,7 +989,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getECC() {
@@ -972,7 +997,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECC_ECState() {
@@ -980,7 +1005,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECC_ECTransition() {
@@ -988,7 +1013,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECC_Start() {
@@ -996,7 +1021,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECC_BasicFBType() {
@@ -1004,7 +1029,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getECState() {
@@ -1012,7 +1037,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECState_ECAction() {
@@ -1020,7 +1045,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECState_OutTransitions() {
@@ -1028,7 +1053,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECState_InTransitions() {
@@ -1036,7 +1061,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECState_ECC() {
@@ -1044,7 +1069,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getECTransition() {
@@ -1052,7 +1077,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getECTransition_Comment() {
@@ -1060,7 +1085,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getECTransition_ConditionExpression() {
@@ -1068,7 +1093,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECTransition_Source() {
@@ -1076,7 +1101,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECTransition_Destination() {
@@ -1084,7 +1109,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECTransition_ConditionEvent() {
@@ -1092,7 +1117,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getECTransition_ECC() {
@@ -1100,7 +1125,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getEvent() {
@@ -1108,7 +1133,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getEvent_With() {
@@ -1116,7 +1141,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getFB() {
@@ -1124,7 +1149,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getFBNetworkElement() {
@@ -1132,7 +1157,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getFBNetworkElement_Interface() {
@@ -1140,7 +1165,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getFBNetworkElement_Mapping() {
@@ -1148,7 +1173,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSubApp() {
@@ -1156,7 +1181,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getSubApp_SubAppNetwork() {
@@ -1164,7 +1189,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getFBType() {
@@ -1172,7 +1197,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getFBType_InterfaceList() {
@@ -1180,7 +1205,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getFBType_Service() {
@@ -1188,7 +1213,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getIdentification() {
@@ -1196,7 +1221,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getIdentification_ApplicationDomain() {
@@ -1204,7 +1229,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getIdentification_Classification() {
@@ -1212,7 +1237,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getIdentification_Description() {
@@ -1220,7 +1245,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getIdentification_Function() {
@@ -1228,7 +1253,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getIdentification_Standard() {
@@ -1236,7 +1261,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getIdentification_Type() {
@@ -1244,7 +1269,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getInputPrimitive() {
@@ -1252,7 +1277,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getInterfaceList() {
@@ -1260,7 +1285,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getInterfaceList_Plugs() {
@@ -1268,7 +1293,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getInterfaceList_Sockets() {
@@ -1276,7 +1301,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getInterfaceList_EventInputs() {
@@ -1284,7 +1309,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getInterfaceList_EventOutputs() {
@@ -1292,7 +1317,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getInterfaceList_InputVars() {
@@ -1300,7 +1325,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getInterfaceList_OutputVars() {
@@ -1308,7 +1333,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public EReference getInterfaceList_ErrorMarker() {
+		return (EReference) interfaceListEClass.getEStructuralFeatures().get(6);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public EClass getLink() {
@@ -1316,7 +1349,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getLink_Segment() {
@@ -1324,7 +1357,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getLink_Device() {
@@ -1332,7 +1365,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getMapping() {
@@ -1340,7 +1373,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getMapping_From() {
@@ -1348,7 +1381,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getMapping_To() {
@@ -1356,7 +1389,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getOtherAlgorithm() {
@@ -1364,7 +1397,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getOtherAlgorithm_Language() {
@@ -1372,7 +1405,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getOutputPrimitive() {
@@ -1380,7 +1413,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAttribute() {
@@ -1388,7 +1421,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAttribute_AttributeDeclaration() {
@@ -1396,7 +1429,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getAttribute_Value() {
@@ -1404,7 +1437,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getResource() {
@@ -1412,7 +1445,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getResource_FBNetwork() {
@@ -1420,7 +1453,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getResource_X() {
@@ -1428,7 +1461,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getResource_Y() {
@@ -1436,7 +1469,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getResource_Device() {
@@ -1444,7 +1477,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getResource_DeviceTypeResource() {
@@ -1452,7 +1485,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getResourceTypeName() {
@@ -1460,7 +1493,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getResourceTypeName_Name() {
@@ -1468,7 +1501,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getResourceType() {
@@ -1476,7 +1509,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getResourceType_VarDeclaration() {
@@ -1484,7 +1517,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getResourceType_FBNetwork() {
@@ -1492,7 +1525,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getResourceType_SupportedFBTypes() {
@@ -1500,7 +1533,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSegment() {
@@ -1508,7 +1541,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getSegment_Width() {
@@ -1516,7 +1549,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getSegment_VarDeclarations() {
@@ -1524,7 +1557,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getSegment_OutConnections() {
@@ -1532,7 +1565,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getServiceSequence() {
@@ -1540,7 +1573,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getServiceSequence_ServiceTransaction() {
@@ -1548,7 +1581,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getServiceTransaction() {
@@ -1556,7 +1589,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getServiceTransaction_InputPrimitive() {
@@ -1564,7 +1597,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getServiceTransaction_OutputPrimitive() {
@@ -1572,7 +1605,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getServiceInterfaceFBType() {
@@ -1580,7 +1613,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSTAlgorithm() {
@@ -1588,7 +1621,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getFBNetwork() {
@@ -1596,7 +1629,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getFBNetwork_NetworkElements() {
@@ -1604,7 +1637,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getFBNetwork_DataConnections() {
@@ -1612,7 +1645,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getFBNetwork_EventConnections() {
@@ -1620,7 +1653,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getFBNetwork_AdapterConnections() {
@@ -1628,7 +1661,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSubAppType() {
@@ -1636,7 +1669,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAutomationSystem() {
@@ -1644,7 +1677,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAutomationSystem_Application() {
@@ -1652,7 +1685,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAutomationSystem_Mapping() {
@@ -1660,7 +1693,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAutomationSystem_Palette() {
@@ -1668,7 +1701,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAutomationSystem_SystemConfiguration() {
@@ -1676,7 +1709,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getAutomationSystem_SystemFile() {
@@ -1684,7 +1717,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getAutomationSystem_CommandStack() {
@@ -1692,7 +1725,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getVarDeclaration() {
@@ -1700,7 +1733,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getVarDeclaration_ArraySize() {
@@ -1708,7 +1741,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getVarDeclaration_Withs() {
@@ -1716,7 +1749,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getVarDeclaration_Value() {
@@ -1724,7 +1757,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getVersionInfo() {
@@ -1732,7 +1765,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getVersionInfo_Author() {
@@ -1740,7 +1773,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getVersionInfo_Date() {
@@ -1748,7 +1781,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getVersionInfo_Organization() {
@@ -1756,7 +1789,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getVersionInfo_Remarks() {
@@ -1764,7 +1797,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getVersionInfo_Version() {
@@ -1772,7 +1805,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getWith() {
@@ -1780,7 +1813,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getWith_Variables() {
@@ -1788,7 +1821,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getLibraryElement() {
@@ -1796,7 +1829,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getLibraryElement_VersionInfo() {
@@ -1804,7 +1837,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getLibraryElement_Identification() {
@@ -1812,7 +1845,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getLibraryElement_PaletteEntry() {
@@ -1820,7 +1853,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getCompilableType() {
@@ -1828,7 +1861,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getCompilableType_CompilerInfo() {
@@ -1836,7 +1869,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getConfigurableObject() {
@@ -1844,7 +1877,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getConfigurableObject_Attributes() {
@@ -1852,7 +1885,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getCompositeFBType() {
@@ -1860,7 +1893,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getCompositeFBType_FBNetwork() {
@@ -1868,7 +1901,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getTextAlgorithm() {
@@ -1876,7 +1909,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getTextAlgorithm_Text() {
@@ -1884,7 +1917,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDataConnection() {
@@ -1892,7 +1925,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getEventConnection() {
@@ -1900,7 +1933,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAdapterConnection() {
@@ -1908,7 +1941,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getServiceInterface() {
@@ -1916,7 +1949,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getIInterfaceElement() {
@@ -1924,7 +1957,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getIInterfaceElement_IsInput() {
@@ -1932,7 +1965,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getIInterfaceElement_InputConnections() {
@@ -1940,7 +1973,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getIInterfaceElement_OutputConnections() {
@@ -1948,7 +1981,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getIInterfaceElement_Type() {
@@ -1956,7 +1989,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getIInterfaceElement_TypeName() {
@@ -1964,7 +1997,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getValue() {
@@ -1972,7 +2005,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getValue_Value() {
@@ -1980,7 +2013,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSystemConfiguration() {
@@ -1988,7 +2021,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getSystemConfiguration_Devices() {
@@ -1996,7 +2029,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getSystemConfiguration_Segments() {
@@ -2004,7 +2037,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getSystemConfiguration_Links() {
@@ -2012,7 +2045,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getINamedElement() {
@@ -2020,7 +2053,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getINamedElement_Name() {
@@ -2028,7 +2061,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getINamedElement_Comment() {
@@ -2036,7 +2069,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getResourceTypeFB() {
@@ -2044,7 +2077,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSegmentType() {
@@ -2052,7 +2085,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getSegmentType_VarDeclaration() {
@@ -2060,7 +2093,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAdapterFBType() {
@@ -2068,7 +2101,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAdapterFBType_AdapterType() {
@@ -2076,7 +2109,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAdapterEvent() {
@@ -2084,7 +2117,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAdapterEvent_AdapterDeclaration() {
@@ -2092,7 +2125,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getService() {
@@ -2100,7 +2133,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getService_RightInterface() {
@@ -2108,7 +2141,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getService_LeftInterface() {
@@ -2116,7 +2149,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getService_ServiceSequence() {
@@ -2124,7 +2157,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getTypedConfigureableObject() {
@@ -2132,7 +2165,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getTypedConfigureableObject_PaletteEntry() {
@@ -2140,7 +2173,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAdapterFB() {
@@ -2148,7 +2181,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getAdapterFB_AdapterDecl() {
@@ -2156,7 +2189,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getPrimitive() {
@@ -2164,7 +2197,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getPrimitive_Event() {
@@ -2172,7 +2205,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getPrimitive_Parameters() {
@@ -2180,7 +2213,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPrimitive_Interface() {
@@ -2188,7 +2221,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getPositionableElement() {
@@ -2196,7 +2229,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPositionableElement_Position() {
@@ -2204,7 +2237,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getPosition() {
@@ -2212,7 +2245,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getPosition_X() {
@@ -2220,7 +2253,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getPosition_Y() {
@@ -2228,7 +2261,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getColor() {
@@ -2236,7 +2269,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getColor_Red() {
@@ -2244,7 +2277,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getColor_Green() {
@@ -2252,7 +2285,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getColor_Blue() {
@@ -2260,7 +2293,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getColorizableElement() {
@@ -2268,7 +2301,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getColorizableElement_Color() {
@@ -2276,7 +2309,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getIVarElement() {
@@ -2284,7 +2317,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getIVarElement_VarDeclarations() {
@@ -2292,7 +2325,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getAttributeDeclaration() {
@@ -2300,7 +2333,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getAttributeDeclaration_InitialValue() {
@@ -2308,7 +2341,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getTypedElement() {
@@ -2316,7 +2349,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getTypedElement_Type() {
@@ -2324,7 +2357,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSimpleFBType() {
@@ -2332,7 +2365,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getSimpleFBType_Algorithm() {
@@ -2340,7 +2373,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getBaseFBType() {
@@ -2348,7 +2381,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getBaseFBType_InternalVars() {
@@ -2356,7 +2389,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public EReference getBaseFBType_InternalFbs() {
+		return (EReference) baseFBTypeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public EClass getStructManipulator() {
@@ -2364,7 +2405,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getStructManipulator_StructType() {
@@ -2372,7 +2413,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDemultiplexer() {
@@ -2380,7 +2421,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getMultiplexer() {
@@ -2388,7 +2429,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getLocalVariable() {
@@ -2396,7 +2437,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getLocalVariable_ArrayStart() {
@@ -2404,7 +2445,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getLocalVariable_ArrayStop() {
@@ -2412,7 +2453,79 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public EClass getErrorMarkerFBNElement() {
+		return errorMarkerFBNElementEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EReference getErrorMarkerFBNElement_RepairedElement() {
+		return (EReference) errorMarkerFBNElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EClass getErrorMarkerInterface() {
+		return errorMarkerInterfaceEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EReference getErrorMarkerInterface_RepairedEndpoint() {
+		return (EReference) errorMarkerInterfaceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EClass getCFBInstance() {
+		return cfbInstanceEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EReference getCFBInstance_CfbNetwork() {
+		return (EReference) cfbInstanceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EClass getErrorMarkerRef() {
+		return errorMarkerRefEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EAttribute getErrorMarkerRef_FileMarkerId() {
+		return (EAttribute) errorMarkerRefEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EAttribute getErrorMarkerRef_ErrorMessage() {
+		return (EAttribute) errorMarkerRefEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public EEnum getLanguage() {
@@ -2420,7 +2533,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getIProject() {
@@ -2428,7 +2541,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getIFile() {
@@ -2436,7 +2549,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getCommandStack() {
@@ -2444,7 +2557,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getPoint() {
@@ -2452,7 +2565,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public LibraryElementFactory getLibraryElementFactory() {
@@ -2460,17 +2573,18 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private boolean isCreated = false;
 
 	/** Creates the meta-model objects for the package. This method is guarded to have no affect on any invocation but
 	 * its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public void createPackageContents() {
-		if (isCreated)
+		if (isCreated) {
 			return;
+		}
 		isCreated = true;
 
 		// Create classes and their features
@@ -2512,6 +2626,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(connectionRoutingDataEClass, CONNECTION_ROUTING_DATA__DX1);
 		createEAttribute(connectionRoutingDataEClass, CONNECTION_ROUTING_DATA__DX2);
 		createEAttribute(connectionRoutingDataEClass, CONNECTION_ROUTING_DATA__DY);
+		createEAttribute(connectionRoutingDataEClass, CONNECTION_ROUTING_DATA__NEEDS_VALIDATION);
 
 		deviceEClass = createEClass(DEVICE);
 		createEReference(deviceEClass, DEVICE__RESOURCE);
@@ -2584,6 +2699,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(interfaceListEClass, INTERFACE_LIST__EVENT_OUTPUTS);
 		createEReference(interfaceListEClass, INTERFACE_LIST__INPUT_VARS);
 		createEReference(interfaceListEClass, INTERFACE_LIST__OUTPUT_VARS);
+		createEReference(interfaceListEClass, INTERFACE_LIST__ERROR_MARKER);
 
 		linkEClass = createEClass(LINK);
 		createEReference(linkEClass, LINK__SEGMENT);
@@ -2764,6 +2880,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		baseFBTypeEClass = createEClass(BASE_FB_TYPE);
 		createEReference(baseFBTypeEClass, BASE_FB_TYPE__INTERNAL_VARS);
+		createEReference(baseFBTypeEClass, BASE_FB_TYPE__INTERNAL_FBS);
 
 		structManipulatorEClass = createEClass(STRUCT_MANIPULATOR);
 		createEReference(structManipulatorEClass, STRUCT_MANIPULATOR__STRUCT_TYPE);
@@ -2776,6 +2893,19 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(localVariableEClass, LOCAL_VARIABLE__ARRAY_START);
 		createEAttribute(localVariableEClass, LOCAL_VARIABLE__ARRAY_STOP);
 
+		errorMarkerFBNElementEClass = createEClass(ERROR_MARKER_FBN_ELEMENT);
+		createEReference(errorMarkerFBNElementEClass, ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT);
+
+		errorMarkerInterfaceEClass = createEClass(ERROR_MARKER_INTERFACE);
+		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT);
+
+		cfbInstanceEClass = createEClass(CFB_INSTANCE);
+		createEReference(cfbInstanceEClass, CFB_INSTANCE__CFB_NETWORK);
+
+		errorMarkerRefEClass = createEClass(ERROR_MARKER_REF);
+		createEAttribute(errorMarkerRefEClass, ERROR_MARKER_REF__FILE_MARKER_ID);
+		createEAttribute(errorMarkerRefEClass, ERROR_MARKER_REF__ERROR_MESSAGE);
+
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -2787,17 +2917,18 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private boolean isInitialized = false;
 
 	/** Complete the initialization of the package and its meta-model. This method is guarded to have no affect on any
 	 * invocation but its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public void initializePackageContents() {
-		if (isInitialized)
+		if (isInitialized) {
 			return;
+		}
 		isInitialized = true;
 
 		// Initialize package
@@ -2806,10 +2937,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		PalettePackage thePalettePackage = (PalettePackage) EPackage.Registry.INSTANCE
+		final PalettePackage thePalettePackage = (PalettePackage) EPackage.Registry.INSTANCE
 				.getEPackage(PalettePackage.eNS_URI);
-		DataPackage theDataPackage = (DataPackage) EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
-		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
+		final DataPackage theDataPackage = (DataPackage) EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
+		final XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
 				.getEPackage(XMLTypePackage.eNS_URI);
 
 		// Create type parameters
@@ -2864,7 +2995,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		eventConnectionEClass.getESuperTypes().add(this.getConnection());
 		adapterConnectionEClass.getESuperTypes().add(this.getConnection());
 		serviceInterfaceEClass.getESuperTypes().add(this.getINamedElement());
-		iInterfaceElementEClass.getESuperTypes().add(this.getINamedElement());
+		iInterfaceElementEClass.getESuperTypes().add(this.getConfigurableObject());
+		valueEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		resourceTypeFBEClass.getESuperTypes().add(this.getFB());
 		segmentTypeEClass.getESuperTypes().add(this.getCompilableType());
 		adapterFBTypeEClass.getESuperTypes().add(this.getFBType());
@@ -2879,6 +3011,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		demultiplexerEClass.getESuperTypes().add(this.getStructManipulator());
 		multiplexerEClass.getESuperTypes().add(this.getStructManipulator());
 		localVariableEClass.getESuperTypes().add(this.getVarDeclaration());
+		errorMarkerFBNElementEClass.getESuperTypes().add(this.getFBNetworkElement());
+		errorMarkerFBNElementEClass.getESuperTypes().add(this.getErrorMarkerRef());
+		errorMarkerInterfaceEClass.getESuperTypes().add(this.getIInterfaceElement());
+		errorMarkerInterfaceEClass.getESuperTypes().add(this.getErrorMarkerRef());
+		cfbInstanceEClass.getESuperTypes().add(this.getFB());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, //$NON-NLS-1$
@@ -3125,6 +3262,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(fbEClass, ecorePackage.getEBoolean(), "isResourceTypeFB", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(fbEClass, this.getFBType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(fbNetworkElementEClass, FBNetworkElement.class, "FBNetworkElement", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFBNetworkElement_Interface(), this.getInterfaceList(), null, "interface", null, 0, 1, //$NON-NLS-1$
@@ -3167,6 +3306,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(subAppEClass, this.getSubAppType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(subAppEClass, theXMLTypePackage.getBoolean(), "isUnfolded", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(subAppEClass, theXMLTypePackage.getBoolean(), "isTyped", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(subAppEClass, this.getFBNetwork(), "loadSubAppNetwork", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(fbTypeEClass, FBType.class, "FBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getFBType_InterfaceList(), this.getInterfaceList(), null, "interfaceList", null, 1, 1, //$NON-NLS-1$
@@ -3219,10 +3362,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getInterfaceList_OutputVars(), this.getVarDeclaration(), null, "outputVars", null, 0, -1, //$NON-NLS-1$
 				InterfaceList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInterfaceList_ErrorMarker(), this.getIInterfaceElement(), null, "errorMarker", null, 0, -1, //$NON-NLS-1$
+				InterfaceList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = addEOperation(interfaceListEClass, null, "getAllInterfaceElements", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		EGenericType g1 = createEGenericType(ecorePackage.getEEList());
-		EGenericType g2 = createEGenericType(this.getIInterfaceElement());
+		final EGenericType g1 = createEGenericType(ecorePackage.getEEList());
+		final EGenericType g2 = createEGenericType(this.getIInterfaceElement());
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 
@@ -3676,8 +3822,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(positionableElementEClass, PositionableElement.class, "PositionableElement", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPositionableElement_Position(), this.getPosition(), null, "position", null, 1, 1, //$NON-NLS-1$
-				PositionableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+				PositionableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = addEOperation(positionableElementEClass, null, "updatePosition", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theXMLTypePackage.getInt(), "x", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -3738,6 +3884,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getBaseFBType_InternalVars(), this.getVarDeclaration(), null, "internalVars", null, 0, -1, //$NON-NLS-1$
 				BaseFBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseFBType_InternalFbs(), this.getFB(), null, "internalFbs", null, 0, -1, BaseFBType.class, //$NON-NLS-1$
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(structManipulatorEClass, StructManipulator.class, "StructManipulator", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -3766,6 +3915,37 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(localVariableEClass, theXMLTypePackage.getInt(), "getArraySize", 0, 1, !IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(errorMarkerFBNElementEClass, ErrorMarkerFBNElement.class, "ErrorMarkerFBNElement", !IS_ABSTRACT, //$NON-NLS-1$
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getErrorMarkerFBNElement_RepairedElement(), this.getFBNetworkElement(), null, "repairedElement", //$NON-NLS-1$
+				null, 0, 1, ErrorMarkerFBNElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(errorMarkerInterfaceEClass, ErrorMarkerInterface.class, "ErrorMarkerInterface", !IS_ABSTRACT, //$NON-NLS-1$
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getErrorMarkerInterface_RepairedEndpoint(), this.getIInterfaceElement(), null,
+				"repairedEndpoint", null, 0, 1, ErrorMarkerInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(cfbInstanceEClass, CFBInstance.class, "CFBInstance", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+				IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCFBInstance_CfbNetwork(), this.getFBNetwork(), null, "cfbNetwork", null, 0, 1, //$NON-NLS-1$
+				CFBInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(cfbInstanceEClass, this.getFBNetwork(), "loadCFBNetwork", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(cfbInstanceEClass, this.getCompositeFBType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(errorMarkerRefEClass, ErrorMarkerRef.class, "ErrorMarkerRef", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+				IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getErrorMarkerRef_FileMarkerId(), ecorePackage.getELong(), "fileMarkerId", null, 0, 1, //$NON-NLS-1$
+				ErrorMarkerRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getErrorMarkerRef_ErrorMessage(), theXMLTypePackage.getString(), "errorMessage", null, 0, 1, //$NON-NLS-1$
+				ErrorMarkerRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$
 		addEEnumLiteral(languageEEnum, Language.C);
@@ -3790,10 +3970,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 	/** Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected void createExtendedMetaDataAnnotations() {
-		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+		final String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
 		addAnnotation(getAdapterType_AdapterFBType(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "Service", //$NON-NLS-1$ //$NON-NLS-2$
 				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
@@ -3933,6 +4113,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				"name", "OutputVars", //$NON-NLS-1$ //$NON-NLS-2$
 				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		});
+		addAnnotation(getInterfaceList_ErrorMarker(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+				"name", "ErrorMarker", //$NON-NLS-1$ //$NON-NLS-2$
+				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		});
 		addAnnotation(getOtherAlgorithm_Language(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "Language" //$NON-NLS-1$ //$NON-NLS-2$
 		});
@@ -4031,11 +4215,19 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addAnnotation(getPrimitive_Parameters(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "Parameters" //$NON-NLS-1$ //$NON-NLS-2$
 		});
+		addAnnotation(getPositionableElement_Position(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+				"name", "Position", //$NON-NLS-1$ //$NON-NLS-2$
+				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		});
 		addAnnotation(getSimpleFBType_Algorithm(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "Algorithm", //$NON-NLS-1$ //$NON-NLS-2$
 				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		});
 		addAnnotation(getBaseFBType_InternalVars(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+				"name", "VarDeclaration", //$NON-NLS-1$ //$NON-NLS-2$
+				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		});
+		addAnnotation(getBaseFBType_InternalFbs(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "VarDeclaration", //$NON-NLS-1$ //$NON-NLS-2$
 				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		});

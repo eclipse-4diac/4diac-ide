@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.AncestorListener;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -47,6 +49,7 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.widgets.Display;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
@@ -67,11 +70,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return maxWidth;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
-	 */
+	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate() */
 	@Override
 	public void activate() {
 		super.activate();
@@ -135,11 +136,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return width;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
-	 */
+	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate() */
 	@Override
 	public void deactivate() {
 		super.deactivate();
@@ -157,19 +156,17 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			if (LibraryElementPackage.eINSTANCE.getValue_Value().equals(feature)) {
 				refreshValue();
 				refreshPosition();
+			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
+				Display.getDefault().asyncExec(ValueEditPart.this::refreshValue);
 			}
 			super.notifyChanged(notification);
 		}
 	};
 
-	/**
-	 * The Class ValueFigure.
-	 */
+	/** The Class ValueFigure. */
 	private class ValueFigure extends Label {
 
-		/**
-		 * Instantiates a new value figure.
-		 */
+		/** Instantiates a new value figure. */
 		public ValueFigure() {
 			setText(getModel().getValue() != null ? getModel().getValue() : ""); //$NON-NLS-1$
 
@@ -189,23 +186,27 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	}
 
-	/**
-	 * Refresh value.
-	 */
+	/** Refresh value. */
 	void refreshValue() {
 		if (getModel().getValue() != null) {
 			getFigure().setText(getModel().getValue());
 			setVisible(true);
+			setBackground(getModel().hasError());
 		} else {
 			setVisible(false);
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	private void setBackground(final boolean hasError) {
+		getFigure().setOpaque(hasError);
+		if (hasError) {
+			getFigure().setBackgroundColor(ColorConstants.red);
+		}
+	}
+
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#refresh()
-	 */
+	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#refresh() */
 	@Override
 	public void refresh() {
 		super.refresh();
@@ -218,11 +219,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return (Label) super.getFigure();
 	}
 
-	/**
-	 * Sets the visible.
+	/** Sets the visible.
 	 *
-	 * @param visible the new visible
-	 */
+	 * @param visible the new visible */
 	public void setVisible(final boolean visible) {
 		getFigure().setVisible(visible);
 	}
@@ -248,11 +247,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return (Value) super.getModel();
 	}
 
-	/**
-	 * Checks if is input.
+	/** Checks if is input.
 	 *
-	 * @return true, if is input
-	 */
+	 * @return true, if is input */
 	public boolean isInput() {
 		return getIInterfaceElement().isIsInput();
 	}
@@ -261,45 +258,33 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return getModel().getVarDeclaration();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
-	 * ConnectionEditPart)
-	 */
+	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef. ConnectionEditPart) */
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
-	 * Request)
-	 */
+	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef. Request) */
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
-	 * ConnectionEditPart)
-	 */
+	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef. ConnectionEditPart) */
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
-	 * Request)
-	 */
+	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef. Request) */
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
 		return new FixedAnchor(getFigure(), isInput());
@@ -316,29 +301,23 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return f;
 	}
 
-	/**
-	 * Gets the context.
+	/** Gets the context.
 	 *
-	 * @return the context
-	 */
+	 * @return the context */
 	public EditPart getContext() {
 		return context;
 	}
 
-	/**
-	 * Sets the context.
+	/** Sets the context.
 	 *
-	 * @param context the new context
-	 */
+	 * @param context the new context */
 	public void setContext(final EditPart context) {
 		this.context = context;
 	}
 
-	/**
-	 * Gets the manager.
+	/** Gets the manager.
 	 *
-	 * @return the manager
-	 */
+	 * @return the manager */
 	public DirectEditManager getManager() {
 		if (manager == null) {
 			manager = new LabelDirectEditManager(this, getFigure());
@@ -346,31 +325,32 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return manager;
 	}
 
-	/**
-	 * performs the directEdit.
-	 */
+	/** performs the directEdit. */
 	public void performDirectEdit() {
 		getManager().show();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see
-	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.
-	 * Request)
-	 */
+	 * @see org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef. Request) */
 	@Override
 	public void performRequest(final Request request) {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT) || (request.getType() == RequestConstants.REQ_OPEN)) {
+		final FBNetworkElement fb = getModel().getVarDeclaration().getFBNetworkElement();
+		if (!isTypedInstance(fb)
+				&& ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+						|| (request.getType() == RequestConstants.REQ_OPEN))) {
 			performDirectEdit();
 
 		} else {
 			super.performRequest(request);
 		}
+	}
+
+	private static boolean isTypedInstance(final FBNetworkElement fb) {
+		return (fb != null) && fb.isContainedInTypedInstance();
 	}
 
 }

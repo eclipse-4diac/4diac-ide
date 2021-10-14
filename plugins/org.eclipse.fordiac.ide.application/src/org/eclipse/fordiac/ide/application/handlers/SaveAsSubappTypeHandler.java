@@ -56,7 +56,7 @@ public class SaveAsSubappTypeHandler extends AbstractHandler {
 	}
 
 	private static boolean calculateEnabled(final ISelection selection) {
-		if (!selection.isEmpty() && (selection instanceof IStructuredSelection)) {
+		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
 			for (final Object selected : ((IStructuredSelection) selection).toList()) {
 				if ((selected instanceof EditPart) && (((EditPart) selected).getModel() instanceof SubApp)) {
 					if (null != ((SubApp) ((EditPart) selected).getModel()).getPaletteEntry()) {
@@ -74,7 +74,7 @@ public class SaveAsSubappTypeHandler extends AbstractHandler {
 		return false;
 	}
 
-	private static void invokeSaveWizard(SubApp subApp, IEditorPart editor) {
+	private static void invokeSaveWizard(final SubApp subApp, final IEditorPart editor) {
 		final SaveAsSubappWizard wizard = new SaveAsSubappWizard(subApp,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageName);
 

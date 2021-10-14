@@ -55,7 +55,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -67,10 +69,11 @@ import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.INavigationLocation;
+import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -78,8 +81,8 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class FBTypeEditor extends FormEditor
-implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker {
+public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelectionListener, CommandStackEventListener,
+ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
 
 	private Collection<IFBTEditorPart> editors;
 	private PaletteEntry paletteEntry;
@@ -97,7 +100,8 @@ implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPa
 				if (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass())) {
 					Display.getDefault().asyncExec(() -> {
 						if (null != paletteEntry) {
-							setPartName(paletteEntry.getLabel());
+							setPartName(paletteEntry.getFile().getName());
+							setInput(new FileEditorInput(paletteEntry.getFile()));
 						}
 					});
 
@@ -223,7 +227,6 @@ implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPa
 
 		// get these values here before calling super dispose
 		final boolean dirty = isDirty();
-		final FBTypeEditorInput input = getFBTypeEditorInput();
 
 		if (null != getSite()) {
 			getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
@@ -234,8 +237,8 @@ implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPa
 		if (dirty) {
 			// purge from typelib after super.dispose() so that no notifiers
 			// will be called
-			if (null != input) {
-				input.getPaletteEntry().setType(null);
+			if (null != paletteEntry) {
+				paletteEntry.setType(null);
 			}
 		}
 
@@ -249,6 +252,27 @@ implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPa
 
 	@Override
 	protected void addPages() {
+		final SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = getEditorsSorted();
+
+		editors = new ArrayList<>();
+		final FBTypeEditorInput editorInput = getFBTypeEditorInput();
+
+		for (final IFBTEditorPart fbtEditorPart : sortedEditorsMap.values()) {
+			editors.add(fbtEditorPart);
+			try {
+				// setCommonCommandStack needs to be called before the editor is added as page
+				fbtEditorPart.setCommonCommandStack(commandStack);
+				final int index = addPage(fbtEditorPart, editorInput);
+				setPageText(index, fbtEditorPart.getTitle());
+				setPageImage(index, fbtEditorPart.getTitleImage());
+			} catch (final PartInitException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+			}
+
+		}
+	}
+
+	private SortedMap<Integer, IFBTEditorPart> getEditorsSorted() {
 		final SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = new TreeMap<>();
 
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -272,23 +296,7 @@ implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPa
 				}
 			}
 		}
-
-		editors = new ArrayList<>();
-		final FBTypeEditorInput editorInput = getFBTypeEditorInput();
-
-		for (final IFBTEditorPart fbtEditorPart : sortedEditorsMap.values()) {
-			editors.add(fbtEditorPart);
-			try {
-				// setCommonCommandStack needs to be called before the editor is added as page
-				fbtEditorPart.setCommonCommandStack(commandStack);
-				final int index = addPage(fbtEditorPart, editorInput);
-				setPageText(index, fbtEditorPart.getTitle());
-				setPageImage(index, fbtEditorPart.getTitleImage());
-			} catch (final PartInitException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
-
-		}
+		return sortedEditorsMap;
 	}
 
 	/**
@@ -385,5 +393,38 @@ implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPa
 			}
 			i++;
 		}
+	}
+
+	@Override
+	public void reloadFile() {
+		if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
+			fbType.eAdapters().remove(adapter);
+		}
+		fbType = (FBType) paletteEntry.getType();
+		editors.stream().forEach(e -> e.reloadType(fbType));
+		getCommandStack().flush();
+		fbType.eAdapters().add(adapter);
+
+	}
+
+	@Override
+	public IFile getFile() {
+		return paletteEntry != null ? paletteEntry.getFile() : null;
+	}
+
+	@Override
+	protected void pageChange(final int newPageIndex) {
+		super.pageChange(newPageIndex);
+		getSite().getPage().getNavigationHistory().markLocation(this);
+	}
+
+	@Override
+	public INavigationLocation createEmptyNavigationLocation() {
+		return null;
+	}
+
+	@Override
+	public INavigationLocation createNavigationLocation() {
+		return new FBTypeNavigationLocation(this);
 	}
 }

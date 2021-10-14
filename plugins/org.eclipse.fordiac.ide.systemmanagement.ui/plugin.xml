@@ -60,13 +60,14 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="%SystemEditor.name"
-            extensions="sys"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
             contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
             default="true"
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
+            extensions="sys"
             icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"
-            id="org.eclipse.fordiac.ide.editors.SystemEditor">
+            id="org.eclipse.fordiac.ide.editors.SystemEditor"
+            matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy"
+            name="%SystemEditor.name">
       </editor>
    </extension>
    <extension
@@ -417,7 +418,7 @@
          point="org.eclipse.ui.navigator.navigatorContent">
         <navigatorContent
             activeByDefault="true"
-            contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentProvider"
+            contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemContentProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent"
             labelProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider"
             name="System Content"
@@ -621,4 +622,35 @@
           </editorInputEnablement>
        </linkHelper>
     </extension>
+    <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.InstanceTypeDecorator"
+            icon="fordiacimage://ICON_FB_TYPE"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.InstanceTypeDecorator"
+            label="Instance type decoration"
+            lightweight="true"
+            state="false">
+            <enablement>
+                <objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+            </enablement>
+            <description>
+               Show type name beside typed fbnetwork elements.
+            </description>
+      </decorator>
+      <decorator
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.InstanceCommentDecorator"
+            icon="fordiacimage://ICON_FB_TYPE"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.InstanceCommentDecorator"
+            label="Instance comment decoration"
+            lightweight="true"
+            state="false">
+            <enablement>
+                <objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+            </enablement>
+            <description>
+               Show instance comment beside typed fbnetwork elements.
+            </description>
+      </decorator>
+   </extension>
 </plugin>

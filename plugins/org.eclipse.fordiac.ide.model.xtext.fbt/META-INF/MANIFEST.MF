@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: fbt (Incubation)
+Bundle-Name: fbt
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 1.14.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.xtext.fbt;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.model,

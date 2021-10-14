@@ -52,33 +52,33 @@ public class SetPositionCommandTest extends FBNetworkTestBase {
 				new Rectangle(x, y, INVALID, INVALID)));
 	}
 
-	public static void verifyState(final State state, final State oldState, final TestFunction t, final int x, final int y) {
+	public static void verifyState(final State state, final TestFunction t, final int x, final int y) {
 		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getPosition().getX(), x);
 		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getPosition().getY(), y);
 	}
 
 	// parameter creation function
 	public static Collection<Arguments> data() {
-		final String MOVE_FB = "Move Functionblock ({0})";
+		final String MOVE_FB = "Move Functionblock ({0})"; //$NON-NLS-1$
 
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						(final State s, final State o, final TestFunction t) -> { //
 							FBCreateCommandTest.verifyState(s, o, t); //
-							verifyState(s, o, t, 0, 0);
+							verifyState(s, t, 0, 0);
 						}), //
 				new ExecutionDescription<>(MessageFormat.format(MOVE_FB, RequestConstants.REQ_MOVE),
 						(final State s) -> executeCommand(s, 10, 20, RequestConstants.REQ_MOVE), //
-						(final State s, final State o, final TestFunction t) -> verifyState(s, o, t, 10, 20) //
+						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 10, 20) //
 						), //
 				new ExecutionDescription<>(MessageFormat.format(MOVE_FB, RequestConstants.REQ_MOVE_CHILDREN),
 						(final State s) -> executeCommand(s, 15, 25, RequestConstants.REQ_MOVE_CHILDREN), //
-						(final State s, final State o, final TestFunction t) -> verifyState(s, o, t, 15, 25) //
+						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 15, 25) //
 						), //
 				new ExecutionDescription<>(MessageFormat.format(MOVE_FB, RequestConstants.REQ_ALIGN_CHILDREN),
 						(final State s) -> executeCommand(s, 5, 10, RequestConstants.REQ_ALIGN_CHILDREN), //
-						(final State s, final State o, final TestFunction t) -> verifyState(s, o, t, 5, 10) //
+						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 5, 10) //
 						) //
 				);
 
@@ -86,11 +86,11 @@ public class SetPositionCommandTest extends FBNetworkTestBase {
 				() -> FBCreateCommandTest.executeCommand(new State()), //
 				(final State s, final State o, final TestFunction t) -> {
 					FBCreateCommandTest.verifyState(s, o, t);
-					verifyState(s, o, t, 0, 0);
+					verifyState(s, t, 0, 0);
 				}, //
 				List.of(new ExecutionDescription<>("Unexecutable case: invalid request", // //$NON-NLS-1$
 						SetPositionCommandTest::unexecutableCommand, //
-						(final State s, final State o, final TestFunction t) -> verifyState(s, o, t, 0, 0) //
+						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 0, 0) //
 						) //
 						), //
 				CommandTestBase::disabledUndoCommand, //

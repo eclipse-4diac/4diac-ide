@@ -12,7 +12,7 @@
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added code for handling better appreance in dark theme
-  *******************************************************************************/
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -42,34 +42,30 @@ import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
 @SuppressWarnings("restriction")
 public class XTextAlgorithmEditor implements IAlgorithmEditor {
 
-	private EmbeddedEditor editor;
+	private final EmbeddedEditor editor;
 
-	private EmbeddedEditorModelAccess embeddedEditorModelAccess;
+	private final EmbeddedEditorModelAccess embeddedEditorModelAccess;
 
-	private BaseFBType fbType;
+	private final BaseFBType fbType;
 
 	private final Adapter adapter = new AdapterImpl() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
-				if (!(notification.getNotifier() instanceof Algorithm)) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							if ((null != editor.getViewer()) && (null != editor.getViewer().getControl())
-									&& (!editor.getViewer().getControl().isDisposed())) {
-								updatePrefix();
-							}
-						}
-					});
-				}
+			if ((Notification.REMOVING_ADAPTER != notification.getEventType())
+					&& (!(notification.getNotifier() instanceof Algorithm))) {
+				Display.getDefault().asyncExec(() -> {
+					if ((null != editor.getViewer()) && (null != editor.getViewer().getControl())
+							&& (!editor.getViewer().getControl().isDisposed())) {
+						updatePrefix();
+					}
+				});
 			}
 		}
 	};
 
-	public XTextAlgorithmEditor(EmbeddedEditor editor, BaseFBType fbType) {
+	public XTextAlgorithmEditor(final EmbeddedEditor editor, final BaseFBType fbType) {
 		this.editor = editor;
 		this.fbType = fbType;
 		embeddedEditorModelAccess = this.editor.createPartialEditor("", "", "", true); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -78,10 +74,11 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 
 		getViewer().addVerticalRulerColumn(createLineNumberRulerColumn());
 
-		AbstractRulerColumn column = new AbstractRulerColumn() {
+		final AbstractRulerColumn column = new AbstractRulerColumn() {
+			// currently nothing to be done here
 		};
 		getViewer().addVerticalRulerColumn(column); // Place holder for folding, also adds distance between line numbers
-													// and alg text
+		// and alg text
 
 		this.fbType.eAdapters().add(adapter);
 		editor.getViewer().getControl().addDisposeListener(e -> getFBType().eAdapters().remove(adapter));
@@ -90,7 +87,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 	}
 
 	private LineNumberRulerColumn createLineNumberRulerColumn() {
-		LineNumberRulerColumn lnrc = new LineNumberRulerColumn() {
+		final LineNumberRulerColumn lnrc = new LineNumberRulerColumn() {
 			@Override
 			protected String createDisplayString(int line) {
 				line -= prefixLineCount;
@@ -112,17 +109,17 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 	}
 
 	@Override
-	public void addDocumentListener(IDocumentListener listener) {
+	public void addDocumentListener(final IDocumentListener listener) {
 		editor.getDocument().addDocumentListener(listener);
 	}
 
 	@Override
-	public void removeDocumentListener(IDocumentListener listener) {
+	public void removeDocumentListener(final IDocumentListener listener) {
 		editor.getDocument().removeDocumentListener(listener);
 	}
 
 	@Override
-	public void setAlgorithmText(String text) {
+	public void setAlgorithmText(final String text) {
 		embeddedEditorModelAccess.updateModel(regeneratePrefix(), text, ""); //$NON-NLS-1$
 	}
 
@@ -145,7 +142,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 		try {
 			prefixLineCount = getViewer().getDocument().getNumberOfLines(0, getViewer().getVisibleRegion().getOffset());
 			prefixLineCount--; // the first line starts after the prefix
-		} catch (BadLocationException e) {
+		} catch (final BadLocationException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 

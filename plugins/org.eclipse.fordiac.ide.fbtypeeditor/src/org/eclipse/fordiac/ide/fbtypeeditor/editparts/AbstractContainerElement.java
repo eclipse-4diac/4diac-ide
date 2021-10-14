@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 public abstract class AbstractContainerElement {
 	private final FBType fbType;
 
-	public AbstractContainerElement(FBType fbtype) {
+	protected AbstractContainerElement(final FBType fbtype) {
 		this.fbType = fbtype;
 	}
 

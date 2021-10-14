@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -30,6 +31,8 @@ import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
+import org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 
 /**
  * <!-- begin-user-doc --> The <b>Switch</b> for the model's inheritance
@@ -52,7 +55,7 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	/**
 	 * Creates an instance of the switch. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MonitoringSwitch() {
@@ -113,6 +116,7 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIEditPartCreator(adapterMonitoringEvent);
 				if (result == null) result = caseEvent(adapterMonitoringEvent);
 				if (result == null) result = caseIInterfaceElement(adapterMonitoringEvent);
+				if (result == null) result = caseConfigurableObject(adapterMonitoringEvent);
 				if (result == null) result = caseINamedElement(adapterMonitoringEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -123,6 +127,7 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIEditPartCreator(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseVarDeclaration(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseIInterfaceElement(adapterMonitoringVarDeclaration);
+				if (result == null) result = caseConfigurableObject(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseINamedElement(adapterMonitoringVarDeclaration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -130,6 +135,22 @@ public class MonitoringSwitch<T> extends Switch<T> {
 			case MonitoringPackage.IEDIT_PART_CREATOR: {
 				IEditPartCreator iEditPartCreator = (IEditPartCreator)theEObject;
 				T result = caseIEditPartCreator(iEditPartCreator);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case MonitoringPackage.SUB_APP_PORT_ELEMENT: {
+				SubAppPortElement subAppPortElement = (SubAppPortElement)theEObject;
+				T result = caseSubAppPortElement(subAppPortElement);
+				if (result == null) result = casePortElement(subAppPortElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case MonitoringPackage.SUBAPP_MONITORING_ELEMENT: {
+				SubappMonitoringElement subappMonitoringElement = (SubappMonitoringElement)theEObject;
+				T result = caseSubappMonitoringElement(subappMonitoringElement);
+				if (result == null) result = caseMonitoringElement(subappMonitoringElement);
+				if (result == null) result = caseMonitoringBaseElement(subappMonitoringElement);
+				if (result == null) result = caseMonitoringBase_IEditPartCreator(subappMonitoringElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -173,6 +194,36 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIEditPartCreator(IEditPartCreator object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Sub App Port Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sub App Port Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSubAppPortElement(SubAppPortElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Subapp Monitoring Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Subapp Monitoring Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSubappMonitoringElement(SubappMonitoringElement object) {
 		return null;
 	}
 
@@ -266,6 +317,21 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseINamedElement(INamedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConfigurableObject(ConfigurableObject object) {
 		return null;
 	}
 

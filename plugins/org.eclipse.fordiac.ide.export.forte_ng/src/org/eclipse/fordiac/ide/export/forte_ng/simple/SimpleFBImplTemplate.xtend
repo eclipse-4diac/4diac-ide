@@ -54,6 +54,10 @@ class SimpleFBImplTemplate extends ForteFBTemplate {
           «generateInternalVarDefinition(type)»
 
         «ENDIF»
+		«IF !type.internalFbs.isEmpty»
+		
+		«generateInteralFbDeclarations(type)»
+        «ENDIF»	
 		«IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
         «generateInitialValueAssignmentDefinition((type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars))»
         «ENDIF»

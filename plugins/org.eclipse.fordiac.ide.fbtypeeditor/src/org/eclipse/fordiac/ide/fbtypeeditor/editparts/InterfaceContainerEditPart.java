@@ -54,7 +54,10 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 	private final Adapter econtentAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			refreshChildren();
+			refresh();
+			if (getParent() != null && getParent().getParent() != null) {
+				getParent().getParent().refresh();
+			}
 			super.notifyChanged(notification);
 		}
 	};
@@ -62,13 +65,13 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 	@Override
 	public void activate() {
 		super.activate();
-		getModel().getFbType().eAdapters().add(econtentAdapter);
+		getModel().getFbType().getInterfaceList().eAdapters().add(econtentAdapter);
 	}
 
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		getModel().getFbType().eAdapters().remove(econtentAdapter);
+		getModel().getFbType().getInterfaceList().eAdapters().remove(econtentAdapter);
 	}
 
 	@Override

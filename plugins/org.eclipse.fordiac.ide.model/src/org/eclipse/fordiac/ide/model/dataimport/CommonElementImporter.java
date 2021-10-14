@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008, 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University, Linz, Primetals Technologies Austria GmbH
+ *                          Johannes Kepler University, Linz
+ *               2020, 2021  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,7 +20,9 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
@@ -36,34 +39,49 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 
-/**
- * The Class CommonElementImporter.
- */
-abstract class CommonElementImporter {
+/** The Class CommonElementImporter. */
+public abstract class CommonElementImporter {
 
 	private static class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
@@ -81,10 +99,47 @@ abstract class CommonElementImporter {
 		}
 	}
 
+	protected static VarDeclaration getVarNamed(final InterfaceList interfaceList, final String varName,
+			final boolean input) {
+		VarDeclaration retVal;
+		boolean hasType = true;
+
+		if (interfaceList.eContainer() instanceof FB) {
+			// only if it is an FB check if it is typed
+			hasType = (null != ((FB) interfaceList.eContainer()).getPaletteEntry());
+		}
+
+		if (hasType) {
+			// we have a typed FB
+			retVal = interfaceList.getVariable(varName);
+			if ((null != retVal) && (retVal.isIsInput() != input)) {
+				retVal = null;
+			}
+		} else {
+			// if we couldn't load the type create the interface entry
+			retVal = createVarDecl(interfaceList, varName, input);
+		}
+		return retVal;
+	}
+
+	private static VarDeclaration createVarDecl(final InterfaceList interfaceList, final String varName,
+			final boolean input) {
+		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		variable.setName(varName);
+		variable.setIsInput(input);
+		if (input) {
+			interfaceList.getInputVars().add(variable);
+		} else {
+			interfaceList.getOutputVars().add(variable);
+		}
+		return variable;
+	}
+
 	private XMLStreamReader reader;
 	private final IFile file;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
+	protected final List<ErrorMarkerBuilder> errorMarkerAttributes;
 
 	protected IFile getFile() {
 		return file;
@@ -96,6 +151,13 @@ abstract class CommonElementImporter {
 
 	protected Palette getPalette() {
 		return getTypeLibrary().getBlockTypeLib();
+	}
+
+	protected FBTypePaletteEntry getTypeEntry(final String typeFbElement) {
+		if (null != typeFbElement) {
+			return getPalette().getFBTypeEntry(typeFbElement);
+		}
+		return null;
 	}
 
 	protected DataTypeLibrary getDataTypeLibrary() {
@@ -114,6 +176,7 @@ abstract class CommonElementImporter {
 		Assert.isNotNull(file);
 		this.file = file;
 		typeLibrary = TypeLibrary.getTypeLibrary(file.getProject());
+		errorMarkerAttributes = new ArrayList<>();
 	}
 
 	protected CommonElementImporter(final CommonElementImporter importer) {
@@ -121,51 +184,41 @@ abstract class CommonElementImporter {
 		reader = importer.reader;
 		file = importer.file;
 		typeLibrary = importer.typeLibrary;
+		errorMarkerAttributes = importer.errorMarkerAttributes;
 	}
 
 	public void loadElement() {
 		element = createRootModelElement();
-		try (ImporterStreams streams = createInputStreams(file.getContents())) {
+		try (ImporterStreams streams = createInputStreams(getInputStream())) {
 			deleteMarkers();
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
 		} catch (final Exception e) {
-			Activator.getDefault().logWarning("Type Loading issue", e);
+			Activator.getDefault().logWarning("Type Loading issue", e);//$NON-NLS-1$
 			createErrorMarker(e.getMessage());
+		} finally {
+			buildErrorMarker(file);
 		}
 	}
 
-	protected void createErrorMarker(final String message) {
-		final Map<String, String> attrs = new HashMap<>();
-		attrs.put(IMarker.MESSAGE, message);
-		createErrorMarker(attrs);
+	protected InputStream getInputStream() throws Exception {
+		return file.getContents();
 	}
 
-	protected void createErrorMarker(final String message, final INamedElement errorLocation) {
-		final Map<String, String> attrs = new HashMap<>();
+	protected ErrorMarkerBuilder createErrorMarker(final String message) {
+		final Map<String, Object> attrs = new HashMap<>();
 		attrs.put(IMarker.MESSAGE, message);
-		FordiacMarkerHelper.addLocation(errorLocation, attrs);
-		FordiacMarkerHelper.addTargetIdentifier(errorLocation, attrs);
-		createErrorMarker(attrs);
+		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarkerBuilder(attrs, getLineNumber());
+		errorMarkerAttributes.add(e);
+		return e;
 	}
 
-	protected void createErrorMarker(final Map<String, String> attrs) {
-		final int lineNumber = reader.getLocation().getLineNumber();
-		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) {
+	private void buildErrorMarker(final IFile file) {
+		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) { //$NON-NLS-1$
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				try {
-					final IMarker marker = file.createMarker(IMarker.PROBLEM);
-					if (marker.exists()) {
-						marker.setAttributes(attrs);
-						marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-						marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-					}
-				} catch (final CoreException e) {
-					Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
-				}
+				errorMarkerAttributes.stream().forEach(a -> FordiacMarkerHelper.createMarkerInFile(a, file));
 				return Status.OK_STATUS;
 			}
 		};
@@ -180,19 +233,21 @@ abstract class CommonElementImporter {
 	protected abstract IChildHandler getBaseChildrenHandler();
 
 	protected void deleteMarkers() {
-		final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) {
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				try {
-					file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-				} catch (final CoreException e) {
-					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+		if (file.exists()) {
+			final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) {
+				@Override
+				public IStatus runInWorkspace(final IProgressMonitor monitor) {
+					try {
+						file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+					} catch (final CoreException e) {
+						Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+					}
+					return Status.OK_STATUS;
 				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(file.getProject());
-		job.schedule();
+			};
+			job.setRule(file.getProject());
+			job.schedule();
+		}
 	}
 
 	private ImporterStreams createInputStreams(final InputStream fileInputStream) throws XMLStreamException {
@@ -205,6 +260,13 @@ abstract class CommonElementImporter {
 
 	protected XMLStreamReader getReader() {
 		return reader;
+	}
+
+	public int getLineNumber() {
+		if (reader != null && reader.getLocation() != null) {
+			return reader.getLocation().getLineNumber();
+		}
+		return -1; // we don't have a parse position
 	}
 
 	protected void proceedToStartElementNamed(final String elementName) throws XMLStreamException {
@@ -255,15 +317,13 @@ abstract class CommonElementImporter {
 		}
 	}
 
-	/**
-	 * Parses the identification.
+	/** Parses the identification.
 	 *
 	 * @param elem the elem
 	 * @param node the node
 	 *
 	 * @return the identification
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void parseIdentification(final LibraryElement elem) throws XMLStreamException {
 		final Identification ident = LibraryElementFactory.eINSTANCE.createIdentification();
 		final String standard = getAttributeValue(LibraryElementTags.STANDARD_ATTRIBUTE);
@@ -336,14 +396,11 @@ abstract class CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.VERSION_INFO_ELEMENT);
 	}
 
-	/**
-	 * Gets the xand y.
+	/** Gets the xand y.
 	 *
-	 * @param positionableElement the positionable element where the parsed
-	 *                            coordinates should be set to
+	 * @param positionableElement the positionable element where the parsed coordinates should be set to
 	 *
-	 * @throws TypeImportException the FBT import exception
-	 */
+	 * @throws TypeImportException the FBT import exception */
 	public void getXandY(final PositionableElement positionableElement) throws TypeImportException {
 		try {
 			final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
@@ -387,18 +444,33 @@ abstract class CommonElementImporter {
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != name && null != value) {
+		if ((null != name) && (null != value)) {
 			confObject.setAttribute(name, null == type ? "STRING" : type, //$NON-NLS-1$
 					value, comment);
+		}
+
+		if (confObject instanceof StructManipulator) {
+			checkStructAttribute((StructManipulator) confObject, name);
+		}
+	}
+
+	private void checkStructAttribute(final StructManipulator fb, final String name) {
+		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(name)) {
+			final Attribute attr = fb.getAttribute(LibraryElementTags.STRUCTURED_TYPE_ELEMENT); // $NON-NLS-1$
+			final StructuredType structType = getTypeLibrary().getDataTypeLibrary().getStructuredType(attr.getValue());
+			fb.setStructTypeElementsAtInterface(structType);
+		} else if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(name)) {
+			// reset type to get visible children configured
+			fb.setStructTypeElementsAtInterface(fb.getStructType());
 		}
 	}
 
 	protected VarDeclaration parseParameter() throws TypeImportException, XMLStreamException {
-		final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (null != name) {
-			var.setName(name);
+			variable.setName(name);
 		} else {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
@@ -407,16 +479,16 @@ abstract class CommonElementImporter {
 		if (null != value) {
 			final Value val = LibraryElementFactory.eINSTANCE.createValue();
 			val.setValue(value);
-			var.setValue(val);
+			variable.setValue(val);
 		} else {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterValueNotSet);
 		}
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
-			var.setComment(comment);
+			variable.setComment(comment);
 		}
 		proceedToEndElementNamed(LibraryElementTags.PARAMETER_ELEMENT);
-		return var;
+		return variable;
 	}
 
 	protected String getAttributeValue(final String attributeName) {
@@ -492,6 +564,41 @@ abstract class CommonElementImporter {
 		compilerInfo.getCompiler().add(comp);
 	}
 
+	protected void parseFBChildren(final FBNetworkElement block, final String parentNodeName)
+			throws TypeImportException, XMLStreamException {
+		processChildren(parentNodeName, name -> {
+			switch (name) {
+			case LibraryElementTags.PARAMETER_ELEMENT:
+				parseParameter(block);
+				return true;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(block);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			default:
+				return false;
+			}
+		});
+	}
+
+	protected void parseParameter(final FBNetworkElement block) throws TypeImportException, XMLStreamException {
+		final VarDeclaration parameter = parseParameter();
+		final VarDeclaration vInput = getVarNamed(block.getInterface(), parameter.getName(), true);
+		if (null != vInput) {
+			vInput.setValue(parameter.getValue());
+			validateValue(vInput);
+		}
+	}
+
+	protected void validateValue(final VarDeclaration vInput) {
+		final String validation = ValueValidator.validateValue(vInput.getType(), vInput.getValue().getValue());
+		if ((validation != null) && (!validation.trim().isEmpty())) {
+			final ErrorMarkerBuilder e = FordiacMarkerHelper.createValueErrorMarkerBuilder(validation,
+					vInput.getValue(), getLineNumber());
+			errorMarkerAttributes.add(e);
+		}
+	}
+
 	protected boolean isProfileAttribute() {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		return (null != name) && LibraryElementTags.DEVICE_PROFILE.equals(name);
@@ -502,6 +609,122 @@ abstract class CommonElementImporter {
 		if (null != value) {
 			device.setProfile(value);
 		}
+	}
+
+	protected Resource parseResource() throws TypeImportException, XMLStreamException {
+		final Resource resource = LibraryElementFactory.eINSTANCE.createResource();
+		resource.setDeviceTypeResource(false); // TODO model refactoring - check if a resource of given name is already
+		// in the list then it would be a device type resource
+		readNameCommentAttributes(resource);
+		parseResourceType(resource);
+		final FBNetwork fbNetwork = createResourceTypeNetwork(resource);
+		resource.setFBNetwork(fbNetwork);
+
+		processChildren(LibraryElementTags.RESOURCE_ELEMENT, name -> {
+			switch (name) {
+			case LibraryElementTags.FBNETWORK_ELEMENT:
+				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations())
+				.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
+				break;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(resource);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
+			case LibraryElementTags.PARAMETER_ELEMENT:
+				final VarDeclaration parameter = parseParameter();
+				if (null != parameter) {
+					final VarDeclaration devParam = getParamter(resource.getVarDeclarations(), parameter.getName());
+					if (null != devParam) {
+						devParam.setValue(parameter.getValue());
+					} else {
+						parameter.setIsInput(true);
+						resource.getVarDeclarations().add(parameter);
+					}
+				}
+				break;
+			default:
+				return false;
+			}
+			return true;
+		});
+		return resource;
+	}
+
+	private void parseResourceType(final Resource resource) {
+		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		if (typeName != null) {
+			final ResourceTypeEntry entry = getPalette().getResourceTypeEntry(typeName);
+			if (null != entry) {
+				resource.setPaletteEntry(entry);
+				createParamters(resource);
+			}
+		}
+	}
+
+	/** Creates the values. */
+	public static void createParamters(final IVarElement element) {
+		if (element instanceof Device) {
+			element.getVarDeclarations().addAll(
+					EcoreUtil.copyAll(((DeviceTypePaletteEntry) ((TypedConfigureableObject) element).getPaletteEntry())
+							.getDeviceType().getVarDeclaration()));
+		}
+		if (element instanceof Resource) {
+			element.getVarDeclarations().addAll(
+					EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getPaletteEntry())
+							.getResourceType().getVarDeclaration()));
+		}
+		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
+			varDecl.setValue(value);
+			final VarDeclaration typeVar = getTypeVariable(varDecl);
+			if (null != typeVar && null != typeVar.getValue()) {
+				value.setValue(typeVar.getValue().getValue());
+			}
+		}
+	}
+
+	private static VarDeclaration getTypeVariable(final VarDeclaration variable) {
+		EList<VarDeclaration> varList = null;
+		if (variable.eContainer() instanceof Device) {
+			final Device dev = (Device) variable.eContainer();
+			if (null != dev.getType()) {
+				varList = dev.getType().getVarDeclaration();
+			}
+		} else if (variable.eContainer() instanceof Resource) {
+			final Resource res = (Resource) variable.eContainer();
+			if (null != res.getType()) {
+				varList = res.getType().getVarDeclaration();
+			}
+		}
+
+		if (null != varList) {
+			return getParamter(varList, variable.getName());
+		}
+		return null;
+	}
+
+	protected static VarDeclaration getParamter(final EList<VarDeclaration> paramList, final String name) {
+		for (final VarDeclaration varDecl : paramList) {
+			if (varDecl.getName().equals(name)) {
+				return varDecl;
+			}
+		}
+		return null;
+	}
+
+	private static FBNetwork createResourceTypeNetwork(final Resource resource) {
+		FBNetwork resourceFBNetwork = null;
+
+		if (resource.getType() != null && resource.getType().getFBNetwork() != null) {
+			// create a dummy interface list so that we can use the copyFBNetwork method
+			final InterfaceList il = LibraryElementFactory.eINSTANCE.createInterfaceList();
+			il.getInputVars().addAll(resource.getVarDeclarations());
+			resourceFBNetwork = FBNetworkHelper.createResourceFBNetwork(resource.getType().getFBNetwork(), il);
+			resource.getVarDeclarations().addAll(il.getInputVars());  // ensure that the data inputs are back with us.
+		} else {
+			resourceFBNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+		}
+		return resourceFBNetwork;
 	}
 
 }

@@ -17,6 +17,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.text.MessageFormat;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -27,8 +29,12 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
@@ -47,7 +53,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -75,14 +80,13 @@ public class InterfaceElementSection extends AbstractSection {
 
 	private Text typeText;
 	private Text commentText;
-	protected CCombo typeCombo;
 	private Text parameterText;
 	private Text currentParameterText;
 	private CLabel parameterTextCLabel;
 	private CLabel currentParameterTextCLabel;
 	private Button openEditorButton;
 	private Section infoSection;
-
+	private AddDeleteWidget deleteButton;
 
 
 	@Override
@@ -107,13 +111,13 @@ public class InterfaceElementSection extends AbstractSection {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteWidget deleteButtonArea = new AddDeleteWidget();
-		deleteButtonArea.createControls(composite, getWidgetFactory());
-		deleteButtonArea.setVisibleCreateButton(false);
+		deleteButton = new AddDeleteWidget();
+		deleteButton.createControls(composite, getWidgetFactory());
+		deleteButton.setVisibleCreateButton(false);
 
 		connectionsViewer = createConnectionsViewer(composite);
 
-		deleteButtonArea.bindToTableViewer(connectionsViewer, this, ref -> null,
+		deleteButton.bindToTableViewer(connectionsViewer, this, ref -> null,
 				ref -> new DeleteConnectionCommand((Connection) ref));
 
 		connectionSection.setClient(composite);
@@ -192,7 +196,7 @@ public class InterfaceElementSection extends AbstractSection {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 
-		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.CurrentValue + ":"); //$NON-NLS-1$
+		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		currentParameterText = createGroupText(composite, true);
 		currentParameterText.addModifyListener(e -> {
 			removeContentAdapter();
@@ -209,61 +213,90 @@ public class InterfaceElementSection extends AbstractSection {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 
-		final boolean b = null != type && (getType() instanceof VarDeclaration)
-				&& !(getType().getType() instanceof AdapterType);
-		parameterTextCLabel.setVisible(b);
-		parameterText.setVisible(b);
-		currentParameterTextCLabel.setVisible(b);
-		currentParameterText.setVisible(b);
 		if (null != type) {
-			infoSection.setText(getType().getFBNetworkElement().getName() + " . " //$NON-NLS-1$
-					+ (getType().getName() != null ? getType().getName() : "")); //$NON-NLS-1$
+			refreshParameterVisibility();
+			final FBNetworkElement fb = getType().getFBNetworkElement();
+			if (fb != null) {
+				infoSection.setText(
+						MessageFormat.format(Messages.InterfaceElementSection_Instance, fb.getName(), getPinName()));
+			} else { // e.g., IP address of device
+				infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
+			}
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
 
 			openEditorButton.setEnabled(
-					getType().getType() instanceof StructuredType || getType().getType() instanceof AdapterType);
+					(getType().getType() instanceof StructuredType) || (getType().getType() instanceof AdapterType));
 
 			if (getType() instanceof VarDeclaration) {
 				itype = setParameterAndType();
-
 			} else {
 				itype = FordiacMessages.Event;
 			}
 			typeText.setText(itype);
 
-			if (getType().isIsInput()) {
-				connectionSection.setText(Messages.InterfaceElementSection_InConnections);
-			} else {
-				connectionSection.setText(Messages.InterfaceElementSection_OutConnections);
-			}
-			connectionsViewer.setInput(getType());
+			refreshConnectionsViewer();
 
+			if (fb != null) {
+				setEditable(!fb.isContainedInTypedInstance());
+			}
 		}
 
 		commandStack = commandStackBuffer;
 	}
 
+	private Object getPinName() {
+		return getType().getName() != null ? getType().getName() : ""; //$NON-NLS-1$
+	}
+
+	private void refreshParameterVisibility() {
+		final boolean isDataIO = (getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration);
+		parameterTextCLabel.setVisible(isDataIO);
+		parameterText.setVisible(isDataIO);
+		currentParameterTextCLabel.setVisible(isDataIO && getType().isIsInput());
+		currentParameterText.setVisible(isDataIO && getType().isIsInput());
+	}
+
+	private void refreshConnectionsViewer() {
+		if (getType().isIsInput()) {
+			connectionSection.setText(Messages.InterfaceElementSection_InConnections);
+		} else {
+			connectionSection.setText(Messages.InterfaceElementSection_OutConnections);
+		}
+
+		connectionsViewer.setInput(getType());
+	}
+
+	private void setEditable(final boolean editable) {
+		currentParameterText.setEditable(editable);
+		currentParameterText.setEnabled(editable);
+		deleteButton.setVisibleDeleteButton(editable);
+	}
+
 	protected String setParameterAndType() {
 		String itype;
-		final VarDeclaration var = (VarDeclaration) getType();
-		itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
-		if (getType().isIsInput()) {
-			if (null != getType().getFBNetworkElement().getType()) {
-				final IInterfaceElement ie = getType().getFBNetworkElement().getType().getInterfaceList()
-						.getInterfaceElement(getType().getName());
+		final VarDeclaration varDecl = (VarDeclaration) getType();
+		itype = varDecl.getType() != null ? varDecl.getType().getName() : ""; //$NON-NLS-1$
+		if (varDecl.isIsInput() && (varDecl.getFBNetworkElement() != null)) {
+			final FBType fbType = varDecl.getFBNetworkElement().getType();
+			if (null != fbType) {
+				final IInterfaceElement ie = fbType.getInterfaceList()
+						.getInterfaceElement(varDecl.getName());
 				if (ie instanceof VarDeclaration) {
 					parameterText.setText(
-							(((VarDeclaration) ie).getValue() != null) ? ((VarDeclaration) ie).getValue().getValue()
-									: ""); //$NON-NLS-1$
-					if (getType().getType() instanceof StructuredType) {
+							getValueFromVarDecl((VarDeclaration) ie));
+					if (varDecl.getType() instanceof StructuredType) {
 						itype = getStructTypes((StructuredType) getType().getType());
 					}
 				}
 			}
-			currentParameterText.setText((var.getValue() != null) ? var.getValue().getValue() : ""); //$NON-NLS-1$
 		}
+		currentParameterText.setText(getValueFromVarDecl(varDecl));
 		return itype;
+	}
+
+	private static String getValueFromVarDecl(final VarDeclaration varDecl) {
+		return (varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""; //$NON-NLS-1$
 	}
 
 	// this method will be removed as soon as there is a toString for StructType in
@@ -319,8 +352,8 @@ public class InterfaceElementSection extends AbstractSection {
 		public Object[] getElements(final Object inputElement) {
 			if (inputElement instanceof IInterfaceElement) {
 				final IInterfaceElement element = ((IInterfaceElement) inputElement);
-				if (element.isIsInput() && null != element.getFBNetworkElement()
-						|| (!element.isIsInput() && null == element.getFBNetworkElement())) {
+				if ((element.isIsInput() && (null != element.getFBNetworkElement()))
+						|| (!element.isIsInput() && (null == element.getFBNetworkElement()))) {
 					return element.getInputConnections().toArray();
 				}
 				return element.getOutputConnections().toArray();
@@ -368,6 +401,8 @@ public class InterfaceElementSection extends AbstractSection {
 					case TARGET_COL_INDEX:
 						if (null != ie.getFBNetworkElement()) {
 							return ie.getFBNetworkElement().getName();
+						} else if (ie.eContainer().eContainer() instanceof CompositeFBType) {
+							return ((CompositeFBType) ie.eContainer().eContainer()).getName();
 						}
 						break;
 					case PIN_COL_INDEX:
@@ -383,8 +418,7 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 
 		private IInterfaceElement getInterfaceElement(final Connection con) {
-			final IInterfaceElement root = getType();
-			return (root.equals(con.getSource())) ? con.getDestination() : con.getSource();
+			return (getType().equals(con.getSource())) ? con.getDestination() : con.getSource();
 		}
 	}
 

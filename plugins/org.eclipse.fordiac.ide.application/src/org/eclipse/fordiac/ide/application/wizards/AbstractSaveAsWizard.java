@@ -24,7 +24,7 @@ public abstract class AbstractSaveAsWizard extends Wizard {
 	private final String subappSection;
 	SaveAsWizardPage newFilePage;
 
-	public AbstractSaveAsWizard(final String subAppSection) {
+	protected AbstractSaveAsWizard(final String subAppSection) {
 		this.subappSection = subAppSection;
 		setupDiagramSettings();
 	}

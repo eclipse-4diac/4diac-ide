@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 
-	private static VarDeclaration createTestVarDec(String name) {
+	private static VarDeclaration createTestVarDec(final String name) {
 		final VarDeclaration varDec = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDec.setName(name);
 		varDec.setType(new DataTypeLibrary().getType(FordiacKeywords.BOOL));
@@ -33,7 +33,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	}
 
 	// insert into empty list
-	private static State executeCommandVar1(State state) {
+	private static State executeCommandVar1(final State state) {
 		final VarDeclaration varDec = createTestVarDec("first"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
@@ -42,7 +42,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	}
 
 	// insert at the beginning
-	private static State executeCommandVar2(State state) {
+	private static State executeCommandVar2(final State state) {
 		final VarDeclaration varDec = createTestVarDec("second"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
@@ -51,7 +51,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	}
 
 	// insert in the middle
-	private static State executeCommandVar3(State state) {
+	private static State executeCommandVar3(final State state) {
 		final VarDeclaration varDec = createTestVarDec("third"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 1));
@@ -60,7 +60,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	}
 
 	// insert at the end
-	private static State executeCommandVar4(State state) {
+	private static State executeCommandVar4(final State state) {
 		final VarDeclaration varDec = createTestVarDec("fourth"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 3));
@@ -68,52 +68,60 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		return commandExecution(state);
 	}
 
-	private static void verifyStateVarWithIndex(State state, State oldState, TestFunction t, int index) {
+	private static void verifyStateVarWithIndex(final State state, final State oldState, final TestFunction t, final int index) {
 		t.test(!state.getList().isEmpty());
 		t.test(state.getList().size(), (oldState.getList().size() + 1));
-		t.test(validateVarDeclaration(state.getList().get(index), state.getVarDec()));
+		validateVarDeclaration(state.getList().get(index), state.getVarDec(), t);
+	}
+
+	private static void validateVarDeclaration(final VarDeclaration newVar, final VarDeclaration oldVar,
+			final TestFunction t) {
+		/* can not check the name because if it is already taken a unique one will be generated */
+		t.test(newVar.getType().getName(), oldVar.getType().getName());
+		t.test(newVar.getComment(), oldVar.getComment());
+		t.test(newVar.getArraySize(), oldVar.getArraySize());
 	}
 
 	// empty list
-	private static void verifyStateVar1(State state, State oldState, TestFunction t) {
+	private static void verifyStateVar1(final State state, final State oldState, final TestFunction t) {
 		verifyStateVarWithIndex(state, oldState, t, 0);
 	}
 
 	// beginning
-	private static void verifyStateVar2(State state, State oldState, TestFunction t) {
+	private static void verifyStateVar2(final State state, final State oldState, final TestFunction t) {
 		verifyStateVarWithIndex(state, oldState, t, 0);
 	}
 
 	// middle
-	private static void verifyStateVar3(State state, State oldState, TestFunction t) {
+	private static void verifyStateVar3(final State state, final State oldState, final TestFunction t) {
 		verifyStateVarWithIndex(state, oldState, t, 1);
 	}
 
 	// end
-	private static void verifyStateVar4(State state, State oldState, TestFunction t) {
+	private static void verifyStateVar4(final State state, final State oldState, final TestFunction t) {
 		verifyStateVarWithIndex(state, oldState, t, 3);
 	}
 
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
-				new ExecutionDescription<State>("Insert an internal variable into an empty list", //$NON-NLS-1$
+				new ExecutionDescription<>("Insert an internal variable into an empty list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar1, //
 						InsertVariableCommandTest::verifyStateVar1 //
-				), //
-				new ExecutionDescription<State>("Insert an internal variable at the beginning of the list", //$NON-NLS-1$
+						), //
+				new ExecutionDescription<>("Insert an internal variable at the beginning of the list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar2, //
 						InsertVariableCommandTest::verifyStateVar2 //
-				), //
-				new ExecutionDescription<State>("Add an internal variable in the middle of the list", //$NON-NLS-1$
+						), //
+				new ExecutionDescription<>("Add an internal variable in the middle of the list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar3, //
 						InsertVariableCommandTest::verifyStateVar3 //
-				), //
-				new ExecutionDescription<State>("Add an internal variable at the end of the list", //$NON-NLS-1$
+						), //
+				new ExecutionDescription<>("Add an internal variable at the end of the list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar4, //
 						InsertVariableCommandTest::verifyStateVar4 //
-				) //
-		);
+						) //
+				);
 
 		return createCommands(executionDescriptions);
 	}

@@ -35,7 +35,8 @@ class CMakeListsTemplate extends ForteFBTemplate {
 	forte_add_directory_module()
 	
 	# If you want to set your own name independent of storage location you can use
-	# forte_add_module("YOUR_MODULE_NAME_HERE" "short description of your module")
+	# forte_add_module("YOUR_MODULE_NAME_HERE" <ON/OFF> "short description of your module")
+	# ON/OFF to specify if the module shall be added by default or not
 	# Additional parameters can be added to specify dependencies on other modules
 	
 	# To specify the source-files to be included in this module you can use

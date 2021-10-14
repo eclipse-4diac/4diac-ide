@@ -25,9 +25,9 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 
-	private TypeLibrary typeLib;
+	private final TypeLibrary typeLib;
 
-	public FBInterfaceEditPartFactory(GraphicalEditor editor, TypeLibrary typeLib) {
+	public FBInterfaceEditPartFactory(final GraphicalEditor editor, final TypeLibrary typeLib) {
 		super(editor);
 		this.typeLib = typeLib;
 	}
@@ -52,9 +52,8 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof VarDeclaration) {
 			if (modelElement instanceof AdapterDeclaration) {
 				return new AdapterInterfaceEditPart(typeLib.getBlockTypeLib());
-			} else {
-				return createInterfaceEditPart();
 			}
+			return createInterfaceEditPart();
 		}
 		if (modelElement instanceof With) {
 			return new WithEditPart();
@@ -74,6 +73,8 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 		throw createEditpartCreationException(modelElement);
 	}
 
+	// make it protected none static so that subclasses can override it and provide own interface edit parts if needed
+	@SuppressWarnings("static-method")
 	protected EditPart createInterfaceEditPart() {
 		return new InterfaceEditPart();
 	}

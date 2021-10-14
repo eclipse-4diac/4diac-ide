@@ -20,6 +20,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//Expression"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FBCall" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fb" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//FB"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="event" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="args" upperBound="-1" eType="#//Argument"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IfStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//Expression"
         containment="true"/>

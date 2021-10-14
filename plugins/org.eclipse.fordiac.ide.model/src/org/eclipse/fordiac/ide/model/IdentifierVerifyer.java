@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2011, 2017 Profactor GmbH, fortiss GmbH, 2018 TU Vienna/ACIN
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -36,31 +36,31 @@ public final class IdentifierVerifyer {
 
 	/**
 	 * Checks if is valid identifier.
-	 * 
+	 *
 	 * @param identifier the identifier
-	 * 
+	 *
 	 * @return true, if is valid identifier
 	 */
-	public static boolean isValidIdentifier(String identifier) {
+	public static boolean isValidIdentifier(final String identifier) {
 		final Matcher matcher = IDENTIFIER_PATTERN.matcher(identifier);
 		return matcher.matches();
 	}
 
 	/**
 	 * Checks if is valid identifier.
-	 * 
+	 *
 	 * @param identifier the identifier
-	 * 
+	 *
 	 * @return null if it is an valid identifier otherwise an Error message
 	 */
-	public static String isValidIdentifierWithErrorMessage(String identifier) {
+	public static String isValidIdentifierWithErrorMessage(final String identifier) {
 		if (isValidIdentifier(identifier)) {
 			return null;
 		}
 		if (identifier.length() < 1) {
 			return Messages.IdentifierVerifyer_ERROR_IdentifierLengthZero;
 		}
-		String firstChar = identifier.substring(0, 1);
+		final String firstChar = identifier.substring(0, 1);
 		final Matcher startSymbolMatcher = IDENTIFIER_PATTERN.matcher(firstChar);
 		if (!startSymbolMatcher.matches()) {
 			return Messages.IdentifierVerifyer_ERROR_InvalidStartSymbol;
@@ -68,7 +68,7 @@ public final class IdentifierVerifyer {
 		final Matcher invalidExpressionSymbolsMatcher = INVALID_IDENTIFIER_PATTERN.matcher(identifier);
 		if (invalidExpressionSymbolsMatcher.find()) {
 			return MessageFormat.format(Messages.IdentifierVerifyer_ERROR_InvalidSymbolUsedInIdentifer,
-					invalidExpressionSymbolsMatcher.group(0).toString());
+					invalidExpressionSymbolsMatcher.group(0));
 		}
 		return Messages.IdentifierVerifyer_ERROR_UnkownExpressionError;
 	}

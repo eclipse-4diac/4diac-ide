@@ -34,17 +34,17 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 	private static final String STORE_REPLACE_SOURCE_ID = "SUBAPP_SECTION.STORE_REPLACE_SOURCE_ID"; //$NON-NLS-1$
 
 	private boolean openType = true;
-	private boolean replaceSource = true;
 
 	private Composite advancedComposite;
 	private int advancedCompositeHeight = -1;
 
+	private Button replaceSourceSubapp;
 	private final String fileLabel;
 	private final String checkBoxText;
 	private final String replaceSourceText;
 
-	private SaveAsWizardPage(String pageName, IStructuredSelection selection, String title, String description,
-			String fileLabel, String checkBoxText, String replaceSourceText) {
+	private SaveAsWizardPage(final String pageName, final IStructuredSelection selection, final String title, final String description,
+			final String fileLabel, final String checkBoxText, final String replaceSourceText) {
 		super(pageName, selection);
 		setTitle(title);
 		setDescription(description);
@@ -59,7 +59,7 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 	}
 
 	public boolean getReplaceSource() {
-		return replaceSource;
+		return replaceSourceSubapp.getSelection();
 	}
 
 	@Override
@@ -68,17 +68,22 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		super.createControl(parent);
-
 		restoreWidgetValues();
+	}
+
+	@Override
+	protected void createAdvancedControls(final Composite parent) {
+		createReplaceSourceEntry(parent);
+		super.createAdvancedControls(parent);
 	}
 
 	public void saveWidgetValues() {
 		final IDialogSettings settings = getDialogSettings();
 		if (null != settings) {
 			settings.put(STORE_OPEN_TYPE_ID, openType);
-			settings.put(STORE_REPLACE_SOURCE_ID, replaceSource);
+			settings.put(STORE_REPLACE_SOURCE_ID, replaceSourceSubapp.getSelection());
 		}
 	}
 
@@ -86,7 +91,7 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		final IDialogSettings settings = getDialogSettings();
 		if (null != settings) {
 			openType = settings.getBoolean(STORE_OPEN_TYPE_ID);
-			replaceSource = settings.getBoolean(STORE_REPLACE_SOURCE_ID);
+			replaceSourceSubapp.setSelection(settings.getBoolean(STORE_REPLACE_SOURCE_ID));
 		}
 	}
 
@@ -111,7 +116,12 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		super.handleAdvancedButtonSelect();
 	}
 
-	private Composite createAdvancedGroup(Composite parent) {
+	private void createReplaceSourceEntry(final Composite parent) {
+		replaceSourceSubapp = new Button(parent, SWT.CHECK);
+		replaceSourceSubapp.setText(replaceSourceText);
+	}
+
+	private Composite createAdvancedGroup(final Composite parent) {
 		final Font font = parent.getFont();
 		initializeDialogUnits(parent);
 		// top level group
@@ -126,22 +136,17 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		openTypeCheckbox.setSelection(openType);
 		openTypeCheckbox.addListener(SWT.Selection, ev -> openType = openTypeCheckbox.getSelection());
 
-		final Button replaceSourceSubapp = new Button(parent, SWT.CHECK);
-		replaceSourceSubapp.setText(replaceSourceText);
-		replaceSourceSubapp.setSelection(replaceSource);
-		replaceSourceSubapp.addListener(SWT.Selection, ev -> replaceSource = replaceSourceSubapp.getSelection());
-
 		return groupComposite;
 	}
 
-	public static SaveAsWizardPage createSaveAsStructWizardPage(String pageName, IStructuredSelection selection) {
+	public static SaveAsWizardPage createSaveAsStructWizardPage(final String pageName, final IStructuredSelection selection) {
 		return new SaveAsWizardPage(pageName, selection, Messages.SaveAsStructWizardPage_WizardPageTitle,
 				Messages.SaveAsStructWizardPage_WizardPageDescription, Messages.SaveAsStructWizardPage_TypeName,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
 				Messages.SaveAsStructWizardPage_ConvertSourceElements);
 	}
 
-	public static SaveAsWizardPage createSaveAsSubAppWizardPage(String pageName, IStructuredSelection selection) {
+	public static SaveAsWizardPage createSaveAsSubAppWizardPage(final String pageName, final IStructuredSelection selection) {
 		return new SaveAsWizardPage(pageName, selection, Messages.SaveAsSubApplicationTypeAction_WizardPageTitle,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageDescription,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageNameLabel,
