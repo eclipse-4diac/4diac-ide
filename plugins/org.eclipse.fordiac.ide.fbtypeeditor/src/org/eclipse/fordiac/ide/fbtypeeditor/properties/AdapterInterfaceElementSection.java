@@ -118,10 +118,10 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	}
 
 	@Override
-	public void setInput(IWorkbenchPart part, ISelection selection) {
+	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
 		typeSelectionWidget.initialize(getType(), getTypeSelectionContentProvider(),
-				(newName) -> handleDataSelectionChanged(newName));
+				this::handleDataSelectionChanged);
 	}
 
 	protected void handleDataSelectionChanged(final String dataName) {
@@ -149,7 +149,8 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	private class AdapterTypeSelectionContentProvider implements ITypeSelectionContentProvider {
 		@Override
 		public List<DataType> getTypes() {
-			return getTypeLibrary().getBlockTypeLib().getAdapterTypesSorted().stream().map(entry -> entry.getType())
+			return getTypeLibrary().getBlockTypeLib().getAdapterTypesSorted().stream()
+					.map(AdapterTypePaletteEntry::getType)
 					.collect(Collectors.toList());
 		}
 	}

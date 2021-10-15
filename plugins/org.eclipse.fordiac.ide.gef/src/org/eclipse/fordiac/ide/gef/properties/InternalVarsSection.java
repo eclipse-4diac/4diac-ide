@@ -24,8 +24,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.List;
-
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -40,7 +38,6 @@ import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
-import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
@@ -164,12 +161,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	private CellEditor[] createCellEditors(final Table table) {
 		final TextCellEditor varNameEditor = new TextCellEditor(table);
 		((Text) varNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		typeDropDown = new DataTypeDropdown(new ITypeSelectionContentProvider() {
-			@Override
-			public List<DataType> getTypes() {
-				return getDataTypeLib().getDataTypesSorted();
-			}
-		}, internalVarsViewer);
+		typeDropDown = new DataTypeDropdown(() -> getDataTypeLib().getDataTypesSorted(), internalVarsViewer);
 		return new CellEditor[] { varNameEditor, typeDropDown, new TextCellEditor(table), new TextCellEditor(table),
 				new TextCellEditor(table) };
 	}
