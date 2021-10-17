@@ -370,4 +370,10 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		return ((FileEditorInput) getEditorInput()).getFile();
 	}
 
+	@Override
+	public void updateEditorInput(final FileEditorInput newInput) {
+		setInput(newInput);
+		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
+	}
+
 }

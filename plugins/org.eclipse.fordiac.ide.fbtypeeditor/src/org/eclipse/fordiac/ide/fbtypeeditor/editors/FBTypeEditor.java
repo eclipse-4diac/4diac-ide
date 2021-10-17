@@ -427,4 +427,10 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 	public INavigationLocation createNavigationLocation() {
 		return new FBTypeNavigationLocation(this);
 	}
+
+	@Override
+	public void updateEditorInput(final FileEditorInput newInput) {
+		setInput(newInput);
+		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
+	}
 }
