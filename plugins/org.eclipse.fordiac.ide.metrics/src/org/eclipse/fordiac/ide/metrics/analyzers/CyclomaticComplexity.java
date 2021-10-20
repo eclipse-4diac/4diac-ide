@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	static final String[] CONDITIONS = { FordiacKeywords.IF, FordiacKeywords.FOR, FordiacKeywords.WHILE,
@@ -108,6 +109,15 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	@Override
 	protected MetricData createDataType() {
 		return new ComplexityData();
+	}
+
+	@Override
+	protected MetricData analyzeSFB(final SimpleFBType simpleFBType) {
+		final ComplexityData data = new ComplexityData();
+
+		data.cc += analyzeAlgorithm(simpleFBType.getAlgorithm());
+		metrics.add(new MetricResult(formatResultName(simpleFBType.getName()), data.cc));
+		return data;
 	}
 
 }

@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public abstract class AbstractCodeMetricAnalyzer {
@@ -66,6 +67,8 @@ public abstract class AbstractCodeMetricAnalyzer {
 			tempData = analyzeBFB((BasicFBType) type);
 		} else if (type instanceof CompositeFBType) {
 			tempData = analyzeCFB((CompositeFBType) type);
+		} else if (type instanceof SimpleFBType) {
+			tempData = analyzeSFB((SimpleFBType) type);
 		}
 		return tempData;
 	}
@@ -100,6 +103,8 @@ public abstract class AbstractCodeMetricAnalyzer {
 	protected MetricData analyzeCFB(final CompositeFBType compositeFBType) {
 		return analyzeFBNetwork(compositeFBType.getFBNetwork(), true);
 	}
+
+	protected abstract MetricData analyzeSFB(SimpleFBType simpleFBType);
 
 	protected abstract MetricData createDataType();
 

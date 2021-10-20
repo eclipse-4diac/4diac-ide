@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 	static final String[] CONDITIONS = { FordiacKeywords.IF, FordiacKeywords.FOR, FordiacKeywords.WHILE,
@@ -159,6 +160,25 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 	@Override
 	protected MetricData createDataType() {
 		return new SpiderChartBFBData();
+	}
+
+	@Override
+	protected MetricData analyzeSFB(final SimpleFBType simpleFBType) {
+		final SpiderChartBFBData data = new SpiderChartBFBData();
+		data.states = 2;
+
+		data.independentPaths = 2;
+		data.transitions = 2;
+
+		data.loc = calculateLOC(simpleFBType.getAlgorithm());
+
+		data.internalVar = simpleFBType.getInternalVars().size();
+		data.interfaceEl += countInterfaceElements(simpleFBType.getInterfaceList());
+
+		data.actions = 1;
+		data.independentPaths += analyzeAlgorithm(simpleFBType.getAlgorithm());
+
+		return data;
 	}
 
 }

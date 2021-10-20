@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 
@@ -146,6 +147,14 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 	protected MetricData createDataType() {
 
 		return new HalsteadData();
+	}
+
+	@Override
+	protected MetricData analyzeSFB(final SimpleFBType simpleFBType) {
+		final HalsteadData data = new HalsteadData();
+
+		analyzeAlgorithm(simpleFBType.getAlgorithm(), data);
+		return data;
 	}
 
 }
