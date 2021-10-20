@@ -190,9 +190,14 @@ public class SystemMonitoringData {
 		monitoredElements.put(port.getInterfaceElement(), element);
 
 		if (port instanceof SubAppPortElement) {
+			final String portString = SubAppPortHelper
+					.findConnectedMonitoredSubappPort(port.getInterfaceElement(), subappElements);
+			if (portString != null) {
+				addToSubappGroup(element, portString);
+			}
 			addSubappMonitoringElement(element);
 		} else {
-			checkForSubappGroup(element, port);
+			addToSubappGroup(element, port);
 			handleConnectedSubappPorts(element);
 			monitoredElementsPerPortStrings.put(port.getPortString(), element);
 		}
@@ -202,23 +207,28 @@ public class SystemMonitoringData {
 		}
 	}
 
+
 	public void addSubappMonitoringElement(final MonitoringBaseElement element) {
 		final PortElement anchor = ((SubappMonitoringElement) element).getAnchor().getPort();
 		final String portString = anchor.getPortString();
-		if (subappElements.containsKey(portString)) {
-			final List<MonitoringElement> subappPins = subappElements.get(portString);
-			subappPins.add((MonitoringElement) element);
-		} else {
+		if (!addToSubappGroup(element, anchor)) {
 			createNewSubappGroup(element, portString);
 		}
 	}
 
-	public void checkForSubappGroup(final MonitoringBaseElement element, final PortElement port) {
+	public boolean addToSubappGroup(final MonitoringBaseElement element, final PortElement port) {
 		// This element has not been created, but there exists a dummy subapp port
-		if (subappElements.containsKey(port.getPortString())) {
-			final List<MonitoringElement> subappPins = subappElements.get(port.getPortString());
+		return addToSubappGroup(element, port.getPortString());
+	}
+
+	public boolean addToSubappGroup(final MonitoringBaseElement element, final String portString) {
+		if (subappElements.containsKey(portString)) {
+			final List<MonitoringElement> subappPins = subappElements.get(portString);
 			subappPins.add((MonitoringElement) element);
+			return true;
 		}
+
+		return false;
 	}
 
 	public void createNewSubappGroup(final MonitoringBaseElement element, final String portString) {
