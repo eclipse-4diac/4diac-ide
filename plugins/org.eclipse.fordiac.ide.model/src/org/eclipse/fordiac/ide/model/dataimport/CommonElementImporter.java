@@ -433,7 +433,7 @@ public abstract class CommonElementImporter {
 	private void readCommentAttribute(final INamedElement namedElement) {
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
-			namedElement.setComment(comment);
+			namedElement.setComment(fullyUnEscapeValue(comment));
 		}
 	}
 
@@ -723,6 +723,22 @@ public abstract class CommonElementImporter {
 			resourceFBNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		}
 		return resourceFBNetwork;
+	}
+
+	/** Take the given string and unescape all &, <, >, ", ', newlines, and tabs with the according XML unsescaped
+	 * characters.
+	 *
+	 * @param value the string to unescape
+	 * @return the unescaped string */
+	protected static String fullyUnEscapeValue(final String value) {
+		String escapedValue = value.replace("&amp;", "&"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&lt;", "<"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&gt;", ">"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&quot;", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&apos;", "\'"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&#10;", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&#9;", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
+		return escapedValue;
 	}
 
 }

@@ -363,7 +363,7 @@ abstract class CommonElementExporter {
 
 	protected void addCommentAttribute(final INamedElement namedElement) throws XMLStreamException {
 		if (null != namedElement.getComment()) {
-			writer.writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, namedElement.getComment());
+			writer.writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, fullyEscapeValue(namedElement.getComment()));
 		}
 	}
 

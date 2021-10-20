@@ -21,7 +21,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
-import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -119,27 +118,27 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 		if (!getModel().getRefElement().isContainedInTypedInstance()
 				&& ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 						|| (request.getType() == RequestConstants.REQ_OPEN))) {
-			performDirectEdit();
+			// performDirectEdit();
 
 		} else {
 			super.performRequest(request);
 		}
 	}
 
-	private DirectEditManager getManager() {
-		if (null == manager) {
-			manager = createDirectEditManager();
-		}
-		return manager;
-	}
-
-	private DirectEditManager createDirectEditManager() {
-		return new LabelDirectEditManager(this, getFigure());
-	}
-
-	private void performDirectEdit() {
-		getManager().show();
-	}
+	// private DirectEditManager getManager() {
+	// if (null == manager) {
+	// manager = createDirectEditManager();
+	// }
+	// return manager;
+	// }
+	//
+	// private DirectEditManager createDirectEditManager() {
+	// return new LabelDirectEditManager(this, getFigure());
+	// }
+	//
+	// private void performDirectEdit() {
+	// getManager().show();
+	// }
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {

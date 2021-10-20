@@ -14,25 +14,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.text.FlowPage;
+import org.eclipse.draw2d.text.ParagraphTextLayout;
+import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
-public class InstanceCommentFigure extends Label implements IFontUpdateListener {
+public class InstanceCommentFigure extends Figure implements IFontUpdateListener {
 
 	private static final int BORDER_WIDTH = 3;
 	private static final Insets BORDER_INSET = new Insets(BORDER_WIDTH);
 
+	TextFlow textFlow;
+
 	public InstanceCommentFigure() {
 		super();
-		setTextAlignment(PositionConstants.CENTER);
-		setLabelAlignment(PositionConstants.CENTER);
-		setText("[empty comment]");
+		// setTextAlignment(PositionConstants.CENTER);
+		// setLabelAlignment(PositionConstants.CENTER);
 		setBorder(new LineBorder(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY)) {
 			@Override
 			public Insets getInsets(final IFigure figure) {
@@ -40,14 +44,24 @@ public class InstanceCommentFigure extends Label implements IFontUpdateListener 
 			}
 		});
 
+		final FlowPage flowPage = new FlowPage();
+
+		textFlow = new TextFlow();
+
+		textFlow.setLayoutManager(new ParagraphTextLayout(textFlow, ParagraphTextLayout.WORD_WRAP_SOFT));
+
+		flowPage.add(textFlow);
+
+		setLayoutManager(new StackLayout());
+		add(flowPage);
+		setText(null);
 	}
 
-	@Override
-	public void setText(String s) {
+	public void setText(final String s) {
 		if ((s != null) && !"".equals(s)) { //$NON-NLS-1$
-			super.setText(s);
+			textFlow.setText(s);
 		} else {
-			super.setText("[empty comment]");
+			textFlow.setText("[empty comment]");
 		}
 	}
 
