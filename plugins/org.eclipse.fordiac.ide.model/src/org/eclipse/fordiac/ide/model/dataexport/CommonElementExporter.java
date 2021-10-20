@@ -275,6 +275,23 @@ abstract class CommonElementExporter {
 		Activator.getDefault().logInfo("Saving time for System: " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	}
+	
+	//Write to File from OutputStream
+	protected void writeToFile(final OutputStream targetStream) {
+		final long startTime = System.currentTimeMillis();
+		try {
+			writer.writeCharacters(LINE_END);
+			writer.writeEndDocument();
+			writer.close();
+			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.transferDataBuffers())) {
+				inputStream.transferTo(targetStream);				
+			} finally {
+				outputStream.close();
+			}
+		} catch (XMLStreamException | IOException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+		}
+	}
 
 	/**
 	 * Check if the folders in the file's path exist and if not create them

@@ -20,6 +20,8 @@
 
 package org.eclipse.fordiac.ide.model.dataexport;
 
+import java.io.OutputStream;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.WorkspaceJob;
@@ -86,6 +88,20 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			};
 			job.setRule(entry.getFile().getParent());
 			job.schedule();
+		}
+	}
+	
+	//Save the model using the Outputstream
+	public static void saveType(final PaletteEntry entry, final OutputStream outputStream) {
+		final AbstractTypeExporter exporter = getTypeExporter(entry);
+		if (exporter != null) {
+			try {
+				exporter.createXMLEntries();
+			} catch (final XMLStreamException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+			}
+			exporter.writeToFile(outputStream);
+			entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
 		}
 	}
 
