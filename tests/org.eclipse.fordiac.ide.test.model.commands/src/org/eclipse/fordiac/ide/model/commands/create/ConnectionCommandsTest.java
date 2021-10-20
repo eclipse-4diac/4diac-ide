@@ -37,7 +37,7 @@ public class ConnectionCommandsTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	private static State initState() {
+	public static State initState() {
 		State state = WithCreateTest.createInterfaceElements(new State());
 		state = addIOWiths(state);
 		state = WithCreateTest.updateNetworkElements(state);
