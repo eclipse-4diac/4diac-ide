@@ -18,11 +18,18 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditManager;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.widgets.Composite;
 
 public class ServicePrimitiveDirectEditManager extends AbstractDirectEditManager<Primitive> {
 
 	public ServicePrimitiveDirectEditManager(final GraphicalEditPart source, final Primitive primitive,
 			final Label label, final ZoomManager zoomManager, final FigureCanvas fc) {
-		super(source, primitive, label, zoomManager, fc, ServicePrimitiveCellEditor.class);
+		super(source, primitive, label, zoomManager, fc);
+	}
+
+	@Override
+	protected CellEditor createCellEditorOn(final Composite composite) {
+		return new ServicePrimitiveCellEditor(composite);
 	}
 }

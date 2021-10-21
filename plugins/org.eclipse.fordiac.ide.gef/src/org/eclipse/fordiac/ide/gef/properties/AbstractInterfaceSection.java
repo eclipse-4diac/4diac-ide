@@ -106,7 +106,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 
 		final CLabel commentLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceComment + ":"); //$NON-NLS-1$
 		commentLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-		commentText = createGroupText(composite, true, SWT.BORDER | SWT.MULTI);
+		commentText = createGroupText(composite, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		final GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false);
 		gridData.heightHint = 3 * commentText.getLineHeight();
 		commentText.setLayoutData(gridData);

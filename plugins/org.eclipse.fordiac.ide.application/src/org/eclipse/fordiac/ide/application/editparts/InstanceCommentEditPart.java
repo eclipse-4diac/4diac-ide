@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2019, 2021 Johannes Kepler University Linz,
+ *                          Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Daniel Lindhuber - altered for instance comment
+ *   Alois Zoitl - added support for multiline comments
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -19,8 +20,9 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
+import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -32,11 +34,32 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
 
 public class InstanceCommentEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
-	private DirectEditManager manager;
+	private class InstanceCommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
+		@Override
+		protected Command getDirectEditCommand(final DirectEditRequest request) {
+			if (getHost() instanceof InstanceCommentEditPart) {
+				final String str = (String) request.getCellEditor().getValue();
+				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
+					return new ChangeCommentCommand(
+							((InstanceCommentEditPart) getHost()).getModel().getRefElement(), str);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected void showCurrentEditValue(final DirectEditRequest request) {
+			final String value = (String) request.getCellEditor().getValue();
+			getFigure().setText(value);
+		}
+	}
 
 	@Override
 	public void activate() {
@@ -48,9 +71,6 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 	public void deactivate() {
 		super.deactivate();
 		getModel().getRefElement().eAdapters().remove(contentAdapter);
-		if (manager != null) {
-			manager = null;
-		}
 	}
 
 	private final Adapter contentAdapter = new AdapterImpl() {
@@ -84,20 +104,7 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 		// FBNetwork elements need a special rename command therefore we remove the
 		// standard edit policy and add a adjusted one
 		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof InstanceCommentEditPart) {
-					final String str = (String) request.getCellEditor().getValue();
-					final String EMPTY_COMMENT = "[" + Messages.InstanceCommentEditPart_EMPTY_COMMENT + "]"; //$NON-NLS-1$ //$NON-NLS-2$
-					if (!EMPTY_COMMENT.equals(str)) {
-						return new ChangeCommentCommand(
-								((InstanceCommentEditPart) getHost()).getModel().getRefElement(), str);
-					}
-				}
-				return null;
-			}
-		});
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new InstanceCommentRenameEditPolicy());
 	}
 
 	@Override
@@ -118,27 +125,26 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 		if (!getModel().getRefElement().isContainedInTypedInstance()
 				&& ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 						|| (request.getType() == RequestConstants.REQ_OPEN))) {
-			// performDirectEdit();
-
+			performDirectEdit();
 		} else {
 			super.performRequest(request);
 		}
 	}
 
-	// private DirectEditManager getManager() {
-	// if (null == manager) {
-	// manager = createDirectEditManager();
-	// }
-	// return manager;
-	// }
-	//
-	// private DirectEditManager createDirectEditManager() {
-	// return new LabelDirectEditManager(this, getFigure());
-	// }
-	//
-	// private void performDirectEdit() {
-	// getManager().show();
-	// }
+	private void performDirectEdit() {
+		new TextDirectEditManager(this, new FigureCellEditorLocator(getFigure())) {
+			@Override
+			protected CellEditor createCellEditorOn(final Composite composite) {
+				return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
+			}
+
+			@Override
+			protected void initCellEditor() {
+				super.initCellEditor();
+				getCellEditor().setValue(getModel().getInstanceComment());
+			}
+		}.show();
+	}
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {

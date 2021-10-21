@@ -44,8 +44,8 @@ public abstract class AbstractDirectEditManager<T> extends TextDirectEditManager
 	private final T element;
 
 	protected AbstractDirectEditManager(final GraphicalEditPart source, final T element,
-			final Label label, final ZoomManager zoomManager, final FigureCanvas fc, final Class<?> clazz) {
-		super(source, clazz, new LabelCellEditorLocator(label, zoomManager, fc));
+			final Label label, final ZoomManager zoomManager, final FigureCanvas fc) {
+		super(source, new LabelCellEditorLocator(label, zoomManager, fc));
 		this.element = element;
 	}
 
