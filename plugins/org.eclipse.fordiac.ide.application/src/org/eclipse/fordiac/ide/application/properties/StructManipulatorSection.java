@@ -27,10 +27,10 @@ import org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
-import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
-import org.eclipse.fordiac.ide.model.StructTreeNode;
-import org.eclipse.fordiac.ide.model.StructTreeNode.StructTreeContentProvider;
-import org.eclipse.fordiac.ide.model.StructTreeNode.StructTreeLabelProvider;
+import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
+import org.eclipse.fordiac.ide.model.CheckableStructTree;
+import org.eclipse.fordiac.ide.model.StructTreeContentProvider;
+import org.eclipse.fordiac.ide.model.StructTreeLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -178,7 +178,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	}
 
 	private StructuredType getSelectedStructuredType() {
-		final StructTreeNode selected = (StructTreeNode) memberVarViewer.getTree().getSelection()[0].getData();
+		final AbstractStructTreeNode selected = (AbstractStructTreeNode) memberVarViewer.getTree().getSelection()[0].getData();
 		final VarDeclaration varDecl = selected.getVariable();
 		if (varDecl.getType() instanceof StructuredType) {
 			return (StructuredType) varDecl.getType();
@@ -225,9 +225,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 		setType(input);
 		if (initTree) {
-			final StructTreeNode node = initTree(getType(), memberVarViewer);
-			((StructTreeContentProvider) memberVarViewer.getContentProvider()).setRoot(node);
-
+			initTree(getType(), memberVarViewer);
 		}
 
 		typeSelectionWidget.initialize(getType(), new StructuredTypeSelectionContentProvider(),
@@ -268,16 +266,18 @@ public class StructManipulatorSection extends AbstractSection implements Command
 		}
 	}
 
-	private static StructTreeNode initTree(final StructManipulator struct, final TreeViewer viewer) {
-		final StructuredType structuredType = struct.getPaletteEntry().getTypeLibrary().getDataTypeLibrary()
-				.getStructuredType(struct.getStructType().getName());
+	public void initTree(final StructManipulator manipulator, final TreeViewer viewer) {
+		final StructuredType struct = manipulator.getPaletteEntry().getTypeLibrary().getDataTypeLibrary()
+				.getStructuredType(manipulator.getStructType().getName());
 
-		final StructTreeNode root = CheckableStructTreeNode.initTree(struct, structuredType);
+		final CheckableStructTree tree;
 		if (viewer != null) {
-			root.setViewer(viewer);
+			tree = new CheckableStructTree(manipulator, struct, viewer);
+		} else {
+			tree = new CheckableStructTree(manipulator, struct);
 		}
 
-		return root;
+		((StructTreeContentProvider) memberVarViewer.getContentProvider()).setRoot(tree.getRoot());
 	}
 
 	@Override

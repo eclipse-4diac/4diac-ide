@@ -39,7 +39,7 @@ public class DeleteDemuxPortCommand extends Command {
 
 	public DeleteDemuxPortCommand(final Demultiplexer type, final CheckableStructTreeNode node) {
 		this.variable = (VarDeclaration) type.getInterfaceElement(node.getPinName());
-		this.oldVisibleChildren = node.getRootNode().visibleToString();
+		this.oldVisibleChildren = node.getTree().getRoot().visibleToString();
 		this.type = type;
 		this.node = node;
 	}
@@ -47,7 +47,7 @@ public class DeleteDemuxPortCommand extends Command {
 	@Override
 	public void execute() {
 		node.updateNode(false);
-		newVisibleChildren = node.getRootNode().visibleToString();
+		newVisibleChildren = node.getTree().getRoot().visibleToString();
 		createChangeStructCommand();
 		cmd.execute();
 		oldMux = type;

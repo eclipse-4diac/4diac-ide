@@ -12,15 +12,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.views;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.model.StructTreeNode;
+import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 
-public class WatchValueTreeNode extends StructTreeNode {
+public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	private String value;
 	private String varName;
@@ -47,20 +48,20 @@ public class WatchValueTreeNode extends StructTreeNode {
 		this.monitoringBaseElement = monitoringBaseElement;
 		this.varName = varName;
 		this.value = value;
-		this.variable = variable;
-		this.parent = parent;
-		this.root = parent.root;
+		setVariable(variable);
+		setParent(parent);
 	}
 
-
-	public WatchValueTreeNode addChild(final MonitoringBaseElement monitoringBaseElement) {
-
-		final WatchValueTreeNode node = createNode(monitoringBaseElement, this);
-
-		if (node != null) {
-			this.children.add(node);
+	@Override
+	public WatchValueTreeNode addChild(final EObject monitoringBaseElement) {
+		if (monitoringBaseElement instanceof MonitoringBaseElement) {
+			final WatchValueTreeNode node = createNode((MonitoringBaseElement) monitoringBaseElement, this);
+			if (node != null) {
+				getChildren().add(node);
+			}
+			return node;
 		}
-		return node;
+		return null;
 	}
 
 	public static WatchValueTreeNode createNode(final MonitoringBaseElement monitoringBaseElement,
@@ -123,22 +124,22 @@ public class WatchValueTreeNode extends StructTreeNode {
 		final String portString = monitoringBaseElement.getPort().getPortString();
 		treeNode.varName = portString;
 
-		this.children.add(treeNode);
+		getChildren().add(treeNode);
 
 		return treeNode;
 	}
 
 	public void addChild(final WatchValueTreeNode child) {
-		this.children.add(child);
+		getChildren().add(child);
 	}
 
 
-	public StructTreeNode addChild(final VarDeclaration memberVariable, final MonitoringBaseElement element,
+	public AbstractStructTreeNode addChild(final VarDeclaration memberVariable, final MonitoringBaseElement element,
 			final StructuredType type) {
 
 		final WatchValueTreeNode treeNode = new WatchValueTreeNode(element, type,
 				memberVariable.getName(), null, memberVariable, this);
-		this.children.add(treeNode);
+		getChildren().add(treeNode);
 
 		return treeNode;
 	}
@@ -191,7 +192,7 @@ public class WatchValueTreeNode extends StructTreeNode {
 	}
 
 	public boolean isStructRootNode() {
-		return (structType != null) && (parent == root);
+		return (structType != null) && (getParent() != null && getParent().getParent() == null);
 	}
 
 	public boolean isStructNode() {
