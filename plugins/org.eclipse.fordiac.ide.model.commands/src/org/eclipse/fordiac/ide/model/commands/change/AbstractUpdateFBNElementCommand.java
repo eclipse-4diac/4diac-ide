@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -361,7 +362,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 				if (onSelectedFB.getFBNetworkElement() == onOtherFB.getFBNetworkElement()) {
 					updatedOther = updateSelectedInterface(onOtherFB, newElement);
 				} else {
-					updatedOther = onOtherFB.getFBNetworkElement().getInterfaceElement(onOtherFB.getName());
+					updatedOther = ((InterfaceList) onOtherFB.eContainer()).getInterfaceElement(onOtherFB.getName());
 				}
 
 				handleReconnect(connection, onSelectedFB, onOtherFB, updatedSelected, updatedOther);
