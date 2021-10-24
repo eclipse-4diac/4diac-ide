@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.IntPredicate;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
@@ -824,13 +825,13 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           StringConcatenation _builder_7 = new StringConcatenation();
           String _name_7 = variable.getName();
           _builder_7.append(_name_7);
-          _builder_7.append("() = \"");
-          String _lowerCase = variable.getValue().getValue().toLowerCase();
-          _builder_7.append(_lowerCase);
-          _builder_7.append("\";");
+          _builder_7.append("() = ");
+          CharSequence _generatBoolLiteral = this.generatBoolLiteral(variable.getValue().getValue());
+          _builder_7.append(_generatBoolLiteral);
+          _builder_7.append(";");
           _switchResult = _builder_7;
           break;
-        default:
+        case FordiacKeywords.REAL:
           StringConcatenation _builder_8 = new StringConcatenation();
           String _name_8 = variable.getName();
           _builder_8.append(_name_8);
@@ -840,18 +841,103 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_8.append(";");
           _switchResult = _builder_8;
           break;
+        case FordiacKeywords.LREAL:
+          StringConcatenation _builder_9 = new StringConcatenation();
+          String _name_9 = variable.getName();
+          _builder_9.append(_name_9);
+          _builder_9.append("() = ");
+          String _value_8 = variable.getValue().getValue();
+          _builder_9.append(_value_8);
+          _builder_9.append(";");
+          _switchResult = _builder_9;
+          break;
+        default:
+          CharSequence _xifexpression = null;
+          boolean _isNumeric = this.isNumeric(variable.getValue().getValue());
+          if (_isNumeric) {
+            StringConcatenation _builder_10 = new StringConcatenation();
+            String _name_10 = variable.getName();
+            _builder_10.append(_name_10);
+            _builder_10.append("() = ");
+            String _value_9 = variable.getValue().getValue();
+            _builder_10.append(_value_9);
+            _builder_10.append(";");
+            _xifexpression = _builder_10;
+          } else {
+            StringConcatenation _builder_11 = new StringConcatenation();
+            String _name_11 = variable.getName();
+            _builder_11.append(_name_11);
+            _builder_11.append("().fromString(\"");
+            String _value_10 = variable.getValue().getValue();
+            _builder_11.append(_value_10);
+            _builder_11.append("\");");
+            _xifexpression = _builder_11;
+          }
+          _switchResult = _xifexpression;
+          break;
       }
     } else {
-      StringConcatenation _builder_8 = new StringConcatenation();
-      String _name_8 = variable.getName();
-      _builder_8.append(_name_8);
-      _builder_8.append("() = ");
-      String _value_7 = variable.getValue().getValue();
-      _builder_8.append(_value_7);
-      _builder_8.append(";");
-      _switchResult = _builder_8;
+      CharSequence _xifexpression = null;
+      boolean _isNumeric = this.isNumeric(variable.getValue().getValue());
+      if (_isNumeric) {
+        StringConcatenation _builder_10 = new StringConcatenation();
+        String _name_10 = variable.getName();
+        _builder_10.append(_name_10);
+        _builder_10.append("() = ");
+        String _value_9 = variable.getValue().getValue();
+        _builder_10.append(_value_9);
+        _builder_10.append(";");
+        _xifexpression = _builder_10;
+      } else {
+        StringConcatenation _builder_11 = new StringConcatenation();
+        String _name_11 = variable.getName();
+        _builder_11.append(_name_11);
+        _builder_11.append("().fromString(\"");
+        String _value_10 = variable.getValue().getValue();
+        _builder_11.append(_value_10);
+        _builder_11.append("\");");
+        _xifexpression = _builder_11;
+      }
+      _switchResult = _xifexpression;
     }
     return _switchResult;
+  }
+  
+  private CharSequence generatBoolLiteral(final String value) {
+    CharSequence _switchResult = null;
+    if (value != null) {
+      switch (value) {
+        case "0":
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("false");
+          _switchResult = _builder;
+          break;
+        case "1":
+          StringConcatenation _builder_1 = new StringConcatenation();
+          _builder_1.append("true");
+          _switchResult = _builder_1;
+          break;
+        default:
+          StringConcatenation _builder_2 = new StringConcatenation();
+          String _lowerCase = value.toLowerCase();
+          _builder_2.append(_lowerCase);
+          _switchResult = _builder_2;
+          break;
+      }
+    } else {
+      StringConcatenation _builder_2 = new StringConcatenation();
+      String _lowerCase = value.toLowerCase();
+      _builder_2.append(_lowerCase);
+      _switchResult = _builder_2;
+    }
+    return _switchResult;
+  }
+  
+  private boolean isNumeric(final String input) {
+    final IntPredicate _function = (int in) -> {
+      return Character.isDigit(in);
+    };
+    return input.chars().allMatch(_function);
   }
   
   protected CharSequence generateInternalVarDefinition(final BaseFBType baseFBType) {
