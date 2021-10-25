@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.InstanceComment;
+import org.eclipse.fordiac.ide.application.editparts.InstanceName;
 import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -41,6 +42,9 @@ public class InterfaceSection extends AbstractInterfaceSection {
 		}
 		if (input instanceof InstanceComment) {
 			return ((InstanceComment) input).getRefElement();
+		}
+		if (input instanceof InstanceName) {
+			return ((InstanceName) input).getRefElement();
 		}
 		return null;
 	}
