@@ -109,6 +109,9 @@
             <input
                   type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.application.editparts.InstanceCommentEditPart">
+            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
