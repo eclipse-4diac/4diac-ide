@@ -235,7 +235,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	}
 
 	private static String convertIntegerToHexString(final long number) {
-		return "16#" + Long.toHexString(number); //$NON-NLS-1$
+		return "16#" + Long.toHexString(number).toUpperCase(); //$NON-NLS-1$
 	}
 
 	private static boolean isNumeric(final String input) {
