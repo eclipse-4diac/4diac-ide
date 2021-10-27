@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.swt.widgets.Display;
 
 public class ErrorMarkerBuilder {
 
@@ -207,8 +208,11 @@ public class ErrorMarkerBuilder {
 		try {
 			final IMarker marker = iresource.createMarker(type, getAttributes());
 			if (marker.exists() && getErrorMarkerRef() != null) {
-				markers.put(Long.valueOf(marker.getId()), getErrorMarkerRef());
-				addId(marker.getId());
+				Display.getDefault().asyncExec(() -> {
+					markers.put(Long.valueOf(marker.getId()), getErrorMarkerRef());
+					addId(marker.getId());
+				});
+
 			}
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError("could not create error marker", e); //$NON-NLS-1$

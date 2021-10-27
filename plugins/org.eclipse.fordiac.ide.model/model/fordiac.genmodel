@@ -248,6 +248,8 @@
         <genParameters ecoreParameter="lib.ecore#//Connection/setVisible/visible"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//Connection/isVisible" body="return org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.isVisible(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Connection/isInterfaceConnection"
+          body="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/setVisible" body="org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this,visible);">
         <genParameters ecoreParameter="lib.ecore#//Connection/setVisible/visible"/>
       </genOperations>

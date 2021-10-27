@@ -91,5 +91,35 @@ inv "ERROR;[DuplicateDataConnection]":
 context EventConnection
 inv "ERROR;[DuplicateEventConnection]":
 	self.getFBNetwork().eventConnections->forAll(connection | self <> connection implies self.source <> connection.source or self.destination <> connection.destination) 
-		
+
+context SubApp
+inv "ERROR;[SubAppFeatureEnvy]":
+	let externalConnections : Real = self.interface.inputVars.inputConnections->collect(isInterfaceConnection())->count(true)+self.interface.outputVars.outputConnections->collect(isInterfaceConnection())->count(true) in
+	let internalConnections : Real = self.interface.inputVars.inputConnections->collect(isInterfaceConnection())->count(false)+self.interface.outputVars.outputConnections->collect(isInterfaceConnection())->count(false) in
+	if externalConnections.floor() = 0 then
+		true
+	else
+		((externalConnections / internalConnections) < 3.0)
+	endif
+	
+context FB
+inv "ERROR;[FBFeatureEnvy]":
+	let externalConnections : Real = self.interface.inputVars.inputConnections->collect(isInterfaceConnection())->count(true)+self.interface.outputVars.outputConnections->collect(isInterfaceConnection())->count(true) in
+	let internalConnections : Real = self.interface.inputVars.inputConnections->collect(isInterfaceConnection())->count(false)+self.interface.outputVars.outputConnections->collect(isInterfaceConnection())->count(false) in
+	if externalConnections.floor() = 0 then
+		true
+	else
+		((externalConnections / internalConnections) < 3.0)
+	endif
+
+context CFBInstance
+inv "ERROR;[CFBFeatureEnvy]":
+	let externalConnections : Real = self.interface.inputVars.inputConnections->collect(isInterfaceConnection())->count(true)+self.interface.outputVars.outputConnections->collect(isInterfaceConnection())->count(true) in
+	let internalConnections : Real = self.interface.inputVars.inputConnections->collect(isInterfaceConnection())->count(false)+self.interface.outputVars.outputConnections->collect(isInterfaceConnection())->count(false) in
+	if externalConnections.floor() = 0 then
+		true
+	else
+		((externalConnections / internalConnections) < 3.0)
+	endif
+	
 endpackage
