@@ -18,16 +18,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.junit.Test;
 
 public class EventCTUDTest extends AbstractInterpreterTest {
 
-	public EventCTUDTest() {
-		// do nothing
-	}
-
-	@Test
-	public void test() throws Exception {
+	@Override
+	public void test() {
 		BasicFBType fb = loadFBType("E_CTUD"); //$NON-NLS-1$
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 

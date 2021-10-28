@@ -18,14 +18,12 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarDeclarationLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -129,9 +127,9 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		}
 		commandStack = commandStackBuffer;
 	}
-	
+
 	@Override
-	protected void handleDataSelectionChanged(String dataName) {
+	protected void handleDataSelectionChanged(final String dataName) {
 		// currently we only have one kind of data type therefore we will return null
 		// here so that it is not changed
 	}
@@ -143,11 +141,6 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 
 	@Override
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
-		return new ITypeSelectionContentProvider() {
-			@Override
-			public List<DataType> getTypes() {
-				return new ArrayList<DataType>(EventTypeLibrary.getInstance().getEventTypes());
-			}
-		};
+		return () -> new ArrayList<>(EventTypeLibrary.getInstance().getEventTypes());
 	}
 }

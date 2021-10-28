@@ -380,6 +380,9 @@
                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent">
                	</contentExtension> 
                <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.mux"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.fb"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.typedSubapp"/>
               <!-- <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.filters.showonly61499Types"/> -->
                <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.fbTypeContent">
                		</contentExtension> 
@@ -571,6 +574,35 @@
             </or>
          </enablement>
       </actionProvider>
+      <commonFilter
+            activeByDefault="false"
+            id="org.eclipse.fordiac.ide.systemmanagement.filters.mux"
+            name="Hide STRUCT_MUX &amp; STRUCT_DEMUX">
+         <filterExpression>
+         	<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.StructManipulator">
+            </instanceof>
+         </filterExpression>
+      </commonFilter>
+      <commonFilter
+            activeByDefault="false"
+            id="org.eclipse.fordiac.ide.systemmanagement.filters.fb"
+            name="Hide FB instances">
+         <filterExpression>
+         	<or>
+	         	<and>
+	         		<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FB" />
+	         		<not><instanceof value="org.eclipse.fordiac.ide.model.libraryElement.StructManipulator" /></not>
+	            </and>
+	            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement" />
+	        </or>    
+         </filterExpression>
+      </commonFilter>
+      <commonFilter
+            activeByDefault="false"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.filters.TypedSubappFilter"
+            id="org.eclipse.fordiac.ide.systemmanagement.filters.typedSubapp"
+            name="Hide Subapplication instances">
+      </commonFilter>
   </extension>
   <extension
           point="org.eclipse.ui.navigator.linkHelper">

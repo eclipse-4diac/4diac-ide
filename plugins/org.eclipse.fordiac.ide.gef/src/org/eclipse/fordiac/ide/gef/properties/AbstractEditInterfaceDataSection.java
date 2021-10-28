@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
-import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
 import org.eclipse.gef.commands.Command;
@@ -57,12 +56,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected CellEditor createTypeCellEditor(final TableViewer viewer) {
-		typeDropdown = new DataTypeDropdown(new ITypeSelectionContentProvider() {
-			@Override
-			public List<DataType> getTypes() {
-				return getDataTypeLib().getDataTypesSorted();
-			}
-		},  viewer);
+		typeDropdown = new DataTypeDropdown(() -> getDataTypeLib().getDataTypesSorted(), viewer);
 		return typeDropdown;
 	}
 

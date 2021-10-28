@@ -17,16 +17,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.junit.Test;
 
 public class EventRendTest extends AbstractInterpreterTest {
 
-	public EventRendTest() {
-		// do nothing
-	}
-
-	@Test
-	public void testPermit() throws Exception {
+	@Override
+	public void test() {
 		final BasicFBType fb = loadFBType("E_REND"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 

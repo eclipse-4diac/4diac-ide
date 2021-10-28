@@ -223,9 +223,9 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	private static String createHexValue(final String value, final DataType type) {
 		// we want to convert every AnyBit type besides bool
 		if (isHexValue(type) && isNumeric(value)) {
-			int parseInt;
+			long parseInt;
 			try {
-				parseInt = Integer.parseInt(value);
+				parseInt = Long.parseUnsignedLong(value);
 			} catch (final NumberFormatException e) {
 				parseInt = 0;
 			}
@@ -234,8 +234,8 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 		return value;
 	}
 
-	private static String convertIntegerToHexString(final int number) {
-		return "16#" + Integer.toHexString(number); //$NON-NLS-1$
+	private static String convertIntegerToHexString(final long number) {
+		return "16#" + Long.toHexString(number).toUpperCase(); //$NON-NLS-1$
 	}
 
 	private static boolean isNumeric(final String input) {

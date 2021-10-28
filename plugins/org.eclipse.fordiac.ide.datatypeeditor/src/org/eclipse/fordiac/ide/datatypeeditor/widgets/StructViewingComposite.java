@@ -16,7 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,6 @@ import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
-import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
@@ -162,15 +160,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
-		typeDropDown = new DataTypeDropdown(new ITypeSelectionContentProvider() {
-			@Override
-			public List<DataType> getTypes() {
-				return dataTypeLibrary.getDataTypesSorted().stream().filter(Objects::nonNull)
-						.filter(type -> !type.getName().equals(StructViewingComposite.this.getType().getName()))
-						.filter(type -> !(type instanceof StructuredType) || isValidStruct((StructuredType) type))
-						.collect(Collectors.toList());
-			}
-		}, structViewer);
+		typeDropDown = new DataTypeDropdown(() -> dataTypeLibrary.getDataTypesSorted().stream().filter(Objects::nonNull)
+				.filter(type -> !type.getName().equals(StructViewingComposite.this.getType().getName()))
+				.filter(type -> !(type instanceof StructuredType) || isValidStruct((StructuredType) type))
+				.collect(Collectors.toList()), structViewer);
 		return new CellEditor[] { new TextCellEditor(table), typeDropDown, new TextCellEditor(table),
 				new TextCellEditor(table), new TextCellEditor(table) };
 	}

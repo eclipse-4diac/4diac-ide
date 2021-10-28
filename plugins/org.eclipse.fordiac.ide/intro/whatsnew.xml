@@ -14,47 +14,33 @@
 -->
 <introContent>
 	<extensionContent id="whatsnew-top-left" name="Whats New Current Version" path="whatsnew/@">
-  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.14.0">
-	    <link label="New and Noteworthy in 1.14.0" style-id="content-link" url="https://www.eclipse.org/4diac/newandnoteworthy/1.14/index.php" id="orgfordiacide-webLink">
+  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 2.0.0">
+	    <link label="New and Noteworthy in 2.0.0" style-id="content-link" url="https://www.eclipse.org/4diac/newandnoteworthy/2.0" id="orgfordiacide-webLink">
   	 		<text>An overview on the new and noteworthy features of Eclipse 4diac.
   	 		&lt;ul&gt;
 			    &lt;li&gt;4diac IDE:
 			        &lt;ul&gt;
-			            &lt;li&gt;System file content is shown in one single editor with bread-crumb navigation&lt;/li&gt;
-			            &lt;li&gt;The infinite drawing canvas was replaced by an incremental growing canvas. This gives better feedback on the size of the network or ECC.&lt;/li&gt;
-			            &lt;li&gt;Possibility of expanding subapps for showing subapp content in-line with its parent&lt;/li&gt;
-			            &lt;li&gt;Inside untyped subapps the subapp's comment is shown at the top of the editing area&lt;/li&gt;
-			            &lt;li&gt;Typed subapps can now contain untyped subapps&lt;/li&gt;
-			            &lt;li&gt;The content of typed subapps can be watched as part of the instance similar to a composite fb in a dedicated viewer&lt;/li&gt;
-			            &lt;li&gt;Parse errors are shown as errors in the problem view which is added to the system perspective&lt;/li&gt;
-			            &lt;li&gt;A default CMakeList.txt file can be generated during export&lt;/li&gt;
-			            &lt;li&gt;Reworked simulated device manager to better show currently running simulated devices&lt;/li&gt;
-			            &lt;li&gt;Implicit upcast are now allowed during connection creation (e.g., INT to DINT)&lt;/li&gt;
-			            &lt;li&gt;Transition conditions can now directly be edited in ECC graphics&lt;/li&gt;
-			            &lt;li&gt;A struct can be created by selecting several interface elements of a subapp&lt;/li&gt;
-			            &lt;li&gt;Many bug fixes and smaller improvements:
-			                &lt;ul&gt;
-			                	&lt;li&gt;Text labels in diagrams are not cut off any more&lt;/li&gt;
-			                	&lt;li&gt;Boot-file and FM generation is again available&lt;/li&gt;
-			                	&lt;li&gt;Improved automatic layout generation&lt;/li&gt;
-			                	&lt;li&gt;Modernized function block appearance with a drop shadow&lt;/li&gt;
-			                	&lt;li&gt;Several issues in the type library leading to broken projects and FBs&lt;/li&gt;
-			                &lt;/ul&gt;
-			            &lt;/li&gt;
-			        &lt;/ul&gt;
+			            &lt;li&gt;Improved usabilty and editing efficiency of all editors&lt;/li&gt;
+			            &lt;li&gt;Introduced monitoring for Structured Datatypes&lt;/li&gt;
+			            &lt;li&gt;Introduced editing history during undo/redo to quickly find the last editing position&lt;/li&gt;
+			            &lt;li&gt;Improved layout generation results&lt;/li&gt;
+			            &lt;li&gt;Improved/introduced input validation, show error messages&lt;/li&gt;
+			            &lt;li&gt;Introduced error markers to handle broken projects more gracefully&lt;/li&gt;
+			            &lt;li&gt;Of course, we have also implemented numerous bug fixes&lt;/li&gt;
+		            &lt;/ul&gt;
 			    &lt;/li&gt;
 			    &lt;li&gt;4diac FORTE:
 			        &lt;ul&gt;
-			            &lt;li&gt;Improved timer handler to use less resources, which should lead to less jitter&lt;/li&gt;
-			            &lt;li&gt;CMake modules have now an option to be enabled per default&lt;/li&gt;
-			            &lt;li&gt;Several compile/portabilty issues where fixed: Modbus, Windows XP, ming64, Piface&lt;/li&gt;
+			            &lt;li&gt;Gracefully handling full external event queueS&lt;/li&gt;
+			            &lt;li&gt;Fixed issues for compiling on Mac OS&lt;/li&gt;
+			            &lt;li&gt;Implicit upcasts are allowed for constant inputs at FBs (e.g., WORD#AFFE on a DWORD input)&lt;/li&gt;
 			        &lt;/ul&gt;
 			    &lt;/li&gt;
 			&lt;/ul&gt;
   	 		</text>
   	 	</link>
-  	 	<link label="Issues Addressed in 1.14.0" style-id="content-link" url="https://projects.eclipse.org/projects/iot.4diac/releases/1.13.0/bugs" id="orgfordiacide-webLink">
-  	 		<text>A list of all issues and bugs addressed for Eclipse 4diac 1.14.0.</text>
+  	 	<link label="Issues Addressed in 2.0.0" style-id="content-link" url="https://projects.eclipse.org/projects/iot.4diac/releases/2.0.0/bugs" id="orgfordiacide-webLink">
+  	 		<text>A list of all issues and bugs addressed for Eclipse 4diac 2.0.0.</text>
   	 	</link>
   	 	</group>
 <!-- 
@@ -79,7 +65,10 @@
   	<extensionContent id="fordiac-older-releases" style="css/style.css" name="Prior Versions" path="whatsnew/@">   			 
 		<group style-id="content-group" id="orgfordiacide-introLink-group"
 		           label="Previous Releases">
-		           
+		    <link label="1.14.0" url="https://projects.eclipse.org/projects/iot.4diac/releases/1.14.0/bugs" id="orgfordiacide-webLink" style-id="content-link">
+                <text> With 4diac 1.14.0 we focused on editing performance of all FB network editors.  
+                </text>                 
+            </link>       
 	        <link label="1.13.1" style-id="content-link" url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;component=4DIAC-IDE&amp;list_id=20305309&amp;product=4DIAC&amp;query_format=advanced&amp;target_milestone=1.13.1" id="orgfordiacide-webLink" >   
 	            <text> The first maintenance release for 4diac 1.13 provides 12 usability and bug fixes for 4diac IDE.
 	            </text>

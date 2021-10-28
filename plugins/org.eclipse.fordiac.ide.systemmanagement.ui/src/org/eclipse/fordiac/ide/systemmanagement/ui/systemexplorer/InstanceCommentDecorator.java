@@ -45,9 +45,18 @@ public class InstanceCommentDecorator implements ILightweightLabelDecorator {
 		if (element instanceof FBNetworkElement) {
 			final String comment = ((FBNetworkElement) element).getComment();
 			if (null != comment && !comment.isBlank()) {
-				decoration.addSuffix(" [" + comment + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+				decoration.addSuffix(" [" + checkComment(comment) + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
+	}
+
+	private static String checkComment(final String comment) {
+		final int i = comment.indexOf('\n');
+		if (i != -1) {
+			// we have a multi-line comment only return first line
+			return comment.substring(0, i) + "..."; //$NON-NLS-1$
+		}
+		return comment;
 	}
 
 }

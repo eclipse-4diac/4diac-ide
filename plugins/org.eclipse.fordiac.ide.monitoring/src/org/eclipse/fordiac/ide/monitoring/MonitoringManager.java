@@ -23,10 +23,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -42,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
+import org.eclipse.fordiac.ide.monitoring.model.SubAppPortHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -218,24 +217,41 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		final MonitoringBaseElement element = getMonitoringElement(interfaceElement);
 
 		if (element instanceof MonitoringElement) {
-			MonitoringElement monitoringElement = (MonitoringElement) element;
+			final MonitoringElement monitoringElement = (MonitoringElement) element;
+
+			final List<MonitoringElement> elements = new ArrayList<>();
+			final SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
 
 			if (element instanceof SubappMonitoringElement) {
-				monitoringElement = (MonitoringElement) ((SubappMonitoringElement) monitoringElement).getAnchor();
+
+				if (!element.getPort().getInterfaceElement().isIsInput()) {
+					elements.add((MonitoringElement) ((SubappMonitoringElement) element).getAnchor());
+				} else {
+
+					final List<MonitoringElement> findElements = SubAppPortHelper
+							.findConnectedElements(element.getPort().getInterfaceElement(), true);
+					elements.addAll(findElements);
 			}
 
-			final SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
-			final IDeviceManagementInteractor devMgmInteractor = data
-					.getDevMgmInteractor(monitoringElement.getPort().getDevice());
-			if (devMgmInteractor != null) {
-				try {
-					devMgmInteractor.triggerEvent(monitoringElement);
-				} catch (final DeploymentException e) {
-					// TODO think if error should be shown to the user
-					Activator.getDefault().logError("Could not trigger event for " + element.getQualifiedString(), e); //$NON-NLS-1$
-				}
-				notifyTriggerEvent(monitoringElement.getPort());
+			} else {
+				elements.add((MonitoringElement) element);
 			}
+
+
+			for (final MonitoringElement me : elements) {
+				final IDeviceManagementInteractor devMgmInteractor = data.getDevMgmInteractor(me.getPort().getDevice());
+				if (devMgmInteractor != null) {
+					try {
+						devMgmInteractor.triggerEvent(me);
+					} catch (final DeploymentException e) {
+						// TODO think if error should be shown to the user
+						Activator.getDefault().logError("Could not trigger event for " + element.getQualifiedString(), //$NON-NLS-1$
+								e);
+					}
+					notifyTriggerEvent(me.getPort());
+				}
+			}
+
 		}
 	}
 
@@ -290,15 +306,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	public static void handleSubappPinWrite(final MonitoringElement element, final SystemMonitoringData data,
 			final Collection<MonitoringElement> elements) {
-		final MonitoringElement anchor = (MonitoringElement) ((SubappMonitoringElement) element).getAnchor();
-		if (element.getPort().getInterfaceElement().isIsInput()) {
-			// here we need to handle fan out
-			final Entry<String, List<MonitoringElement>> subappElements = data.getSubappElements(element);
-			Assert.isNotNull(subappElements);
-			elements.addAll(subappElements.getValue());
-		} else {
-			elements.add(anchor);
-		}
+		final List<MonitoringElement> findElements = SubAppPortHelper
+				.findConnectedElements(element.getPort().getInterfaceElement());
+		elements.addAll(findElements);
 	}
 
 	public void forceValue(final MonitoringElement element, final String value) {

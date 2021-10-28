@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.gef,
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.0.qualifier
-Bundle-Name: Common UI Controls (Incubation)
+Bundle-Name: Common UI Controls
 Bundle-Activator: org.eclipse.fordiac.ide.ui.UIPlugin
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.ui;singleton:=true

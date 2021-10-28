@@ -27,8 +27,10 @@ import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractor
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
+import org.eclipse.fordiac.ide.monitoring.model.SubAppPortHelper;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.systemmanagement.Activator;
 
@@ -115,7 +117,6 @@ class DeviceMonitoringHandler implements Runnable {
 	public void updateFbs(final org.eclipse.fordiac.ide.deployment.devResponse.Resource res, final String resName) {
 
 		final HashMap<String, SubappGroup> collectedGroups = new HashMap<>();
-
 		for (final FB fb : res.getFbs()) {
 			final String fbName = resName + fb.getName() + "."; //$NON-NLS-1$
 			for (final Port port : fb.getPorts()) {
@@ -124,7 +125,6 @@ class DeviceMonitoringHandler implements Runnable {
 
 				List<MonitoringElement> subappPins = systemMonData.getSubappElements().get(portString);
 				final Entry<String, List<MonitoringElement>> subappEntry = systemMonData.getSubappElements(element);
-
 				if (element != null && subappPins == null && subappEntry != null) {
 					subappPins = subappEntry.getValue();
 					portString = subappEntry.getKey();
@@ -156,23 +156,42 @@ class DeviceMonitoringHandler implements Runnable {
 		updateSubappPorts(collectedGroups);
 	}
 
-	private static void updateSubappPorts(final Map<String, SubappGroup> collectedGroups) {
+	private void updateSubappPorts(final Map<String, SubappGroup> collectedGroups) {
 		for (final SubappGroup subappGroup : collectedGroups.values()) {
 			updateSubAppGroup(subappGroup);
 		}
 
 	}
 
-	private static void updateSubAppGroup(final SubappGroup subappGroup) {
+	private void updateSubAppGroup(final SubappGroup subappGroup) {
 		// if the anchors have inconsistent values we need to display that
 		boolean inconsistent = false;
+		boolean event = false;
 		String currentVal = ""; //$NON-NLS-1$
 
 		for (final MonitoringElement monitoringElement : subappGroup.collectedSubappPins) {
 			final Port port = subappGroup.getPort(monitoringElement);
-			updateMonitoringElement(monitoringElement, port);
-			inconsistent = isInconsistent(currentVal, monitoringElement);
+
+
+			if (port != null) {
+				updateMonitoringElement(monitoringElement, port);
+			}
+
+			if (currentVal.isEmpty()) {
+				currentVal = monitoringElement.getCurrentValue();
+			}
+
+			if (isEventPin(monitoringElement)) {
+				event = true;
+			} else if (!inconsistent) {
+				inconsistent = isInconsistent(currentVal, monitoringElement);
+			}
+
 			currentVal = monitoringElement.getCurrentValue();
+		}
+
+		if (event) {
+			updateEventPins(subappGroup);
 		}
 
 		if (inconsistent) {
@@ -181,9 +200,56 @@ class DeviceMonitoringHandler implements Runnable {
 
 	}
 
-	public static boolean isInconsistent(final String currentVal, final MonitoringElement monitoringElement) {
-		return !currentVal.isEmpty() && !(monitoringElement instanceof SubappMonitoringElement)
-				&& !currentVal.equals(monitoringElement.getCurrentValue());
+	public boolean isInconsistent(final String currentVal, final MonitoringElement monitoringElement) {
+
+		if(currentVal.isEmpty()) {
+			return false;
+		}
+
+		if (monitoringElement instanceof SubappMonitoringElement) {
+			final List<MonitoringElement> findConnectedElements = SubAppPortHelper
+					.findConnectedElements(monitoringElement.getPort().getInterfaceElement());
+
+			for (final MonitoringElement e : findConnectedElements) {
+				final MonitoringElement monitoredElement = (MonitoringElement) systemMonData
+						.getMonitoredElement(e.getPort().getInterfaceElement());
+				if (monitoredElement != null && !monitoredElement.getCurrentValue().equals(currentVal)) {
+					return true;
+				}
+			}
+		}
+
+
+		return !currentVal
+				.equals(monitoringElement.getCurrentValue());
+	}
+
+	public static boolean isEventPin(final MonitoringElement monitoringElement) {
+		return monitoringElement.getPort().getInterfaceElement() instanceof Event;
+	}
+
+	private void updateEventPins(final SubappGroup subappGroup) {
+
+		subappGroup.collectedSubappPins.stream().filter(SubappMonitoringElement.class::isInstance)
+		.filter(me -> !me.getPort().getInterfaceElement().isIsInput())
+		.forEach(e ->
+		{
+			final List<MonitoringElement> findConnectedElements = SubAppPortHelper
+					.findConnectedElements(e.getPort().getInterfaceElement());
+			long eventCount = 0;
+			for (final MonitoringElement x : findConnectedElements) {
+				final MonitoringElement monitoredElement = (MonitoringElement) systemMonData
+						.getMonitoredElement(x.getPort().getInterfaceElement());
+
+				if (monitoredElement != null && !monitoredElement.getCurrentValue().equals("N/A")) {
+					eventCount+=Long.parseLong(monitoredElement.getCurrentValue());
+				}
+			}
+			e.setCurrentValue(Long.toString(eventCount));
+		});
+
+
+
 	}
 
 	private static void setSubappPinsToInconsistentState(final SubappGroup subappGroup) {
@@ -193,7 +259,6 @@ class DeviceMonitoringHandler implements Runnable {
 	}
 
 	private static void updateMonitoringElement(final MonitoringElement monitoringElement, final Port p) {
-
 		for (final Data d : p.getDataValues()) {
 			long timeAsLong = 0;
 			try {

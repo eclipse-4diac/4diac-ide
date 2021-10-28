@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
@@ -157,7 +156,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 				withEventsViewer.setInput(getType());
 				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 				getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
-						.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
+				.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
 			} else {
 				eventComposite.setVisible(false);
 			}
@@ -166,20 +165,15 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	@Override
-	protected void handleDataSelectionChanged(String dataName) {
+	protected void handleDataSelectionChanged(final String dataName) {
 		final DataType newType = getDataTypeLib().getTypeIfExists(dataName);
 		if (newType != null) {
-			commandStack.execute(new ChangeDataTypeCommand((VarDeclaration) getType(), newType));
+			commandStack.execute(new ChangeDataTypeCommand(getType(), newType));
 		}
 	}
 
 	@Override
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
-		return new ITypeSelectionContentProvider() {
-			@Override
-			public List<DataType> getTypes() {
-				return getDataTypeLib().getDataTypesSorted();
-			}
-		};
+		return () -> getDataTypeLib().getDataTypesSorted();
 	}
 }

@@ -231,7 +231,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 		}
 
 		typeSelectionWidget.initialize(getType(), new StructuredTypeSelectionContentProvider(),
-				(newName) -> handleStructSelectionChanged(newName));
+				this::handleStructSelectionChanged);
 
 		if (commandStack != null) {
 			commandStack.addCommandStackEventListener(this);
@@ -240,7 +240,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 	private void handleStructSelectionChanged(final String newStructName) {
 		if (null != type && newStructSelected(newStructName)) {
-			final StructuredType newStruct = (StructuredType) getDataTypeLib().getStructuredType(newStructName);
+			final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
 			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
 			commandStack.execute(cmd);
 			updateStructManipulatorFB(cmd.getNewMux());
@@ -268,7 +268,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 		}
 	}
 
-	public StructTreeNode initTree(final StructManipulator struct, final TreeViewer viewer) {
+	private static StructTreeNode initTree(final StructManipulator struct, final TreeViewer viewer) {
 		final StructuredType structuredType = struct.getPaletteEntry().getTypeLibrary().getDataTypeLibrary()
 				.getStructuredType(struct.getStructType().getName());
 

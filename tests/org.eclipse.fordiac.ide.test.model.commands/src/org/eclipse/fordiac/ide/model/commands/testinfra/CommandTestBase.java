@@ -216,7 +216,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		@SuppressWarnings("unchecked")
 		final T state = (T) stateObj;
 		emh.start();
-		state.setViaUndo();
 		tester.get().test(state.getCommand().canUndo());
 		state.getCommand().undo();
 		state.setMessages(emh.getMessages());
@@ -288,6 +287,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		tester.get().test(state.getCommand().canExecute());
 		state.getCommand().execute();
 		state.setMessages(emh.getMessages());
+		state.setUndoAllowed(state.getCommand().canUndo());
 		emh.stop();
 		return state;
 	}
@@ -741,14 +741,19 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 					current = new StateNode<>(undo.executeCommand(current.getState()), current.getBefore().getVerifier(),
 							clone.getBefore().getBefore());
 					current.setAfter(clone);
-					current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), tester.get());
+					current.getState().setViaUndo();
+					if (current.getState().isUndoAllowed()) {
+						current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), tester.get());
+					}
 					break;
 				case REDO:
 					// execute redo and fix undo list
 					current = new StateNode<>(redo.executeCommand(current.getState()), current.getAfter().getVerifier(),
 							clone);
 					clone.setAfter(current);
-					current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), tester.get());
+					if (current.getState().isUndoAllowed()) {
+						current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), tester.get());
+					}
 					break;
 				default:
 					throw new RuntimeException("Unhandled Operation");// NOSONAR //$NON-NLS-1$

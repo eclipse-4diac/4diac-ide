@@ -93,7 +93,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 
 	protected void createFBInfoGroup(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceName + ":"); //$NON-NLS-1$
 		nameText = createGroupText(composite, true);

@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -49,7 +50,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestDataLabelProvider
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
+import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
+import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -66,13 +68,13 @@ import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
-import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -211,7 +213,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		super.createPartControl(graphicalEditor);
 	}
 
-	private void preselectFirstConfiguration(CCombo configurationCombo, StackLayout stack) {
+	private void preselectFirstConfiguration(final CCombo configurationCombo, final StackLayout stack) {
 		if (configurationCombo.getItems().length > 0) {
 			configurationCombo.select(0);
 		}
@@ -428,8 +430,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
 		final ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
-		final ZoomScalableFreeformRootEditPart root = new ZoomScalableFreeformRootEditPart(getSite(),
-				getActionRegistry());
+		final ZoomScalableFreeformRootEditPart root = createRootEditPart();
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditpartFactory());
 		// configure the context menu provider
@@ -447,6 +448,31 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 		final KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
 		viewer.setKeyHandler(viewerKeyHandler);
+	}
+
+	private ZoomScalableFreeformRootEditPart createRootEditPart() {
+		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
+			@Override
+			protected AbstractFreeformFigure createDrawingAreaContainer() {
+				return new MinSpaceFreeformFigure();
+			}
+
+			@Override
+			protected IFigure createFigure() {
+				final IFigure rootFigure = super.createFigure();
+				final GridLayer grid = (GridLayer) getLayer(GRID_LAYER);
+				if (grid != null) {
+					// it does not make sense to have a grid in the interface layer so hide it
+					grid.setVisible(false);
+				}
+				return rootFigure;
+			}
+
+			@Override
+			protected void refreshGridLayer() {
+				// empty to be sure that grid will not be drawn
+			}
+		};
 	}
 
 	public ZoomManager getZoomManger() {
@@ -470,13 +496,6 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 		}
 		return sharedKeyHandler;
-	}
-
-	@Override
-	protected void createGraphicalViewer(final Composite parent) {
-		final RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
-		super.createGraphicalViewer(rulerComp);
-		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
 	}
 
 	public static List<String> getTestConfigurations() {

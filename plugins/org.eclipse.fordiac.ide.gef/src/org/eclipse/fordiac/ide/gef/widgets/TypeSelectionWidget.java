@@ -14,24 +14,6 @@
 
 package org.eclipse.fordiac.ide.gef.widgets;
 
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
-
 import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -45,6 +27,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class TypeSelectionWidget {
 	private static final String TYPE = "TYPE"; //$NON-NLS-1$
@@ -58,7 +56,7 @@ public class TypeSelectionWidget {
 	private TableViewer tableViewer;
 	private Button openEditorButton;
 
-	public TypeSelectionWidget(TabbedPropertySheetWidgetFactory widgetFactory) {
+	public TypeSelectionWidget(final TabbedPropertySheetWidgetFactory widgetFactory) {
 		this.widgetFactory = widgetFactory;
 	}
 
@@ -68,7 +66,7 @@ public class TypeSelectionWidget {
 
 	public void createControls(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
-		GridLayout gridLayout = new GridLayout(2, false);
+		final GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginHeight = 0;
 		composite.setLayout(gridLayout);
@@ -102,29 +100,22 @@ public class TypeSelectionWidget {
 
 		openEditorButton = new Button(composite, SWT.PUSH);
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-		openEditorButton.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(org.eclipse.swt.widgets.Event event) {
-				String typeName = null;
-				if (configurableObject instanceof StructManipulator) {
-					typeName = ((StructManipulator) configurableObject).getStructType().getName();
-				} else if (configurableObject instanceof IInterfaceElement) {
-					typeName = ((IInterfaceElement) configurableObject).getType().getName();
-				}
-				
-				if(typeName != null) {
-					OpenStructMenu.openStructEditor(getDataType(typeName).getPaletteEntry().getFile());
-				}
+		openEditorButton.addListener(SWT.Selection, event -> {
+			DataType dataType = null;
+			if (configurableObject instanceof StructManipulator) {
+				dataType = ((StructManipulator) configurableObject).getStructType();
+			} else if (configurableObject instanceof IInterfaceElement) {
+				dataType = ((IInterfaceElement) configurableObject).getType();
+			}
+
+			if (dataType != null && dataType.getPaletteEntry() != null) {
+				OpenStructMenu.openStructEditor(dataType.getPaletteEntry().getFile());
 			}
 		});
 	}
-	
-	private DataType getDataType(String dataTypeName) {
-		return contentProvider.getTypes().stream().filter(type -> type.getName().equals(dataTypeName)).findAny().orElse(null);
-	}
 
 	public void initialize(final ConfigurableObject type, final ITypeSelectionContentProvider contentProvider,
-			Consumer<String> handleSelectionChanged) {
+			final Consumer<String> handleSelectionChanged) {
 		this.configurableObject = type;
 		this.contentProvider = contentProvider;
 		this.handleSelectionChanged = handleSelectionChanged;
@@ -155,7 +146,7 @@ public class TypeSelectionWidget {
 		final TableViewer viewer = new TableViewer(parent, SWT.NO_SCROLL | SWT.BORDER);
 
 		final Table table = viewer.getTable();
-		TableLayout tableLayout = new TableLayout();
+		final TableLayout tableLayout = new TableLayout();
 		tableLayout.addColumnData(new ColumnWeightData(100));
 		table.setLayout(tableLayout);
 		table.setLayoutData(new GridData(SWT.FILL, 0, true, false));
@@ -181,7 +172,7 @@ public class TypeSelectionWidget {
 		} else if (configurableObject instanceof Event || configurableObject instanceof AdapterDeclaration) {
 			// reset parent composite and dispose button
 			final Composite typeComp = tableViewer.getTable().getParent();
-			GridLayout gridLayout = new GridLayout(1, false);
+			final GridLayout gridLayout = new GridLayout(1, false);
 			gridLayout.marginWidth = 0;
 			gridLayout.marginHeight = 0;
 			typeComp.setLayout(gridLayout);

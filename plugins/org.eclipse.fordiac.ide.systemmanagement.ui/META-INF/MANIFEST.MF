@@ -4,7 +4,7 @@ Export-Package: org.eclipse.fordiac.ide.systemmanagement.ui,
  org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer,
  org.eclipse.fordiac.ide.systemmanagement.ui.wizard
 Bundle-ActivationPolicy: lazy
-Bundle-Name: System Management UI (Incubation)
+Bundle-Name: System Management UI
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.ui,
