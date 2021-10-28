@@ -86,6 +86,18 @@ public interface Connection extends ConfigurableObject, ErrorMarkerRef {
 	 * @generated */
 	void updateRoutingData(int dx1, int dy, int dx2);
 
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model visibleDataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated */
+	void setVisible(boolean visible);
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation"
+	 * @generated */
+	boolean isVisible();
+
 	/** Returns the value of the '<em><b>Broken Connection</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Broken Connection</em>' attribute isn't clear, there really should be more of a

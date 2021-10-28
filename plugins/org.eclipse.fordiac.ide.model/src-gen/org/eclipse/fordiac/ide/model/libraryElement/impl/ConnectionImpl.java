@@ -483,6 +483,22 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 *
 	 * @generated */
 	@Override
+	public void setVisible(final boolean visible) {
+		org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this, visible);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public boolean isVisible() {
+		return org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.isVisible(this);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
 	public boolean hasError() {
 		return getFileMarkerId() != 0;
 	}
@@ -514,7 +530,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 *
 	 * @generated */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
+			final NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.CONNECTION__SOURCE:
 			return basicSetSource(null, msgs);

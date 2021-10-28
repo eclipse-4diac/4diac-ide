@@ -139,7 +139,14 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addConnection(final Connection connection, final FBNetwork fbNetwork) throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
+
+		final boolean hasAttributes = !connection.getAttributes().isEmpty();
+		if (hasAttributes) {
+			addStartElement(LibraryElementTags.CONNECTION_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
+		}
+
 		if (isExportableConnectionEndpoint(connection.getSource())) {
 			getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getSource(), fbNetwork));
@@ -151,6 +158,12 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 		addCommentAttribute(connection);
 		addConnectionCoordinates(connection);
+
+		if (hasAttributes) {
+			addAttributes(connection.getAttributes());
+			addEndElement();
+		}
+
 	}
 
 	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {

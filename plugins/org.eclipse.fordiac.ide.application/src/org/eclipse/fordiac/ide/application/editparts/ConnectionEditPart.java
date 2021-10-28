@@ -32,7 +32,7 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.tools.FBNScrollingConnectionEndpointTracker;
@@ -140,6 +140,10 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return (Connection) super.getModel();
 	}
 
+	public Connection getConnection() {
+		return getModel();
+	}
+
 	private final IPropertyChangeListener propertyChangeListener = event -> {
 		if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
 				&& (getModel() instanceof EventConnection)) {
@@ -186,43 +190,43 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		final PolylineConnection connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
+		final PolylineConnection polylineConnection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
 
 		final String status = getModel().getAttributeValue(HIDEN_CON);
-		if (connection instanceof HideableConnection) {
-			((HideableConnection) connection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
+		if (polylineConnection instanceof HideableConnection) {
+			((HideableConnection) polylineConnection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
 			if ((getModel() != null) && (getModel().getSourceElement() != null)) {
-				((HideableConnection) connection)
+				((HideableConnection) polylineConnection)
 				.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
 			}
-			((HideableConnection) connection).setModel(getModel());
+			((HideableConnection) polylineConnection).setModel(getModel());
 		}
 
 		final PolygonDecoration arrow = new PolygonDecoration();
 		arrow.setTemplate(PolygonDecoration.TRIANGLE_TIP);
 		arrow.setScale(7, 4);
-		connection.setTargetDecoration(arrow);
+		polylineConnection.setTargetDecoration(arrow);
 
 		if (getModel() instanceof EventConnection) {
-			connection.setVisible(
+			polylineConnection.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
 		}
 
 		if (getModel() instanceof AdapterConnection) {
-			connection.setTargetDecoration(null);
-			connection.setSourceDecoration(null);
+			polylineConnection.setTargetDecoration(null);
+			polylineConnection.setSourceDecoration(null);
 
 		}
 
 		if (getModel() instanceof DataConnection) {
-			connection.setVisible(
+			polylineConnection.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON));
 
 		}
-		setConnectionColor(connection);
-		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
-		connection.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
-		return connection;
+		setConnectionColor(polylineConnection);
+		polylineConnection.setToolTip(new ConnectionTooltipFigure(getModel()));
+		polylineConnection.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+		return polylineConnection;
 	}
 
 	@Override
@@ -289,6 +293,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_SOLID);
 				((PolylineConnection) getConnectionFigure()).setLineDash(null);
 			}
+			getConnectionFigure().setVisible(getConnection().isVisible());
+
 		}
 	}
 
@@ -305,7 +311,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 	private Adapter getContentAdapter() {
 		if (contentAdapter == null) {
-			contentAdapter = new AdapterImpl() {
+			contentAdapter = new EContentAdapter() {
 				@Override
 				public void notifyChanged(final Notification notification) {
 					final Object feature = notification.getFeature();

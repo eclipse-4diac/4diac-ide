@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  *               2019 Johannes Kepler University Linz
+ *               2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,12 +15,14 @@
  *   Bianca Wiesmayr
  *     - merged the ConnectionSection classes
  *   Alois Zoitl - cleaned command stack handling for property sections
+ *   Michael Oberlehner - addd show connection section
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.HideConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -27,8 +30,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -37,10 +43,14 @@ public class ConnectionSection extends AbstractSection {
 	private Text commentText;
 	private Text sourceText;
 	private Text targetText;
-
+	private Button showConnectionButton;
 	@Override
 	protected Connection getType() {
 		return (Connection) type;
+	}
+
+	private Connection getConnection() {
+		return getType();
 	}
 
 	@Override
@@ -60,6 +70,18 @@ public class ConnectionSection extends AbstractSection {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
+		});
+
+		getWidgetFactory().createCLabel(composite, Messages.ConnectionSection_ShowConnection);
+		showConnectionButton = getWidgetFactory().createButton(composite, "", SWT.CHECK); //$NON-NLS-1$
+		showConnectionButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final Button btn = (Button) e.getSource();
+				final boolean visible = btn.getSelection();
+				executeCommand(new HideConnectionCommand(getConnection(), visible));
+
+			}
 		});
 	}
 
@@ -84,6 +106,9 @@ public class ConnectionSection extends AbstractSection {
 				targetText.setText(getFBNameFromIInterfaceElement(getType().getDestination()) + "." //$NON-NLS-1$
 						+ getType().getDestination().getName());
 			}
+
+			showConnectionButton.setSelection(getConnection().isVisible());
+
 		}
 		commandStack = commandStackBuffer;
 	}

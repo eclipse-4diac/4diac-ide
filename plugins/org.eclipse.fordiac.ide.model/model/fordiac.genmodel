@@ -238,6 +238,13 @@
         <genParameters ecoreParameter="lib.ecore#//Connection/updateRoutingData/dy"/>
         <genParameters ecoreParameter="lib.ecore#//Connection/updateRoutingData/dx2"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//Connection/setVisible" body="org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this,visible);">
+        <genParameters ecoreParameter="lib.ecore#//Connection/setVisible/visible"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//Connection/isVisible" body="return org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.isVisible(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Connection/setVisible" body="org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this,visible);">
+        <genParameters ecoreParameter="lib.ecore#//Connection/setVisible/visible"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConnectionRoutingData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>

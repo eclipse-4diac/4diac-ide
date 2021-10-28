@@ -184,7 +184,8 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	}
 
-	private <T extends Connection> T parseConnection(final EClass conType) {
+	private <T extends Connection> T parseConnection(final EClass conType)
+			throws XMLStreamException, TypeImportException {
 		@SuppressWarnings("unchecked")
 		final T connection = (T) LibraryElementFactory.eINSTANCE.create(conType);
 		connection.setResTypeConnection(false);
@@ -235,11 +236,25 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (null != commentElement) {
 			connection.setComment(commentElement);
 		}
-
 		parseConnectionRouting(connection);
-
+		parseAttributes(connection);
 		return connection;
 	}
+
+	public <T extends Connection> void parseAttributes(final T connection)
+			throws XMLStreamException, TypeImportException {
+		processChildren(LibraryElementTags.CONNECTION_ELEMENT, tag -> {
+			switch (tag) {
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(connection);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			default:
+				return false;
+			}
+		});
+	}
+
 
 	protected void handleMissingConnectionSource(final Connection connection, final ConnectionBuilder builder) {
 		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
