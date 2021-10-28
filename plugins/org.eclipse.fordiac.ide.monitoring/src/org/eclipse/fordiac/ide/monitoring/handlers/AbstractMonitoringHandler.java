@@ -51,7 +51,7 @@ public abstract class AbstractMonitoringHandler extends AbstractHandler {
 		}
 	}
 
-	private static void refresh(final RootEditPart rootEditPart) {
+	public static void refresh(final RootEditPart rootEditPart) {
 		rootEditPart.refresh();
 
 		final List<?> children = rootEditPart.getChildren();

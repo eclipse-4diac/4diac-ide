@@ -228,11 +228,13 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 
 	private void createInfoSection(final FormToolkit toolkit, final SashForm sash) {
 		final Section infoSection = createExpandableSection(toolkit, sash, "System Information:");
-		infoSection.setLayout(new GridLayout(1, true));
+		infoSection.setLayout(new GridLayout());
 
 		typeInfo = new TypeInfoWidget(toolkit);
-		final Composite typeInfoRoot = typeInfo.createControls(infoSection);
-		infoSection.setClient(typeInfoRoot);
+		final Composite composite = toolkit.createComposite(infoSection);
+		composite.setLayout(new GridLayout(2, true));
+		typeInfo.createControls(composite);
+		infoSection.setClient(composite);
 	}
 
 	private static Section createExpandableSection(final FormToolkit toolkit, final Composite parent,

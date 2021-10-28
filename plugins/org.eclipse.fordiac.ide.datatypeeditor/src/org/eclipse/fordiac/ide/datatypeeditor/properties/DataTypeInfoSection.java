@@ -37,20 +37,22 @@ public class DataTypeInfoSection extends AbstractSection {
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		final Composite composite = getWidgetFactory().createComposite(parent);
-		composite.setLayout(new GridLayout(1, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		createCommentField(composite);
-		typeInfoWidget = new TypeInfoWidget(getWidgetFactory());
-		typeInfoWidget.createControls(composite);
+
+		parent.setLayout(new GridLayout(2, false));
+		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+
+		createCommentField(parent);
+		createTypeInfoGroup(parent);
 	}
 
-	private void createCommentField(final Composite composite) {
-		final Composite container = new Composite(composite, SWT.SHADOW_NONE);
+	private void createCommentField(final Composite parent) {
+		final Composite container = getWidgetFactory().createComposite(parent);
 		container.setLayout(new GridLayout(2, false));
-		container.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		final GridData data = new GridData(SWT.FILL, 0, true, false);
+		data.horizontalSpan = 2;
+		container.setLayoutData(data);
 
-		getWidgetFactory().createLabel(container, FordiacMessages.Comment + ":"); // $NON-NLS-1$
+		getWidgetFactory().createLabel(container, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createGroupText(container, true);
 		commentText.addModifyListener(e -> {
 			/*
@@ -65,7 +67,12 @@ public class DataTypeInfoSection extends AbstractSection {
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			}
 		});
-			
+
+	}
+
+	private void createTypeInfoGroup(final Composite parent) {
+		typeInfoWidget = new TypeInfoWidget(getWidgetFactory());
+		typeInfoWidget.createControls(parent);
 	}
 
 	@Override

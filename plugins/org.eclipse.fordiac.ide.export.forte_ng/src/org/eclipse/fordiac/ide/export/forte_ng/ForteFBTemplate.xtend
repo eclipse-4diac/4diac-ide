@@ -281,10 +281,33 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 			case FordiacKeywords.DATE:  '''«variable.name»().fromString("«variable.value.value»");'''
 			case FordiacKeywords.TIME_OF_DAY:  '''«variable.name»().fromString("«variable.value.value»");'''
 			case FordiacKeywords.DATE_AND_TIME:  '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.BOOL:  '''«variable.name»() = "«variable.value.value.toLowerCase»";'''
-			default: '''«variable.name»() = «variable.value.value»;'''
+			case FordiacKeywords.BOOL:  '''«variable.name»() = «variable.value.value.generatBoolLiteral»;'''
+			case FordiacKeywords.REAL:  '''«variable.name»() = «variable.value.value»;'''
+			case FordiacKeywords.LREAL:  '''«variable.name»() = «variable.value.value»;'''
+			default: 
+				if(isNumeric(variable.value.value)){   
+					'''«variable.name»() = «variable.value.value»;'''
+				}else {
+					'''«variable.name»().fromString("«variable.value.value»");'''
+				}
 		}
 	}
+	
+	def private generatBoolLiteral(String value){
+		switch value{
+			case "0":
+				'''false'''			
+			case "1":
+				'''true'''			
+			default:
+				'''«value.toLowerCase»'''
+		}
+	}
+	
+	def private isNumeric(String input) {
+		input.chars().allMatch([in | Character.isDigit(in)])
+	}
+	
 
 	def protected generateInternalVarDefinition(BaseFBType baseFBType) '''
 		«IF !baseFBType.internalVars.isEmpty»
