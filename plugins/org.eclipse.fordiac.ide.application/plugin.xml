@@ -179,6 +179,12 @@
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.application.editparts.InstanceCommentEditPart">
+            </input>
+            <input
+                  type="org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart">
+            </input>
          </propertySection>
          <propertySection
          	class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
