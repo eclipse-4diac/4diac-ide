@@ -14,7 +14,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<tycho.version>2.4.0</tycho.version>
+		<tycho.version>2.5.0</tycho.version>
 		<tycho-repo.url>https://download.eclipse.org/releases/2021-06</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
