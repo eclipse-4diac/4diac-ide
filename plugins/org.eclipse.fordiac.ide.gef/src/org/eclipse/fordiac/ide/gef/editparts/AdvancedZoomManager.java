@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
+import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -22,17 +23,36 @@ public class AdvancedZoomManager extends ZoomManager {
 
 	private Point lastMousePos;
 
-	AdvancedZoomManager(ScalableFigure pane, Viewport viewport) {
+	AdvancedZoomManager(final ScalableFigure pane, final Viewport viewport) {
 		super(pane, viewport);
 	}
 
-	public void setLastMousePos(int x, int y) {
+	public void setLastMousePos(final int x, final int y) {
 		this.lastMousePos = new Point(x, y);
 	}
 
 	@Override
-	protected void primSetZoom(double zoom) {
-		Point newViewLocation = (null == lastMousePos) ? takeMiddPosition(zoom) : calcNewViewLocation(zoom);
+	public void setZoomAsText(final String zoomString) {
+		super.setZoomAsText(zoomString);
+
+		if (FIT_HEIGHT.equalsIgnoreCase(FIT_HEIGHT) || FIT_ALL.equalsIgnoreCase(zoomString)
+				|| FIT_WIDTH.equalsIgnoreCase(zoomString)) {
+			// scroll to the center so that our drawing canvas is fully shown
+			final Point scrollPoint = new Point(calculateCenterScrollPos(getViewport().getHorizontalRangeModel()),
+					calculateCenterScrollPos(getViewport().getVerticalRangeModel()));
+			setViewLocation(scrollPoint);
+		}
+
+	}
+
+	private static int calculateCenterScrollPos(final RangeModel rangeModel) {
+		final int center = (rangeModel.getMaximum() + rangeModel.getMinimum()) / 2;
+		return center - rangeModel.getExtent() / 2;
+	}
+
+	@Override
+	protected void primSetZoom(final double zoom) {
+		final Point newViewLocation = (null == lastMousePos) ? takeMiddPosition(zoom) : calcNewViewLocation(zoom);
 
 		super.primSetZoom(zoom);
 
@@ -46,9 +66,9 @@ public class AdvancedZoomManager extends ZoomManager {
 	 * (mousepos + oldViewLocation) / oldZoom = (mousepos + newViewLocation)/newZoom
 	 *
 	 */
-	private Point calcNewViewLocation(double newZoom) {
-		Point oldViewLocation = getViewport().getViewLocation();
-		Point newviewLocation = lastMousePos.getCopy();
+	private Point calcNewViewLocation(final double newZoom) {
+		final Point oldViewLocation = getViewport().getViewLocation();
+		final Point newviewLocation = lastMousePos.getCopy();
 		newviewLocation.performTranslate(oldViewLocation.x, oldViewLocation.y);
 		newviewLocation.scale(1.0 / getZoom());
 		newviewLocation.scale(newZoom);
@@ -56,9 +76,9 @@ public class AdvancedZoomManager extends ZoomManager {
 		return newviewLocation;
 	}
 
-	private Point takeMiddPosition(double newZoom) {
-		Point oldViewLocation = getViewport().getClientArea().getCenter();
-		Dimension dif = oldViewLocation.getScaled(newZoom / getZoom()).getDifference(oldViewLocation);
+	private Point takeMiddPosition(final double newZoom) {
+		final Point oldViewLocation = getViewport().getClientArea().getCenter();
+		final Dimension dif = oldViewLocation.getScaled(newZoom / getZoom()).getDifference(oldViewLocation);
 		return getViewport().getViewLocation().getTranslated(dif.width, dif.height);
 	}
 
