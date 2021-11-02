@@ -19,10 +19,8 @@ package org.eclipse.fordiac.ide.elk.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
@@ -40,7 +38,6 @@ public class LayoutCommand extends Command {
 
 	private final Map<FBNetworkElement, Position> positions;
 	private final Map<Connection, PointList> connPoints;
-	private final Map<FBNetworkElement, FBNetworkElementFigure> fbFigures;
 	private final Map<IInterfaceElement, Integer> pins;
 
 	private final Map<FBNetworkElement, Position> oldPositions = new HashMap<>();
@@ -49,11 +46,10 @@ public class LayoutCommand extends Command {
 	private final CompoundCommand pinPositionAttrCommand = new CompoundCommand();
 
 	public LayoutCommand(final Map<FBNetworkElement, Position> positions, final Map<Connection, PointList> connPoints,
-			final Map<FBNetworkElement, FBNetworkElementFigure> fbFigures, final Map<IInterfaceElement, Integer> pins) {
+			final Map<IInterfaceElement, Integer> pins) {
 		super();
 		this.positions = positions;
 		this.connPoints = connPoints;
-		this.fbFigures = fbFigures;
 		this.pins = pins;
 	}
 
@@ -62,7 +58,6 @@ public class LayoutCommand extends Command {
 		saveDataForUndo();
 		updateModelElements();
 		updatePositionAttributes();
-		updateFigures();
 		if (pinPositionAttrCommand.canExecute()) {
 			pinPositionAttrCommand.execute();
 		}
@@ -70,7 +65,6 @@ public class LayoutCommand extends Command {
 	@Override
 	public void redo() {
 		updateModelElements();
-		updateFigures();
 		if (pinPositionAttrCommand.canExecute()) {
 			pinPositionAttrCommand.redo();
 		}
@@ -80,10 +74,6 @@ public class LayoutCommand extends Command {
 	public void undo() {
 		oldPositions.forEach(FBNetworkElement::setPosition);
 		oldRoutingData.forEach(Connection::setRoutingData);
-		fbFigures.forEach((elem, fig) -> {
-			final Position pos = oldPositions.get(elem);
-			fig.setLocation(new Point(pos.getX(), pos.getY()));
-		});
 		if (pinPositionAttrCommand.canExecute()) {
 			pinPositionAttrCommand.undo();
 		}
@@ -113,13 +103,6 @@ public class LayoutCommand extends Command {
 			cmd = new AttributeChangeCommand(attr, attrValue);
 		}
 		pinPositionAttrCommand.add(cmd);
-	}
-
-	private void updateFigures() {
-		fbFigures.forEach((elem, fig) -> {
-			final Position pos = positions.get(elem);
-			fig.setLocation(new Point(pos.getX(), pos.getY()));
-		});
 	}
 
 	private static void updateModel(final org.eclipse.fordiac.ide.model.libraryElement.Connection connModel, final PointList pointList) {
