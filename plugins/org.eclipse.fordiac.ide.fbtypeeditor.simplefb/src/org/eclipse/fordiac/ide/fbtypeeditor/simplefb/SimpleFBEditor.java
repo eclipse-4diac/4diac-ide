@@ -102,7 +102,6 @@ public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
-
 	}
 
 	@Override
@@ -137,9 +136,18 @@ public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
 		if (type instanceof SimpleFBType) {
 			fbType = (SimpleFBType) type;
 			baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
+			try {
+				init(getEditorSite(), new FBTypeEditorInput(type, type.getPaletteEntry()));
+				initializeGraphicalViewer();
+			} catch (final PartInitException e) {
+				Activator.getDefault().logError(getContentDescription(), e);
+			}
+
 		}
 
 	}
+
+
 
 	@Override
 	protected void initializeGraphicalViewer() {
@@ -151,6 +159,14 @@ public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
 	@Override
 	protected CommandStack getCommandStack() {
 		return commandStack;
+	}
+
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getEditPartRegistry().get(fbType);
 	}
 
 }

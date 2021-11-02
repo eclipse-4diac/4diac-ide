@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -256,6 +257,12 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			EditorUtils.CloseEditor.run(this);
 		}
 
+	}
+
+	@Override
+	public Object getSelectableEditPart() {
+		final GraphicalViewer viewer = getAdapter(GraphicalViewer.class);
+		return viewer.getRootEditPart();
 	}
 
 }

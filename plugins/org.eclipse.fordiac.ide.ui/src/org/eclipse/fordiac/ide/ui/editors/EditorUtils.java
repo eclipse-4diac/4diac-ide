@@ -16,13 +16,17 @@
 package org.eclipse.fordiac.ide.ui.editors;
 
 import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.PropertySheet;
 
 public final class EditorUtils {
 
@@ -79,5 +83,15 @@ public final class EditorUtils {
 
 	public static void closeEditorsFiltered(final EditorFilter filter) {
 		forEachOpenEditorFiltered(filter, CloseEditor);
+	}
+
+	public static void refreshPropertySheetWithSelection(final IEditorPart activeEditor, final GraphicalViewer viewer,
+			final Object obj) {
+		viewer.select((EditPart) obj);
+		final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.findView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
+		if (view instanceof PropertySheet) {
+			((PropertySheet) view).selectionChanged(activeEditor, viewer.getSelection());
+		}
 	}
 }

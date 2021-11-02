@@ -38,7 +38,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.gef.EditPart;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -70,10 +70,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class StructManipulatorSection extends AbstractSection
@@ -201,17 +199,13 @@ implements CommandStackEventListener {
 		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
 			viewer.flush();
-			final Object obj = viewer.getEditPartRegistry().get(newMux);
-			viewer.select((EditPart) obj);
-			final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.findView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
-			if(view instanceof PropertySheet) {
-				((PropertySheet) view).selectionChanged(activeEditor, viewer.getSelection());
-			}
-
+			EditorUtils.refreshPropertySheetWithSelection(activeEditor, viewer,
+					viewer.getEditPartRegistry().get(newMux));
 		}
 
 	}
+
+
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {

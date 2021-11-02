@@ -313,4 +313,13 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		}
 
 	}
+
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getEditPartRegistry().get(fbType);
+	}
+
 }
