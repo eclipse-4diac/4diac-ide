@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
+import org.eclipse.draw2d.FreeformFigure;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.Viewport;
@@ -53,11 +55,60 @@ public class AdvancedZoomManager extends ZoomManager {
 	@Override
 	protected void primSetZoom(final double zoom) {
 		final Point newViewLocation = (null == lastMousePos) ? takeMiddPosition(zoom) : calcNewViewLocation(zoom);
-
 		super.primSetZoom(zoom);
-
 		setViewLocation(newViewLocation);
 	}
+
+	@Override
+	protected double getFitHeightZoomLevel() {
+		return getFitXZoomLevelBounds(1);
+	}
+
+	@Override
+	protected double getFitPageZoomLevel() {
+		return getFitXZoomLevelBounds(2);
+	}
+
+	@Override
+	protected double getFitWidthZoomLevel() {
+		return getFitXZoomLevelBounds(0);
+	}
+
+	/** This method is copied from {@link ZoomManager} and adjusted such that it uses the bounds of the figure to
+	 * correctly take the modulo figure into account.
+	 *
+	 * See {@link ZoomManager#getFitXZoomLevel(final int which)} for the original implementation. */
+	private double getFitXZoomLevelBounds(final int which) {
+		IFigure fig = getScalableFigure();
+
+		final Dimension available = getViewport().getClientArea().getSize();
+		Dimension desired;
+		if (fig instanceof FreeformFigure) {
+			desired = ((FreeformFigure) fig).getBounds().getSize();
+		} else {
+			desired = fig.getPreferredSize().getCopy();
+		}
+
+		desired.width -= fig.getInsets().getWidth();
+		desired.height -= fig.getInsets().getHeight();
+
+		while (fig != getViewport()) {
+			available.width -= fig.getInsets().getWidth();
+			available.height -= fig.getInsets().getHeight();
+			fig = fig.getParent();
+		}
+
+		final double scaleX = Math.min(available.width * getZoom() / desired.width, getMaxZoom());
+		final double scaleY = Math.min(available.height * getZoom() / desired.height, getMaxZoom());
+		if (which == 0) {
+			return scaleX;
+		}
+		if (which == 1) {
+			return scaleY;
+		}
+		return Math.min(scaleX, scaleY);
+	}
+
 
 	/*
 	 * In order to keep the target under the mouse stable we have to calculate the
