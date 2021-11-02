@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *               - extracted breadcrumb based editor to model.ui
  *   Michael Oberlehner, Alois Zoitl
  *               - implemented save and restore state
+ *   Daniel Lindhuber - auto reload remembers editor location
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
@@ -376,18 +378,22 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	@Override
 	public void reloadFile() {
 		final CommandStack commandStack = system.getCommandStack();
-		// TODO save state in memento and restore
+
+		final String path = getBreadcrumb().serializePath();
+
 		system = SystemManager.INSTANCE.replaceSystemFromFile(system, getFile());
 
 		system.setCommandStack(commandStack);
 		getCommandStack().flush();
 
-		if (!system.getApplication().isEmpty()) {
-			OpenListenerManager.openEditor(system.getApplication().get(0));
-		} else {
-			EditorUtils.CloseEditor.run(this);
+		if (!getBreadcrumb().openPath(path, system)) {
+			if (!system.getApplication().isEmpty()) {
+				OpenListenerManager.openEditor(system.getApplication().get(0));
+			} else {
+				EditorUtils.CloseEditor.run(this);
+			}
+			showReloadErrorMessage(path);
 		}
-
 	}
 
 	@Override

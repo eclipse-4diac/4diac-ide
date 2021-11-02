@@ -240,10 +240,14 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	public void reloadType(final FBType type) {
 		if (type instanceof SubAppType) {
+			final String path = getBreadcrumb().serializePath();
 			getEditorInput().setFbType(type);
 			removePage(getActivePage());
 			createPages();
-			getBreadcrumb().setInput(type);
+			if (!getBreadcrumb().openPath(path, (SubAppType) type)) {
+				getBreadcrumb().setInput(type);
+				showReloadErrorMessage(path);
+			}
 		} else {
 			EditorUtils.CloseEditor.run(this);
 		}

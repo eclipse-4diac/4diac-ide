@@ -95,6 +95,10 @@ public class BreadcrumbItem {
 		return current;
 	}
 
+	public String getText() {
+		return labelProvider.getText(current);
+	}
+
 	void dispose() {
 		text.dispose();
 		if (arrow != null) {
