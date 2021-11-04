@@ -18,21 +18,13 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 
-/**
- * The Class SetTestValueEditPolicy.
- */
+/** EditPolicy for editable data fields */
 public class SetTestValueEditPolicy extends DirectEditPolicy {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editpolicies.DirectEditPolicy#getDirectEditCommand(org.
-	 * eclipse.gef.requests.DirectEditRequest)
-	 */
 	@Override
 	protected Command getDirectEditCommand(DirectEditRequest request) {
 		if (getHost() instanceof TestEditPart) {
-			TestEditPart testEditPart = (TestEditPart) getHost();
+			final TestEditPart testEditPart = (TestEditPart) getHost();
 			testEditPart.getModel().setValue((String) request.getCellEditor().getValue());
 			testEditPart.refresh();
 
@@ -50,17 +42,11 @@ public class SetTestValueEditPolicy extends DirectEditPolicy {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editpolicies.DirectEditPolicy#showCurrentEditValue(org.
-	 * eclipse.gef.requests.DirectEditRequest)
-	 */
 	@Override
 	protected void showCurrentEditValue(DirectEditRequest request) {
-		String value = (String) request.getCellEditor().getValue();
+		final String value = (String) request.getCellEditor().getValue();
 		if (getHost() instanceof AbstractViewEditPart) {
-			AbstractViewEditPart viewEditPart = (AbstractViewEditPart) getHost();
+			final AbstractViewEditPart viewEditPart = (AbstractViewEditPart) getHost();
 			viewEditPart.getNameLabel().setText(value);
 		}
 	}

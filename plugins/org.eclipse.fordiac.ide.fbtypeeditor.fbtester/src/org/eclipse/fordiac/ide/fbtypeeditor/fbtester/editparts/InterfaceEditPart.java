@@ -51,108 +51,59 @@ public class InterfaceEditPart extends org.eclipse.fordiac.ide.gef.editparts.Int
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.gef.editparts.AbstractGraphicalEditPart#getModelSourceConnections
-	 * ()
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected List getModelSourceConnections() {
+	protected List<With> getModelSourceConnections() {
 		if (isEvent()) {
 			return ((Event) getModel()).getWith();
 		}
 		return Collections.emptyList();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.gef.editparts.AbstractGraphicalEditPart#getModelTargetConnections
-	 * ()
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected List getModelTargetConnections() {
+	protected List<With> getModelTargetConnections() {
 		if (isVariable()) {
 			return ((VarDeclaration) getModel()).getWiths();
 		}
 		return Collections.emptyList();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
-	 * ConnectionEditPart)
-	 */
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
-		int pos = 1;
+		return getWithAnchors(connection);
+	}
+
+	private ConnectionAnchor getWithAnchors(final ConnectionEditPart connection) {
 		if (isInput()) {
-			pos = calculateInputWithPos(connection);
-			return new InputWithAnchor(getFigure(), pos, this);
+			return new InputWithAnchor(getFigure(), calculateInputWithPos(connection), this);
 		}
-		pos = calculateOutputWithPos(connection);
-		return new OutputWithAnchor(getFigure(), pos, this);
+		return new OutputWithAnchor(getFigure(), calculateOutputWithPos(connection), this);
 	}
 
 	private static int calculateInputWithPos(final ConnectionEditPart connection) {
-		int pos;
 		final With with = (With) connection.getModel();
 		final Event event = (Event) with.eContainer();
 		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
-		pos = interfaceList.getEventInputs().indexOf(event) + 1;
-		return pos;
+		return interfaceList.getEventInputs().indexOf(event) + 1;
 	}
 
 	private static int calculateOutputWithPos(final ConnectionEditPart connection) {
-		int pos;
 		final With with = (With) connection.getModel();
 		final Event event = (Event) with.eContainer();
 
 		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
-		pos = interfaceList.getEventOutputs().indexOf(event) + 1;
-		return pos;
+		return interfaceList.getEventOutputs().indexOf(event) + 1;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
-	 * Request)
-	 */
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
 		return new ChopboxAnchor(getFigure());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
-	 * ConnectionEditPart)
-	 */
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
-		int pos = 1;
-		if (isInput()) {
-			pos = calculateInputWithPos(connection);
-			return new InputWithAnchor(getFigure(), pos, this);
-		}
-		pos = calculateOutputWithPos(connection);
-		return new OutputWithAnchor(getFigure(), pos, this);
+		return getWithAnchors(connection);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
-	 * Request)
-	 */
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
 		return new ChopboxAnchor(getFigure());

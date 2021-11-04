@@ -45,9 +45,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
-/**
- * The Class TestEditPart.
- */
+/** The Class TestEditPart. */
 public class TestEditPart extends AbstractViewEditPart implements SpecificLayerEditPart {
 
 	/** The parent part. */
@@ -57,13 +55,13 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		return parentPart;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void activate() {
 		super.activate();
+		@SuppressWarnings("rawtypes")
 		final Set set = getViewer().getEditPartRegistry().keySet();
 		for (final Object object : set) {
-			if ((object instanceof IInterfaceElement)
+			if (object instanceof IInterfaceElement
 					&& ((IInterfaceElement) object).equals(getModel().getInterfaceElement())) {
 				final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
 				if (part instanceof org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) {
@@ -94,11 +92,9 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		registerElement();
 	}
 
-	/**
-	 * Set the background color of this editparts figure
+	/** Set the background color of this editparts figure
 	 *
-	 * @param color
-	 */
+	 * @param color */
 	public void setBackgroundColor(final Color color) {
 		getFigure().setBackgroundColor(color);
 	}
@@ -109,36 +105,28 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		getNameLabel().setToolTip(new Label(getModel().getValue()));
 	}
 
-	/**
-	 * Register element.
-	 */
+	/** Register element. */
 	protected void registerElement() {
 		TestingManager.getInstance().addTestElement(getModel());
 	}
 
-	/**
-	 * Checks if is input.
+	/** Checks if is input.
 	 *
-	 * @return true, if is input
-	 */
+	 * @return true, if is input */
 	public boolean isInput() {
 		return getModel().getInterfaceElement().isIsInput();
 	}
 
-	/**
-	 * Checks if is event.
+	/** Checks if is event.
 	 *
-	 * @return true, if is event
-	 */
+	 * @return true, if is event */
 	public boolean isEvent() {
 		return getModel().getInterfaceElement() instanceof Event;
 	}
 
-	/**
-	 * Checks if is variable.
+	/** Checks if is variable.
 	 *
-	 * @return true, if is variable
-	 */
+	 * @return true, if is variable */
 	public boolean isVariable() {
 		return getModel().getInterfaceElement() instanceof VarDeclaration;
 	}
@@ -149,9 +137,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	/** The oldy. */
 	protected int oldy;
 
-	/**
-	 * Update pos.
-	 */
+	/** Update pos. */
 	protected void updatePos() {
 		if (null != parentPart) {
 			final String label = ((Label) getFigure()).getText();
@@ -179,11 +165,9 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		}
 	}
 
-	/**
-	 * Gets the casted model.
+	/** Gets the casted model.
 	 *
-	 * @return the casted model
-	 */
+	 * @return the casted model */
 	@Override
 	public TestElement getModel() {
 		return (TestElement) super.getModel();
@@ -289,11 +273,9 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		return ZoomScalableFreeformRootEditPart.TOP_LAYER;
 	}
 
-	/**
-	 * Sets the value.
+	/** Sets the value.
 	 *
-	 * @param string the new value
-	 */
+	 * @param string the new value */
 	public void setValue(final String string) {
 		if (isActive() && getFigure() != null) {
 			((Label) getFigure()).setText(string);
