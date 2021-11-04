@@ -41,10 +41,10 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.swt.custom.CCombo;
 
 public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
@@ -150,8 +150,9 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {
 					final int index = ((Integer) request.getCellEditor().getValue()).intValue();
-					if (index > 0 && index < ((ComboDirectEditManager) getManager()).getComboBox().getItemCount()) {
-						final String typeName = ((ComboDirectEditManager) getManager()).getComboBox().getItem(index);
+					final CCombo combo = (CCombo) request.getCellEditor().getControl();
+					if (index > 0 && index < combo.getItemCount()) {
+						final String typeName = combo.getItem(index);
 						ChangeDataTypeCommand cmd;
 						if (getCastedModel() instanceof AdapterDeclaration) {
 							// TODO change to own command in order to update cfb internals
@@ -188,7 +189,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	}
 
 	@Override
-	protected DirectEditManager createDirectEditManager() {
+	protected ComboDirectEditManager createDirectEditManager() {
 		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(comment), comment);
 	}
 
@@ -204,9 +205,10 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 				dataTypeNames.add(dataType.getName());
 			}
 		}
-		((ComboDirectEditManager) getManager()).updateComboData(dataTypeNames);
-		((ComboDirectEditManager) getManager()).setSelectedItem(dataTypeNames.indexOf(getTypeName()));
-		getManager().show();
+		final ComboDirectEditManager editManager = createDirectEditManager();
+		editManager.updateComboData(dataTypeNames);
+		editManager.setSelectedItem(dataTypeNames.indexOf(getTypeName()));
+		editManager.show();
 	}
 
 	@Override

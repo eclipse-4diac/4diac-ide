@@ -106,15 +106,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		}
 	}
 
-	public void performDirectEdit(final char initialCharacter, final boolean isLeft) {
-		if (getManager(isLeft) instanceof LabelDirectEditManager) {
-			((LabelDirectEditManager) getManager(isLeft)).show(initialCharacter);
-		} else {
-			performDirectEdit(isLeft);
-		}
-	}
-
-	public void performDirectEdit(final boolean isLeft) {
+	private void performDirectEdit(final boolean isLeft) {
 		getManager(isLeft).show();
 	}
 

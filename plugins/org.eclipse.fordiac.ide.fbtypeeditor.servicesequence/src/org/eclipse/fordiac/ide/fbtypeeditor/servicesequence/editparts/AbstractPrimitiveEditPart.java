@@ -224,11 +224,6 @@ implements NodeEditPart, IChangeStringEditPart {
 		return ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager();
 	}
 
-	@Override
-	public void performDirectEdit() {
-		getManager().show();
-	}
-
 	private static List<String> getRelevantEvents(final EditPart editPart, final Primitive primitive) {
 		final List<String> events = new ArrayList<>();
 		if (editPart instanceof InputPrimitiveEditPart) {

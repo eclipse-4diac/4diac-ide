@@ -62,7 +62,6 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 	private final FBNetwork fbNetwork;
 	private final Palette palette;
-	private NewInstanceDirectEditManager manager;
 
 	public FBNetworkRootEditPart(final FBNetwork fbNetwork, final Palette palette, final IWorkbenchPartSite site,
 			final ActionRegistry actionRegistry) {
@@ -91,15 +90,12 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		}
 	}
 
-	private NewInstanceDirectEditManager getManager() {
-		if (null == manager) {
-			manager = new NewInstanceDirectEditManager(this, palette, false);
-		}
-		return manager;
+	private NewInstanceDirectEditManager createDirectEditManager() {
+		return new NewInstanceDirectEditManager(this, palette, false);
 	}
 
 	void performDirectEdit(final SelectionRequest request) {
-		final NewInstanceDirectEditManager directEditManager = getManager();
+		final NewInstanceDirectEditManager directEditManager = createDirectEditManager();
 		directEditManager.updateRefPosition(new Point(request.getLocation().x, request.getLocation().y));
 		if (request.getExtendedData().isEmpty()) {
 			directEditManager.show();
@@ -139,7 +135,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	private Point getInsertPos() {
-		final Point location = getManager().getLocator().getRefPoint();
+		final Point location = createDirectEditManager().getLocator().getRefPoint();
 		final FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
 		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
 		location.x += viewLocation.x;

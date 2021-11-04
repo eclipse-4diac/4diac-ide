@@ -42,7 +42,6 @@ import org.eclipse.swt.graphics.RGB;
 
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
-	private DirectEditManager manager;
 
 	private Adapter adapter;
 
@@ -197,19 +196,12 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		}
 	}
 
-	protected DirectEditManager getManager() {
-		if (manager == null) {
-			manager = createDirectEditManager();
-		}
-		return manager;
-	}
-
 	protected DirectEditManager createDirectEditManager() {
 		return new LabelDirectEditManager(this, getNameLabel());
 	}
 
 	protected void performDirectEdit() {
-		getManager().show();
+		createDirectEditManager().show();
 	}
 
 	public void setTransparency(final int value) {

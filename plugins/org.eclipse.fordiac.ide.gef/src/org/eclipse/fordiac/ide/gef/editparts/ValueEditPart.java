@@ -54,7 +54,6 @@ import org.eclipse.swt.widgets.Display;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
-	private DirectEditManager manager;
 	private EditPart context;
 	private InterfaceEditPart parentPart;
 
@@ -144,9 +143,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	public void deactivate() {
 		super.deactivate();
 		getModel().eAdapters().remove(contentAdapter);
-		if (manager != null) {
-			manager = null;
-		}
 	}
 
 	private final Adapter contentAdapter = new AdapterImpl() {
@@ -319,16 +315,13 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	/** Gets the manager.
 	 *
 	 * @return the manager */
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			manager = new LabelDirectEditManager(this, getFigure());
-		}
-		return manager;
+	public DirectEditManager createDirectEditManager() {
+		return new LabelDirectEditManager(this, getFigure());
 	}
 
 	/** performs the directEdit. */
 	public void performDirectEdit() {
-		getManager().show();
+		createDirectEditManager().show();
 	}
 
 	/* (non-Javadoc)
