@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2020 Johannes Kepler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  * 
  *   Ernst Blecha - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - fixes partial index validator for primary variables
+ * 		and adds one for adapter variables
  */
 package org.eclipse.fordiac.ide.model.structuredtext.validation;
 
@@ -17,6 +20,8 @@ import com.google.common.base.Objects;
 import java.util.Arrays;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
@@ -35,31 +40,127 @@ import org.eclipse.xtext.validation.Check;
  */
 @SuppressWarnings("all")
 public class StructuredTextValidator extends AbstractStructuredTextValidator {
-  private boolean isIndexInRange(final PartialAccess p, final int start, final int stop) {
-    return ((p.getIndex() >= start) && (p.getIndex() <= stop));
+  private boolean isPartialIndexInDataType(final Variable variable) {
+    boolean _xblockexpression = false;
+    {
+      final int varBitSize = this.BitSize(variable);
+      final int partSize = this.BitSize(variable.getPart());
+      final int index = variable.getPart().getIndex();
+      final int startIndex = (index * partSize);
+      final int endIndex = (startIndex + partSize);
+      _xblockexpression = (endIndex > varBitSize);
+    }
+    return _xblockexpression;
   }
   
   @Check
   public void checkPartialAccess(final PrimaryVariable v) {
     PartialAccess _part = v.getPart();
-    boolean _tripleNotEquals = (null != _part);
+    boolean _tripleNotEquals = (_part != null);
     if (_tripleNotEquals) {
-      PartialAccess _part_1 = v.getPart();
-      int _arraySize = v.getVar().getArraySize();
-      int _minus = (_arraySize - 1);
-      boolean _isIndexInRange = this.isIndexInRange(_part_1, 0, _minus);
-      boolean _not = (!_isIndexInRange);
-      if (_not) {
+      boolean _isPartialIndexInDataType = this.isPartialIndexInDataType(v);
+      if (_isPartialIndexInDataType) {
         this.error("Incorrect partial access: index not within limits.", StructuredTextPackage.Literals.PRIMARY_VARIABLE__VAR);
       }
     }
   }
   
-  private int _BitSize(final VarDeclaration v) {
-    return this.BitSize(this.extractTypeInformation(v));
+  @Check
+  public void checkPartialAccess(final AdapterVariable v) {
+    PartialAccess _part = v.getPart();
+    boolean _tripleNotEquals = (_part != null);
+    if (_tripleNotEquals) {
+      boolean _isPartialIndexInDataType = this.isPartialIndexInDataType(v);
+      if (_isPartialIndexInDataType) {
+        this.error("Incorrect partial access: index not within limits.", StructuredTextPackage.Literals.ADAPTER_VARIABLE__VAR);
+      }
+    }
   }
   
-  private int _BitSize(final PrimaryVariable v) {
+  private int _BitSize(final PartialAccess part) {
+    int _xifexpression = (int) 0;
+    if ((part != null)) {
+      int _xifexpression_1 = (int) 0;
+      boolean _isBitaccess = part.isBitaccess();
+      if (_isBitaccess) {
+        _xifexpression_1 = this.BitSize(IecTypes.ElementaryTypes.BOOL);
+      } else {
+        int _xifexpression_2 = (int) 0;
+        boolean _isByteaccess = part.isByteaccess();
+        if (_isByteaccess) {
+          _xifexpression_2 = this.BitSize(IecTypes.ElementaryTypes.BYTE);
+        } else {
+          int _xifexpression_3 = (int) 0;
+          boolean _isWordaccess = part.isWordaccess();
+          if (_isWordaccess) {
+            _xifexpression_3 = this.BitSize(IecTypes.ElementaryTypes.WORD);
+          } else {
+            int _xifexpression_4 = (int) 0;
+            boolean _isDwordaccess = part.isDwordaccess();
+            if (_isDwordaccess) {
+              _xifexpression_4 = this.BitSize(IecTypes.ElementaryTypes.DWORD);
+            } else {
+              _xifexpression_4 = 0;
+            }
+            _xifexpression_3 = _xifexpression_4;
+          }
+          _xifexpression_2 = _xifexpression_3;
+        }
+        _xifexpression_1 = _xifexpression_2;
+      }
+      _xifexpression = _xifexpression_1;
+    } else {
+      _xifexpression = 0;
+    }
+    return _xifexpression;
+  }
+  
+  private int _BitSize(final PrimaryVariable variable) {
+    return this.BitSize(variable.getVar().getType());
+  }
+  
+  private int _BitSize(final AdapterVariable variable) {
+    return this.BitSize(variable.getVar().getType());
+  }
+  
+  private int _BitSize(final DataType type) {
+    int _switchResult = (int) 0;
+    boolean _matched = false;
+    if (Objects.equal(type, IecTypes.ElementaryTypes.LWORD)) {
+      _matched=true;
+      _switchResult = 64;
+    }
+    if (!_matched) {
+      if (Objects.equal(type, IecTypes.ElementaryTypes.DWORD)) {
+        _matched=true;
+        _switchResult = 32;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(type, IecTypes.ElementaryTypes.WORD)) {
+        _matched=true;
+        _switchResult = 16;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(type, IecTypes.ElementaryTypes.BYTE)) {
+        _matched=true;
+        _switchResult = 8;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(type, IecTypes.ElementaryTypes.BOOL)) {
+        _matched=true;
+        _switchResult = 1;
+      }
+    }
+    if (!_matched) {
+      _switchResult = 0;
+    }
+    return _switchResult;
+  }
+  
+  private int _BitSize(final VarDeclaration v) {
     return this.BitSize(this.extractTypeInformation(v));
   }
   
@@ -270,8 +371,14 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
       return _BitSize((LocalVariable)v);
     } else if (v instanceof VarDeclaration) {
       return _BitSize((VarDeclaration)v);
+    } else if (v instanceof DataType) {
+      return _BitSize((DataType)v);
+    } else if (v instanceof AdapterVariable) {
+      return _BitSize((AdapterVariable)v);
     } else if (v instanceof PrimaryVariable) {
       return _BitSize((PrimaryVariable)v);
+    } else if (v instanceof PartialAccess) {
+      return _BitSize((PartialAccess)v);
     } else if (v instanceof String) {
       return _BitSize((String)v);
     } else {
