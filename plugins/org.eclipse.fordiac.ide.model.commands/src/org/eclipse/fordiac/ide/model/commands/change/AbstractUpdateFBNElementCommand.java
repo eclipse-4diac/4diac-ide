@@ -126,13 +126,19 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			unmapCmd.redo();
 		}
 
+		// deletion has to be done before old element is removed
+		if (errorMarkerBuilder != null && onlyOldElementIsErrorMarker()) {
+			FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) oldElement);
+		}
+
 		network.getNetworkElements().add(newElement);
 		reconnCmds.redo();
 		network.getNetworkElements().remove(oldElement);
 
 		errorPins.forEach(FordiacMarkerHelper::createMarkerInFile);
 
-		if (errorMarkerBuilder != null && newElement instanceof ErrorMarkerRef) {
+		// creation has to be done after new element is inserted
+		if (errorMarkerBuilder != null && onlyNewElementIsErrorMarker()) {
 			FordiacMarkerHelper.createMarkerInFile(errorMarkerBuilder);
 		}
 
@@ -151,13 +157,19 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 		errorPins.stream().map(ErrorMarkerBuilder::getErrorMarkerRef).forEach(FordiacMarkerHelper::deleteErrorMarker);
 
-		if (errorMarkerBuilder != null && newElement instanceof ErrorMarkerRef) {
+		// the deletion has to be done before the new element is removed
+		if (errorMarkerBuilder != null && onlyNewElementIsErrorMarker()) {
 			FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) newElement);
 		}
 
 		network.getNetworkElements().add(oldElement);
 		reconnCmds.undo();
 		network.getNetworkElements().remove(newElement);
+
+		// the creation has to be done after the old element was inserted
+		if (errorMarkerBuilder != null && onlyOldElementIsErrorMarker()) {
+			FordiacMarkerHelper.createMarkerInFile(errorMarkerBuilder);
+		}
 
 		if (unmapCmd != null) {
 			unmapCmd.undo();
@@ -262,7 +274,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 	}
 
 	private void handleErrorMarker() {
-		if ((!(oldElement instanceof ErrorMarkerFBNElement)) && newElement instanceof ErrorMarkerFBNElement) {
+		if (onlyNewElementIsErrorMarker()) {
 			final String errorMessage = MessageFormat.format("Type File: {0} could not be loaded for FB", //$NON-NLS-1$
 					entry.getFile() != null ? entry.getFile().getFullPath() : "null type"); //$NON-NLS-1$
 			errorMarkerBuilder = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement, 0);
@@ -276,6 +288,18 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			copyErrorMarkerRef();
 		}
 
+		if (onlyOldElementIsErrorMarker()) {
+			errorMarkerBuilder = FordiacMarkerHelper.deleteErrorMarker((ErrorMarkerRef) oldElement);
+		}
+
+	}
+
+	private boolean onlyNewElementIsErrorMarker() {
+		return (!(oldElement instanceof ErrorMarkerFBNElement)) && newElement instanceof ErrorMarkerFBNElement;
+	}
+
+	private boolean onlyOldElementIsErrorMarker() {
+		return oldElement instanceof ErrorMarkerFBNElement && !(newElement instanceof ErrorMarkerFBNElement);
 	}
 
 	private void copyErrorMarkerRef() {
