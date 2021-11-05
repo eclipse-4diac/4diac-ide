@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmenda, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
@@ -38,7 +38,7 @@ public final class VariableUtils {
 					BoolType.class, v -> v.setValue("false") //$NON-NLS-1$
 					);
 
-	public static void initVariable(VarDeclaration varDeclaration, DataTypeLibrary lib) {
+	public static void initVariable(final VarDeclaration varDeclaration, final DataTypeLibrary lib) {
 		// first set type, then add value
 		if (varDeclaration.getType() == null) {
 			varDeclaration.setType(lib.getType(varDeclaration.getTypeName()));
@@ -56,22 +56,22 @@ public final class VariableUtils {
 	}
 
 	//Init all FB Variables
-	public static void fBVariableInitialization(BasicFBType basicFbType) {
+	public static void fBVariableInitialization(final BasicFBType basicFbType) {
 		final var lib = new DataTypeLibrary();
 		initInternalVars(basicFbType, lib);
 		initInputVars(basicFbType, lib);
 		initOutputVars(basicFbType, lib);
 	}
 
-	public static void initOutputVars(BasicFBType basicFbType, DataTypeLibrary lib) {
+	public static void initOutputVars(final BasicFBType basicFbType, final DataTypeLibrary lib) {
 		basicFbType.getInterfaceList().getOutputVars().forEach(outputVar -> VariableUtils.initVariable(outputVar, lib));
 	}
 
-	public static void initInputVars(BasicFBType basicFbType, DataTypeLibrary lib) {
+	public static void initInputVars(final BasicFBType basicFbType, final DataTypeLibrary lib) {
 		basicFbType.getInterfaceList().getInputVars().forEach(inputVar -> VariableUtils.initVariable(inputVar, lib));
 	}
 
-	public static void initInternalVars(BasicFBType basicFbType, DataTypeLibrary lib) {
+	public static void initInternalVars(final BasicFBType basicFbType, final DataTypeLibrary lib) {
 		basicFbType.getInternalVars().forEach(interVar -> VariableUtils.initVariable(interVar, lib));
 	}
 }

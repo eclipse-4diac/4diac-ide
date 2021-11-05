@@ -21,8 +21,9 @@ import org.eclipse.emf.ecore.resource.Resource.Factory;
 public class FunctionBlockFactory implements Factory {
 
 	@Override
-	public Resource createResource(URI uri) {
+	public Resource createResource(final URI uri) {
 		return new FunctionBlockResource(uri);		
 	}
 	
 }
+

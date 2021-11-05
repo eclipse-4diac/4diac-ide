@@ -11,7 +11,7 @@
  *   Antonio Garmenda, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
+package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,119 +31,45 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.test.fb.interpreter.ModelDeserializer;
-import org.eclipse.fordiac.ide.test.fb.interpreter.ModelSerializer;
-import org.junit.Test;
 
-public abstract class AbstractInterpreterTest {
+public final class ServiceSequenceUtils {
+
+	public static final String EXTERNAL_INTERFACE = "external"; //$NON-NLS-1$
+	public static final String INTERNAL_INTERFACE = "internal"; //$NON-NLS-1$
 	public static final String START_STATE = "START"; //$NON-NLS-1$
 
-	static final ModelDeserializer deserializer = new ModelDeserializer();
-	static final ModelSerializer serializer = new ModelSerializer();
-
-	@Test
-	public abstract void test() throws IllegalArgumentException;
-
-	protected static BasicFBType loadFBType(final String name) {
-		return loadFBType(name, true);
+	public static Service createEmptyServiceModel() {
+		final Service s = LibraryElementFactory.eINSTANCE.createService();
+		final ServiceInterface left = LibraryElementFactory.eINSTANCE.createServiceInterface();
+		left.setName(EXTERNAL_INTERFACE);
+		final ServiceInterface right = LibraryElementFactory.eINSTANCE.createServiceInterface();
+		right.setName(INTERNAL_INTERFACE);
+		s.setLeftInterface(left);
+		s.setRightInterface(right);
+		addServiceSequence(s);
+		return s;
 	}
 
-	protected static BasicFBType loadFBType(final String name, final boolean emptyService) {
-		//TODO First, implement the load of Fordiac projects for unit testing
-		//final BasicFBType fbt = (BasicFBType) deserializer
-		//			.loadModel("inputmodelsfbt/" + name + ".fbt"); //$NON-NLS-1$ //$NON-NLS-2$
-		final BasicFBType fbt = (BasicFBType) deserializer
-				.loadModel("inputmodels/" + name + ".xmi"); //$NON-NLS-1$ //$NON-NLS-2$
-		if (emptyService) {
-			fbt.setService(ServiceSequenceUtils.createEmptyServiceModel());
-		}
-		return fbt;
+	public static ServiceSequence addServiceSequence(final org.eclipse.fordiac.ide.model.libraryElement.Service s) {
+		final ServiceSequence seq = LibraryElementFactory.eINSTANCE.createServiceSequence();
+		seq.setName("Test" + s.getServiceSequence().size()); //$NON-NLS-1$
+		s.getServiceSequence().add(seq);
+		return seq;
 	}
-
-	protected static ServiceTransaction addTransaction(final ServiceSequence seq, final FBTransaction fbtrans) {
-		final ServiceTransaction transaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
-		seq.getServiceTransaction().add(transaction);
-		if (fbtrans.getInputEvent() != null) {
-			final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
-			inputPrimitive.setEvent(fbtrans.getInputEvent());
-			transaction.setInputPrimitive(inputPrimitive);
-		}
-
-		if (!fbtrans.getOutputEvent().isEmpty()) {
-			for (final String event : fbtrans.getOutputEvent()) {
-				final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-				outputPrimitive.setEvent(event);
-				outputPrimitive.setInterface(((Service) seq.eContainer()).getLeftInterface());
-				outputPrimitive.setParameters(""); //$NON-NLS-1$
-				for (final String parameter : fbtrans.getOutputParameter()) {
-					outputPrimitive.setParameters(outputPrimitive.getParameters() + parameter + ";"); //$NON-NLS-1$
-				}
-				transaction.getOutputPrimitive().add(outputPrimitive);
-			}
-		}
-		return transaction;
-	}
-
-	public static void setVariable(final FBType fb, final String name, final String value) {
-		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name);
-		if (el instanceof VarDeclaration) {
-			final Value val = ((VarDeclaration) el).getValue();
-			if (val == null) {
-				((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
-			}
-			((VarDeclaration) el).getValue().setValue(value);
-		} else {
-			throw new IllegalArgumentException("variable does not exist in FB"); //$NON-NLS-1$
-		}
-	}
-
-	private static Collection<Transaction> createTransactions(final BasicFBType fb, final ServiceSequence seq,
-			final BasicFBTypeRuntime runtime) {
-		final List<Transaction> transactions = new ArrayList<>();
-		for (final ServiceTransaction st : seq.getServiceTransaction()) {
-			final String inputEvent = st.getInputPrimitive().getEvent();
-			if (inputEvent != null) {
-				final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
-				if (eventPin == null) {
-					throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist");  //$NON-NLS-1$//$NON-NLS-2$
-				}
-				final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-				eventOccurrence.setEvent(eventPin);
-				final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createTransaction();
-				transaction.setInputEventOccurrence(eventOccurrence);
-				// process parameter and set variables
-				final String inputParameters = st.getInputPrimitive().getParameters();
-				final var paramList = getParametersFromString(inputParameters);
-				for (final List<String> parameter : paramList) {
-					setVariable(fb, parameter.get(0), parameter.get(1));
-				}
-				transactions.add(transaction);
-			}
-		}
-		// The first transaction has a copy of the BasicFBTypeRuntime
-		final Copier copier = new Copier();
-		final BasicFBTypeRuntime copyBasicFBTypeRuntime = (BasicFBTypeRuntime) copier.copy(runtime);
-		copier.copyReferences();
-		transactions.get(0).getInputEventOccurrence().setFbRuntime(copyBasicFBTypeRuntime);
-		return transactions;
-	}
-
 
 	public static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq) throws IllegalArgumentException {
 		return runTest(fb, seq, START_STATE);
@@ -187,7 +113,6 @@ public abstract class AbstractInterpreterTest {
 		return next;
 	}
 
-
 	private static void checkResults(final ServiceSequence seq, final EventManager eventManager)
 			throws IllegalArgumentException {
 		final EList<ServiceTransaction> expectedResults = seq.getServiceTransaction();
@@ -204,6 +129,50 @@ public abstract class AbstractInterpreterTest {
 		}
 	}
 
+	private static Collection<Transaction> createTransactions(final BasicFBType fb, final ServiceSequence seq,
+			final BasicFBTypeRuntime runtime) {
+		final List<Transaction> transactions = new ArrayList<>();
+		for (final ServiceTransaction st : seq.getServiceTransaction()) {
+			final String inputEvent = st.getInputPrimitive().getEvent();
+			if (inputEvent != null) {
+				final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
+				if (eventPin == null) {
+					throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist");  //$NON-NLS-1$//$NON-NLS-2$
+				}
+				final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+				eventOccurrence.setEvent(eventPin);
+				final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createTransaction();
+				transaction.setInputEventOccurrence(eventOccurrence);
+				// process parameter and set variables
+				final String inputParameters = st.getInputPrimitive().getParameters();
+				final var paramList = getParametersFromString(inputParameters);
+				for (final List<String> parameter : paramList) {
+					setVariable(fb, parameter.get(0), parameter.get(1));
+				}
+				transactions.add(transaction);
+			}
+		}
+		// The first transaction has a copy of the BasicFBTypeRuntime
+		final Copier copier = new Copier();
+		final BasicFBTypeRuntime copyBasicFBTypeRuntime = (BasicFBTypeRuntime) copier.copy(runtime);
+		copier.copyReferences();
+		transactions.get(0).getInputEventOccurrence().setFbRuntime(copyBasicFBTypeRuntime);
+		return transactions;
+	}
+
+	public static void setVariable(final FBType fb, final String name, final String value) {
+		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name);
+		if (el instanceof VarDeclaration) {
+			final Value val = ((VarDeclaration) el).getValue();
+			if (val == null) {
+				((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
+			}
+			((VarDeclaration) el).getValue().setValue(value);
+		} else {
+			throw new IllegalArgumentException("variable does not exist in FB"); //$NON-NLS-1$
+		}
+	}
+
 	private static void checkTransaction(final Transaction result, final ServiceTransaction expectedResult) {
 		// input event was correctly generated
 		if (!result.getInputEventOccurrence().getEvent().getName()
@@ -213,9 +182,7 @@ public abstract class AbstractInterpreterTest {
 
 		// no unwanted output event occurrences
 		final long outputEvents = expectedResult.getOutputPrimitive().stream()
-				.filter(p -> !p.getInterface().getName().toLowerCase()
-						.contains(ServiceSequenceUtils.INTERNAL_INTERFACE))
-				.count();
+				.filter(p -> !p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)).count();
 		if (outputEvents != result.getOutputEventOccurences().size()) {
 			throw new IllegalArgumentException("Unwanted output event occurrence"); //$NON-NLS-1$
 		}
@@ -228,7 +195,7 @@ public abstract class AbstractInterpreterTest {
 	}
 
 	private static void checkOutputPrimitive(final Transaction result, final int j, final OutputPrimitive p) {
-		if (!p.getInterface().getName().toLowerCase().contains(ServiceSequenceUtils.INTERNAL_INTERFACE)) {
+		if (!p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)) {
 			// generated output event is correct
 			if (!p.getEvent().equals(result.getOutputEventOccurences().get(j).getEvent().getName())) {
 				throw new IllegalArgumentException("Generated output event is incorrect"); //$NON-NLS-1$
@@ -256,13 +223,6 @@ public abstract class AbstractInterpreterTest {
 		return true;
 	}
 
-	private static List<String> splitParameterList(final String parameters) {
-		if (parameters == null) {
-			return Collections.emptyList();
-		}
-		return Arrays.asList(parameters.split(";")); //$NON-NLS-1$
-	}
-
 	private static List<List<String>> getParametersFromString(final String parameters) {
 		final List<String> statementList = splitParameterList(parameters);
 		final var parameterList = new ArrayList<List<String>>();
@@ -271,6 +231,13 @@ public abstract class AbstractInterpreterTest {
 			parameterList.add(statement);
 		}
 		return parameterList;
+	}
+
+	private static List<String> splitParameterList(final String parameters) {
+		if (parameters == null) {
+			return Collections.emptyList();
+		}
+		return Arrays.asList(parameters.split(";")); //$NON-NLS-1$
 	}
 
 	private static boolean processParameter(final String varName, String expectedValue, final BasicFBType basicfbtype) {
@@ -301,5 +268,9 @@ public abstract class AbstractInterpreterTest {
 		}
 		return false;
 	}
-}
 
+	private ServiceSequenceUtils() {
+		throw new UnsupportedOperationException("utility class should not be instantiated"); //$NON-NLS-1$
+	}
+
+}

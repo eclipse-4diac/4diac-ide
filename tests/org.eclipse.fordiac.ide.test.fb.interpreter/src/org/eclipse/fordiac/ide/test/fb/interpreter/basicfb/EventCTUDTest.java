@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
@@ -33,7 +34,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		runTest(fb, seq);
 
-		seq = addServiceSequence(fb.getService());
+		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "2"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("LD", "LDO", "QU:=TRUE;QD:=FALSE;CV:=2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
@@ -43,7 +44,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		runTest(fb, seq);
 
-		seq = addServiceSequence(fb.getService());
+		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "2"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("LD", "LDO", "QU:=TRUE;QD:=FALSE;CV:=2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
@@ -51,7 +52,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		runTest(fb, seq);
 
-		seq = addServiceSequence(fb.getService());
+		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "2"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("R", "RO", "QU:=FALSE;QD:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
@@ -61,7 +62,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		runTest(fb, seq);
 
-		seq = addServiceSequence(fb.getService());
+		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "0"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("R", "RO", "QU:=TRUE;QD:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$

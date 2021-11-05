@@ -28,12 +28,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 
 public class SystemResource extends ResourceImpl {
 	
-	public SystemResource(URI uri) {
+	public SystemResource(final URI uri) {
 		super(uri);	
 	}
 	
 	@Override
-	protected void doSave(OutputStream outputStream, Map<?, ?> options) throws IOException {
+	protected void doSave(final OutputStream outputStream, final Map<?, ?> options) throws IOException {
 		saveSystem((AutomationSystem) getContents().get(0));
 	}
 	
@@ -49,3 +49,4 @@ public class SystemResource extends ResourceImpl {
 	}
 
 }
+

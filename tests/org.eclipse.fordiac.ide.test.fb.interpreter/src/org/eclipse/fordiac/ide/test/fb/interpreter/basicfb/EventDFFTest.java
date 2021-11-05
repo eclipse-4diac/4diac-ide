@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
@@ -69,7 +70,7 @@ public class EventDFFTest extends AbstractInterpreterTest {
 
 	private static ServiceSequence newServiceSequence(final BasicFBType fb) {
 		fb.getService().getServiceSequence().clear();
-		return addServiceSequence(fb.getService());
+		return ServiceSequenceUtils.addServiceSequence(fb.getService());
 	}
 
 
