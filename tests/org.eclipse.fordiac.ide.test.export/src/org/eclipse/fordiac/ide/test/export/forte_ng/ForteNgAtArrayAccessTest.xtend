@@ -46,64 +46,43 @@ class ForteNgAtArrayAccessTest extends ExporterTestBasicFBTypeBase {
 		return Stream.of(
 				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
 				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
-				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1,
-						VALUE_TRUE, INVALID_ACCESS ), //
+
 				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
 				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
-				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1, VALUE_TRUE,
-						INVALID_ACCESS ), //
+
 
 				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
 				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
-				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1,
-						VALUE_FALSE, INVALID_ACCESS ), //
+
 				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
 				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
-				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1, VALUE_FALSE,
-						INVALID_ACCESS ), //
+
 
 				Arguments.of( DWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(DWORD, BYTE), 0, VALUE_42, VALID_ACCESS ), //
-				Arguments.of( DWORD, BYTE, BYTEACCESS, INDEX_START, 1, 2, VALUE_42, INVALID_ACCESS ), //
-				Arguments.of( DWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(DWORD, BYTE), indexStop(DWORD, BYTE) + 1, VALUE_42,
-						INVALID_ACCESS ), //
 
 				Arguments.of( DWORD, WORD, WORDACCESS, INDEX_START, indexStop(DWORD, WORD), 0, VALUE_42, VALID_ACCESS ), //
-				Arguments.of( DWORD, WORD, WORDACCESS, INDEX_START, indexStop(DWORD, WORD), 2, VALUE_42, INVALID_ACCESS ), //
 
 				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
 				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
-				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1,
-						VALUE_TRUE, INVALID_ACCESS ), //
+
 				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
 				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
-				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1, VALUE_TRUE,
-						INVALID_ACCESS ), //
 
 				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
 				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
-				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1,
-						VALUE_FALSE, INVALID_ACCESS ), //
+
 				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
 				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
-				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1, VALUE_FALSE,
-						INVALID_ACCESS ), //
 
 				Arguments.of( LWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(LWORD, BYTE), 0, VALUE_42, VALID_ACCESS ), //
-				Arguments.of( LWORD, BYTE, BYTEACCESS, INDEX_START, 1, 2, VALUE_42, INVALID_ACCESS ), //
-				Arguments.of( LWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(LWORD, BYTE), indexStop(LWORD, BYTE) + 1, VALUE_42,
-						INVALID_ACCESS ), //
 
 				Arguments.of( LWORD, WORD, WORDACCESS, INDEX_START, indexStop(LWORD, WORD), 0, VALUE_42, VALID_ACCESS ), //
-				Arguments.of( LWORD, WORD, WORDACCESS, INDEX_START, indexStop(LWORD, WORD), indexStop(LWORD, WORD) + 1, VALUE_42,
-						INVALID_ACCESS ), //
 
-				Arguments.of( LWORD, DWORD, DWORDACCESS, INDEX_START, indexStop(LWORD, DWORD), 0, VALUE_42, VALID_ACCESS ), //
-				Arguments.of( LWORD, DWORD, DWORDACCESS, INDEX_START, indexStop(LWORD, DWORD), indexStop(LWORD, DWORD) + 1,
-						VALUE_42, INVALID_ACCESS ) //
+				Arguments.of( LWORD, DWORD, DWORDACCESS, INDEX_START, indexStop(LWORD, DWORD), 0, VALUE_42, VALID_ACCESS ) //
 			)
 		}
 
-	@ParameterizedTest(name = "{index}: {0}.{2}{5}={6}")
+	@ParameterizedTest(name = "{index}: {0}->{1}[{5}]={6} valid->{7}")
 	@MethodSource("testCases")
 	def locatedArrayAtAccess(String sourceType, String accessType, String accessor, int arrayStart, int arrayStop, int index, String value, boolean isValid) {
 		getFunctionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
@@ -112,7 +91,7 @@ class ForteNgAtArrayAccessTest extends ExporterTestBasicFBTypeBase {
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [«arrayStart»..«arrayStop»] OF «accessType»;
 		END_VAR
 
-		«VARIABLE2_NAME».«accessor»«index» := «value»;'''))
+		«VARIABLE2_NAME»[«index»] := «value»;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
@@ -122,7 +101,8 @@ class ForteNgAtArrayAccessTest extends ExporterTestBasicFBTypeBase {
 			assertEquals('''
 			CIEC_«sourceType» «EXPORTED_VARIABLE_NAME»;
 			ARRAY_AT<CIEC_«accessType», CIEC_«sourceType», «arrayStart», «arrayStop»> «EXPORTED_VARIABLE2_NAME»(«EXPORTED_VARIABLE_NAME»);
-			«EXPORTED_VARIABLE2_NAME».partial<CIEC_«accessType»,«index»>() = «value»;
+			«EXPORTED_VARIABLE2_NAME»[«index»]
+			 = «value»;
 			'''.toString(), generatedCode.toString())
 		} else {
 			assertErrors(errors)

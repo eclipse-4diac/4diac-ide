@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *  Ernst Blecha
  *    - initial API and implementation and/or initial documentation
+ *  Martin Melik Merkumians - adds DT keyword
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -115,6 +117,8 @@ public final class FordiacKeywords {
 	public static final String LDATE = "LDATE"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String DATE_AND_TIME = "DATE_AND_TIME"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE)
+	public static final String DT = "DT"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String LDATE_AND_TIME = "LDATE_AND_TIME"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
