@@ -337,20 +337,7 @@
             id="org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"
             label="Open Subapplication">
       </openListener>
-   </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            adaptable="false"
-            id="org.eclipse.fordiac.ide.application.objectContribution2"
-            objectClass="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
-         <action
-               class="org.eclipse.fordiac.ide.application.actions.RerouteAction"
-               id="org.eclipse.fordiac.ide.application.action2"
-               label="Redraw">
-         </action>
-      </objectContribution>
-   </extension>
+   </extension>   
    <extension
          point="org.eclipse.ui.views">
       <view
