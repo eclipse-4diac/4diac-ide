@@ -72,16 +72,16 @@ public abstract class AbstractStructTreeNode {
 	public AbstractStructTree<? extends AbstractStructTreeNode> getTree() {
 		return tree;
 	}
-	
+
 	public void setVariable(final VarDeclaration variable) {
 		this.variable = variable;
 	}
-	
+
 	public void setParent(final AbstractStructTreeNode parent) {
 		this.parent = parent;
 	}
 
-	protected void setTree(AbstractStructTree<? extends AbstractStructTreeNode> tree) {
+	protected void setTree(final AbstractStructTree<? extends AbstractStructTreeNode> tree) {
 		this.tree = tree;
 	}
 

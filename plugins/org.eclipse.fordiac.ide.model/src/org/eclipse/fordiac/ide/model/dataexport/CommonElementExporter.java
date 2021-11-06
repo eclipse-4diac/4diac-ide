@@ -52,7 +52,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 
-abstract class CommonElementExporter {
+class CommonElementExporter {
 
 	private static class ByteBufferInputStream extends InputStream {
 
@@ -279,7 +279,6 @@ abstract class CommonElementExporter {
 
 	//Write to File from OutputStream
 	protected void writeToFile(final OutputStream targetStream) {
-		final long startTime = System.currentTimeMillis();
 		try {
 			writer.writeCharacters(LINE_END);
 			writer.writeEndDocument();
