@@ -12,7 +12,6 @@ Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.0.qualifier
 Bundle-Name: Online Edit
-Bundle-Activator: org.eclipse.fordiac.ide.onlineedit.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.onlineedit;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11

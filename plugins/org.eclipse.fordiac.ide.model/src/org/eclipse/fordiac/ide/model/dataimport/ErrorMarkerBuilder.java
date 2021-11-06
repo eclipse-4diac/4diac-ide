@@ -29,7 +29,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -76,10 +75,8 @@ public class ErrorMarkerBuilder {
 				this.attributes = Collections.emptyMap();
 			}
 		} catch (final CoreException e) {
-			Activator.getDefault().getLog().error("Error Marker not found", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("Error Marker not found", e); //$NON-NLS-1$
 		}
-
-
 	}
 
 	public Map<String, Object> getAttributes() {

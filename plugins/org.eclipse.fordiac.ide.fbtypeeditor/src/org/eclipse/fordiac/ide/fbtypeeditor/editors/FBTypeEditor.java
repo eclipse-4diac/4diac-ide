@@ -40,7 +40,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.fbtypeeditor.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -83,6 +82,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.osgi.framework.FrameworkUtil;
 
 public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelectionListener, CommandStackEventListener,
 ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
@@ -179,7 +179,8 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			final IFile fbTypeFile = ((FileEditorInput) editorInput).getFile();
 			if (!fbTypeFile.exists()) {
 				throw new PartInitException(
-						new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.FBTypeEditor_TypeFileDoesnotExist));
+						new Status(IStatus.ERROR, FrameworkUtil.getBundle(getClass()).getSymbolicName(),
+								Messages.FBTypeEditor_TypeFileDoesnotExist));
 			}
 
 			paletteEntry = TypeLibrary.getPaletteEntryForFile(fbTypeFile);

@@ -20,7 +20,6 @@ Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.0.qualifier
 Bundle-Name: %pluginName
-Bundle-Activator: org.eclipse.fordiac.ide.deployment.ui.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.ui;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11

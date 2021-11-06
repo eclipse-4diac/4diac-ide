@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -46,7 +47,7 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 	public CreateFMUWizard() {
 		setWindowTitle(Messages.FordiacCreateFMUWizard_LABEL_Window_Title);
 
-		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings settings = DialogSettingsProvider.getDialogSettings(getClass());
 
 		final IDialogSettings dialogSettings = settings.getSection(FORDIAC_CREATE_FMU_SECTION);
 		if (dialogSettings == null) {

@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
-import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.IFBTestConfiguration;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.IFBTestConfiguratonCreator;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Messages;
@@ -49,6 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -80,7 +80,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	}
 
 	public FORTERemoteTester() {
-		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings settings = DialogSettingsProvider.getDialogSettings(getClass());
 		forteRemoteTesterSettings = settings.getSection(FORTE_REMOTE_TESTER_SETTINGS);
 		if (forteRemoteTesterSettings == null) {
 			forteRemoteTesterSettings = settings.addNewSection(FORTE_REMOTE_TESTER_SETTINGS);

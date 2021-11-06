@@ -25,4 +25,3 @@ Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.ui.workbench,
  org.eclipse.fordiac.ide.ui
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclipse.fordiac.ide.fb.interpreter.Activator
