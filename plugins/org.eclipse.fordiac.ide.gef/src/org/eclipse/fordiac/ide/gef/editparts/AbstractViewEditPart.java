@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -56,9 +57,9 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	private final Adapter iNamedElementContentAdapter = new AdapterImpl() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if (notification.getNotifier().equals(getINamedElement())) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
 					refreshName();
 				}
@@ -71,8 +72,8 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		}
 	};
 
-	protected void backgroundColorChanged(IFigure figure) {
-		Color fordiacColor = getBackgroundColor();
+	protected void backgroundColorChanged(final IFigure figure) {
+		final Color fordiacColor = getBackgroundColor();
 		setColor(figure, fordiacColor);
 	}
 
@@ -80,7 +81,7 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		return null;
 	}
 
-	protected void setColor(IFigure figure, Color fordiacColor) {
+	protected void setColor(final IFigure figure, final Color fordiacColor) {
 		org.eclipse.swt.graphics.Color newColor;
 		if (fordiacColor != null) {
 			newColor = ColorManager
@@ -171,8 +172,8 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 			if (f != null) {
 				backgroundColorChanged(f);
 			}
-		} catch (IllegalArgumentException e) {
-			Activator.getDefault().logError(ERROR_IN_CREATE_FIGURE, e);
+		} catch (final IllegalArgumentException e) {
+			FordiacLogHelper.logError(ERROR_IN_CREATE_FIGURE, e);
 		}
 		return f;
 	}
@@ -211,7 +212,7 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		getManager().show();
 	}
 
-	public void setTransparency(int value) {
+	public void setTransparency(final int value) {
 		if (getFigure() instanceof ITransparencyFigure) {
 			((ITransparencyFigure) getFigure()).setTransparency(value);
 		}

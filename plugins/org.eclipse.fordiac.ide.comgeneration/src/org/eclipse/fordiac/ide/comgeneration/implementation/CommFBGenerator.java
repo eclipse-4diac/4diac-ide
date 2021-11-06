@@ -20,7 +20,6 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGeneratorFactory;
-import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -39,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class CommFBGenerator {
 	private static final String GENERATED_ANNOTATION = "generatedComm"; //$NON-NLS-1$
@@ -80,7 +80,7 @@ public class CommFBGenerator {
 
 	private void generateFBs(final CommunicationChannelDestination destination) {
 		if (destination.getSelectedMedia() == null || destination.getSelectedProtocolId() == null) {
-			Activator.getDefault().logError(MessageFormat.format(Messages.CommFBGenerator_NoSelectionFor, destination));
+			FordiacLogHelper.logError(MessageFormat.format(Messages.CommFBGenerator_NoSelectionFor, destination));
 			return;
 		}
 		int numberDataPorts = 0;
@@ -107,7 +107,7 @@ public class CommFBGenerator {
 		final MediaSpecificGenerator specificGenerator = specificGeneratorFactory
 				.getForProtocolId(destination.getSelectedProtocolId());
 		if (specificGenerator == null) {
-			Activator.getDefault().logError(MessageFormat.format(Messages.CommFBGenerator_NoGeneratorForProtocol,
+			FordiacLogHelper.logError(MessageFormat.format(Messages.CommFBGenerator_NoGeneratorForProtocol,
 					destination.getSelectedProtocolId()));
 		} else {
 			final GeneratedFBInfo sourceGeneratedFBInfo = generateFB(ChannelEnd.SOURCE, numberDataPorts, withPorts,
@@ -252,7 +252,7 @@ public class CommFBGenerator {
 		if (sourceEvents.isEmpty()) {
 			final FB startFB = resource.getFBNetwork().getFBNamed("START"); //$NON-NLS-1$
 			if (startFB == null) {
-				Activator.getDefault().logError(
+				FordiacLogHelper.logError(
 						MessageFormat.format(Messages.CommFBGenerator_NoStartFBInResource, resource.getName()));
 				return;
 			}

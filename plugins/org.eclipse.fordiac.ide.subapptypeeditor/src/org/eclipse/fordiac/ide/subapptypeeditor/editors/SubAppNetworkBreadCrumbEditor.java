@@ -32,11 +32,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.subapptypeeditor.Activator;
 import org.eclipse.fordiac.ide.subapptypeeditor.providers.TypedSubappProviderAdapterFactory;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.CommandStack;
@@ -107,7 +107,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			// provided by the content
 			// providers
 		} catch (final PartInitException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 
@@ -231,9 +231,9 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-			return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker)
-					|| FordiacMarkerHelper.markerTargetsConnection(marker)
-					|| FordiacMarkerHelper.markerTargetsValue(marker);
+		return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker)
+				|| FordiacMarkerHelper.markerTargetsConnection(marker)
+				|| FordiacMarkerHelper.markerTargetsValue(marker);
 	}
 
 	@Override

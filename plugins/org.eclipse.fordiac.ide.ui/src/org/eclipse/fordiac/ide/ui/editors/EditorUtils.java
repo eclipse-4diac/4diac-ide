@@ -15,7 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.editors;
 
-import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -47,7 +47,7 @@ public final class EditorUtils {
 		try {
 			editor = activePage.openEditor(input, editorId);
 		} catch (final PartInitException e) {
-			UIPlugin.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		return editor;
 	}

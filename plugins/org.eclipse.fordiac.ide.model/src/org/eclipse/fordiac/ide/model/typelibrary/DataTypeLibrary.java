@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
@@ -33,6 +32,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class DataTypeLibrary {
 
@@ -102,7 +102,7 @@ public final class DataTypeLibrary {
 			type = getDerivedType(name);
 			if (null == type) {
 				// TODO reconsider if in this case a new type should be created
-				Activator.getDefault().logInfo("Missing Datatype: " + name); //$NON-NLS-1$
+				FordiacLogHelper.logInfo("Missing Datatype: " + name); //$NON-NLS-1$
 				type = DataFactory.eINSTANCE.createElementaryType();
 				type.setName(name);
 				typeMap.put(name, type);

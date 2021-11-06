@@ -30,8 +30,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -141,7 +141,7 @@ public class OpenTypeHandler extends AbstractHandler {
 		try {
 			members = container.members();
 		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			members = new IResource[0];
 		}
 		for (final IResource member : members) {
@@ -157,7 +157,7 @@ public class OpenTypeHandler extends AbstractHandler {
 		try {
 			members = container.members();
 		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			members = new IResource[0];
 		}
 		for (final IResource member : members) {
@@ -183,7 +183,7 @@ public class OpenTypeHandler extends AbstractHandler {
 				try {
 					activePage.openEditor(new FileEditorInput(file), desc.getId());
 				} catch (final PartInitException e1) {
-					Activator.getDefault().logError(e1.getMessage(), e1);
+					FordiacLogHelper.logError(e1.getMessage(), e1);
 					final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 					MessageDialog.openError(shell, Messages.OpenTypeHandler_OPEN_TYPE_ERROR_TITLE, Messages.OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE);
 				}

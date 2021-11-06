@@ -53,6 +53,7 @@ import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystem
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
@@ -86,7 +87,7 @@ public enum SystemManager {
 			// ensure dirty workspaces are cleaned before any type library is loaded
 			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		// Correctly setup the tool library needs to be done before loading any systems
 		// and adding the resource change listener
@@ -252,7 +253,7 @@ public enum SystemManager {
 			final long startTime = System.currentTimeMillis();
 			final AutomationSystem system = initSystem(systemFile);
 			final long endTime = System.currentTimeMillis();
-			Activator.getDefault().logInfo(
+			FordiacLogHelper.logInfo(
 					"Loading time for System (" + systemFile.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			return system;
 		});
@@ -281,7 +282,7 @@ public enum SystemManager {
 						}
 					}
 				} catch (final CoreException corex) {
-					Activator.getDefault().logError("Error loading TagProviders!", corex); //$NON-NLS-1$
+					FordiacLogHelper.logError("Error loading TagProviders!", corex); //$NON-NLS-1$
 				}
 			}
 		}
@@ -306,7 +307,7 @@ public enum SystemManager {
 			}
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			Activator.getDefault().logError("Error on creating TagProvider instance!", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("Error on creating TagProvider instance!", e); //$NON-NLS-1$
 			return null;
 		}
 		return provider;

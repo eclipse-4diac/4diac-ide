@@ -57,6 +57,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -135,7 +136,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 					((IFBTValidation) o).invokeValidation(fbType);
 				}
 			} catch (final CoreException ex) {
-				Activator.getDefault().logError(ex.getMessage(), ex);
+				FordiacLogHelper.logError(ex.getMessage(), ex);
 			}
 		}
 	}
@@ -266,7 +267,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 				setPageText(index, fbtEditorPart.getTitle());
 				setPageImage(index, fbtEditorPart.getTitleImage());
 			} catch (final PartInitException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 
 		}
@@ -292,7 +293,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 						}
 					}
 				} catch (final Exception e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}

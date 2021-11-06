@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class SystemContentProvider extends AdapterFactoryContentProvider implements DistributedSystemListener {
 
@@ -138,7 +138,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 			try {
 				return ((IContainer) resource).members();
 			} catch (final CoreException e) {
-				Activator.getDefault().logError("Could not read project children", e); //$NON-NLS-1$
+				FordiacLogHelper.logError("Could not read project children", e); //$NON-NLS-1$
 			}
 		}
 
@@ -155,7 +155,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		try {
 			return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
 		} catch (final CoreException e) {
-			Activator.getDefault().logError("Could not read project nature", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("Could not read project nature", e); //$NON-NLS-1$
 		}
 		return false;
 	}

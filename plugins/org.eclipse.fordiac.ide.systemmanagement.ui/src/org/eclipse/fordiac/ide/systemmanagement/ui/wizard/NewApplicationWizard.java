@@ -26,10 +26,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
 import org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -95,7 +95,7 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 			}
 
 		} catch (final ExecutionException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 

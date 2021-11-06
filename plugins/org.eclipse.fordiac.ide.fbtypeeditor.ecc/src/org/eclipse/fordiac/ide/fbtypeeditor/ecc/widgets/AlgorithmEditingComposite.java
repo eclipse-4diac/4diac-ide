@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.AbstractChangeAlgorithmTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTextCommand;
@@ -38,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -162,7 +162,7 @@ public abstract class AlgorithmEditingComposite {
 				try {
 					obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 				} catch (final Exception e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 				if (obj instanceof IAlgorithmEditorCreator) {
 					final IAlgorithmEditor editor = ((IAlgorithmEditorCreator) obj).createAlgorithmEditor(codeEditors,

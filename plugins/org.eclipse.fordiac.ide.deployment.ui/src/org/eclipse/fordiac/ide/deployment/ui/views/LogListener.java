@@ -15,8 +15,8 @@ package org.eclipse.fordiac.ide.deployment.ui.views;
 
 import java.text.MessageFormat;
 
-import org.eclipse.fordiac.ide.deployment.ui.Activator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
@@ -159,7 +159,7 @@ public class LogListener implements IDocumentListener {
 				} while (region != null);
 			}
 		} catch (final BadLocationException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
 	}

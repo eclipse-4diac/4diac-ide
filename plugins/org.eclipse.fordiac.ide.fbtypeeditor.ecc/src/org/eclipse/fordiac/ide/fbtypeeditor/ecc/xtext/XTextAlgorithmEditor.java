@@ -18,10 +18,10 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocumentListener;
@@ -143,7 +143,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 			prefixLineCount = getViewer().getDocument().getNumberOfLines(0, getViewer().getVisibleRegion().getOffset());
 			prefixLineCount--; // the first line starts after the prefix
 		} catch (final BadLocationException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
 		documentValid = true;

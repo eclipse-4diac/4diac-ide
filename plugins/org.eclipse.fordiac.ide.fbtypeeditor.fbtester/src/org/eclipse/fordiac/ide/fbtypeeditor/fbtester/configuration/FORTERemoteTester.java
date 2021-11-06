@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
@@ -147,10 +148,10 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 						t.start();
 						Thread.sleep(500);
 					} catch (final IOException e1) {
-						Activator.getDefault().logError(e1.getMessage(), e1);
+						FordiacLogHelper.logError(e1.getMessage(), e1);
 					} catch (final InterruptedException ex) {
 						Thread.currentThread().interrupt();  // mark interruption
-						Activator.getDefault().logError(Messages.FORTERemoteTester_ThreadInterrupted, ex);
+						FordiacLogHelper.logError(Messages.FORTERemoteTester_ThreadInterrupted, ex);
 					}
 				} else {
 					setRunning(false);
@@ -165,7 +166,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 						socket.close();
 						socket = null;
 					} catch (final IOException e1) {
-						Activator.getDefault().logError(e1.getMessage(), e1);
+						FordiacLogHelper.logError(e1.getMessage(), e1);
 					}
 				}
 			}
@@ -221,10 +222,10 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					}
 
 				} catch (final IOException e1) {
-					Activator.getDefault().logError(e1.getMessage(), e1);
+					FordiacLogHelper.logError(e1.getMessage(), e1);
 				}
 			} else {
-				Activator.getDefault().logInfo(
+				FordiacLogHelper.logInfo(
 						MessageFormat.format(Messages.FORTERemoteTester_ElementSkipped, element.getFBString()));
 			}
 		}
@@ -335,13 +336,12 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 
 				} else if (type.equals(SendType.FORCE_VALUE)) {
 					final String forceResp = parseResponse(inputStream);
-					Activator.getDefault()
-					.logInfo(MessageFormat.format(Messages.FORTERemoteTester_ForceResponse, forceResp));
+					FordiacLogHelper.logInfo(MessageFormat.format(Messages.FORTERemoteTester_ForceResponse, forceResp));
 					// normally nothing to do - as no response expected
 				}
 			}
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 
@@ -376,7 +376,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 						element.getValue(), element.getFBString() + "." + element.getPortString(), "true"); //$NON-NLS-1$ //$NON-NLS-2$
 				sendRequest(SendType.FORCE_VALUE, element.getResourceString(), request, outputStream, inputStream);
 			} catch (final IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 	}
@@ -395,7 +395,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					sendRequest(SendType.TRIGGER_EVENT, element.getResourceString(), request, outputStream, inputStream);
 				}
 			} catch (final IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 	}

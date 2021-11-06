@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteracto
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.systemmanagement.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
@@ -58,7 +58,7 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 				devMgmInteractor.connect();
 			} catch (final DeploymentException e) {
 				systemMonitoringData.removeDeviceMonitoringHandler(dev);
-				Activator.getDefault().logError("Monitoring: Cannot connect to device " + dev.getName(), e); //$NON-NLS-1$
+				FordiacLogHelper.logError("Monitoring: Cannot connect to device " + dev.getName(), e); //$NON-NLS-1$
 			}
 			monitor.worked(1);
 		}

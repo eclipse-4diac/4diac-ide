@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -41,17 +41,17 @@ public class FordiacLogListener implements ILogListener {
 	private static final String FORDIAC_IDE_BUGZILLA_URL = "https://bugs.eclipse.org/bugs/enter_bug.cgi?product=4DIAC&component=4DIAC-IDE"; //$NON-NLS-1$
 
 	private static final class LogErrorDialog extends ErrorDialog {
-		private LogErrorDialog(Shell parentShell, IStatus status) {
+		private LogErrorDialog(final Shell parentShell, final IStatus status) {
 			super(parentShell, Messages.FordiacLogListener_ErrorDialogTitle,
 					Messages.FordiacLogListener_ErrorDialogDescription, status,
 					IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
 		}
 
 		@Override
-		protected void createButtonsForButtonBar(Composite parent) {
+		protected void createButtonsForButtonBar(final Composite parent) {
 			createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 			createDetailsButton(parent);
-			Button button = createButton(parent, IDialogConstants.YES_ID, Messages.FordiacLogListener_ReportIssue,
+			final Button button = createButton(parent, IDialogConstants.YES_ID, Messages.FordiacLogListener_ReportIssue,
 					false);
 			button.addListener(SWT.Selection, ev -> {
 				setReturnCode(IDialogConstants.YES_ID);
@@ -61,7 +61,7 @@ public class FordiacLogListener implements ILogListener {
 	}
 
 	@Override
-	public void logging(IStatus status, String plugin) {
+	public void logging(final IStatus status, final String plugin) {
 
 		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())) {
 			// inform the user that an error has happened
@@ -71,24 +71,24 @@ public class FordiacLogListener implements ILogListener {
 		}
 	}
 
-	private static IStatus createStatusWithStackTrace(IStatus status) {
-		String stackTrace = getStackTrace(status.getException());
-		List<IStatus> stackList = Arrays.stream(stackTrace.split(System.getProperty("line.separator"))) //$NON-NLS-1$
+	private static IStatus createStatusWithStackTrace(final IStatus status) {
+		final String stackTrace = getStackTrace(status.getException());
+		final List<IStatus> stackList = Arrays.stream(stackTrace.split(System.getProperty("line.separator"))) //$NON-NLS-1$
 				.map(l -> new Status(IStatus.ERROR, status.getPlugin(), l)).collect(Collectors.toList());
 
 		return new MultiStatus(status.getPlugin(), IStatus.ERROR, stackList.toArray(new IStatus[stackList.size()]),
 				status.getMessage(), status.getException());
 	}
 
-	private static String getStackTrace(Throwable exception) {
-		StringWriter writer = new StringWriter();
+	private static String getStackTrace(final Throwable exception) {
+		final StringWriter writer = new StringWriter();
 		exception.printStackTrace(new PrintWriter(writer));
 		return writer.toString();
 	}
 
-	private static void showErrorDialog(IStatus displayStatus) {
+	private static void showErrorDialog(final IStatus displayStatus) {
 		if ((null != Display.getCurrent()) && (null != Display.getCurrent().getActiveShell())) {
-			ErrorDialog dialog = new LogErrorDialog(Display.getCurrent().getActiveShell(), displayStatus);
+			final ErrorDialog dialog = new LogErrorDialog(Display.getCurrent().getActiveShell(), displayStatus);
 			if (IDialogConstants.YES_ID == dialog.open()) {
 				openBugReportBrowser();
 			}
@@ -97,11 +97,11 @@ public class FordiacLogListener implements ILogListener {
 
 	private static void openBugReportBrowser() {
 		try {
-			IWorkbench wb = PlatformUI.getWorkbench();
-			IWebBrowser browser = wb.getBrowserSupport().createBrowser(Activator.PLUGIN_ID);
+			final IWorkbench wb = PlatformUI.getWorkbench();
+			final IWebBrowser browser = wb.getBrowserSupport().createBrowser(Activator.PLUGIN_ID);
 			browser.openURL(new URL(FORDIAC_IDE_BUGZILLA_URL));
 		} catch (PartInitException | MalformedURLException e) {
-			UIPlugin.getDefault().logError("Error in opening the 4diac bugzilla web-page!", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("Error in opening the 4diac bugzilla web-page!", e); //$NON-NLS-1$
 		}
 
 	}

@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
  * The Class SystemPaletteManagement.
@@ -43,7 +43,7 @@ public final class SystemPaletteManagement {
 		try {
 			copyDirectory(TypeLibrary.getToolLibFolder(), destination);
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 

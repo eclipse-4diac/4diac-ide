@@ -23,9 +23,9 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.text.MessageFormat;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
  * The Class Utils.
@@ -82,7 +82,7 @@ public final class Utils {
 					inputStream);
 
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			return e.getMessage();
 		}
 		return null;
@@ -122,7 +122,7 @@ public final class Utils {
 			sendREQ("", delete, outputStream, inputStream); //$NON-NLS-1$
 
 		} catch (final RuntimeException | IOException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			return e.getMessage();
 		}
 		return null;
@@ -141,7 +141,7 @@ public final class Utils {
 	 * @throws Exception   the exception */
 	public static synchronized String sendREQ(final String destination, final String request,
 			final DataOutputStream outputStream, final DataInputStream inputStream)
-			throws RuntimeException, IOException {
+					throws RuntimeException, IOException {
 
 		String output = ""; //$NON-NLS-1$
 		if (outputStream != null && inputStream != null) {

@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
@@ -81,7 +82,7 @@ public enum FordiacImage {
 		try {
 			return ResourceBundle.getBundle(FORDIAC_IMAGE_PROPERTIES);
 		} catch (final MissingResourceException e) {
-			UIPlugin.getDefault().logWarning("Unable to load fordiacimages.properties from image-fragment.", e); //$NON-NLS-1$
+			FordiacLogHelper.logWarning("Unable to load fordiacimages.properties from image-fragment.", e); //$NON-NLS-1$
 			return new ListResourceBundle() {
 				@Override
 				protected Object[][] getContents() {
@@ -105,7 +106,7 @@ public enum FordiacImage {
 					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR),
 					IDecoration.TOP_LEFT);
 			count++;
-			UIPlugin.getDefault().logInfo("createErrorOverlayImage " + count); //$NON-NLS-1$
+			FordiacLogHelper.logInfo("createErrorOverlayImage " + count); //$NON-NLS-1$
 			return overlay.createImage();
 		});
 	}

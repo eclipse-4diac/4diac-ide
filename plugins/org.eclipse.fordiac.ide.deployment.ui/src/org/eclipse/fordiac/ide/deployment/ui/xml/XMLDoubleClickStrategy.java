@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.xml;
 
-import org.eclipse.fordiac.ide.deployment.ui.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
@@ -95,7 +95,7 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 			fText.setSelectedRange(offset, len);
 			return true;
 		} catch (final BadLocationException x) {
-			Activator.getDefault().logError(x.getMessage(), x);
+			FordiacLogHelper.logError(x.getMessage(), x);
 		}
 
 		return false;
@@ -138,7 +138,7 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 			return true;
 
 		} catch (final BadLocationException x) {
-			Activator.getDefault().logError(x.getMessage(), x);
+			FordiacLogHelper.logError(x.getMessage(), x);
 		}
 
 		return false;

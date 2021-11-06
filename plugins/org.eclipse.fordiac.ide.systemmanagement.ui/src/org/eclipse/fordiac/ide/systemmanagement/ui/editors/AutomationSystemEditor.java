@@ -54,9 +54,9 @@ import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEdi
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
@@ -103,7 +103,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			final int pagenum = addPage(new SystemEditor(), getEditorInput());
 			getModelToEditorNumMapping().put(system, Integer.valueOf(pagenum));
 		} catch (final PartInitException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 

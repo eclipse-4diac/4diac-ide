@@ -15,8 +15,8 @@ package org.eclipse.fordiac.ide.application;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -94,10 +94,10 @@ public class FordiacMarkersView extends MarkerSupportView {
 			try {
 				markerObject = marker.getAttribute("org.eclipse.fordiac.ide.application.marker.fb"); //$NON-NLS-1$
 				if (markerObject instanceof FB) {
-					Activator.getDefault().logWarning("should open markerObject"); //$NON-NLS-1$
+					FordiacLogHelper.logWarning("should open markerObject"); //$NON-NLS-1$
 				}
 			} catch (final CoreException e) {
-				ApplicationPlugin.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 	}

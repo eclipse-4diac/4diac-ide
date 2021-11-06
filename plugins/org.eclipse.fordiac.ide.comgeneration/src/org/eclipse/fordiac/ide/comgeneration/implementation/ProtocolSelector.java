@@ -20,9 +20,9 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.CanPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.EthernetPubSubGenerator;
-import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class ProtocolSelector {
 
@@ -88,7 +88,7 @@ public final class ProtocolSelector {
 						}
 					}
 				} else {
-					Activator.getDefault().logError(Messages.ProtocolSelector_NoConnectionAvailable);
+					FordiacLogHelper.logError(Messages.ProtocolSelector_NoConnectionAvailable);
 				}
 
 			}

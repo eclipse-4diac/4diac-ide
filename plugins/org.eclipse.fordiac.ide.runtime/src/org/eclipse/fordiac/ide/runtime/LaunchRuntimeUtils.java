@@ -20,6 +20,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
  * The Class LaunchRuntimeUtils.
@@ -64,7 +65,7 @@ public final class LaunchRuntimeUtils {
 
 			waitForOneSecond();
 		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		return launcht;
 	}
@@ -74,7 +75,7 @@ public final class LaunchRuntimeUtils {
 			Thread.sleep(1000);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();  // mark interruption
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 

@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.Activator;
 import org.eclipse.ocl.ecore.Constraint;
 import org.eclipse.ocl.expressions.Variable;
@@ -107,7 +108,7 @@ public final class ValidationHelper {
 					iresource.deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
 				}
 			} catch (final CoreException e) {
-				Activator.getDefault().logError(e.getMessage(), e); // $NON-NLS-1$
+				FordiacLogHelper.logError(e.getMessage(), e); // $NON-NLS-1$
 			}
 		}
 

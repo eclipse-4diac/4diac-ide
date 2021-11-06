@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.parser;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.resource.XtextResource;
 
 public class ConditionExpressionXMI {
@@ -27,11 +27,11 @@ public class ConditionExpressionXMI {
 	public static final String EXPR_PREFIX = "expression_"; //$NON-NLS-1$
 	public final ResourceSet reset;
 
-	public ConditionExpressionXMI(ResourceSet reset) {
+	public ConditionExpressionXMI(final ResourceSet reset) {
 		this.reset = reset;
 	}
 
-	public Resource createXtextResourceFromConditionExp(String condExpression) {
+	public Resource createXtextResourceFromConditionExp(final String condExpression) {
 		final var resource = reset.createResource(URI.createURI(EXPR_PREFIX + reset.getResources().size()
 				+ "." + AbstractXMIParser.EXPR_URI_EXTENSION //$NON-NLS-1$
 				));
@@ -41,7 +41,7 @@ public class ConditionExpressionXMI {
 		try {
 			resource.load(in, loadOptions);
 		} catch (final IOException e) {
-			Activator.getDefault().logError(e.getMessage());
+			FordiacLogHelper.logError(e.getMessage());
 		}
 		return resource;
 	}

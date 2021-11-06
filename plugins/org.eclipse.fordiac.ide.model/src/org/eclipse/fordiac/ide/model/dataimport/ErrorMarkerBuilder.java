@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class ErrorMarkerBuilder {
 
@@ -150,7 +151,7 @@ public class ErrorMarkerBuilder {
 				addId(marker.getId());
 			}
 		} catch (final CoreException e) {
-			Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("could not create error marker", e); //$NON-NLS-1$
 		}
 	}
 
@@ -187,7 +188,7 @@ public class ErrorMarkerBuilder {
 				try {
 					marker.delete();
 				} catch (final CoreException e) {
-					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+					FordiacLogHelper.logError("Could not delete error marker", e); //$NON-NLS-1$
 				}
 				return Status.OK_STATUS;
 			}
@@ -198,7 +199,7 @@ public class ErrorMarkerBuilder {
 		try {
 			job.join();
 		} catch (final InterruptedException e) {
-			Activator.getDefault().logError("Delete marker Job interrupted", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("Delete marker Job interrupted", e); //$NON-NLS-1$
 			Thread.currentThread().interrupt();
 		}
 		return errorMarkerAttribute;
@@ -213,7 +214,7 @@ public class ErrorMarkerBuilder {
 				addId(marker.getId());
 			}
 		} catch (final CoreException e) {
-			Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("could not create error marker", e); //$NON-NLS-1$
 		}
 
 	}

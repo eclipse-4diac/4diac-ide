@@ -19,12 +19,12 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -64,12 +64,12 @@ public class GetResourcesHandler extends AbstractHandler {
 				interactor.connect();
 				((DynamicTypeLoadDeploymentExecutor) interactor).queryResourcesWithNetwork(device);
 			} catch (final Exception e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			} finally {
 				try {
 					interactor.disconnect();
 				} catch (final DeploymentException e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 			DeploymentCoordinator.INSTANCE.disableOutput(interactor);

@@ -34,8 +34,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
@@ -149,7 +149,7 @@ INavigationLocationProvider, IPersistableEditor {
 			try {
 				return addPage(part, input);
 			} catch (final PartInitException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 		return -1;

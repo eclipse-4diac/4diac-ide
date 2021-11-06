@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.model.SubAppPortHelper;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -231,7 +232,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 					final List<MonitoringElement> findElements = SubAppPortHelper
 							.findConnectedElements(element.getPort().getInterfaceElement(), true);
 					elements.addAll(findElements);
-			}
+				}
 
 			} else {
 				elements.add((MonitoringElement) element);
@@ -245,8 +246,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 						devMgmInteractor.triggerEvent(me);
 					} catch (final DeploymentException e) {
 						// TODO think if error should be shown to the user
-						Activator.getDefault().logError("Could not trigger event for " + element.getQualifiedString(), //$NON-NLS-1$
-								e);
+						FordiacLogHelper.logError("Could not trigger event for " + element.getQualifiedString(), e); //$NON-NLS-1$
 					}
 					notifyTriggerEvent(me.getPort());
 				}
@@ -299,7 +299,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 						(VarDeclaration) e.getPort().getInterfaceElement());
 			} catch (final DeploymentException ex) {
 				// TODO think if error should be shown to the user
-				Activator.getDefault().logError("Could not write value to " + e.getQualifiedString(), ex); //$NON-NLS-1$
+				FordiacLogHelper.logError("Could not write value to " + e.getQualifiedString(), ex); //$NON-NLS-1$
 			}
 		}
 	}
@@ -347,8 +347,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 					}
 				} catch (final DeploymentException ex) {
 					// TODO think if error should be shown to the user
-					Activator.getDefault()
-					.logError("Could not force value of " + e.getQualifiedString() + "to " + value, ex); //$NON-NLS-1$ //$NON-NLS-2$
+					FordiacLogHelper.logError("Could not force value of " + e.getQualifiedString() + "to " + value, ex); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 

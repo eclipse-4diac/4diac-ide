@@ -17,9 +17,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -62,7 +62,7 @@ public class OpenTypeHandler extends AbstractHandler {
 				try {
 					activePage.openEditor(new FileEditorInput(file), desc.getId());
 				} catch (final Exception e) {
-					ApplicationPlugin.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}

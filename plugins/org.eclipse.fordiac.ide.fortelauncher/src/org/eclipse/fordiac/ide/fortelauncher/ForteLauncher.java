@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.runtime.IRuntimeLauncher;
 import org.eclipse.fordiac.ide.runtime.LaunchParameter;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeException;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 /**
@@ -65,7 +66,7 @@ public class ForteLauncher implements IRuntimeLauncher {
 		} catch (final NumberFormatException num) {
 			throw new LaunchRuntimeException(Messages.ForteLauncher_ERROR_WrongPort);
 		} catch (final Exception ex) {
-			Activator.getDefault().logError(Messages.ForteLauncher_ERROR_CouldNotLaunchFORTE, ex);
+			FordiacLogHelper.logError(Messages.ForteLauncher_ERROR_CouldNotLaunchFORTE, ex);
 		}
 	}
 

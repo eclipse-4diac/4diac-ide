@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.IConnectionRouterFactory;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -159,7 +160,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 					connectionRouter.put(name, routerFactory);
 				}
 			} catch (final CoreException corex) {
-				Activator.getDefault().logError("Error loading ConnectionRouter", corex); //$NON-NLS-1$
+				FordiacLogHelper.logError("Error loading ConnectionRouter", corex); //$NON-NLS-1$
 			}
 		}
 

@@ -39,7 +39,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -77,6 +76,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /** The Class CommonElementImporter. */
 public abstract class CommonElementImporter {
@@ -193,7 +193,7 @@ public abstract class CommonElementImporter {
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
 		} catch (final Exception e) {
-			Activator.getDefault().logWarning("Type Loading issue", e);//$NON-NLS-1$
+			FordiacLogHelper.logWarning("Type Loading issue", e);//$NON-NLS-1$
 			createErrorMarker(e.getMessage());
 		} finally {
 			buildErrorMarker(file);
@@ -238,7 +238,7 @@ public abstract class CommonElementImporter {
 					try {
 						file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 					} catch (final CoreException e) {
-						Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+						FordiacLogHelper.logError("Could not delete error marker", e); //$NON-NLS-1$
 					}
 					return Status.OK_STATUS;
 				}

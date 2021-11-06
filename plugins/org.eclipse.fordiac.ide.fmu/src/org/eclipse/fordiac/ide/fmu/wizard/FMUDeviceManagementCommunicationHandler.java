@@ -53,6 +53,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -372,7 +373,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		try {
 			Files.delete(Paths.get(path.getAbsolutePath()));
 		} catch (final IOException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			return false;
 		}
 
@@ -386,7 +387,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		try {
 			Files.delete(Paths.get(file.getAbsolutePath()));
 		} catch (final IOException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			return false;
 		}
 		return true;
@@ -500,7 +501,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				zos.closeEntry();
 
 			} catch (PatternSyntaxException | IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 
 		}

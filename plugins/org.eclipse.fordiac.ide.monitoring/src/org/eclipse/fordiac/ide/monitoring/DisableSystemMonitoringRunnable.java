@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
@@ -58,7 +59,7 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 				}
 			} catch (final DeploymentException e) {
 				// TODO think if error should be shown to the user
-				Activator.getDefault().logError("Could not disconnect from device", e); //$NON-NLS-1$
+				FordiacLogHelper.logError("Could not disconnect from device", e); //$NON-NLS-1$
 			}
 			monitor.worked(1);
 		}

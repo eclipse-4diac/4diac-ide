@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 TU Wien ACIN, Profactor GmbH, fortiss GmbH, 
+ * Copyright (c) 2012, 2021 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
@@ -13,7 +13,7 @@
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - New Project Explorer layout
- *               - Fixed handing of project renameing      
+ *               - Fixed handing of project renameing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
@@ -47,10 +47,10 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -81,7 +81,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				}
 
 			} catch (final CoreException e) {
-				Activator.getDefault().logError("Couldn't process resource delta", e); //$NON-NLS-1$
+				FordiacLogHelper.logError("Couldn't process resource delta", e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -125,7 +125,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			case IEditorFileChangeListener.NO_TO_ALL:
 				return;
 			default:
-				Activator.getDefault().logError(code + " is not a valid dialog output"); //$NON-NLS-1$
+				FordiacLogHelper.logError(code + " is not a valid dialog output"); //$NON-NLS-1$
 				break;
 			}
 		}
@@ -345,7 +345,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					// to rename a file
 					file.move(new Path(newPath), true, new NullProgressMonitor());
 				} catch (final CoreException e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 				return Status.OK_STATUS;
 			}
@@ -371,7 +371,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					final String name = scanner.findWithinHorizon(systemNamePattern, 0);
 					wrongName = (null != name) && (!name.endsWith("\"" + newTypeName)); //$NON-NLS-1$
 				} catch (final Exception e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 				if (wrongName) {
 					final AutomationSystem system = systemManager.getSystem(file);

@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.editors;
 
-import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorMatchingStrategy;
 import org.eclipse.ui.IEditorReference;
@@ -29,7 +29,7 @@ public class FordiacEditorMatchingStrategy implements IEditorMatchingStrategy {
 			return (editorRef.getName().equals(stripExtension(input.getName()))
 					&& input.equals(editorRef.getEditorInput()));
 		} catch (final PartInitException e) {
-			UIPlugin.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		return false;
 	}

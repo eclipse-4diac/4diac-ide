@@ -19,11 +19,11 @@ import java.text.MessageFormat;
 
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 
 public class AdjustConnectionCommand extends Command {
@@ -91,9 +91,8 @@ public class AdjustConnectionCommand extends Command {
 			newRoutingData.setDx2((int) Math.floor(newDx2 / zoom));
 			break;
 		default:
-			Activator.getDefault().logError(
-					MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex,
-							Integer.valueOf(index)));
+			FordiacLogHelper.logError(MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex,
+					Integer.valueOf(index)));
 			break;
 		}
 	}

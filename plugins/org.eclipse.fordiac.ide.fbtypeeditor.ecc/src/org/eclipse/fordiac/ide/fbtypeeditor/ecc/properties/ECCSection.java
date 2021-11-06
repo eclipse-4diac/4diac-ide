@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart;
@@ -32,6 +31,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECTransitionEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class ECCSection {
 
@@ -50,7 +50,7 @@ public final class ECCSection {
 						languages.add(lang);
 					}
 				} catch (final Exception e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}

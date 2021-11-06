@@ -58,6 +58,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -354,7 +355,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 				}
 				writer.flush();
 			} catch (final Exception e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 	}
@@ -372,7 +373,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 						testDataCollection.add(testData);
 					}
 				} catch (final Exception e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}
@@ -541,7 +542,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 						configurations.put(lang, configuration);
 					}
 				} catch (final Exception e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}
