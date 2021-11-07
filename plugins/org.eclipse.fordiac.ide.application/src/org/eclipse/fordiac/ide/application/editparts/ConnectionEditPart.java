@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
- * 				 2018 - 2020 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH,
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 - 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
+ * 							 Johannes Kepler University Linz,
+ * 							 Primetals Technologies Germany GmbH,
+ *                           Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,7 @@
  *               - fixed hide event and data connection issues
  *               - reworked connection selection and hover feedback
  *   Lukas Wais	 - reworked connection colors
+ *   Michael Oberlehner - added support for hidden connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -40,7 +41,6 @@ import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
-import org.eclipse.fordiac.ide.gef.router.RouterUtil;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyRealType;
@@ -128,8 +128,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	private static final float[] BROKEN_CONNECTION_DASH_PATTERN = new float[] { 5.0f, 5.0f };
-	private static final String HIDDEN = "HIDDEN"; //$NON-NLS-1$
-	private static final String HIDEN_CON = "HIDEN_CON"; //$NON-NLS-1$
 
 	public ConnectionEditPart() {
 		super();
@@ -138,10 +136,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	@Override
 	public Connection getModel() {
 		return (Connection) super.getModel();
-	}
-
-	public Connection getConnection() {
-		return getModel();
 	}
 
 	private final IPropertyChangeListener propertyChangeListener = event -> {
@@ -190,48 +184,47 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		final PolylineConnection polylineConnection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
-
-		final String status = getModel().getAttributeValue(HIDEN_CON);
-		if (polylineConnection instanceof HideableConnection) {
-			((HideableConnection) polylineConnection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
-			if ((getModel() != null) && (getModel().getSourceElement() != null)) {
-				((HideableConnection) polylineConnection)
-				.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
-			}
-			((HideableConnection) polylineConnection).setModel(getModel());
-		}
+		final HideableConnection connectionFigure = new HideableConnection();
+		connectionFigure.setModel(getModel());
+		connectionFigure.setHidden(!getModel().isVisible());
 
 		final PolygonDecoration arrow = new PolygonDecoration();
 		arrow.setTemplate(PolygonDecoration.TRIANGLE_TIP);
 		arrow.setScale(7, 4);
-		polylineConnection.setTargetDecoration(arrow);
+		connectionFigure.setTargetDecoration(arrow);
 
+		performConnTypeConfiguration(connectionFigure);
+		setConnectionColor(connectionFigure);
+		connectionFigure.setToolTip(new ConnectionTooltipFigure(getModel()));
+		connectionFigure.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+		return connectionFigure;
+	}
+
+	private void performConnTypeConfiguration(final HideableConnection connectionFigure) {
 		if (getModel() instanceof EventConnection) {
-			polylineConnection.setVisible(
+			connectionFigure.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
 		}
 
 		if (getModel() instanceof AdapterConnection) {
-			polylineConnection.setTargetDecoration(null);
-			polylineConnection.setSourceDecoration(null);
-
+			connectionFigure.setTargetDecoration(null);
+			connectionFigure.setSourceDecoration(null);
 		}
 
 		if (getModel() instanceof DataConnection) {
-			polylineConnection.setVisible(
+			connectionFigure.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON));
-
 		}
-		setConnectionColor(polylineConnection);
-		polylineConnection.setToolTip(new ConnectionTooltipFigure(getModel()));
-		polylineConnection.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
-		return polylineConnection;
 	}
 
 	@Override
-	public PolylineConnection getFigure() {
-		return (PolylineConnection) super.getFigure();
+	public HideableConnection getFigure() {
+		return (HideableConnection) super.getFigure();
+	}
+
+	@Override
+	public HideableConnection getConnectionFigure() {
+		return (HideableConnection) super.getConnectionFigure();
 	}
 
 	private void setConnectionColor(final PolylineConnection connection) {
@@ -283,18 +276,16 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-
-		if ((getConnectionFigure() instanceof PolylineConnection) && (getModel() != null)) {
+		if (getModel() != null) {
 			if (getModel().isBrokenConnection()) {
-				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_CUSTOM);
-				((PolylineConnection) getConnectionFigure()).setLineDash(BROKEN_CONNECTION_DASH_PATTERN);
+				getConnectionFigure().setLineStyle(SWT.LINE_CUSTOM);
+				getConnectionFigure().setLineDash(BROKEN_CONNECTION_DASH_PATTERN);
 
 			} else {
-				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_SOLID);
-				((PolylineConnection) getConnectionFigure()).setLineDash(null);
+				getConnectionFigure().setLineStyle(SWT.LINE_SOLID);
+				getConnectionFigure().setLineDash(null);
 			}
-			getConnectionFigure().setVisible(getConnection().isVisible());
-
+			getConnectionFigure().setHidden(!getModel().isVisible());
 		}
 	}
 

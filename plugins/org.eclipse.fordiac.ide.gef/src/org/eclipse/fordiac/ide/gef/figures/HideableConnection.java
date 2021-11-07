@@ -67,7 +67,17 @@ public class HideableConnection extends PolylineConnection {
 	}
 
 	public void setHidden(final boolean hidden) {
+		final boolean oldHidden = this.hidden;
 		this.hidden = hidden;
+		if (oldHidden != hidden) {
+			if(hidden) {
+				if ((getModel() != null) && (getModel().getSourceElement() != null)) {
+					setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
+				}
+			}
+			invalidate();
+			repaint();
+		}
 	}
 
 	@Override
