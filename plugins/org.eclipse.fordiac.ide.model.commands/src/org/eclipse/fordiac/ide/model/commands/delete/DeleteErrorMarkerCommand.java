@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.commands.Command;
 
 public class DeleteErrorMarkerCommand extends Command {
@@ -21,10 +22,10 @@ public class DeleteErrorMarkerCommand extends Command {
 	private final DeleteInterfaceCommand deleteErrorMarkerIECmd;
 	private final DeleteFBNetworkElementCommand deleteErrorMarkerFBN;
 
-	public DeleteErrorMarkerCommand(final ErrorMarkerInterface errorIe) {
+	public DeleteErrorMarkerCommand(final ErrorMarkerInterface errorIe, final FBNetworkElement errorFb) {
 		super();
 		deleteErrorMarkerIECmd = new DeleteInterfaceCommand(errorIe);
-		deleteErrorMarkerFBN = createDeleteFBNCommand(errorIe);
+		deleteErrorMarkerFBN = createDeleteFBNCommand(errorIe, errorFb);
 	}
 
 	@Override
@@ -55,10 +56,14 @@ public class DeleteErrorMarkerCommand extends Command {
 		}
 	}
 
-	private static DeleteFBNetworkElementCommand createDeleteFBNCommand(final ErrorMarkerInterface errorIe) {
-		if (errorIe.getFBNetworkElement() instanceof ErrorMarkerFBNElement
-				&& errorIe.getFBNetworkElement().getInterface().getErrorMarker().size() == 1) {
-			return new DeleteFBNetworkElementCommand(errorIe.getFBNetworkElement());
+	private static DeleteFBNetworkElementCommand createDeleteFBNCommand(final ErrorMarkerInterface errorIe,
+			final FBNetworkElement errorFb) {
+		final FBNetworkElement fbNetworkElement = errorIe.getFBNetworkElement();
+		// only delete the fbnetworkelement if this delete error marker command was not called becuase of an fb delete
+		// and if the fbelement is an error maker fb and we are the last errormarker at this fb
+		if (fbNetworkElement != errorFb && fbNetworkElement instanceof ErrorMarkerFBNElement
+				&& fbNetworkElement.getInterface().getErrorMarker().size() == 1) {
+			return new DeleteFBNetworkElementCommand(fbNetworkElement);
 		}
 		return null;
 	}

@@ -71,7 +71,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (element.isMapped()) {
 			cmds.add(new UnmapCommand(element));
 		}
-		getDeleteConnections(element);
+		collectDeleteCommands(element);
 		handleValueErrorMarkers();
 		// Before removing the fbnetwork element the connections, value error markers, and mapping should be removed
 		if (cmds.canExecute()) {
@@ -109,17 +109,11 @@ public class DeleteFBNetworkElementCommand extends Command {
 
 	}
 
-	private void getDeleteConnections(final FBNetworkElement element) {
+	private void collectDeleteCommands(final FBNetworkElement element) {
 		for (final IInterfaceElement intElement : element.getInterface().getAllInterfaceElements()) {
-			EList<Connection> connList = null;
-			if (intElement.isIsInput()) {
-				connList = intElement.getInputConnections();
-			} else {
-				connList = intElement.getOutputConnections();
-			}
-			if (null != connList) {
-				connList.forEach((final Connection con) -> cmds.add(new DeleteConnectionCommand(con)));
-			}
+			final EList<Connection> connections = intElement.isIsInput() ? intElement.getInputConnections()
+					: intElement.getOutputConnections();
+			connections.forEach(con -> cmds.add(new DeleteConnectionCommand(con, element)));
 		}
 	}
 
