@@ -37,6 +37,7 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
@@ -45,6 +46,7 @@ import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 
@@ -86,6 +88,8 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	private final Figure plugs = new Figure();
 
 	private UnderlineAlphaLabel typeLabel;
+
+	private static int maxWidth = -1;
 
 	public FBShape(final FBType fbType) {
 		configureMainFigure();
@@ -160,6 +164,14 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 	public RoundedRectangle getBottom() {
 		return bottom;
+	}
+
+	private static int getMaxWidth() {
+		if (-1 == maxWidth) {
+			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+			return pf.getInt(DiagramPreferences.MAX_TYPE_LABEL_SIZE);
+		}
+		return maxWidth;
 	}
 
 	@Override
@@ -370,7 +382,11 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 		middle.setLayoutManager(middleLayout);
 
-		final String typeName = (null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET;
+		String typeName = (null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET;
+
+		if(typeName.length() > getMaxWidth()) {
+			typeName = typeName.substring(0, getMaxWidth()) + getTruncationString();
+		}
 
 		typeLabel = new UnderlineAlphaLabel(null != typeName ? typeName : FordiacMessages.ND);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
@@ -380,9 +396,16 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	}
 
-	protected void changeTypeLabelText(final String text) {
+	protected void changeTypeLabelText(String text) {
+		if (text.length() > getMaxWidth()) {
+			text = text.substring(0, getMaxWidth()) + getTruncationString();
+		}
 		typeLabel.setText(text);
 		typeLabel.setIcon(null);
+	}
+
+	protected static String getTruncationString() {
+		return "\u2026"; //$NON-NLS-1$
 	}
 
 }

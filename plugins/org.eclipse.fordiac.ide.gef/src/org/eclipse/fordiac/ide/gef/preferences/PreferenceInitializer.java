@@ -33,7 +33,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(DiagramPreferences.CONNECTION_ROUTER, "Adjustable Router (no Jumplinks)"); //$NON-NLS-1$
 		store.setDefault(DiagramPreferences.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
 		// port
-		store.setDefault(DiagramPreferences.MAX_VALUE_PIN_SIZE, 12);
+		store.setDefault(DiagramPreferences.MAX_PIN_LABEL_SIZE, 12);
 		store.setDefault(DiagramPreferences.MAX_TYPE_LABEL_SIZE, 15);
 	}
 }

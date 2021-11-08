@@ -49,7 +49,7 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_GeneralDiagramPreferences;
 	public static String DiagramPreferences_LabelSize;
 	public static String DiagramPreferences_MaximumValueLabelSize;
-	public static String DiagramPreferences_MaximumValuePinSize;
+	public static String DiagramPreferences_MaximumPinLabelSize;
 	public static String DiagramPreferences_MaximumTypeLabelSize;
 	public static String DiagramPreferences_FieldEditors_GridSpacingInPixels;
 	public static String DiagramPreferences_FieldEditors_RulerAndGrid;
@@ -58,6 +58,8 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_FieldEditors_SnapToGrid;
 	public static String DiagramPreferences_InterfacePins;
 	public static String DiagramPreferences_InterfacePins_ShowInputComment;
+
+	public static String DiagramPreferences_Restart;
 	public static String FBFigure_TYPE_NOT_SET;
 	public static String FordiacContextMenuProvider_Align;
 	public static String PropertyUtil_LABEL_Description_Complianceprofile;

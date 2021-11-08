@@ -34,12 +34,16 @@ import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * The Class DiagramPreferences.
@@ -65,9 +69,11 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	public static final String MAX_VALUE_LABEL_SIZE = "MaxValueLabelSize"; //$NON-NLS-1$
 
-	public static final String MAX_VALUE_PIN_SIZE = "MaxValuePinSize"; //$NON-NLS-1$
+	public static final String MAX_PIN_LABEL_SIZE = "MaxPinLabelSize"; //$NON-NLS-1$
 
 	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
+
+	public boolean changesOnLabelSize = false;
 
 	/**
 	 * Instantiates a new diagram preferences.
@@ -116,7 +122,51 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		group.setLayoutData(gridData);
 	}
 
+	@Override
+	public void propertyChange(final PropertyChangeEvent event) {
+		if (event.getSource().getClass().equals(IntegerFieldEditor.class)) {
+			if (IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+					.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
+					|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+					.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
+					|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+					.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)) {
+				changesOnLabelSize = true;
+			}
+		}
+	}
+
+	@Override
+	public boolean performOk() {
+		if (changesOnLabelSize) {
+			changesOnLabelSize = false;
+
+			super.performOk();
+			showMessageBox();
+		}
+		return true;
+	}
+
+	private static void showMessageBox() {
+
+		final MessageBox msgBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.YES | SWT.NO);
+		Display.getDefault().getActiveShell();
+		msgBox.setText("4diac IDE"); //$NON-NLS-1$
+		msgBox.setMessage(Messages.DiagramPreferences_Restart);
+
+		switch (msgBox.open()) {
+		case SWT.NO:
+			break;
+		case SWT.YES:
+			PlatformUI.getWorkbench().restart();
+			break;
+		default:
+			break;
+		}
+	}
+
 	private void createGroupLabelSize() {
+
 		final Group labelSize = createGroup(Messages.DiagramPreferences_LabelSize);
 		final IntegerFieldEditor integerFieldEditorLabel = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE,
 				Messages.DiagramPreferences_MaximumValueLabelSize, labelSize);
@@ -128,8 +178,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		integerFieldEditorTypeLabel.setValidRange(0, 120);
 		addField(integerFieldEditorTypeLabel);
 
-		final IntegerFieldEditor integerFieldEditorPin = new IntegerFieldEditor(MAX_VALUE_PIN_SIZE,
-				Messages.DiagramPreferences_MaximumValuePinSize, labelSize);
+		final IntegerFieldEditor integerFieldEditorPin = new IntegerFieldEditor(MAX_PIN_LABEL_SIZE,
+				Messages.DiagramPreferences_MaximumPinLabelSize, labelSize);
 		integerFieldEditorPin.setValidRange(0, 60);
 		addField(integerFieldEditorPin);
 		configGroup(labelSize);
