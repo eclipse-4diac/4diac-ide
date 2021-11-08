@@ -26,12 +26,14 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(DiagramPreferences.SNAP_TO_GRID, true);
 		store.setDefault(DiagramPreferences.SHOW_GRID, true);
 		store.setDefault(DiagramPreferences.GRID_SPACING, 20);
 		store.setDefault(DiagramPreferences.CONNECTION_ROUTER, "Adjustable Router (no Jumplinks)"); //$NON-NLS-1$
 		store.setDefault(DiagramPreferences.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
-																		// port
+		// port
+		store.setDefault(DiagramPreferences.MAX_VALUE_PIN_SIZE, 12);
+		store.setDefault(DiagramPreferences.MAX_TYPE_LABEL_SIZE, 15);
 	}
 }

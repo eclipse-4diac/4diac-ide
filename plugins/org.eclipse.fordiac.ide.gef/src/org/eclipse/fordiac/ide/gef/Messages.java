@@ -49,6 +49,8 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_GeneralDiagramPreferences;
 	public static String DiagramPreferences_LabelSize;
 	public static String DiagramPreferences_MaximumValueLabelSize;
+	public static String DiagramPreferences_MaximumValuePinSize;
+	public static String DiagramPreferences_MaximumTypeLabelSize;
 	public static String DiagramPreferences_FieldEditors_GridSpacingInPixels;
 	public static String DiagramPreferences_FieldEditors_RulerAndGrid;
 	public static String DiagramPreferences_FieldEditors_ShowGrid;

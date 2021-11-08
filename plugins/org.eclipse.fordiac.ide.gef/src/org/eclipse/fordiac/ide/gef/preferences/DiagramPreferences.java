@@ -65,6 +65,10 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	public static final String MAX_VALUE_LABEL_SIZE = "MaxValueLabelSize"; //$NON-NLS-1$
 
+	public static final String MAX_VALUE_PIN_SIZE = "MaxValuePinSize"; //$NON-NLS-1$
+
+	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
+
 	/**
 	 * Instantiates a new diagram preferences.
 	 */
@@ -114,10 +118,20 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	private void createGroupLabelSize() {
 		final Group labelSize = createGroup(Messages.DiagramPreferences_LabelSize);
-		final IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE,
+		final IntegerFieldEditor integerFieldEditorLabel = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE,
 				Messages.DiagramPreferences_MaximumValueLabelSize, labelSize);
-		integerFieldEditor.setValidRange(0, 120);
-		addField(integerFieldEditor);
+		integerFieldEditorLabel.setValidRange(0, 120);
+		addField(integerFieldEditorLabel);
+
+		final IntegerFieldEditor integerFieldEditorTypeLabel = new IntegerFieldEditor(MAX_TYPE_LABEL_SIZE,
+				Messages.DiagramPreferences_MaximumTypeLabelSize, labelSize);
+		integerFieldEditorTypeLabel.setValidRange(0, 120);
+		addField(integerFieldEditorTypeLabel);
+
+		final IntegerFieldEditor integerFieldEditorPin = new IntegerFieldEditor(MAX_VALUE_PIN_SIZE,
+				Messages.DiagramPreferences_MaximumValuePinSize, labelSize);
+		integerFieldEditorPin.setValidRange(0, 60);
+		addField(integerFieldEditorPin);
 		configGroup(labelSize);
 	}
 
