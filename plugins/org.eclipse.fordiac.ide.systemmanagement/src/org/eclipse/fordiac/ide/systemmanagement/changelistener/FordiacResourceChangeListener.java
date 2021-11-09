@@ -52,10 +52,14 @@ import org.eclipse.fordiac.ide.systemmanagement.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class FordiacResourceChangeListener implements IResourceChangeListener {
@@ -415,6 +419,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					entry.setFile(dst);
 				}
 			}
+			updateEditorInput(src, dst);
 		}
 	}
 
@@ -550,4 +555,32 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			return (input instanceof FileEditorInput) && (file.equals(((FileEditorInput) input).getFile()));
 		}));
 	}
+
+	private static FordiacEditorMatchingStrategy editorMatching = new FordiacEditorMatchingStrategy();
+
+	private static void updateEditorInput(final IFile src, final IFile dst) {
+		Display.getDefault().syncExec(() -> {
+			final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			final IEditorReference[] editorReferences = activePage.getEditorReferences();
+
+			for (final IEditorReference editorReference : editorReferences) {
+				final IEditorPart editor = editorReference.getEditor(false);
+				if (null != editor) {
+					//the editor is loaded check if it is ours and if yes update it
+					final IEditorInput input = editor.getEditorInput();
+					if((src.equals(((FileEditorInput) input).getFile()) && editor instanceof IEditorFileChangeListener)) {
+						((IEditorFileChangeListener)editor).updateEditorInput(new FileEditorInput(dst));
+					}
+				} else {
+					// the editor is not yet loaded check if it may be ours. We can not load it as the file it is referring
+					// to is not existing anymore, therefore we can only close it
+					if (editorMatching.matches(editorReference, new FileEditorInput(src))) {
+						activePage.closeEditors(new IEditorReference[] { editorReference }, false);
+
+					}
+				}
+			}
+		});
+	}
+
 }

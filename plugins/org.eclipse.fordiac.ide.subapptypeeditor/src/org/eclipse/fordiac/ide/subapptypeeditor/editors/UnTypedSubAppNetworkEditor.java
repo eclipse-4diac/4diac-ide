@@ -107,4 +107,13 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 
 	}
 
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+
+		return getGraphicalViewer().getRootEditPart();
+	}
+
 }

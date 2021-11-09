@@ -231,4 +231,12 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		}
 	}
 
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getEditPartRegistry().get(fbType);
+	}
+
 }

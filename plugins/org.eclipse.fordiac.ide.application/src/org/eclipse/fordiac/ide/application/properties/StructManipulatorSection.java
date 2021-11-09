@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.gef.EditPart;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -65,10 +65,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class StructManipulatorSection extends AbstractSection implements CommandStackEventListener {
@@ -113,6 +111,34 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 	protected void refreshStructTypeTable() {
 		memberVarViewer.setInput(getType());
+	}
+
+	protected void handleStructSelectionChanged(final String newStructName) {
+		if (null != getType()) {
+			if (newStructSelected(newStructName)) {
+				final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
+				final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
+				commandStack.execute(cmd);
+				updateStructManipulatorFB(cmd.getNewMux());
+			}
+		}
+	}
+
+	public boolean newStructSelected(final String newStructName) {
+		return !newStructName.contentEquals(getType().getStructType().getName())
+				&& getDataTypeLib().getStructuredType(newStructName).getName().equals(newStructName);
+	}
+
+	protected static void updateStructManipulatorFB(final StructManipulator newMux) {
+		final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
+		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
+		if (null != viewer) {
+			viewer.flush();
+			EditorUtils.refreshPropertySheetWithSelection(activeEditor, viewer,
+					viewer.getEditPartRegistry().get(newMux));
+		}
+
 	}
 
 	@Override
@@ -233,36 +259,6 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 		if (commandStack != null) {
 			commandStack.addCommandStackEventListener(this);
-		}
-	}
-
-	private void handleStructSelectionChanged(final String newStructName) {
-		if (null != type && newStructSelected(newStructName)) {
-			final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
-			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
-			commandStack.execute(cmd);
-			updateStructManipulatorFB(cmd.getNewMux());
-		}
-	}
-
-	private boolean newStructSelected(final String newStructName) {
-		return !newStructName.contentEquals(getType().getStructType().getName())
-				&& getDataTypeLib().getStructuredType(newStructName) instanceof StructuredType;
-	}
-
-	protected static void updateStructManipulatorFB(final StructManipulator newMux) {
-		final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
-		if (null != viewer) {
-			viewer.flush();
-			final Object obj = viewer.getEditPartRegistry().get(newMux);
-			viewer.select((EditPart) obj);
-			final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.findView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
-			if (view instanceof PropertySheet) {
-				((PropertySheet) view).selectionChanged(activeEditor, viewer.getSelection());
-			}
 		}
 	}
 

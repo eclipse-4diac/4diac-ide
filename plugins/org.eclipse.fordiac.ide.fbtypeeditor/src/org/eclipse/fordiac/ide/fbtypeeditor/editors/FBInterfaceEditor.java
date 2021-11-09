@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
@@ -189,6 +190,11 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	public void reloadType(final FBType type) {
 		fbType = type;
+		try {
+			init(getEditorSite(), new FBTypeEditorInput(type, type.getPaletteEntry()));
+		} catch (final PartInitException e) {
+			FordiacLogHelper.logError(PROPERTY_CONTRIBUTOR_ID, e);
+		}
 		getGraphicalViewer().setContents(fbType);
 
 	}
@@ -233,6 +239,14 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	private static int calculateCenterScrollPos(final RangeModel rangeModel) {
 		final int center = (rangeModel.getMaximum() + rangeModel.getMinimum()) / 2;
 		return center - rangeModel.getExtent() / 2;
+	}
+
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getEditPartRegistry().get(fbType);
 	}
 
 }

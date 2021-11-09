@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.ui.part.FileEditorInput;
 
 public interface IEditorFileChangeListener {
 
@@ -26,5 +27,9 @@ public interface IEditorFileChangeListener {
 	void reloadFile();
 
 	IFile getFile();
+
+	/* update the editor input to be used by this editor. This can occur if directories or projects are renamed or a
+	 * file is moved to a different location and the editor is open. It will not result in a reload of the content. */
+	void updateEditorInput(FileEditorInput newInput);
 
 }

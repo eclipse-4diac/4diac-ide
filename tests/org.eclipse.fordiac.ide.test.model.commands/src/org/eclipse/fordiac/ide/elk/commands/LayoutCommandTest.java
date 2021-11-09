@@ -23,7 +23,6 @@ import java.util.Map;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommandTest;
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommandTest;
-import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.model.commands.create.ConnectionCommandsTest;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
@@ -94,7 +93,6 @@ public class LayoutCommandTest extends FBNetworkTestBase {
 	private static State createLayoutCommand(final State s, final FBNetwork network) {
 		final Map<FBNetworkElement, Position> positions = new HashMap<>();
 		final Map<Connection, PointList> connPoints = new HashMap<>();
-		final Map<FBNetworkElement, FBNetworkElementFigure> fbFigures = new HashMap<>();
 
 		final FBNetworkElement elem1 = network.getNetworkElements().get(0);
 		final FBNetworkElement elem2 = network.getNetworkElements().get(1);
@@ -106,8 +104,6 @@ public class LayoutCommandTest extends FBNetworkTestBase {
 		pos2.setY(200);
 		positions.put(elem1, pos1);
 		positions.put(elem2, pos2);
-		fbFigures.put(elem1, new FBNetworkElementFigure(elem1, null));
-		fbFigures.put(elem2, new FBNetworkElementFigure(elem2, null));
 
 		final PointList pList = new PointList();
 		pList.addPoint(100, 100);
@@ -116,7 +112,7 @@ public class LayoutCommandTest extends FBNetworkTestBase {
 		connPoints.put(network.getEventConnections().get(0), pList);
 		connPoints.put(network.getDataConnections().get(0), pList.getCopy());
 
-		s.setCommand(new LayoutCommand(positions, connPoints, fbFigures, Collections.emptyMap()));
+		s.setCommand(new LayoutCommand(positions, connPoints, Collections.emptyMap()));
 		return s;
 	}
 

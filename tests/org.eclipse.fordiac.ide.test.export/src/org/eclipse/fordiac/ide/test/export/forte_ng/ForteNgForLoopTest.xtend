@@ -39,13 +39,12 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 
 		assertEquals('''
-		// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5
-		auto by = 1;
-		auto to = 5;
+		const auto by_0 = 1;
+		const auto to_0 = 5;
 		for(«EXPORTED_VARIABLE_NAME»() = 1;
-		    (by >  0 && «EXPORTED_VARIABLE_NAME»() <= to) ||
-		    (by <= 0 && «EXPORTED_VARIABLE_NAME»() >= to);
-		    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by){
+		    (by_0 >  0 && «EXPORTED_VARIABLE_NAME»() <= to_0) ||
+		    (by_0 <= 0 && «EXPORTED_VARIABLE_NAME»() >= to_0);
+		    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by_0){
 			«EXPORTED_VARIABLE2_NAME»() = 0;
 		}
 		'''.toString(), generatedCode.toString())
@@ -66,16 +65,90 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 
 		assertEquals('''
-		// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5
-		auto by = 2;
-		auto to = 5;
+		const auto by_0 = 2;
+		const auto to_0 = 5;
 		for(«EXPORTED_VARIABLE_NAME»() = 1;
-		    (by >  0 && «EXPORTED_VARIABLE_NAME»() <= to) ||
-		    (by <= 0 && «EXPORTED_VARIABLE_NAME»() >= to);
-		    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by){
+		    (by_0 >  0 && «EXPORTED_VARIABLE_NAME»() <= to_0) ||
+		    (by_0 <= 0 && «EXPORTED_VARIABLE_NAME»() >= to_0);
+		    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by_0){
 			«EXPORTED_VARIABLE2_NAME»() = 0;
 		}
 		'''.toString(), generatedCode.toString())
 	}
+	
+	@Test
+	def void multipleForLoopsOnSameLevel() {
+		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
+		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE2_NAME, DINT))
+		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		FOR «VARIABLE_NAME»:=1 TO 5 DO
+			«VARIABLE2_NAME» := 0;
+		END_FOR;
+		FOR «VARIABLE_NAME»:=6 TO 10 DO
+			«VARIABLE2_NAME» := 1;
+		END_FOR;'''))
+
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
+
+		assertNoErrors(errors);
+		assertNotNull(generatedCode);
+
+		assertEquals('''
+		const auto by_0 = 1;
+		const auto to_0 = 5;
+		for(«EXPORTED_VARIABLE_NAME»() = 1;
+		    (by_0 >  0 && «EXPORTED_VARIABLE_NAME»() <= to_0) ||
+		    (by_0 <= 0 && «EXPORTED_VARIABLE_NAME»() >= to_0);
+		    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by_0){
+			«EXPORTED_VARIABLE2_NAME»() = 0;
+		}
+		const auto by_1 = 1;
+		const auto to_1 = 10;
+		for(«EXPORTED_VARIABLE_NAME»() = 6;
+		    (by_1 >  0 && «EXPORTED_VARIABLE_NAME»() <= to_1) ||
+		    (by_1 <= 0 && «EXPORTED_VARIABLE_NAME»() >= to_1);
+		    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by_1){
+			«EXPORTED_VARIABLE2_NAME»() = 1;
+		}
+		'''.toString(), generatedCode.toString())
+	}
+	
+	@Test
+	def void multipleForLoopsContained() {
+		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
+		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE2_NAME, DINT))
+		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		FOR «VARIABLE_NAME»:=1 TO 5 DO
+			«VARIABLE2_NAME» := 0;
+			FOR «VARIABLE_NAME»:=6 TO 10 DO
+				«VARIABLE2_NAME» := 1;
+			END_FOR;
+		END_FOR;'''))
+
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
+
+		assertNoErrors(errors);
+		assertNotNull(generatedCode);
+
+		assertEquals('''
+		const auto by_0 = 1;
+		const auto to_0 = 5;
+		for(«EXPORTED_VARIABLE_NAME»() = 1;
+		    (by_0 >  0 && «EXPORTED_VARIABLE_NAME»() <= to_0) ||
+		    (by_0 <= 0 && «EXPORTED_VARIABLE_NAME»() >= to_0);
+		    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by_0){
+			«EXPORTED_VARIABLE2_NAME»() = 0;
+			const auto by_0_0 = 1;
+			const auto to_0_0 = 10;
+			for(«EXPORTED_VARIABLE_NAME»() = 6;
+			    (by_0_0 >  0 && «EXPORTED_VARIABLE_NAME»() <= to_0_0) ||
+			    (by_0_0 <= 0 && «EXPORTED_VARIABLE_NAME»() >= to_0_0);
+			    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by_0_0){
+				«EXPORTED_VARIABLE2_NAME»() = 1;
+			}
+		}
+		'''.toString(), generatedCode.toString())
+	}
+	
 
 }

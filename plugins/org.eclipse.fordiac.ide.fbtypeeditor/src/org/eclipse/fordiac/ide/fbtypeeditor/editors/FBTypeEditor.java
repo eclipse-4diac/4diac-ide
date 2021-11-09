@@ -59,6 +59,8 @@ import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChange
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -402,7 +404,14 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			fbType.eAdapters().remove(adapter);
 		}
 		fbType = (FBType) paletteEntry.getType();
-		editors.stream().forEach(e -> e.reloadType(fbType));
+		getActiveEditor();
+		editors.stream().forEach(e -> {
+			e.reloadType(fbType);
+			if (e == getActiveEditor()) {
+				EditorUtils.refreshPropertySheetWithSelection(this, e.getAdapter(GraphicalViewer.class),
+						e.getSelectableEditPart());
+			}
+		});
 		getCommandStack().flush();
 		fbType.eAdapters().add(adapter);
 
@@ -427,5 +436,11 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 	@Override
 	public INavigationLocation createNavigationLocation() {
 		return new FBTypeNavigationLocation(this);
+	}
+
+	@Override
+	public void updateEditorInput(final FileEditorInput newInput) {
+		setInput(newInput);
+		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
 	}
 }

@@ -43,7 +43,6 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
-import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -76,12 +75,10 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 	/* used for applying the layout */
 	private final Map<FBNetworkElement, Position> positions = new HashMap<>();
 	private final Map<Connection, PointList> connPoints = new HashMap<>();
-	private final Map<FBNetworkElement, FBNetworkElementFigure> fbFigures = new HashMap<>();
 
 	private void clear() {
 		positions.clear();
 		connPoints.clear();
-		fbFigures.clear();
 	}
 
 	@Override
@@ -244,7 +241,7 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 		calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, INSTANCE_COMMENT_OFFSET);
 
 		final Map<IInterfaceElement, Integer> pins = createPinOffsetData(mapping);
-		final Command layoutCommand = new LayoutCommand(positions, connPoints, fbFigures, pins);
+		final Command layoutCommand = new LayoutCommand(positions, connPoints, pins);
 		mapping.getProperty(COMMAND_STACK).execute(layoutCommand);
 	}
 
@@ -292,7 +289,6 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 			pos.setX(calculatedX);
 			pos.setY(calculatedY);
 			positions.put((FBNetworkElement) ep.getModel(), pos);
-			fbFigures.put((FBNetworkElement) ep.getModel(), (FBNetworkElementFigure) ep.getFigure());
 		}
 		for (final ElkEdge edge : node.getContainedEdges()) {
 			final ConnectionEditPart connEp = (ConnectionEditPart) mapping.getGraphMap().get(edge);

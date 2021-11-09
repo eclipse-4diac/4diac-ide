@@ -26,7 +26,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.BorderLayout;
@@ -46,9 +45,9 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -314,7 +313,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 				children.addAll(ifList.getPlugs());
 				children.addAll(ifList.getSockets());
 			}
-			if (isUntyped()) {
+			if (isInstance()) {
 				children.add(getInstanceComment());
 			}
 			return children;
@@ -322,13 +321,13 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		return Collections.emptyList();
 	}
 
-	private boolean isUntyped() {
-		return getModel().eContainer() instanceof SubApp;
+	private boolean isInstance() {
+		return getModel().eContainer() instanceof FBNetworkElement;
 	}
 
 	private InstanceComment getInstanceComment() {
 		if (null == instanceComment) {
-			instanceComment = new InstanceComment((SubApp) getModel().eContainer());
+			instanceComment = new InstanceComment((FBNetworkElement) getModel().eContainer());
 		}
 		return instanceComment;
 	}
@@ -483,15 +482,6 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	@Override
 	public DragTracker getDragTracker(final Request req) {
 		return getParent().getDragTracker(req);
-	}
-
-	@Override
-	protected void refreshVisuals() {
-		final List<EditPart> ies = (List<EditPart>) getChildren().stream()
-				.filter(InterfaceEditPart.class::isInstance)
-				.collect(Collectors.toList());
-		ies.forEach(this::removeChild);
-		ies.forEach(ie -> addChild(ie, -1));
 	}
 
 }

@@ -390,4 +390,10 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	}
 
+	@Override
+	public void updateEditorInput(final FileEditorInput newInput) {
+		setInput(newInput);
+		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
+	}
+
 }

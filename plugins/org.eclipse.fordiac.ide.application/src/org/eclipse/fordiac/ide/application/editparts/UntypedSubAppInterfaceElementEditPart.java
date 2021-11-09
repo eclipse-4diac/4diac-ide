@@ -64,8 +64,6 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		}
 	}
 
-	private DirectEditManager manager;
-
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
@@ -93,10 +91,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	}
 
 	private DirectEditManager getManager() {
-		if (manager == null) {
-			manager = new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
-		}
-		return manager;
+		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
 	}
 
 	public Label getNameLabel() {

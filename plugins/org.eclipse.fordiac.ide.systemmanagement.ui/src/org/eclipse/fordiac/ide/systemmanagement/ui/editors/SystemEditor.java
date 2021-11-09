@@ -48,6 +48,7 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -86,9 +87,11 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 	private final Adapter appListener = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			if ((null != appTreeViewer) && (!appTreeViewer.getControl().isDisposed())) {
-				appTreeViewer.refresh();
-			}
+			Display.getDefault().asyncExec(() -> {
+				if ((null != appTreeViewer) && (!appTreeViewer.getControl().isDisposed())) {
+					appTreeViewer.refresh();
+				}
+			});
 		}
 	};
 

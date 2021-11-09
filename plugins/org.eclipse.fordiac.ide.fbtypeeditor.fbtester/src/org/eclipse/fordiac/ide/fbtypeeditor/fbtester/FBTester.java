@@ -634,4 +634,12 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		getGraphicalViewer().setContents(fbTypeEditorInput);
 	}
 
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getEditPartRegistry().get(type);
+	}
+
 }

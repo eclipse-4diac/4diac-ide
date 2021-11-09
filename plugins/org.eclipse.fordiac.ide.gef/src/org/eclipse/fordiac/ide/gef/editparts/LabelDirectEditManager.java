@@ -81,7 +81,6 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected void bringDown() {
 		initialString = null;
-		getLocator().relocate(getCellEditor());
 		super.bringDown();
 	}
 
@@ -92,6 +91,7 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 	 */
 	@Override
 	protected void initCellEditor() {
+		super.initCellEditor();
 		final Text text = (Text) getCellEditor().getControl();
 
 		if (aditionalVerify != null) {
@@ -106,7 +106,6 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 			initialLabelText = initialString;
 			getCellEditor().setValue(initialLabelText);
 		}
-		super.initCellEditor();
 		text.selectAll();
 	}
 

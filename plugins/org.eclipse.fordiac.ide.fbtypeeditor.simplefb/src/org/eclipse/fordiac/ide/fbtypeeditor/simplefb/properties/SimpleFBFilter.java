@@ -13,16 +13,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeRootEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.RootEditPart;
+import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.jface.viewers.IFilter;
 
 public class SimpleFBFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		return (toTest instanceof FBTypeRootEditPart
-				&& ((FBTypeRootEditPart) toTest).getModel() instanceof SimpleFBTypeImpl);
+		if (toTest instanceof FBTypeEditPart) {
+			final RootEditPart root = ((FBTypeEditPart) toTest).getRoot();
+			if (((EditPart) toTest).getModel() instanceof SimpleFBTypeImpl &&  root instanceof ScalableRootEditPart) { // here we are in the algorithm editor
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
