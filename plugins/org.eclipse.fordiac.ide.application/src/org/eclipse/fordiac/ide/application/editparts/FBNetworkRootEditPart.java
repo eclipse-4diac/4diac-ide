@@ -123,7 +123,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(final DirectEditRequest request) {
 		final Object value = request.getCellEditor().getValue();
-		final Point refPoint = getInsertPos();
+		final Point refPoint = getInsertPos(request);
 		if (value instanceof FBTypePaletteEntry) {
 			return new FBCreateCommand((FBTypePaletteEntry) value, fbNetwork, refPoint.x, refPoint.y);
 		}
@@ -134,8 +134,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		return null;
 	}
 
-	private Point getInsertPos() {
-		final Point location = createDirectEditManager().getLocator().getRefPoint();
+	private Point getInsertPos(final DirectEditRequest request) {
+		final org.eclipse.draw2d.geometry.Point location = request.getLocation();
 		final FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
 		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
 		location.x += viewLocation.x;

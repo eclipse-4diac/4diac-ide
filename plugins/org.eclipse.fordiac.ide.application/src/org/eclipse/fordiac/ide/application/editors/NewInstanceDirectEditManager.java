@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.CellEditor;
@@ -116,6 +117,13 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected NewInstanceCellEditor getCellEditor() {
 		return (NewInstanceCellEditor) super.getCellEditor();
+	}
+
+	@Override
+	protected DirectEditRequest createDirectEditRequest() {
+		final DirectEditRequest directEditRequest = super.createDirectEditRequest();
+		directEditRequest.setLocation(new org.eclipse.draw2d.geometry.Point(getLocator().getRefPoint()));
+		return directEditRequest;
 	}
 
 	public void updateRefPosition(final Point refPoint) {
