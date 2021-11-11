@@ -50,6 +50,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -270,10 +271,13 @@ implements CommandStackEventListener {
 	}
 
 	private StructuredType getSelectedStructuredType() {
-		final StructTreeNode selected = (StructTreeNode) memberVarViewer.getTree().getSelection()[0].getData();
-		final VarDeclaration varDecl = selected.getVariable();
-		if (varDecl.getType() instanceof StructuredType) {
-			return (StructuredType) varDecl.getType();
+		final ITreeSelection selection = memberVarViewer.getStructuredSelection();
+		if (!selection.isEmpty()) {
+			final StructTreeNode selected = (StructTreeNode) selection.getFirstElement();
+			final VarDeclaration varDecl = selected.getVariable();
+			if (varDecl.getType() instanceof StructuredType) {
+				return (StructuredType) varDecl.getType();
+			}
 		}
 		return null;
 	}
