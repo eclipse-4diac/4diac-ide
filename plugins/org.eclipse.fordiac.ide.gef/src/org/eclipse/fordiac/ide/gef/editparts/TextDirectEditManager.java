@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -52,6 +53,9 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 	private IAction find;
 	private IAction selectAll;
 	private IAction delete;
+	// we need to cash the zoom manager as some direct edit commands change the editpart and we loose connection to the
+	// viewer
+	private ZoomManager zoomMananger = null;
 
 	private Font scaledFont;
 	private final ZoomListener zoomListener = this::updateScaledFont;
@@ -113,7 +117,13 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 	}
 
 	private ZoomManager getZoomManager() {
-		return (ZoomManager) getEditPart().getViewer().getProperty(ZoomManager.class.toString());
+		if (zoomMananger == null) {
+			final EditPartViewer viewer = getEditPart().getViewer();
+			if (viewer != null) {
+				zoomMananger = (ZoomManager) viewer.getProperty(ZoomManager.class.toString());
+			}
+		}
+		return zoomMananger;
 	}
 
 	private void cleanUpActions() {
