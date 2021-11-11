@@ -248,7 +248,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 				portString.append(fb.getName());
 				portString.append("."); //$NON-NLS-1$
 
-				if (interfaceElement.eContainer().eContainer() instanceof AdapterFB) {
+				if (interfaceElement.eContainer() != null && interfaceElement.eContainer().eContainer() instanceof AdapterFB) {
 					portString.append(((PortElementImpl) eContainer()).interfaceElement.getName());
 					portString.append("."); //$NON-NLS-1$
 				}
