@@ -92,7 +92,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 
 	public boolean isElementOrParentDeleted(final Notification notification) {
 		final FBNetworkElement fbNetworkElement = getInterfaceElement().getFBNetworkElement();
-		return notification.getOldValue() == fbNetworkElement
+		return fbNetworkElement == null || notification.getOldValue() == fbNetworkElement
 				|| fbNetworkElement.isNestedInSubApp() && fBnetworks.contains(fbNetworkElement.getFbNetwork());
 	}
 

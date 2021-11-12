@@ -49,6 +49,7 @@ import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
@@ -204,10 +205,13 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	}
 
 	private StructuredType getSelectedStructuredType() {
-		final AbstractStructTreeNode selected = (AbstractStructTreeNode) memberVarViewer.getTree().getSelection()[0].getData();
-		final VarDeclaration varDecl = selected.getVariable();
-		if (varDecl.getType() instanceof StructuredType) {
-			return (StructuredType) varDecl.getType();
+		final ITreeSelection selection = memberVarViewer.getStructuredSelection();
+		if (!selection.isEmpty()) {
+			final AbstractStructTreeNode selected = (AbstractStructTreeNode) selection.getFirstElement();
+			final VarDeclaration varDecl = selected.getVariable();
+			if (varDecl.getType() instanceof StructuredType) {
+				return (StructuredType) varDecl.getType();
+			}
 		}
 		return null;
 	}
