@@ -25,7 +25,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.geometry.Point;
@@ -186,15 +185,10 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	protected IFigure createFigure() {
 		final HideableConnection connectionFigure = new HideableConnection();
 		connectionFigure.setModel(getModel());
+		setConnectionColor(connectionFigure);  // needs to be done before setHidden
 		connectionFigure.setHidden(!getModel().isVisible());
 
-		final PolygonDecoration arrow = new PolygonDecoration();
-		arrow.setTemplate(PolygonDecoration.TRIANGLE_TIP);
-		arrow.setScale(7, 4);
-		connectionFigure.setTargetDecoration(arrow);
-
 		performConnTypeConfiguration(connectionFigure);
-		setConnectionColor(connectionFigure);
 		connectionFigure.setToolTip(new ConnectionTooltipFigure(getModel()));
 		connectionFigure.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		return connectionFigure;
@@ -204,11 +198,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		if (getModel() instanceof EventConnection) {
 			connectionFigure.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
-		}
-
-		if (getModel() instanceof AdapterConnection) {
-			connectionFigure.setTargetDecoration(null);
-			connectionFigure.setSourceDecoration(null);
 		}
 
 		if (getModel() instanceof DataConnection) {

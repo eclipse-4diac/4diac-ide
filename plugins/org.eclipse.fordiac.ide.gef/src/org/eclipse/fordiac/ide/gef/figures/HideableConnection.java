@@ -15,9 +15,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
-import org.eclipse.draw2d.FigureUtilities;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PolylineConnection;
+import org.eclipse.draw2d.RotatableDecoration;
+import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Geometry;
 import org.eclipse.draw2d.geometry.Point;
@@ -31,7 +36,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.util.ColorHelper;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 
 public class HideableConnection extends PolylineConnection {
 
@@ -41,10 +48,61 @@ public class HideableConnection extends PolylineConnection {
 	private static final int DOUBLE_LINE_AMPLIFICATION = 2;
 
 	private boolean hidden = false;
-	private String label = ""; //$NON-NLS-1$
-	private final Rectangle moveRect = new Rectangle();
 	private org.eclipse.fordiac.ide.model.libraryElement.Connection model;
 	private Color lighterColor;
+
+	private static class ConnectionLabel extends RoundedRectangle implements RotatableDecoration {
+
+		private final Label label;
+		private final boolean srcLabel;
+
+		public ConnectionLabel(final boolean srcLabel) {
+			super();
+			this.srcLabel = srcLabel;
+			setLayoutManager(new StackLayout());
+			setFill(true);
+			setAntialias(1);
+			setOutline(false);
+			setCornerDimensions(new Dimension(10, 10));
+
+			label = createLabel();
+			add(label);
+		}
+
+		private static Label createLabel() {
+			final Label label = new Label();
+			label.setOpaque(false);
+			label.setForegroundColor(ColorConstants.white);
+			label.setFont(getLabelFont());
+			label.setBorder(new MarginBorder(0,2,0,2));
+			return label;
+		}
+
+		public Label getLabel() {
+			return label;
+		}
+
+		private static Font getLabelFont() {
+			return JFaceResources.getFontRegistry()
+					.get(org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT);
+		}
+
+		@Override
+		public void setReferencePoint(final Point p) {
+			// we don't want this decorator to be rotated so that the number keeps readable
+		}
+
+		@Override
+		public void setLocation(final Point p) {
+			final Dimension preferredSize = super.getPreferredSize();
+			if (!srcLabel) {
+				p.x -= preferredSize.width;
+			}
+			p.y -= preferredSize.height / 2;
+			super.setBounds(new Rectangle(p, preferredSize));
+		}
+
+	}
 
 	public void setModel(final org.eclipse.fordiac.ide.model.libraryElement.Connection newModel) {
 		model = newModel;
@@ -52,14 +110,6 @@ public class HideableConnection extends PolylineConnection {
 
 	public org.eclipse.fordiac.ide.model.libraryElement.Connection getModel() {
 		return model;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(final String label) {
-		this.label = label;
 	}
 
 	public boolean isHidden() {
@@ -70,14 +120,40 @@ public class HideableConnection extends PolylineConnection {
 		final boolean oldHidden = this.hidden;
 		this.hidden = hidden;
 		if (oldHidden != hidden) {
-			if(hidden) {
-				if ((getModel() != null) && (getModel().getSourceElement() != null)) {
-					setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
-				}
+			if (hidden) {
+				setSourceDecoration(createSourceLabel());
+				setTargetDecoration(createTargetLabel());
+			} else {
+				setSourceDecoration(null);
+				setTargetDecoration(null);
 			}
 			invalidate();
 			repaint();
 		}
+	}
+
+	private RotatableDecoration createTargetLabel() {
+		final ConnectionLabel label = new ConnectionLabel(false);
+		label.setBackgroundColor(getForegroundColor());
+		label.getLabel().setText(createLabelText(getModel().getSource()));
+		return label;
+	}
+
+	private RotatableDecoration createSourceLabel() {
+		final ConnectionLabel label = new ConnectionLabel(true);
+		label.setBackgroundColor(getForegroundColor());
+		label.getLabel().setText(createLabelText(getModel().getDestination()));
+		return label;
+	}
+
+	private static String createLabelText(final IInterfaceElement ie) {
+		final StringBuilder builder = new StringBuilder();
+		if (ie.getFBNetworkElement() != null) {
+			builder.append(ie.getFBNetworkElement().getName());
+			builder.append('.');
+		}
+		builder.append(ie.getName());
+		return builder.toString();
 	}
 
 	@Override
@@ -90,20 +166,7 @@ public class HideableConnection extends PolylineConnection {
 
 	@Override
 	protected void outlineShape(final Graphics g) {
-		if (isHidden()) {
-
-			final int[] startLine = new int[] { getStart().x, getStart().y, getStart().x + 20, getStart().y };
-			final int[] endLine = new int[] { getEnd().x, getEnd().y, getEnd().x - 20, getEnd().y };
-			g.drawPolyline(startLine);
-			g.drawPolyline(endLine);
-
-			final Dimension dim = FigureUtilities.getTextExtents(label, g.getFont());
-			g.drawText(label, new Point(getEnd().x - dim.width - 25, getEnd().y - (dim.height / 2)));
-			moveRect.x = getEnd().x - dim.width - 25;
-			moveRect.y = getEnd().y - (dim.height / 2);
-			moveRect.width = 5;
-			moveRect.height = 5;
-		} else {
+		if (!isHidden()) {
 			if (isAdapterConnectionOrStructConnection()) {
 				drawDoublePolyline(g, getBeveledPoints());
 			} else {

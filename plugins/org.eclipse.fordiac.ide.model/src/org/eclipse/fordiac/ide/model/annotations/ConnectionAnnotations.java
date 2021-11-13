@@ -16,13 +16,18 @@ import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 
-public class ConnectionAnnotations {
+public final class ConnectionAnnotations {
 
 	public static void setVisible(final Connection connection, final boolean visible) {
-		setVisible(connection, Boolean.toString(visible));
+		if (visible) {
+			// if we are visible the attribute can be removed
+			connection.deleteAttribute(LibraryElementTags.CONNECTION_VISIBLE);
+		} else {
+			setVisible(connection, Boolean.toString(visible));
+		}
 	}
 
-	public static void setVisible(final Connection connection, final String visible) {
+	private static void setVisible(final Connection connection, final String visible) {
 		connection.setAttribute(LibraryElementTags.CONNECTION_VISIBLE, FordiacKeywords.STRING, visible, "");  //$NON-NLS-1$
 	}
 
@@ -31,4 +36,7 @@ public class ConnectionAnnotations {
 		return !"false".equalsIgnoreCase(visibleAttribute); //$NON-NLS-1$
 	}
 
+	private ConnectionAnnotations() {
+		throw new UnsupportedOperationException("Utility class should not be instantiated");
+	}
 }
