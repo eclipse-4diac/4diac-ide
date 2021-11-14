@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.ConnectionLayer;
+import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ShortestPathConnectionRouter;
 import org.eclipse.emf.common.notify.Adapter;
@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.widgets.Display;
 
@@ -41,12 +40,8 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	private Adapter adapter;
 
 	@Override
-	protected IFigure createFigure() {
-		final IFigure figure = super.createFigure();
-		// Create the static router for the connection layer
-		final ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
-		connLayer.setConnectionRouter(new ShortestPathConnectionRouter(figure));
-		return figure;
+	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
+		return new ShortestPathConnectionRouter(figure);
 	}
 
 	@Override

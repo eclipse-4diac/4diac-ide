@@ -42,9 +42,7 @@ public final class Messages extends NLS {
 
 	public static String ConnectionSection_Source;
 	public static String ConnectionSection_Target;
-	public static String DiagramPreferences_ConnectionRouter;
 	public static String DiagramPreferences_CornerDimension;
-	public static String DiagramPreferences_DefaultRouter;
 	public static String DiagramPreferences_FB;
 	public static String DiagramPreferences_GeneralDiagramPreferences;
 	public static String DiagramPreferences_LabelSize;

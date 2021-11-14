@@ -16,11 +16,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FreeformLayer;
-import org.eclipse.draw2d.FreeformLayout;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
@@ -30,7 +25,6 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 /**
@@ -41,28 +35,6 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 	/** The adapter. */
 	private Adapter adapter;
 
-	/**
-	 * Creates the <code>Figure</code> to be used as this part's <i>visuals</i>.
-	 *
-	 * @return a figure
-	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
-	 */
-	@Override
-	protected IFigure createFigure() {
-		Figure f = new FreeformLayer();
-		f.setBorder(new MarginBorder(10));
-		f.setLayoutManager(new FreeformLayout());
-		f.setOpaque(false);
-		getLayer(LayerConstants.CONNECTION_LAYER).setLayoutManager(new FreeformLayout());
-		return f;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
-	 */
 	@Override
 	public void activate() {
 		if (!isActive()) {
@@ -94,7 +66,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 			adapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(final Notification notification) {
-					int type = notification.getEventType();
+					final int type = notification.getEventType();
 					switch (type) {
 					case Notification.ADD:
 					case Notification.ADD_MANY:
@@ -143,7 +115,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 	 */
 	@Override
 	protected List<?> getModelChildren() {
-		List<ECState> temp = new ArrayList<>();
+		final List<ECState> temp = new ArrayList<>();
 		temp.addAll(getCastedECCModel().getECState());
 		return temp;
 	}

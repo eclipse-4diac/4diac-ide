@@ -189,11 +189,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		// Allows the removal of the connection model element
 		installEditPolicy(EditPolicy.CONNECTION_ROLE, new DeleteConnectionEditPolicy());
 
-		if (getConnectionFigure().getConnectionRouter() instanceof BendpointPolicyRouter) {
-			installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
-					((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter())
-					.getBendpointPolicy(getModel()));
-		}
+		installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
+				((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter()).getBendpointPolicy(getModel()));
 	}
 
 	@Override

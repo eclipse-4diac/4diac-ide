@@ -53,7 +53,7 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 		// Create a Group to hold the compare editor fields
 		final Group compare = new Group(getFieldEditorParent(), SWT.NONE);
 		compare.setText(Messages.FORTEExportPreferences_CompareEditorForMerging);
-		final GridLayout routerLayout = new GridLayout(2, false);
+		final GridLayout compareLayout = new GridLayout(2, false);
 
 		final Map<String, ICompareEditorOpener> compareEditorOpeners = CompareEditorOpenerUtil.getCompareEditorOpeners();
 
@@ -75,7 +75,7 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 		comparedata.horizontalSpan = 2;
 
 		compare.setLayoutData(comparedata);
-		compare.setLayout(routerLayout);
+		compare.setLayout(compareLayout);
 
 	}
 

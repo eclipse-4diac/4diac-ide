@@ -16,7 +16,9 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.ConnectionLayer;
+import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
@@ -24,7 +26,6 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.gef.router.RouterUtil;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.SnapToGrid;
@@ -55,7 +56,8 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		newFigure.setLayoutManager(new FreeformLayout());
 		newFigure.setOpaque(false);
 
-		updateRouter(newFigure);
+		final ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
+		connLayer.setConnectionRouter(createConnectionRouter(newFigure));
 
 		return newFigure;
 	}
@@ -132,17 +134,14 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 				if (event.getProperty().equals(DiagramPreferences.SHOW_RULERS)) {
 					updateRuler();
 				}
-				if (event.getProperty().equals(DiagramPreferences.CONNECTION_ROUTER)) {
-					updateRouter(getFigure());
-				}
 			};
 		}
 		return listener;
 	}
 
-	protected void updateRouter(final IFigure figure) {
-		final ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
-		connLayer.setConnectionRouter(RouterUtil.getConnectionRouter(figure));
+	@SuppressWarnings("static-method")  // allow children to overwrite and create a different router
+	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
+		return new BendpointConnectionRouter();
 	}
 
 	protected void updateGrid() {

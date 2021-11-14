@@ -19,8 +19,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
-import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
-import org.eclipse.fordiac.ide.gef.router.RouterUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
@@ -33,9 +31,9 @@ import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 public class LinkEditPart extends AbstractConnectionEditPart {
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			Object feature = notification.getFeature();
+			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
 				updateLinkColor(getFigure());
 			}
@@ -48,9 +46,9 @@ public class LinkEditPart extends AbstractConnectionEditPart {
 		return (Link) super.getModel();
 	}
 
-	protected void updateLinkColor(IFigure connection) {
+	protected void updateLinkColor(final IFigure connection) {
 		if (null != getModel().getSegment()) {
-			Color segmentColor = getModel().getSegment().getColor();
+			final Color segmentColor = getModel().getSegment().getColor();
 			if (null != segmentColor) {
 				connection.setForegroundColor(ColorManager.getColor(segmentColor));
 			}
@@ -63,17 +61,11 @@ public class LinkEditPart extends AbstractConnectionEditPart {
 		// Makes the connection show a feedback, when selected by the user.
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new FeedbackConnectionEndpointEditPolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ROLE, new DeleteLinkEditPolicy());
-		if (getConnectionFigure().getConnectionRouter() instanceof BendpointPolicyRouter) {
-			installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
-					((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter())
-							.getBendpointPolicy(getModel()));
-		}
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		PolylineConnection connection;
-		connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
+		final PolylineConnection connection = new PolylineConnection();
 		connection.setConnectionRouter(new LinkConnectionRouter(this));
 		connection.setLineWidth(3);
 		updateLinkColor(connection);

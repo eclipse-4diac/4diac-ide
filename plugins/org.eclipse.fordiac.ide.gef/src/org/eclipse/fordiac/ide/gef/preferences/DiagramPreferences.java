@@ -18,20 +18,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.gef.router.IConnectionRouterFactory;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -49,9 +38,6 @@ import org.eclipse.ui.PlatformUI;
  * The Class DiagramPreferences.
  */
 public class DiagramPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-
-	/** The Constant CONNECTION_ROUTER. */
-	public static final String CONNECTION_ROUTER = "ConnectionRouter"; //$NON-NLS-1$
 
 	/** The Constant CORNER_DIM. */
 	public static final int CORNER_DIM = 6;
@@ -95,9 +81,6 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the ruler fields
 		createGroupRulerGrid();
-
-		// Create a Group to hold the connection router fields
-		createGroupRouter();
 
 		// Create a Group to hold label size field
 		createGroupLabelSize();
@@ -205,42 +188,6 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		gridSpacing.setTextLimit(10);
 		addField(gridSpacing);
 		configGroup(group);
-	}
-
-	private void createGroupRouter() {
-		final Group router = createGroup(Messages.DiagramPreferences_ConnectionRouter);
-
-		final Map<String, IConnectionRouterFactory> connectionRouter = new HashMap<>();
-
-		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
-				"ConnectionRouterProvider"); //$NON-NLS-1$
-		for (final IConfigurationElement element : elems) {
-			try {
-				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				final String name = element.getAttribute("name"); //$NON-NLS-1$
-				if (object instanceof IConnectionRouterFactory) {
-					final IConnectionRouterFactory routerFactory = (IConnectionRouterFactory) object;
-					connectionRouter.put(name, routerFactory);
-				}
-			} catch (final CoreException corex) {
-				FordiacLogHelper.logError("Error loading ConnectionRouter", corex); //$NON-NLS-1$
-			}
-		}
-
-		final Set<String> keySet = connectionRouter.keySet();
-		final String[][] nameArray = new String[keySet.size()][2];
-		int i = 0;
-		for (final String key : keySet) {
-			nameArray[i][0] = key;
-			nameArray[i][1] = key;
-			i++;
-		}
-
-		final ComboFieldEditor routerEditor = new ComboFieldEditor(CONNECTION_ROUTER,
-				Messages.DiagramPreferences_DefaultRouter, nameArray, router);
-		addField(routerEditor);
-		configGroup(router);
 	}
 
 	private void createGroupInterfacePins() {
