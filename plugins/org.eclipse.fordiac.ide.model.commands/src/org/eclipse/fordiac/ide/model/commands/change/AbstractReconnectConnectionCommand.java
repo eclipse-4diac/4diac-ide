@@ -104,6 +104,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 
 		connectionCreateCmd.execute();  // perform adding the connection first to preserve any error markers
 		deleteConnectionCmd.execute();
+		copyAttributes(connectionCreateCmd.getConnection(), deleteConnectionCmd.getConnection());
 	}
 
 	@Override
@@ -116,6 +117,12 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	public void undo() {
 		deleteConnectionCmd.undo();
 		connectionCreateCmd.undo();
+	}
+
+	private static void copyAttributes(final Connection dstCon, final Connection srcCon) {
+		srcCon.getAttributes().forEach(attr -> {
+			dstCon.setAttribute(attr.getName(), attr.getType().getName(), attr.getValue(), attr.getComment());
+		});
 	}
 
 	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent);

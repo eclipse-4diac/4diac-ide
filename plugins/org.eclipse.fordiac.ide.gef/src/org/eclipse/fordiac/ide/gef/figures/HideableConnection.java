@@ -51,7 +51,7 @@ public class HideableConnection extends PolylineConnection {
 	private org.eclipse.fordiac.ide.model.libraryElement.Connection model;
 	private Color lighterColor;
 
-	private static class ConnectionLabel extends RoundedRectangle implements RotatableDecoration {
+	public static class ConnectionLabel extends RoundedRectangle implements RotatableDecoration {
 
 		private final Label label;
 		private final boolean srcLabel;
@@ -132,6 +132,23 @@ public class HideableConnection extends PolylineConnection {
 		}
 	}
 
+	@Override
+	public ConnectionLabel getSourceDecoration() {
+		return (ConnectionLabel) super.getSourceDecoration();
+	}
+
+	@Override
+	public ConnectionLabel getTargetDecoration() {
+		return (ConnectionLabel) super.getTargetDecoration();
+	}
+
+	public void updateConLabels() {
+		if(isHidden()) {
+			getSourceDecoration().getLabel().setText(createLabelText(getModel().getDestination()));
+			getTargetDecoration().getLabel().setText(createLabelText(getModel().getSource()));
+		}
+	}
+
 	private RotatableDecoration createTargetLabel() {
 		final ConnectionLabel label = new ConnectionLabel(false);
 		label.setBackgroundColor(getForegroundColor());
@@ -148,11 +165,13 @@ public class HideableConnection extends PolylineConnection {
 
 	private static String createLabelText(final IInterfaceElement ie) {
 		final StringBuilder builder = new StringBuilder();
-		if (ie.getFBNetworkElement() != null) {
-			builder.append(ie.getFBNetworkElement().getName());
-			builder.append('.');
+		if (ie != null) {
+			if (ie.getFBNetworkElement() != null) {
+				builder.append(ie.getFBNetworkElement().getName());
+				builder.append('.');
+			}
+			builder.append(ie.getName());
 		}
-		builder.append(ie.getName());
 		return builder.toString();
 	}
 
@@ -222,7 +241,8 @@ public class HideableConnection extends PolylineConnection {
 
 	@Override
 	protected boolean shapeContainsPoint(final int x, final int y) {
-		return Geometry.polylineContainsPoint(getPoints(), x, y, getLineWidth() + CONNECTION_SELECTION_TOLERANCE);
+		return !isHidden()
+				&& Geometry.polylineContainsPoint(getPoints(), x, y, getLineWidth() + CONNECTION_SELECTION_TOLERANCE);
 	}
 
 	private PointList getBeveledPoints() {

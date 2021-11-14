@@ -218,7 +218,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 	private boolean isInDeleteConnList(final Connection conn) {
 		for (final Object cmd : reconnCmds.getCommands()) {
 			if (cmd instanceof DeleteConnectionCommand
-					&& ((DeleteConnectionCommand) cmd).getConnectionView().equals(conn)) {
+					&& ((DeleteConnectionCommand) cmd).getConnection().equals(conn)) {
 				return true;
 			}
 		}

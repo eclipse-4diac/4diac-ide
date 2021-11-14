@@ -52,7 +52,7 @@ public class DeleteConnectionCommand extends Command {
 		this.errorFb = errorFb;
 	}
 
-	public Connection getConnectionView() {
+	public Connection getConnection() {
 		return connection;
 	}
 

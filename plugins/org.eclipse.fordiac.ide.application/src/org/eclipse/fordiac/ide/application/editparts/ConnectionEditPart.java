@@ -275,6 +275,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 				getConnectionFigure().setLineDash(null);
 			}
 			getConnectionFigure().setHidden(!getModel().isVisible());
+			getConnectionFigure().updateConLabels();
 		}
 	}
 
