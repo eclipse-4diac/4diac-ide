@@ -32,6 +32,9 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
@@ -66,6 +69,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
 public class ConnectionEditPart extends AbstractConnectionEditPart {
+
+	private final class SrcDstAdapter extends AdapterImpl {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)) {
+				getConnectionFigure().updateConLabels();
+			}
+		}
+	}
 
 	private static final class FBNConnectionEndPointHandle extends ScrollingConnectionEndpointHandle {
 		private FBNConnectionEndPointHandle(final org.eclipse.gef.ConnectionEditPart owner, final int endPoint) {
@@ -285,10 +300,34 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			super.activate();
 			UIPlugin.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 			getModel().eAdapters().add(getContentAdapter());
+			addSourceAdapters();
+			addDestinationAdapters();
+		}
+	}
+
+	private void addDestinationAdapters() {
+		if (getModel().getDestination() != null && dstPinAdapter.getTarget() == null) {
+			getModel().getDestination().eAdapters().add(dstPinAdapter);
+			if (getModel().getDestinationElement() != null) {
+				getModel().getDestinationElement().eAdapters().add(dstFBAdapter);
+			}
+		}
+	}
+
+	private void addSourceAdapters() {
+		if (getModel().getSource() != null && srcPinAdapter.getTarget() == null) {
+			getModel().getSource().eAdapters().add(srcPinAdapter);
+			if (getModel().getSourceElement() != null) {
+				getModel().getSourceElement().eAdapters().add(srcFBAdapter);
+			}
 		}
 	}
 
 	private Adapter contentAdapter;
+	private final Adapter srcPinAdapter = new SrcDstAdapter();
+	private final Adapter srcFBAdapter = new SrcDstAdapter();
+	private final Adapter dstPinAdapter = new SrcDstAdapter();
+	private final Adapter dstFBAdapter = new SrcDstAdapter();
 
 	private Adapter getContentAdapter() {
 		if (contentAdapter == null) {
@@ -302,10 +341,28 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 							|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
 						refreshComment();
 					}
+					if (LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
+						addSourceAdapters();
+					}
 					if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
+						addDestinationAdapters();
 						setConnectionColor(getFigure());
 						// reset the line width so that any to struct connections have the right width
 						getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+					}
+
+					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)) {
+						// the hidden property was changed inform source and destination so that all labels are updated
+						getModel().getSource()
+						.eNotify(new ENotificationImpl((InternalEObject) getModel().getSource(),
+								Notification.SET,
+								LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections(),
+								getModel(), getModel()));
+						getModel().getDestination()
+						.eNotify(new ENotificationImpl((InternalEObject) getModel().getDestination(),
+								Notification.SET,
+								LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections(),
+								getModel(), getModel()));
 					}
 				}
 			};
@@ -323,6 +380,19 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			super.deactivate();
 			UIPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 			getModel().eAdapters().remove(getContentAdapter());
+
+			if (srcPinAdapter.getTarget() != null) {
+				srcPinAdapter.getTarget().eAdapters().remove(srcPinAdapter);
+			}
+			if (srcFBAdapter.getTarget() != null) {
+				srcFBAdapter.getTarget().eAdapters().remove(srcFBAdapter);
+			}
+			if (dstPinAdapter.getTarget() != null) {
+				dstPinAdapter.getTarget().eAdapters().remove(dstPinAdapter);
+			}
+			if (dstFBAdapter.getTarget() != null) {
+				dstFBAdapter.getTarget().eAdapters().remove(dstFBAdapter);
+			}
 		}
 	}
 

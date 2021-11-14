@@ -15,6 +15,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Label;
@@ -28,11 +31,13 @@ import org.eclipse.draw2d.geometry.Geometry;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.util.ColorHelper;
@@ -48,7 +53,7 @@ public class HideableConnection extends PolylineConnection {
 	private static final int DOUBLE_LINE_AMPLIFICATION = 2;
 
 	private boolean hidden = false;
-	private org.eclipse.fordiac.ide.model.libraryElement.Connection model;
+	private Connection model;
 	private Color lighterColor;
 
 	public static class ConnectionLabel extends RoundedRectangle implements RotatableDecoration {
@@ -104,11 +109,11 @@ public class HideableConnection extends PolylineConnection {
 
 	}
 
-	public void setModel(final org.eclipse.fordiac.ide.model.libraryElement.Connection newModel) {
+	public void setModel(final Connection newModel) {
 		model = newModel;
 	}
 
-	public org.eclipse.fordiac.ide.model.libraryElement.Connection getModel() {
+	public Connection getModel() {
 		return model;
 	}
 
@@ -143,36 +148,59 @@ public class HideableConnection extends PolylineConnection {
 	}
 
 	public void updateConLabels() {
-		if(isHidden()) {
-			getSourceDecoration().getLabel().setText(createLabelText(getModel().getDestination()));
-			getTargetDecoration().getLabel().setText(createLabelText(getModel().getSource()));
+		if (isHidden()) {
+			getSourceDecoration().getLabel().setText(createDestinationLabelText());
+			getTargetDecoration().getLabel().setText(createSourceLabelText());
 		}
 	}
 
 	private RotatableDecoration createTargetLabel() {
 		final ConnectionLabel label = new ConnectionLabel(false);
 		label.setBackgroundColor(getForegroundColor());
-		label.getLabel().setText(createLabelText(getModel().getSource()));
+		label.getLabel().setText(createSourceLabelText());
 		return label;
 	}
-
 	private RotatableDecoration createSourceLabel() {
 		final ConnectionLabel label = new ConnectionLabel(true);
 		label.setBackgroundColor(getForegroundColor());
-		label.getLabel().setText(createLabelText(getModel().getDestination()));
+		label.getLabel().setText(createDestinationLabelText());
 		return label;
 	}
 
-	private static String createLabelText(final IInterfaceElement ie) {
+	private String createSourceLabelText() {
+		if (getModel().getSource() != null && getModel().getDestination() != null) {
+			return createLabelText(getModel().getSource(), getModel().getDestination().getInputConnections());
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	private String createDestinationLabelText() {
+		if (getModel().getSource() != null && getModel().getDestination() != null) {
+			return createLabelText(getModel().getDestination(), getModel().getSource().getOutputConnections());
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	private static String createLabelText(final IInterfaceElement ie, final EList<Connection> connections) {
 		final StringBuilder builder = new StringBuilder();
-		if (ie != null) {
-			if (ie.getFBNetworkElement() != null) {
-				builder.append(ie.getFBNetworkElement().getName());
-				builder.append('.');
+		final List<Connection> hiddenConnections = getHiddenConnections(connections);
+		if (hiddenConnections.size() > 1) {
+			// we have more then one hidden connection so we show the number
+			builder.append(hiddenConnections.size());
+		} else {
+			if (ie != null) {
+				if (ie.getFBNetworkElement() != null) {
+					builder.append(ie.getFBNetworkElement().getName());
+					builder.append('.');
+				}
+				builder.append(ie.getName());
 			}
-			builder.append(ie.getName());
 		}
 		return builder.toString();
+	}
+
+	private static List<Connection> getHiddenConnections(final EList<Connection> connections) {
+		return connections.stream().filter(con -> !con.isVisible()).collect(Collectors.toList());
 	}
 
 	@Override
