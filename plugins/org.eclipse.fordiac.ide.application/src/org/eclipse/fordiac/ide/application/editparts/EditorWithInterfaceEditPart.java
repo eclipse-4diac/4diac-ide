@@ -26,6 +26,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.BorderLayout;
@@ -482,6 +483,14 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	@Override
 	public DragTracker getDragTracker(final Request req) {
 		return getParent().getDragTracker(req);
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		final List<EditPart> ies = (List<EditPart>) getChildren().stream().filter(InterfaceEditPart.class::isInstance)
+				.collect(Collectors.toList());
+		ies.forEach(this::removeChild);
+		ies.forEach(ie -> addChild(ie, -1));
 	}
 
 }
