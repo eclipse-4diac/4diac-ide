@@ -31,10 +31,12 @@ import org.eclipse.swt.graphics.Color;
 
 public class ConnectorBorder extends AbstractBorder {
 
-	private static final int CONNECTOR_SIZE = 5;
+	private static final int CONNECTOR_WIDTH = 5;
+	private static final int CONNECTOR_HEIGHT = 10;
+	private static final int CONNECTOR_HEIGHT_HALF = CONNECTOR_HEIGHT / 2;
 	private static final int ADAPTER_SIZE = 9;
 
-	protected static final int LR_MARGIN = CONNECTOR_SIZE + 1;
+	protected static final int LR_MARGIN = CONNECTOR_WIDTH + 1;
 	protected static final int LR_ADAPTER_MARGIN = 11;
 
 	private final IInterfaceElement editPartModelOject;
@@ -105,25 +107,31 @@ public class ConnectorBorder extends AbstractBorder {
 		graphics.setBackgroundColor(connectorColor);
 
 		final Rectangle where = getPaintRectangle(figure, insets);
-		Rectangle r = null;
 		if (isInput()) {
 			if (isAdapter()) {
 				createAdapterSymbolMiniFBrotated(graphics, where, 0, false);
 			} else {
-				r = new Rectangle(where.x, where.y + (where.height - CONNECTOR_SIZE) / 2, CONNECTOR_SIZE,
-						CONNECTOR_SIZE);
-				graphics.fillRectangle(r);
+				final PointList pointList = getTrianglePoints(where.x,
+						where.y + (where.height - CONNECTOR_HEIGHT) / 2);
+				graphics.fillPolygon(pointList);
 			}
 		} else {
 			if (isAdapter()) {
 				createAdapterSymbolMiniFBrotated(graphics, where, where.width - ADAPTER_SIZE + 1, true);
 			} else {
-				r = new Rectangle(where.width + where.x - CONNECTOR_SIZE,
-						where.y + (where.height - CONNECTOR_SIZE) / 2,
-						CONNECTOR_SIZE, CONNECTOR_SIZE);
-				graphics.fillRectangle(r);
+				final PointList pointList = getTrianglePoints(where.width + where.x - CONNECTOR_WIDTH,
+						where.y + (where.height - CONNECTOR_HEIGHT) / 2);
+				graphics.fillPolygon(pointList);
 			}
 		}
+	}
+
+	private static PointList getTrianglePoints(final int startX, final int startY) {
+		final PointList pointList = new PointList(4);
+		pointList.addPoint(startX, startY);
+		pointList.addPoint(startX + CONNECTOR_WIDTH, startY + CONNECTOR_HEIGHT_HALF);
+		pointList.addPoint(startX, startY + CONNECTOR_HEIGHT);
+		return pointList;
 	}
 
 	@Override
