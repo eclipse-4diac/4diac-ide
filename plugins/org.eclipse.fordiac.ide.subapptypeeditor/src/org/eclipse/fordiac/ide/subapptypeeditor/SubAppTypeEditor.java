@@ -95,7 +95,7 @@ public class SubAppTypeEditor extends FBTypeEditor {
 	@Override
 	protected FBType getFBType(final PaletteEntry paletteEntry) {
 		if (paletteEntry instanceof SubApplicationTypePaletteEntry) {
-			return ((SubApplicationTypePaletteEntry) paletteEntry).getSubApplicationType();
+			return ((SubApplicationTypePaletteEntry) paletteEntry).getTypeEditable();
 		}
 		return null;
 	}

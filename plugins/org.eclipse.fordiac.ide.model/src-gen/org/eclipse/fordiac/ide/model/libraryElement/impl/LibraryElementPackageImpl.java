@@ -3127,6 +3127,14 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, theXMLTypePackage.getInt(), "dy", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theXMLTypePackage.getInt(), "dx2", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(connectionEClass, null, "setVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getBoolean(), "visible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(connectionEClass, theXMLTypePackage.getBoolean(), "isVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(connectionEClass, null, "setVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getBoolean(), "visible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(connectionRoutingDataEClass, ConnectionRoutingData.class, "ConnectionRoutingData", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getConnectionRoutingData_Dx1(), theXMLTypePackage.getInt(), "dx1", "0", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
@@ -3631,7 +3639,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				LibraryElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLibraryElement_PaletteEntry(), thePalettePackage.getPaletteEntry(),
-				thePalettePackage.getPaletteEntry_Type(), "paletteEntry", null, 0, 1, LibraryElement.class, //$NON-NLS-1$
+				thePalettePackage.getPaletteEntry_TypeEditable(), "paletteEntry", null, 0, 1, LibraryElement.class, //$NON-NLS-1$
 				IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

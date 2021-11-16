@@ -605,7 +605,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 		private State(final State s) {
 			net = EcoreUtil.copy(s.net);
 			functionblock = EcoreUtil.copy(s.functionblock);
-			functionblock.setType(EcoreUtil.copy(s.functionblock.getFBType()));
+			functionblock.setType(EcoreUtil.copy(s.functionblock.getType()));
 		}
 
 		@Override

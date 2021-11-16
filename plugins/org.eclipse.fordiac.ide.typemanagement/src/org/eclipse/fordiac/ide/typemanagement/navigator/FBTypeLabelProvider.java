@@ -183,7 +183,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	private static FBType getFBTypeFromFile(final IFile file) {
 		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (entry instanceof FBTypePaletteEntry) {
-			return ((FBTypePaletteEntry) entry).getFBType();
+			return ((FBTypePaletteEntry) entry).getType();
 		}
 		return null;
 	}

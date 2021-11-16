@@ -11,7 +11,7 @@
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed analysis result to key value pairs
- *   Lisa Sonnleithner - Adjustments to change calculation method to average 
+ *   Lisa Sonnleithner - Adjustments to change calculation method to average
  *   				   - extracted superclass
  *******************************************************************************/
 
@@ -58,12 +58,12 @@ public abstract class AbstractCodeMetricHandler extends AbstractHandler {
 		private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00"); //$NON-NLS-1$
 
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
+		public Image getColumnImage(final Object element, final int columnIndex) {
 			return null;
 		}
 
 		@Override
-		public String getColumnText(Object element, int columnIndex) {
+		public String getColumnText(final Object element, final int columnIndex) {
 			if (element instanceof MetricResult) {
 				switch (columnIndex) {
 				case 0:
@@ -83,20 +83,20 @@ public abstract class AbstractCodeMetricHandler extends AbstractHandler {
 
 		private final List<MetricResult> data;
 
-		public MetricsResultDialog(Shell parent, INamedElement element, final List<MetricResult> data) {
+		public MetricsResultDialog(final Shell parent, final INamedElement element, final List<MetricResult> data) {
 			super(parent, Messages.CalculatedMetricsFor + element.getName(), null, null, INFORMATION, 0,
 					IDialogConstants.OK_LABEL);
 			this.data = data;
 		}
 
 		@Override
-		protected Control createMessageArea(Composite composite) {
+		protected Control createMessageArea(final Composite composite) {
 			final Composite body = (Composite) super.createMessageArea(composite);
 
 			final TableViewer viewer = new TableViewer(body, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI);
 			GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, false)
-					.hint(convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH), SWT.DEFAULT)
-					.applyTo(viewer.getTable());
+			.hint(convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH), SWT.DEFAULT)
+			.applyTo(viewer.getTable());
 			configureTableColumns(viewer.getTable());
 
 			viewer.setContentProvider(new ArrayContentProvider());
@@ -106,11 +106,11 @@ public abstract class AbstractCodeMetricHandler extends AbstractHandler {
 			return body;
 		}
 
-		private static void configureTableColumns(Table table) {
+		private static void configureTableColumns(final Table table) {
 			new TableColumn(table, SWT.LEFT).setText(Messages.Metric);
 			new TableColumn(table, SWT.RIGHT).setText(Messages.Value);
 
-			TableLayout layout = new TableLayout();
+			final TableLayout layout = new TableLayout();
 			layout.addColumnData(new ColumnWeightData(65, 100));
 			layout.addColumnData(new ColumnWeightData(25, 10));
 			table.setLayout(layout);
@@ -121,10 +121,10 @@ public abstract class AbstractCodeMetricHandler extends AbstractHandler {
 	}
 
 	@Override
-	public Object execute(ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
-		List<MetricResult> result = new ArrayList<>();
+	public Object execute(final ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
+		final List<MetricResult> result = new ArrayList<>();
 
-		INamedElement selectedElement = getSelectedElement(
+		final INamedElement selectedElement = getSelectedElement(
 				(StructuredSelection) HandlerUtil.getCurrentSelection(event));
 
 		if (null != selectedElement) {
@@ -134,7 +134,7 @@ public abstract class AbstractCodeMetricHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static INamedElement getSelectedElement(StructuredSelection currentSelection) {
+	private static INamedElement getSelectedElement(final StructuredSelection currentSelection) {
 		Object obj = currentSelection.getFirstElement();
 		if (obj instanceof EditPart) {
 			obj = ((EditPart) obj).getModel();
@@ -152,25 +152,25 @@ public abstract class AbstractCodeMetricHandler extends AbstractHandler {
 		return (obj instanceof INamedElement) ? (INamedElement) obj : null;
 	}
 
-	private static INamedElement checkSelectedFile(IFile file) {
-		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
+	private static INamedElement checkSelectedFile(final IFile file) {
+		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (entry instanceof FBTypePaletteEntry) {
-			return ((FBTypePaletteEntry) entry).getFBType();
+			return ((FBTypePaletteEntry) entry).getType();
 		}
 		return null;
 	}
 
-	private void calculateMetrics(INamedElement element, List<MetricResult> result) {
-		List<AbstractCodeMetricAnalyzer> analyzers = getAnalyzers();
-		for (AbstractCodeMetricAnalyzer analyzer : analyzers) {
+	private void calculateMetrics(final INamedElement element, final List<MetricResult> result) {
+		final List<AbstractCodeMetricAnalyzer> analyzers = getAnalyzers();
+		for (final AbstractCodeMetricAnalyzer analyzer : analyzers) {
 			analyzer.calculateMetrics(element);
 			result.addAll(analyzer.getResults());
 		}
 	}
 
-	private static void displayResults(INamedElement element, List<MetricResult> result,
-			IWorkbenchWindow workbenchWindow) {
-		MetricsResultDialog resultDialog = new MetricsResultDialog(workbenchWindow.getShell(), element, result);
+	private static void displayResults(final INamedElement element, final List<MetricResult> result,
+			final IWorkbenchWindow workbenchWindow) {
+		final MetricsResultDialog resultDialog = new MetricsResultDialog(workbenchWindow.getShell(), element, result);
 		resultDialog.open();
 	}
 

@@ -70,7 +70,7 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 
 	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */
@@ -78,7 +78,7 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 
 	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */
@@ -102,7 +102,7 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 
 	/** The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getPaletteEntry()
 	 * @generated
 	 * @ordered */
@@ -279,11 +279,11 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		if (newPaletteEntry != paletteEntry) {
 			NotificationChain msgs = null;
 			if (paletteEntry != null)
-				msgs = ((InternalEObject) paletteEntry).eInverseRemove(this, PalettePackage.PALETTE_ENTRY__TYPE,
-						PaletteEntry.class, msgs);
+				msgs = ((InternalEObject) paletteEntry).eInverseRemove(this,
+						PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE, PaletteEntry.class, msgs);
 			if (newPaletteEntry != null)
-				msgs = ((InternalEObject) newPaletteEntry).eInverseAdd(this, PalettePackage.PALETTE_ENTRY__TYPE,
-						PaletteEntry.class, msgs);
+				msgs = ((InternalEObject) newPaletteEntry).eInverseAdd(this,
+						PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE, PaletteEntry.class, msgs);
 			msgs = basicSetPaletteEntry(newPaletteEntry, msgs);
 			if (msgs != null)
 				msgs.dispatch();
@@ -311,8 +311,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		switch (featureID) {
 		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 			if (paletteEntry != null)
-				msgs = ((InternalEObject) paletteEntry).eInverseRemove(this, PalettePackage.PALETTE_ENTRY__TYPE,
-						PaletteEntry.class, msgs);
+				msgs = ((InternalEObject) paletteEntry).eInverseRemove(this,
+						PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE, PaletteEntry.class, msgs);
 			return basicSetPaletteEntry((PaletteEntry) otherEnd, msgs);
 		default:
 			return super.eInverseAdd(otherEnd, featureID, msgs);

@@ -15,15 +15,13 @@
  */
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter Type Palette Entry</b></em>'. <!--
  * end-user-doc -->
@@ -50,7 +48,7 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 	 * @generated */
 	@Override
 	public AdapterType getType() {
-		final LibraryElement type = super.getType();
+		LibraryElement type = super.getType();
 		if (type instanceof AdapterType) {
 			return (AdapterType) type;
 		}
@@ -67,9 +65,7 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 		} else {
 			super.setType(null);
 			if (null != type) {
-				final Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"tried to set no AdapterType as type entry for AdapterTypePaletteEntry");  //$NON-NLS-1$
-				Activator.getDefault().getLog().log(exception);
+				FordiacLogHelper.logError("tried to set no AdapterType as type entry for AdapterTypePaletteEntry");  //$NON-NLS-1$
 			}
 		}
 	}
@@ -80,6 +76,18 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 	@Override
 	public CommonElementImporter getImporter() {
 		return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(getFile());
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public AdapterType getTypeEditable() {
+		LibraryElement type = super.getTypeEditable();
+		if (type instanceof AdapterType) {
+			return (AdapterType) type;
+		}
+		return null;
 	}
 
 } // AdapterTypePaletteEntryImpl

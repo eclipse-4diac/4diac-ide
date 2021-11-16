@@ -151,7 +151,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		final FBTypePaletteEntry entry = getTypeEntry(typeFbElement);
 
 		if (null != entry) {
-			final FBType type = entry.getFBType();
+			final FBType type = entry.getType();
 			if (type instanceof CompositeFBType) {
 				fb = LibraryElementFactory.eINSTANCE.createCFBInstance();
 			} else {

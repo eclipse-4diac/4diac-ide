@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,9 +9,10 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
 import org.eclipse.core.resources.IFile;
@@ -21,6 +23,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
@@ -40,13 +43,14 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * Modification Timestamp</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getType <em>Type</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getPalette <em>Palette</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getTypeEditable <em>Type Editable</em>}</li>
  * </ul>
  *
  * @generated */
 public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEntry {
 	/** The default value of the '{@link #getLabel() <em>Label</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered */
@@ -54,7 +58,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/** The cached value of the '{@link #getLabel() <em>Label</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered */
@@ -78,7 +82,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/** The default value of the '{@link #getLastModificationTimestamp() <em>Last Modification Timestamp</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getLastModificationTimestamp()
 	 * @generated
 	 * @ordered */
@@ -86,7 +90,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/** The cached value of the '{@link #getLastModificationTimestamp() <em>Last Modification Timestamp</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getLastModificationTimestamp()
 	 * @generated
 	 * @ordered */
@@ -102,11 +106,19 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/** The cached value of the '{@link #getPalette() <em>Palette</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @see #getPalette()
 	 * @generated
 	 * @ordered */
 	protected Palette palette;
+
+	/** The cached value of the '{@link #getTypeEditable() <em>Type Editable</em>}' reference. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 *
+	 * @see #getTypeEditable()
+	 * @generated
+	 * @ordered */
+	protected LibraryElement typeEditable;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -213,43 +225,12 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public NotificationChain basicSetType(final LibraryElement newType, NotificationChain msgs) {
+	@Override
+	public void setType(final LibraryElement newType) {
 		final LibraryElement oldType = type;
 		type = newType;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					PalettePackage.PALETTE_ENTRY__TYPE, oldType, newType);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
-		}
-		return msgs;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public void setType(final LibraryElement newType) {
-		if (newType != type) {
-			NotificationChain msgs = null;
-			if (type != null) {
-				msgs = ((InternalEObject) type).eInverseRemove(this,
-						LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, LibraryElement.class, msgs);
-			}
-			if (newType != null) {
-				msgs = ((InternalEObject) newType).eInverseAdd(this,
-						LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, LibraryElement.class, msgs);
-			}
-			msgs = basicSetType(newType, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
-		} else if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__TYPE, newType,
-					newType));
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__TYPE, oldType, type));
 		}
 	}
 
@@ -271,6 +252,61 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__PALETTE, oldPalette,
 					palette));
+		}
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated not */
+	@Override
+	public LibraryElement getTypeEditable() {
+		if (typeEditable == null) {
+			// if the editable type is null load it from the file and set a copy
+			setTypeEditable(EcoreUtil.copy(getType()));
+		}
+		return typeEditable;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	public NotificationChain basicSetTypeEditable(final LibraryElement newTypeEditable, NotificationChain msgs) {
+		final LibraryElement oldTypeEditable = typeEditable;
+		typeEditable = newTypeEditable;
+		if (eNotificationRequired()) {
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE, oldTypeEditable, newTypeEditable);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
+		}
+		return msgs;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public void setTypeEditable(final LibraryElement newTypeEditable) {
+		if (newTypeEditable != typeEditable) {
+			NotificationChain msgs = null;
+			if (typeEditable != null) {
+				msgs = ((InternalEObject) typeEditable).eInverseRemove(this,
+						LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, LibraryElement.class, msgs);
+			}
+			if (newTypeEditable != null) {
+				msgs = ((InternalEObject) newTypeEditable).eInverseAdd(this,
+						LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, LibraryElement.class, msgs);
+			}
+			msgs = basicSetTypeEditable(newTypeEditable, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE,
+					newTypeEditable, newTypeEditable));
 		}
 	}
 
@@ -314,12 +350,12 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	@Override
 	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case PalettePackage.PALETTE_ENTRY__TYPE:
-			if (type != null) {
-				msgs = ((InternalEObject) type).eInverseRemove(this,
+		case PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE:
+			if (typeEditable != null) {
+				msgs = ((InternalEObject) typeEditable).eInverseRemove(this,
 						LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, LibraryElement.class, msgs);
 			}
-			return basicSetType((LibraryElement) otherEnd, msgs);
+			return basicSetTypeEditable((LibraryElement) otherEnd, msgs);
 		default:
 			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
@@ -332,8 +368,8 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
 			final NotificationChain msgs) {
 		switch (featureID) {
-		case PalettePackage.PALETTE_ENTRY__TYPE:
-			return basicSetType(null, msgs);
+		case PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE:
+			return basicSetTypeEditable(null, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -355,6 +391,8 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			return getType();
 		case PalettePackage.PALETTE_ENTRY__PALETTE:
 			return getPalette();
+		case PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE:
+			return getTypeEditable();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -380,6 +418,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			return;
 		case PalettePackage.PALETTE_ENTRY__PALETTE:
 			setPalette((Palette) newValue);
+			return;
+		case PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE:
+			setTypeEditable((LibraryElement) newValue);
 			return;
 		default:
 			super.eSet(featureID, newValue);
@@ -408,6 +449,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		case PalettePackage.PALETTE_ENTRY__PALETTE:
 			setPalette((Palette) null);
 			return;
+		case PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE:
+			setTypeEditable((LibraryElement) null);
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -430,6 +474,8 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			return type != null;
 		case PalettePackage.PALETTE_ENTRY__PALETTE:
 			return palette != null;
+		case PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE:
+			return typeEditable != null;
 		default:
 			return super.eIsSet(featureID);
 		}

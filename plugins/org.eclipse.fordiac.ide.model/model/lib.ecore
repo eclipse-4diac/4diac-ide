@@ -991,7 +991,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="identification" eType="#//Identification"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="paletteEntry" eType="ecore:EClass palette.ecore#//PaletteEntry"
-        transient="true" resolveProxies="false" eOpposite="palette.ecore#//PaletteEntry/type"/>
+        transient="true" resolveProxies="false" eOpposite="palette.ecore#//PaletteEntry/typeEditable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompilableType" eSuperTypes="#//LibraryElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="compilerInfo" eType="#//CompilerInfo"

@@ -80,9 +80,6 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 				@Override
 				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 					exporter.writeToFile(entry.getFile());
-					// "reset" the modification timestamp in the PaletteEntry to avoid reload - as for this timestamp it
-					// is not necessary as the data is in memory
-					entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
 					return Status.OK_STATUS;
 				}
 			};

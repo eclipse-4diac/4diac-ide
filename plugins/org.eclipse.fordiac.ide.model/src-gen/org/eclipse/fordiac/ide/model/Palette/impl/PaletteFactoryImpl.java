@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -21,30 +21,33 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-
 import org.eclipse.core.runtime.CoreException;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import org.eclipse.fordiac.ide.model.Palette.*;
-
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
+import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
+import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	/** Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public static PaletteFactory init() {
 		try {
@@ -60,14 +63,14 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public PaletteFactoryImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EObject create(EClass eClass) {
@@ -108,7 +111,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
@@ -131,7 +134,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
@@ -154,7 +157,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Palette createPalette() {
@@ -163,7 +166,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public Map.Entry<String, AdapterTypePaletteEntry> createStringToAdapterTypePaletteEntryMap() {
 		StringToAdapterTypePaletteEntryMapImpl stringToAdapterTypePaletteEntryMap = new StringToAdapterTypePaletteEntryMapImpl();
@@ -171,7 +174,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public Map.Entry<String, DeviceTypePaletteEntry> createStringToFDeviceTypePaletteEntryMap() {
 		StringToFDeviceTypePaletteEntryMapImpl stringToFDeviceTypePaletteEntryMap = new StringToFDeviceTypePaletteEntryMapImpl();
@@ -179,7 +182,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public Map.Entry<String, FBTypePaletteEntry> createStringToFBTypePaletteEntryMap() {
 		StringToFBTypePaletteEntryMapImpl stringToFBTypePaletteEntryMap = new StringToFBTypePaletteEntryMapImpl();
@@ -187,7 +190,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public Map.Entry<String, ResourceTypeEntry> createStringToResourceTypeEntryMap() {
 		StringToResourceTypeEntryMapImpl stringToResourceTypeEntryMap = new StringToResourceTypeEntryMapImpl();
@@ -195,7 +198,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public Map.Entry<String, SegmentTypePaletteEntry> createStringToSegmentTypePaletteEntryMap() {
 		StringToSegmentTypePaletteEntryMapImpl stringToSegmentTypePaletteEntryMap = new StringToSegmentTypePaletteEntryMapImpl();
@@ -203,7 +206,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public Map.Entry<String, SubApplicationTypePaletteEntry> createStringToSubApplicationTypePaletteEntryMap() {
 		StringToSubApplicationTypePaletteEntryMapImpl stringToSubApplicationTypePaletteEntryMap = new StringToSubApplicationTypePaletteEntryMapImpl();
@@ -211,7 +214,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AdapterTypePaletteEntry createAdapterTypePaletteEntry() {
@@ -220,7 +223,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DataTypePaletteEntry createDataTypePaletteEntry() {
@@ -229,7 +232,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public DeviceTypePaletteEntry createDeviceTypePaletteEntry() {
@@ -238,7 +241,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public FBTypePaletteEntry createFBTypePaletteEntry() {
@@ -247,7 +250,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public ResourceTypeEntry createResourceTypeEntry() {
@@ -256,7 +259,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SegmentTypePaletteEntry createSegmentTypePaletteEntry() {
@@ -265,7 +268,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SubApplicationTypePaletteEntry createSubApplicationTypePaletteEntry() {
@@ -274,7 +277,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SystemPaletteEntry createSystemPaletteEntry() {
@@ -283,91 +286,91 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public IFile createIFileFromString(EDataType eDataType, String initialValue) {
 		return (IFile) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertIFileToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public IProject createIProjectFromString(EDataType eDataType, String initialValue) {
 		return (IProject) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public CommonElementImporter createCommonElementImporterFromString(EDataType eDataType, String initialValue) {
 		return (CommonElementImporter) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertCommonElementImporterToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public XMLStreamException createXMLStreamExceptionFromString(EDataType eDataType, String initialValue) {
 		return (XMLStreamException) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertXMLStreamExceptionToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public CoreException createCoreExceptionFromString(EDataType eDataType, String initialValue) {
 		return (CoreException) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertCoreExceptionToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public TypeLibrary createTypeLibraryFromString(EDataType eDataType, String initialValue) {
 		return (TypeLibrary) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public String convertTypeLibraryToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public PalettePackage getPalettePackage() {
@@ -375,7 +378,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @deprecated
 	 * @generated */
 	@Deprecated

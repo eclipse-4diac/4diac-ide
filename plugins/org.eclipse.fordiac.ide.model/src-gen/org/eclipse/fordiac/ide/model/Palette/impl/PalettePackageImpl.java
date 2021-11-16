@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -21,20 +21,15 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-
 import org.eclipse.core.runtime.CoreException;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
-
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
@@ -47,130 +42,124 @@ import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
-
 import org.eclipse.fordiac.ide.model.data.DataPackage;
-
 import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
-
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-
 import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl;
-
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
- * 
+ *
  * @generated */
 public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass paletteEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass stringToAdapterTypePaletteEntryMapEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass stringToFDeviceTypePaletteEntryMapEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass stringToFBTypePaletteEntryMapEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass stringToResourceTypeEntryMapEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass stringToSegmentTypePaletteEntryMapEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass stringToSubApplicationTypePaletteEntryMapEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass paletteEntryEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass adapterTypePaletteEntryEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass dataTypePaletteEntryEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass deviceTypePaletteEntryEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass fbTypePaletteEntryEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass resourceTypeEntryEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass segmentTypePaletteEntryEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass subApplicationTypePaletteEntryEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EClass systemPaletteEntryEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType iFileEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType iProjectEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType commonElementImporterEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType xmlStreamExceptionEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType coreExceptionEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private EDataType typeLibraryEDataType = null;
 
@@ -180,7 +169,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also
 	 * performs initialization of the package, or returns the registered package, if one already exists. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#eNS_URI
 	 * @see #init()
@@ -190,7 +179,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private static boolean isInited = false;
 
@@ -200,7 +189,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * This method is used to initialize {@link PalettePackage#eINSTANCE} when that field is accessed. Clients should
 	 * not invoke it directly. Instead, they should simply access that field to obtain the package. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
@@ -249,7 +238,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getPalette() {
@@ -257,7 +246,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getPalette_TypeLibrary() {
@@ -265,7 +254,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPalette_AdapterTypes() {
@@ -273,7 +262,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPalette_DeviceTypes() {
@@ -281,7 +270,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPalette_FbTypes() {
@@ -289,7 +278,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPalette_ResourceTypes() {
@@ -297,7 +286,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPalette_SegmentTypes() {
@@ -305,7 +294,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPalette_SubAppTypes() {
@@ -313,7 +302,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getStringToAdapterTypePaletteEntryMap() {
@@ -321,7 +310,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getStringToAdapterTypePaletteEntryMap_Key() {
@@ -329,7 +318,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getStringToAdapterTypePaletteEntryMap_Value() {
@@ -337,7 +326,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getStringToFDeviceTypePaletteEntryMap() {
@@ -345,7 +334,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getStringToFDeviceTypePaletteEntryMap_Key() {
@@ -353,7 +342,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getStringToFDeviceTypePaletteEntryMap_Value() {
@@ -361,7 +350,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getStringToFBTypePaletteEntryMap() {
@@ -369,7 +358,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getStringToFBTypePaletteEntryMap_Key() {
@@ -377,7 +366,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getStringToFBTypePaletteEntryMap_Value() {
@@ -385,7 +374,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getStringToResourceTypeEntryMap() {
@@ -393,7 +382,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getStringToResourceTypeEntryMap_Key() {
@@ -401,7 +390,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getStringToResourceTypeEntryMap_Value() {
@@ -409,7 +398,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getStringToSegmentTypePaletteEntryMap() {
@@ -417,7 +406,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getStringToSegmentTypePaletteEntryMap_Key() {
@@ -425,7 +414,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getStringToSegmentTypePaletteEntryMap_Value() {
@@ -433,7 +422,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getStringToSubApplicationTypePaletteEntryMap() {
@@ -441,7 +430,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getStringToSubApplicationTypePaletteEntryMap_Key() {
@@ -449,7 +438,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getStringToSubApplicationTypePaletteEntryMap_Value() {
@@ -457,7 +446,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getPaletteEntry() {
@@ -465,7 +454,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getPaletteEntry_Label() {
@@ -473,7 +462,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getPaletteEntry_File() {
@@ -481,7 +470,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EAttribute getPaletteEntry_LastModificationTimestamp() {
@@ -489,7 +478,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPaletteEntry_Type() {
@@ -497,7 +486,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EReference getPaletteEntry_Palette() {
@@ -505,7 +494,15 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
+	 * @generated */
+	@Override
+	public EReference getPaletteEntry_TypeEditable() {
+		return (EReference) paletteEntryEClass.getEStructuralFeatures().get(5);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated */
 	@Override
 	public EClass getAdapterTypePaletteEntry() {
@@ -513,7 +510,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDataTypePaletteEntry() {
@@ -521,7 +518,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getDeviceTypePaletteEntry() {
@@ -529,7 +526,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getFBTypePaletteEntry() {
@@ -537,7 +534,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getResourceTypeEntry() {
@@ -545,7 +542,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSegmentTypePaletteEntry() {
@@ -553,7 +550,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSubApplicationTypePaletteEntry() {
@@ -561,7 +558,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EClass getSystemPaletteEntry() {
@@ -569,7 +566,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getIFile() {
@@ -577,7 +574,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getIProject() {
@@ -585,7 +582,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getCommonElementImporter() {
@@ -593,7 +590,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getXMLStreamException() {
@@ -601,7 +598,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getCoreException() {
@@ -609,7 +606,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EDataType getTypeLibrary() {
@@ -617,7 +614,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public PaletteFactory getPaletteFactory() {
@@ -625,13 +622,13 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private boolean isCreated = false;
 
 	/** Creates the meta-model objects for the package. This method is guarded to have no affect on any invocation but
 	 * its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public void createPackageContents() {
 		if (isCreated)
@@ -681,6 +678,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		createEAttribute(paletteEntryEClass, PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP);
 		createEReference(paletteEntryEClass, PALETTE_ENTRY__TYPE);
 		createEReference(paletteEntryEClass, PALETTE_ENTRY__PALETTE);
+		createEReference(paletteEntryEClass, PALETTE_ENTRY__TYPE_EDITABLE);
 
 		adapterTypePaletteEntryEClass = createEClass(ADAPTER_TYPE_PALETTE_ENTRY);
 
@@ -708,13 +706,13 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	private boolean isInitialized = false;
 
 	/** Complete the initialization of the package and its meta-model. This method is guarded to have no affect on any
 	 * invocation but its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public void initializePackageContents() {
 		if (isInitialized)
@@ -867,13 +865,16 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		initEAttribute(getPaletteEntry_LastModificationTimestamp(), theXMLTypePackage.getLong(),
 				"lastModificationTimestamp", null, 0, 1, PaletteEntry.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				!IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
-		initEReference(getPaletteEntry_Type(), theLibraryElementPackage.getLibraryElement(),
-				theLibraryElementPackage.getLibraryElement_PaletteEntry(), "type", null, 1, 1, PaletteEntry.class, //$NON-NLS-1$
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPaletteEntry_Type(), theLibraryElementPackage.getLibraryElement(), null, "type", null, 1, 1, //$NON-NLS-1$
+				PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPaletteEntry_Palette(), this.getPalette(), null, "palette", null, 1, 1, PaletteEntry.class, //$NON-NLS-1$
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPaletteEntry_TypeEditable(), theLibraryElementPackage.getLibraryElement(),
+				theLibraryElementPackage.getLibraryElement_PaletteEntry(), "typeEditable", null, 1, 1, //$NON-NLS-1$
+				PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(paletteEntryEClass, theXMLTypePackage.getString(), "getProjectRelativeTypePath", 1, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
@@ -896,6 +897,9 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		addEOperation(adapterTypePaletteEntryEClass, this.getCommonElementImporter(), "getImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
+
+		addEOperation(adapterTypePaletteEntryEClass, theLibraryElementPackage.getAdapterType(), "getTypeEditable", 0, 1, //$NON-NLS-1$
+				IS_UNIQUE, IS_ORDERED);
 
 		initEClass(dataTypePaletteEntryEClass, DataTypePaletteEntry.class, "DataTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -924,7 +928,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		initEClass(fbTypePaletteEntryEClass, FBTypePaletteEntry.class, "FBTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		addEOperation(fbTypePaletteEntryEClass, theLibraryElementPackage.getFBType(), "getFBType", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+		addEOperation(fbTypePaletteEntryEClass, theLibraryElementPackage.getFBType(), "getType", 1, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 
 		op = addEOperation(fbTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -932,6 +936,9 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		addEOperation(fbTypePaletteEntryEClass, this.getCommonElementImporter(), "getImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
+
+		addEOperation(fbTypePaletteEntryEClass, theLibraryElementPackage.getFBType(), "getTypeEditable", 1, 1, //$NON-NLS-1$
+				IS_UNIQUE, IS_ORDERED);
 
 		initEClass(resourceTypeEntryEClass, ResourceTypeEntry.class, "ResourceTypeEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -960,14 +967,17 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		initEClass(subApplicationTypePaletteEntryEClass, SubApplicationTypePaletteEntry.class,
 				"SubApplicationTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		addEOperation(subApplicationTypePaletteEntryEClass, theLibraryElementPackage.getSubAppType(),
-				"getSubApplicationType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(subApplicationTypePaletteEntryEClass, theLibraryElementPackage.getSubAppType(), "getType", 1, 1, //$NON-NLS-1$
+				IS_UNIQUE, IS_ORDERED);
 
 		op = addEOperation(subApplicationTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(subApplicationTypePaletteEntryEClass, this.getCommonElementImporter(), "getImporter", 0, 1, //$NON-NLS-1$
 				IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(subApplicationTypePaletteEntryEClass, theLibraryElementPackage.getSubAppType(), "getTypeEditable", //$NON-NLS-1$
+				1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(systemPaletteEntryEClass, SystemPaletteEntry.class, "SystemPaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

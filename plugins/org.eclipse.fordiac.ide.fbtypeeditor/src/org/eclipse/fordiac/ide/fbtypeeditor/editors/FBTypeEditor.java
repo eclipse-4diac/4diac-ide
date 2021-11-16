@@ -44,7 +44,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -120,7 +120,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			// allow each editor to save back changes before saving to file
 			editors.forEach(editorPart -> editorPart.doSave(monitor));
 			getCommandStack().markSaveLocation();
-			AbstractBlockTypeExporter.saveType(paletteEntry);
+			AbstractTypeExporter.saveType(paletteEntry);
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 	}
@@ -192,9 +192,6 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 
 			fbType = getFBType(paletteEntry);
 			if (null != fbType) {
-				// TODO create a copy of the type here so that closing the editor without
-				// saveing is better implemented
-				// Attention adapters need for saveing then beeing treated special
 				fbType.eAdapters().add(adapter);
 			}
 		}
@@ -205,11 +202,12 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		super.init(site, editorInput);
 	}
 
+	@SuppressWarnings("static-method")  // allow children to override this method
 	protected FBType getFBType(final PaletteEntry paletteEntry) {
 		if (paletteEntry instanceof FBTypePaletteEntry) {
-			return ((FBTypePaletteEntry) paletteEntry).getFBType();
+			return ((FBTypePaletteEntry) paletteEntry).getTypeEditable();
 		} else if (paletteEntry instanceof AdapterTypePaletteEntry) {
-			return ((AdapterTypePaletteEntry) paletteEntry).getType().getAdapterFBType();
+			return ((AdapterTypePaletteEntry) paletteEntry).getTypeEditable().getAdapterFBType();
 		}
 		return null;
 	}
@@ -237,12 +235,9 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 
 		super.dispose();
 
-		if (dirty) {
-			// purge from typelib after super.dispose() so that no notifiers
-			// will be called
-			if (null != paletteEntry) {
-				paletteEntry.setType(null);
-			}
+		if (dirty && paletteEntry != null) {
+			// purge editable type from typelib after super.dispose() so that no notifiers will be called
+			paletteEntry.setTypeEditable(null);
 		}
 
 		getCommandStack().removeCommandStackEventListener(this);
@@ -414,7 +409,6 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		}
 		getCommandStack().flush();
 		fbType.eAdapters().add(adapter);
-
 	}
 
 	@Override
