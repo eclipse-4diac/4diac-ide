@@ -13,21 +13,45 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class FBTypeContentProvider extends AdapterFactoryContentProvider {
+
+	private List<Notifier> targets = new ArrayList<>();
+
+	private final Adapter palletteEntryAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			final Object feature = notification.getFeature();
+			if (PalettePackage.eINSTANCE.getPaletteEntry_TypeEditable().equals(feature)) {
+				final PaletteEntry entry = (PaletteEntry) notification.getNotifier();
+				FBTypeContentProvider.super.notifyChanged(new ViewerNotification(notification, entry.getFile()));
+			}
+		}
+	};
 
 	public FBTypeContentProvider() {
 		super(FBTypeComposedAdapterFactory.getAdapterFactory());
@@ -36,6 +60,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 		return getChildren(inputElement);
+
 	}
 
 	@Override
@@ -44,7 +69,8 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 			final IFile element = (IFile) parentElement;
 			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(element);
 			if (null != entry) {
-				parentElement = entry.getType();
+				hookToPaletteEntry(entry);
+				parentElement = entry.getTypeEditable();
 				if (parentElement instanceof AdapterType) {
 					parentElement = ((AdapterType) parentElement).getAdapterFBType();
 				}
@@ -59,16 +85,30 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 		return super.getChildren(parentElement);
 	}
 
+	private void hookToPaletteEntry(final PaletteEntry entry) {
+		if (!entry.eAdapters().contains(palletteEntryAdapter)) {
+			entry.eAdapters().add(palletteEntryAdapter);
+			targets.add(entry);
+		}
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		targets.forEach(entry -> entry.eAdapters().remove(palletteEntryAdapter));
+		targets = null;
+	}
+
 	@Override
 	public Object getParent(final Object element) {
 		if (element instanceof IFile) {
 			return ((IResource) element).getParent();
 		}
-		return super.getParent(element);
-		// FIXME check for the correct elements and return the IFile for them
-		//			if(retval instanceof FBType){
-		//
-		//			}
+		final Object retval = super.getParent(element);
+		if (retval instanceof FBType) {
+			return ((FBType) retval).getPaletteEntry().getFile();
+		}
+		return retval;
 	}
 
 	@Override
