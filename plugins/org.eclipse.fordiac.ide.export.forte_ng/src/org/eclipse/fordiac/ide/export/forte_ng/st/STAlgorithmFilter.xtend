@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *               2020, 2021 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * 				 			Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,8 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Ernst Blecha - add multibit partial access
  *   Ernst Blecha - expose abstract syntax tree after parsing
+ *   Martin Melik Merkumians - fixes partial access and changes type resolution from
+ * 							   String information to object comparison
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.export.forte_ng.st
@@ -25,7 +27,9 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.FordiacKeywords
+import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -83,7 +87,6 @@ import org.eclipse.xtext.validation.CheckMode
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
-import java.util.stream.IntStream
 
 class STAlgorithmFilter {
 
@@ -192,8 +195,41 @@ class STAlgorithmFilter {
 		«alg.localVariables.generateLocalVariables»
 		«alg.statements.generateStatementList»
 	'''
+	
+	def private dispatch int BitSize(PartialAccess part) {
+		if(part !== null) {
+			if(part.bitaccess)			ElementaryTypes.BOOL.BitSize
+			else if(part.byteaccess)	ElementaryTypes.BYTE.BitSize
+			else if(part.wordaccess)	ElementaryTypes.WORD.BitSize
+			else if(part.dwordaccess)	ElementaryTypes.DWORD.BitSize
+			else					    0
+		} else 0
+	}
+	
+	def private dispatch int BitSize(PrimaryVariable variable) {
+		variable.^var.type.BitSize
+	}
+	
+	def private dispatch int BitSize(AdapterVariable variable) {
+		variable.^var.type.BitSize
+	}
+	
+	def private dispatch int BitSize(VarDeclaration declaration) {
+		declaration.type.BitSize
+	}
+	
+	def private dispatch int BitSize(DataType type) {
+		switch(type) {
+			case ElementaryTypes.LWORD: 64
+			case ElementaryTypes.DWORD: 32
+			case ElementaryTypes.WORD: 16
+			case ElementaryTypes.BYTE: 8
+			case ElementaryTypes.BOOL: 1
+			default: 0
+		}
+	}
 
-	def private BitSize(CharSequence str) {
+	def private dispatch int BitSize(CharSequence str) {
 		switch str {
 			case FordiacKeywords.LWORD: 64
 			case FordiacKeywords.DWORD: 32
@@ -691,23 +727,38 @@ class STAlgorithmFilter {
 	def protected generateBitaccess(AdapterVariable variable) {
 		if (null !== variable.part) {
 			val lastvar = variable.^var
-			generateBitaccess(lastvar, lastvar.type.name, variable.extractTypeInformation, variable.part.index)
+			generateBitaccess(lastvar, variable.part)
 		}
 	}
 
 	def protected generateBitaccess(PrimaryVariable variable) {
 		if (null !== variable.part) {
-			generateBitaccess(variable.^var, variable.^var.type.name, variable.extractTypeInformation,
-				variable.part.index)
+			generateBitaccess(variable.^var, variable.part)
 		}
 	}
+	
+	def protected partialAccessTypeName(PartialAccess part) {
+		if (part.bitaccess)        FordiacKeywords.BOOL
+		else if (part.byteaccess)  FordiacKeywords.BYTE
+		else if (part.wordaccess)  FordiacKeywords.WORD
+		else if (part.dwordaccess) FordiacKeywords.DWORD
+		else                       ""
+	}
+	
+	def protected generateBitaccess(VarDeclaration variable, PartialAccess part) {
+		val maxVarBitIndex = variable.BitSize
+		val endBitIndexAccessor = part.BitSize * (part.index + 1)
+		if(maxVarBitIndex > endBitIndexAccessor) {
+			'''.partial<CIEC_«part.partialAccessTypeName»,«Long.toString(part.index)»>()'''
+		}
+		
+	}
 
-	def protected generateBitaccess(VarDeclaration variable, CharSequence DataType, CharSequence AccessorType,
-		int Index) {
-		if (BitSize(AccessorType) > 0 && variable.array &&
-			variable.arraySize * BitSize(DataType) > BitSize(AccessorType)) {
-			'''.partial<CIEC_«AccessorType»,«Long.toString(Index)»>()'''
-		} else if (BitSize(DataType) == BitSize(AccessorType)) {
+	def protected generateBitaccess(VarDeclaration variable, CharSequence dataType, CharSequence accessorType, int index) {
+		if (BitSize(accessorType) > 0 && variable.array &&
+			variable.arraySize * BitSize(dataType) > BitSize(accessorType)) {
+			'''.partial<CIEC_«accessorType»,«Long.toString(index)»>()'''
+		} else if (BitSize(dataType) == BitSize(accessorType)) {
 			''''''
 		} else {
 			'''''' // This should never happen - we cannot access more bits than are available in the source type
@@ -745,5 +796,9 @@ class STAlgorithmFilter {
 	def protected dispatch extractTypeInformation(VarDeclaration variable) {
 		variable.type.name
 	}
-
+	
+	def protected dispatch extractTypeInformation(AdapterVariable variable) {
+		variable.^var.type.name
+	}
+ 
 }

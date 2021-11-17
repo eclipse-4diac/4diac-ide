@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2019 fortiss GmbH
- *               2020, 2021 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * 				 			Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,8 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Ernst Blecha - add multibit partial access
  *   Ernst Blecha - expose abstract syntax tree after parsing
+ *   Martin Melik Merkumians - fixes partial access and changes type resolution from
+ * 							   String information to object comparison
  */
 package org.eclipse.fordiac.ide.export.forte_ng.st;
 
@@ -35,6 +37,7 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -297,7 +300,94 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  private int BitSize(final CharSequence str) {
+  private int _BitSize(final PartialAccess part) {
+    int _xifexpression = (int) 0;
+    if ((part != null)) {
+      int _xifexpression_1 = (int) 0;
+      boolean _isBitaccess = part.isBitaccess();
+      if (_isBitaccess) {
+        _xifexpression_1 = this.BitSize(IecTypes.ElementaryTypes.BOOL);
+      } else {
+        int _xifexpression_2 = (int) 0;
+        boolean _isByteaccess = part.isByteaccess();
+        if (_isByteaccess) {
+          _xifexpression_2 = this.BitSize(IecTypes.ElementaryTypes.BYTE);
+        } else {
+          int _xifexpression_3 = (int) 0;
+          boolean _isWordaccess = part.isWordaccess();
+          if (_isWordaccess) {
+            _xifexpression_3 = this.BitSize(IecTypes.ElementaryTypes.WORD);
+          } else {
+            int _xifexpression_4 = (int) 0;
+            boolean _isDwordaccess = part.isDwordaccess();
+            if (_isDwordaccess) {
+              _xifexpression_4 = this.BitSize(IecTypes.ElementaryTypes.DWORD);
+            } else {
+              _xifexpression_4 = 0;
+            }
+            _xifexpression_3 = _xifexpression_4;
+          }
+          _xifexpression_2 = _xifexpression_3;
+        }
+        _xifexpression_1 = _xifexpression_2;
+      }
+      _xifexpression = _xifexpression_1;
+    } else {
+      _xifexpression = 0;
+    }
+    return _xifexpression;
+  }
+  
+  private int _BitSize(final PrimaryVariable variable) {
+    return this.BitSize(variable.getVar().getType());
+  }
+  
+  private int _BitSize(final AdapterVariable variable) {
+    return this.BitSize(variable.getVar().getType());
+  }
+  
+  private int _BitSize(final VarDeclaration declaration) {
+    return this.BitSize(declaration.getType());
+  }
+  
+  private int _BitSize(final DataType type) {
+    int _switchResult = (int) 0;
+    boolean _matched = false;
+    if (Objects.equal(type, IecTypes.ElementaryTypes.LWORD)) {
+      _matched=true;
+      _switchResult = 64;
+    }
+    if (!_matched) {
+      if (Objects.equal(type, IecTypes.ElementaryTypes.DWORD)) {
+        _matched=true;
+        _switchResult = 32;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(type, IecTypes.ElementaryTypes.WORD)) {
+        _matched=true;
+        _switchResult = 16;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(type, IecTypes.ElementaryTypes.BYTE)) {
+        _matched=true;
+        _switchResult = 8;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(type, IecTypes.ElementaryTypes.BOOL)) {
+        _matched=true;
+        _switchResult = 1;
+      }
+    }
+    if (!_matched) {
+      _switchResult = 0;
+    }
+    return _switchResult;
+  }
+  
+  private int _BitSize(final CharSequence str) {
     int _switchResult = (int) 0;
     boolean _matched = false;
     if (Objects.equal(str, FordiacKeywords.LWORD)) {
@@ -1746,7 +1836,7 @@ public class STAlgorithmFilter {
       CharSequence _xblockexpression = null;
       {
         final VarDeclaration lastvar = variable.getVar();
-        _xblockexpression = this.generateBitaccess(lastvar, lastvar.getType().getName(), this.extractTypeInformation(variable), variable.getPart().getIndex());
+        _xblockexpression = this.generateBitaccess(lastvar, variable.getPart());
       }
       _xifexpression = _xblockexpression;
     }
@@ -1758,28 +1848,84 @@ public class STAlgorithmFilter {
     PartialAccess _part = variable.getPart();
     boolean _tripleNotEquals = (null != _part);
     if (_tripleNotEquals) {
-      _xifexpression = this.generateBitaccess(variable.getVar(), variable.getVar().getType().getName(), this.extractTypeInformation(variable), 
-        variable.getPart().getIndex());
+      _xifexpression = this.generateBitaccess(variable.getVar(), variable.getPart());
     }
     return _xifexpression;
   }
   
-  protected CharSequence generateBitaccess(final VarDeclaration variable, final CharSequence DataType, final CharSequence AccessorType, final int Index) {
+  protected String partialAccessTypeName(final PartialAccess part) {
+    String _xifexpression = null;
+    boolean _isBitaccess = part.isBitaccess();
+    if (_isBitaccess) {
+      _xifexpression = FordiacKeywords.BOOL;
+    } else {
+      String _xifexpression_1 = null;
+      boolean _isByteaccess = part.isByteaccess();
+      if (_isByteaccess) {
+        _xifexpression_1 = FordiacKeywords.BYTE;
+      } else {
+        String _xifexpression_2 = null;
+        boolean _isWordaccess = part.isWordaccess();
+        if (_isWordaccess) {
+          _xifexpression_2 = FordiacKeywords.WORD;
+        } else {
+          String _xifexpression_3 = null;
+          boolean _isDwordaccess = part.isDwordaccess();
+          if (_isDwordaccess) {
+            _xifexpression_3 = FordiacKeywords.DWORD;
+          } else {
+            _xifexpression_3 = "";
+          }
+          _xifexpression_2 = _xifexpression_3;
+        }
+        _xifexpression_1 = _xifexpression_2;
+      }
+      _xifexpression = _xifexpression_1;
+    }
+    return _xifexpression;
+  }
+  
+  protected CharSequence generateBitaccess(final VarDeclaration variable, final PartialAccess part) {
+    CharSequence _xblockexpression = null;
+    {
+      final int maxVarBitIndex = this.BitSize(variable);
+      int _BitSize = this.BitSize(part);
+      int _index = part.getIndex();
+      int _plus = (_index + 1);
+      final int endBitIndexAccessor = (_BitSize * _plus);
+      CharSequence _xifexpression = null;
+      if ((maxVarBitIndex > endBitIndexAccessor)) {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append(".partial<CIEC_");
+        String _partialAccessTypeName = this.partialAccessTypeName(part);
+        _builder.append(_partialAccessTypeName);
+        _builder.append(",");
+        String _string = Long.toString(part.getIndex());
+        _builder.append(_string);
+        _builder.append(">()");
+        _xifexpression = _builder;
+      }
+      _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
+  }
+  
+  protected CharSequence generateBitaccess(final VarDeclaration variable, final CharSequence dataType, final CharSequence accessorType, final int index) {
     CharSequence _xifexpression = null;
-    if ((((this.BitSize(AccessorType) > 0) && variable.isArray()) && 
-      ((variable.getArraySize() * this.BitSize(DataType)) > this.BitSize(AccessorType)))) {
+    if ((((this.BitSize(accessorType) > 0) && variable.isArray()) && 
+      ((variable.getArraySize() * this.BitSize(dataType)) > this.BitSize(accessorType)))) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append(".partial<CIEC_");
-      _builder.append(AccessorType);
+      _builder.append(accessorType);
       _builder.append(",");
-      String _string = Long.toString(Index);
+      String _string = Long.toString(index);
       _builder.append(_string);
       _builder.append(">()");
       _xifexpression = _builder;
     } else {
       CharSequence _xifexpression_1 = null;
-      int _BitSize = this.BitSize(DataType);
-      int _BitSize_1 = this.BitSize(AccessorType);
+      int _BitSize = this.BitSize(dataType);
+      int _BitSize_1 = this.BitSize(accessorType);
       boolean _equals = (_BitSize == _BitSize_1);
       if (_equals) {
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -1849,6 +1995,29 @@ public class STAlgorithmFilter {
   
   protected CharSequence _extractTypeInformation(final VarDeclaration variable) {
     return variable.getType().getName();
+  }
+  
+  protected CharSequence _extractTypeInformation(final AdapterVariable variable) {
+    return variable.getVar().getType().getName();
+  }
+  
+  private int BitSize(final Object declaration) {
+    if (declaration instanceof VarDeclaration) {
+      return _BitSize((VarDeclaration)declaration);
+    } else if (declaration instanceof DataType) {
+      return _BitSize((DataType)declaration);
+    } else if (declaration instanceof AdapterVariable) {
+      return _BitSize((AdapterVariable)declaration);
+    } else if (declaration instanceof PrimaryVariable) {
+      return _BitSize((PrimaryVariable)declaration);
+    } else if (declaration instanceof PartialAccess) {
+      return _BitSize((PartialAccess)declaration);
+    } else if (declaration instanceof CharSequence) {
+      return _BitSize((CharSequence)declaration);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(declaration).toString());
+    }
   }
   
   protected CharSequence generateStatement(final Statement stmt) {
@@ -1948,6 +2117,8 @@ public class STAlgorithmFilter {
   protected CharSequence extractTypeInformation(final EObject variable) {
     if (variable instanceof VarDeclaration) {
       return _extractTypeInformation((VarDeclaration)variable);
+    } else if (variable instanceof AdapterVariable) {
+      return _extractTypeInformation((AdapterVariable)variable);
     } else if (variable instanceof PrimaryVariable) {
       return _extractTypeInformation((PrimaryVariable)variable);
     } else {
