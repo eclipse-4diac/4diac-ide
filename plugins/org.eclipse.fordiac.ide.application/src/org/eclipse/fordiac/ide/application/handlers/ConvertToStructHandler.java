@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.wizards.SaveAsStructWizard;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.CreateStructFromInterfaceElementsCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -92,6 +93,8 @@ public class ConvertToStructHandler extends AbstractHandler {
 			return ((AutomationSystem) root).getSystemFile().getProject();
 		} else if (root instanceof FBType) {
 			return ((FBType) root).getTypeLibrary().getProject();
+		} else if (root instanceof PaletteEntry) {
+			return ((PaletteEntry) root).getFile().getProject();
 		}
 		return null;
 	}

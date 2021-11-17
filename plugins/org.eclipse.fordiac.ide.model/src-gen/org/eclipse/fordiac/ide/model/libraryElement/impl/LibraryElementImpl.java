@@ -27,7 +27,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -46,8 +45,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * Info</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getIdentification
  * <em>Identification</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getPaletteEntry <em>Palette
- * Entry</em>}</li>
  * </ul>
  *
  * @generated */
@@ -99,14 +96,6 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 * @generated
 	 * @ordered */
 	protected Identification identification;
-
-	/** The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 *
-	 * @see #getPaletteEntry()
-	 * @generated
-	 * @ordered */
-	protected PaletteEntry paletteEntry;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -250,52 +239,6 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 *
 	 * @generated */
 	@Override
-	public PaletteEntry getPaletteEntry() {
-		return paletteEntry;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	public NotificationChain basicSetPaletteEntry(PaletteEntry newPaletteEntry, NotificationChain msgs) {
-		PaletteEntry oldPaletteEntry = paletteEntry;
-		paletteEntry = newPaletteEntry;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, oldPaletteEntry, newPaletteEntry);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public void setPaletteEntry(PaletteEntry newPaletteEntry) {
-		if (newPaletteEntry != paletteEntry) {
-			NotificationChain msgs = null;
-			if (paletteEntry != null)
-				msgs = ((InternalEObject) paletteEntry).eInverseRemove(this,
-						PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE, PaletteEntry.class, msgs);
-			if (newPaletteEntry != null)
-				msgs = ((InternalEObject) newPaletteEntry).eInverseAdd(this,
-						PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE, PaletteEntry.class, msgs);
-			msgs = basicSetPaletteEntry(newPaletteEntry, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY,
-					newPaletteEntry, newPaletteEntry));
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
 	public TypeLibrary getTypeLibrary() {
 		if (null != getPaletteEntry()) {
 			return getPaletteEntry().getTypeLibrary();
@@ -307,16 +250,11 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 *
 	 * @generated */
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-			if (paletteEntry != null)
-				msgs = ((InternalEObject) paletteEntry).eInverseRemove(this,
-						PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE, PaletteEntry.class, msgs);
-			return basicSetPaletteEntry((PaletteEntry) otherEnd, msgs);
-		default:
-			return super.eInverseAdd(otherEnd, featureID, msgs);
+	public PaletteEntry getPaletteEntry() {
+		if (eContainer() instanceof PaletteEntry) {
+			return (PaletteEntry) eContainer();
 		}
+		return null;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -329,8 +267,6 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			return ((InternalEList<?>) getVersionInfo()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 			return basicSetIdentification(null, msgs);
-		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-			return basicSetPaletteEntry(null, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -352,8 +288,6 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			if (resolve)
 				return getIdentification();
 			return basicGetIdentification();
-		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-			return getPaletteEntry();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -379,9 +313,6 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 			setIdentification((Identification) newValue);
 			return;
-		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-			setPaletteEntry((PaletteEntry) newValue);
-			return;
 		default:
 			super.eSet(featureID, newValue);
 			return;
@@ -406,9 +337,6 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 			setIdentification((Identification) null);
 			return;
-		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-			setPaletteEntry((PaletteEntry) null);
-			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -429,8 +357,6 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			return versionInfo != null && !versionInfo.isEmpty();
 		case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 			return identification != null;
-		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-			return paletteEntry != null;
 		default:
 			return super.eIsSet(featureID);
 		}

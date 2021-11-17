@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
@@ -126,6 +127,11 @@ public class STAlgorithmFilter {
   
   private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI(((STAlgorithmFilter.SYNTHETIC_URI_NAME + STAlgorithmFilter.URI_SEPERATOR) + STAlgorithmFilter.ST_URI_EXTENSION)));
   
+  public void createFBResource(final XtextResourceSet resourceSet, final FBTypePaletteEntry entry) {
+    FBType _type = entry.getType();
+    this.createFBResource(resourceSet, ((BaseFBType) _type));
+  }
+  
   public void createFBResource(final XtextResourceSet resourceSet, final BaseFBType fbType) {
     final Resource fbResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
     fbResource.getContents().add(fbType);
@@ -190,7 +196,7 @@ public class STAlgorithmFilter {
       ResourceSet _get = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
       final XtextResourceSet resourceSet = ((XtextResourceSet) _get);
       EObject _rootContainer = EcoreUtil.getRootContainer(alg);
-      this.createFBResource(resourceSet, ((BaseFBType) _rootContainer));
+      this.createFBResource(resourceSet, ((FBTypePaletteEntry) _rootContainer));
       Resource _createResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.ST_URI_EXTENSION));
       final XtextResource resource = ((XtextResource) _createResource);
       String _text = alg.getText();

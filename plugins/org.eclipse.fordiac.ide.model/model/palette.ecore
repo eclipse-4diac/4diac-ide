@@ -125,11 +125,11 @@
         ordered="false" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Long"
         transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass lib.ecore#//LibraryElement"
-        resolveProxies="false"/>
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="palette" lowerBound="1"
         eType="#//Palette" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="typeEditable" lowerBound="1"
-        eType="ecore:EClass lib.ecore#//LibraryElement" resolveProxies="false" eOpposite="lib.ecore#//LibraryElement/paletteEntry"/>
+        eType="ecore:EClass lib.ecore#//LibraryElement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterTypePaletteEntry" eSuperTypes="#//PaletteEntry">
     <eOperations name="getType" eType="ecore:EClass lib.ecore#//AdapterType">

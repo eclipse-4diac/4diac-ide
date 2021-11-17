@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,9 +9,10 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Martin Jobst
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.data;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -87,12 +89,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int DATA_TYPE__IDENTIFICATION = LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int DATA_TYPE__PALETTE_ENTRY = LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
@@ -132,12 +128,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ANY_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Any Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -179,12 +169,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ANY_DERIVED_TYPE__IDENTIFICATION = ANY_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_DERIVED_TYPE__PALETTE_ENTRY = ANY_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -233,12 +217,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ARRAY_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ARRAY_TYPE__PALETTE_ENTRY = ANY_DERIVED_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -307,12 +285,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int VALUE_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int VALUE_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Value Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -353,12 +325,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int DERIVED_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int DERIVED_TYPE__PALETTE_ENTRY = VALUE_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Base Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -407,12 +373,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int DIRECTLY_DERIVED_TYPE__IDENTIFICATION = DERIVED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int DIRECTLY_DERIVED_TYPE__PALETTE_ENTRY = DERIVED_TYPE__PALETTE_ENTRY;
-
 	/** The feature id for the '<em><b>Base Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
@@ -459,12 +419,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ENUMERATED_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ENUMERATED_TYPE__PALETTE_ENTRY = VALUE_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Enumerated Value</b></em>' containment reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -540,12 +494,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int STRUCTURED_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int STRUCTURED_TYPE__PALETTE_ENTRY = ANY_DERIVED_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -629,12 +577,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int SUBRANGE_TYPE__IDENTIFICATION = DERIVED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int SUBRANGE_TYPE__PALETTE_ENTRY = DERIVED_TYPE__PALETTE_ENTRY;
-
 	/** The feature id for the '<em><b>Base Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
@@ -689,12 +631,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int ELEMENTARY_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ELEMENTARY_TYPE__PALETTE_ENTRY = VALUE_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Elementary Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -735,12 +671,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int EVENT_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int EVENT_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Event Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -783,12 +713,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int ANY_ELEMENTARY_TYPE__IDENTIFICATION = ANY_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_ELEMENTARY_TYPE__PALETTE_ENTRY = ANY_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Any Elementary Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -829,12 +753,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ANY_MAGNITUDE_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_MAGNITUDE_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Any Magnitude Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -877,12 +795,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int ANY_NUM_TYPE__IDENTIFICATION = ANY_MAGNITUDE_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_NUM_TYPE__PALETTE_ENTRY = ANY_MAGNITUDE_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Any Num Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -923,12 +835,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ANY_REAL_TYPE__IDENTIFICATION = ANY_NUM_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_REAL_TYPE__PALETTE_ENTRY = ANY_NUM_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Any Real Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -971,12 +877,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int REAL_TYPE__IDENTIFICATION = ANY_REAL_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int REAL_TYPE__PALETTE_ENTRY = ANY_REAL_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Real Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -1017,12 +917,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int LREAL_TYPE__IDENTIFICATION = ANY_REAL_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int LREAL_TYPE__PALETTE_ENTRY = ANY_REAL_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Lreal Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1065,12 +959,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int ANY_INT_TYPE__IDENTIFICATION = ANY_NUM_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_INT_TYPE__PALETTE_ENTRY = ANY_NUM_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Any Int Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -1111,12 +999,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ANY_UNSIGNED_TYPE__IDENTIFICATION = ANY_INT_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_UNSIGNED_TYPE__PALETTE_ENTRY = ANY_INT_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Any Unsigned Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -1159,12 +1041,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int USINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int USINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Usint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -1205,12 +1081,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int UINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int UINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Uint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1253,12 +1123,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int UDINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int UDINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Udint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -1299,12 +1163,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ULINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ULINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Ulint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1347,12 +1205,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int ANY_SIGNED_TYPE__IDENTIFICATION = ANY_INT_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_SIGNED_TYPE__PALETTE_ENTRY = ANY_INT_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Any Signed Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -1393,12 +1245,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int SINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int SINT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Sint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1441,12 +1287,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int INT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int INT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Int Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -1487,12 +1327,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int DINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int DINT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Dint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1535,12 +1369,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int LINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int LINT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Lint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -1581,12 +1409,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ANY_DURATION_TYPE__IDENTIFICATION = ANY_MAGNITUDE_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_DURATION_TYPE__PALETTE_ENTRY = ANY_MAGNITUDE_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Any Duration Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -1629,12 +1451,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int TIME_TYPE__IDENTIFICATION = ANY_DURATION_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int TIME_TYPE__PALETTE_ENTRY = ANY_DURATION_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Time Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -1675,12 +1491,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int LTIME_TYPE__IDENTIFICATION = ANY_DURATION_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int LTIME_TYPE__PALETTE_ENTRY = ANY_DURATION_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Ltime Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1723,12 +1533,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int ANY_BIT_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_BIT_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Any Bit Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -1769,12 +1573,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int BOOL_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int BOOL_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Bool Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1817,12 +1615,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int BYTE_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int BYTE_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Byte Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -1863,12 +1655,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int WORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int WORD_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Word Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1911,12 +1697,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int DWORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int DWORD_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Dword Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -1957,12 +1737,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int LWORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int LWORD_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Lword Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -2005,12 +1779,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int ANY_CHARS_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_CHARS_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Any Chars Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -2051,12 +1819,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ANY_STRING_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_STRING_TYPE__PALETTE_ENTRY = ANY_CHARS_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Any String Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -2099,12 +1861,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int STRING_TYPE__IDENTIFICATION = ANY_STRING_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int STRING_TYPE__PALETTE_ENTRY = ANY_STRING_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>String Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -2145,12 +1901,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int WSTRING_TYPE__IDENTIFICATION = ANY_STRING_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int WSTRING_TYPE__PALETTE_ENTRY = ANY_STRING_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Wstring Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -2193,12 +1943,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int ANY_CHAR_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_CHAR_TYPE__PALETTE_ENTRY = ANY_CHARS_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Any Char Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -2239,12 +1983,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int CHAR_TYPE__IDENTIFICATION = ANY_CHAR_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int CHAR_TYPE__PALETTE_ENTRY = ANY_CHAR_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Char Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -2287,12 +2025,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int WCHAR_TYPE__IDENTIFICATION = ANY_CHAR_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int WCHAR_TYPE__PALETTE_ENTRY = ANY_CHAR_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Wchar Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -2333,12 +2065,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ANY_DATE_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ANY_DATE_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Any Date Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -2381,12 +2107,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int DATE_AND_TIME_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int DATE_AND_TIME_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Date And Time Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -2427,12 +2147,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int LDT_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int LDT_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Ldt Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -2475,12 +2189,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int DATE_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int DATE_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Date Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -2521,12 +2229,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int TIME_OF_DAY_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int TIME_OF_DAY_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Time Of Day Type</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -2569,12 +2271,6 @@ public interface DataPackage extends EPackage {
 	 * @ordered */
 	int LTOD_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int LTOD_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
-
 	/** The number of structural features of the '<em>Ltod Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -2615,12 +2311,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int LDATE_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int LDATE_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Ldate Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->

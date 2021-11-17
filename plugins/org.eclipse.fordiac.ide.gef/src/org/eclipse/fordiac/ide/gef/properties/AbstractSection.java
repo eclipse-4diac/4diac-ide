@@ -26,6 +26,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -80,6 +81,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 			return ((FBType) root).getTypeLibrary();
 		} else if (root instanceof AutomationSystem) {
 			return ((AutomationSystem) root).getPalette().getTypeLibrary();
+		} else if (root instanceof PaletteEntry) {
+			return ((PaletteEntry) root).getTypeLibrary();
 		}
 		throw new IllegalStateException(
 				"Could not determine root element for finding the typ lib for given element: " + getType()); //$NON-NLS-1$

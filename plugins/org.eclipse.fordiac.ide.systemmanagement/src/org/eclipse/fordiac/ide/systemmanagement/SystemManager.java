@@ -132,7 +132,7 @@ public enum SystemManager {
 		final SystemPaletteEntry entry = PaletteFactory.eINSTANCE.createSystemPaletteEntry();
 		entry.setFile(systemFile);
 		entry.setType(system);
-		system.setPaletteEntry(entry);
+		entry.setPalette(system.getPalette());
 		saveSystem(system);
 		return system;
 	}
@@ -207,9 +207,9 @@ public enum SystemManager {
 		if (systemFile.exists()) {
 			final SystemPaletteEntry entry = PaletteFactory.eINSTANCE.createSystemPaletteEntry();
 			entry.setFile(systemFile);
-			final AutomationSystem type = (AutomationSystem) entry.getType();
-			type.setPaletteEntry(entry);
-			return type;
+			final AutomationSystem system = entry.getSystem();
+			entry.setPalette(system.getPalette());
+			return system;
 		}
 		return null;
 	}

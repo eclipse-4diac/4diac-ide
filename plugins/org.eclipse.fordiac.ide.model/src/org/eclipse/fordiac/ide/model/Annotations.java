@@ -27,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -379,6 +380,9 @@ public final class Annotations {
 
 	public static AutomationSystem getAutomationSystem(final FBNetwork fbn) {
 		final EObject system = EcoreUtil.getRootContainer(fbn);
+		if (system instanceof SystemPaletteEntry) {
+			return ((SystemPaletteEntry) system).getSystem();
+		}
 		return system instanceof AutomationSystem ? (AutomationSystem) system : null;
 	}
 

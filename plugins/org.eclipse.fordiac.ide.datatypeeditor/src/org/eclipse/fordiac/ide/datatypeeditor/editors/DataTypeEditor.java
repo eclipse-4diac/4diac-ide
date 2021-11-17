@@ -144,7 +144,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		removeListenerFromDataTypeObj();
-		dataTypePaletteEntry.setType(EcoreUtil.copy(dataType.get()));
+		dataTypePaletteEntry.setTypeEditable(EcoreUtil.copy(dataType.get()));
 		AbstractTypeExporter.saveType(dataTypePaletteEntry);
 		addListenerToDataTypeObj();
 
@@ -359,7 +359,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper
-					.logError("Error during refreshing struct table after file change detection: " + e.toString()); //$NON-NLS-1$
+			.logError("Error during refreshing struct table after file change detection: " + e.toString()); //$NON-NLS-1$
 		}
 
 	}

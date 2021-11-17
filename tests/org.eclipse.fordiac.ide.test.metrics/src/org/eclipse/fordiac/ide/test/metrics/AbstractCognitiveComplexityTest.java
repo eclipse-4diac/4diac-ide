@@ -61,7 +61,7 @@ abstract class AbstractCognitiveComplexityTest {
 
 		functionBlock.setECC(LibraryElementFactory.eINSTANCE.createECC());
 
-		functionBlock.setPaletteEntry(preparePaletteWithTypeLib());
+		preparePaletteWithTypeLib().setType(functionBlock);
 
 		final STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		stAlg.setName(algorithmName);

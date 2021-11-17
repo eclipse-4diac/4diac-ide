@@ -38,7 +38,7 @@ public class CMakeListsMarker implements LibraryElement {
 	}
 
 	@Override
-	public void setName(String value) {
+	public void setName(final String value) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -48,7 +48,7 @@ public class CMakeListsMarker implements LibraryElement {
 	}
 
 	@Override
-	public void setComment(String value) {
+	public void setComment(final String value) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -98,32 +98,32 @@ public class CMakeListsMarker implements LibraryElement {
 	}
 
 	@Override
-	public Object eGet(EStructuralFeature feature) {
+	public Object eGet(final EStructuralFeature feature) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object eGet(EStructuralFeature feature, boolean resolve) {
+	public Object eGet(final EStructuralFeature feature, final boolean resolve) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void eSet(EStructuralFeature feature, Object newValue) {
+	public void eSet(final EStructuralFeature feature, final Object newValue) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean eIsSet(EStructuralFeature feature) {
+	public boolean eIsSet(final EStructuralFeature feature) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void eUnset(EStructuralFeature feature) {
+	public void eUnset(final EStructuralFeature feature) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object eInvoke(EOperation operation, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final EOperation operation, final EList<?> arguments) throws InvocationTargetException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -138,12 +138,12 @@ public class CMakeListsMarker implements LibraryElement {
 	}
 
 	@Override
-	public void eSetDeliver(boolean deliver) {
+	public void eSetDeliver(final boolean deliver) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void eNotify(Notification notification) {
+	public void eNotify(final Notification notification) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -158,17 +158,12 @@ public class CMakeListsMarker implements LibraryElement {
 	}
 
 	@Override
-	public void setIdentification(Identification value) {
+	public void setIdentification(final Identification value) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public PaletteEntry getPaletteEntry() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setPaletteEntry(PaletteEntry value) {
 		throw new UnsupportedOperationException();
 	}
 

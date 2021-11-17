@@ -52,36 +52,44 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  *
  * @generated */
 public class PaletteImpl extends EObjectImpl implements Palette {
-	/** The default value of the '{@link #getTypeLibrary() <em>Type Library</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getTypeLibrary() <em>Type Library</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getTypeLibrary()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final TypeLibrary TYPE_LIBRARY_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getTypeLibrary() <em>Type Library</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getTypeLibrary() <em>Type Library</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getTypeLibrary()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected TypeLibrary typeLibrary = TYPE_LIBRARY_EDEFAULT;
 
-	/** The cached value of the '{@link #getAdapterTypes() <em>Adapter Types</em>}' map. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getAdapterTypes() <em>Adapter Types</em>}' map.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getAdapterTypes()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EMap<String, AdapterTypePaletteEntry> adapterTypes;
 
-	/** The cached value of the '{@link #getDeviceTypes() <em>Device Types</em>}' map. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getDeviceTypes() <em>Device Types</em>}' map.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getDeviceTypes()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EMap<String, DeviceTypePaletteEntry> deviceTypes;
 
 	/** The cached value of the '{@link #getFbTypes() <em>Fb Types</em>}' map. <!-- begin-user-doc --> <!-- end-user-doc
@@ -92,28 +100,34 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * @ordered */
 	protected EMap<String, FBTypePaletteEntry> fbTypes;
 
-	/** The cached value of the '{@link #getResourceTypes() <em>Resource Types</em>}' map. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getResourceTypes() <em>Resource Types</em>}' map.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getResourceTypes()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EMap<String, ResourceTypeEntry> resourceTypes;
 
-	/** The cached value of the '{@link #getSegmentTypes() <em>Segment Types</em>}' map. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getSegmentTypes() <em>Segment Types</em>}' map.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getSegmentTypes()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EMap<String, SegmentTypePaletteEntry> segmentTypes;
 
-	/** The cached value of the '{@link #getSubAppTypes() <em>Sub App Types</em>}' map. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getSubAppTypes() <em>Sub App Types</em>}' map.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getSubAppTypes()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EMap<String, SubApplicationTypePaletteEntry> subAppTypes;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

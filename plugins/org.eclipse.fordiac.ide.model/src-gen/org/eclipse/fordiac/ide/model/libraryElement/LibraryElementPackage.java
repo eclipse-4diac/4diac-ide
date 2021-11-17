@@ -400,18 +400,12 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int LIBRARY_ELEMENT__IDENTIFICATION = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int LIBRARY_ELEMENT__PALETTE_ENTRY = INAMED_ELEMENT_FEATURE_COUNT + 2;
-
 	/** The number of structural features of the '<em>Library Element</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered */
-	int LIBRARY_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 3;
+	int LIBRARY_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl <em>Adapter
 	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -446,12 +440,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ADAPTER_TYPE__IDENTIFICATION = DataPackage.DATA_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ADAPTER_TYPE__PALETTE_ENTRY = DataPackage.DATA_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Adapter FB Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -569,12 +557,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int COMPILABLE_TYPE__IDENTIFICATION = LIBRARY_ELEMENT__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int COMPILABLE_TYPE__PALETTE_ENTRY = LIBRARY_ELEMENT__PALETTE_ENTRY;
-
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -622,12 +604,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int FB_TYPE__IDENTIFICATION = COMPILABLE_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int FB_TYPE__PALETTE_ENTRY = COMPILABLE_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -689,12 +665,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int BASE_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int BASE_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -771,12 +741,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int BASIC_FB_TYPE__IDENTIFICATION = BASE_FB_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int BASIC_FB_TYPE__PALETTE_ENTRY = BASE_FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -1179,12 +1143,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE__IDENTIFICATION = COMPILABLE_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int DEVICE_TYPE__PALETTE_ENTRY = COMPILABLE_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -2255,12 +2213,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int RESOURCE_TYPE__IDENTIFICATION = COMPILABLE_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int RESOURCE_TYPE__PALETTE_ENTRY = COMPILABLE_TYPE__PALETTE_ENTRY;
-
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -2466,12 +2418,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SERVICE_INTERFACE_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int SERVICE_INTERFACE_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
-
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -2610,12 +2556,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int COMPOSITE_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int COMPOSITE_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
-
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -2685,12 +2625,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SUB_APP_TYPE__IDENTIFICATION = COMPOSITE_FB_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int SUB_APP_TYPE__PALETTE_ENTRY = COMPOSITE_FB_TYPE__PALETTE_ENTRY;
-
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -2759,12 +2693,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int AUTOMATION_SYSTEM__IDENTIFICATION = LIBRARY_ELEMENT__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int AUTOMATION_SYSTEM__PALETTE_ENTRY = LIBRARY_ELEMENT__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Application</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -3327,12 +3255,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SEGMENT_TYPE__IDENTIFICATION = COMPILABLE_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int SEGMENT_TYPE__PALETTE_ENTRY = COMPILABLE_TYPE__PALETTE_ENTRY;
-
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
@@ -3387,12 +3309,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ADAPTER_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int ADAPTER_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -3805,12 +3721,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int SIMPLE_FB_TYPE__IDENTIFICATION = BASE_FB_TYPE__IDENTIFICATION;
-
-	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int SIMPLE_FB_TYPE__PALETTE_ENTRY = BASE_FB_TYPE__PALETTE_ENTRY;
 
 	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -5857,16 +5767,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	EReference getLibraryElement_Identification();
 
-	/** Returns the meta object for the reference
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry <em>Palette Entry</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the reference '<em>Palette Entry</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry()
-	 * @see #getLibraryElement()
-	 * @generated */
-	EReference getLibraryElement_PaletteEntry();
-
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType
 	 * <em>Compilable Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -7700,12 +7600,6 @@ public interface LibraryElementPackage extends EPackage {
 		 *
 		 * @generated */
 		EReference LIBRARY_ELEMENT__IDENTIFICATION = eINSTANCE.getLibraryElement_Identification();
-
-		/** The meta object literal for the '<em><b>Palette Entry</b></em>' reference feature. <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 *
-		 * @generated */
-		EReference LIBRARY_ELEMENT__PALETTE_ENTRY = eINSTANCE.getLibraryElement_PaletteEntry();
 
 		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl
 		 * <em>Compilable Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
