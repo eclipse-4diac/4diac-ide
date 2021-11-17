@@ -398,14 +398,14 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
 			fbType.eAdapters().remove(adapter);
 		}
+		paletteEntry.setTypeEditable(null);  // purge the editable instance from the palette entry, ensures reload
 		fbType = (FBType) paletteEntry.getType();
 		editors.stream().forEach(e -> e.reloadType(fbType));
 		final IEditorPart activeEditor = getActiveEditor();
 		if (activeEditor instanceof IFBTEditorPart) {
-			Display.getDefault()
-					.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
-							activeEditor.getAdapter(GraphicalViewer.class),
-							((IFBTEditorPart) activeEditor).getSelectableEditPart()));
+			Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
+					activeEditor.getAdapter(GraphicalViewer.class),
+					((IFBTEditorPart) activeEditor).getSelectableEditPart()));
 		}
 		getCommandStack().flush();
 		fbType.eAdapters().add(adapter);

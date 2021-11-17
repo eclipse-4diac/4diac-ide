@@ -158,10 +158,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			if (findEditor == EditorUtils.getCurrentActiveEditor()) {
 				activeEditor = findEditor;
 				findEditor = null;
-			}
-
-			if (findEditor != null) {
+			} else if (findEditor != null) {
 				changedOpenedDirtyEditors.add(findEditor);
+			} else {
+				// no editor is currently open purge any editable model
+				entry.setTypeEditable(null);
 			}
 		}
 
