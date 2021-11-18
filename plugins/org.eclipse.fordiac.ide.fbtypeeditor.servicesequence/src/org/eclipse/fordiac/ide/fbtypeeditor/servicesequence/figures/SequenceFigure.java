@@ -31,8 +31,6 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
 import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.widgets.Display;
 
 public final class SequenceFigure extends Layer {
 	private static final String TRIANGLE_RIGHTWARDS = "\u25B8  "; //$NON-NLS-1$
@@ -74,7 +72,7 @@ public final class SequenceFigure extends Layer {
 		final MarginBorder titleBorder = new MarginBorder(new Insets(10, 20, 3, 0));
 		nameLabel.setBorder(titleBorder);
 		nameLabel.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
-		nameLabel.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.BOLD)); //$NON-NLS-1$
+		nameLabel.setFont(ServiceFigure.getFontRegistry().get(ServiceFigure.LABEL_FONT));
 		nameLabel.setLabelAlignment(PositionConstants.LEFT);
 
 		commentLabel.setOpaque(true);
