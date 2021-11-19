@@ -16,26 +16,38 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.draw2d.GridData;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.fbtypeeditor.figures.FBTypeFigure;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Point;
 
-/**
- * The Class FBEditPart.
- */
-public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editparts.FBEditPart {
-
-	/** The control listener. */
-	private ControlListener controlListener;
+public class TesterFBEditPart extends AbstractPositionableElementEditPart {
 
 	public TesterFBEditPart() {
 		super();
+	}
+	
+	@Override
+	public FB getModel() {
+		return (FB) super.getModel();
 	}
 
 	@Override
@@ -43,22 +55,6 @@ public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editpa
 		// Provide an empty content adpater as we don't want to react in the tester to
 		// the classical FBN editing changes
 		return new AdapterImpl();
-	}
-
-	@Override
-	public void activate() {
-		super.activate();
-		refreshName();
-	}
-
-	@Override
-	public void deactivate() {
-		super.deactivate();
-		if (getParent() != null && getParent().getViewer() != null && getParent().getViewer().getControl() != null
-				&& controlListener != null) {
-			getParent().getViewer().getControl().removeControlListener(controlListener);
-			controlListener = null;
-		}
 	}
 
 	@Override
@@ -99,25 +95,6 @@ public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editpa
 	 */
 	@Override
 	protected void refreshVisuals() {
-		if (controlListener == null) {
-			controlListener = new ControlListener() {
-
-				@Override
-				public void controlResized(final ControlEvent e) {
-					updatePosition();
-				}
-
-				@Override
-				public void controlMoved(final ControlEvent e) {
-					// currently nothing to be done here
-				}
-
-			};
-			if (getParent() != null && getParent().getViewer() != null
-					&& getParent().getViewer().getControl() != null) {
-				getParent().getViewer().getControl().addControlListener(controlListener);
-			}
-		}
 		updatePosition();
 
 	}
@@ -131,5 +108,125 @@ public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editpa
 			update(rect);
 		}
 	}
+
+	@Override
+	protected PositionableElement getPositionableElement() {
+		return getModel();
+	}
+
+	@Override
+	public INamedElement getINamedElement() {
+		return getModel();
+	}
+
+	@Override
+	public Label getNameLabel() {
+		return null;
+	}
+
+	@Override
+	protected IPropertyChangeListener getPreferenceChangeListener() {
+		return null;
+	}
+
+	@Override
+	protected IFigure createFigureForModel() {
+		// extend this if FunctionBlock gets extended!
+		FBTypeFigure f = null;
+		if (getModel() != null) {
+			f = new FBTypeFigure(getModel().getType());
+		} else {
+			throw new IllegalArgumentException();
+		}
+		return f;
+	}
+	
+	@Override
+	public FBTypeFigure getFigure() {
+		return (FBTypeFigure) super.getFigure();
+	}
+	
+	@Override
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		if (childEditPart instanceof InterfaceEditPart) {
+			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
+		} else {
+			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
+		}
+	}
+	
+	private IFigure getTargetFigure(final InterfaceEditPart interfaceEditPart) {
+		if (interfaceEditPart.isInput()) {
+			if (interfaceEditPart.isEvent()) {
+				return getFigure().getEventInputs();
+			}
+			if (interfaceEditPart.isAdapter()) {
+				return getFigure().getSockets();
+			}
+			if (interfaceEditPart.isVariable()) {
+				return getFigure().getDataInputs();
+			}
+
+		} else {
+			if (interfaceEditPart.isEvent()) {
+				return getFigure().getEventOutputs();
+			}
+			if (interfaceEditPart.isAdapter()) {
+				return getFigure().getPlugs();
+			}
+			if (interfaceEditPart.isVariable()) {
+				return getFigure().getDataOutputs();
+			}
+		}
+		return getFigure();
+	}
+
+	private int getInterfaceElementIndex(final InterfaceEditPart interfaceEditPart) {
+		final InterfaceList interfaceList = getModel().getInterface();
+		if (interfaceEditPart.isInput()) {
+			if (interfaceEditPart.isEvent()) {
+				return interfaceList.getEventInputs().indexOf(interfaceEditPart.getModel());
+			}
+			if (interfaceEditPart.isAdapter()) {
+				return interfaceList.getSockets().indexOf(interfaceEditPart.getModel());
+			}
+			if (interfaceEditPart.isVariable()) {
+				return interfaceList.getInputVars().indexOf(interfaceEditPart.getModel());
+			}
+		} else {
+			if (interfaceEditPart.isEvent()) {
+				return interfaceList.getEventOutputs().indexOf(interfaceEditPart.getModel());
+			}
+			if (interfaceEditPart.isAdapter()) {
+				return interfaceList.getPlugs().indexOf(interfaceEditPart.getModel());
+			}
+			if (interfaceEditPart.isVariable()) {
+				return interfaceList.getOutputVars().indexOf(interfaceEditPart.getModel());
+			}
+		}
+		return -1;
+	}
+
+	@Override
+	protected void removeChildVisual(final EditPart childEditPart) {
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		if (childEditPart instanceof InterfaceEditPart) {
+			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+			getTargetFigure(interfaceEditPart).remove(child);
+		} else {
+			super.removeChildVisual(childEditPart);
+		}
+	}
+
+	@Override
+	protected List<Object> getModelChildren() {
+		final List<Object> elements = new ArrayList<>();
+		elements.addAll(getModel().getInterface().getAllInterfaceElements());
+		return elements;
+	}
+	
+	
 
 }

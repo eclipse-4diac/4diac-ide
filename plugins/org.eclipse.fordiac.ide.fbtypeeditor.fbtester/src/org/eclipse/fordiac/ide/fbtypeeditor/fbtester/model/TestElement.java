@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 						2021 Primetals Technologies Austria GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,15 +10,17 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *    - initial implementation
+ *    Christoph Binder - implementing MonitoringBaseElement
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.TestEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.TestEventEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -26,10 +29,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-/**
- * The Class TestElement.
- */
-public class TestElement extends PositionableElementImpl implements IEditPartCreator {
+public class TestElement extends PositionableElementImpl implements MonitoringBaseElement {
 
 	/** The monitoring element. */
 	private String monitoringElement;
@@ -237,6 +237,33 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 */
 	public void setColor(final Color color) {
 		Display.getDefault().asyncExec(() -> part.setBackgroundColor(color));
+	}
+
+	@Override
+	public PortElement getPort() {
+		//currently not used method
+		return null;
+	}
+
+	@Override
+	public void setPort(PortElement value) {
+		//currently not used method
+	}
+
+	@Override
+	public boolean isOffline() {
+		//currently not used method
+		return false;
+	}
+
+	@Override
+	public void setOffline(boolean value) {	
+		//currently not used method
+	}
+
+	@Override
+	public String getQualifiedString() {
+		return this.getFBString() + "." + this.getPortString();
 	}
 
 }

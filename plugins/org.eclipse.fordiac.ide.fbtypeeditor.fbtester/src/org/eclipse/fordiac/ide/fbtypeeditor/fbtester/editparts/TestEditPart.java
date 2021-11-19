@@ -26,12 +26,10 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.policies.SetTestValueEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -46,7 +44,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
 /** The Class TestEditPart. */
-public class TestEditPart extends AbstractViewEditPart implements SpecificLayerEditPart {
+public class TestEditPart extends AbstractViewEditPart  {
 
 	/** The parent part. */
 	private org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
@@ -266,11 +264,6 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	@Override
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		return null;
-	}
-
-	@Override
-	public String getSpecificLayer() {
-		return ZoomScalableFreeformRootEditPart.TOP_LAYER;
 	}
 
 	/** Sets the value.
