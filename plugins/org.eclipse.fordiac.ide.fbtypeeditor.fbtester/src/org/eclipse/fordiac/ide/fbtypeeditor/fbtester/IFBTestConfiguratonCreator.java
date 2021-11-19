@@ -20,7 +20,17 @@ import org.eclipse.swt.widgets.Composite;
 public interface IFBTestConfiguratonCreator extends ISetValueListener, ITriggerEventListener {
 
 	IFBTestConfiguration createConfigurationPage(Composite parent);
+	
+	String resetFB();
+	
+	String clean();
 
 	void setType(FBType type);
+
+	boolean isRunning();
+
+	String close();
+
+	String startFB();
 
 }

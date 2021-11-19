@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014, 2018 Profactor GmbH, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- *
+ * 				 2021 Primetals Technologies Austria GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,6 +13,7 @@
  *    - initial implementation
  *   Alois Zoitl - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
+ *   Christoph Binder - removing dependency from application plugin
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
@@ -96,15 +97,11 @@ public class TesterFBEditPart extends AbstractPositionableElementEditPart {
 	@Override
 	protected void refreshVisuals() {
 		updatePosition();
-
 	}
 
 	private void updatePosition() {
 		if (getParent() != null && getParent().getViewer() != null && getParent().getViewer().getControl() != null) {
-			final Point p = getParent().getViewer().getControl().getSize();
-			final Dimension dim = getFigure().getPreferredSize(-1, -1);
-
-			final Rectangle rect = new Rectangle(p.x / 2 - dim.width / 2, p.y / 2 - dim.height / 2, -1, -1);
+			final Rectangle rect = new Rectangle(-1, -1, -1, -1);
 			update(rect);
 		}
 	}

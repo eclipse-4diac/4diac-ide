@@ -13,10 +13,11 @@
  *   Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Monika Wenger
  *    			 - initial implementation
  *   Alois Zoitl - Harmonized deployment and monitoring
- *   Christoph Binder - Using Deployment Plugin
+ *   Christoph Binder - Using Deployment Plugin and changes necessary for reset and reload buttons
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.configuration;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.IFBTestConfiguration;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.IFBTestConfiguratonCreator;
@@ -51,10 +53,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
-public class FORTERemoteTester implements IFBTestConfiguratonCreator {
+public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeploymentListener {
 	private static final int TESTER_CYCLE_TIME_IN_MS = 500;
 	private static final String LAST_IP = "lastIp"; //$NON-NLS-1$
 	private static final String FORTE_REMOTE_TESTER_SETTINGS = "FORTE_REMOTE_TESTER_SETTINGS"; //$NON-NLS-1$
+	private static final String UNSUPPORTED_TYPE = "UNSUPPORTED_TYPE"; //$NON-NLS-1$
+	private static final String NO_SUCH_OBJECT = "NO_SUCH_OBJECT"; //$NON-NLS-1$
 	private Button run;
 	private FBType type;
 	private boolean running;
@@ -62,9 +66,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	private Text ipText;
 	private Text runTimePortText;
 	private TestDeploymentExecutor testDeploymentExecutor;
-	private String address;
 	private Map<String, TestElement> testElements;
-
 
 	public FORTERemoteTester() {
 		final IDialogSettings settings = DialogSettingsProvider.getDialogSettings(getClass());
@@ -115,19 +117,21 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					final int runtimePort = Integer.parseInt(runTimePortText.getText());
 					final String ipAddress = ipText.getText();
 					forteRemoteTesterSettings.put(LAST_IP, ipAddress);
-					testDeploymentExecutor = new TestDeploymentExecutor(type,ipAddress,runtimePort);
+					testDeploymentExecutor = new TestDeploymentExecutor(type,ipAddress,runtimePort,getDeploymentListener(),getTestElements());
+					setRunning(true);
 					final String response = testDeploymentExecutor.deployNetwork();
 					if (response != null) {
-						final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-						msb.setMessage(MessageFormat.format(
-								Messages.FORTERemoteTester_FBCanNotBeTestedBecauseOfTheFollowingError, response));
-						msb.open();
-						setRunning(false);
+						if(isRunning()) {
+							final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+							msb.setMessage(MessageFormat.format(
+									Messages.FORTERemoteTester_FBCanNotBeTestedBecauseOfTheFollowingError, response));
+							msb.open();
+							setRunning(false);
+						}
 						run.setSelection(false);
 						return;
 					}
-					testDeploymentExecutor.addWatches(getTestElements()); 
-					setRunning(true);
+					testDeploymentExecutor.addWatches(); 
 					final Thread t = new Thread(new TriggerRequestRunnable());
 					t.start();
 					try {
@@ -138,7 +142,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					}
 				} else {
 					setRunning(false);
-					final String response = testDeploymentExecutor.clean();
+					String response = testDeploymentExecutor.cleanNetwork();
 					if (response != null) {
 						final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
 						msb.setMessage(MessageFormat.format(
@@ -170,6 +174,47 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 		return configuration;
 
 	}
+	
+	@Override
+	public String close() {
+		if(isRunning()){
+			running=false; //setrunning() cannot be used here due to error when called by FBTestereditor
+			return testDeploymentExecutor.cleanNetwork();
+		}
+		return null;
+	}
+	
+	@Override
+	public String clean() {
+		if(isRunning()){
+			setRunning(false);
+			run.setSelection(false);
+			return testDeploymentExecutor.cleanNetwork();
+		}
+		return null;
+	}
+	
+	public String resetFB() {
+		if(isRunning()) {
+			try {
+				testDeploymentExecutor.resetFB();
+			} catch (IOException e) {
+				return e.getMessage();
+			}
+		}
+		return null;
+	}
+	
+	public String startFB() {
+		if(isRunning()) {
+			try {
+				testDeploymentExecutor.startFB();
+			} catch (DeploymentException e) {
+				return e.getMessage();
+			}
+		}
+		return null;
+	}
 
 	private void loadLastIp() {
 		if (forteRemoteTesterSettings != null) {
@@ -180,9 +225,13 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 			}
 		}
 	}
+	
+	private IDeploymentListener getDeploymentListener() {
+		return this;
+	}
 
 	private Map<String, TestElement> getTestElements() {
-		return testElements =TestingManager.getInstance().getTestElements(type, this, this);
+		return testElements = TestingManager.getInstance().getTestElements(type, this, this);
 	}
 
 	class TriggerRequestRunnable implements Runnable {
@@ -264,6 +313,46 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	@Override
 	public void setValue(final TestElement element, final String value) {
 		setValue(element);
+	}
+
+	@Override
+	public void connectionOpened() {
+		//currently not used method
+	}
+
+	@Override
+	public void postCommandSent(String info, String destination, String command) {
+		//currently not used method
+	}
+
+	@Override
+	public  void postResponseReceived(String response, String source) {
+		if(response.contains(UNSUPPORTED_TYPE)){
+			final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			msb.setMessage(MessageFormat.format(
+					Messages.FORTERemoteTester_FBCanNotBeTestedBecauseItsTypeIsNotKnown, response));
+			msb.open();
+			setRunning(false);
+			run.setSelection(false);
+			testDeploymentExecutor.cleanNetwork();
+			return;
+		}
+		if(response.contains(NO_SUCH_OBJECT)) {
+			final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			msb.setMessage(MessageFormat.format(
+					Messages.FORTERemoteTester_InterfaceNotTheSameAsTheOneKnownByTheDevice, response));
+			msb.open();
+			setRunning(false);
+			run.setSelection(false);
+			testDeploymentExecutor.cleanNetwork();
+			return;
+		}
+		
+	}
+
+	@Override
+	public void connectionClosed() {	
+		//currently not used method
 	}
 
 }

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 Profactor GmbH, fortiss GmbH
+ * 						2021 Primetals Technologies Austria GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *    - initial implementation
+ *   Christoph Binder - deactivate method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
@@ -44,7 +46,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
 /** The Class TestEditPart. */
-public class TestEditPart extends AbstractViewEditPart  {
+public class TestEditPart extends AbstractViewEditPart {
 
 	/** The parent part. */
 	private org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
@@ -89,6 +91,12 @@ public class TestEditPart extends AbstractViewEditPart  {
 		updatePos();
 		registerElement();
 	}
+	
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		unregisterElement();
+	}
 
 	/** Set the background color of this editparts figure
 	 *
@@ -106,6 +114,11 @@ public class TestEditPart extends AbstractViewEditPart  {
 	/** Register element. */
 	protected void registerElement() {
 		TestingManager.getInstance().addTestElement(getModel());
+	}
+	
+	/** Unregister element. */
+	protected void unregisterElement() {
+		TestingManager.getInstance().deleteTestElement(getModel());
 	}
 
 	/** Checks if is input.
@@ -226,7 +239,7 @@ public class TestEditPart extends AbstractViewEditPart  {
 	protected void refreshPosition() {
 		updatePos();
 		if (null != getModel()) {
-			final Rectangle bounds = new Rectangle(getModel().getPosition().asPoint(), new Dimension(80, -1));
+			final Rectangle bounds = new Rectangle(getModel().getPosition().asPoint(), new Dimension(80, 21));
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}

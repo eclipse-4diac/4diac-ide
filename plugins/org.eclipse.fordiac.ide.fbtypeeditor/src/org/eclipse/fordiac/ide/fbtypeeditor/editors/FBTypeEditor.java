@@ -119,7 +119,6 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			performPresaveHooks();
 			// allow each editor to save back changes before saving to file
 			editors.forEach(editorPart -> editorPart.doSave(monitor));
-
 			getCommandStack().markSaveLocation();
 			AbstractBlockTypeExporter.saveType(paletteEntry);
 			firePropertyChange(IEditorPart.PROP_DIRTY);

@@ -22,6 +22,7 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.fbtester.messages"; //$NON-NLS-1$
 	public static String FBTester_AddTest;
+	public static String FBTester_CleaningDeviceFailed;
 	public static String FBTester_CreateDataConnectionFailed;
 	public static String FBTester_CreateEventConnection;
 	public static String FBTester_CreateEventConnectionFailed;
@@ -48,6 +49,9 @@ public final class Messages extends NLS {
 	public static String FBTester_WriteFBParameterFailed;
 	public static String FBTester_WriteParameter;
 	public static String FBTester_WriteResourceParameterFailed;
+	public static String FBTester_ResetButton_Reset;
+	public static String FBTester_ResetButton_Start;
+	public static String FBTester_ReloadButton;
 	public static String FORTERemoteTester_ElementSkipped;
 	public static String FORTERemoteTester_FBCanNotBeCleanedBecauseOfTheFollowingError;
 	public static String FORTERemoteTester_FBCanNotBeTestedBecauseOfTheFollowingError;
@@ -58,6 +62,8 @@ public final class Messages extends NLS {
 	public static String FORTERemoteTester_StopTestingFB;
 	public static String FORTERemoteTester_ThreadInterrupted;
 	public static String TestdataFactoryImpl_TheClassIsNotAValidClassifier;
+	public static String FORTERemoteTester_FBCanNotBeTestedBecauseItsTypeIsNotKnown;
+	public static String FORTERemoteTester_InterfaceNotTheSameAsTheOneKnownByTheDevice;
 
 	static {
 		// initialize resource bundle

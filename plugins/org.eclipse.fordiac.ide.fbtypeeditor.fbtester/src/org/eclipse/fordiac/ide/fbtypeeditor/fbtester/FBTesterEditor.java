@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 - 2019 Johannes Kepler University
+ *   					2021 Primetals Technologies Austria GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,9 +13,12 @@
  *    - initial implementation
  *   Bianca Wiesmayr
  *    - clean up to extract TableViewer creation
+ *   Christoph Binder 
+ *    - Reset and reload buttons and ecxeption handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +32,10 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.FreeformViewport;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.RangeModel;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.FBInterfaceEditPartFactory;
@@ -48,6 +55,7 @@ import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -60,12 +68,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
@@ -83,8 +97,12 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 	private KeyHandler sharedKeyHandler;
 	private TypeLibrary typeLib;
 	private final Map<String, IFBTestConfiguration> configurations = new HashMap<>();
+	private final Map<String, IFBTestConfiguratonCreator> configCreators = new HashMap<>();
+	private IFBTestConfiguratonCreator configCreator;
 	private Composite configurationParent;
 	private CommandStack commandStack;
+	private Button resetButton;
+	private Button reloadButton;
 
 	public FBTesterEditor() {
 		// empty constructor
@@ -98,6 +116,18 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 	@Override
 	public void doSaveAs() {
 		// not used
+	}
+
+	@Override
+	public void dispose() {
+		String response = configCreator.close();
+		if (response != null) {
+			final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			msb.setMessage(MessageFormat.format(
+					Messages.FBTester_CleaningDeviceFailed, response));
+			msb.open();
+		}
+		super.dispose();
 	}
 
 	@Override
@@ -140,6 +170,8 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 			final IFBTestConfiguration configPage = configurations.get(configurationCombo.getText());
 			configPageLayout.topControl = configPage.getControl();
 			configurationParent.layout();
+
+			configCreator = configCreators.get(configurationCombo.getText());
 		});
 
 		final GridData configurationParentData = new GridData(GridData.FILL, GridData.FILL, true, true);
@@ -150,10 +182,87 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 		createTestConfigurations(configurationParent);
 		preselectFirstConfiguration(configurationCombo, configPageLayout);
 
+		resetButton = new Button(testConfigSelection, SWT.TOGGLE);
+		resetButton.setText(Messages.FBTester_ResetButton_Reset);
+		resetButton.setEnabled(true);
+		resetButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				String response = null;
+				if (resetButton.getSelection()) {
+					response = configCreator.resetFB();
+					resetButton.setText(Messages.FBTester_ResetButton_Start);
+				} else {
+					response = configCreator.startFB();
+					resetButton.setText(Messages.FBTester_ResetButton_Reset);
+				}
+				if (response != null) {
+					final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+					msb.setMessage(MessageFormat.format(
+							Messages.FORTERemoteTester_FBCanNotBeTestedBecauseOfTheFollowingError, response));
+					msb.open();
+					resetButton.setSelection(false);
+					resetButton.setText(Messages.FBTester_ResetButton_Reset);
+				}
+			}
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+		
+		reloadButton = new Button(testConfigSelection, SWT.PUSH);
+		reloadButton.setText(Messages.FBTester_ReloadButton);
+		reloadButton.setEnabled(true);
+		reloadButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				configCreator.clean();
+				reloadType(type);
+				resetButton.setSelection(false);
+				resetButton.setText(Messages.FBTester_ResetButton_Reset);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+		
+		
 		final SashForm horizontal = new SashForm(topEditorContents, SWT.HORIZONTAL | SWT.SMOOTH);
 		final Composite graphicalEditor = new Composite(horizontal, SWT.NONE);
 		graphicalEditor.setLayout(new FillLayout());
 		super.createPartControl(graphicalEditor);
+		
+		setScrollPosition(getGraphicalViewer());		
+	}
+
+	private void setScrollPosition(GraphicalViewer viewer) {
+		if (viewer.getControl() instanceof FigureCanvas) {
+			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+
+			Display.getDefault().asyncExec(() -> {
+				viewer.flush();
+				if (viewer.getSelectedEditParts().isEmpty()) {
+					final Point scrollPos = getInitialScrollPos();
+					canvas.scrollTo(scrollPos.x, scrollPos.y);
+				} 
+			});
+		}		
+	}
+
+	private Point getInitialScrollPos() {
+		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
+				.getRootEditPart();
+		final FreeformViewport rootviewPort = (FreeformViewport) rootEditPart.getFigure();
+		return new Point(calculateCenterScrollPos(rootviewPort.getHorizontalRangeModel()),
+				calculateCenterScrollPos(rootviewPort.getVerticalRangeModel()));
+	}
+
+	private static int calculateCenterScrollPos(final RangeModel rangeModel) {
+		final int center = (rangeModel.getMaximum() + rangeModel.getMinimum()) / 2;
+		return center - rangeModel.getExtent() / 2;
 	}
 
 	private void preselectFirstConfiguration(final CCombo configurationCombo, final StackLayout stack) {
@@ -283,6 +392,8 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 						final IFBTestConfiguration configuration = contributor.createConfigurationPage(parent);
 						final String lang = element.getAttribute("label"); //$NON-NLS-1$
 						configurations.put(lang, configuration);
+						configCreators.put(lang,contributor);
+						configCreator = contributor;
 					}
 				} catch (final Exception e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
@@ -318,6 +429,7 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 		final FBTypeEditorInput fbTypeEditorInput = (FBTypeEditorInput) getEditorInput();
 		fbTypeEditorInput.setFbType(type);
 		getGraphicalViewer().setContents(fbTypeEditorInput);
+		setScrollPosition(getGraphicalViewer());
 	}
 
 	@Override
