@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020, 2021 Johannes Kepler University Linz
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,29 +9,20 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Muddasir Shakil
- *     - initial API and implementation and/or initial documentation
+ *   Muddasir Shakil - initial API and implementation and/or initial documentation
+ *   Alois Zoitl     - introduced dedicated editpart for better interaction with
+ *                     property sheets
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.RootEditPart;
-import org.eclipse.gef.editparts.ScalableRootEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.simplefb.SimpleFBEditor.SimpleFBEditPart;
 import org.eclipse.jface.viewers.IFilter;
 
 public class SimpleFBFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		if (toTest instanceof FBTypeEditPart) {
-			final RootEditPart root = ((FBTypeEditPart) toTest).getRoot();
-			if (((EditPart) toTest).getModel() instanceof SimpleFBTypeImpl &&  root instanceof ScalableRootEditPart) { // here we are in the algorithm editor
-				return true;
-			}
-		}
-		return false;
+		return toTest instanceof SimpleFBEditPart;
 	}
 
 }

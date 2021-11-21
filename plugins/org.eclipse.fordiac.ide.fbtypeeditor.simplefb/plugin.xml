@@ -9,19 +9,7 @@
             type="simple">
       </editor>
    </extension>
-     <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
-      <propertyTabs
-            contributorId="property.contributor.fb">
-             <propertyTab
-               category="simple-fb"
-               id="property.tab.simple.ivars"
-               label="Internal Vars">
-         </propertyTab>
-      </propertyTabs>
-      
-   </extension>
-  <extension
+   <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections
             contributorId="property.contributor.fb">
@@ -29,7 +17,7 @@
                class="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.InternalVarsSectionSimple"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.SimpleFBFilter"
                id="property.propertysection.ivars"
-               tab="property.tab.simple.ivars">
+               tab="property.tab.ivars">
             <input
                   type="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB">
             </input>

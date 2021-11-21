@@ -17,6 +17,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.fbtypeeditor,
+ org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc,
  org.eclipse.fordiac.ide.model.commands,
@@ -24,4 +25,4 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.simplefb;singleton:=true
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.fordiac.ide.gef.properties
+
