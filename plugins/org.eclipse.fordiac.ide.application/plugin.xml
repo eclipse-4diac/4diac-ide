@@ -428,9 +428,33 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
-            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowConnectionHandler"
-            id="org.eclipse.fordiac.ide.application.commands.followConnection"
-            name="Follow Connection">
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoChildHandler"
+            id="org.eclipse.fordiac.ide.application.commands.gotochild"
+            name="Go To Child">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoPinUnderHandler"
+            id="org.eclipse.fordiac.ide.application.commands.gotopinunder"
+            name="Go To Pin Below">
+      </command>
+	  <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoPinAboveHandler"
+            id="org.eclipse.fordiac.ide.application.commands.gotopinabove"
+            name="Go To Pin Below">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
+            id="org.eclipse.fordiac.ide.application.commands.followLeftConnection"
+            name="Follow Left Connection">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
+            id="org.eclipse.fordiac.ide.application.commands.followRightConnection"
+            name="Follow Right Connection">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
@@ -656,7 +680,31 @@
             sequence="M1+M2+ARROW_UP">
       </key>
       <key
-            commandId="org.eclipse.fordiac.ide.application.commands.followConnection"
+            commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+ARROW_DOWN">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.gotopinunder"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+ARROW_DOWN">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.gotopinabove"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+ARROW_UP">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+ARROW_LEFT">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+ARROW_RIGHT">
@@ -684,7 +732,9 @@
                   commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
                   icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
             <command
-                  commandId="org.eclipse.fordiac.ide.application.commands.followConnection" />
+                  commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection" />
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection" />
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.showInstance"
                   style="push">
@@ -1053,7 +1103,31 @@
             </visibleWhen>
          </command>
          <command
-               commandId="org.eclipse.fordiac.ide.application.commands.followConnection" >
+               commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection" >
+            <visibleWhen checkEnabled="true">
+            <and>
+            	<with variable="selection">
+                   <count value="1"/>
+                   <iterate>
+                      <or>
+                        <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+                      </or>
+                   </iterate>
+                </with>
+                <!-- we are in an application or subapp editor or in a subapp/cfb viewer -->
+               	<or> 
+	                <with variable="activeEditor">
+		            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+		            </with>
+		            <with variable="activeEditor">
+		            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+		            </with>
+            	</or>
+            </and>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection" >
             <visibleWhen checkEnabled="true">
             <and>
             	<with variable="selection">
