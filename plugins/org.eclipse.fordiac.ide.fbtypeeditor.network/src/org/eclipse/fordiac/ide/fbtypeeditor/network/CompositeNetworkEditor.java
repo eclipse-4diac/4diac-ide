@@ -222,9 +222,12 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	public void reloadType(final FBType type) {
 		if (type instanceof CompositeFBType) {
-			final FBNetwork fbNetwork = ((CompositeFBType) type).getFBNetwork();
-			if (fbNetwork != null) {
-				getGraphicalViewer().setContents(fbNetwork);
+			getModel().eAdapters().remove(adapter);
+			fbType = ((CompositeFBType) type);
+			setModel(fbType.getFBNetwork());
+			if (getModel() != null) {
+				getModel().eAdapters().add(adapter);
+				getGraphicalViewer().setContents(getModel());
 			} else {
 				EditorUtils.CloseEditor.run(this);
 			}
@@ -236,7 +239,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		if (getGraphicalViewer() == null) {
 			return null;
 		}
-		return getGraphicalViewer().getEditPartRegistry().get(fbType);
+		return getGraphicalViewer().getEditPartRegistry().get(getModel());
 	}
 
 }

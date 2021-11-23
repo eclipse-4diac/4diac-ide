@@ -404,14 +404,14 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			fbType.eAdapters().remove(adapter);
 		}
 		fbType = (FBType) paletteEntry.getType();
-		getActiveEditor();
-		editors.stream().forEach(e -> {
-			e.reloadType(fbType);
-			if (e == getActiveEditor()) {
-				EditorUtils.refreshPropertySheetWithSelection(this, e.getAdapter(GraphicalViewer.class),
-						e.getSelectableEditPart());
-			}
-		});
+		editors.stream().forEach(e -> e.reloadType(fbType));
+		final IEditorPart activeEditor = getActiveEditor();
+		if (activeEditor instanceof IFBTEditorPart) {
+			Display.getDefault()
+					.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
+							activeEditor.getAdapter(GraphicalViewer.class),
+							((IFBTEditorPart) activeEditor).getSelectableEditPart()));
+		}
 		getCommandStack().flush();
 		fbType.eAdapters().add(adapter);
 

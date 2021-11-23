@@ -28,9 +28,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
-import org.eclipse.fordiac.ide.model.data.AnyBitType;
-import org.eclipse.fordiac.ide.model.data.BoolType;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -39,6 +36,7 @@ import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNodeUtils;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPolicy;
@@ -209,9 +207,11 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 				final VarDeclaration varDeclaration = (VarDeclaration) getInterfaceElement();
 				if (isForced()) {
 					figure.setText(MessageFormat.format(Messages.MonitoringEditPart_Forced_ValueDisplay,
-							getModel().getForceValue(), createHexValue(input, varDeclaration.getType())));
+							getModel().getForceValue(),
+							WatchValueTreeNodeUtils.decorateHexValue(input, varDeclaration.getType(), getModel())));
 				} else {
-					figure.setText(createHexValue(input, varDeclaration.getType()));
+					figure.setText(
+							WatchValueTreeNodeUtils.decorateHexValue(input, varDeclaration.getType(), getModel()));
 				}
 			} else {
 				figure.setText(input);
@@ -220,35 +220,8 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 		}
 	}
 
-	private static String createHexValue(final String value, final DataType type) {
-		// we want to convert every AnyBit type besides bool
-		if (isHexValue(type) && isNumeric(value)) {
-			long parseInt;
-			try {
-				parseInt = Long.parseUnsignedLong(value);
-			} catch (final NumberFormatException e) {
-				parseInt = 0;
-			}
-			return convertIntegerToHexString(parseInt);
-		}
-		return value;
-	}
-
-	private static String convertIntegerToHexString(final long number) {
-		return "16#" + Long.toHexString(number).toUpperCase(); //$NON-NLS-1$
-	}
-
-	private static boolean isNumeric(final String input) {
-		return input.chars().allMatch(Character::isDigit);
-	}
-
 	private boolean isForced() {
 		return getModel().isForce() && (getModel().getForceValue() != null);
-	}
-
-	// checks if the value should be converted to a hexstring
-	private static boolean isHexValue(final DataType type) {
-		return (type instanceof AnyBitType) && !(type instanceof BoolType);
 	}
 
 }

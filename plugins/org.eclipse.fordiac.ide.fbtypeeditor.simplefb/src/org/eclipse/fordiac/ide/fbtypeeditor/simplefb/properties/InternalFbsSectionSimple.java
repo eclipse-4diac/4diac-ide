@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,23 +9,21 @@
  *
  * Contributors:
  *   Martin Melik Merkumians - added internalFbsSection to Simple FB
+ *   Alois Zoitl             - reworked to better handled selection
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeRootEditPart;
 import org.eclipse.fordiac.ide.gef.properties.InternalFbsSection;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.gef.EditPart;
 
 public class InternalFbsSectionSimple extends InternalFbsSection {
 	@Override
 	protected Object getInputType(Object input) {
-		if (input instanceof FBTypeRootEditPart) {
-			FBType type = ((FBTypeRootEditPart) input).getModel();
-			if (type instanceof BaseFBType) {
-				return type;
-			}
-		} else if (input instanceof BaseFBType) {
+		if (input instanceof EditPart) {
+			input = ((EditPart) input).getModel();
+		}
+		if (input instanceof BaseFBType) {
 			return input;
 		}
 		return null;

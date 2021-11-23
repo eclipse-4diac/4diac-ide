@@ -51,42 +51,44 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	private String fileExtension;
 
 	@Override
-	public IAlgorithmEditor createAlgorithmEditor(Composite parent, final BaseFBType fbType) {
-		IEditedResourceProvider resourceProvider = new IEditedResourceProvider() {
+	public IAlgorithmEditor createAlgorithmEditor(final Composite parent, final BaseFBType fbType) {
+		final IEditedResourceProvider resourceProvider = new IEditedResourceProvider() {
 
 			@Override
 			public XtextResource createResource() {
-				XtextResourceSet resourceSet = resourceSetProvider.get();
-				Resource fbResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+				final XtextResourceSet resourceSet = resourceSetProvider.get();
+				final Resource fbResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 				fbResource.getContents().add(fbType);
 
 				fbType.getInterfaceList().getSockets().forEach(adp -> createAdapterResource(resourceSet, adp));
 				fbType.getInterfaceList().getPlugs().forEach(adp -> createAdapterResource(resourceSet, adp));
-				createStructResources(resourceSet, fbType.getTypeLibrary().getDataTypeLibrary().getStructuredTypes());
-
+				if (fbType.getTypeLibrary() != null) {
+					createStructResources(resourceSet,
+							fbType.getTypeLibrary().getDataTypeLibrary().getStructuredTypes());
+				}
 				return (XtextResource) resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
 			}
 
-			private void createStructResources(XtextResourceSet resourceSet, List<StructuredType> structuredTypes) {
+			private void createStructResources(final XtextResourceSet resourceSet, final List<StructuredType> structuredTypes) {
 				structuredTypes.forEach(struct -> {
-					Resource structResource = resourceSet
+					final Resource structResource = resourceSet
 							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 					structResource.getContents().add(struct);
 				});
 			}
 
-			private void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
+			private void createAdapterResource(final XtextResourceSet resourceSet, final AdapterDeclaration adapter) {
 				if (null != adapter.getType() && null != adapter.getType().getAdapterFBType()) {
-					Resource adapterResource = resourceSet
+					final Resource adapterResource = resourceSet
 							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 					adapterResource.getContents().add(adapter.getType().getAdapterFBType());
 				}
 			}
 
-			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
-				String name = "__synthetic"; //$NON-NLS-1$
+			protected URI computeUnusedUri(final ResourceSet resourceSet, final String fileExtension) {
+				final String name = "__synthetic"; //$NON-NLS-1$
 				for (int i = 0; i < Integer.MAX_VALUE; i++) {
-					URI syntheticUri = URI.createURI(name + i + "." + fileExtension); //$NON-NLS-1$
+					final URI syntheticUri = URI.createURI(name + i + "." + fileExtension); //$NON-NLS-1$
 					if (resourceSet.getResource(syntheticUri, false) == null) {
 						return syntheticUri;
 					}
@@ -95,7 +97,7 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 			}
 		};
 
-		EmbeddedEditor editor = editorFactory.newEditor(resourceProvider).showErrorAndWarningAnnotations()
+		final EmbeddedEditor editor = editorFactory.newEditor(resourceProvider).showErrorAndWarningAnnotations()
 				.withParent(parent);
 		return createXTextAlgorithmEditor(fbType, editor);
 	}
@@ -107,7 +109,7 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	 * additional setups for your DSL.
 	 */
 	@SuppressWarnings("static-method") // has to be none static so that sub-classes can override
-	protected XTextAlgorithmEditor createXTextAlgorithmEditor(BaseFBType fbType, EmbeddedEditor editor) {
+	protected XTextAlgorithmEditor createXTextAlgorithmEditor(final BaseFBType fbType, final EmbeddedEditor editor) {
 		return new XTextAlgorithmEditor(editor, fbType);
 	}
 
