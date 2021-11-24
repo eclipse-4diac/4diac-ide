@@ -155,7 +155,8 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			l.setTextAlignment(PositionConstants.LEFT);
 			l.setLabelAlignment(PositionConstants.LEFT);
 		}
-		l.setBorder(new MarginBorder(0, 5, 0, 5));
+		l.setBorder(new MarginBorder(0, AbstractMonitoringBaseEditPart.MONITORING_VALUE_LR_MARGIN, 0,
+				AbstractMonitoringBaseEditPart.MONITORING_VALUE_LR_MARGIN));
 		l.setText(Messages.MonitoringEditPart_Not_Available);
 		l.setMinimumSize(new Dimension(50, 1));
 		l.setAlpha(PreferenceConstants.getMonitoringTransparency());
