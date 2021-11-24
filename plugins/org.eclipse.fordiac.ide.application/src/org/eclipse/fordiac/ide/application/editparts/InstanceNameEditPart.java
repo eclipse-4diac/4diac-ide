@@ -39,7 +39,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class InstanceNameEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
-	private DirectEditManager manager;
 	private DiagramFontChangeListener fontChangeListener;
 
 	@Override
@@ -54,9 +53,6 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		super.deactivate();
 		getModel().getRefElement().eAdapters().remove(contentAdapter);
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
-		if (manager != null) {
-			manager = null;
-		}
 	}
 
 	private IPropertyChangeListener getFontChangeListener() {
@@ -138,19 +134,12 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		}
 	}
 
-	private DirectEditManager getManager() {
-		if (null == manager) {
-			manager = createDirectEditManager();
-		}
-		return manager;
-	}
-
 	private DirectEditManager createDirectEditManager() {
 		return new LabelDirectEditManager(this, getFigure());
 	}
 
 	private void performDirectEdit() {
-		getManager().show();
+		createDirectEditManager().show();
 	}
 
 	private boolean isResoruceTypeFBNElement() {

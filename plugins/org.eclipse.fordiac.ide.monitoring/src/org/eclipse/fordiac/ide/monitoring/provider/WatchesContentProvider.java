@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.model.StructTreeNode;
+import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
@@ -192,7 +192,7 @@ public class WatchesContentProvider implements ITreeContentProvider {
 	}
 
 	private void removeAdapterFromChildrenList() {
-		for (final StructTreeNode node : root.getChildren()) {
+		for (final AbstractStructTreeNode node : root.getChildren()) {
 			final MonitoringBaseElement element = ((WatchValueTreeNode) node).getMonitoringBaseElement();
 			if (element.eAdapters().contains(adapter)) {
 				element.eAdapters().remove(adapter);

@@ -337,20 +337,7 @@
             id="org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"
             label="Open Subapplication">
       </openListener>
-   </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            adaptable="false"
-            id="org.eclipse.fordiac.ide.application.objectContribution2"
-            objectClass="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
-         <action
-               class="org.eclipse.fordiac.ide.application.actions.RerouteAction"
-               id="org.eclipse.fordiac.ide.application.action2"
-               label="Redraw">
-         </action>
-      </objectContribution>
-   </extension>
+   </extension>   
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -782,17 +769,20 @@
                <dynamic
                      class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
                      id="org.eclipse.fordiac.ide.application.commands.mapTo">
-               </dynamic>
                <visibleWhen
                      checkEnabled="true">
                     <and>
                         <with variable="activeEditor">
-                  			<adapt
-                       			 type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
-                    		</adapt>
+                        	<and>
+	                  			<adapt
+	                       			 type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+	                    		</adapt>
+	                    		<test property="org.eclipse.fordiac.ide.application.utilities.isMapableFBNetwork" />
+							</and>	                    			
             			</with>
                      </and>
                </visibleWhen>
+               </dynamic>
             </menu>
             <command
                   commandId="org.eclipse.fordiac.ide.application.unmap"
@@ -969,16 +959,12 @@
                <visibleWhen
                      checkEnabled="true">
                      <and>
-          				<with
-             			     variable="activeEditor">
+          				<with variable="activeEditor">
+          					<and>
 								<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+								<test property="org.eclipse.fordiac.ide.application.utilities.isMapableFBNetwork" />
+							</and>
 						</with>
-                    	<with variable="activeEditorId">
-                    		<and>
-                    			<not><equals value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" /></not>
-                    			<not><equals value="org.eclipse.fordiac.ide.network.CompositeNetworkEditor" /></not>
-                    		</and>
-                   		 </with>
                   		<reference
                      	   definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
                   		</reference>
@@ -1357,6 +1343,13 @@
           id="org.eclipse.fordiac.ide.application.utilities.isSubapplicationTester"
           namespace="org.eclipse.fordiac.ide.application.utilities"
           properties="isSubapplication"
+          type="java.lang.Object">
+    	</propertyTester>
+    	<propertyTester
+          class="org.eclipse.fordiac.ide.application.utilities.IsMapableFBNetwork"
+          id="org.eclipse.fordiac.ide.application.utilities.isMapableFBNetwork"
+          namespace="org.eclipse.fordiac.ide.application.utilities"
+          properties="isMapableFBNetwork"
           type="java.lang.Object">
     	</propertyTester>
  </extension> 

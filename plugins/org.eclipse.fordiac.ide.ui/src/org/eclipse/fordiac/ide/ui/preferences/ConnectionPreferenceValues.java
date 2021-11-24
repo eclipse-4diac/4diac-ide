@@ -18,7 +18,7 @@ public final class ConnectionPreferenceValues {
 
 	public static final int HIGHLIGTHED_LINE_WIDTH = 3;
 
-	public static final int SELECTED_LINE_WIDTH = 5;
+	public static final int SELECTED_LINE_WIDTH = HIGHLIGTHED_LINE_WIDTH;
 
 	public static final int HANDLE_SIZE = 13;
 

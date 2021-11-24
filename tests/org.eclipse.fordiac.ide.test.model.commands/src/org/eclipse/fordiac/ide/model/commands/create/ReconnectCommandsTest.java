@@ -40,11 +40,9 @@ public class ReconnectCommandsTest extends FBNetworkTestBase {
 	}
 
 	private static void verifyInitialState(final State state, final State oldState, final TestFunction t) {
-		// if (!state.isViaUndo()) {
 		t.test(state.getFbNetwork().getNetworkElements().size(), 3);
 		ConnectionCommandsTest.verifyDataConnection(state, oldState, t);
 		ConnectionCommandsTest.verifyEventConnection(state, oldState, t);
-		// }
 	}
 
 	private static Collection<Arguments> threeFunctionBlocks(

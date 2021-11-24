@@ -16,8 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
-import org.eclipse.fordiac.ide.application.editparts.InstanceName;
-import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.WithEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
@@ -43,13 +41,10 @@ public class FBInterfaceEditPartFactory
 			return new FBTypeRootEditPart();
 		}
 		if (modelElement instanceof FB) {
-			return new org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.TesterFBEditPart();
-		}
-		if (modelElement instanceof InstanceName) {
-			return new InstanceNameEditPart();
+			return new TesterFBEditPart();
 		}
 		if (modelElement instanceof IInterfaceElement) {
-			return new org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart();
+			return new InterfaceEditPart();
 		}
 
 		if (modelElement instanceof Value) {

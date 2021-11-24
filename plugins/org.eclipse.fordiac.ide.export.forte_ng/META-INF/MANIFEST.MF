@@ -6,7 +6,6 @@ Bundle-Version: 2.0.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.export.forte_ng
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Bundle-Activator: org.eclipse.fordiac.ide.export.forte_ng.Activator
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
@@ -20,3 +19,4 @@ Require-Bundle: com.google.guava,
  org.eclipse.fordiac.ide.model.structuredtext,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.model.xtext.fbt
+Export-Package: org.eclipse.fordiac.ide.export.forte_ng.st

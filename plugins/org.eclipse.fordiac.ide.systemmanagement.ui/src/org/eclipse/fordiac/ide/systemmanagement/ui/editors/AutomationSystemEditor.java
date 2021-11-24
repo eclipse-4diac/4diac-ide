@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *               - extracted breadcrumb based editor to model.ui
  *   Michael Oberlehner, Alois Zoitl
  *               - implemented save and restore state
+ *   Daniel Lindhuber - auto reload remembers editor location
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
@@ -54,9 +56,9 @@ import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEdi
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
@@ -103,7 +105,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			final int pagenum = addPage(new SystemEditor(), getEditorInput());
 			getModelToEditorNumMapping().put(system, Integer.valueOf(pagenum));
 		} catch (final PartInitException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 
@@ -376,18 +378,28 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	@Override
 	public void reloadFile() {
 		final CommandStack commandStack = system.getCommandStack();
-		// TODO save state in memento and restore
+
+		final String path = getBreadcrumb().serializePath();
+
 		system = SystemManager.INSTANCE.replaceSystemFromFile(system, getFile());
 
 		system.setCommandStack(commandStack);
 		getCommandStack().flush();
 
-		if (!system.getApplication().isEmpty()) {
-			OpenListenerManager.openEditor(system.getApplication().get(0));
-		} else {
-			EditorUtils.CloseEditor.run(this);
+		if (!getBreadcrumb().openPath(path, system)) {
+			if (!system.getApplication().isEmpty()) {
+				OpenListenerManager.openEditor(system.getApplication().get(0));
+			} else {
+				EditorUtils.CloseEditor.run(this);
+			}
+			showReloadErrorMessage(path);
 		}
+	}
 
+	@Override
+	public void updateEditorInput(final FileEditorInput newInput) {
+		setInput(newInput);
+		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
 	}
 
 }

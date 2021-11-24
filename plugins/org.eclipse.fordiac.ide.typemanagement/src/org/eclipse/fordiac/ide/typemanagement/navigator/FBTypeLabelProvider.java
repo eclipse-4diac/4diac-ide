@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.typemanagement.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
@@ -93,7 +93,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 			try {
 				problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 			} catch (final CoreException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 		return ((null != problems) && (0 < problems.length));
@@ -118,7 +118,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 				}
 			}
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
 		return image;

@@ -34,7 +34,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.datatypeeditor.Activator;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
@@ -45,6 +44,7 @@ import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -358,8 +358,8 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			editComposite.getViewer().refresh();
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
-			Activator.getDefault()
-			.logError("Error during refreshing struct table after file change detection: " + e.toString()); //$NON-NLS-1$
+			FordiacLogHelper
+					.logError("Error during refreshing struct table after file change detection: " + e.toString()); //$NON-NLS-1$
 		}
 
 	}
@@ -368,6 +368,12 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	public IFile getFile() {
 		Assert.isNotNull(((FileEditorInput) getEditorInput()).getFile());
 		return ((FileEditorInput) getEditorInput()).getFile();
+	}
+
+	@Override
+	public void updateEditorInput(final FileEditorInput newInput) {
+		setInput(newInput);
+		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
 	}
 
 }

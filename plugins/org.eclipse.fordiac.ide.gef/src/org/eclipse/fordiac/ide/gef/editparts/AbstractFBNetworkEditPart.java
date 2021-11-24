@@ -21,12 +21,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.draw2d.ConnectionRouter;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart {
 
@@ -62,6 +65,11 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 			}
 		}
 		return children;
+	}
+
+	@Override
+	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
+		return new MoveableRouter();
 	}
 
 	/**
@@ -100,8 +108,8 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 					childProviders.add(childrenProvider);
 				}
 			} catch (final CoreException corex) {
-				Activator.getDefault()
-				.logError("Error loading ChildrenProvider Extensions in org.eclipse.fordiac.ide.gef", corex); //$NON-NLS-1$
+				FordiacLogHelper.logError("Error loading ChildrenProvider Extensions in org.eclipse.fordiac.ide.gef", //$NON-NLS-1$
+						corex);
 			}
 		}
 	}

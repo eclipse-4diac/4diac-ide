@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009, 2014, 2016 Profactor GmbH, fortiss GmbH, 2018 TU Vienna/ACIN
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,8 +22,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.export.Activator;
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
  * The Class CompareEditorOpenerUtil is a helper class to get the
@@ -38,24 +38,24 @@ public final class CompareEditorOpenerUtil {
 	/**
 	 * Gets a Map of available <code>ICompareEditorOpeners</code> with their names
 	 * as key.
-	 * 
+	 *
 	 * @return the compare editor openers
 	 */
 	public static Map<String, ICompareEditorOpener> getCompareEditorOpeners() {
-		HashMap<String, ICompareEditorOpener> openers = new HashMap<>(2);
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry
+		final HashMap<String, ICompareEditorOpener> openers = new HashMap<>(2);
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] elems = registry
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.export.openCompareEditor"); //$NON-NLS-1$
-		for (IConfigurationElement element : elems) {
+		for (final IConfigurationElement element : elems) {
 			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				String name = element.getAttribute("name"); //$NON-NLS-1$
+				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
+				final String name = element.getAttribute("name"); //$NON-NLS-1$
 				if (object instanceof ICompareEditorOpener) {
-					ICompareEditorOpener compareEditorOpener = (ICompareEditorOpener) object;
+					final ICompareEditorOpener compareEditorOpener = (ICompareEditorOpener) object;
 					openers.put(name, compareEditorOpener);
 				}
-			} catch (CoreException corex) {
-				Activator.getDefault().logError("Error loading Compareeditor", corex); //$NON-NLS-1$
+			} catch (final CoreException corex) {
+				FordiacLogHelper.logError("Error loading Compareeditor", corex); //$NON-NLS-1$
 			}
 		}
 		return openers;
@@ -65,13 +65,13 @@ public final class CompareEditorOpenerUtil {
 	 * Gets the opener selected in the Preference Page. If none is specified the
 	 * first one which is found is used. If there exists none - <code>null</code> is
 	 * returned.
-	 * 
+	 *
 	 * @return the opener
 	 */
 	public static ICompareEditorOpener getOpener() {
-		String compareEditor = org.eclipse.fordiac.ide.export.Activator.getDefault().getPreferenceStore()
+		final String compareEditor = org.eclipse.fordiac.ide.export.Activator.getDefault().getPreferenceStore()
 				.getString(PreferenceConstants.P_COMPARE_EDITOR);
-		Map<String, ICompareEditorOpener> openers = getCompareEditorOpeners();
+		final Map<String, ICompareEditorOpener> openers = getCompareEditorOpeners();
 		ICompareEditorOpener opener = openers.get(compareEditor);
 		if (opener == null && openers.size() >= 1) { // simply use the first compare
 			// editor found if the

@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
-import org.eclipse.fordiac.ide.typemanagement.Activator
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper
 import org.eclipse.jface.viewers.ISelection
 import org.eclipse.jface.viewers.IStructuredSelection
 import org.eclipse.ui.ISources
@@ -114,7 +114,7 @@ class ExportXMIHandler extends AbstractHandler {
 		try {
 			xmiRessource.save(Collections.EMPTY_MAP)
 		} catch (IOException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		return null
 	}

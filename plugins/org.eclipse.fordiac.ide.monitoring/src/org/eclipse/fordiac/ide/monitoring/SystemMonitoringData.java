@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.model.SubAppPortHelper;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -131,7 +132,7 @@ public class SystemMonitoringData {
 				devMgmInteractor.removeWatch(element);
 			} catch (final DeploymentException e) {
 				// TODO think if error should be shown to the user
-				Activator.getDefault().logError("Could not remove watch for " + element.getQualifiedString(), e); //$NON-NLS-1$
+				FordiacLogHelper.logError("Could not remove watch for " + element.getQualifiedString(), e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -143,7 +144,7 @@ public class SystemMonitoringData {
 				devMgmInteractor.addWatch(element);
 			} catch (final DeploymentException e) {
 				// TODO think if error should be shown to the user
-				Activator.getDefault().logError("Could not add watch for " + element.getQualifiedString(), e); //$NON-NLS-1$
+				FordiacLogHelper.logError("Could not add watch for " + element.getQualifiedString(), e); //$NON-NLS-1$
 			}
 		}
 	}

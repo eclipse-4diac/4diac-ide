@@ -36,8 +36,8 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -300,7 +300,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 				description = description.substring(9, description.length() - 1);
 			}
 		} catch (final FileNotFoundException e) {
-			Activator.getDefault().logError(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
+			FordiacLogHelper.logError(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
 		}
 		return new TemplateInfo(f, name, description);
 	}

@@ -44,6 +44,7 @@ public interface LibraryElementTags {
 	String Y_ATTRIBUTE = "y"; //$NON-NLS-1$
 
 	String CONNECTION_ELEMENT = "Connection"; //$NON-NLS-1$
+	String CONNECTION_VISIBLE = "Visible"; //$NON-NLS-1$
 	String DESTINATION_ATTRIBUTE = "Destination"; //$NON-NLS-1$
 	String SOURCE_ATTRIBUTE = "Source"; //$NON-NLS-1$
 	String ADAPTERCONNECTIONS_ELEMENT = "AdapterConnections"; //$NON-NLS-1$

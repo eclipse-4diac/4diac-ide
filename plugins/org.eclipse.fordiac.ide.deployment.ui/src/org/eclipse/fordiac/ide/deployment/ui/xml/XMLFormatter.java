@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009 Profactor GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,8 +18,8 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -47,7 +47,7 @@ public class XMLFormatter {
 		protected String readTag() throws IOException {
 			int intChar;
 			char c;
-			StringBuilder node = new StringBuilder();
+			final StringBuilder node = new StringBuilder();
 
 			while (!complete && (intChar = getReader().read()) != -1) {
 				c = (char) intChar;
@@ -80,7 +80,7 @@ public class XMLFormatter {
 		protected String readTag() throws IOException {
 			int intChar;
 			char c;
-			StringBuilder node = new StringBuilder();
+			final StringBuilder node = new StringBuilder();
 
 			while (!complete && (intChar = getReader().read()) != -1) {
 				c = (char) intChar;
@@ -114,7 +114,7 @@ public class XMLFormatter {
 		protected String readTag() throws IOException {
 			int intChar;
 			char c;
-			StringBuilder node = new StringBuilder();
+			final StringBuilder node = new StringBuilder();
 
 			while (!complete && (intChar = getReader().read()) != -1) {
 				c = (char) intChar;
@@ -186,17 +186,17 @@ public class XMLFormatter {
 
 		public static TagReader createTagReaderFor(final Reader reader) throws IOException {
 
-			char[] buf = new char[10];
+			final char[] buf = new char[10];
 			reader.mark(10);
 			reader.read(buf, 0, 10);
 			reader.reset();
 
-			String startOfTag = String.valueOf(buf);
+			final String startOfTag = String.valueOf(buf);
 
-			for (int i = 0; i < tagReaders.length; i++) {
-				if (startOfTag.startsWith(tagReaders[i].getStartOfTag())) {
-					tagReaders[i].setReader(reader);
-					return tagReaders[i];
+			for (final TagReader tagReader : tagReaders) {
+				if (startOfTag.startsWith(tagReader.getStartOfTag())) {
+					tagReader.setReader(reader);
+					return tagReader;
 				}
 			}
 			// else
@@ -218,7 +218,7 @@ public class XMLFormatter {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#
 		 * getStartOfTag()
@@ -230,7 +230,7 @@ public class XMLFormatter {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#
 		 * isTextNode()
@@ -248,12 +248,12 @@ public class XMLFormatter {
 			while (!complete) {
 
 				getReader().mark(1);
-				int intChar = getReader().read();
+				final int intChar = getReader().read();
 				if (intChar == -1) {
 					break;
 				}
 
-				char c = (char) intChar;
+				final char c = (char) intChar;
 				if (c == '<') {
 					getReader().reset();
 					complete = true;
@@ -268,10 +268,10 @@ public class XMLFormatter {
 				this.isTextNode = false;
 
 			} else if (node.toString().trim().length() == 0) {
-				String whitespace = node.toString();
+				final String whitespace = node.toString();
 				node = new StringBuilder();
 				for (int i = 0; i < whitespace.length(); i++) {
-					char whitespaceCharacter = whitespace.charAt(i);
+					final char whitespaceCharacter = whitespace.charAt(i);
 					if (whitespaceCharacter == '\n' || whitespaceCharacter == '\r') {
 						node.append(whitespaceCharacter);
 					}
@@ -286,7 +286,7 @@ public class XMLFormatter {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#
 		 * requiresInitialIndent()
@@ -298,7 +298,7 @@ public class XMLFormatter {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#
 		 * startsOnNewline()
@@ -345,13 +345,13 @@ public class XMLFormatter {
 		@Override
 		protected String readTag() throws IOException {
 
-			StringBuilder node = new StringBuilder();
+			final StringBuilder node = new StringBuilder();
 
 			boolean insideQuote = false;
 			int intChar;
 
 			while (!complete && (intChar = getReader().read()) != -1) {
-				char c = (char) intChar;
+				final char c = (char) intChar;
 
 				node.append(c);
 				// TODO logic incorrectly assumes that " is quote character
@@ -385,7 +385,7 @@ public class XMLFormatter {
 
 	private void copyNode(final Reader reader, final StringBuilder out) throws IOException {
 
-		TagReader tag = TagReaderFactory.createTagReaderFor(reader);
+		final TagReader tag = TagReaderFactory.createTagReaderFor(reader);
 
 		depth = depth + tag.getPreTagDepthModifier();
 
@@ -410,18 +410,18 @@ public class XMLFormatter {
 
 	/**
 	 * Returns the indent of the given string.
-	 * 
+	 *
 	 * @param line     the text line
 	 * @param tabWidth the width of the '\t' character.
-	 * 
+	 *
 	 * @return the int
 	 */
 	public static int computeIndent(final String line, final int tabWidth) {
 		int result = 0;
 		int blanks = 0;
-		int size = line.length();
+		final int size = line.length();
 		for (int i = 0; i < size; i++) {
-			char c = line.charAt(i);
+			final char c = line.charAt(i);
 			if (c == '\t') {
 				result++;
 				blanks = 0;
@@ -441,9 +441,9 @@ public class XMLFormatter {
 	/**
 	 * Indent char is a space char but not a line delimiters.
 	 * <code>== Character.isWhitespace(ch) && ch != '\n' && ch != '\r'</code>
-	 * 
+	 *
 	 * @param ch the ch
-	 * 
+	 *
 	 * @return true, if checks if is indent char
 	 */
 	public static boolean isIndentChar(final char ch) {
@@ -452,9 +452,9 @@ public class XMLFormatter {
 
 	/**
 	 * Line delimiter chars are '\n' and '\r'.
-	 * 
+	 *
 	 * @param ch the ch
-	 * 
+	 *
 	 * @return true, if checks if is line delimiter char
 	 */
 	public static boolean isLineDelimiterChar(final char ch) {
@@ -463,16 +463,16 @@ public class XMLFormatter {
 
 	/**
 	 * Format.
-	 * 
+	 *
 	 * @param documentText the document text
-	 * 
+	 *
 	 * @return the string
 	 */
 	public String format(final String documentText) {
 
 		Assert.isNotNull(documentText);
 
-		Reader reader = new StringReader(documentText);
+		final Reader reader = new StringReader(documentText);
 		formattedXml = new StringBuilder();
 
 		if (depth == -1) {
@@ -482,7 +482,7 @@ public class XMLFormatter {
 		try {
 			while (true) {
 				reader.mark(1);
-				int intChar = reader.read();
+				final int intChar = reader.read();
 				reader.reset();
 
 				if (intChar != -1) {
@@ -492,8 +492,8 @@ public class XMLFormatter {
 				}
 			}
 			reader.close();
-		} catch (IOException e) {
-			Activator.getDefault().logWarning(Messages.XMLFormatter_ExceptionDuringXMLFormating, e);
+		} catch (final IOException e) {
+			FordiacLogHelper.logWarning(Messages.XMLFormatter_ExceptionDuringXMLFormating, e);
 		}
 		return formattedXml.toString();
 	}
@@ -504,7 +504,7 @@ public class XMLFormatter {
 	}
 
 	private String indent(final String canonicalIndent) {
-		StringBuilder indent = new StringBuilder(30);
+		final StringBuilder indent = new StringBuilder(30);
 		for (int i = 0; i < depth; i++) {
 			indent.append(canonicalIndent);
 		}
@@ -513,7 +513,7 @@ public class XMLFormatter {
 
 	/**
 	 * Sets the initial indent.
-	 * 
+	 *
 	 * @param indent the new initial indent
 	 */
 	public void setInitialIndent(final int indent) {
@@ -524,22 +524,22 @@ public class XMLFormatter {
 	 * Returns the indentation of the line at <code>offset</code> as a
 	 * <code>StringBuilder</code>. If the offset is not valid, the empty string is
 	 * returned.
-	 * 
+	 *
 	 * @param offset   the offset in the document
 	 * @param document the document
-	 * 
+	 *
 	 * @return the indentation (leading whitespace) of the line in which
 	 *         <code>offset</code> is located
 	 */
 	public static StringBuilder getLeadingWhitespace(final int offset, final IDocument document) {
-		StringBuilder indent = new StringBuilder();
+		final StringBuilder indent = new StringBuilder();
 		try {
-			IRegion line = document.getLineInformationOfOffset(offset);
-			int lineOffset = line.getOffset();
-			int nonWS = findEndOfWhiteSpace(document, lineOffset, lineOffset + line.getLength());
+			final IRegion line = document.getLineInformationOfOffset(offset);
+			final int lineOffset = line.getOffset();
+			final int nonWS = findEndOfWhiteSpace(document, lineOffset, lineOffset + line.getLength());
 			indent.append(document.get(lineOffset, nonWS - lineOffset));
 			return indent;
-		} catch (BadLocationException e) {
+		} catch (final BadLocationException e) {
 			return indent;
 		}
 	}
@@ -548,23 +548,23 @@ public class XMLFormatter {
 	 * Returns the first offset greater than <code>offset</code> and smaller than
 	 * <code>end</code> whose character is not a space or tab character. If no such
 	 * offset is found, <code>end</code> is returned.
-	 * 
+	 *
 	 * @param document the document to search in
 	 * @param offset   the offset at which searching start
 	 * @param end      the offset at which searching stops
-	 * 
+	 *
 	 * @return the offset in the specifed range whose character is not a space or
 	 *         tab
-	 * 
+	 *
 	 * @throws BadLocationException the bad location exception
-	 * 
+	 *
 	 * @exception BadLocationException if position is an invalid range in the given
 	 *                                 document
 	 */
 	public static int findEndOfWhiteSpace(final IDocument document, int offset, final int end)
 			throws BadLocationException {
 		while (offset < end) {
-			char c = document.getChar(offset);
+			final char c = document.getChar(offset);
 			if (c != ' ' && c != '\t') {
 				return offset;
 			}
@@ -575,11 +575,11 @@ public class XMLFormatter {
 
 	/**
 	 * Creates a string that represents one indent (can be spaces or tabs..)
-	 * 
+	 *
 	 * @return one indentation
 	 */
 	public static StringBuilder createIndent() {
-		StringBuilder oneIndent = new StringBuilder();
+		final StringBuilder oneIndent = new StringBuilder();
 		oneIndent.append('\t'); // default
 
 		return oneIndent;
@@ -587,7 +587,7 @@ public class XMLFormatter {
 
 	/**
 	 * Sets the default line delimiter.
-	 * 
+	 *
 	 * @param defaultLineDelimiter the new default line delimiter
 	 */
 	public void setDefaultLineDelimiter(final String defaultLineDelimiter) {

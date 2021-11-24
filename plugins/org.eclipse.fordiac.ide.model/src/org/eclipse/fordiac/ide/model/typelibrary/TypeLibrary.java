@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
- * 		            Johannes Kepler University, 
+ * 		            Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -40,12 +40,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class TypeLibrary implements TypeLibraryTags {
 
@@ -176,7 +176,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 			try {
 				toolLibProject.delete(true, new NullProgressMonitor());
 			} catch (final CoreException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 
@@ -199,7 +199,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 				}
 			}
 		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 
@@ -262,7 +262,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 					countPaletteCreater++;
 				}
 			} catch (final CoreException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 	}
@@ -289,7 +289,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		try {
 			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
 		checkDeletions();
@@ -324,7 +324,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 				}
 			}
 		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
 	}
@@ -367,7 +367,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 			toolLibProject.create(progressMonitor);
 			toolLibProject.open(progressMonitor);
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
 		createToolLibLink(toolLibProject);
@@ -392,7 +392,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 			try {
 				link.createLink(location, IResource.NONE, null);
 			} catch (final Exception e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		} else {
 			// invalid location, throw an exception or warn user

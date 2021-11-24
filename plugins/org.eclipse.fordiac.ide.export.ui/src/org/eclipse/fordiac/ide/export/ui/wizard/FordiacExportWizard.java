@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -100,7 +101,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	}
 
 	protected static void showExceptionErrorDialog(final Exception e) {
-		Activator.getDefault().logError(e.getMessage(), e);
+		FordiacLogHelper.logError(e.getMessage(), e);
 		final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
 		msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
 		msg.open();
@@ -164,7 +165,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 				}
 
 			} catch (final ExportException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 				final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
 				msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
 				msg.open();
@@ -176,7 +177,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 			try {
 				filter = (IExportFilter) conf.createExecutableExtension("class"); //$NON-NLS-1$
 			} catch (final CoreException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 				final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
 				msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
 				msg.open();

@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Communication Generation
 Bundle-SymbolicName: org.eclipse.fordiac.ide.comgeneration;singleton:=true
 Bundle-Version: 2.0.0.qualifier
-Bundle-Activator: org.eclipse.fordiac.ide.comgeneration.plugin.Activator
 Bundle-Vendor: Eclipse 4diac
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

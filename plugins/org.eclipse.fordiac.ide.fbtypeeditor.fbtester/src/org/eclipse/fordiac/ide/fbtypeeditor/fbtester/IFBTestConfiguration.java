@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Control;
 public interface IFBTestConfiguration {
 
 	Control getControl();
-
+	
 	void newTestConf(List<TestElement> variables, List<String> values, List<ValuedVarDecl> resultVars,
 			Map<String, Object> params);
 

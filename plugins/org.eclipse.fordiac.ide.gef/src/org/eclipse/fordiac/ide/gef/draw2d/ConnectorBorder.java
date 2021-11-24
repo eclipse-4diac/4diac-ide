@@ -125,7 +125,7 @@ public class ConnectorBorder extends AbstractBorder {
 	@Override
 	public Insets getInsets(final IFigure figure) {
 		final int lrMargin = (isAdapter()) ? LR_ADAPTER_MARGIN : LR_MARGIN;
-		return new Insets(0, lrMargin, 0, lrMargin);
+		return (isInput()) ? new Insets(0, lrMargin, 0, 0) : new Insets(0, 0, 0, lrMargin);
 	}
 
 	public boolean isInput() {

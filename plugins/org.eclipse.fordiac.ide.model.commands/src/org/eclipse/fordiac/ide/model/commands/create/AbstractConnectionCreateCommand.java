@@ -89,6 +89,10 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		return parent;
 	}
 
+	public Connection getConnection() {
+		return connection;
+	}
+
 	@Override
 	public boolean canExecute() {
 		if ((getSource() == null) || (getDestination() == null)) {

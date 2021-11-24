@@ -56,6 +56,32 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 		return itemPropertyDescriptors;
 	}
 
+	/** This adds a property descriptor for the File Marker Id feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	protected void addFileMarkerIdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_ErrorMarkerRef_fileMarkerId_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_fileMarkerId_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_ErrorMarkerRef_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.ERROR_MARKER_REF__FILE_MARKER_ID, true, false, false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/** This adds a property descriptor for the Error Message feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	protected void addErrorMessagePropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_ErrorMarkerRef_errorMessage_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_errorMessage_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_ErrorMarkerRef_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.ERROR_MARKER_REF__ERROR_MESSAGE, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
 	/** This adds a property descriptor for the Res Type Connection feature. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
@@ -84,7 +110,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	}
 
 	/** This adds a property descriptor for the Source feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected void addSourcePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
@@ -120,7 +146,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getText(Object object) {
@@ -132,7 +158,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
 	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
@@ -151,7 +177,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 
 	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
 	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {

@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
       <editor
-            class="org.eclipse.fordiac.ide.fbtypeeditor.fbtester.FBTester"
+            class="org.eclipse.fordiac.ide.fbtypeeditor.fbtester.FBTesterEditor"
             sortIndex="100"
             type="ForAllNonAdapterFBTypes">
       </editor>

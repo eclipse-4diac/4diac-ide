@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -87,7 +88,7 @@ public abstract class AbstractFileManagementHandler implements IDeviceManagement
 				boot.flush();
 				returnValue = true;
 			} catch (final IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
 						Messages.AbstractFileManagementHandler_CouldNotWriteFile, fileName, e.getMessage()), shell);
 			}
@@ -115,7 +116,7 @@ public abstract class AbstractFileManagementHandler implements IDeviceManagement
 					res = SWT.NO;
 				}
 			} catch (final IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
 						Messages.AbstractFileManagementHandler_CouldnotCreateFileWithError, e.getMessage()), shell);
 			}

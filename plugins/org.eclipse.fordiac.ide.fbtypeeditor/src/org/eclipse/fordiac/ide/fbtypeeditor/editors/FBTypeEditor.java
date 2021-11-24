@@ -40,7 +40,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.fbtypeeditor.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -57,7 +56,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -80,6 +82,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.osgi.framework.FrameworkUtil;
 
 public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelectionListener, CommandStackEventListener,
 ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
@@ -116,7 +119,6 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			performPresaveHooks();
 			// allow each editor to save back changes before saving to file
 			editors.forEach(editorPart -> editorPart.doSave(monitor));
-
 			getCommandStack().markSaveLocation();
 			AbstractBlockTypeExporter.saveType(paletteEntry);
 			firePropertyChange(IEditorPart.PROP_DIRTY);
@@ -135,7 +137,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 					((IFBTValidation) o).invokeValidation(fbType);
 				}
 			} catch (final CoreException ex) {
-				Activator.getDefault().logError(ex.getMessage(), ex);
+				FordiacLogHelper.logError(ex.getMessage(), ex);
 			}
 		}
 	}
@@ -176,7 +178,8 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			final IFile fbTypeFile = ((FileEditorInput) editorInput).getFile();
 			if (!fbTypeFile.exists()) {
 				throw new PartInitException(
-						new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.FBTypeEditor_TypeFileDoesnotExist));
+						new Status(IStatus.ERROR, FrameworkUtil.getBundle(getClass()).getSymbolicName(),
+								Messages.FBTypeEditor_TypeFileDoesnotExist));
 			}
 
 			paletteEntry = TypeLibrary.getPaletteEntryForFile(fbTypeFile);
@@ -266,7 +269,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 				setPageText(index, fbtEditorPart.getTitle());
 				setPageImage(index, fbtEditorPart.getTitleImage());
 			} catch (final PartInitException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 
 		}
@@ -292,7 +295,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 						}
 					}
 				} catch (final Exception e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}
@@ -402,6 +405,13 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		}
 		fbType = (FBType) paletteEntry.getType();
 		editors.stream().forEach(e -> e.reloadType(fbType));
+		final IEditorPart activeEditor = getActiveEditor();
+		if (activeEditor instanceof IFBTEditorPart) {
+			Display.getDefault()
+					.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
+							activeEditor.getAdapter(GraphicalViewer.class),
+							((IFBTEditorPart) activeEditor).getSelectableEditPart()));
+		}
 		getCommandStack().flush();
 		fbType.eAdapters().add(adapter);
 
@@ -426,5 +436,11 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 	@Override
 	public INavigationLocation createNavigationLocation() {
 		return new FBTypeNavigationLocation(this);
+	}
+
+	@Override
+	public void updateEditorInput(final FileEditorInput newInput) {
+		setInput(newInput);
+		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
 	}
 }

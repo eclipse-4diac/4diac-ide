@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
@@ -53,7 +54,6 @@ import org.eclipse.swt.widgets.Display;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
-	private DirectEditManager manager;
 	private EditPart context;
 	private InterfaceEditPart parentPart;
 
@@ -65,7 +65,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			final int maxLabelSize = pf.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);
 			final FontMetrics fm = FigureUtilities
 					.getFontMetrics(JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
-			maxWidth = (int) (maxLabelSize * fm.getAverageCharacterWidth());
+			maxWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth());
 		}
 		return maxWidth;
 	}
@@ -143,9 +143,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	public void deactivate() {
 		super.deactivate();
 		getModel().eAdapters().remove(contentAdapter);
-		if (manager != null) {
-			manager = null;
-		}
 	}
 
 	private final Adapter contentAdapter = new AdapterImpl() {
@@ -182,6 +179,11 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 			setToolTip(new ValueToolTipFigure(getIInterfaceElement(), getModel()));
 
+		}
+
+		@Override
+		protected String getTruncationString() {
+			return "\u2026"; //$NON-NLS-1$
 		}
 
 	}
@@ -296,7 +298,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		try {
 			f = createFigureForModel();
 		} catch (final IllegalArgumentException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		return f;
 	}
@@ -318,16 +320,13 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	/** Gets the manager.
 	 *
 	 * @return the manager */
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			manager = new LabelDirectEditManager(this, getFigure());
-		}
-		return manager;
+	public DirectEditManager createDirectEditManager() {
+		return new LabelDirectEditManager(this, getFigure());
 	}
 
 	/** performs the directEdit. */
 	public void performDirectEdit() {
-		getManager().show();
+		createDirectEditManager().show();
 	}
 
 	/* (non-Javadoc)

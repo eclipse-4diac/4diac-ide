@@ -24,10 +24,10 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 
-import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class EthernetDeviceManagementCommunicationHandler implements IDeviceManagementCommunicationHandler {
 	private static final int ASN1_TAG_IECSTRING = 80;
@@ -82,7 +82,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 			throw new DeploymentException(Messages.DeploymentExecutor_DisconnectFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();  // mark interruption
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 

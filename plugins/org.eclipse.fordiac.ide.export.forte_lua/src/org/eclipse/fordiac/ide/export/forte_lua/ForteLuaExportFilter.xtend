@@ -11,19 +11,20 @@
  *   Martin Jobst, Florian Noack, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.export.forte_lua 
+package org.eclipse.fordiac.ide.export.forte_lua
 
 import java.util.Collections
 import org.eclipse.core.resources.IFile
-import org.eclipse.fordiac.ide.export.forte_lua.filter.AdapterFilter
-import org.eclipse.fordiac.ide.export.forte_lua.filter.BasicFBFilter
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.IExportFilter
+import org.eclipse.fordiac.ide.export.forte_lua.filter.AdapterFilter
+import org.eclipse.fordiac.ide.export.forte_lua.filter.BasicFBFilter
+import org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
-import org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper
 
 class ForteLuaExportFilter implements IExportFilter {
 
@@ -37,9 +38,9 @@ class ForteLuaExportFilter implements IExportFilter {
 
 	override export(IFile typeFile, String destination, boolean forceOverwrite, LibraryElement type) throws ExportException {
 		switch (type) {
-			BasicFBType: Activator.getDefault().logInfo(type.lua)
-			CompositeFBType: Activator.getDefault().logInfo(type.lua)
-			AdapterType: Activator.getDefault().logInfo(type.lua)
+			BasicFBType: FordiacLogHelper.logInfo(type.lua)
+			CompositeFBType: FordiacLogHelper.logInfo(type.lua)
+			AdapterType: FordiacLogHelper.logInfo(type.lua)
 			default: throw new UnsupportedOperationException("Unknown library element type " + type.eClass.name)
 		}
 	}

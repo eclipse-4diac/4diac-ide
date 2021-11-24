@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractMonitoringManager {
 
@@ -79,11 +80,11 @@ public abstract class AbstractMonitoringManager {
 					return (AbstractMonitoringManager) object;
 				}
 			} catch (final CoreException corex) {
-				Activator.getDefault().logError(Messages.AbstractMonitoringManager_ErrorInCreatingMonitoringManager,
+				FordiacLogHelper.logError(Messages.AbstractMonitoringManager_ErrorInCreatingMonitoringManager,
 						corex);
 			}
 		}
-		Activator.getDefault().logError(Messages.AbstractMonitoringManager_NoMonitoringManagerProvided);
+		FordiacLogHelper.logError(Messages.AbstractMonitoringManager_NoMonitoringManagerProvided);
 		return dummyMonitoringManager;
 	}
 

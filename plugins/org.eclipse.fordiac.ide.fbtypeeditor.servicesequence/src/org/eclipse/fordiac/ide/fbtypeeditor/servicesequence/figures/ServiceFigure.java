@@ -34,16 +34,19 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.ColorManager;
+import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.graphics.FontData;
 
 public final class ServiceFigure extends FreeformLayeredPane {
 	private static final int MIDDLE_LINE_WIDTH = 5;
+	public static final String LABEL_FONT = "labelFont"; //$NON-NLS-1$
 
 	private Label leftLabel;
 	private Label rightLabel;
 	private Layer serviceSequenceContainer;
+	private static FontRegistry fontRegistry = null; // the registry will be disposed with the swt display that created
+	// it
 
 	public ServiceFigure() {
 		setLayoutManager(new StackLayout());
@@ -51,6 +54,21 @@ public final class ServiceFigure extends FreeformLayeredPane {
 		createBaseLayer();
 		createInterfaceLayer();
 		createServiceSequenceLayer();
+	}
+
+	public static FontRegistry getFontRegistry() {
+		if (fontRegistry == null) {
+			fontRegistry = createFontRegistry();
+		}
+		return fontRegistry;
+	}
+
+	private static FontRegistry createFontRegistry() {
+		final FontRegistry newfontRegistry = new FontRegistry();
+		newfontRegistry.put(LABEL_FONT, new FontData[] {
+				new FontData("Arial", 10, SWT.NONE) //$NON-NLS-1$
+		});
+		return newfontRegistry;
 	}
 
 	private void createBaseLayer() {
@@ -126,12 +144,12 @@ public final class ServiceFigure extends FreeformLayeredPane {
 		add(interfaceLayer);
 	}
 
-	private static Label createLabel(final boolean isLeftInterface) {
+	private Label createLabel(final boolean isLeftInterface) {
 		final int centerMargin = 100;
 		final int topMargin = 5;
 		final int borderMargin = 30;
 		final Label label = new Label();
-		label.setFont(new Font(Display.getDefault(), "Arial", 10, SWT.NONE)); //$NON-NLS-1$
+		label.setFont(getFontRegistry().get(LABEL_FONT));
 		if (isLeftInterface) {
 			label.setLabelAlignment(PositionConstants.RIGHT);
 			label.setBorder(new MarginBorder(topMargin, borderMargin, 0, centerMargin));

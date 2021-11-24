@@ -27,8 +27,8 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.ILaunchesListener2;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.fordiac.ide.runtime.Activator;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ColumnPixelData;
@@ -143,7 +143,7 @@ public class RuntimesView implements ILaunchesListener2 {
 		try {
 			runtimeData.launch.terminate();
 		} catch (final DebugException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 
@@ -196,7 +196,7 @@ public class RuntimesView implements ILaunchesListener2 {
 		try {
 			parameter = l.getLaunchConfiguration().getAttribute(LaunchRuntimeUtils.ATTR_TOOL_ARGUMENTS, ""); //$NON-NLS-1$
 		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		runtimes.add(new RuntimeData(l, parameter));
 	}

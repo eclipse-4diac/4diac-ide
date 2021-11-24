@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -31,6 +30,7 @@ import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class PaletteAnnotations {
 
@@ -57,8 +57,7 @@ public final class PaletteAnnotations {
 		} else if (entry instanceof SubApplicationTypePaletteEntry) {
 			palette.getSubAppTypes().put(entry.getLabel(), (SubApplicationTypePaletteEntry) entry);
 		} else {
-			Activator.getDefault()
-			.logError("Unknown pallet entry to be added to palette: " + entry.getClass().getName()); //$NON-NLS-1$
+			FordiacLogHelper.logError("Unknown pallet entry to be added to palette: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
@@ -76,8 +75,8 @@ public final class PaletteAnnotations {
 		} else if (entry instanceof SubApplicationTypePaletteEntry) {
 			palette.getSubAppTypes().removeKey(entry.getLabel());
 		} else {
-			Activator.getDefault()
-			.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName()); //$NON-NLS-1$
+			FordiacLogHelper
+					.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
@@ -87,7 +86,7 @@ public final class PaletteAnnotations {
 		final LibraryElement retval = importer.getElement();
 
 		if (null == retval) {
-			Activator.getDefault().logError("Error loading type: " + paletteEntryImpl.getFile().getName()); //$NON-NLS-1$
+			FordiacLogHelper.logError("Error loading type: " + paletteEntryImpl.getFile().getName()); //$NON-NLS-1$
 		}
 		return retval;
 	}

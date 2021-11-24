@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.metrics.analyzers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -22,9 +24,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RepeatStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
 
 public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
-	static final String[] CONDITIONS = { "IF", "FOR", "WHILE", "REPEAT" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 	@Override
 	public List<MetricResult> getResults() {
@@ -50,9 +61,10 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 		data.states = ecc.getECState().size();
 
 		data.independentPaths = (ecc.getECTransition().size() - ecc.getECState().size() + 2);
+		data.transitions = ecc.getECTransition().size();
 
 		for (final Algorithm alg : basicFBType.getAlgorithm()) {
-			data.loc += calculateLOC(alg.toString());
+			data.loc += calculateLOC(alg);
 		}
 
 		data.internalVar = basicFBType.getInternalVars().size();
@@ -78,81 +90,103 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 		count += interfaceList.getEventOutputs().size();
 		interfaceList.getPlugs().forEach(plug -> adpCount[0] += countInterfaceElements(plug.getType().getInterfaceList()));
 		interfaceList.getSockets()
-				.forEach(socket -> adpCount[0] += countInterfaceElements(socket.getType().getInterfaceList()));
+		.forEach(socket -> adpCount[0] += countInterfaceElements(socket.getType().getInterfaceList()));
 		count += adpCount[0];
 		return count;
 	}
 
 	// LOC of algorithm, blank lines and comments are not counted
-	protected int calculateLOC(final String algString) {
-		int loc = 0;
-		//cut overhead
-		final int indStart = algString.indexOf("text:"); //$NON-NLS-1$
-		final int indEnd = algString.lastIndexOf(')');
-		final String trimmedAlgString = algString.substring(indStart, indEnd);
+	private static double calculateLOC(final Algorithm alg) {
 
-		final String[] lines = trimmedAlgString.split("\\r?\\n"); //$NON-NLS-1$
-
-		boolean isComment = false;
-		int indCommentStart1;
-		int indCommentStart2;
-		int indCommentEnd1;
-		int indCommentEnd2;
-		for (final String s : lines) {
-			if (!s.isEmpty()) {
-				indCommentStart1 = s.trim().indexOf("(*"); //$NON-NLS-1$
-				indCommentStart2 = s.trim().indexOf("/*"); //$NON-NLS-1$
-				if ((indCommentStart1 > 0) || (indCommentStart2 > 0)) { // blockcomment starts somewhere in this line
-					isComment = true;
-					loc++;
-				} else if ((indCommentStart1 == 0) || (indCommentStart2 == 0)) { // blockcomment starts at the beginning
-					isComment = true;
-				} else if (!isComment && !s.trim().startsWith("//")) { //$NON-NLS-1$
-					loc++;
-				}
-
-				indCommentEnd1 = s.trim().indexOf("*)"); //$NON-NLS-1$
-				indCommentEnd2 = s.trim().indexOf("*/"); //$NON-NLS-1$
-				if (isComment && ((indCommentEnd1 != -1) || (indCommentEnd2 != -1))) { // end of blockcomment
-					isComment = false;
-					if (((indCommentEnd1 < s.trim().length() - 2) && (indCommentEnd1 != -1))
-							|| ((indCommentEnd2 < s.trim().length() - 2) && (indCommentEnd2 != -1))) { // code after
-						// comment
-						loc++;
-					}
-				}
-			}
+		if (!(alg instanceof STAlgorithm)) {
+			return Double.NaN;
 		}
-		return loc;
+
+		final STAlgorithmFilter filter = new STAlgorithmFilter();
+		final List<String> errors = new ArrayList<>();
+		final var ast = filter.parse((STAlgorithm) alg, errors);
+		return errors.isEmpty() ? //
+				countStatements(ast.getStatements()) + //
+				countLocalVariables(ast.getLocalVariables()) //
+				: Double.NaN;
+
+	}
+
+	private static int countLocalVariables(final EList<VarDeclaration> vars) {
+		if (vars.isEmpty()) {
+			return 0;
+		}
+		return vars.size() + 2;
+	}
+
+	private static int countStatements(final StatementList list) {
+		return list.getStatements().stream().mapToInt(SpiderChartBFBMeasures::dispatchCountStatements).sum();
+	}
+
+	private static int dispatchCountStatements(final Statement stmt) {
+		if (stmt instanceof IfStatement) {
+			final IfStatement ifStmt = (IfStatement) stmt;
+
+			int elseCount = 0;
+			if (ifStmt.getElse() != null) {
+				elseCount = 1 + countStatements(ifStmt.getElse().getStatements());
+			}
+
+			return 2 + countStatements(ifStmt.getStatments()) + //
+					elseCount + //
+					ifStmt.getElseif().size() + //
+					ifStmt.getElseif().stream().mapToInt(v -> countStatements(v.getStatements())).sum();
+		}
+		if (stmt instanceof ForStatement) {
+			final ForStatement forStmt = (ForStatement) stmt;
+			return 2 + countStatements(forStmt.getStatements());
+		}
+		if (stmt instanceof WhileStatement) {
+			final WhileStatement whileStmt = (WhileStatement) stmt;
+			return 2 + countStatements(whileStmt.getStatements());
+		}
+		if (stmt instanceof RepeatStatement) {
+			final RepeatStatement repeatStmt = (RepeatStatement) stmt;
+			return 2 + countStatements(repeatStmt.getStatements());
+		}
+		if (stmt instanceof CaseStatement) {
+			final CaseStatement caseStmt = (CaseStatement) stmt;
+			int elseCount = 0;
+			if (caseStmt.getElse() != null) {
+				elseCount = 1 + countStatements(caseStmt.getElse().getStatements());
+			}
+			return 2 + elseCount + //
+					caseStmt.getCase().stream().mapToInt(v -> countStatements(v.getStatements())).sum();
+		}
+		return 1;
 	}
 
 	private static double analyzeAlgorithm(final Algorithm algorithm) {
-		double ccAlg = 0.0;
-		final String algText = algorithm.toString();
-		int saveIndex = 0;
-		for (final String cond : CONDITIONS) {
-			int lastIndex = 0;
-			while (-1 != lastIndex) {
-				if (cond.equals("REPEAT")) { //$NON-NLS-1$
-					saveIndex = algText.indexOf(cond + "\\r?\\n", lastIndex); //$NON-NLS-1$
-				} else {
-					saveIndex = algText.indexOf(cond + " ", lastIndex); //$NON-NLS-1$
-				}
-				if (0 != saveIndex) {
-					lastIndex = saveIndex;
-					if (-1 != lastIndex) {
-						ccAlg++;
-						lastIndex += cond.length();
-					}
-				}
-			}
-		}
-		return ccAlg;
+		return CyclomaticComplexity.analyzeAlgorithm(algorithm);
 	}
 
 	@Override
 	protected MetricData createDataType() {
 		return new SpiderChartBFBData();
+	}
+
+	@Override
+	protected MetricData analyzeSFB(final SimpleFBType simpleFBType) {
+		final SpiderChartBFBData data = new SpiderChartBFBData();
+		data.states = 2;
+
+		data.independentPaths = 2;
+		data.transitions = 2;
+
+		data.loc = calculateLOC(simpleFBType.getAlgorithm());
+
+		data.internalVar = simpleFBType.getInternalVars().size();
+		data.interfaceEl += countInterfaceElements(simpleFBType.getInterfaceList());
+
+		data.actions = 1;
+		data.independentPaths += analyzeAlgorithm(simpleFBType.getAlgorithm());
+
+		return data;
 	}
 
 }

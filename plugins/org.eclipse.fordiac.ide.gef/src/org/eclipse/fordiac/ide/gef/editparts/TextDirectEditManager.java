@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2013, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2021 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,16 +11,24 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added zoom handling as explained in GEF logic editor example
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.editparts.ZoomListener;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.CellEditorActionHandler;
@@ -32,9 +40,6 @@ import org.eclipse.ui.part.CellEditorActionHandler;
  * text field more usable.
  *
  * This class is a potential target for upstreaming to GEF
- *
- * @author az
- *
  */
 public abstract class TextDirectEditManager extends DirectEditManager {
 
@@ -48,31 +53,47 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 	private IAction find;
 	private IAction selectAll;
 	private IAction delete;
+	// we need to cash the zoom manager as some direct edit commands change the editpart and we loose connection to the
+	// viewer
+	private ZoomManager zoomMananger = null;
 
-	@SuppressWarnings("rawtypes")
-	protected TextDirectEditManager(final GraphicalEditPart source, final Class editorType,
-			final CellEditorLocator locator) {
-		super(source, editorType, locator);
-		Assert.isTrue(TextCellEditor.class.isAssignableFrom(editorType));
+	private Font scaledFont;
+	private final ZoomListener zoomListener = this::updateScaledFont;
+
+	protected TextDirectEditManager(final GraphicalEditPart source, final CellEditorLocator locator) {
+		super(source, null, locator);
 	}
 
-	@SuppressWarnings("rawtypes")
-	protected TextDirectEditManager(final GraphicalEditPart source, final Class editorType,
-			final CellEditorLocator locator,
+	protected TextDirectEditManager(final GraphicalEditPart source, final CellEditorLocator locator,
 			final Object feature) {
-		super(source, editorType, locator, feature);
-		Assert.isTrue(TextCellEditor.class.isAssignableFrom(editorType));
+		super(source, null, locator, feature);
 	}
 
 	@Override
 	protected void initCellEditor() {
 		setupActions();
+		setupZoomHandling();
 	}
 
 	@Override
 	protected void bringDown() {
 		cleanUpActions();
 		super.bringDown();
+		disposeScaledFont();
+	}
+
+	@Override
+	protected CellEditor createCellEditorOn(final Composite composite) {
+		return new TextCellEditor(composite);
+	}
+
+	@Override
+	protected void unhookListeners() {
+		super.unhookListeners();
+		final ZoomManager zoomManager = getZoomManager();
+		if (zoomManager != null) {
+			zoomManager.removeZoomListener(zoomListener);
+		}
 	}
 
 	// Hook the cell editor's copy/paste actions to the actionBars so that
@@ -83,6 +104,26 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 		actionHandler = new CellEditorActionHandler(actionBars);
 		actionHandler.addCellEditor(getCellEditor());
 		actionBars.updateActionBars();
+	}
+
+	private void setupZoomHandling() {
+		final ZoomManager zoomManager = getZoomManager();
+		if (zoomManager != null) {
+			updateScaledFont(zoomManager.getZoom());
+			zoomManager.addZoomListener(zoomListener);
+		} else {
+			getCellEditor().getControl().setFont(getEditPart().getFigure().getFont());
+		}
+	}
+
+	private ZoomManager getZoomManager() {
+		if (zoomMananger == null) {
+			final EditPartViewer viewer = getEditPart().getViewer();
+			if (viewer != null) {
+				zoomMananger = (ZoomManager) viewer.getProperty(ZoomManager.class.toString());
+			}
+		}
+		return zoomMananger;
 	}
 
 	private void cleanUpActions() {
@@ -117,6 +158,28 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 		find = actionBars.getGlobalActionHandler(ActionFactory.FIND.getId());
 		undo = actionBars.getGlobalActionHandler(ActionFactory.UNDO.getId());
 		redo = actionBars.getGlobalActionHandler(ActionFactory.REDO.getId());
+	}
+
+	private void updateScaledFont(final double zoom) {
+		final Control control = getCellEditor().getControl();
+		final Font font = getEditPart().getFigure().getFont();
+
+		disposeScaledFont();
+		if (0 == Double.compare(zoom, 1.0)) {
+			control.setFont(font);
+		} else {
+			final FontData fd = font.getFontData()[0];
+			fd.setHeight((int) (fd.getHeight() * zoom));
+			scaledFont = new Font(null, fd);
+			control.setFont(scaledFont);
+		}
+	}
+
+	private void disposeScaledFont() {
+		if (scaledFont != null) {
+			scaledFont.dispose();
+			scaledFont = null;
+		}
 	}
 
 }

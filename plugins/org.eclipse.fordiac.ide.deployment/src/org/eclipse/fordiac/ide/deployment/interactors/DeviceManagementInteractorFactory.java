@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
  * Factory for loading DeviceManagementInteractors and handle related data
@@ -93,7 +94,7 @@ public enum DeviceManagementInteractorFactory {
 					interactors.add((IDeviceManagementInteractorProvider) object);
 				}
 			} catch (final CoreException corex) {
-				Activator.getDefault().logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
+				FordiacLogHelper.logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
 			}
 		}
 		return interactors;

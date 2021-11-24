@@ -39,7 +39,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -77,6 +76,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /** The Class CommonElementImporter. */
 public abstract class CommonElementImporter {
@@ -193,7 +193,7 @@ public abstract class CommonElementImporter {
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
 		} catch (final Exception e) {
-			Activator.getDefault().logWarning("Type Loading issue", e);//$NON-NLS-1$
+			FordiacLogHelper.logWarning("Type Loading issue", e);//$NON-NLS-1$
 			createErrorMarker(e.getMessage());
 		} finally {
 			buildErrorMarker(file);
@@ -238,7 +238,7 @@ public abstract class CommonElementImporter {
 					try {
 						file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 					} catch (final CoreException e) {
-						Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+						FordiacLogHelper.logError("Could not delete error marker", e); //$NON-NLS-1$
 					}
 					return Status.OK_STATUS;
 				}
@@ -433,7 +433,7 @@ public abstract class CommonElementImporter {
 	private void readCommentAttribute(final INamedElement namedElement) {
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
-			namedElement.setComment(comment);
+			namedElement.setComment(fullyUnEscapeValue(comment));
 		}
 	}
 
@@ -723,6 +723,22 @@ public abstract class CommonElementImporter {
 			resourceFBNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		}
 		return resourceFBNetwork;
+	}
+
+	/** Take the given string and unescape all &, <, >, ", ', newlines, and tabs with the according XML unsescaped
+	 * characters.
+	 *
+	 * @param value the string to unescape
+	 * @return the unescaped string */
+	protected static String fullyUnEscapeValue(final String value) {
+		String escapedValue = value.replace("&amp;", "&"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&lt;", "<"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&gt;", ">"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&quot;", "\""); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&apos;", "\'"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&#10;", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&#9;", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
+		return escapedValue;
 	}
 
 }

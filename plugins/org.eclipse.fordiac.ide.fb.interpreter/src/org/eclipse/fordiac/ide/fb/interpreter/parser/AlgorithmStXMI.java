@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.parser;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.resource.XtextResource;
 
 public class AlgorithmStXMI {
@@ -27,11 +27,11 @@ public class AlgorithmStXMI {
 	public static final String ALGORITHM_PREFIX = "algorithm_"; //$NON-NLS-1$
 	public final ResourceSet reset;
 
-	public AlgorithmStXMI(ResourceSet reset) {
+	public AlgorithmStXMI(final ResourceSet reset) {
 		this.reset = reset;
 	}
 
-	public Resource createXtextResourceFromAlgorithmSt(String algorithmSt) {
+	public Resource createXtextResourceFromAlgorithmSt(final String algorithmSt) {
 		final var resource = reset.createResource(URI.createURI(ALGORITHM_PREFIX + reset.getResources().size()
 				+ "." + AbstractXMIParser.ST_URI_EXTENSION //$NON-NLS-1$
 				));
@@ -41,7 +41,7 @@ public class AlgorithmStXMI {
 		try {
 			resource.load(inputStream, loadOptions);
 		} catch (final IOException e) {
-			Activator.getDefault().logError(e.getMessage());
+			FordiacLogHelper.logError(e.getMessage());
 		}
 		return resource;
 	}

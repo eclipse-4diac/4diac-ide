@@ -17,6 +17,7 @@
  *   			   creation feedback
  *   Daniel Lindhuber - added source comment
  *   Alois Zoitl - added update handling on source comment
+ *   Fabio Gandolfi - added resizing of pin labels by property settings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -30,6 +31,7 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -61,12 +63,14 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private ValueEditPart referencedPart;
 	private int mouseState;
+	private static int maxWidth = -1;
 
 	private Adapter contentAdapter = null;
 	private IInterfaceElement sourcePin = null;
@@ -83,6 +87,14 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	protected InterfaceEditPart() {
 		setConnectable(true);
 		addPreferenceListener();
+	}
+
+	private static int getMaxWidth() {
+		if (-1 == maxWidth) {
+			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+			return pf.getInt(DiagramPreferences.MAX_PIN_LABEL_SIZE);
+		}
+		return maxWidth;
 	}
 
 	@Override
@@ -153,6 +165,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	public class InterfaceFigure extends SetableAlphaLabel {
+
 		public InterfaceFigure() {
 			super();
 			setOpaque(false);
@@ -201,6 +214,47 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 				});
 			}
+		}
+
+		@Override
+		public String getSubStringText() {
+			if (getLabelText().length() > getMaxWidth()) {
+				return getLabelText().substring(0, getMaxWidth()) + getTruncationString();
+			}
+			return getLabelText();
+		}
+
+		@Override
+		// Copied code from Label class, changed size calculation via subStringTextSize rather than TextSize.
+		public Dimension getPreferredSize(final int wHint, final int hHint) {
+			if (prefSize == null) {
+				prefSize = calculateLabelSize(getSubStringTextSize());
+				final Insets insets = getInsets();
+				prefSize.expand(insets.getWidth(), insets.getHeight());
+				if (getLayoutManager() != null) {
+					prefSize.union(getLayoutManager().getPreferredSize(this, wHint, hHint));
+				}
+			}
+			if (wHint >= 0 && wHint < prefSize.width) {
+				final Dimension minSize = getMinimumSize(wHint, hHint);
+				final Dimension result = prefSize.getCopy();
+				result.width = Math.min(result.width, wHint);
+				result.width = Math.max(minSize.width, result.width);
+				return result;
+			}
+			return prefSize;
+		}
+
+		@Override
+		public Dimension getMinimumSize(final int wHint, final int hHint) {
+			return getPreferredSize(-1, -1);
+		}
+
+		@Override
+		public Dimension getTextSize() {
+                        //call super class to set TextSize
+			super.getTextSize();
+			return getSubStringTextSize();
 		}
 	}
 

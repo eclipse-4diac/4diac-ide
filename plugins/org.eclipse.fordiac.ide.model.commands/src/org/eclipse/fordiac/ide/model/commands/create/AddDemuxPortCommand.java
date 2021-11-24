@@ -47,7 +47,7 @@ public class AddDemuxPortCommand extends Command {
 		this.node = node;
 		this.type = type;
 		this.varName = node.getPinName();
-		this.oldVisibleChildren = node.getRootNode().visibleToString();
+		this.oldVisibleChildren = node.getTree().getRoot().visibleToString();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class AddDemuxPortCommand extends Command {
 		node.updateNode(true);
 
 		if (null == newVisibleChildren) {
-			newVisibleChildren = node.getRootNode().visibleToString();
+			newVisibleChildren = node.getTree().getRoot().visibleToString();
 		}
 		createChangeStructCommand();
 		cmd.execute();

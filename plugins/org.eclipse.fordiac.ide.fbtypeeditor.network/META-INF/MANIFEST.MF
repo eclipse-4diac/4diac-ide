@@ -20,7 +20,6 @@ Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.0.qualifier
 Bundle-Name: Composite FB Network
-Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.network.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.network;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11

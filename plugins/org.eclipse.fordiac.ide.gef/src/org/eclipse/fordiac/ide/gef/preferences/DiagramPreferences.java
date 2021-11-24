@@ -18,35 +18,26 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.gef.router.IConnectionRouterFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * The Class DiagramPreferences.
  */
 public class DiagramPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-
-	/** The Constant CONNECTION_ROUTER. */
-	public static final String CONNECTION_ROUTER = "ConnectionRouter"; //$NON-NLS-1$
 
 	/** The Constant CORNER_DIM. */
 	public static final int CORNER_DIM = 6;
@@ -63,6 +54,12 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	public static final String SHOW_COMMENT_AT_PIN = "ShowCommentAtPin"; //$NON-NLS-1$
 
 	public static final String MAX_VALUE_LABEL_SIZE = "MaxValueLabelSize"; //$NON-NLS-1$
+
+	public static final String MAX_PIN_LABEL_SIZE = "MaxPinLabelSize"; //$NON-NLS-1$
+
+	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
+
+	public boolean changesOnLabelSize = false;
 
 	/**
 	 * Instantiates a new diagram preferences.
@@ -84,9 +81,6 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the ruler fields
 		createGroupRulerGrid();
-
-		// Create a Group to hold the connection router fields
-		createGroupRouter();
 
 		// Create a Group to hold label size field
 		createGroupLabelSize();
@@ -111,12 +105,66 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		group.setLayoutData(gridData);
 	}
 
+	@Override
+	public void propertyChange(final PropertyChangeEvent event) {
+		if (event.getSource().getClass().equals(IntegerFieldEditor.class)) {
+			if (IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+					.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
+					|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+					.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
+					|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+					.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)) {
+				changesOnLabelSize = true;
+			}
+		}
+	}
+
+	@Override
+	public boolean performOk() {
+		if (changesOnLabelSize) {
+			changesOnLabelSize = false;
+
+			super.performOk();
+			showMessageBox();
+		}
+		return true;
+	}
+
+	private static void showMessageBox() {
+
+		final MessageBox msgBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.YES | SWT.NO);
+		Display.getDefault().getActiveShell();
+		msgBox.setText("4diac IDE"); //$NON-NLS-1$
+		msgBox.setMessage(Messages.DiagramPreferences_Restart);
+
+		switch (msgBox.open()) {
+		case SWT.NO:
+			break;
+		case SWT.YES:
+			PlatformUI.getWorkbench().restart();
+			break;
+		default:
+			break;
+		}
+	}
+
 	private void createGroupLabelSize() {
+
 		final Group labelSize = createGroup(Messages.DiagramPreferences_LabelSize);
-		final IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE,
+		final IntegerFieldEditor integerFieldEditorLabel = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE,
 				Messages.DiagramPreferences_MaximumValueLabelSize, labelSize);
-		integerFieldEditor.setValidRange(0, 120);
-		addField(integerFieldEditor);
+		integerFieldEditorLabel.setValidRange(0, 120);
+		addField(integerFieldEditorLabel);
+
+		final IntegerFieldEditor integerFieldEditorTypeLabel = new IntegerFieldEditor(MAX_TYPE_LABEL_SIZE,
+				Messages.DiagramPreferences_MaximumTypeLabelSize, labelSize);
+		integerFieldEditorTypeLabel.setValidRange(0, 120);
+		addField(integerFieldEditorTypeLabel);
+
+		final IntegerFieldEditor integerFieldEditorPin = new IntegerFieldEditor(MAX_PIN_LABEL_SIZE,
+				Messages.DiagramPreferences_MaximumPinLabelSize, labelSize);
+		integerFieldEditorPin.setValidRange(0, 60);
+		addField(integerFieldEditorPin);
 		configGroup(labelSize);
 	}
 
@@ -140,42 +188,6 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		gridSpacing.setTextLimit(10);
 		addField(gridSpacing);
 		configGroup(group);
-	}
-
-	private void createGroupRouter() {
-		final Group router = createGroup(Messages.DiagramPreferences_ConnectionRouter);
-
-		final Map<String, IConnectionRouterFactory> connectionRouter = new HashMap<>();
-
-		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
-				"ConnectionRouterProvider"); //$NON-NLS-1$
-		for (final IConfigurationElement element : elems) {
-			try {
-				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				final String name = element.getAttribute("name"); //$NON-NLS-1$
-				if (object instanceof IConnectionRouterFactory) {
-					final IConnectionRouterFactory routerFactory = (IConnectionRouterFactory) object;
-					connectionRouter.put(name, routerFactory);
-				}
-			} catch (final CoreException corex) {
-				Activator.getDefault().logError("Error loading ConnectionRouter", corex); //$NON-NLS-1$
-			}
-		}
-
-		final Set<String> keySet = connectionRouter.keySet();
-		final String[][] nameArray = new String[keySet.size()][2];
-		int i = 0;
-		for (final String key : keySet) {
-			nameArray[i][0] = key;
-			nameArray[i][1] = key;
-			i++;
-		}
-
-		final ComboFieldEditor routerEditor = new ComboFieldEditor(CONNECTION_ROUTER,
-				Messages.DiagramPreferences_DefaultRouter, nameArray, router);
-		addField(routerEditor);
-		configGroup(router);
 	}
 
 	private void createGroupInterfacePins() {

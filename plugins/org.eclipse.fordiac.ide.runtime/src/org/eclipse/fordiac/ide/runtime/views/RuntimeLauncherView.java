@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.runtime.Activator;
 import org.eclipse.fordiac.ide.runtime.IRuntimeLauncher;
 import org.eclipse.fordiac.ide.runtime.LaunchParameter;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeException;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -238,7 +239,7 @@ public class RuntimeLauncherView {
 					}
 				}
 			} catch (final LaunchRuntimeException e1) {
-				Activator.getDefault().logError(e1.getMessage(), e1);
+				FordiacLogHelper.logError(e1.getMessage(), e1);
 				// TODO added error message pop-up
 			}
 		});
@@ -260,7 +261,7 @@ public class RuntimeLauncherView {
 
 				}
 			} catch (final CoreException corex) {
-				Activator.getDefault().logError("Error loading run-time launcher", corex); //$NON-NLS-1$
+				FordiacLogHelper.logError("Error loading run-time launcher", corex); //$NON-NLS-1$
 			}
 		}
 		return retVal;

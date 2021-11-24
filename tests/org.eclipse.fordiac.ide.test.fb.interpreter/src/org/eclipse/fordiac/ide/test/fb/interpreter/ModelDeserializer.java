@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter;
@@ -25,6 +25,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 
 public class ModelDeserializer {
@@ -45,7 +47,7 @@ public class ModelDeserializer {
 		resourceSet.getPackageRegistry().put(LibraryElementPackage.eINSTANCE.getNsURI(), LibraryElementPackage.eINSTANCE);
 	}
 
-	public EObject loadModel(String uri) {
+	public EObject loadModel(final String uri) {
 		// create file URI, always use File.getAbsolutePath()
 		final URI fileUri = URI.createURI(getModelFile(uri));
 		// create resource
@@ -54,9 +56,10 @@ public class ModelDeserializer {
 		return resource.getContents().get(0);
 	}
 
-	public String getModelFile(String resourceUri) {
+	public String getModelFile(final String resourceUri) {
 		try {
-			final URL featureFile = FileLocator.toFileURL(Activator.getDefault().getBundle().getResource(resourceUri));
+			final Bundle bundle = FrameworkUtil.getBundle(getClass());
+			final URL featureFile = FileLocator.toFileURL(bundle.getResource(resourceUri));
 			return featureFile.toString();
 		} catch (final IOException e) {
 			e.printStackTrace();

@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.xbase.lib.Extension;
 
 @SuppressWarnings("all")
@@ -48,18 +49,18 @@ public class ForteLuaExportFilter implements IExportFilter {
     boolean _matched = false;
     if (type instanceof BasicFBType) {
       _matched=true;
-      Activator.getDefault().logInfo(this.basicFBFilter.lua(((BasicFBType)type)));
+      FordiacLogHelper.logInfo(this.basicFBFilter.lua(((BasicFBType)type)));
     }
     if (!_matched) {
       if (type instanceof CompositeFBType) {
         _matched=true;
-        Activator.getDefault().logInfo(this.compositeFBFilter.lua(((CompositeFBType)type)));
+        FordiacLogHelper.logInfo(this.compositeFBFilter.lua(((CompositeFBType)type)));
       }
     }
     if (!_matched) {
       if (type instanceof AdapterType) {
         _matched=true;
-        Activator.getDefault().logInfo(this.adapterFilter.lua(((AdapterType)type)));
+        FordiacLogHelper.logInfo(this.adapterFilter.lua(((AdapterType)type)));
       }
     }
     if (!_matched) {

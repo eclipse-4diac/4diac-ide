@@ -33,14 +33,11 @@ import org.eclipse.gef.tools.DirectEditManager;
  */
 public abstract class AbstractDirectEditableEditPart extends AbstractConnectableEditPart {
 
-	/** The manager. */
-	private DirectEditManager manager;
-
 	private final Adapter adapter = new AdapterImpl() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
-			Object feature = notification.getFeature();
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
 				refreshName();
 			}
@@ -115,18 +112,6 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 		}
 	}
 
-	/**
-	 * Gets the manager.
-	 *
-	 * @return the manager
-	 */
-	protected DirectEditManager getManager() {
-		if (null == manager) {
-			manager = createDirectEditManager();
-		}
-		return manager;
-	}
-
 	protected DirectEditManager createDirectEditManager() {
 		return new LabelDirectEditManager(this, getNameLabel());
 	}
@@ -142,12 +127,12 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 	 * performs the directEdit.
 	 */
 	public void performDirectEdit() {
-		getManager().show();
+		createDirectEditManager().show();
 	}
 
 	// TODO already duplicated on several places put it into a util class
-	public static void executeCommand(Command cmd) {
-		Object viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
+	public static void executeCommand(final Command cmd) {
+		final Object viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
 		if (viewer instanceof GraphicalViewer) {
 			((GraphicalViewer) viewer).getEditDomain().getCommandStack().execute(cmd);
 		} else {

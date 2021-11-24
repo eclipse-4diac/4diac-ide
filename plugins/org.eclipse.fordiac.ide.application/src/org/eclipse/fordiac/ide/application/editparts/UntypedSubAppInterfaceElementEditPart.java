@@ -64,8 +64,6 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		}
 	}
 
-	private DirectEditManager manager;
-
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
@@ -86,17 +84,14 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	public void performRequest(final Request request) {
 		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
 			// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
-			getManager().show();
+			createDirectEditManager().show();
 		} else {
 			super.performRequest(request);
 		}
 	}
 
-	private DirectEditManager getManager() {
-		if (manager == null) {
-			manager = new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
-		}
-		return manager;
+	private DirectEditManager createDirectEditManager() {
+		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
 	}
 
 	public Label getNameLabel() {

@@ -43,6 +43,7 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -102,8 +103,13 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 			executeCommand(getRenameCommand(nameText.getText()));
 			addContentAdapter();
 		});
-		getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceComment + ":"); //$NON-NLS-1$
-		commentText = createGroupText(composite, true);
+
+		final CLabel commentLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceComment + ":"); //$NON-NLS-1$
+		commentLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+		commentText = createGroupText(composite, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
+		final GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false);
+		gridData.heightHint = 3 * commentText.getLineHeight();
+		commentText.setLayoutData(gridData);
 		commentText.addModifyListener(event -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));

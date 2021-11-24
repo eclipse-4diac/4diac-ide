@@ -29,13 +29,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class ErrorMarkerBuilder {
 
@@ -75,10 +75,8 @@ public class ErrorMarkerBuilder {
 				this.attributes = Collections.emptyMap();
 			}
 		} catch (final CoreException e) {
-			Activator.getDefault().getLog().error("Error Marker not found", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("Error Marker not found", e); //$NON-NLS-1$
 		}
-
-
 	}
 
 	public Map<String, Object> getAttributes() {
@@ -150,7 +148,7 @@ public class ErrorMarkerBuilder {
 				addId(marker.getId());
 			}
 		} catch (final CoreException e) {
-			Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("could not create error marker", e); //$NON-NLS-1$
 		}
 	}
 
@@ -187,7 +185,7 @@ public class ErrorMarkerBuilder {
 				try {
 					marker.delete();
 				} catch (final CoreException e) {
-					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+					FordiacLogHelper.logError("Could not delete error marker", e); //$NON-NLS-1$
 				}
 				return Status.OK_STATUS;
 			}
@@ -198,7 +196,7 @@ public class ErrorMarkerBuilder {
 		try {
 			job.join();
 		} catch (final InterruptedException e) {
-			Activator.getDefault().logError("Delete marker Job interrupted", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("Delete marker Job interrupted", e); //$NON-NLS-1$
 			Thread.currentThread().interrupt();
 		}
 		return errorMarkerAttribute;
@@ -213,7 +211,7 @@ public class ErrorMarkerBuilder {
 				addId(marker.getId());
 			}
 		} catch (final CoreException e) {
-			Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("could not create error marker", e); //$NON-NLS-1$
 		}
 
 	}

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 Profactor GmbH, fortiss GmbH
+ * 						2021 Primetals Technologies Austria GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *    - initial implementation
+ *   Christoph Binder - deactivate method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
@@ -26,12 +28,10 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.policies.SetTestValueEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -45,10 +45,8 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
-/**
- * The Class TestEditPart.
- */
-public class TestEditPart extends AbstractViewEditPart implements SpecificLayerEditPart {
+/** The Class TestEditPart. */
+public class TestEditPart extends AbstractViewEditPart {
 
 	/** The parent part. */
 	private org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
@@ -57,13 +55,13 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		return parentPart;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void activate() {
 		super.activate();
+		@SuppressWarnings("rawtypes")
 		final Set set = getViewer().getEditPartRegistry().keySet();
 		for (final Object object : set) {
-			if ((object instanceof IInterfaceElement)
+			if (object instanceof IInterfaceElement
 					&& ((IInterfaceElement) object).equals(getModel().getInterfaceElement())) {
 				final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
 				if (part instanceof org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) {
@@ -93,12 +91,16 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		updatePos();
 		registerElement();
 	}
+	
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		unregisterElement();
+	}
 
-	/**
-	 * Set the background color of this editparts figure
+	/** Set the background color of this editparts figure
 	 *
-	 * @param color
-	 */
+	 * @param color */
 	public void setBackgroundColor(final Color color) {
 		getFigure().setBackgroundColor(color);
 	}
@@ -109,36 +111,33 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		getNameLabel().setToolTip(new Label(getModel().getValue()));
 	}
 
-	/**
-	 * Register element.
-	 */
+	/** Register element. */
 	protected void registerElement() {
 		TestingManager.getInstance().addTestElement(getModel());
 	}
+	
+	/** Unregister element. */
+	protected void unregisterElement() {
+		TestingManager.getInstance().deleteTestElement(getModel());
+	}
 
-	/**
-	 * Checks if is input.
+	/** Checks if is input.
 	 *
-	 * @return true, if is input
-	 */
+	 * @return true, if is input */
 	public boolean isInput() {
 		return getModel().getInterfaceElement().isIsInput();
 	}
 
-	/**
-	 * Checks if is event.
+	/** Checks if is event.
 	 *
-	 * @return true, if is event
-	 */
+	 * @return true, if is event */
 	public boolean isEvent() {
 		return getModel().getInterfaceElement() instanceof Event;
 	}
 
-	/**
-	 * Checks if is variable.
+	/** Checks if is variable.
 	 *
-	 * @return true, if is variable
-	 */
+	 * @return true, if is variable */
 	public boolean isVariable() {
 		return getModel().getInterfaceElement() instanceof VarDeclaration;
 	}
@@ -149,9 +148,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	/** The oldy. */
 	protected int oldy;
 
-	/**
-	 * Update pos.
-	 */
+	/** Update pos. */
 	protected void updatePos() {
 		if (null != parentPart) {
 			final String label = ((Label) getFigure()).getText();
@@ -179,11 +176,9 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		}
 	}
 
-	/**
-	 * Gets the casted model.
+	/** Gets the casted model.
 	 *
-	 * @return the casted model
-	 */
+	 * @return the casted model */
 	@Override
 	public TestElement getModel() {
 		return (TestElement) super.getModel();
@@ -244,7 +239,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	protected void refreshPosition() {
 		updatePos();
 		if (null != getModel()) {
-			final Rectangle bounds = new Rectangle(getModel().getPosition().asPoint(), new Dimension(80, -1));
+			final Rectangle bounds = new Rectangle(getModel().getPosition().asPoint(), new Dimension(80, 21));
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}
@@ -284,16 +279,9 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		return null;
 	}
 
-	@Override
-	public String getSpecificLayer() {
-		return ZoomScalableFreeformRootEditPart.TOP_LAYER;
-	}
-
-	/**
-	 * Sets the value.
+	/** Sets the value.
 	 *
-	 * @param string the new value
-	 */
+	 * @param string the new value */
 	public void setValue(final String string) {
 		if (isActive() && getFigure() != null) {
 			((Label) getFigure()).setText(string);

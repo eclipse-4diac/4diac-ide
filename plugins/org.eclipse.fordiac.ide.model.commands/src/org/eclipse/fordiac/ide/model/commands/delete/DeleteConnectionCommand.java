@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH, AIT
- * 				 2019 Johannes Keppler University Linz
+ * Copyright (c) 2008, 2021 Profactor GmbH, fortiss GmbH, AIT,
+ *                          Johannes Keppler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,9 +9,10 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Filip Pr�stl Andr�n, Monika Wenger
+ *   Gerhard Ebenhofer, Alois Zoitl, Filip Pröstl Andren, Monika Wenger
  *   	- initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
+ *   Michael Oberlehner - added support for error marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
@@ -31,9 +32,15 @@ public class DeleteConnectionCommand extends Command {
 	private final FBNetwork connectionParent;
 	private boolean performMappingCheck;
 	private DeleteConnectionCommand deleteMapped = null;
-	private final CompoundCommand deleteErrorMarkers;
+	private final CompoundCommand deleteErrorMarkers = new CompoundCommand();
+	private FBNetworkElement errorFb;
 
 	public DeleteConnectionCommand(final Connection connection) {
+		this(connection, null);
+		this.errorFb = null;
+	}
+
+	public DeleteConnectionCommand(final Connection connection, final FBNetworkElement errorFb) {
 		super(Messages.DeleteConnectionCommand_DeleteConnection);
 		this.connection = connection;
 		if (this.connection.eContainer() instanceof FBNetwork) {
@@ -42,10 +49,10 @@ public class DeleteConnectionCommand extends Command {
 			connectionParent = null;
 		}
 		performMappingCheck = true;
-		deleteErrorMarkers = new CompoundCommand();
+		this.errorFb = errorFb;
 	}
 
-	public Connection getConnectionView() {
+	public Connection getConnection() {
 		return connection;
 	}
 
@@ -133,11 +140,13 @@ public class DeleteConnectionCommand extends Command {
 	}
 
 	private void checkErrorMarker() {
-		if (source instanceof ErrorMarkerInterface && getConnectionCount(source) == 0) {
-			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source));
+		if (source instanceof ErrorMarkerInterface
+				&& getConnectionCount(source) == 0) {
+			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
 		}
-		if (destination instanceof ErrorMarkerInterface && getConnectionCount(destination) == 0) {
-			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination));
+		if (destination instanceof ErrorMarkerInterface
+				&& getConnectionCount(destination) == 0) {
+			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
 		}
 	}
 

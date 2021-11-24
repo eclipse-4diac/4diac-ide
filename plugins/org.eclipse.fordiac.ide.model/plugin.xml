@@ -89,6 +89,37 @@
             class="org.eclipse.fordiac.ide.model.PreferenceInitializer">
       </initializer>
    </extension>
+      <extension
+            point="org.eclipse.emf.ecore.extension_parser">
+         <parser
+               class="org.eclipse.fordiac.ide.model.resource.FunctionBlockFactory"
+               type="fbt">
+         </parser>
+         <parser
+               class="org.eclipse.fordiac.ide.model.resource.SystemFactory"
+               type="sys">
+         </parser>
+         <parser
+               class="org.eclipse.fordiac.ide.model.resource.FunctionBlockFactory"
+               type="adp">
+         </parser>
+         <parser
+               class="org.eclipse.fordiac.ide.model.resource.FunctionBlockFactory"
+               type="SUB">
+         </parser>
+         <parser
+               class="org.eclipse.fordiac.ide.model.resource.FunctionBlockFactory"
+               type="res">
+         </parser>
+         <parser
+               class="org.eclipse.fordiac.ide.model.resource.FunctionBlockFactory"
+               type="dev">
+         </parser>
+         <parser
+               class="org.eclipse.fordiac.ide.model.resource.FunctionBlockFactory"
+               type="seg">
+         </parser>
+      </extension>
    <!-- this is needed to load old pre eclipse version projects -->
 null
 </plugin>

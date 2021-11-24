@@ -16,12 +16,12 @@ package org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators;
 import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.ChannelEnd;
-import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGenerator {
 	private static final String[] PALETTE_ENTRY_SOURCE_LOCAL = { "PUBL_0", "PUBL_1", "PUBL_2", "PUBL_3", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -57,7 +57,7 @@ public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGen
 		final FBTypePaletteEntry entry = getPalette().getFBTypeEntry(paletteEntries[numDataPorts]);
 
 		if (null == entry) {
-			Activator.getDefault().logError(MessageFormat.format(Messages.CommGenerator_FBTypePaletteEntryNotFound,
+			FordiacLogHelper.logError(MessageFormat.format(Messages.CommGenerator_FBTypePaletteEntryNotFound,
 					paletteEntries[numDataPorts]));
 		}
 		return entry;

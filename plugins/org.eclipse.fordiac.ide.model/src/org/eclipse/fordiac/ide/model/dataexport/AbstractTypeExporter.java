@@ -20,6 +20,8 @@
 
 package org.eclipse.fordiac.ide.model.dataexport;
 
+import java.io.OutputStream;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.WorkspaceJob;
@@ -27,7 +29,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractTypeExporter extends CommonElementExporter {
 	private final LibraryElement type;
@@ -71,7 +73,7 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			try {
 				exporter.createXMLEntries();
 			} catch (final XMLStreamException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 
 			final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
@@ -86,6 +88,20 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			};
 			job.setRule(entry.getFile().getParent());
 			job.schedule();
+		}
+	}
+
+	//Save the model using the Outputstream
+	public static void saveType(final PaletteEntry entry, final OutputStream outputStream) {
+		final AbstractTypeExporter exporter = getTypeExporter(entry);
+		if (exporter != null) {
+			try {
+				exporter.createXMLEntries();
+			} catch (final XMLStreamException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+			exporter.writeToFile(outputStream);
+			entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
 		}
 	}
 

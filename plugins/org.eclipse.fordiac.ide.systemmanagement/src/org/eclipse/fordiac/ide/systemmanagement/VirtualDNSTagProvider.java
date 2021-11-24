@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSFactory;
 import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement;
 import org.eclipse.fordiac.ide.model.virtualDNS.util.VirtualDNSAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class VirtualDNSTagProvider implements ITagProvider {
 
@@ -92,7 +93,7 @@ public class VirtualDNSTagProvider implements ITagProvider {
 			resource.getContents().add(virtualDNSManagement);
 			resource.save(options);
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			ok = false;
 		}
 		return ok;

@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 							 Johannes Kepler University
+ * 							 				Johannes Kepler University
+ * 						2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,42 +13,33 @@
  *   Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Monika Wenger
  *    			 - initial implementation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Christoph Binder - Using Deployment Plugin and changes necessary for reset and reload buttons
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.configuration;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.StringReader;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.fordiac.ide.deployment.devResponse.Data;
 import org.eclipse.fordiac.ide.deployment.devResponse.FB;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
+import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
-import org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor;
-import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
-import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.IFBTestConfiguration;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.IFBTestConfiguratonCreator;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
-import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.configuration.internal.Utils;
+import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.configuration.internal.TestDeploymentExecutor;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -60,26 +52,24 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
-import org.xml.sax.InputSource;
 
-public class FORTERemoteTester implements IFBTestConfiguratonCreator {
+public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeploymentListener {
+	private static final int TESTER_CYCLE_TIME_IN_MS = 500;
 	private static final String LAST_IP = "lastIp"; //$NON-NLS-1$
 	private static final String FORTE_REMOTE_TESTER_SETTINGS = "FORTE_REMOTE_TESTER_SETTINGS"; //$NON-NLS-1$
+	private static final String UNSUPPORTED_TYPE = "UNSUPPORTED_TYPE"; //$NON-NLS-1$
+	private static final String NO_SUCH_OBJECT = "NO_SUCH_OBJECT"; //$NON-NLS-1$
 	private Button run;
 	private FBType type;
 	private boolean running;
-	private Socket socket;
 	private IDialogSettings forteRemoteTesterSettings;
 	private Text ipText;
 	private Text runTimePortText;
-	private final ResponseMapping data = new ResponseMapping();
-
-	private enum SendType {
-		REQ, ADD_WATCH, REMOVE_WATCH, TRIGGER_EVENT, START_EVENT_COUNT, FORCE_VALUE
-	}
+	private TestDeploymentExecutor testDeploymentExecutor;
+	private Map<String, TestElement> testElements;
 
 	public FORTERemoteTester() {
-		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings settings = DialogSettingsProvider.getDialogSettings(getClass());
 		forteRemoteTesterSettings = settings.getSection(FORTE_REMOTE_TESTER_SETTINGS);
 		if (forteRemoteTesterSettings == null) {
 			forteRemoteTesterSettings = settings.addNewSection(FORTE_REMOTE_TESTER_SETTINGS);
@@ -123,49 +113,41 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 		run.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final int runtimePort = Integer.parseInt(runTimePortText.getText());
 				if (run.getSelection()) {
+					final int runtimePort = Integer.parseInt(runTimePortText.getText());
 					final String ipAddress = ipText.getText();
 					forteRemoteTesterSettings.put(LAST_IP, ipAddress);
-					final String response = Utils.deployNetwork(type, ipText.getText(), runtimePort);
+					testDeploymentExecutor = new TestDeploymentExecutor(type,ipAddress,runtimePort,getDeploymentListener(),getTestElements());
+					setRunning(true);
+					final String response = testDeploymentExecutor.deployNetwork();
 					if (response != null) {
-						final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-						msb.setMessage(MessageFormat.format(
-								Messages.FORTERemoteTester_FBCanNotBeTestedBecauseOfTheFollowingError, response));
-						msb.open();
-						setRunning(false);
+						if(isRunning()) {
+							final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+							msb.setMessage(MessageFormat.format(
+									Messages.FORTERemoteTester_FBCanNotBeTestedBecauseOfTheFollowingError, response));
+							msb.open();
+							setRunning(false);
+						}
 						run.setSelection(false);
 						return;
 					}
-					final int thread = 0;
+					testDeploymentExecutor.addWatches(); 
+					final Thread t = new Thread(new TriggerRequestRunnable());
+					t.start();
 					try {
-						socket = new Socket(InetAddress.getByName(ipAddress), runtimePort);
-						socket.setSoTimeout(500);
-						addWatches("_" + type.getName()); //$NON-NLS-1$
-						setRunning(true);
-						final Thread t = new Thread(new TriggerRequestRunnable(socket, thread));
-						t.start();
-						Thread.sleep(500);
-					} catch (final IOException e1) {
-						Activator.getDefault().logError(e1.getMessage(), e1);
+						Thread.sleep(TESTER_CYCLE_TIME_IN_MS);
 					} catch (final InterruptedException ex) {
 						Thread.currentThread().interrupt();  // mark interruption
-						Activator.getDefault().logError(Messages.FORTERemoteTester_ThreadInterrupted, ex);
+						FordiacLogHelper.logError(Messages.FORTERemoteTester_ThreadInterrupted, ex);
 					}
 				} else {
 					setRunning(false);
-					final String response = Utils.cleanNetwork(type, ipText.getText(), runtimePort, socket);
+					String response = testDeploymentExecutor.cleanNetwork();
 					if (response != null) {
 						final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
 						msb.setMessage(MessageFormat.format(
 								Messages.FORTERemoteTester_FBCanNotBeCleanedBecauseOfTheFollowingError, response));
 						msb.open();
-					}
-					try {
-						socket.close();
-						socket = null;
-					} catch (final IOException e1) {
-						Activator.getDefault().logError(e1.getMessage(), e1);
 					}
 				}
 			}
@@ -183,13 +165,55 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 			}
 
 			@Override
-			public void newTestConf(final List<TestElement> variables, final List<String> values, final List<ValuedVarDecl> resultVars,
-					final Map<String, Object> params) {
+			public void newTestConf(final List<TestElement> variables, final List<String> values,
+					final List<ValuedVarDecl> resultVars, final Map<String, Object> params) {
+				// Not needed right now
 			}
 		};
 		loadLastIp();
 		return configuration;
 
+	}
+	
+	@Override
+	public String close() {
+		if(isRunning()){
+			running=false; //setrunning() cannot be used here due to error when called by FBTestereditor
+			return testDeploymentExecutor.cleanNetwork();
+		}
+		return null;
+	}
+	
+	@Override
+	public String clean() {
+		if(isRunning()){
+			setRunning(false);
+			run.setSelection(false);
+			return testDeploymentExecutor.cleanNetwork();
+		}
+		return null;
+	}
+	
+	public String resetFB() {
+		if(isRunning()) {
+			try {
+				testDeploymentExecutor.resetFB();
+			} catch (IOException e) {
+				return e.getMessage();
+			}
+		}
+		return null;
+	}
+	
+	public String startFB() {
+		if(isRunning()) {
+			try {
+				testDeploymentExecutor.startFB();
+			} catch (DeploymentException e) {
+				return e.getMessage();
+			}
+		}
+		return null;
 	}
 
 	private void loadLastIp() {
@@ -201,201 +225,82 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 			}
 		}
 	}
-
-	private void addWatches(final String fbName) {
-		testElements = TestingManager.getInstance().getTestElements(type, this, this);
-
-		for (final TestElement element : testElements.values()) {
-			if (element.getFBString().equals(fbName)) {
-				DataOutputStream outputStream = null;
-				DataInputStream inputStream = null;
-				try {
-					outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-					inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-					if (element.getInterfaceElement() instanceof VarDeclaration) {
-						addWatch(element, outputStream, inputStream);
-
-					}
-					if (element.getInterfaceElement() instanceof Event && !element.getInterfaceElement().isIsInput()) {
-						addWatch(element, outputStream, inputStream);
-					}
-
-				} catch (final IOException e1) {
-					Activator.getDefault().logError(e1.getMessage(), e1);
-				}
-			} else {
-				Activator.getDefault().logInfo(
-						MessageFormat.format(Messages.FORTERemoteTester_ElementSkipped, element.getFBString()));
-			}
-		}
+	
+	private IDeploymentListener getDeploymentListener() {
+		return this;
 	}
 
-	private void addWatch(final TestElement element, final DataOutputStream outputStream, final DataInputStream inputStream) {
-		if (outputStream != null && inputStream != null) {
-			final String request = MessageFormat.format(DeploymentExecutor.ADD_WATCH,
-					Integer.valueOf(0), element.getFBString() + "." + element.getPortString(), "*"); //$NON-NLS-1$ //$NON-NLS-2$
-			sendRequest(SendType.ADD_WATCH, element.getResourceString(), request, outputStream, inputStream);
-		}
+	private Map<String, TestElement> getTestElements() {
+		return testElements = TestingManager.getInstance().getTestElements(type, this, this);
 	}
 
 	class TriggerRequestRunnable implements Runnable {
-		private final Socket socket;
-
-		public TriggerRequestRunnable(final Socket socket, final int thread) {
-			this.socket = socket;
-		}
-
-		private int i = 0;
 
 		@Override
 		public void run() {
-			DataOutputStream outputStream = null;
-			DataInputStream inputStream = null;
-			try {
-				outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-				inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-			} catch (final IOException e1) {
-				setRunning(false);
-			}
 			while (running) {
-				i++;
 				try {
-					Thread.sleep(500);
+					Thread.sleep(TESTER_CYCLE_TIME_IN_MS);
 				} catch (final InterruptedException e) {
 					Thread.currentThread().interrupt();  // mark interruption
 					setRunning(false);
 				}
-				final String request = MessageFormat.format(DeploymentExecutor.READ_WATCHES, Integer.valueOf(i));
-
 				if (running) {
-					sendRequest(SendType.REQ, "", request, outputStream, inputStream); //$NON-NLS-1$
-				}
-			}
-		}
-	}
-
-	private synchronized void sendRequest(final SendType type, final String destination, final String request,
-			final DataOutputStream outputStream, final DataInputStream inputStream) {
-		try {
-			if (socket.isConnected()) {
-
-				outputStream.writeByte(80);
-				outputStream.writeShort(destination.length());
-				outputStream.writeBytes(destination);
-
-				outputStream.writeByte(80);
-				outputStream.writeShort(request.length());
-				outputStream.writeBytes(request);
-				outputStream.flush();
-				if (type.equals(SendType.REQ)) {
-					final String response = parseResponse(inputStream);
-					if (!response.equals("")) { //$NON-NLS-1$
-						final XMLResource resource = new XMLResourceImpl();
-						final InputSource source = new InputSource(new StringReader(response));
-						resource.load(source, data.getLoadOptions());
-						for (final EObject object : resource.getContents()) {
-							if (object instanceof Response) {
-								final Response resp = (Response) object;
-								if (resp.getWatches() != null) {
-									for (final org.eclipse.fordiac.ide.deployment.devResponse.Resource res : resp.getWatches()
-											.getResources()) {
-
-										for (final FB fb : res.getFbs()) {
-											for (final Port p : fb.getPorts()) {
-												for (final Data d : p.getDataValues()) {
-
-													final TestElement element = testElements
-															.get(res.getName() + "." + fb.getName() //$NON-NLS-1$
-															+ "." + p.getName()); //$NON-NLS-1$
-													if (element != null) {
-														element.updateValue(d.getValue(), 0);
-													}
-
-												}
-											}
-										}
-									}
-								}
-							}
-						}
+					try {
+						evaluateResponse(testDeploymentExecutor.readWatches());
+					} catch (DeploymentException e) {
+						FordiacLogHelper.logError(e.getMessage(), e);
 					}
-
-				} else if (type.equals(SendType.ADD_WATCH)) {
-					// TODO evaluate responses
-					inputStream.available();
-					inputStream.read();
-
-				} else if (type.equals(SendType.TRIGGER_EVENT)) {
-					// normally nothing to do - as no response expected
-				} else if (type.equals(SendType.REMOVE_WATCH)) {
-					// normally nothing to do - as no response expected
-
-				} else if (type.equals(SendType.START_EVENT_COUNT)) {
-					// normally nothing to do - as no response expected
-
-				} else if (type.equals(SendType.FORCE_VALUE)) {
-					final String forceResp = parseResponse(inputStream);
-					Activator.getDefault()
-					.logInfo(MessageFormat.format(Messages.FORTERemoteTester_ForceResponse, forceResp));
-					// normally nothing to do - as no response expected
 				}
 			}
-		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
 
-	private static String parseResponse(final DataInputStream inputStream) throws IOException {
-		final StringBuilder response = new StringBuilder();
-		inputStream.readByte(); // asn.1 tag
-		final short size = inputStream.readShort();
-
-		for (int i = 0; i < size; i++) {
-			response.append((char) inputStream.readByte());
+	private void evaluateResponse(final Response resp) {
+		if (resp.getWatches() != null) {
+			for (final Resource res : resp.getWatches().getResources()) {
+				for (final FB fb : res.getFbs()) {
+					evaluateFbResponse(res, fb);
+				}
+			}
 		}
-		return response.toString();
 	}
 
-	private Map<String, TestElement> testElements;
+	private void evaluateFbResponse(final Resource res, final FB fb) {
+		for (final Port p : fb.getPorts()) {
+			for (final Data d : p.getDataValues()) {
+				final TestElement element = testElements.get(res.getName() + "." + fb.getName() //$NON-NLS-1$
+						+ "." + p.getName()); //$NON-NLS-1$
+				if (element != null ) {
+					element.updateValue(d.getValue(), 0);
+				}
+			}
+		}
+	}
 
-	/**
-	 * "Type" : "FB", "Name" : "FB_ADD_INT", "Resource" : "RES1", "Port" : "IN1",
-	 * "force" : true, "forceValue" : "10"
-	 *
-	 * @param element
-	 */
 	public void setValue(final TestElement element) {
 		if (isRunning()) {
-			DataOutputStream outputStream = null;
-			DataInputStream inputStream = null;
 			try {
-				outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-				inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-
-				final String request = MessageFormat.format(DeploymentExecutor.FORCE_VALUE, Integer.valueOf(0),
-						element.getValue(), element.getFBString() + "." + element.getPortString(), "true"); //$NON-NLS-1$ //$NON-NLS-2$
-				sendRequest(SendType.FORCE_VALUE, element.getResourceString(), request, outputStream, inputStream);
-			} catch (final IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				String value = element.getValue();
+				testDeploymentExecutor.setValue(element,value);
+			} catch (DeploymentException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 	}
-
+	
+	/** "Type" : "FB", "Name" : "FB_ADD_INT", "Resource" : "RES1", "Port" : "IN1", "force" : true, "forceValue" : "10"
+	 *
+	 * @param element */
 	@Override
 	public void sendEvent(final TestElement element) {
 		if (isRunning()) {
-			DataOutputStream outputStream = null;
-			DataInputStream inputStream = null;
-			try {
-				outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-				inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-				if (element != null) {
-					final String request = MessageFormat.format(DeploymentExecutor.WRITE_PARAMETER,
-							Integer.valueOf(0), "$e", element.getFBString() + "." + element.getPortString()); //$NON-NLS-1$ //$NON-NLS-2$
-					sendRequest(SendType.TRIGGER_EVENT, element.getResourceString(), request, outputStream, inputStream);
+			if (element != null) {
+				try {
+					testDeploymentExecutor.sendEvent(element);
+				} catch (DeploymentException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
-			} catch (final IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		}
 	}
@@ -408,6 +313,46 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	@Override
 	public void setValue(final TestElement element, final String value) {
 		setValue(element);
+	}
+
+	@Override
+	public void connectionOpened() {
+		//currently not used method
+	}
+
+	@Override
+	public void postCommandSent(String info, String destination, String command) {
+		//currently not used method
+	}
+
+	@Override
+	public  void postResponseReceived(String response, String source) {
+		if(response.contains(UNSUPPORTED_TYPE)){
+			final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			msb.setMessage(MessageFormat.format(
+					Messages.FORTERemoteTester_FBCanNotBeTestedBecauseItsTypeIsNotKnown, response));
+			msb.open();
+			setRunning(false);
+			run.setSelection(false);
+			testDeploymentExecutor.cleanNetwork();
+			return;
+		}
+		if(response.contains(NO_SUCH_OBJECT)) {
+			final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			msb.setMessage(MessageFormat.format(
+					Messages.FORTERemoteTester_InterfaceNotTheSameAsTheOneKnownByTheDevice, response));
+			msb.open();
+			setRunning(false);
+			run.setSelection(false);
+			testDeploymentExecutor.cleanNetwork();
+			return;
+		}
+		
+	}
+
+	@Override
+	public void connectionClosed() {	
+		//currently not used method
 	}
 
 }

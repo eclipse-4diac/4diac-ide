@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.systemconfiguration.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
@@ -58,7 +58,7 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 	 *
 	 * @param viewer the EditPartViewer
 	 */
-	public SysConfTemplateTransferDropTargetListener(final EditPartViewer viewer, AutomationSystem system) {
+	public SysConfTemplateTransferDropTargetListener(final EditPartViewer viewer, final AutomationSystem system) {
 		super(viewer);
 		targetProject = (null != system) ? system.getSystemFile().getProject() : null;
 	}
@@ -73,8 +73,8 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 
 		} else {
 			if (TemplateTransfer.getInstance().getTemplate() instanceof PaletteEntry) {
-				PaletteEntry entry = (PaletteEntry) TemplateTransfer.getInstance().getTemplate();
-				IProject srcProject = entry.getFile().getProject();
+				final PaletteEntry entry = (PaletteEntry) TemplateTransfer.getInstance().getTemplate();
+				final IProject srcProject = entry.getFile().getProject();
 
 				// If project is null it is an entry from the tool palette
 				if (isSysConfEditorType(TemplateTransfer.getInstance().getTemplate()) && (null != targetProject)
@@ -108,12 +108,12 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 		} else if (template instanceof TemplateCreationFactory) {
 			return super.getFactory(template);
 		} else {
-			Activator.getDefault().logError("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
+			FordiacLogHelper.logError("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
 		}
 		return null;
 	}
 
-	private static boolean isSysConfEditorType(Object template) {
+	private static boolean isSysConfEditorType(final Object template) {
 		return (template instanceof DeviceTypePaletteEntry) || (template instanceof ResourceTypeEntry)
 				|| (template instanceof SegmentTypePaletteEntry);
 	}

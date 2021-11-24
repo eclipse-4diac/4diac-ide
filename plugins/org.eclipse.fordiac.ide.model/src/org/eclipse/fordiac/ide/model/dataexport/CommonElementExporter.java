@@ -49,9 +49,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 
-abstract class CommonElementExporter {
+class CommonElementExporter {
 
 	private static class ByteBufferInputStream extends InputStream {
 
@@ -222,7 +223,7 @@ abstract class CommonElementExporter {
 			newWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0"); //$NON-NLS-1$
 			return newWriter;
 		} catch (final XMLStreamException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -269,11 +270,27 @@ abstract class CommonElementExporter {
 				outputStream.close();
 			}
 		} catch (CoreException | XMLStreamException | IOException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		final long endTime = System.currentTimeMillis();
-		Activator.getDefault().logInfo("Saving time for System: " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
+		FordiacLogHelper.logInfo("Saving time for System: " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
 
+	}
+
+	//Write to File from OutputStream
+	protected void writeToFile(final OutputStream targetStream) {
+		try {
+			writer.writeCharacters(LINE_END);
+			writer.writeEndDocument();
+			writer.close();
+			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.transferDataBuffers())) {
+				inputStream.transferTo(targetStream);
+			} finally {
+				outputStream.close();
+			}
+		} catch (XMLStreamException | IOException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
 	}
 
 	/**
@@ -363,7 +380,7 @@ abstract class CommonElementExporter {
 
 	protected void addCommentAttribute(final INamedElement namedElement) throws XMLStreamException {
 		if (null != namedElement.getComment()) {
-			writer.writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, namedElement.getComment());
+			writer.writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, fullyEscapeValue(namedElement.getComment()));
 		}
 	}
 

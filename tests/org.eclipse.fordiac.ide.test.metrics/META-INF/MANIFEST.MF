@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Metrics Tests (Incubation)
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.metrics
+Bundle-Version: 2.0.0.qualifier
+Fragment-Host: org.eclipse.fordiac.ide.metrics
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.metrics
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Vendor: Eclipse 4diac
+Import-Package: org.junit.jupiter.api,
+ org.junit.jupiter.params,
+ org.junit.jupiter.params.provider,
+ org.opentest4j
+Require-Bundle: com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ org.eclipse.fordiac.ide.model.xtext.fbt

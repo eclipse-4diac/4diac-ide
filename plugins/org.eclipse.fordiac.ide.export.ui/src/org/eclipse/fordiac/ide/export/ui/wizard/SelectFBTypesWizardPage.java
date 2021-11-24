@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.export.ui.Messages;
-import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -87,7 +87,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 				final int sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
 				return sortIndex1 - sortIndex2;
 			} catch (final NumberFormatException e2) {
-				Activator.getDefault().logError(e2.getMessage(), e2);
+				FordiacLogHelper.logError(e2.getMessage(), e2);
 			}
 			return 0;
 		});

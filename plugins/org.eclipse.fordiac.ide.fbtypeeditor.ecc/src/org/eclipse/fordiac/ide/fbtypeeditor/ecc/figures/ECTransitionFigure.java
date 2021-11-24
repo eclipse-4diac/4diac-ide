@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.AbsoluteBendpoint;
 import org.eclipse.draw2d.Bendpoint;
-import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Ellipse;
@@ -105,7 +104,6 @@ public class ECTransitionFigure extends SplineConnection {
 		setAntialias(SWT.ON);
 		setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
 
-		setConnectionRouter(new BendpointConnectionRouter());
 		updateBendPoints(ecTransition);
 
 		transitionOrderDecorator = new TransitionOrderDecorator();

@@ -213,14 +213,14 @@ public class AddElementsToSubAppCommand extends Command {
 			subAppIE = reusablePin.get();
 		} else {
 			// pin has been created in the course of this command or is not present at all and needs to be created
-			subAppIE = sourceToSubAppPin.computeIfAbsent(source, k -> createInterfaceElement(ie));
+			subAppIE = sourceToSubAppPin.computeIfAbsent(source, k -> createInterfaceElement(ie, source.getName()));
 		}
 		createConnModificationCommands(con, subAppIE, isNewPin);
 	}
 
-	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie) {
+	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String srcName) {
 		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(ie.getType(),
-				ie.getName(), targetSubApp.getInterface(), ie.isIsInput(), -1);
+				srcName, targetSubApp.getInterface(), ie.isIsInput(), -1);
 		cmd.execute();
 		changedSubAppIEs.add(cmd);
 		return cmd.getCreatedElement();

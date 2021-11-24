@@ -57,7 +57,6 @@ import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
@@ -212,7 +211,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	}
 
 	@Override
-	protected DirectEditManager createDirectEditManager() {
+	protected ComboDirectEditManager createDirectEditManager() {
 		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getNameLabel()),
 				getNameLabel());
 	}
@@ -228,9 +227,10 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		final int selected = (getAction().getAlgorithm() != null) ? algNames.indexOf(getAction().getAlgorithm().getName())
 				: algNames.size() - 1;
 
-		((ComboDirectEditManager) getManager()).updateComboData(algNames);
-		((ComboDirectEditManager) getManager()).setSelectedItem(selected);
-		getManager().show();
+		final ComboDirectEditManager editManager = createDirectEditManager();
+		editManager.updateComboData(algNames);
+		editManager.setSelectedItem(selected);
+		editManager.show();
 	}
 
 	public ECActionAlgorithm getCastedModel() {

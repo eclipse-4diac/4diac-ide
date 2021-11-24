@@ -15,15 +15,32 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
+import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.BinaryExpression;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RepeatStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
 
 public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 
@@ -62,10 +79,12 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 	}
 
 	private static void analyzeAction(final ECAction action, final HalsteadData data) {
-		if (!data.actions.contains("Action " + data.actionCount)) {
+		final String actionCount = MessageFormat.format(Messages.HalsteadNumberOfActions,
+				Integer.valueOf(data.actionCount));
+		if (!data.actions.contains(actionCount)) {
 			data.uniqueOperator += 1;
 		}
-		data.actions.add("Action " + data.actionCount);
+		data.actions.add(actionCount);
 
 		if (null != action.getOutput()) {
 			if (!data.event.contains(action.getOutput().getName())) {
@@ -82,30 +101,95 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 
 	private static void analyzeAlgorithm(final Algorithm algorithm, final HalsteadData data) {
 		if (!data.alg.contains(algorithm.getName())) {
+			data.alg.add(algorithm.getName());
 			data.uniqueOperands += 1;
 		}
-		data.alg.add(algorithm.getName());
-		String algo = algorithm.toString();
-		int count = 0;
-		for (final String op : HalsteadData.ST_OPERATORS) {
-			int lastIndex = 0;
-			while (-1 != lastIndex) {
-				lastIndex = algo.indexOf(op, lastIndex);
-				if (-1 != lastIndex) {
-					data.operatorST++;
-					data.opCount[count] += 1;
-					data.operandST += HalsteadData.ST_OPERANDS_WEIGHT[count];
-					final String sub1 = algo.substring(0, lastIndex);
-					final String sub2 = algo.substring(lastIndex + op.length(), algo.length());
-					algo = sub1.concat(sub2);
+
+		if (!(algorithm instanceof STAlgorithm)) {
+			return;
+		}
+		final STAlgorithmFilter filter = new STAlgorithmFilter();
+		final List<String> errors = new ArrayList<>();
+		final var ast = filter.parse((STAlgorithm) algorithm, errors);
+		if (errors.isEmpty()) {
+			calculateHalstead(ast.getStatements(), data);
+		}
+
+	}
+
+	private static void calculateHalstead(final StatementList list, final HalsteadData data) {
+		for (final Statement stmt : list.getStatements()) {
+			if (stmt instanceof AssignmentStatement) {
+				final var assignStmt = (AssignmentStatement) stmt;
+				handleOperator(":=", data); //$NON-NLS-1$
+				calculateHalstead(assignStmt.getExpression(), data);
+			}
+			if (stmt instanceof CaseStatement) {
+				final var caseStmt = (CaseStatement) stmt;
+				calculateHalstead(caseStmt.getExpression(), data);
+				for (final var caseElement : caseStmt.getCase()) {
+					calculateHalstead(caseElement.getStatements(), data);
+				}
+				final var elseStmt = caseStmt.getElse();
+				if (elseStmt != null) {
+					calculateHalstead(elseStmt.getStatements(), data);
 				}
 			}
-			count++;
+			if (stmt instanceof IfStatement) {
+				final var ifStmt = (IfStatement) stmt;
+				calculateHalstead(ifStmt.getExpression(), data);
+				calculateHalstead(ifStmt.getStatments(), data);
+				for (final var elsifStmt : ifStmt.getElseif()) {
+					calculateHalstead(elsifStmt.getExpression(), data);
+					calculateHalstead(elsifStmt.getStatements(), data);
+				}
+				final var elseStmt = ifStmt.getElse();
+				if(elseStmt != null) {
+					calculateHalstead(elseStmt.getStatements(), data);
+				}
+			}
+			if (stmt instanceof ForStatement) {
+				final var forStmt = (ForStatement) stmt;
+				calculateHalstead(forStmt.getFrom(), data);
+				calculateHalstead(forStmt.getBy(), data);
+				calculateHalstead(forStmt.getTo(), data);
+				calculateHalstead(forStmt.getStatements(), data);
+			}
+			if (stmt instanceof RepeatStatement) {
+				final var repeatStmt = (RepeatStatement) stmt;
+				calculateHalstead(repeatStmt.getExpression(), data);
+				calculateHalstead(repeatStmt.getStatements(), data);
+			}
+			if (stmt instanceof WhileStatement) {
+				final var whileStmt = (WhileStatement) stmt;
+				calculateHalstead(whileStmt.getExpression(), data);
+				calculateHalstead(whileStmt.getStatements(), data);
+			}
 		}
 	}
 
+	private static void calculateHalstead(final Expression expr, final HalsteadData data) {
+		if (expr instanceof BinaryExpression) {
+			final var binExpr = (BinaryExpression) expr;
+			handleOperator(binExpr.getOperator().getLiteral(), data);
+			calculateHalstead(binExpr.getLeft(), data);
+			calculateHalstead(binExpr.getRight(), data);
+		}
+		if (expr instanceof UnaryExpression) {
+			final var unaryExpr = (UnaryExpression) expr;
+			handleOperator(unaryExpr.getOperator().getLiteral(), data);
+			calculateHalstead(unaryExpr.getExpression(), data);
+		}
+	}
 
-
+	private static void handleOperator(final String op, final HalsteadData data) {
+		final int operatorIndex = Arrays.asList(HalsteadData.ST_OPERATORS).indexOf(op);
+		if (operatorIndex >= 0) {
+			data.operatorST++;
+			data.opCount[operatorIndex]++;
+			data.operandST += HalsteadData.ST_OPERANDS_WEIGHT[operatorIndex];
+		}
+	}
 
 	@Override
 	public List<MetricResult> getResults() {
@@ -114,10 +198,10 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 
 		final HalsteadData hData= (HalsteadData) this.data;
 
-		results.add(new MetricResult("Distinct operators n1 ",hData.n1));
-		results.add(new MetricResult("Distinct operands n2", hData.n2));
-		results.add(new MetricResult("Total number of operators N1", hData.n1Major));
-		results.add(new MetricResult("Total number of operands N2", hData.n2Major));
+		results.add(new MetricResult(Messages.HalsteadDisctinctOperatorsN1,hData.n1));
+		results.add(new MetricResult(Messages.HalsteadDisctinctOperatorsN2, hData.n2));
+		results.add(new MetricResult(Messages.HalsteadTotalNumberOfOperatorsN1, hData.n1Major));
+		results.add(new MetricResult(Messages.HalsteadTotalNumberOfOperatorsN2, hData.n2Major));
 
 		final double nMAjor = hData.n1Major + hData.n2Major;
 		final double n = hData.n1 + hData.n2;
@@ -127,13 +211,13 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 		final double d = hData.n1 / 2 * hData.n2Major / hData.n2;
 		final double e = d * v;
 
-		results.add(new MetricResult("Program Length N", nMAjor));
-		results.add(new MetricResult("Program vocabulary n", n));
-		results.add(new MetricResult("Estimated length N^", nHat));
-		results.add(new MetricResult("Purity ratio PR", pr));
-		results.add(new MetricResult("Program volume V", v));
-		results.add(new MetricResult("Difficulty D", d));
-		results.add(new MetricResult("Program Effort E", e));
+		results.add(new MetricResult(Messages.HalsteadProgramLength, nMAjor));
+		results.add(new MetricResult(Messages.HalsteadProgramVocabulary, n));
+		results.add(new MetricResult(Messages.HalsteadEstimatedLength, nHat));
+		results.add(new MetricResult(Messages.HalsteadPurityRatio, pr));
+		results.add(new MetricResult(Messages.HalsteadProgramVolume, v));
+		results.add(new MetricResult(Messages.HalsteadDifficulty, d));
+		results.add(new MetricResult(Messages.HalsteadProgramEffort, e));
 
 		return results;
 	}
@@ -142,6 +226,14 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 	protected MetricData createDataType() {
 
 		return new HalsteadData();
+	}
+
+	@Override
+	protected MetricData analyzeSFB(final SimpleFBType simpleFBType) {
+		final HalsteadData data = new HalsteadData();
+
+		analyzeAlgorithm(simpleFBType.getAlgorithm(), data);
+		return data;
 	}
 
 }

@@ -67,7 +67,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Point;
@@ -416,7 +415,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	public void performDirectEdit() {
-		final NewInstanceDirectEditManager directEditManager = getManager();
+		final NewInstanceDirectEditManager directEditManager = createDirectEditManager();
 		directEditManager.updateRefPosition(getRefPoint());
 		directEditManager.show(getModel().getTypeName());
 	}
@@ -443,13 +442,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		// don't do anyting here
 	}
 
-	@Override
-	protected NewInstanceDirectEditManager getManager() {
-		return (NewInstanceDirectEditManager) super.getManager();
-	}
 
 	@Override
-	protected DirectEditManager createDirectEditManager() {
+	protected NewInstanceDirectEditManager createDirectEditManager() {
 		return new NewInstanceDirectEditManager(this, getPalette(), true);
 	}
 

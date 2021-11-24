@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 TU Wien ACIN, Profactor GmbH, fortiss GmbH, 
+ * Copyright (c) 2012, 2021 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
@@ -13,7 +13,7 @@
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - New Project Explorer layout
- *               - Fixed handing of project renameing      
+ *               - Fixed handing of project renameing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
@@ -47,15 +47,19 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class FordiacResourceChangeListener implements IResourceChangeListener {
@@ -81,7 +85,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				}
 
 			} catch (final CoreException e) {
-				Activator.getDefault().logError("Couldn't process resource delta", e); //$NON-NLS-1$
+				FordiacLogHelper.logError("Couldn't process resource delta", e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -125,7 +129,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			case IEditorFileChangeListener.NO_TO_ALL:
 				return;
 			default:
-				Activator.getDefault().logError(code + " is not a valid dialog output"); //$NON-NLS-1$
+				FordiacLogHelper.logError(code + " is not a valid dialog output"); //$NON-NLS-1$
 				break;
 			}
 		}
@@ -345,7 +349,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					// to rename a file
 					file.move(new Path(newPath), true, new NullProgressMonitor());
 				} catch (final CoreException e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 				return Status.OK_STATUS;
 			}
@@ -371,7 +375,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					final String name = scanner.findWithinHorizon(systemNamePattern, 0);
 					wrongName = (null != name) && (!name.endsWith("\"" + newTypeName)); //$NON-NLS-1$
 				} catch (final Exception e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 				if (wrongName) {
 					final AutomationSystem system = systemManager.getSystem(file);
@@ -415,6 +419,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					entry.setFile(dst);
 				}
 			}
+			updateEditorInput(src, dst);
 		}
 	}
 
@@ -550,4 +555,32 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			return (input instanceof FileEditorInput) && (file.equals(((FileEditorInput) input).getFile()));
 		}));
 	}
+
+	private static FordiacEditorMatchingStrategy editorMatching = new FordiacEditorMatchingStrategy();
+
+	private static void updateEditorInput(final IFile src, final IFile dst) {
+		Display.getDefault().syncExec(() -> {
+			final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			final IEditorReference[] editorReferences = activePage.getEditorReferences();
+
+			for (final IEditorReference editorReference : editorReferences) {
+				final IEditorPart editor = editorReference.getEditor(false);
+				if (null != editor) {
+					//the editor is loaded check if it is ours and if yes update it
+					final IEditorInput input = editor.getEditorInput();
+					if((src.equals(((FileEditorInput) input).getFile()) && editor instanceof IEditorFileChangeListener)) {
+						((IEditorFileChangeListener)editor).updateEditorInput(new FileEditorInput(dst));
+					}
+				} else {
+					// the editor is not yet loaded check if it may be ours. We can not load it as the file it is referring
+					// to is not existing anymore, therefore we can only close it
+					if (editorMatching.matches(editorReference, new FileEditorInput(src))) {
+						activePage.closeEditors(new IEditorReference[] { editorReference }, false);
+
+					}
+				}
+			}
+		});
+	}
+
 }

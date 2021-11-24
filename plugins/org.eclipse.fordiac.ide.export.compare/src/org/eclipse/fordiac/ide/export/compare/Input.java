@@ -23,6 +23,7 @@ import org.eclipse.compare.IEditableContent;
 import org.eclipse.compare.IStreamContentAccessor;
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISaveablesSource;
 import org.eclipse.ui.Saveable;
@@ -84,7 +85,7 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor, 
 		try {
 			return new FileInputStream(fContent);
 		} catch (final FileNotFoundException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -120,7 +121,7 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor, 
 		try (FileOutputStream fo = new FileOutputStream(fContent);) {
 			fo.write(newContent);
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 

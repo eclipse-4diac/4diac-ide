@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -209,7 +210,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 				}
 			}
 		} catch (final CoreException e) {
-			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
+			FordiacLogHelper.logError("Could not get marker attributes", e); //$NON-NLS-1$
 		}
 	}
 
@@ -221,13 +222,24 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	public void reloadType(final FBType type) {
 		if (type instanceof CompositeFBType) {
-			final FBNetwork fbNetwork = ((CompositeFBType) type).getFBNetwork();
-			if (fbNetwork != null) {
-				getGraphicalViewer().setContents(fbNetwork);
+			getModel().eAdapters().remove(adapter);
+			fbType = ((CompositeFBType) type);
+			setModel(fbType.getFBNetwork());
+			if (getModel() != null) {
+				getModel().eAdapters().add(adapter);
+				getGraphicalViewer().setContents(getModel());
 			} else {
 				EditorUtils.CloseEditor.run(this);
 			}
 		}
+	}
+
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getEditPartRegistry().get(getModel());
 	}
 
 }

@@ -38,15 +38,17 @@ public final class Messages extends NLS {
 	public static String AppearancePropertySection_LABLE_Color;
 	public static String ChangeCommentCommand_LABEL_ChangeComment;
 	public static String ConnectionSection_Comment;
+	public static String ConnectionSection_ShowConnection;
+
 	public static String ConnectionSection_Source;
 	public static String ConnectionSection_Target;
-	public static String DiagramPreferences_ConnectionRouter;
 	public static String DiagramPreferences_CornerDimension;
-	public static String DiagramPreferences_DefaultRouter;
 	public static String DiagramPreferences_FB;
 	public static String DiagramPreferences_GeneralDiagramPreferences;
 	public static String DiagramPreferences_LabelSize;
 	public static String DiagramPreferences_MaximumValueLabelSize;
+	public static String DiagramPreferences_MaximumPinLabelSize;
+	public static String DiagramPreferences_MaximumTypeLabelSize;
 	public static String DiagramPreferences_FieldEditors_GridSpacingInPixels;
 	public static String DiagramPreferences_FieldEditors_RulerAndGrid;
 	public static String DiagramPreferences_FieldEditors_ShowGrid;
@@ -54,6 +56,8 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_FieldEditors_SnapToGrid;
 	public static String DiagramPreferences_InterfacePins;
 	public static String DiagramPreferences_InterfacePins_ShowInputComment;
+
+	public static String DiagramPreferences_Restart;
 	public static String FBFigure_TYPE_NOT_SET;
 	public static String FordiacContextMenuProvider_Align;
 	public static String PropertyUtil_LABEL_Description_Complianceprofile;

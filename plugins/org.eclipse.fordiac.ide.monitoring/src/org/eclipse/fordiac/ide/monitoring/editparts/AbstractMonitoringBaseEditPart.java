@@ -62,6 +62,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 
 	private InterfaceEditPart parentPart;
 	private final List<EObject> fBnetworks = new ArrayList<>();
+	public static final int MONITORING_VALUE_LR_MARGIN = 5;
 
 	private IPropertyChangeListener listener;
 	private final Adapter deleteInterfaceAdapter = new AdapterImpl() {
@@ -92,7 +93,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 
 	public boolean isElementOrParentDeleted(final Notification notification) {
 		final FBNetworkElement fbNetworkElement = getInterfaceElement().getFBNetworkElement();
-		return notification.getOldValue() == fbNetworkElement
+		return fbNetworkElement == null || notification.getOldValue() == fbNetworkElement
 				|| fbNetworkElement.isNestedInSubApp() && fBnetworks.contains(fbNetworkElement.getFbNetwork());
 	}
 
@@ -336,7 +337,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			final int maxLabelSize = preferenceStore.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);
 			final FontMetrics fm = FigureUtilities
 					.getFontMetrics(JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
-			maxLabelWidth = (int) (maxLabelSize * fm.getAverageCharacterWidth());
+			maxLabelWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth()) + 2 * MONITORING_VALUE_LR_MARGIN;
 
 		}
 		return maxLabelWidth;

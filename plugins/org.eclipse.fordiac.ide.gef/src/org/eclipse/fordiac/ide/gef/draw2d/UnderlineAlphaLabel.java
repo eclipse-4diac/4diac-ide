@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013 fortiss GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,7 +25,7 @@ public class UnderlineAlphaLabel extends SetableAlphaLabel {
 		super();
 	}
 
-	public UnderlineAlphaLabel(String text) {
+	public UnderlineAlphaLabel(final String text) {
 		super(text);
 	}
 
@@ -33,22 +33,21 @@ public class UnderlineAlphaLabel extends SetableAlphaLabel {
 		return drawUnderline;
 	}
 
-	public void setDrawUnderline(boolean drawUnderline) {
+	public void setDrawUnderline(final boolean drawUnderline) {
 		this.drawUnderline = drawUnderline;
 		repaint();
 	}
 
 	@Override
-	protected void paintFigure(Graphics graphics) {
+	protected void paintFigure(final Graphics graphics) {
 		super.paintFigure(graphics);
-		Rectangle bounds = getBounds();
+		final Rectangle bounds = getBounds();
 		if (drawUnderline) {
 			graphics.translate(bounds.x, bounds.y);
-			Point loc = new Point(getTextLocation());
+			final Point loc = new Point(getTextLocation());
 			loc.y += bounds.height - 2;
 			graphics.drawLine(loc.x(), loc.y(), bounds.width() - loc.x(), loc.y());
 			graphics.translate(-bounds.x, -bounds.y);
 		}
 	}
-
 }

@@ -53,4 +53,7 @@ public interface IFBTEditorPart extends ISelectionListener, IEditorPart, IGotoMa
 
 	void reloadType(FBType type);
 
+	Object getSelectableEditPart();
+
+
 }

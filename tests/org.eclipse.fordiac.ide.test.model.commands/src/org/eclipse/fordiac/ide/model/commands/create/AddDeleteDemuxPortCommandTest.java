@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.CheckableStructTree;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.StructManipulation;
@@ -58,7 +59,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 		private Demultiplexer demux;
 		private final StructuredType struct;
-		private CheckableStructTreeNode node;
+		private CheckableStructTree tree;
 
 		public Demultiplexer getDemultiplexer() {
 			return demux;
@@ -71,7 +72,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		public State() {
 			struct = createSampleStruct();
 			demux = createDemultiplexer();
-			node = CheckableStructTreeNode.initTree(demux, struct);
+			tree = new CheckableStructTree(demux, struct);
 		}
 
 		public void setDemultiplexer(final Demultiplexer demux) {
@@ -196,7 +197,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	}
 
 	private static State executeDeleteCommand(final State state, final String name) {
-		final CheckableStructTreeNode n = (CheckableStructTreeNode) state.node.find(name);
+		final CheckableStructTreeNode n = (CheckableStructTreeNode) state.tree.getRoot().find(name);
 		final DeleteDemuxPortCommand cmd = new DeleteDemuxPortCommand(state.getDemultiplexer(), n);
 		state.setCommand(cmd);
 		final State newState = commandExecution(state);
@@ -205,7 +206,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	}
 
 	private static State executeAddCommand(final State state, final String name) {
-		final CheckableStructTreeNode n = (CheckableStructTreeNode) state.node.find(name);
+		final CheckableStructTreeNode n = (CheckableStructTreeNode) state.tree.getRoot().find(name);
 		final AddDemuxPortCommand cmd = new AddDemuxPortCommand(state.getDemultiplexer(), n);
 		state.setCommand(cmd);
 		final State newState = commandExecution(state);

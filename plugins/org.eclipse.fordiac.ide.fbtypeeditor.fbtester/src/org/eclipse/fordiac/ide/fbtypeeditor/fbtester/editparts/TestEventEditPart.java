@@ -1,5 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2016 Profactor GmbH, fortiss GmbH
+ * 						2021 Primetals Technologies Austria GmbH
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *    - initial implementation
+ *   Christoph Binder - deactivate method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
@@ -31,9 +34,21 @@ public class TestEventEditPart extends TestEditPart {
 	/**
 	 * Register element.
 	 */
-
 	protected void registerTriggerElement() {
 		TestingManager.getInstance().addTriggerElement(getModel());
+	}
+	
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		unregisterTriggerElement();
+	}
+	
+	/**
+	 * Unregister element.
+	 */
+	protected void unregisterTriggerElement() {
+		TestingManager.getInstance().deleteTriggerElement(getModel());
 	}
 
 	@Override

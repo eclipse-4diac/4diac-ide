@@ -17,11 +17,8 @@ package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FreeformLayer;
-import org.eclipse.draw2d.FreeformLayout;
+import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -40,13 +37,9 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 	private Adapter adapter;
 
 	@Override
-	protected IFigure createFigure() {
-		final Figure f = new FreeformLayer();
-		f.setBorder(new MarginBorder(10));
-		f.setLayoutManager(new FreeformLayout());
-		f.setOpaque(false);
-		// Create the static router for the connection layer
-		return f;
+	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
+		// we have a connection specific router so return null here
+		return null;
 	}
 
 	@Override

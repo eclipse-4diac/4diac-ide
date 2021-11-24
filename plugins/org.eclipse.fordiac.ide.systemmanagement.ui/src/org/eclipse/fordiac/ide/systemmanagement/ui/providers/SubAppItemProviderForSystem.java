@@ -18,10 +18,14 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.SubAppItemProvider;
 
@@ -86,5 +90,20 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 			subAppNetwork.eAdapters().add(subAppNetworkItemProvider);
 		}
 		return subAppNetwork;
+	}
+
+	@Override
+	public void notifyChanged(final Notification notification) {
+		if (LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY == notification
+				.getFeatureID(TypedConfigureableObject.class)) {
+			// if the palette entry get change inform viewer to update the parent's children, this ensures that any
+			// filters that may be enabled are applied
+			final SubApp subapp = (SubApp) notification.getNotifier();
+			final Notification wrappedNotification = ViewerNotification.wrapNotification(notification,
+					subapp.eContainer().eContainer());
+			fireNotifyChanged(wrappedNotification);
+		} else {
+			super.notifyChanged(notification);
+		}
 	}
 }

@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.model.SubAppPortHelper;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.systemmanagement.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 class DeviceMonitoringHandler implements Runnable {
 
@@ -84,7 +84,7 @@ class DeviceMonitoringHandler implements Runnable {
 					Thread.sleep(pollingIntervall);
 				} catch (final InterruptedException e) {
 					Thread.currentThread().interrupt();  // mark interruption
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 				if (devInteractor.isConnected()) {
 					try {

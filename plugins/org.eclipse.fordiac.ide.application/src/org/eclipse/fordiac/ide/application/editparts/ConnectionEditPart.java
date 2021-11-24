@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
- * 				 2018 - 2020 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH,
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 - 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
+ * 							 Johannes Kepler University Linz,
+ * 							 Primetals Technologies Germany GmbH,
+ *                           Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,13 +18,13 @@
  *               - fixed hide event and data connection issues
  *               - reworked connection selection and hover feedback
  *   Lukas Wais	 - reworked connection colors
+ *   Michael Oberlehner - added support for hidden connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.geometry.Point;
@@ -33,6 +33,9 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.tools.FBNScrollingConnectionEndpointTracker;
@@ -40,7 +43,6 @@ import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
-import org.eclipse.fordiac.ide.gef.router.RouterUtil;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyRealType;
@@ -67,6 +69,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
 public class ConnectionEditPart extends AbstractConnectionEditPart {
+
+	private final class SrcDstAdapter extends AdapterImpl {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)) {
+				getConnectionFigure().updateConLabels();
+			}
+		}
+	}
 
 	private static final class FBNConnectionEndPointHandle extends ScrollingConnectionEndpointHandle {
 		private FBNConnectionEndPointHandle(final org.eclipse.gef.ConnectionEditPart owner, final int endPoint) {
@@ -128,8 +142,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	private static final float[] BROKEN_CONNECTION_DASH_PATTERN = new float[] { 5.0f, 5.0f };
-	private static final String HIDDEN = "HIDDEN"; //$NON-NLS-1$
-	private static final String HIDEN_CON = "HIDEN_CON"; //$NON-NLS-1$
 
 	public ConnectionEditPart() {
 		super();
@@ -177,57 +189,43 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		// Allows the removal of the connection model element
 		installEditPolicy(EditPolicy.CONNECTION_ROLE, new DeleteConnectionEditPolicy());
 
-		if (getConnectionFigure().getConnectionRouter() instanceof BendpointPolicyRouter) {
-			installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
-					((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter())
-					.getBendpointPolicy(getModel()));
-		}
+		installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
+				((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter()).getBendpointPolicy(getModel()));
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		final PolylineConnection connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
+		final HideableConnection connectionFigure = new HideableConnection();
+		connectionFigure.setModel(getModel());
+		setConnectionColor(connectionFigure);  // needs to be done before setHidden
+		connectionFigure.setHidden(!getModel().isVisible());
 
-		final String status = getModel().getAttributeValue(HIDEN_CON);
-		if (connection instanceof HideableConnection) {
-			((HideableConnection) connection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
-			if ((getModel() != null) && (getModel().getSourceElement() != null)) {
-				((HideableConnection) connection)
-				.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
-			}
-			((HideableConnection) connection).setModel(getModel());
-		}
+		performConnTypeConfiguration(connectionFigure);
+		connectionFigure.setToolTip(new ConnectionTooltipFigure(getModel()));
+		connectionFigure.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+		return connectionFigure;
+	}
 
-		final PolygonDecoration arrow = new PolygonDecoration();
-		arrow.setTemplate(PolygonDecoration.TRIANGLE_TIP);
-		arrow.setScale(7, 4);
-		connection.setTargetDecoration(arrow);
-
+	private void performConnTypeConfiguration(final HideableConnection connectionFigure) {
 		if (getModel() instanceof EventConnection) {
-			connection.setVisible(
+			connectionFigure.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
 		}
 
-		if (getModel() instanceof AdapterConnection) {
-			connection.setTargetDecoration(null);
-			connection.setSourceDecoration(null);
-
-		}
-
 		if (getModel() instanceof DataConnection) {
-			connection.setVisible(
+			connectionFigure.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON));
-
 		}
-		setConnectionColor(connection);
-		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
-		connection.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
-		return connection;
 	}
 
 	@Override
-	public PolylineConnection getFigure() {
-		return (PolylineConnection) super.getFigure();
+	public HideableConnection getFigure() {
+		return (HideableConnection) super.getFigure();
+	}
+
+	@Override
+	public HideableConnection getConnectionFigure() {
+		return (HideableConnection) super.getConnectionFigure();
 	}
 
 	private void setConnectionColor(final PolylineConnection connection) {
@@ -279,16 +277,17 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-
-		if ((getConnectionFigure() instanceof PolylineConnection) && (getModel() != null)) {
+		if (getModel() != null) {
 			if (getModel().isBrokenConnection()) {
-				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_CUSTOM);
-				((PolylineConnection) getConnectionFigure()).setLineDash(BROKEN_CONNECTION_DASH_PATTERN);
+				getConnectionFigure().setLineStyle(SWT.LINE_CUSTOM);
+				getConnectionFigure().setLineDash(BROKEN_CONNECTION_DASH_PATTERN);
 
 			} else {
-				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_SOLID);
-				((PolylineConnection) getConnectionFigure()).setLineDash(null);
+				getConnectionFigure().setLineStyle(SWT.LINE_SOLID);
+				getConnectionFigure().setLineDash(null);
 			}
+			getConnectionFigure().setHidden(!getModel().isVisible());
+			getConnectionFigure().updateConLabels();
 		}
 	}
 
@@ -298,14 +297,38 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			super.activate();
 			UIPlugin.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 			getModel().eAdapters().add(getContentAdapter());
+			addSourceAdapters();
+			addDestinationAdapters();
+		}
+	}
+
+	private void addDestinationAdapters() {
+		if (getModel().getDestination() != null && dstPinAdapter.getTarget() == null) {
+			getModel().getDestination().eAdapters().add(dstPinAdapter);
+			if (getModel().getDestinationElement() != null) {
+				getModel().getDestinationElement().eAdapters().add(dstFBAdapter);
+			}
+		}
+	}
+
+	private void addSourceAdapters() {
+		if (getModel().getSource() != null && srcPinAdapter.getTarget() == null) {
+			getModel().getSource().eAdapters().add(srcPinAdapter);
+			if (getModel().getSourceElement() != null) {
+				getModel().getSourceElement().eAdapters().add(srcFBAdapter);
+			}
 		}
 	}
 
 	private Adapter contentAdapter;
+	private final Adapter srcPinAdapter = new SrcDstAdapter();
+	private final Adapter srcFBAdapter = new SrcDstAdapter();
+	private final Adapter dstPinAdapter = new SrcDstAdapter();
+	private final Adapter dstFBAdapter = new SrcDstAdapter();
 
 	private Adapter getContentAdapter() {
 		if (contentAdapter == null) {
-			contentAdapter = new AdapterImpl() {
+			contentAdapter = new EContentAdapter() {
 				@Override
 				public void notifyChanged(final Notification notification) {
 					final Object feature = notification.getFeature();
@@ -315,10 +338,28 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 							|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
 						refreshComment();
 					}
+					if (LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
+						addSourceAdapters();
+					}
 					if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
+						addDestinationAdapters();
 						setConnectionColor(getFigure());
 						// reset the line width so that any to struct connections have the right width
 						getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+					}
+
+					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)) {
+						// the hidden property was changed inform source and destination so that all labels are updated
+						getModel().getSource()
+						.eNotify(new ENotificationImpl((InternalEObject) getModel().getSource(),
+								Notification.SET,
+								LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections(),
+								getModel(), getModel()));
+						getModel().getDestination()
+						.eNotify(new ENotificationImpl((InternalEObject) getModel().getDestination(),
+								Notification.SET,
+								LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections(),
+								getModel(), getModel()));
 					}
 				}
 			};
@@ -336,6 +377,19 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			super.deactivate();
 			UIPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 			getModel().eAdapters().remove(getContentAdapter());
+
+			if (srcPinAdapter.getTarget() != null) {
+				srcPinAdapter.getTarget().eAdapters().remove(srcPinAdapter);
+			}
+			if (srcFBAdapter.getTarget() != null) {
+				srcFBAdapter.getTarget().eAdapters().remove(srcFBAdapter);
+			}
+			if (dstPinAdapter.getTarget() != null) {
+				dstPinAdapter.getTarget().eAdapters().remove(dstPinAdapter);
+			}
+			if (dstFBAdapter.getTarget() != null) {
+				dstFBAdapter.getTarget().eAdapters().remove(dstFBAdapter);
+			}
 		}
 	}
 

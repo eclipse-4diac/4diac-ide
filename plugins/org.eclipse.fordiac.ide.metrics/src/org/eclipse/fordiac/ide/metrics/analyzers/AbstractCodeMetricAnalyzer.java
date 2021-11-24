@@ -15,7 +15,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -25,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public abstract class AbstractCodeMetricAnalyzer {
@@ -47,6 +50,10 @@ public abstract class AbstractCodeMetricAnalyzer {
 
 	public abstract List<MetricResult> getResults();
 
+	public static List<MetricResult> removeDuplicateResults(final Collection<MetricResult> m) {
+		return m.stream().distinct().collect(Collectors.toList());
+	}
+
 	protected MetricData analyzeSubApp(final SubApp subApp, final boolean calcAvg) {
 		if (subApp.isTyped()) {
 			return analyzeFBNetwork(subApp.getType().getFBNetwork(), true);
@@ -60,6 +67,8 @@ public abstract class AbstractCodeMetricAnalyzer {
 			tempData = analyzeBFB((BasicFBType) type);
 		} else if (type instanceof CompositeFBType) {
 			tempData = analyzeCFB((CompositeFBType) type);
+		} else if (type instanceof SimpleFBType) {
+			tempData = analyzeSFB((SimpleFBType) type);
 		}
 		return tempData;
 	}
@@ -94,6 +103,8 @@ public abstract class AbstractCodeMetricAnalyzer {
 	protected MetricData analyzeCFB(final CompositeFBType compositeFBType) {
 		return analyzeFBNetwork(compositeFBType.getFBNetwork(), true);
 	}
+
+	protected abstract MetricData analyzeSFB(SimpleFBType simpleFBType);
 
 	protected abstract MetricData createDataType();
 

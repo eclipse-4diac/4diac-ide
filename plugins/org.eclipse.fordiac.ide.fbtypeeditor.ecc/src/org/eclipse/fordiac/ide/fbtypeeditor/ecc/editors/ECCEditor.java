@@ -307,10 +307,19 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	public void reloadType(final FBType type) {
 		if (type instanceof BasicFBType) {
 			fbType = (BasicFBType) type;
-			getGraphicalViewer().setContents(type);
+			getGraphicalViewer().setContents(getModel());
 		} else {
 			EditorUtils.CloseEditor.run(this);
 		}
 
 	}
+
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getEditPartRegistry().get(getModel());
+	}
+
 }

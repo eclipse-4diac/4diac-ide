@@ -13,8 +13,8 @@ package org.eclipse.fordiac.ide.gef.editparts;
 
 import java.text.MessageFormat;
 
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
@@ -51,8 +51,7 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 				part.setModel(modelElement);
 			}
 		} catch (final RuntimeException e) {
-			Activator.getDefault().logError(Messages.Abstract4diacEditPartFactory_ERROR_CantCreatePartForModelElement,
-					e);
+			FordiacLogHelper.logError(Messages.Abstract4diacEditPartFactory_ERROR_CantCreatePartForModelElement, e);
 		}
 		return part;
 	}

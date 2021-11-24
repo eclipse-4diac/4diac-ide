@@ -10,7 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Filip Andren, Ingo Hegny
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr, Melanie Winter 
+ *   Bianca Wiesmayr, Melanie Winter
  *     - change canvas, fix problem with size calculation when dragging elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
@@ -206,6 +206,14 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	@Override
 	public void doSaveAs() {
 		// nothing to do here
+	}
+
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getRootEditPart();
 	}
 
 }

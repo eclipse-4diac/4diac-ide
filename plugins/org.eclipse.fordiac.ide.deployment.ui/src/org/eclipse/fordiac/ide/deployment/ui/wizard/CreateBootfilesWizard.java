@@ -21,10 +21,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.fordiac.ide.deployment.ui.Activator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -51,7 +52,7 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		this.selection = new StructuredSelection(selection.toList());
 		setWindowTitle(Messages.FordiacCreateBootfilesWizard_LABEL_Window_Title);
-		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings settings = DialogSettingsProvider.getDialogSettings(getClass());
 
 		if (null != settings.getSection(FORDIAC_CREATE_BOOTFILES_SECTION)) {
 			// if section does not exist create it
@@ -102,7 +103,7 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 		final MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
 		msg.setMessage(Messages.CreateBootfilesWizard_BootFileCreationError + e.getMessage());
 		msg.open();
-		Activator.getDefault().logError(msg.getMessage(), e);
+		FordiacLogHelper.logError(msg.getMessage(), e);
 	}
 
 	private Map<Device, List<Object>> prepareWorkload() {
