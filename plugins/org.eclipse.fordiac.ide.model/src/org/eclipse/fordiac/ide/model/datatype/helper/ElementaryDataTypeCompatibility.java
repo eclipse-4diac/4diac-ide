@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2018-2020 Johannes Kepler University
  * 				 2020 Primetals Technologies Germany GmbH
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  *
  * Contributors:
  *   Michael Jaeger - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - fixed isDateCompatibleWith
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.datatype.helper;
 
@@ -116,7 +118,7 @@ public final class ElementaryDataTypeCompatibility {
 	}
 
 	public static boolean isDateCompatibleWith(final DataType other) {
-		return isAnyDateCompatibleWith(other);
+		return other == ElementaryTypes.DATE || isAnyDateCompatibleWith(other);
 	}
 
 	public static boolean isTimeOfDayCompatibleWith(final DataType other) {
