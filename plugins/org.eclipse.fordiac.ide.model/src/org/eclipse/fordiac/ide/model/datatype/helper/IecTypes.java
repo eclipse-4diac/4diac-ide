@@ -98,7 +98,8 @@ public final class IecTypes {
 		public static final LdateType LDATE = DataFactory.eINSTANCE.createLdateType();
 		public static final DateAndTimeType DATE_AND_TIME = DataFactory.eINSTANCE.createDateAndTimeType();
 		public static final DateAndTimeType DT = DATE_AND_TIME;
-		public static final LdtType LDT = DataFactory.eINSTANCE.createLdtType();
+		public static final LdtType LDATE_AND_TIME = DataFactory.eINSTANCE.createLdtType();
+		public static final LdtType LDT = LDATE_AND_TIME;
 		public static final TimeOfDayType TIME_OF_DAY = DataFactory.eINSTANCE.createTimeOfDayType();
 		public static final TimeOfDayType TOD = TIME_OF_DAY;
 		public static final LtodType LTOD = DataFactory.eINSTANCE.createLtodType();
@@ -136,6 +137,7 @@ public final class IecTypes {
 			LDATE.setName(FordiacKeywords.LDATE);
 			DATE_AND_TIME.setName(FordiacKeywords.DATE_AND_TIME);
 			DT.setName(FordiacKeywords.DT);
+			LDATE_AND_TIME.setName(FordiacKeywords.LDATE_AND_TIME);
 			LDT.setName(FordiacKeywords.LDATE_AND_TIME);
 			TIME_OF_DAY.setName(FordiacKeywords.TIME_OF_DAY);
 			TOD.setName(FordiacKeywords.TOD);
@@ -144,8 +146,8 @@ public final class IecTypes {
 
 		public static DataType[] getAllElementaryType() {
 			return new DataType[] { REAL, LREAL, USINT, UINT, UDINT, ULINT, SINT, INT, DINT, LINT, TIME, LTIME, BOOL,
-					BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE, LDATE, DATE_AND_TIME, LDT,
-					TIME_OF_DAY, LTOD };
+					BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE, LDATE, DATE_AND_TIME, DT,
+					LDATE_AND_TIME, LDT, TIME_OF_DAY, TOD, LTOD };
 		}
 
 		public static DataType getTypeByName(final String name) {
