@@ -65,6 +65,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -394,6 +395,30 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			}
 			showReloadErrorMessage(path);
 		}
+		selectRootModelOfEditor();
+	}
+
+	private void selectRootModelOfEditor() {
+		Display.getDefault().asyncExec(() -> {
+			final GraphicalViewer viewer = getAdapter(GraphicalViewer.class);
+			if (viewer != null) {
+				final Object selection = getSelection(viewer);
+				EditorUtils.refreshPropertySheetWithSelection(this, viewer, selection);
+			}
+		});
+	}
+
+	private Object getSelection(final GraphicalViewer viewer) {
+		Object selection = null;
+		final IEditorPart activeEditor = getActiveEditor();
+		if (activeEditor instanceof DiagramEditorWithFlyoutPalette) {
+			selection = viewer.getEditPartRegistry()
+					.get(((DiagramEditorWithFlyoutPalette) activeEditor).getModel());
+		}
+		if (selection == null) {
+			selection = viewer.getRootEditPart();
+		}
+		return selection;
 	}
 
 	@Override

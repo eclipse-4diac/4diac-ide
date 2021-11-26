@@ -10,6 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - filling in the implementation
+ *   Martin Melik Merkumians - fixes handling for ANY types
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.validation;
 
@@ -245,31 +246,51 @@ public final class ValueValidator {
 	public static String validateValue(final DataType type, final String value) {
 		final var pattern = Pattern.compile(REGEX_LITERAL_SPLITTER);
 		final var matcher = pattern.matcher(value);
+
+		// check if literal matches the general literal structure (<type>#)?(<radix>#)?<value>
 		if (!matcher.find()) {
 			return Messages.VALIDATOR_UNKOWN_LITERAL_ERROR_PLEASE_CHECK_SANENESS_OF_LITERAL;
 		}
 
+		// First group contains the type specifier if present
 		var typeSpecifier = matcher.group(1);
 		if (typeSpecifier != null) {
+			// delete # from type name
 			typeSpecifier = typeSpecifier.replace("#", EMPTY_STRING); //$NON-NLS-1$
 		} else {
+			// no type information available
 			typeSpecifier = EMPTY_STRING;
 		}
+
+		// Second group contains base modifier if present
 		var baseSpecifier = matcher.group(2);
 		if (baseSpecifier != null) {
+			// delete # from base
 			baseSpecifier = baseSpecifier.replace("#", EMPTY_STRING); //$NON-NLS-1$
 		} else {
+			// no base information available, so base 10 is implicitly selected
 			baseSpecifier = EMPTY_STRING;
 		}
 
 		DataType literalType = null;
-		if (!typeSpecifier.isBlank()) {
+
+		if (IecTypes.GenericTypes.isAnyType(type)) {
+			if (typeSpecifier.isBlank() || null == IecTypes.ElementaryTypes.getTypeByName(typeSpecifier)) {
+				return Messages.VALIDATOR_CONCRETE_TYPE_SPECIFIER_MANDATORY_FOR_ANYS;
+			}
 			literalType = IecTypes.ElementaryTypes.getTypeByName(typeSpecifier);
 			if (null == literalType) {
 				literalType = IecTypes.ElementaryTypes.getTypeByName(SHORT_FORM_TRANSLATIONS.get(typeSpecifier));
 			}
 		} else {
-			literalType = type; // We assume that the literal type is the same as the data type
+			if (!typeSpecifier.isBlank()) {
+				literalType = IecTypes.ElementaryTypes.getTypeByName(typeSpecifier);
+				if (null == literalType) {
+					literalType = IecTypes.ElementaryTypes.getTypeByName(SHORT_FORM_TRANSLATIONS.get(typeSpecifier));
+				}
+			} else {
+				literalType = type; // We assume that the literal type is the same as the data type
+			}
 		}
 
 		if (null == literalType) {
@@ -324,9 +345,8 @@ public final class ValueValidator {
 			if (literalValue.contains(ST_ESCAPE_WITH_SINGLE_QUOTE)) {
 				errorString += Messages.VALIDATOR_STRING_QUOTE_DOES_NOT_NEED_ESCAPE_SYMBOL;
 			}
-			if (literalValue.contains(ST_ESCAPE_SYMBOL)) { // correctly escaped characters dont trigger this error
-				// beacause of the
-				// if.
+			if (literalValue.contains(ST_ESCAPE_SYMBOL)) { // correctly escaped characters do not trigger this error
+				// because of the if
 				errorString += Messages.VALIDATOR_W_STRING_DOLLAR_IS_ESCAPE_SYMBOL;
 			}
 		}
@@ -342,12 +362,11 @@ public final class ValueValidator {
 			if (literalValue.contains("$'")) { //$NON-NLS-1$
 				errorString += Messages.VALIDATOR_STRING_QUOTE_DOES_NOT_NEED_ESCAPE_SYMBOL;
 			}
-			if (literalValue.contains(ST_ESCAPE_SYMBOL)) { // correctly escaped characters dont trigger this error
-				// beacause of the
-				// if.
+			if (literalValue.contains(ST_ESCAPE_SYMBOL)) { // correctly escaped characters do not trigger this error
+				// because of the if.
 				errorString += Messages.VALIDATOR_W_STRING_DOLLAR_IS_ESCAPE_SYMBOL;
 			}
-			if (literalValue.length() == 2) { // correctly escaped characters dont trigger this error beacause of the
+			if (literalValue.length() == 2) { // correctly escaped characters do not trigger this error because of the
 				// if.
 				errorString += Messages.VALIDATOR_EMPTY_CHARACTERS_ARE_NOT_ALLOWED;
 			}
@@ -364,9 +383,8 @@ public final class ValueValidator {
 			if (literalValue.contains(VALIDATOR_ST_ESCAPE_DOUBLE_QUOTES)) {
 				errorString += Messages.VALIDATOR_WSTRING_QUOTES_HAVE_NOT_TO_BE_ESCAPED;
 			}
-			if (literalValue.contains(ST_ESCAPE_SYMBOL)) { // correctly escaped characters dont trigger this error
-				// beacause of the
-				// if.
+			if (literalValue.contains(ST_ESCAPE_SYMBOL)) { // correctly escaped characters do not trigger this error
+				// because of the if.
 				errorString += Messages.VALIDATOR_W_STRING_DOLLAR_IS_ESCAPE_SYMBOL;
 			}
 			if (literalValue.length() == 2) { // correctly escaped characters don't trigger this error because of the
@@ -384,9 +402,8 @@ public final class ValueValidator {
 			if (literalValue.contains(VALIDATOR_ST_ESCAPE_DOUBLE_QUOTES)) {
 				errorString += Messages.VALIDATOR_WSTRING_QUOTES_HAVE_NOT_TO_BE_ESCAPED;
 			}
-			if (literalValue.contains(ST_ESCAPE_SYMBOL)) { // correctly escaped characters dont trigger this error
-				// beacause of the
-				// if.
+			if (literalValue.contains(ST_ESCAPE_SYMBOL)) { // correctly escaped characters do not trigger this error
+				// because of the if.
 				errorString += Messages.VALIDATOR_W_STRING_DOLLAR_IS_ESCAPE_SYMBOL;
 			}
 		}
