@@ -81,6 +81,27 @@ public class ValueValidatorTest {
 		assertEquals(expectedErrorString, resultString);
 	}
 
+	public static Stream<Arguments> validateValidDateLiteralsTestCases() {
+		return Stream.of(
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#2000-01-01", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#2000-12-31", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1815-12-10", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1852-11-27", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1906-12-09", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1992-01-01", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1878-11-07", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1968-10-27", NO_ERROR)); //$NON-NLS-1$
+	}
+
+	@DisplayName("Validator tests for valid DATE literals")
+	@ParameterizedTest(name = "{index}: Literal: {1}")
+	@MethodSource("validateValidDateLiteralsTestCases")
+	@SuppressWarnings("static-method")
+	public void validateValidDateLiterals(final DataType type, final String value, final String expectedResult) {
+		final String resultString = ValueValidator.validateValue(type, value);
+		assertEquals(expectedResult, resultString);
+	}
+
 	public static Stream<Arguments> validateTypeSpecifierMandatoryForAnyLiteralsTestCases() {
 		return Stream.of(
 				Arguments.of(IecTypes.GenericTypes.ANY, "0", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
