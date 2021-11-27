@@ -45,13 +45,14 @@ import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 
 public class FBShape extends Shape implements IFontUpdateListener {
+
+	private static final String TYPE_TRUNCATION_STRING = "\u2026"; //$NON-NLS-1$
 
 	private static final int INPUT_OUTPUT_INTERLEAVE = 7;
 
@@ -382,13 +383,8 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 		middle.setLayoutManager(middleLayout);
 
-		String typeName = (null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET;
-
-		if(typeName.length() > getMaxWidth()) {
-			typeName = typeName.substring(0, getMaxWidth()) + getTruncationString();
-		}
-
-		typeLabel = new UnderlineAlphaLabel(null != typeName ? typeName : FordiacMessages.ND);
+		typeLabel = new UnderlineAlphaLabel();
+		changeTypeLabelText((null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
 		typeLabel.setOpaque(true);
 		typeLabel.setIcon(ResultListLabelProvider.getTypeImage(type));
@@ -399,14 +395,9 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 	protected void changeTypeLabelText(String text) {
 		if (text.length() > getMaxWidth()) {
-			text = text.substring(0, getMaxWidth()) + getTruncationString();
+			text = text.substring(0, getMaxWidth()) + TYPE_TRUNCATION_STRING;
 		}
 		typeLabel.setText(text);
-		typeLabel.setIcon(null);
-	}
-
-	protected static String getTruncationString() {
-		return "\u2026"; //$NON-NLS-1$
 	}
 
 }

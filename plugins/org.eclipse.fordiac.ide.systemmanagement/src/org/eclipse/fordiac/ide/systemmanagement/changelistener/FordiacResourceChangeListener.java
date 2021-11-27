@@ -151,13 +151,12 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		IEditorPart activeEditor = null;
 
 		for (final PaletteEntry entry : changedFiles) {
-			IEditorPart findEditor = EditorUtils
+			final IEditorPart findEditor = EditorUtils
 					.findEditor((final IEditorPart editor) -> editor.getEditorInput() instanceof FileEditorInput
 							&& ((FileEditorInput) editor.getEditorInput()).getFile().equals(entry.getFile()));
 
 			if (findEditor == EditorUtils.getCurrentActiveEditor()) {
 				activeEditor = findEditor;
-				findEditor = null;
 			} else if (findEditor != null) {
 				changedOpenedDirtyEditors.add(findEditor);
 			} else {

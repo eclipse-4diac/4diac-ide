@@ -115,13 +115,11 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	}
 
 	protected void handleStructSelectionChanged(final String newStructName) {
-		if (null != getType()) {
-			if (newStructSelected(newStructName)) {
-				final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
-				final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
-				commandStack.execute(cmd);
-				updateStructManipulatorFB(cmd.getNewMux());
-			}
+		if (null != getType() && newStructSelected(newStructName)) {
+			final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
+			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
+			commandStack.execute(cmd);
+			updateStructManipulatorFB(cmd.getNewMux());
 		}
 	}
 

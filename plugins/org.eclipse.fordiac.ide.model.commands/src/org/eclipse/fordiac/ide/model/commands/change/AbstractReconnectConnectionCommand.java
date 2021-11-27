@@ -120,9 +120,8 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	}
 
 	private static void copyAttributes(final Connection dstCon, final Connection srcCon) {
-		srcCon.getAttributes().forEach(attr -> {
-			dstCon.setAttribute(attr.getName(), attr.getType().getName(), attr.getValue(), attr.getComment());
-		});
+		srcCon.getAttributes().forEach(attr -> dstCon.setAttribute(attr.getName(), attr.getType().getName(),
+				attr.getValue(), attr.getComment()));
 	}
 
 	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent);
