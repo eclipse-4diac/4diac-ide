@@ -1484,6 +1484,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 		return errorMarkerRefItemProvider;
 	}
 
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.Group} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GroupItemProvider groupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Group}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGroupAdapter() {
+		if (groupItemProvider == null) {
+			groupItemProvider = new GroupItemProvider(this);
+		}
+
+		return groupItemProvider;
+	}
+
 	/** This returns the root adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */

@@ -44,20 +44,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class AdapterDeclarationImpl extends VarDeclarationImpl implements AdapterDeclaration {
-	/** The cached value of the '{@link #getAdapterFB() <em>Adapter FB</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getAdapterFB() <em>Adapter FB</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getAdapterFB()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected AdapterFB adapterFB;
 
-	/** The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getPaletteEntry()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected AdapterTypePaletteEntry paletteEntry;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

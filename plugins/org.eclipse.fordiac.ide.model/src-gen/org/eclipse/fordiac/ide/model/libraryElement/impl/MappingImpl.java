@@ -42,11 +42,13 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	 * @ordered */
 	protected FBNetworkElement from;
 
-	/** The cached value of the '{@link #getTo() <em>To</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getTo() <em>To</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getTo()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBNetworkElement to;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

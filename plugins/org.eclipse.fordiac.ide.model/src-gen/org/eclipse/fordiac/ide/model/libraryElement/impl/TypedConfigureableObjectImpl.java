@@ -35,12 +35,14 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  *
  * @generated */
 public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl implements TypedConfigureableObject {
-	/** The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getPaletteEntry()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected PaletteEntry paletteEntry;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

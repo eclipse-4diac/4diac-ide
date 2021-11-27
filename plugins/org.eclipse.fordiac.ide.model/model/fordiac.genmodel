@@ -705,6 +705,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/errorMessage"/>
       <genOperations ecoreOperation="lib.ecore#//ErrorMarkerRef/hasError" body="return getFileMarkerId() != 0;"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Group">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Group/groupElements"/>
+    </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">

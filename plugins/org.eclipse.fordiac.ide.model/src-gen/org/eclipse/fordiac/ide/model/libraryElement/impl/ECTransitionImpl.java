@@ -43,20 +43,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class ECTransitionImpl extends PositionableElementImpl implements ECTransition {
-	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String comment = COMMENT_EDEFAULT;
 
 	/** The default value of the '{@link #getConditionExpression() <em>Condition Expression</em>}' attribute. <!--
@@ -75,28 +79,34 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @ordered */
 	protected String conditionExpression = CONDITION_EXPRESSION_EDEFAULT;
 
-	/** The cached value of the '{@link #getSource() <em>Source</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getSource() <em>Source</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getSource()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ECState source;
 
-	/** The cached value of the '{@link #getDestination() <em>Destination</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getDestination() <em>Destination</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getDestination()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ECState destination;
 
-	/** The cached value of the '{@link #getConditionEvent() <em>Condition Event</em>}' reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getConditionEvent() <em>Condition Event</em>}' reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getConditionEvent()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Event conditionEvent;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

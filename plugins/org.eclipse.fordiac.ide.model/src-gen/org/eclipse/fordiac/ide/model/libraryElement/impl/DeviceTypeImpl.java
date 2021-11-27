@@ -57,12 +57,13 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * @ordered */
 	protected EList<VarDeclaration> varDeclaration;
 
-	/** The cached value of the '{@link #getResourceTypeName() <em>Resource Type Name</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getResourceTypeName() <em>Resource Type Name</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getResourceTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<ResourceTypeName> resourceTypeName;
 
 	/** The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list. <!--
@@ -73,36 +74,43 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * @ordered */
 	protected EList<Resource> resource;
 
-	/** The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getFBNetwork()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBNetwork fBNetwork;
 
-	/** The default value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getProfile() <em>Profile</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String PROFILE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String profile = PROFILE_EDEFAULT;
 
-	/** The cached value of the '{@link #getAttributeDeclarations() <em>Attribute Declarations</em>}' containment
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getAttributeDeclarations() <em>Attribute Declarations</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAttributeDeclarations()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<AttributeDeclaration> attributeDeclarations;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

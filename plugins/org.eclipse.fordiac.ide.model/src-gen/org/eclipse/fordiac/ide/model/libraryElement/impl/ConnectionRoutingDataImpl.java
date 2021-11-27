@@ -69,34 +69,42 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @ordered */
 	protected int dx2 = DX2_EDEFAULT;
 
-	/** The default value of the '{@link #getDy() <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The default value of the '{@link #getDy() <em>Dy</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDy()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int DY_EDEFAULT = 0;
 
-	/** The cached value of the '{@link #getDy() <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The cached value of the '{@link #getDy() <em>Dy</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDy()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int dy = DY_EDEFAULT;
 
-	/** The default value of the '{@link #isNeedsValidation() <em>Needs Validation</em>}' attribute. <!-- begin-user-doc
+	/**
+	 * The default value of the '{@link #isNeedsValidation() <em>Needs Validation</em>}' attribute.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
 	 * @see #isNeedsValidation()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final boolean NEEDS_VALIDATION_EDEFAULT = false;
 
-	/** The cached value of the '{@link #isNeedsValidation() <em>Needs Validation</em>}' attribute. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #isNeedsValidation() <em>Needs Validation</em>}' attribute.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
 	 * @see #isNeedsValidation()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected boolean needsValidation = NEEDS_VALIDATION_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

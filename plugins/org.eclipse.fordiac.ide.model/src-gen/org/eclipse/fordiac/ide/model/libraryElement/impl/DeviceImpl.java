@@ -57,28 +57,33 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated */
 public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
-	/** The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getPosition()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Position position;
 
-	/** The cached value of the '{@link #getColor() <em>Color</em>}' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getColor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Color color;
 
-	/** The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getVarDeclarations()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VarDeclaration> varDeclarations;
 
 	/** The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list. <!--
@@ -89,20 +94,24 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @ordered */
 	protected EList<Resource> resource;
 
-	/** The default value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getProfile() <em>Profile</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String PROFILE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String profile = PROFILE_EDEFAULT;
 
 	/** The cached value of the '{@link #getInConnections() <em>In Connections</em>}' reference list. <!--

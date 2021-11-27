@@ -33,12 +33,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class AdapterFBImpl extends FBImpl implements AdapterFB {
-	/** The cached value of the '{@link #getAdapterDecl() <em>Adapter Decl</em>}' reference. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getAdapterDecl() <em>Adapter Decl</em>}' reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getAdapterDecl()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected AdapterDeclaration adapterDecl;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

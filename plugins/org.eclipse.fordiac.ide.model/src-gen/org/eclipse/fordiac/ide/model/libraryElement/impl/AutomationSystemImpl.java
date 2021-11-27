@@ -63,60 +63,73 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @ordered */
 	protected EList<Application> application;
 
-	/** The cached value of the '{@link #getMapping() <em>Mapping</em>}' containment reference list. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getMapping() <em>Mapping</em>}' containment reference list.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
 	 * @see #getMapping()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Mapping> mapping;
 
-	/** The cached value of the '{@link #getPalette() <em>Palette</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getPalette() <em>Palette</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getPalette()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Palette palette;
 
-	/** The cached value of the '{@link #getSystemConfiguration() <em>System Configuration</em>}' containment reference.
+	/**
+	 * The cached value of the '{@link #getSystemConfiguration() <em>System Configuration</em>}' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @see #getSystemConfiguration()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected SystemConfiguration systemConfiguration;
 
-	/** The default value of the '{@link #getSystemFile() <em>System File</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getSystemFile() <em>System File</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getSystemFile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final IFile SYSTEM_FILE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getSystemFile() <em>System File</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getSystemFile() <em>System File</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getSystemFile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected IFile systemFile = SYSTEM_FILE_EDEFAULT;
 
-	/** The default value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getCommandStack()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final CommandStack COMMAND_STACK_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getCommandStack()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected CommandStack commandStack = COMMAND_STACK_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

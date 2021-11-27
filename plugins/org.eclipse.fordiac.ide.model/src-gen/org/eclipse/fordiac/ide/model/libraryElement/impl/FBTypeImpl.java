@@ -43,12 +43,14 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	 * @ordered */
 	protected InterfaceList interfaceList;
 
-	/** The cached value of the '{@link #getService() <em>Service</em>}' containment reference. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getService() <em>Service</em>}' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getService()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Service service;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

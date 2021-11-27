@@ -45,28 +45,34 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  *
  * @generated */
 public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implements FBNetworkElement {
-	/** The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getPosition()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Position position;
 
-	/** The cached value of the '{@link #getInterface() <em>Interface</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getInterface() <em>Interface</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getInterface()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected InterfaceList interface_;
 
-	/** The cached value of the '{@link #getMapping() <em>Mapping</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getMapping() <em>Mapping</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getMapping()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Mapping mapping;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

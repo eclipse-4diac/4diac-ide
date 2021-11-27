@@ -51,44 +51,53 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated */
 public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment {
-	/** The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getPosition()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Position position;
 
-	/** The cached value of the '{@link #getColor() <em>Color</em>}' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getColor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Color color;
 
-	/** The default value of the '{@link #getWidth() <em>Width</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getWidth() <em>Width</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getWidth()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int WIDTH_EDEFAULT = 200;
 
-	/** The cached value of the '{@link #getWidth() <em>Width</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getWidth() <em>Width</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getWidth()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int width = WIDTH_EDEFAULT;
 
-	/** The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getVarDeclarations()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VarDeclaration> varDeclarations;
 
 	/** The cached value of the '{@link #getOutConnections() <em>Out Connections</em>}' reference list. <!--

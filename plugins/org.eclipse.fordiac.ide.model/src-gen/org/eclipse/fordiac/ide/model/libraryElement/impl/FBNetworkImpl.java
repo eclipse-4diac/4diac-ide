@@ -51,36 +51,40 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
  *
  * @generated */
 public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
-	/** The cached value of the '{@link #getNetworkElements() <em>Network Elements</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getNetworkElements() <em>Network Elements</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getNetworkElements()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<FBNetworkElement> networkElements;
 
-	/** The cached value of the '{@link #getDataConnections() <em>Data Connections</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getDataConnections() <em>Data Connections</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getDataConnections()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<DataConnection> dataConnections;
 
-	/** The cached value of the '{@link #getEventConnections() <em>Event Connections</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getEventConnections() <em>Event Connections</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getEventConnections()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<EventConnection> eventConnections;
 
-	/** The cached value of the '{@link #getAdapterConnections() <em>Adapter Connections</em>}' containment reference
-	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getAdapterConnections() <em>Adapter Connections</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAdapterConnections()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<AdapterConnection> adapterConnections;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

@@ -36,36 +36,44 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
-	/** The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getFileMarkerId()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final long FILE_MARKER_ID_EDEFAULT = 0L;
 
-	/** The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getFileMarkerId()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
 
-	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getErrorMessage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String ERROR_MESSAGE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getErrorMessage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

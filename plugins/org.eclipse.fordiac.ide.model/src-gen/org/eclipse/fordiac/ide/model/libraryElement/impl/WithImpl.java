@@ -33,12 +33,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *
  * @generated */
 public class WithImpl extends EObjectImpl implements With {
-	/** The cached value of the '{@link #getVariables() <em>Variables</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getVariables() <em>Variables</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getVariables()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected VarDeclaration variables;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

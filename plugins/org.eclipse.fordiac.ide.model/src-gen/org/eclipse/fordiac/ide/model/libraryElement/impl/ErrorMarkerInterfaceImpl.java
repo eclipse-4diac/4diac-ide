@@ -58,20 +58,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements ErrorMarkerInterface {
-	/** The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final boolean IS_INPUT_EDEFAULT = false;
 
-	/** The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected boolean isInput = IS_INPUT_EDEFAULT;
 
 	/** The cached value of the '{@link #getInputConnections() <em>Input Connections</em>}' reference list. <!--
@@ -98,52 +102,64 @@ public class ErrorMarkerInterfaceImpl extends ConfigurableObjectImpl implements 
 	 * @ordered */
 	protected DataType type;
 
-	/** The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String TYPE_NAME_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String typeName = TYPE_NAME_EDEFAULT;
 
-	/** The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getFileMarkerId()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final long FILE_MARKER_ID_EDEFAULT = 0L;
 
-	/** The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getFileMarkerId()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
 
-	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getErrorMessage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String ERROR_MESSAGE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getErrorMessage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
 
 	/** The cached value of the '{@link #getRepairedEndpoint() <em>Repaired Endpoint</em>}' reference. <!--

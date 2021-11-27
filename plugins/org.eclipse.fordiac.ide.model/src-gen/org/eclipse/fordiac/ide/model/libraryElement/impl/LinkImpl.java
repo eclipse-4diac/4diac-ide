@@ -35,20 +35,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
  *
  * @generated */
 public class LinkImpl extends ConfigurableObjectImpl implements Link {
-	/** The cached value of the '{@link #getSegment() <em>Segment</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getSegment() <em>Segment</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getSegment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Segment segment;
 
-	/** The cached value of the '{@link #getDevice() <em>Device</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getDevice() <em>Device</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getDevice()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Device device;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

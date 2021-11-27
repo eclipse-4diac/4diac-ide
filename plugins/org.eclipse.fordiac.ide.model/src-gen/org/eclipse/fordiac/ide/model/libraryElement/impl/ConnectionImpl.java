@@ -49,36 +49,44 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public abstract class ConnectionImpl extends ConfigurableObjectImpl implements Connection {
-	/** The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getFileMarkerId()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final long FILE_MARKER_ID_EDEFAULT = 0L;
 
-	/** The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getFileMarkerId()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
 
-	/** The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getErrorMessage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String ERROR_MESSAGE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getErrorMessage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
 
 	/** The default value of the '{@link #isResTypeConnection() <em>Res Type Connection</em>}' attribute. <!--
@@ -113,28 +121,34 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @ordered */
 	protected boolean brokenConnection = BROKEN_CONNECTION_EDEFAULT;
 
-	/** The cached value of the '{@link #getSource() <em>Source</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getSource() <em>Source</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getSource()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected IInterfaceElement source;
 
-	/** The cached value of the '{@link #getDestination() <em>Destination</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getDestination() <em>Destination</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getDestination()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected IInterfaceElement destination;
 
-	/** The cached value of the '{@link #getRoutingData() <em>Routing Data</em>}' reference. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getRoutingData() <em>Routing Data</em>}' reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getRoutingData()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ConnectionRoutingData routingData;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

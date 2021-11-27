@@ -35,20 +35,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated */
 public class ValueImpl extends ErrorMarkerRefImpl implements Value {
-	/** The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String VALUE_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String value = VALUE_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

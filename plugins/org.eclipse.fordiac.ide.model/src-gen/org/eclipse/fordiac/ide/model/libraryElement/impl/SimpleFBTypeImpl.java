@@ -35,12 +35,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
  *
  * @generated */
 public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
-	/** The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getAlgorithm()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Algorithm algorithm;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

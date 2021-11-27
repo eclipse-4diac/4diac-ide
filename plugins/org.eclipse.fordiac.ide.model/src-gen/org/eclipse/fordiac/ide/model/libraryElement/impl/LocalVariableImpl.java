@@ -37,36 +37,44 @@ import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
  *
  * @generated */
 public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariable {
-	/** The default value of the '{@link #getArrayStart() <em>Array Start</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getArrayStart() <em>Array Start</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getArrayStart()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int ARRAY_START_EDEFAULT = 0;
 
-	/** The cached value of the '{@link #getArrayStart() <em>Array Start</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getArrayStart() <em>Array Start</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getArrayStart()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int arrayStart = ARRAY_START_EDEFAULT;
 
-	/** The default value of the '{@link #getArrayStop() <em>Array Stop</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getArrayStop() <em>Array Stop</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getArrayStop()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int ARRAY_STOP_EDEFAULT = 0;
 
-	/** The cached value of the '{@link #getArrayStop() <em>Array Stop</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getArrayStop() <em>Array Stop</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getArrayStop()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int arrayStop = ARRAY_STOP_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

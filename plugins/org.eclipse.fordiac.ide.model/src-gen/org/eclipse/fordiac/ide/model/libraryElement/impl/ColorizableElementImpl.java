@@ -34,12 +34,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class ColorizableElementImpl extends EObjectImpl implements ColorizableElement {
-	/** The cached value of the '{@link #getColor() <em>Color</em>}' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getColor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Color color;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

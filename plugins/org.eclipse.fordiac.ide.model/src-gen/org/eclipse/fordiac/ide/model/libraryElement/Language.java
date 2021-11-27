@@ -26,84 +26,100 @@ import org.eclipse.emf.common.util.Enumerator;
  * @model
  * @generated */
 public enum Language implements Enumerator {
-	/** The '<em><b>C</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The '<em><b>C</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #C_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	C(0, "C", "C"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>Other</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The '<em><b>Other</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #OTHER_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	OTHER(1, "Other", "Other"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>Java</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The '<em><b>Java</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #JAVA_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	JAVA(2, "Java", "Java"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>Cpp</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The '<em><b>Cpp</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #CPP_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	CPP(3, "Cpp", "Cpp"); //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>C</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>C</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>C</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #C
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int C_VALUE = 0;
 
-	/** The '<em><b>Other</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>Other</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>Other</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #OTHER
 	 * @model name="Other"
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int OTHER_VALUE = 1;
 
-	/** The '<em><b>Java</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>Java</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>Java</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #JAVA
 	 * @model name="Java"
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int JAVA_VALUE = 2;
 
-	/** The '<em><b>Cpp</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>Cpp</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>Cpp</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #CPP
 	 * @model name="Cpp"
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int CPP_VALUE = 3;
 
 	/** An array of all the '<em><b>Language</b></em>' enumerators. <!-- begin-user-doc --> <!-- end-user-doc -->

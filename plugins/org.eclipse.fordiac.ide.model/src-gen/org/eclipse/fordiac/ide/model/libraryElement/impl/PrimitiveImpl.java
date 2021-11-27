@@ -36,44 +36,54 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
  *
  * @generated */
 public class PrimitiveImpl extends EObjectImpl implements Primitive {
-	/** The default value of the '{@link #getEvent() <em>Event</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getEvent() <em>Event</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getEvent()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String EVENT_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getEvent() <em>Event</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getEvent() <em>Event</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getEvent()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String event = EVENT_EDEFAULT;
 
-	/** The default value of the '{@link #getParameters() <em>Parameters</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getParameters() <em>Parameters</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getParameters()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String PARAMETERS_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getParameters() <em>Parameters</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getParameters()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String parameters = PARAMETERS_EDEFAULT;
 
-	/** The cached value of the '{@link #getInterface() <em>Interface</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getInterface() <em>Interface</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getInterface()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ServiceInterface interface_;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

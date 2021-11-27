@@ -39,12 +39,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
  *
  * @generated */
 public abstract class StructManipulatorImpl extends FBImpl implements StructManipulator {
-	/** The cached value of the '{@link #getStructType() <em>Struct Type</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getStructType() <em>Struct Type</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getStructType()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected StructuredType structType;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

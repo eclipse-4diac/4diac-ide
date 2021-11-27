@@ -56,20 +56,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *
  * @generated */
 public class EventImpl extends ConfigurableObjectImpl implements Event {
-	/** The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final boolean IS_INPUT_EDEFAULT = false;
 
-	/** The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected boolean isInput = IS_INPUT_EDEFAULT;
 
 	/** The cached value of the '{@link #getInputConnections() <em>Input Connections</em>}' reference list. <!--
@@ -96,28 +100,34 @@ public class EventImpl extends ConfigurableObjectImpl implements Event {
 	 * @ordered */
 	protected DataType type;
 
-	/** The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String TYPE_NAME_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String typeName = TYPE_NAME_EDEFAULT;
 
-	/** The cached value of the '{@link #getWith() <em>With</em>}' containment reference list. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getWith() <em>With</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getWith()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<With> with;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
