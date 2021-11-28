@@ -20,7 +20,7 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 
 	private static final String INITIAL_GROUP_NAME = "__Group01"; //$NON-NLS-1$
 
-	protected CreateGroupCommand(final FBNetwork fbNetwork, final int x, final int y) {
+	public CreateGroupCommand(final FBNetwork fbNetwork, final int x, final int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createGroup(), x, y);
 	}
 

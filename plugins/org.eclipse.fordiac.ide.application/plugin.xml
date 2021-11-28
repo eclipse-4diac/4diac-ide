@@ -373,6 +373,12 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewGroupHandler"
+            id="org.eclipse.fordiac.ide.application.commands.newGroup"
+            name="New Group">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
             name="Flatten Subapplication">
       </command>
@@ -584,17 +590,6 @@
             	</with>
             </activeWhen>
       </handler>
-      <handler 
-            class="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
-            commandId="org.eclipse.fordiac.ide.application.commands.newSubApp">
-         <activeWhen>
-            <iterate>
-               <adapt
-                     type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
-               </adapt>
-            </iterate>
-         </activeWhen>
-      </handler>
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.UnmapHandler"
             commandId="org.eclipse.fordiac.ide.application.unmap">
@@ -757,6 +752,17 @@
       
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup"> 
             <command
+               commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
+               label="New subapplication"
+               tooltip="Create a new subapplication">
+               
+            </command>
+            <command
+               commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
+               label="New group"
+               tooltip="Create a new group">
+            </command>               
+            <command
                   commandId="org.eclipse.fordiac.ide.application.commands.changeType"
                   label="Change Type">
                 <visibleWhen checkEnabled="false">
@@ -911,7 +917,31 @@
 	            </with>
             </visibleWhen>
          </command>
-         
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
+               label="New group"
+               tooltip="Create a new group">
+            <visibleWhen
+                  checkEnabled="false">
+                <and> 
+	            	<with variable="activeEditor">
+                    	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            		</with>
+	
+            		<with variable="selection">
+	            		<iterate ifEmpty="true">
+	            			<or>
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+            					<instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
+            				</or>
+            			</iterate>
+        			</with>
+    			</and>
+            </visibleWhen>
+         </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
             <visibleWhen checkEnabled="true">
 	             <or>

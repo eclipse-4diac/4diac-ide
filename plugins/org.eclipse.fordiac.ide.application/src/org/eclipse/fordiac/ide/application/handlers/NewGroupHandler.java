@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 fortiss GmbH, Johannes Kepler University Linz,
- * 							Primetals Technologies Austria GmbH
+ * Copyright (c) 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,27 +8,22 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl, Monika Wenger - initial API and implementation and/or initial
- *                                documentation
- *   Bianca Wiesmayr - fix positioning of subapp, fix unfolded subapp
- *   Bianca Wiesmayr, Alois Zoitl - make newsubapp available for breadcrumb editor
- *   Alois Zoitl - extracted common elements into base class for reuseing it for
- *                 the group creation handler
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-public class NewSubApplication extends AbstractContainerElementHandler {
+public class NewGroupHandler extends AbstractContainerElementHandler {
 
 	@Override
 	protected AbstractCreateFBNetworkElementCommand createContainerCreationCommand(final StructuredSelection selection,
 			final FBNetwork network, final Point pos) {
-		return new NewSubAppCommand(network, selection.toList(), pos.x, pos.y);
+		return new CreateGroupCommand(network, pos.x, pos.y);
 	}
 
 }
