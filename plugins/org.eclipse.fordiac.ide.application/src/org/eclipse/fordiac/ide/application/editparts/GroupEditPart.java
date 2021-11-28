@@ -28,13 +28,18 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editpolicies.ComponentEditPolicy;
+import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class GroupEditPart extends AbstractPositionableElementEditPart {
@@ -129,6 +134,17 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 		} else {
 			super.performRequest(request);
 		}
+	}
+
+	@Override
+	protected void createEditPolicies() {
+		super.createEditPolicies();
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
+			@Override
+			protected Command createDeleteCommand(final GroupRequest request) {
+				return new DeleteGroupCommand((Group) getHost().getModel());
+			}
+		});
 	}
 
 	private InstanceComment getInstanceComment() {

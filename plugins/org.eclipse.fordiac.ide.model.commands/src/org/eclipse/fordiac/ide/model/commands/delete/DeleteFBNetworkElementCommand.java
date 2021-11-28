@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -42,10 +43,12 @@ public class DeleteFBNetworkElementCommand extends Command {
 	private final CompoundCommand cmds = new CompoundCommand();
 	private ErrorMarkerBuilder errorMarker;
 	private final List<ErrorMarkerBuilder> valueErrorMarkers = new ArrayList<>();
+	private final Group group;
 
 	public DeleteFBNetworkElementCommand(final FBNetworkElement element) {
 		super(Messages.DeleteFBNetworkElementCommand_DeleteFBOrSubapplication);
 		this.element = element;
+		this.group = element.getGroup();
 	}
 
 	public FBNetworkElement getFBNetworkElement() {
@@ -76,6 +79,9 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (cmds.canExecute()) {
 			cmds.execute();
 		}
+		if (group != null) {
+			element.setGroup(null);
+		}
 		fbParent.getNetworkElements().remove(element);
 		if (element instanceof SubApp) {
 			closeSubApplicationEditor((SubApp) element);
@@ -85,6 +91,9 @@ public class DeleteFBNetworkElementCommand extends Command {
 	@Override
 	public void undo() {
 		fbParent.getNetworkElements().add(element);
+		if (group != null) {
+			element.setGroup(group);
+		}
 		if (cmds.canUndo()) {
 			cmds.undo();
 		}
@@ -103,7 +112,9 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (element instanceof ErrorMarkerRef) {
 			errorMarker = ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) element);
 		}
-
+		if (group != null) {
+			element.setGroup(null);
+		}
 		fbParent.getNetworkElements().remove(element);
 
 	}
