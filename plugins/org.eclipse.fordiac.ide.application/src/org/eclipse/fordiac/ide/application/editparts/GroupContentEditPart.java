@@ -12,7 +12,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.List;
+
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+
 public class GroupContentEditPart extends AbstractContainerContentEditPart {
-	// for now this editpart does not add additional functionality. This will come when fbs need to be repositioned and
-	// layed out.
+
+	@Override
+	protected List<FBNetworkElement> getNetworkElements() {
+		// our model is the group and the getNetworkElements all elements in the group we want to show as children
+		return getModel().getNetworkElements();
+	}
+
 }

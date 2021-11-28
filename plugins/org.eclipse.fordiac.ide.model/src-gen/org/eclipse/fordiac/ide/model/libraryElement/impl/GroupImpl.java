@@ -17,12 +17,14 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.util.EObjectEList;
-
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectWithInverseEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -78,9 +80,40 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	@Override
 	public EList<FBNetworkElement> getGroupElements() {
 		if (groupElements == null) {
-			groupElements = new EObjectEList<FBNetworkElement>(FBNetworkElement.class, this, LibraryElementPackage.GROUP__GROUP_ELEMENTS);
+			groupElements = new EObjectWithInverseEList<FBNetworkElement>(FBNetworkElement.class, this, LibraryElementPackage.GROUP__GROUP_ELEMENTS, LibraryElementPackage.FB_NETWORK_ELEMENT__GROUP);
 		}
 		return groupElements;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.GROUP__GROUP_ELEMENTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getGroupElements()).basicAdd(otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.GROUP__GROUP_ELEMENTS:
+				return ((InternalEList<?>)getGroupElements()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**

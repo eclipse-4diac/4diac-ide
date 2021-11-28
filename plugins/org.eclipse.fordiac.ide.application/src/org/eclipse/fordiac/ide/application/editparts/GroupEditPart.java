@@ -32,6 +32,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class GroupEditPart extends AbstractPositionableElementEditPart {
@@ -112,6 +115,20 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 		children.add(getInstanceComment());
 		children.add(getSubappContents());
 		return children;
+	}
+
+	@Override
+	public void performRequest(final Request request) {
+		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
+		// REQ_OPEN -> doubleclick
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+			if(!getChildren().isEmpty()) {
+				//forward direc edit to instance comment
+				((EditPart) getChildren().get(0)).performRequest(request);
+			}
+		} else {
+			super.performRequest(request);
+		}
 	}
 
 	private InstanceComment getInstanceComment() {

@@ -306,10 +306,10 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				// TODO currently no subapps supported - bug 538333
 				final String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
 				final FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
-				final IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);
+				final IInterfaceElement srcIE = srcFB.getInterfaceElement(src[src.length - 1]);
 				final String[] dst = connection.getDestination().split("\\."); //$NON-NLS-1$
 				final FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
-				final IInterfaceElement dstIE = Annotations.getInterfaceElement(dstFB, dst[dst.length - 1]);
+				final IInterfaceElement dstIE = dstFB.getInterfaceElement(dst[dst.length - 1]);
 				createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
 			}
 		}

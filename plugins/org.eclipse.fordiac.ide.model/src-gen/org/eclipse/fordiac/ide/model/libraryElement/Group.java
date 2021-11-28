@@ -37,11 +37,13 @@ public interface Group extends FBNetworkElement {
 	/**
 	 * Returns the value of the '<em><b>Group Elements</b></em>' reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getGroup <em>Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Group Elements</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getGroup_GroupElements()
-	 * @model resolveProxies="false"
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getGroup
+	 * @model opposite="group" resolveProxies="false"
 	 *        extendedMetaData="kind='element' name='FB' namespace='##targetNamespace'"
 	 * @generated
 	 */

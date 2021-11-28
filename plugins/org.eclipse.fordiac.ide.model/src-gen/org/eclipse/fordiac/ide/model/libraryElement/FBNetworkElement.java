@@ -72,6 +72,30 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * @generated */
 	void setMapping(Mapping value);
 
+	/**
+	 * Returns the value of the '<em><b>Group</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.Group#getGroupElements <em>Group Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Group</em>' reference.
+	 * @see #setGroup(Group)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetworkElement_Group()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Group#getGroupElements
+	 * @model opposite="groupElements"
+	 * @generated
+	 */
+	Group getGroup();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getGroup <em>Group</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Group</em>' reference.
+	 * @see #getGroup()
+	 * @generated
+	 */
+	void setGroup(Group value);
+
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
@@ -132,5 +156,13 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated */
 	boolean isContainedInTypedInstance();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	boolean isInGroup();
 
 } // FBNetworkElement

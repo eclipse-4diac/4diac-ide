@@ -21,6 +21,8 @@ package org.eclipse.fordiac.ide.application.handlers;
 import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getViewer;
 import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.selectElement;
 
+import java.util.List;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.Status;
@@ -49,7 +51,8 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		final CommandStack cmdstack = activeEditor.getAdapter(CommandStack.class);
 		final FBNetwork network = getFBNetwork(selection, event);
 		final Point pos = getInsertPos(viewer, selection);
-		final AbstractCreateFBNetworkElementCommand cmd = createContainerCreationCommand(selection, network, pos);
+		final AbstractCreateFBNetworkElementCommand cmd = createContainerCreationCommand(selection.toList(), network,
+				pos);
 		cmdstack.execute(cmd);
 		selectElement(cmd.getElement(), viewer);
 
@@ -57,7 +60,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 	}
 
 	protected abstract AbstractCreateFBNetworkElementCommand createContainerCreationCommand(
-			final StructuredSelection selection, final FBNetwork network, final Point pos);
+			final List<?> selection, final FBNetwork network, final Point pos);
 
 	private static FBNetwork getFBNetwork(final StructuredSelection selection, final ExecutionEvent event) {
 		if (createNewEmptyContainerElement(selection)) {

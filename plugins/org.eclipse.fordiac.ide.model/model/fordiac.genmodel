@@ -322,23 +322,25 @@
     <genClasses ecoreClass="lib.ecore#//FBNetworkElement">
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//FBNetworkElement/interface"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetworkElement/mapping"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getResource" body="return org.eclipse.fordiac.ide.model.Annotations.getResource(this);"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetworkElement/group"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getResource" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getResource(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getInterfaceElement"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);">
+          body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getInterfaceElement(this, name);">
         <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/getInterfaceElement/name"/>
       </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getOpposite" body="return org.eclipse.fordiac.ide.model.Annotations.getOpposite(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getFbNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.getFbNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getOpposite" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getOpposite(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getFbNetwork" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getFbNetwork(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/checkConnections"
-          body="org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isMapped" body="return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);"/>
+          body="org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.checkConnections(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isMapped" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.isMapped(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getType" body="//the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter) is a FBType. Therefore we can have this here.&#xA;&#xA;//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;&#xA;return super.getType() instanceof FBType ? (FBType)super.getType() : null;"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isNestedInSubApp"
-          body="final EObject parent = this.eContainer();if (parent == null) {return false;}final EObject grandParent = parent.eContainer();if (grandParent == null) {return false;}return grandParent instanceof org.eclipse.fordiac.ide.model.libraryElement.SubApp;"/>
+          body="final org.eclipse.emf.ecore.EObject parent = this.eContainer();&#xA;if (parent == null) {&#xA;&#x9;return false;&#xA;}&#xA;final org.eclipse.emf.ecore.EObject grandParent = parent.eContainer();&#xA;if (grandParent == null) {&#xA;&#x9;return false;&#xA;}&#xA;return grandParent instanceof org.eclipse.fordiac.ide.model.libraryElement.SubApp;"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getOuterFBNetworkElement"
           body="&#x9;&#x9;if ((this.eContainer() == null) || !(this.eContainer().eContainer() instanceof FBNetworkElement)) {&#xA;&#x9;&#x9;&#x9;return null;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return (FBNetworkElement) this.eContainer().eContainer();"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isContainedInTypedInstance"
           body="return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isInGroup" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.isInGroup(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SubApp">
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"

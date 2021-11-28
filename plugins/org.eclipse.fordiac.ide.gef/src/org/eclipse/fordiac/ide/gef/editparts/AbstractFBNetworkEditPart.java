@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -23,7 +24,6 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -36,8 +36,8 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	/** The child providers. */
 	private List<IChildrenProvider> childProviders = null;
 
-	protected EList<FBNetworkElement> getNetworkElements() {
-		return getModel().getNetworkElements();
+	protected List<FBNetworkElement> getNetworkElements() {
+		return getModel().getNetworkElements().stream().filter(el -> !el.isInGroup()).collect(Collectors.toList());
 	}
 
 	@Override

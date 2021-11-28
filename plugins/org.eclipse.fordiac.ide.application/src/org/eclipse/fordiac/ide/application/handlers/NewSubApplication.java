@@ -18,18 +18,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.util.List;
+
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.jface.viewers.StructuredSelection;
 
 public class NewSubApplication extends AbstractContainerElementHandler {
 
 	@Override
-	protected AbstractCreateFBNetworkElementCommand createContainerCreationCommand(final StructuredSelection selection,
+	protected AbstractCreateFBNetworkElementCommand createContainerCreationCommand(final List<?> selection,
 			final FBNetwork network, final Point pos) {
-		return new NewSubAppCommand(network, selection.toList(), pos.x, pos.y);
+		return new NewSubAppCommand(network, selection, pos.x, pos.y);
 	}
 
 }

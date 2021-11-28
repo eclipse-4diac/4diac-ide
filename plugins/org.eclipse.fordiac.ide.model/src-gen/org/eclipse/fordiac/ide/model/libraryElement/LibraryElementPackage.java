@@ -2089,13 +2089,22 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_NETWORK_ELEMENT__MAPPING = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FB_NETWORK_ELEMENT__GROUP = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>FB Network Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
+	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl <em>FB</em>}' class.
@@ -2169,6 +2178,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FB__GROUP = FB_NETWORK_ELEMENT__GROUP;
 
 	/**
 	 * The number of structural features of the '<em>FB</em>' class.
@@ -2251,6 +2269,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SUB_APP__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP__GROUP = FB_NETWORK_ELEMENT__GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Sub App Network</b></em>' containment reference.
@@ -4373,6 +4400,15 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_FB__MAPPING = FB__MAPPING;
 
 	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_TYPE_FB__GROUP = FB__GROUP;
+
+	/**
 	 * The number of structural features of the '<em>Resource Type FB</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4772,6 +4808,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_FB__MAPPING = FB__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_FB__GROUP = FB__GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Adapter Decl</b></em>' reference.
@@ -5196,6 +5241,15 @@ public interface LibraryElementPackage extends EPackage {
 	int STRUCT_MANIPULATOR__MAPPING = FB__MAPPING;
 
 	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRUCT_MANIPULATOR__GROUP = FB__GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5287,6 +5341,15 @@ public interface LibraryElementPackage extends EPackage {
 	int DEMULTIPLEXER__MAPPING = STRUCT_MANIPULATOR__MAPPING;
 
 	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__GROUP = STRUCT_MANIPULATOR__GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5376,6 +5439,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int MULTIPLEXER__MAPPING = STRUCT_MANIPULATOR__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__GROUP = STRUCT_MANIPULATOR__GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
@@ -5605,6 +5677,15 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_FBN_ELEMENT__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
 
 	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ERROR_MARKER_FBN_ELEMENT__GROUP = FB_NETWORK_ELEMENT__GROUP;
+
+	/**
 	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5832,6 +5913,15 @@ public interface LibraryElementPackage extends EPackage {
 	int CFB_INSTANCE__MAPPING = FB__MAPPING;
 
 	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CFB_INSTANCE__GROUP = FB__GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Cfb Network</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5921,6 +6011,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int GROUP__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP__GROUP = FB_NETWORK_ELEMENT__GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Group Elements</b></em>' reference list.
@@ -6731,6 +6830,17 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFBNetworkElement_Mapping();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getGroup <em>Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Group</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getGroup()
+	 * @see #getFBNetworkElement()
+	 * @generated
+	 */
+	EReference getFBNetworkElement_Group();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp <em>Sub App</em>}'.
@@ -9202,6 +9312,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FB_NETWORK_ELEMENT__MAPPING = eINSTANCE.getFBNetworkElement_Mapping();
+
+		/**
+		 * The meta object literal for the '<em><b>Group</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FB_NETWORK_ELEMENT__GROUP = eINSTANCE.getFBNetworkElement_Group();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl <em>Sub App</em>}' class.
