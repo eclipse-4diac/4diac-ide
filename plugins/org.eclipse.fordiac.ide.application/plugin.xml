@@ -375,7 +375,13 @@
             categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewGroupHandler"
             id="org.eclipse.fordiac.ide.application.commands.newGroup"
-            name="New Group">
+            name="Group">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.UngroupHandler"
+            id="org.eclipse.fordiac.ide.application.commands.ungroup"
+            name="Ungroup">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
@@ -759,8 +765,13 @@
             </command>
             <command
                commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-               label="New group"
+               label="Group"
                tooltip="Create a new group">
+            </command>               
+            <command
+               commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
+               label="Ungroup"
+               tooltip="Remove group">
             </command>               
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.changeType"
@@ -940,6 +951,17 @@
             			</iterate>
         			</with>
     			</and>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
+               label="Ungroup"
+               tooltip="Remove group">
+            <visibleWhen
+                  checkEnabled="true">
+	            	<with variable="activeEditor">
+                    	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            		</with>
             </visibleWhen>
          </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
