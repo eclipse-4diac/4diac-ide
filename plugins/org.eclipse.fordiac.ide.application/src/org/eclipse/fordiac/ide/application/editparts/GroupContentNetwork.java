@@ -48,6 +48,10 @@ public class GroupContentNetwork implements FBNetwork {
 		this.group = group;
 	}
 
+	public Group getGroup() {
+		return group;
+	}
+
 	@Override
 	public EClass eClass() {
 		return group.eClass();

@@ -14,7 +14,9 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.gef.EditPolicy;
 
 public class GroupContentEditPart extends AbstractContainerContentEditPart {
 
@@ -22,6 +24,12 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 	protected List<FBNetworkElement> getNetworkElements() {
 		// our model is the group and the getNetworkElements all elements in the group we want to show as children
 		return getModel().getNetworkElements();
+	}
+
+	@Override
+	protected void createEditPolicies() {
+		super.createEditPolicies();
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new GroupXYLayoutPolicy());
 	}
 
 }

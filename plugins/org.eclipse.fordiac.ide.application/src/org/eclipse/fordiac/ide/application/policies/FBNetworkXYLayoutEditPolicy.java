@@ -50,12 +50,9 @@ import org.eclipse.gef.requests.CreateRequest;
 
 public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
-	private ZoomManager zoomManager;
-
 	@Override
 	public void setHost(final EditPart host) {
 		super.setHost(host);
-		zoomManager = ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
 	}
 
 	@Override
@@ -108,6 +105,10 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
+	protected ZoomManager getZoomManager() {
+		return ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
+	}
+
 	private Command handleDragToRootRequest(final ChangeBoundsRequest request) {
 		final List<EditPart> editParts = request.getEditParts();
 		final Point destination = getTranslatedAndZoomedPoint(request);
@@ -123,11 +124,11 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	private org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
+	protected org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
 		final FigureCanvas viewerControl = (FigureCanvas) getTargetEditPart(request).getViewer().getControl();
 		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
 		return new org.eclipse.draw2d.geometry.Point(request.getLocation().x + location.x,
-				request.getLocation().y + location.y).scale(1.0 / zoomManager.getZoom());
+				request.getLocation().y + location.y).scale(1.0 / getZoomManager().getZoom());
 	}
 
 	private static List<FBNetworkElement> collectFromSubappDraggedFBs(final List<EditPart> editParts) {
@@ -150,7 +151,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	private Point getDestinationPoint(final ChangeBoundsRequest request) {
-		return request.getMoveDelta().getScaled(1.0 / zoomManager.getZoom());
+		return request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
 	}
 
 	public static boolean isDragAndDropRequestToRoot(final Request generic, final EditPart targetEditPart) {

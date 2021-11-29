@@ -31,26 +31,24 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.ContainerContentXYLayoutPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
-import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.swt.graphics.Point;
 
 public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart {
 	private int childrenNumber = 0;
 	protected Point p = new Point(0, 0);
+
+	public Point getOffsetPoint() {
+		return p;
+	}
 
 	private final Adapter adapter = new EContentAdapter() {
 		@Override
@@ -118,27 +116,7 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// handles constraint changes of model elements and creation of new
 		// model elements
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBNetworkXYLayoutEditPolicy() {
-			@Override
-			protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
-					final Object constraint) { // TODO constraint ist die neue Position, irgendwie Deltaposition
-				// ausrechnen?
-				// return a command that can move a "ViewEditPart"
-				if ((child.getModel() instanceof PositionableElement) && (constraint instanceof Rectangle)) {
-					final Rectangle constraintRect = (Rectangle) constraint;
-					constraintRect.x += p.x;
-					constraintRect.y += p.y;
-
-					if (child.getModel() instanceof FBNetworkElement) {
-						return new FBNetworkElementSetPositionCommand((FBNetworkElement) child.getModel(), request,
-								(Rectangle) constraint);
-					}
-					return new SetPositionCommand((PositionableElement) child.getModel(), request,
-							(Rectangle) constraint);
-				}
-				return null;
-			}
-		});
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ContainerContentXYLayoutPolicy());
 	}
 
 	static final int VER_BORDER_WIDTH = 10;

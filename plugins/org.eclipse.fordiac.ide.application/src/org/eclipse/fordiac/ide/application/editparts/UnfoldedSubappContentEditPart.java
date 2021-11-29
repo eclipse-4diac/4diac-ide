@@ -17,7 +17,9 @@
 
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.gef.EditPolicy;
 
 public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditPart {
 
@@ -26,6 +28,13 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 		super.setModel(model);
 		p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
 		p.x -= 40;
+	}
+
+	@Override
+	protected void createEditPolicies() {
+		super.createEditPolicies();
+		// Add policy to handle drag&drop of fbs
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
 	}
 
 }
