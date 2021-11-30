@@ -23,7 +23,7 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 
 	private static final int PADDING = 0;
 	private static final int BASE_WIDTH = 400;
-	private static final int BASE_HEIGHT = 200;
+	public static final int BASE_HEIGHT = 200;
 
 	public ModuloFreeformFigure(final ZoomScalableFreeformRootEditPart zoomScalableFreeformRootEditPart) {
 		this(zoomScalableFreeformRootEditPart, true);
