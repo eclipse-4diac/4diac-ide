@@ -44,7 +44,7 @@ class ColorHelperTest {
 
 	@SuppressWarnings("static-method") // JUnit needs this as a non-static method
 	@Test
-	public void lighter() {
+	void lighter() {
 		final int MEDIUM = 128;
 		final int LIGHT = 213;
 

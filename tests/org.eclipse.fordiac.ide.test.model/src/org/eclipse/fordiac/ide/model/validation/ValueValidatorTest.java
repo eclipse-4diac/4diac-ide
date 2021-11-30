@@ -47,7 +47,7 @@ public class ValueValidatorTest {
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateValidBoolLiteralsTestCases")
 	@SuppressWarnings("static-method")
-	public void validateValidBoolLiterals(final DataType type, final String value, final String expectedResult) {
+	void validateValidBoolLiterals(final DataType type, final String value, final String expectedResult) {
 		final String resultString = ValueValidator.validateValue(type, value);
 		assertEquals(expectedResult, resultString);
 	}
@@ -76,7 +76,7 @@ public class ValueValidatorTest {
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateInvalidBoolLiteralsTestCases")
 	@SuppressWarnings("static-method")
-	public void validateInvalidBoolLiterals(final DataType type, final String value, final String expectedErrorString) {
+	void validateInvalidBoolLiterals(final DataType type, final String value, final String expectedErrorString) {
 		final String resultString = ValueValidator.validateValue(type, value);
 		assertEquals(expectedErrorString, resultString);
 	}
@@ -97,7 +97,7 @@ public class ValueValidatorTest {
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateValidDateLiteralsTestCases")
 	@SuppressWarnings("static-method")
-	public void validateValidDateLiterals(final DataType type, final String value, final String expectedResult) {
+	void validateValidDateLiterals(final DataType type, final String value, final String expectedResult) {
 		final String resultString = ValueValidator.validateValue(type, value);
 		assertEquals(expectedResult, resultString);
 	}
@@ -126,7 +126,7 @@ public class ValueValidatorTest {
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateTypeSpecifierMandatoryForAnyLiteralsTestCases")
 	@SuppressWarnings("static-method")
-	public void validateTypeSpecifierMandatoryForAnyLiterals(final DataType type, final String value,
+	void validateTypeSpecifierMandatoryForAnyLiterals(final DataType type, final String value,
 			final String expectedErrorString) {
 		final String resultString = ValueValidator.validateValue(type, value);
 		assertEquals(expectedErrorString, resultString);

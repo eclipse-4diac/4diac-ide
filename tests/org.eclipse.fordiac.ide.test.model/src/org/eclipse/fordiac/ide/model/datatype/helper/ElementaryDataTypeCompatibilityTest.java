@@ -61,7 +61,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for LREAL")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("lrealImplicitlyCastableInTestCases")
-	public void lrealImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void lrealImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.LREAL.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -102,7 +102,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for REAL")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("realImplicitlyCastableInTestCases")
-	public void realImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void realImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.REAL.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -143,7 +143,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for LINT")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("lintImplicitlyCastableInTestCases")
-	public void lintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void lintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.LINT.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -184,7 +184,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for DINT")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("dintImplicitlyCastableInTestCases")
-	public void dintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void dintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.DINT.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -225,7 +225,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for INT")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("intImplicitlyCastableInTestCases")
-	public void intImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void intImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.INT.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -266,7 +266,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for SINT")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("sintImplicitlyCastableInTestCases")
-	public void sintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void sintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.SINT.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -307,7 +307,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for LWORD")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("lwordImplicitlyCastableInTestCases")
-	public void lwordImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void lwordImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.LWORD.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -348,7 +348,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for DWORD")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("dwordImplicitlyCastableInTestCases")
-	public void dwordImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void dwordImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.DWORD.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -389,7 +389,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for WORD")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("wordImplicitlyCastableInTestCases")
-	public void wordImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void wordImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.WORD.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -430,7 +430,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for BYTE")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("byteImplicitlyCastableInTestCases")
-	public void byteImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void byteImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.BYTE.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -471,7 +471,7 @@ public class ElementaryDataTypeCompatibilityTest {
 	@DisplayName("Implicit cast checks for BOOL")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("boolImplicitlyCastableInTestCases")
-	public void boolImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void boolImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String dataTypeName) {
 		final var castable = IecTypes.ElementaryTypes.BOOL.isCompatibleWith(targetType);
 		assertEquals(isAllowed, castable);
@@ -509,14 +509,14 @@ public class ElementaryDataTypeCompatibilityTest {
 
 	}
 
-	@SuppressWarnings({ "static-method", "boxing" })
+	@SuppressWarnings("static-method")
 	@DisplayName("Implicit cast checks for DATE")
 	@ParameterizedTest(name = "Cast in type {2}")
 	@MethodSource("dateImplicitlyCastableInTestCases")
-	public void dateImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
+	void dateImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed,
 			final String typeName) {
 		final var castable = IecTypes.ElementaryTypes.DATE.isCompatibleWith(targetType);
-		assertEquals(isAllowed, castable);
+		assertEquals(Boolean.valueOf(isAllowed), Boolean.valueOf(castable));
 	}
 
 }
