@@ -12,13 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.handlers;
 
+import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 
 public class AdvancedGraphicalViewerKeyHandler extends GraphicalViewerKeyHandler {
-	private static final int SCROLL_SPEED = 400;
+	private static final int SCROLL_SPEED_X = ModuloFreeformFigure.BASE_HEIGHT * 3;
+	private static final int SCROLL_SPEED_Y = (int) (ModuloFreeformFigure.BASE_HEIGHT * 1.5);
 
 	public AdvancedGraphicalViewerKeyHandler(final AdvancedScrollingGraphicalViewer viewer) {
 		super(viewer);
@@ -30,25 +32,25 @@ public class AdvancedGraphicalViewerKeyHandler extends GraphicalViewerKeyHandler
 		switch (event.keyCode) {
 		case SWT.ARROW_DOWN:
 			if (!modifierPressed) {
-				getViewer().scrollByOffset(0, SCROLL_SPEED);
+				getViewer().scrollByOffset(0, SCROLL_SPEED_Y);
 				return true;
 			}
 			break;
 		case SWT.ARROW_UP:
 			if (!modifierPressed) {
-				getViewer().scrollByOffset(0, -SCROLL_SPEED);
+				getViewer().scrollByOffset(0, -SCROLL_SPEED_Y);
 				return true;
 			}
 			break;
 		case SWT.ARROW_RIGHT:
 			if (!modifierPressed) {
-				getViewer().scrollByOffset(SCROLL_SPEED, 0);
+				getViewer().scrollByOffset(SCROLL_SPEED_X, 0);
 				return true;
 			}
 			break;
 		case SWT.ARROW_LEFT:
 			if (!modifierPressed) {
-				getViewer().scrollByOffset(-SCROLL_SPEED, 0);
+				getViewer().scrollByOffset(-SCROLL_SPEED_X, 0);
 				return true;
 			}
 			break;
