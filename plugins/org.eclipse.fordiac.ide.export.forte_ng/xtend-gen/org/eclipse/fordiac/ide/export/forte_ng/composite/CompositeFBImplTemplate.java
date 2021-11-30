@@ -309,108 +309,102 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
   }
   
   protected StringBuilder exportEventConns(final EList<EventConnection> eConns) {
-    StringBuilder _xblockexpression = null;
-    {
-      StringBuilder retVal = new StringBuilder();
-      HashSet<Connection> conSet = new HashSet<Connection>();
-      StringBuilder fannedOutConns = new StringBuilder();
-      CharSequence _fBClassName = this.getFBClassName();
-      String _plus = ("const SCFB_FBConnectionData " + _fBClassName);
-      String _plus_1 = (_plus + "::scm_astEventConnections[] = {\n");
-      retVal.append(_plus_1);
-      for (final Connection eConn : eConns) {
-        boolean _contains = conSet.contains(eConn);
-        boolean _not = (!_contains);
-        if (_not) {
-          conSet.add(eConn);
-          retVal.append(this.getConnListEntry(eConn));
-          int _size = eConn.getSource().getOutputConnections().size();
-          boolean _greaterThan = (_size > 1);
-          if (_greaterThan) {
-            final Function1<Connection, Boolean> _function = (Connection it) -> {
-              boolean _equals = Objects.equal(it, eConn);
-              return Boolean.valueOf((!_equals));
-            };
-            Iterable<Connection> _filter = IterableExtensions.<Connection>filter(eConn.getSource().getOutputConnections(), _function);
-            for (final Connection fannedConn : _filter) {
-              {
-                conSet.add(fannedConn);
-                fannedOutConns.append(this.genFannedOutConnString(fannedConn, this.eConnNumber));
-                this.fannedOutEventConns++;
-              }
+    StringBuilder retVal = new StringBuilder();
+    HashSet<Connection> conSet = new HashSet<Connection>();
+    StringBuilder fannedOutConns = new StringBuilder();
+    CharSequence _fBClassName = this.getFBClassName();
+    String _plus = ("const SCFB_FBConnectionData " + _fBClassName);
+    String _plus_1 = (_plus + "::scm_astEventConnections[] = {\n");
+    retVal.append(_plus_1);
+    for (final Connection eConn : eConns) {
+      boolean _contains = conSet.contains(eConn);
+      boolean _not = (!_contains);
+      if (_not) {
+        conSet.add(eConn);
+        retVal.append(this.getConnListEntry(eConn));
+        int _size = eConn.getSource().getOutputConnections().size();
+        boolean _greaterThan = (_size > 1);
+        if (_greaterThan) {
+          final Function1<Connection, Boolean> _function = (Connection it) -> {
+            boolean _equals = Objects.equal(it, eConn);
+            return Boolean.valueOf((!_equals));
+          };
+          Iterable<Connection> _filter = IterableExtensions.<Connection>filter(eConn.getSource().getOutputConnections(), _function);
+          for (final Connection fannedConn : _filter) {
+            {
+              conSet.add(fannedConn);
+              fannedOutConns.append(this.genFannedOutConnString(fannedConn, this.eConnNumber));
+              this.fannedOutEventConns++;
             }
           }
-          this.eConnNumber++;
         }
+        this.eConnNumber++;
       }
-      retVal.append("};\n");
+    }
+    retVal.append("};\n");
+    if ((0 != this.fannedOutEventConns)) {
       CharSequence _fBClassName_1 = this.getFBClassName();
       String _plus_2 = ("\nconst SCFB_FBFannedOutConnectionData " + _fBClassName_1);
       String _plus_3 = (_plus_2 + "::scm_astFannedOutEventConnections[] = {\n");
       retVal.append(_plus_3);
-      if ((0 != this.fannedOutEventConns)) {
-        retVal.append(fannedOutConns);
-      }
-      _xblockexpression = retVal.append("};\n");
+      retVal.append(fannedOutConns);
+      retVal.append("};\n");
     }
-    return _xblockexpression;
+    return retVal;
   }
   
   protected StringBuilder exportDataConns(final EList<DataConnection> dataConns) {
-    StringBuilder _xblockexpression = null;
-    {
-      StringBuilder retVal = new StringBuilder();
-      HashSet<Connection> conSet = new HashSet<Connection>();
-      StringBuilder fannedOutConns = new StringBuilder();
-      CharSequence _fBClassName = this.getFBClassName();
-      String _plus = ("const SCFB_FBConnectionData " + _fBClassName);
-      String _plus_1 = (_plus + "::scm_astDataConnections[] = {\n");
-      retVal.append(_plus_1);
-      for (final DataConnection dConn : dataConns) {
-        boolean _contains = conSet.contains(dConn);
-        boolean _not = (!_contains);
-        if (_not) {
-          final Connection primConn = this.getPrimaryDataConn(dConn);
-          conSet.add(primConn);
-          retVal.append(this.getConnListEntry(primConn));
-          int _size = primConn.getSource().getOutputConnections().size();
-          boolean _greaterThan = (_size > 1);
-          if (_greaterThan) {
-            final Function1<Connection, Boolean> _function = (Connection it) -> {
-              boolean _equals = Objects.equal(it, primConn);
-              return Boolean.valueOf((!_equals));
-            };
-            Iterable<Connection> _filter = IterableExtensions.<Connection>filter(primConn.getSource().getOutputConnections(), _function);
-            for (final Connection fannedConn : _filter) {
-              {
-                conSet.add(fannedConn);
-                if ((this.hasCFBInterfaceDestination(fannedConn) && this.hasCFBInterfaceDestination(primConn))) {
-                  fannedOutConns.append("#error a fanout to several composite FB\'s outputs is currently not supported: ");
-                  List<String> _errors = this.getErrors();
-                  String _name = this.getName();
-                  String _plus_2 = (" - " + _name);
-                  String _plus_3 = (_plus_2 + " FORTE does currently not allow that a data a composite\'s data connection may be connected to several data outputs of the composite FB.");
-                  _errors.add(_plus_3);
-                }
-                fannedOutConns.append(this.genFannedOutConnString(fannedConn, this.dataConnNumber));
-                this.fannedOutDataConns++;
+    StringBuilder retVal = new StringBuilder();
+    HashSet<Connection> conSet = new HashSet<Connection>();
+    StringBuilder fannedOutConns = new StringBuilder();
+    CharSequence _fBClassName = this.getFBClassName();
+    String _plus = ("const SCFB_FBConnectionData " + _fBClassName);
+    String _plus_1 = (_plus + "::scm_astDataConnections[] = {\n");
+    retVal.append(_plus_1);
+    for (final DataConnection dConn : dataConns) {
+      boolean _contains = conSet.contains(dConn);
+      boolean _not = (!_contains);
+      if (_not) {
+        final Connection primConn = this.getPrimaryDataConn(dConn);
+        conSet.add(primConn);
+        retVal.append(this.getConnListEntry(primConn));
+        int _size = primConn.getSource().getOutputConnections().size();
+        boolean _greaterThan = (_size > 1);
+        if (_greaterThan) {
+          final Function1<Connection, Boolean> _function = (Connection it) -> {
+            boolean _equals = Objects.equal(it, primConn);
+            return Boolean.valueOf((!_equals));
+          };
+          Iterable<Connection> _filter = IterableExtensions.<Connection>filter(primConn.getSource().getOutputConnections(), _function);
+          for (final Connection fannedConn : _filter) {
+            {
+              conSet.add(fannedConn);
+              if ((this.hasCFBInterfaceDestination(fannedConn) && this.hasCFBInterfaceDestination(primConn))) {
+                fannedOutConns.append("#error a fanout to several composite FB\'s outputs is currently not supported: ");
+                List<String> _errors = this.getErrors();
+                String _name = this.getName();
+                String _plus_2 = (" - " + _name);
+                String _plus_3 = (_plus_2 + " FORTE does currently not allow that a data a composite\'s data connection may be connected to several data outputs of the composite FB.");
+                _errors.add(_plus_3);
               }
+              fannedOutConns.append(this.genFannedOutConnString(fannedConn, this.dataConnNumber));
+              this.fannedOutDataConns++;
             }
           }
-          this.dataConnNumber++;
         }
+        this.dataConnNumber++;
       }
-      retVal.append("};\n");
+    }
+    retVal.append("};\n");
+    if ((0 != this.fannedOutDataConns)) {
       CharSequence _fBClassName_1 = this.getFBClassName();
       String _plus_2 = ("\nconst SCFB_FBFannedOutConnectionData " + _fBClassName_1);
       String _plus_3 = (_plus_2 + "::scm_astFannedOutDataConnections[] = {\n");
       retVal.append(_plus_3);
-      if ((0 != this.fannedOutDataConns)) {
-        retVal.append(fannedOutConns);
-      }
-      _xblockexpression = retVal.append("};\n");
+      retVal.append(fannedOutConns);
+      retVal.append("};\n");
     }
-    return _xblockexpression;
+    return retVal;
   }
   
   protected CharSequence getConnListEntry(final Connection con) {
@@ -497,19 +491,20 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
         }
       }
       StringConcatenation _builder = new StringConcatenation();
-      _builder.append("const SCFB_FBParameter ");
-      CharSequence _fBClassName = this.getFBClassName();
-      _builder.append(_fBClassName);
-      _builder.append("::scm_astParamters[] = {");
-      _builder.newLineIfNotEmpty();
       {
         if ((0 != this.numCompFBParams)) {
+          _builder.newLineIfNotEmpty();
+          _builder.append("const SCFB_FBParameter ");
+          CharSequence _fBClassName = this.getFBClassName();
+          _builder.append(_fBClassName);
+          _builder.append("::scm_astParamters[] = {");
+          _builder.newLineIfNotEmpty();
           String _string = retVal.toString();
           _builder.append(_string);
+          _builder.newLineIfNotEmpty();
+          _builder.append("};");
         }
       }
-      _builder.newLineIfNotEmpty();
-      _builder.append("};");
       _xblockexpression = _builder;
     }
     return _xblockexpression;

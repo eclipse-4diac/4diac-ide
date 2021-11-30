@@ -140,11 +140,12 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 
         retVal.append("};\n")
 
-        retVal.append("\nconst SCFB_FBFannedOutConnectionData " + FBClassName + "::scm_astFannedOutEventConnections[] = {\n")
         if (0 != fannedOutEventConns) {
+        	retVal.append("\nconst SCFB_FBFannedOutConnectionData " + FBClassName + "::scm_astFannedOutEventConnections[] = {\n")
             retVal.append(fannedOutConns)
+        	retVal.append("};\n"); //$NON-NLS-1$
         }
-        retVal.append("};\n"); //$NON-NLS-1$
+        return retVal
     }
 
     def protected exportDataConns(EList<DataConnection> dataConns) {
@@ -179,11 +180,12 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 
         retVal.append("};\n")
 
-        retVal.append("\nconst SCFB_FBFannedOutConnectionData " + FBClassName + "::scm_astFannedOutDataConnections[] = {\n") 
         if (0 != fannedOutDataConns) {
+        	retVal.append("\nconst SCFB_FBFannedOutConnectionData " + FBClassName + "::scm_astFannedOutDataConnections[] = {\n") 
             retVal.append(fannedOutConns)
+        	retVal.append("};\n"); //$NON-NLS-1$
         }
-        retVal.append("};\n"); //$NON-NLS-1$
+        return retVal
     }
 
     def protected getConnListEntry(Connection con)
@@ -220,10 +222,11 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 			}
 		}
 
-		'''
+		
+		'''«IF 0 != numCompFBParams»
 		const SCFB_FBParameter «FBClassName»::scm_astParamters[] = {
-		«IF 0 != numCompFBParams»«retVal.toString»«ENDIF»
-		};'''
+		«retVal.toString»
+		};«ENDIF»'''
 	}
 	
 	def private getParamValue(VarDeclaration v) {

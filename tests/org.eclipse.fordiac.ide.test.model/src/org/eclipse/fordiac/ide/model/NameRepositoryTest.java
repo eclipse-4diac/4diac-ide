@@ -44,7 +44,7 @@ class NameRepositoryTest {
 	@ParameterizedTest(name = "{index}: {0}->{1}")
 	@MethodSource("createUniqueNameTestCases")
 	@SuppressWarnings({ "squid:S5803", "squid:S5960", "static-method" })
-	public void createUniqueName(final String input, final String output) {
+	void createUniqueName(final String input, final String output) {
 		assertEquals(NameRepository.createUniqueName(input, input), output);
 	}
 
