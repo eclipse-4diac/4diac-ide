@@ -30,9 +30,9 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class HideEventConnections extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		Command command = event.getCommand();
-		boolean oldValue = HandlerUtil.toggleCommandState(command);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final Command command = event.getCommand();
+		final boolean oldValue = HandlerUtil.toggleCommandState(command);
 		UIPlugin.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_HIDE_EVENT_CON, !oldValue);
 		return Status.OK_STATUS;
 	}

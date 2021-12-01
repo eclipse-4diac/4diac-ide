@@ -393,7 +393,6 @@
             id="org.eclipse.fordiac.ide.application.commands.expandSubApp"
             name="Expand Subapp">
       </command>
-
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.SaveAsSubappTypeHandler"
@@ -475,6 +474,12 @@
                  class="org.eclipse.ui.handlers.RegistryToggleState"
                  id="org.eclipse.ui.commands.toggleState">
            </state>
+      </command>
+      <command 
+      		categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.ToggleConnectionsHandler"
+            id="org.eclipse.fordiac.ide.application.commands.toggleConnections"
+            name="Toggle Connections Visibility">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
@@ -564,7 +569,6 @@
          		</with> 
 			 </and>   
 			</activeWhen>
-
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.UpdateFBTypeHandler"
@@ -715,6 +719,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+B">
       </key>
+      <key 
+      		commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
+         	contextId="org.eclipse.ui.contexts.window"
+         	schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         	sequence="M1+T">
+    </key>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -862,6 +872,9 @@
                   commandId="org.eclipse.fordiac.ide.application.unmapAll"
                   label="Unmap All">
             </command>
+            <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
+               label="Toggle Connection Visibility">
+      		</command>
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -1009,6 +1022,10 @@
     			</and>
             </visibleWhen>
          </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
+               label="Toggle Connection Visibility">
+         	<visibleWhen checkEnabled="true"></visibleWhen>
+      	 </command>
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="Ungroup"
