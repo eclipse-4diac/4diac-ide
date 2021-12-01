@@ -25,6 +25,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -202,6 +203,13 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 		newChildDescriptors
 				.add(createChildParameter(LibraryElementPackage.Literals.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION,
 						LibraryElementFactory.eINSTANCE.createSystemConfiguration()));
+	}
+
+	/** @generated NOT */
+	@Override
+	public Object getParent(Object object) {
+		final Object parent = super.getParent(object);
+		return parent instanceof PaletteEntry ? null : parent;
 	}
 
 }
