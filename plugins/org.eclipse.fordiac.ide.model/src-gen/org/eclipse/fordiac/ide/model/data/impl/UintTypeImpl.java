@@ -45,7 +45,7 @@ public class UintTypeImpl extends AnyUnsignedTypeImpl implements UintType {
 	@Override
 	public boolean isCompatibleWith(final DataType other) {
 		return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility
-				.isUsintCompatibleWith(other);
+				.isUintCompatibleWith(other);
 	}
 
 } // UintTypeImpl

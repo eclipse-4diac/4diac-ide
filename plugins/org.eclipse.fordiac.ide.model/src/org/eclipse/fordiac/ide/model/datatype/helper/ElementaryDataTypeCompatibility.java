@@ -110,7 +110,8 @@ public final class ElementaryDataTypeCompatibility {
 	}
 
 	public static boolean isDateAndTimeCompatibleWith(final DataType other) {
-		return other == ElementaryTypes.DATE_AND_TIME || isAnyDateCompatibleWith(other);
+		return other == ElementaryTypes.DATE_AND_TIME || other == ElementaryTypes.LDATE_AND_TIME
+				|| isAnyDateCompatibleWith(other);
 	}
 
 	public static boolean isLdtCompatibleWith(final DataType other) {
@@ -118,7 +119,11 @@ public final class ElementaryDataTypeCompatibility {
 	}
 
 	public static boolean isDateCompatibleWith(final DataType other) {
-		return other == ElementaryTypes.DATE || isAnyDateCompatibleWith(other);
+		return other == ElementaryTypes.LDATE || other == ElementaryTypes.DATE || isAnyDateCompatibleWith(other);
+	}
+
+	public static boolean isLdateCompatibleWith(final DataType other) {
+		return other == ElementaryTypes.LDATE || isAnyDateCompatibleWith(other);
 	}
 
 	public static boolean isTimeOfDayCompatibleWith(final DataType other) {
