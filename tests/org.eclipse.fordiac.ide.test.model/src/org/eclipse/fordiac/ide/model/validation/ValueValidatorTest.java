@@ -32,7 +32,7 @@ public class ValueValidatorTest {
 	private static final String BASE_SPECIFIER_INVALID_FOR_BOOL = "Base specifiers are not allowed for BOOL literals!"; //$NON-NLS-1$
 	private static final String TYPE_SPECIFIER_MANDATORY_FOR_ANYS = "Concrete type specifier is mandatory for ANY types!"; //$NON-NLS-1$
 
-	public static Stream<Arguments> validateValidBoolLiteralsTestCases() {
+	static Stream<Arguments> validateValidBoolLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.BOOL, "0", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "1", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "FALSE", NO_ERROR), //$NON-NLS-1$
@@ -52,7 +52,7 @@ public class ValueValidatorTest {
 		assertEquals(expectedResult, resultString);
 	}
 
-	public static Stream<Arguments> validateInvalidBoolLiteralsTestCases() {
+	static Stream<Arguments> validateInvalidBoolLiteralsTestCases() {
 		return Stream.of(
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"0\"", //$NON-NLS-1$
 						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
@@ -81,7 +81,7 @@ public class ValueValidatorTest {
 		assertEquals(expectedErrorString, resultString);
 	}
 
-	public static Stream<Arguments> validateValidDateLiteralsTestCases() {
+	static Stream<Arguments> validateValidDateLiteralsTestCases() {
 		return Stream.of(
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#2000-01-01", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#2000-12-31", NO_ERROR), //$NON-NLS-1$
@@ -102,7 +102,7 @@ public class ValueValidatorTest {
 		assertEquals(expectedResult, resultString);
 	}
 
-	public static Stream<Arguments> validateTypeSpecifierMandatoryForAnyLiteralsTestCases() {
+	static Stream<Arguments> validateTypeSpecifierMandatoryForAnyLiteralsTestCases() {
 		return Stream.of(
 				Arguments.of(IecTypes.GenericTypes.ANY, "0", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
 				Arguments.of(IecTypes.GenericTypes.ANY_BIT, "-0", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
