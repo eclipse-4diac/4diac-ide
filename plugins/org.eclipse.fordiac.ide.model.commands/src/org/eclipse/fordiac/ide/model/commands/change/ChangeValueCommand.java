@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -49,10 +48,6 @@ public class ChangeValueCommand extends Command {
 		}
 		if (!newValue.isBlank()) {
 			// if we have a non empty value check if it is a valid literal
-			if ((IecTypes.GenericTypes.ANY == variable.getType()) && (!newValue.contains("#"))) { //$NON-NLS-1$
-				ErrorMessenger.popUpErrorMessage(Messages.ChangeValueCommand_ConstantValuesNoAllowedOnAny);
-				return false;
-			}
 			final String validationMsg = ValueValidator.validateValue(variable.getType(), newValue);
 			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
 				ErrorMessenger.popUpErrorMessage(validationMsg);
