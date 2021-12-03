@@ -1,0 +1,8 @@
+For using the FordiacProjectLoader you have to perform two steps:
+
+1) Instantiate the Loader itself: FordiacProjectLoader loader = new FordiacProjectLoader(projectFilename);
+   Whereas the projectFilename is the project name represented as String
+   
+2) You need to load your 4diac workspace where your project is located. See: https://stackoverflow.com/questions/27088926/run-eclipse-plug-in-test-with-included-workspace-projects
+
+3) Done. You now have access to AutomationSystem: loader.getAutomationSystem();
