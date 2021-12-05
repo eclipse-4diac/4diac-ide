@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
@@ -48,6 +49,12 @@ public class TypedSubAppItemProvider extends SubAppTypeItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		final FBNetwork fbNetwork = getFBNetwork(object);
 		return (null != fbNetwork) ? subAppNetworkItemProvider.getChildrenFeatures(fbNetwork) : Collections.emptyList();
+	}
+
+	@Override
+	public Object getParent(Object object) {
+		final Object parent = super.getParent(object);
+		return parent instanceof PaletteEntry ? null : parent;
 	}
 
 	@Override
