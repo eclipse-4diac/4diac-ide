@@ -87,7 +87,7 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		g.setXORMode(false);
 		g.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		g.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
-		final int radius = (int) (ConnectionPreferenceValues.HANDLE_SIZE * 0.45);
+		final int radius = getCornerRadius();
 		if (isPrimary()) {
 			// only draw the border for the primary connection selection
 			g.drawRoundRectangle(r, radius, radius);
@@ -97,6 +97,11 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		g.setAlpha(255);
 
 		paintHandleCenter(g, r);
+	}
+
+	@SuppressWarnings("static-method")  // allow sub-classes to provide a different radius
+	protected int getCornerRadius() {
+		return (int) (ConnectionPreferenceValues.HANDLE_SIZE * 0.45);
 	}
 
 	protected void paintHandleCenter(final Graphics g, final Rectangle r) {
