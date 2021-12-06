@@ -235,16 +235,18 @@ public class FollowConnectionHandler extends AbstractHandler {
 
 	protected IInterfaceElement getInternalOppositePin(final ISelection selection) {
 		final InterfaceEditPart pin = (InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement();
-		if(pin.isEvent()) {
-			if (pin.getModel().getFBNetworkElement().getInterface().getEventOutputs().isEmpty()) {
-				return getInternalOppositeVarPin(pin);
+
+		if (hasOpposites(pin)) {
+			if(pin.isEvent()) {
+				return getInternalOppositeEventPin(pin);
 			}
-			return getInternalOppositeEventPin(pin);
+			else if (pin.isVariable() && !pin.isAdapter()) {
+				return getInternalOppositeVarPin(pin);
+			} else {
+				return getInternalOppositePlugOrSocketPin(pin);
+			}
 		}
-		if (pin.getModel().getFBNetworkElement().getInterface().getOutputVars().isEmpty()) {
-			return getInternalOppositeEventPin(pin);
-		}
-		return getInternalOppositeVarPin(pin);
+		return null;
 	}
 
 	@SuppressWarnings("static-method")
@@ -257,4 +259,25 @@ public class FollowConnectionHandler extends AbstractHandler {
 		return null;
 	}
 
+	@SuppressWarnings("static-method")
+	protected IInterfaceElement getInternalOppositePlugOrSocketPin(final InterfaceEditPart pin) {
+		return null;
+	}
+
+	@SuppressWarnings("static-method")
+	protected boolean hasOpposites(final InterfaceEditPart pin) {
+		return false;
+	}
+
+	protected static IInterfaceElement calcInternalOppositePin(final EList<?> source, final EList<?> destination,
+			final InterfaceEditPart pin) {
+		if (!source.contains(pin.getModel())) {
+			return (IInterfaceElement) destination.get(0);
+		}
+
+		if ((destination.size() - 1) < source.indexOf(pin.getModel())) {
+			return (IInterfaceElement) destination.get(destination.size() - 1);
+		}
+		return (IInterfaceElement) destination.get(source.indexOf(pin.getModel()));
+	}
 }

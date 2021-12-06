@@ -63,42 +63,41 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected IInterfaceElement getInternalOppositeEventPin(final InterfaceEditPart pin) {
-
-		final EList<?> eventInputs = pin.getModel().getFBNetworkElement().getInterface().getEventInputs();
 		final EList<?> eventOutputs = pin.getModel().getFBNetworkElement().getInterface().getEventOutputs();
+		final EList<?> eventInputs = pin.getModel().getFBNetworkElement().getInterface().getEventInputs();
 
 		if (eventOutputs.isEmpty()) {
-			return null;
+			return getInternalOppositeVarPin(pin);
 		}
-
-		if (eventOutputs.indexOf(pin.getModel()) == -1) {
-			return (IInterfaceElement) eventOutputs.get(0);
-		}
-
-		if ((eventOutputs.size() - 1) < eventInputs
-				.indexOf(pin.getModel())) {
-			return (IInterfaceElement) eventOutputs.get(eventOutputs.size() - 1);
-		}
-		return (IInterfaceElement) eventOutputs.get(eventInputs.indexOf(pin.getModel()));
+		return calcInternalOppositePin(eventInputs, eventOutputs, pin);
 	}
 
 	@Override
 	protected IInterfaceElement getInternalOppositeVarPin(final InterfaceEditPart pin) {
-
 		final EList<?> varInputs = pin.getModel().getFBNetworkElement().getInterface().getInputVars();
 		final EList<?> varOutputs = pin.getModel().getFBNetworkElement().getInterface().getOutputVars();
 
 		if (varOutputs.isEmpty()) {
-			return null;
+			return getInternalOppositePlugOrSocketPin(pin);
 		}
+		return calcInternalOppositePin(varInputs, varOutputs, pin);
+	}
 
-		if (varOutputs.indexOf(pin.getModel()) == -1) {
-			return (IInterfaceElement) varOutputs.get(0);
-		}
+	@Override
+	protected IInterfaceElement getInternalOppositePlugOrSocketPin(final InterfaceEditPart pin) {
+		final EList<?> sockets = pin.getModel().getFBNetworkElement().getInterface().getSockets();
+		final EList<?> plugs = pin.getModel().getFBNetworkElement().getInterface().getPlugs();
 
-		if ((varOutputs.size() - 1) < varInputs.indexOf(pin.getModel())) {
-			return (IInterfaceElement) varOutputs.get(varOutputs.size() - 1);
+		if (plugs.isEmpty()) {
+			return getInternalOppositeEventPin(pin);
 		}
-		return (IInterfaceElement) varOutputs.get(varInputs.indexOf(pin.getModel()));
+		return calcInternalOppositePin(sockets, plugs, pin);
+	}
+
+	@Override
+	protected boolean hasOpposites(final InterfaceEditPart pin) {
+		return !(pin.getModel().getFBNetworkElement().getInterface().getEventOutputs().isEmpty()
+				&& pin.getModel().getFBNetworkElement().getInterface().getOutputVars().isEmpty()
+				&& pin.getModel().getFBNetworkElement().getInterface().getPlugs().isEmpty());
 	}
 }
