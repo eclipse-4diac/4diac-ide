@@ -180,9 +180,13 @@ public class FollowConnectionHandler extends AbstractHandler {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_NAME);
 
-		if (((IStructuredSelection) selection).getFirstElement() instanceof InterfaceEditPart) {
-			setBaseEnabled(editor != null);
+		if (selection != null && ((IStructuredSelection) selection).size() == 1) {
+			setBaseEnabled(editor != null && ((IStructuredSelection) selection).getFirstElement() instanceof InterfaceEditPart);
+		} else {
+			setBaseEnabled(false);
 		}
+
+
 	}
 
 	protected static List<IInterfaceElement> getConnectionOposites(final ISelection selection,

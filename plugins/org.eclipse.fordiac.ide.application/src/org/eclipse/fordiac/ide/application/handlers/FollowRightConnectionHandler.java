@@ -46,7 +46,6 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 			return Status.OK_STATUS;
 		}
 
-
 		if (((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).isInput()) {
 			selectElement(getInternalOppositePin(selection), viewer);
 			return Status.OK_STATUS;
