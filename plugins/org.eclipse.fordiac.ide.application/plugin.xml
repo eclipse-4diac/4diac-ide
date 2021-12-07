@@ -730,7 +730,10 @@
             locationURI="menu:navigate?after=goTo">
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
-                  icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
+                  icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_prev.png"/>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
+                  icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_next.png"/>
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection" />
             <command
@@ -890,7 +893,10 @@
             locationURI="toolbar:org.eclipse.ui.workbench.navigate">
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
-                  icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
+                  icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_prev.png"/>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
+                  icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_next.png"/>
       </menuContribution>    
       <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
@@ -1095,7 +1101,16 @@
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.fordiac.ide.group.navigate">
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
-               icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png">
+               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_prev.png">
+            <visibleWhen checkEnabled="true">
+		       <with variable="activeEditor">
+		          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+		       </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
+               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_next.png">
             <visibleWhen checkEnabled="true">
 		       <with variable="activeEditor">
 		          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />

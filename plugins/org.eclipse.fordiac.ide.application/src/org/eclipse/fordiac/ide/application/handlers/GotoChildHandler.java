@@ -57,6 +57,7 @@ public class GotoChildHandler extends AbstractHandler {
 		if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			if (structuredSelection.size() == 1
+					&& structuredSelection.getFirstElement() instanceof EditPart
 					&& ((EditPart) structuredSelection.getFirstElement()).getAdapter(EditPart.class) != null) {
 				final EditPart editPart = ((EditPart) structuredSelection.getFirstElement()).getAdapter(EditPart.class);
 				final Object model = editPart.getModel();
