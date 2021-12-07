@@ -29,7 +29,7 @@ public final class Messages extends NLS {
 	public static String DeleteConnectionCommand_DeleteConnection;
 	public static String DeleteFBNetworkElement;
 	public static String DeleteFBNetworkElementCommand_DeleteFBOrSubapplication;
-	public static String FBCreateCommand_LABLE_CreateFunctionBlock;
+	public static String FBCreateCommand_LABEL_CreateFunctionBlock;
 	public static String LinkConstraints_ClassLinconstraintsShouldNotBeCreated;
 	public static String LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct;
 	public static String LinkConstraints_STATUSMessage_hasAlreadyInputConnection;

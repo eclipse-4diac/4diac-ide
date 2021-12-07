@@ -31,7 +31,7 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	public FBCreateCommand(final FBTypePaletteEntry paletteEntry, final FBNetwork fbNetwork, final int x, final int y) {
 		super(fbNetwork, createNewFb(paletteEntry), x, y);
 		this.paletteEntry = paletteEntry;
-		setLabel(Messages.FBCreateCommand_LABLE_CreateFunctionBlock);
+		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
 		getFB().setPaletteEntry(paletteEntry);
 	}
 
@@ -51,7 +51,7 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	protected FBCreateCommand(final FBNetwork fbNetwork, final FBNetworkElement adapter, final int x, final int y) {
 		super(fbNetwork, adapter, x, y);
 		this.paletteEntry = null;
-		setLabel(Messages.FBCreateCommand_LABLE_CreateFunctionBlock);
+		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
 		getFB().setPaletteEntry(paletteEntry);
 	}
 

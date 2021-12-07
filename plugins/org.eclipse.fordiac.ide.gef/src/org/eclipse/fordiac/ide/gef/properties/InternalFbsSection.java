@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFbTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInternalFBOrderCommand;
@@ -97,9 +97,9 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.DOWN));
 	}
 
-	private PaletteEntry getFBTypePaletteEntry() {
+	private FBTypePaletteEntry getFBTypePaletteEntry() {
 		final FB fb = getLastSelectedFB();
-		return (null != fb) ? fb.getType().getPaletteEntry() : null;
+		return (null != fb) ? (FBTypePaletteEntry) fb.getPaletteEntry() : null;
 	}
 
 	private String getName() {
@@ -197,12 +197,11 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 				cmd = new ChangeNameCommand(fb, value.toString());
 				break;
 			case FB_TYPE:
-				final PaletteEntry fbTypeEntry = getPalette().getFBTypeEntry(value.toString());
+				final FBTypePaletteEntry fbTypeEntry = getPalette().getFBTypeEntry(value.toString());
 				if (null == fbTypeEntry) {
 					return;
 				}
-				final FBType fbType = (FBType) fbTypeEntry.getType();
-				cmd = new ChangeFbTypeCommand(fb, fbType);
+				cmd = new ChangeFbTypeCommand(fb, fbTypeEntry);
 				break;
 			default:
 				cmd = new ChangeCommentCommand(fb, value.toString());
