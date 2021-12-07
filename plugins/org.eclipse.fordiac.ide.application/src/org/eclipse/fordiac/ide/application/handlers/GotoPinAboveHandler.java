@@ -62,21 +62,18 @@ public class GotoPinAboveHandler extends AbstractHandler {
 			if ((structuredSelection.size() == 1)
 					&& (structuredSelection.getFirstElement() instanceof InterfaceEditPart)) {
 				// only if only one element is selected
+				final IInterfaceElement ie = ((InterfaceEditPart) structuredSelection.getFirstElement()).getModel();
 
-				final InterfaceEditPart pin = (InterfaceEditPart) structuredSelection.getFirstElement();
-				final IInterfaceElement ie = pin.getModel();
-
-				if (pin.isInput()) {
-					return getFollowingInputPin(pin, ie);
+				if (ie.isIsInput()) {
+					return getFollowingInputPin(ie);
 				}
-				return getFollowingOutputPin(pin, ie);
+				return getFollowingOutputPin(ie);
 			}
 		}
 		return null;
 	}
 
-	private static IInterfaceElement getFollowingInputPin(final InterfaceEditPart pin,
-			final IInterfaceElement ie) {
+	private static IInterfaceElement getFollowingInputPin(final IInterfaceElement ie) {
 		final List<Object> inputList = new ArrayList<>();
 		inputList.addAll(ie.getFBNetworkElement().getInterface().getEventInputs());
 		inputList.addAll(ie.getFBNetworkElement().getInterface().getInputVars());
@@ -86,14 +83,13 @@ public class GotoPinAboveHandler extends AbstractHandler {
 			return null;
 		}
 
-		if (inputList.indexOf(pin.getModel()) == 0) {
+		if (inputList.indexOf(ie) == 0) {
 			return (IInterfaceElement) inputList.get(inputList.size() - 1);
 		}
-		return (IInterfaceElement) inputList.get(inputList.indexOf(pin.getModel()) - 1);
+		return (IInterfaceElement) inputList.get(inputList.indexOf(ie) - 1);
 	}
 
-	private static IInterfaceElement getFollowingOutputPin(final InterfaceEditPart pin,
-			final IInterfaceElement ie) {
+	private static IInterfaceElement getFollowingOutputPin(final IInterfaceElement ie) {
 		final List<Object> outputList = new ArrayList<>();
 		outputList.addAll(ie.getFBNetworkElement().getInterface().getEventOutputs());
 		outputList.addAll(ie.getFBNetworkElement().getInterface().getOutputVars());
@@ -103,10 +99,10 @@ public class GotoPinAboveHandler extends AbstractHandler {
 			return null;
 		}
 
-		if (outputList.indexOf(pin.getModel()) == 0) {
+		if (outputList.indexOf(ie) == 0) {
 			return (IInterfaceElement) outputList.get(outputList.size() - 1);
 		}
-		return (IInterfaceElement) outputList.get(outputList.indexOf(pin.getModel()) - 1);
+		return (IInterfaceElement) outputList.get(outputList.indexOf(ie) - 1);
 	}
 
 	private static void selectElement(final Object element, final GraphicalViewer viewer) {
