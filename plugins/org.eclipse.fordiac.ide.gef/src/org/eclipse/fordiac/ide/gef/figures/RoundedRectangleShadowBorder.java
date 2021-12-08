@@ -12,33 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
-import org.eclipse.draw2d.AbstractBackground;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 
-public class RoundedRectangleShadowBorder extends AbstractBackground {
-
-	private static final int SHADOW_ALPHA = 30;
-
-	private static final int SHADOW_SIZE = 4;
-
-	private static final int SHADOW_CORNER_RADIUS = DiagramPreferences.CORNER_DIM + 2;
-
-	public static final Insets SHADOW_INSETS = new Insets(2, 2, SHADOW_SIZE, SHADOW_SIZE * 2 / 3);
-
-	@Override
-	public Insets getInsets(final IFigure figure) {
-		return SHADOW_INSETS;
-	}
-
-	@Override
-	public boolean isOpaque() {
-		return true;
-	}
+public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 
 	@Override
 	public void paintBackground(final IFigure figure, final Graphics graphics, final Insets insets) {

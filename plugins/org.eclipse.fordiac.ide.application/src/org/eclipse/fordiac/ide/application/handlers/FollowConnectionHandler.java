@@ -30,8 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
-import org.eclipse.gef.EditPart;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -84,9 +83,9 @@ public class FollowConnectionHandler extends AbstractHandler {
 
 			final Composite titleAreaComposite = (Composite) super.createTitleMenuArea(parent);
 
-			final GridData gd_label = new GridData(GridData.FILL);
-			gd_label.horizontalIndent = 5;
-			titleAreaComposite.setLayoutData(gd_label);
+			final GridData gdLabel = new GridData(GridData.FILL);
+			gdLabel.horizontalIndent = 5;
+			titleAreaComposite.setLayoutData(gdLabel);
 			return titleAreaComposite;
 		}
 
@@ -114,7 +113,7 @@ public class FollowConnectionHandler extends AbstractHandler {
 			listViewer.setInput(opposites.toArray());
 
 			listViewer.addSelectionChangedListener(
-					event -> selectElement(event.getStructuredSelection().getFirstElement(), viewer));
+					event -> HandlerHelper.selectElement(event.getStructuredSelection().getFirstElement(), viewer));
 
 			// on enter close the view
 			listViewer.getControl().addKeyListener(new KeyListener() {
@@ -141,18 +140,6 @@ public class FollowConnectionHandler extends AbstractHandler {
 			return dialogArea;
 		}
 
-	}
-
-	protected static void selectElement(final Object element, final GraphicalViewer viewer) {
-		final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
-		if (null != editPart) {
-			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
-				((AdvancedScrollingGraphicalViewer) viewer).selectAndRevealEditPart(editPart);
-			} else {
-				viewer.select(editPart);
-				viewer.reveal(editPart);
-			}
-		}
 	}
 
 	@Override

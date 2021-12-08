@@ -67,7 +67,6 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 				// on layout request just recalculate the bounds and draw it
 				bounds = null;
 				getBounds();
-				// repaint();
 				fireFigureMoved();
 			}
 		};

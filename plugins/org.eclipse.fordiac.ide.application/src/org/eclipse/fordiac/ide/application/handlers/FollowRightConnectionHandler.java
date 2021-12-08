@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -47,13 +48,13 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		}
 
 		if (((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).isInput()) {
-			selectElement(getInternalOppositePin(selection), viewer);
+			HandlerHelper.selectElement(getInternalOppositePin(selection), viewer);
 			return Status.OK_STATUS;
 		}
 
 		if (!opposites.isEmpty()) {
 			if (opposites.size() == 1) {
-				selectElement(opposites.get(0), viewer);
+				HandlerHelper.selectElement(opposites.get(0), viewer);
 			} else {
 				showOppositeSelectionDialog(opposites, event, viewer);
 			}

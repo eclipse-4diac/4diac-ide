@@ -51,14 +51,8 @@ import org.eclipse.gef.requests.CreateRequest;
 public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
-	public void setHost(final EditPart host) {
-		super.setHost(host);
-	}
-
-	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
 		return new ModifiedNonResizeableEditPolicy();
-
 	}
 
 	@Override

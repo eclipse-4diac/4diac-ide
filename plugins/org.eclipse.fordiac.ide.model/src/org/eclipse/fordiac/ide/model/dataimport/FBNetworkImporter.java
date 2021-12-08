@@ -275,14 +275,12 @@ class FBNetworkImporter extends CommonElementImporter {
 	public <T extends Connection> void parseAttributes(final T connection)
 			throws XMLStreamException, TypeImportException {
 		processChildren(LibraryElementTags.CONNECTION_ELEMENT, tag -> {
-			switch (tag) {
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(tag)) {
 				parseGenericAttributeNode(connection);
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 				return true;
-			default:
-				return false;
 			}
+			return false;
 		});
 	}
 
