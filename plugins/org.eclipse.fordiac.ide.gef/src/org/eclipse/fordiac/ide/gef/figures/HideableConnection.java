@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.GridLayout;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PolylineConnection;
@@ -31,6 +34,9 @@ import org.eclipse.draw2d.geometry.Geometry;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.text.FlowPage;
+import org.eclipse.draw2d.text.ParagraphTextLayout;
+import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -109,6 +115,20 @@ public class HideableConnection extends PolylineConnection {
 
 	}
 
+	private static class ConLabelToolTip extends Figure {
+		private final TextFlow content = new TextFlow();
+		private final FlowPage fp = new FlowPage();
+
+		public ConLabelToolTip(final String tooltipText) {
+			setLayoutManager(new GridLayout());
+			content.setText(tooltipText);
+			content.setLayoutManager(new ParagraphTextLayout(content, ParagraphTextLayout.WORD_WRAP_HARD));
+			fp.add(content);
+			add(fp);
+		}
+
+	}
+
 	public void setModel(final Connection newModel) {
 		model = newModel;
 	}
@@ -128,6 +148,7 @@ public class HideableConnection extends PolylineConnection {
 			if (hidden) {
 				setSourceDecoration(createSourceLabel());
 				setTargetDecoration(createTargetLabel());
+				updateConLabels();
 			} else {
 				setSourceDecoration(null);
 				setTargetDecoration(null);
@@ -150,20 +171,20 @@ public class HideableConnection extends PolylineConnection {
 	public void updateConLabels() {
 		if (isHidden()) {
 			getSourceDecoration().getLabel().setText(createDestinationLabelText());
+			updateSourceTooltip();
 			getTargetDecoration().getLabel().setText(createSourceLabelText());
+			updateTargetTooltip();
 		}
 	}
 
 	private RotatableDecoration createTargetLabel() {
 		final ConnectionLabel label = new ConnectionLabel(false);
 		label.setBackgroundColor(getForegroundColor());
-		label.getLabel().setText(createSourceLabelText());
 		return label;
 	}
 	private RotatableDecoration createSourceLabel() {
 		final ConnectionLabel label = new ConnectionLabel(true);
 		label.setBackgroundColor(getForegroundColor());
-		label.getLabel().setText(createDestinationLabelText());
 		return label;
 	}
 
@@ -181,21 +202,65 @@ public class HideableConnection extends PolylineConnection {
 		return ""; //$NON-NLS-1$
 	}
 
+	private void updateSourceTooltip() {
+		if (getModel().getSource() != null && getModel().getDestination() != null) {
+			getSourceDecoration().setToolTip(createSourceLabelToolTip(getModel().getSource().getOutputConnections()));
+		}
+	}
+
+	private void updateTargetTooltip() {
+		if (getModel().getSource() != null && getModel().getDestination() != null) {
+			getTargetDecoration().setToolTip(createDstLabelToolTip(getModel().getDestination().getInputConnections()));
+		}
+	}
+
+	private static IFigure createSourceLabelToolTip(final EList<Connection> connections) {
+		final List<Connection> hiddenConnections = getHiddenConnections(connections);
+		if (hiddenConnections.size() > 1) {
+			final StringBuilder builder = new StringBuilder();
+			hiddenConnections.forEach(con -> {
+				builder.append(generateIEString(con.getDestination()));
+				builder.append('\n');
+			});
+			builder.deleteCharAt(builder.length() - 1);
+			return new ConLabelToolTip(builder.toString());
+		}
+		return null;
+	}
+
+	private static IFigure createDstLabelToolTip(final EList<Connection> connections) {
+		final List<Connection> hiddenConnections = getHiddenConnections(connections);
+		if (hiddenConnections.size() > 1) {
+			final StringBuilder builder = new StringBuilder();
+			hiddenConnections.forEach(con -> {
+				builder.append(generateIEString(con.getSource()));
+				builder.append('\n');
+			});
+			builder.deleteCharAt(builder.length() - 1);
+			return new ConLabelToolTip(builder.toString());
+		}
+		return null;
+	}
+
 	private static String createLabelText(final IInterfaceElement ie, final EList<Connection> connections) {
-		final StringBuilder builder = new StringBuilder();
 		final List<Connection> hiddenConnections = getHiddenConnections(connections);
 		if (hiddenConnections.size() > 1) {
 			// we have more then one hidden connection so we show the number
-			builder.append(hiddenConnections.size());
-		} else {
-			if (ie != null) {
-				if (ie.getFBNetworkElement() != null) {
-					builder.append(ie.getFBNetworkElement().getName());
-					builder.append('.');
-				}
-				builder.append(ie.getName());
-			}
+			return Integer.toString(hiddenConnections.size());
 		}
+		if (ie != null) {
+			return generateIEString(ie);
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	private static String generateIEString(final IInterfaceElement ie) {
+		final StringBuilder builder = new StringBuilder();
+		if (ie.getFBNetworkElement() != null) {
+			builder.append(ie.getFBNetworkElement().getName());
+			builder.append('.');
+		}
+		builder.append(ie.getName());
 		return builder.toString();
 	}
 
