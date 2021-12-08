@@ -66,6 +66,26 @@
 	</extension>  
 	<extension
     		point="org.eclipse.ui.handlers">
+    	<handler class="org.eclipse.fordiac.ide.gef.handlers.ZoomInHandler"
+        		commandId="org.eclipse.ui.edit.text.zoomIn">
+        	<activeWhen>
+         		<or> 
+         	 		<with variable="activeEditor">
+                   		<adapt type="org.eclipse.gef.editparts.ZoomManager" />
+            		</with>
+           		</or>                  
+         	</activeWhen>
+		</handler>    
+    	<handler class="org.eclipse.fordiac.ide.gef.handlers.ZoomOutHandler"
+        		commandId="org.eclipse.ui.edit.text.zoomOut">
+        	<activeWhen>
+         		<or> 
+         	 		<with variable="activeEditor">
+                   		<adapt type="org.eclipse.gef.editparts.ZoomManager" />
+            		</with>
+           		</or>                  
+         	</activeWhen>
+		</handler>    
     	<handler class="org.eclipse.fordiac.ide.gef.handlers.Zoom100Handler"
         		commandId="org.eclipse.fordiac.ide.gef.zoom100">
         	<activeWhen>
@@ -101,5 +121,36 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+0">
       	</key>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=org.eclipse.ui.workbench.navigate">
+			<toolbar id="org.eclipse.fordiac.ide.toolbars.zoomToolbar">
+				<command
+	            		commandId="org.eclipse.ui.edit.text.zoomOut"
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
+	                  	tooltip="Zoom out">
+	            </command>
+	            <control class="org.eclipse.fordiac.ide.gef.handlers.ZoomComboContributionItem"
+              			id="org.eclipse.fordiac.ide.toolbars.zoomToolbar">
+        		</control>
+				<command
+	            		commandId="org.eclipse.ui.edit.text.zoomIn"
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
+	                  	tooltip="Zoom in">
+	            </command>
+				<command
+	            		commandId="org.eclipse.fordiac.ide.gef.zoom100"
+	                  	icon="fordiacimage://ICON_ZOOM_100"
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
+	                  	tooltip="Set zoom level to 100%">
+	            </command>
+				<command
+	            		commandId="org.eclipse.fordiac.ide.gef.zoomfitpage"
+	                  	icon="fordiacimage://ICON_ZOOM_PAGE"
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
+	                  	tooltip="Set zoom level to fit the page">
+	            </command>
+			</toolbar>
+		</menuContribution>	
 	</extension>
 </plugin>

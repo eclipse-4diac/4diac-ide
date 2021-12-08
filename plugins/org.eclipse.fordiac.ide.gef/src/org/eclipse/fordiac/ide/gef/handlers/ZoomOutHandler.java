@@ -14,12 +14,11 @@ package org.eclipse.fordiac.ide.gef.handlers;
 
 import org.eclipse.gef.editparts.ZoomManager;
 
-public class Zoom100Handler extends AbstractZoomHandler {
+public class ZoomOutHandler extends AbstractZoomHandler {
 
 	@Override
 	protected void performZoom(final ZoomManager zoomManager) {
-		zoomManager.setZoom(1.0);
+		zoomManager.zoomOut();
 	}
-
 
 }
