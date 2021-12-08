@@ -120,40 +120,41 @@ class DeviceMonitoringHandler implements Runnable {
 		for (final FB fb : res.getFbs()) {
 			final String fbName = resName + fb.getName() + "."; //$NON-NLS-1$
 			for (final Port port : fb.getPorts()) {
-				String portString = fbName + port.getName();
+				final String portString = fbName + port.getName();
 				final MonitoringBaseElement element = systemMonData.getMonitoringElementByPortString(portString);
-
-				List<MonitoringElement> subappPins = systemMonData.getSubappElements().get(portString);
-				final Entry<String, List<MonitoringElement>> subappEntry = systemMonData.getSubappElements(element);
-				if (element != null && subappPins == null && subappEntry != null) {
-					subappPins = subappEntry.getValue();
-					portString = subappEntry.getKey();
+				if (element instanceof MonitoringElement) {
+					updateMonitoringElement((MonitoringElement) element, port);
 				}
-
-				if (subappPins != null) {
-					SubappGroup subappGroup = null;
-					if (collectedGroups.containsKey(portString)) {
-						subappGroup = collectedGroups.get(portString);
-
-					} else {
-						// create new group
-						subappGroup = new SubappGroup(subappPins);
-						collectedGroups.put(portString, subappGroup);
-					}
-					if (element != null) {
-						subappGroup.assignPort((MonitoringElement) element, port);
-					}
-					subappGroup.assignSubappPorts(port, portString);
-
-				} else {
-					if (element instanceof MonitoringElement) {
-						updateMonitoringElement((MonitoringElement) element, port);
-					}
-				}
+				checkSubappGroups(collectedGroups, port, portString, element);
 			}
 		}
 
 		updateSubappPorts(collectedGroups);
+	}
+
+	private void checkSubappGroups(final HashMap<String, SubappGroup> collectedGroups, final Port port,
+			String portString, final MonitoringBaseElement element) {
+		List<MonitoringElement> subappPins = systemMonData.getSubappElements().get(portString);
+		final Entry<String, List<MonitoringElement>> subappEntry = systemMonData.getSubappElements(element);
+		if (element != null && subappPins == null && subappEntry != null) {
+			subappPins = subappEntry.getValue();
+			portString = subappEntry.getKey();
+		}
+
+		if (subappPins != null) {
+			SubappGroup subappGroup = null;
+			if (collectedGroups.containsKey(portString)) {
+				subappGroup = collectedGroups.get(portString);
+			} else {
+				// create new group
+				subappGroup = new SubappGroup(subappPins);
+				collectedGroups.put(portString, subappGroup);
+			}
+			if (element != null) {
+				subappGroup.assignPort((MonitoringElement) element, port);
+			}
+			subappGroup.assignSubappPorts(port, portString);
+		}
 	}
 
 	private void updateSubappPorts(final Map<String, SubappGroup> collectedGroups) {
