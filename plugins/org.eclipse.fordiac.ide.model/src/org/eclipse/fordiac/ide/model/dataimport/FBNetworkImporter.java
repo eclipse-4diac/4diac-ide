@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -54,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -96,12 +98,29 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	public void parseFBNetwork(final String networkNodeName) throws TypeImportException, XMLStreamException {
 		processChildren(networkNodeName, this::handleFBNetworkChild);
+		moveElementsToGroup();
+	}
+
+	private void moveElementsToGroup() {
+		getFbNetwork().getNetworkElements().stream().forEach(el -> {
+			final Attribute groupAttr = el.getAttribute(LibraryElementTags.GROUP_NAME);
+			if (groupAttr != null) {
+				final FBNetworkElement group = fbNetworkElementMap.get(groupAttr.getValue());
+				if (group instanceof Group) {
+					el.setGroup((Group) group);
+					el.deleteAttribute(LibraryElementTags.GROUP_NAME);
+				}
+			}
+		});
 	}
 
 	protected boolean handleFBNetworkChild(final String name) throws XMLStreamException, TypeImportException {
 		switch (name) {
 		case LibraryElementTags.FB_ELEMENT:
 			parseFB();
+			break;
+		case LibraryElementTags.GROUP_ELEMENT:
+			parseGroup();
 			break;
 		case LibraryElementTags.EVENT_CONNECTIONS_ELEMENT:
 			parseConnectionList(LibraryElementPackage.eINSTANCE.getEventConnection(), fbNetwork.getEventConnections(),
@@ -121,7 +140,19 @@ class FBNetworkImporter extends CommonElementImporter {
 		return true;
 	}
 
-	protected void parseFB() throws TypeImportException, XMLStreamException {
+	private void parseGroup() throws TypeImportException, XMLStreamException {
+		final Group group = LibraryElementFactory.eINSTANCE.createGroup();
+		group.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		readNameCommentAttributes(group);
+		getXandY(group);
+
+		// add FB to FBnetwork so that parameter parsing can create error markers correctly.
+		fbNetwork.getNetworkElements().add(group);
+		fbNetworkElementMap.put(group.getName(), group);
+		proceedToEndElementNamed(LibraryElementTags.GROUP_ELEMENT);
+	}
+
+	private void parseFB() throws TypeImportException, XMLStreamException {
 		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		final FBNetworkElement fb = createFBInstance(typeFbElement);
 
