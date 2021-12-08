@@ -41,6 +41,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -232,7 +233,7 @@ class CommonElementExporter {
 		if (null != colElement.getColor()) {
 			final String colorValue = colElement.getColor().getRed() + "," + colElement.getColor().getGreen() + "," //$NON-NLS-1$ //$NON-NLS-2$
 					+ colElement.getColor().getBlue();
-			addAttributeElement(LibraryElementTags.COLOR, "STRING", colorValue, "color"); //$NON-NLS-1$ //$NON-NLS-2$
+			addAttributeElement(LibraryElementTags.COLOR, IecTypes.ElementaryTypes.STRING.getName(), colorValue, null);
 		}
 	}
 

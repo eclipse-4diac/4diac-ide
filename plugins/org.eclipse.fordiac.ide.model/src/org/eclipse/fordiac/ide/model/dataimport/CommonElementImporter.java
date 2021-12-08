@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -443,7 +444,7 @@ public abstract class CommonElementImporter {
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if ((null != name) && (null != value)) {
-			confObject.setAttribute(name, null == type ? "STRING" : type, //$NON-NLS-1$
+			confObject.setAttribute(name, null == type ? IecTypes.ElementaryTypes.STRING.getName() : type,
 					value, comment);
 		}
 

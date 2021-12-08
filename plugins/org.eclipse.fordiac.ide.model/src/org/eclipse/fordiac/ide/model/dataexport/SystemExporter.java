@@ -27,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -72,7 +73,7 @@ public class SystemExporter extends CommonElementExporter {
 		}
 		final long endTime = System.currentTimeMillis();
 		FordiacLogHelper
-				.logInfo("Overall saving time for System (" + system.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		.logInfo("Overall saving time for System (" + system.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private void addApplications() throws XMLStreamException {
@@ -183,8 +184,8 @@ public class SystemExporter extends CommonElementExporter {
 	private void addDeviceProfile(final Device device) throws XMLStreamException {
 		final String profileName = device.getProfile();
 		if ((null != profileName) && !"".equals(profileName)) { //$NON-NLS-1$
-			addAttributeElement(LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, //$NON-NLS-1$
-					"device profile"); //$NON-NLS-1$
+			addAttributeElement(LibraryElementTags.DEVICE_PROFILE, IecTypes.ElementaryTypes.STRING.getName(),
+					profileName, null);
 		}
 	}
 

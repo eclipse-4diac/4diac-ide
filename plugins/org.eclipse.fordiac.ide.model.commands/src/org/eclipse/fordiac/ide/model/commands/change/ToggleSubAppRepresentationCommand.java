@@ -13,16 +13,17 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
 public class ToggleSubAppRepresentationCommand extends Command {
 
-	private SubApp subapp;
+	private final SubApp subapp;
 	private String oldAttribute;
 	private String newAttribute;
 
-	public ToggleSubAppRepresentationCommand(SubApp subapp) {
+	public ToggleSubAppRepresentationCommand(final SubApp subapp) {
 		this.subapp = subapp;
 	}
 
@@ -44,11 +45,12 @@ public class ToggleSubAppRepresentationCommand extends Command {
 		setRepresentationAttribute(newAttribute);
 	}
 
-	private void setRepresentationAttribute(String text) {
+	private void setRepresentationAttribute(final String text) {
 		if (null == text) {
 			subapp.deleteAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);
 		} else {
-			subapp.setAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE, "STRING", text, ""); //$NON-NLS-1$ //$NON-NLS-2$
+			subapp.setAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE,
+					IecTypes.ElementaryTypes.STRING.getName(), text, ""); //$NON-NLS-1$
 		}
 	}
 }
