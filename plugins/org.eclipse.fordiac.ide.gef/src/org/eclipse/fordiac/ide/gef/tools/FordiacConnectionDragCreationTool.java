@@ -18,6 +18,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
@@ -53,6 +54,21 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 			CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, NEW_CONNECTION_CANVAS_BORDER);
 		}
 		super.mouseDrag(me, viewer);
+	}
+
+	@Override
+	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
+		if (((me.stateMask & SWT.MOD2) != 0)) {
+			checkCurrentCommandforShiftMask();
+		}
+		super.mouseUp(me, viewer);
+	}
+
+	private void checkCurrentCommandforShiftMask() {
+		final Command curCmd = getCurrentCommand();
+		if (curCmd instanceof AbstractConnectionCreateCommand) {
+			((AbstractConnectionCreateCommand) curCmd).setVisible(false);
+		}
 	}
 
 	@Override
