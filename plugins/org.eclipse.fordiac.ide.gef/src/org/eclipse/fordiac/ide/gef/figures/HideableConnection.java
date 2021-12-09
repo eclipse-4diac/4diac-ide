@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
@@ -214,7 +215,7 @@ public class HideableConnection extends PolylineConnection {
 		}
 	}
 
-	private static IFigure createSourceLabelToolTip(final EList<Connection> connections) {
+	private IFigure createSourceLabelToolTip(final EList<Connection> connections) {
 		final List<Connection> hiddenConnections = getHiddenConnections(connections);
 		if (hiddenConnections.size() > 1) {
 			final StringBuilder builder = new StringBuilder();
@@ -228,7 +229,7 @@ public class HideableConnection extends PolylineConnection {
 		return null;
 	}
 
-	private static IFigure createDstLabelToolTip(final EList<Connection> connections) {
+	private IFigure createDstLabelToolTip(final EList<Connection> connections) {
 		final List<Connection> hiddenConnections = getHiddenConnections(connections);
 		if (hiddenConnections.size() > 1) {
 			final StringBuilder builder = new StringBuilder();
@@ -242,7 +243,7 @@ public class HideableConnection extends PolylineConnection {
 		return null;
 	}
 
-	private static String createLabelText(final IInterfaceElement ie, final EList<Connection> connections) {
+	private String createLabelText(final IInterfaceElement ie, final EList<Connection> connections) {
 		final List<Connection> hiddenConnections = getHiddenConnections(connections);
 		if (hiddenConnections.size() > 1) {
 			// we have more then one hidden connection so we show the number
@@ -254,14 +255,22 @@ public class HideableConnection extends PolylineConnection {
 		return ""; //$NON-NLS-1$
 	}
 
-	private static String generateIEString(final IInterfaceElement ie) {
+	private String generateIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = new StringBuilder();
-		if (ie.getFBNetworkElement() != null) {
+		if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
 			builder.append(ie.getFBNetworkElement().getName());
 			builder.append('.');
 		}
 		builder.append(ie.getName());
 		return builder.toString();
+	}
+
+	private boolean isInterfaceBarElement(final IInterfaceElement ie) {
+		if (ie.getFBNetworkElement() instanceof SubApp) {
+			final SubApp subapp = (SubApp) ie.getFBNetworkElement();
+			return getModel().getFBNetwork().equals(subapp.getSubAppNetwork());
+		}
+		return false;
 	}
 
 	private static List<Connection> getHiddenConnections(final EList<Connection> connections) {
