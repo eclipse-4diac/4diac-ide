@@ -15,13 +15,18 @@ package org.eclipse.fordiac.ide.typemanagement.navigator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -82,6 +87,20 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 			return true;
 		}
 		return super.hasChildren(element);
+	}
+
+	@Override
+	public void notifyChanged(final Notification notification) {
+		if (notification.getNotifier() instanceof FBType) {
+			// as the automation system is changed we need to perform a special refresh here
+			LibraryElement type = (LibraryElement) notification.getNotifier();
+			if (type instanceof AdapterFBType) {
+				type = ((AdapterFBType) type).getAdapterType();
+			}
+			super.notifyChanged(new ViewerNotification(notification, type.getPaletteEntry().getFile()));
+		} else {
+			super.notifyChanged(notification);
+		}
 	}
 
 }
