@@ -12,15 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.tools;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.tools.SelectEditPartTracker;
 import org.eclipse.swt.SWT;
@@ -35,10 +29,6 @@ public class ConnectionSelectEditPartTracker extends SelectEditPartTracker {
 		return (ConnectionEditPart) super.getSourceEditPart();
 	}
 
-	private Connection getModel() {
-		return getSourceEditPart().getModel();
-	}
-
 	@Override
 	protected void performSelection() {
 		if (hasSelectionOccurred()) {
@@ -46,9 +36,9 @@ public class ConnectionSelectEditPartTracker extends SelectEditPartTracker {
 		}
 		setFlag(FLAG_SELECTION_PERFORMED, true);
 
-		final List<ConnectionEditPart> connections = getCoLocatedConnections();
-
 		final EditPartViewer viewer = getCurrentViewer();
+		final List<ConnectionEditPart> connections = ColLocatedConnectionFinder
+				.getCoLocatedConnections(getSourceEditPart(), viewer, getLocation());
 		final List<Object> selectedObjects = viewer.getSelectedEditParts();
 
 		boolean first = true;
@@ -71,32 +61,6 @@ public class ConnectionSelectEditPartTracker extends SelectEditPartTracker {
 			}
 		}
 
-	}
-
-	private List<ConnectionEditPart> getCoLocatedConnections() {
-		final Set<Connection> conns = new HashSet<>(getModel().getSource().getOutputConnections());
-		conns.addAll(getModel().getDestination().getInputConnections());
-		final EditPartViewer viewer = getCurrentViewer();
-		final List<ConnectionEditPart> retVal = new ArrayList<>();
-		final Point location = getRelativeLocation(getSourceEditPart().getFigure());
-		conns.forEach(con -> {
-			final ConnectionEditPart conEditPart = (ConnectionEditPart) viewer.getEditPartRegistry().get(con);
-			if (conEditPart.getFigure().findFigureAt(location) != null) {
-				// the figure if the connection is under the mouse
-				retVal.add(conEditPart);
-			}
-		});
-
-		return retVal;
-	}
-
-	private Point getRelativeLocation(final IFigure figure) {
-		if(figure.getParent() != null) {
-			final Point location = getRelativeLocation(figure.getParent());
-			figure.translateFromParent(location);
-			return location;
-		}
-		return getLocation();
 	}
 
 }
