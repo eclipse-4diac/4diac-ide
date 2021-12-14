@@ -268,7 +268,7 @@ public class HideableConnection extends PolylineConnection {
 	private boolean isInterfaceBarElement(final IInterfaceElement ie) {
 		if (ie.getFBNetworkElement() instanceof SubApp) {
 			final SubApp subapp = (SubApp) ie.getFBNetworkElement();
-			return getModel().getFBNetwork().equals(subapp.getSubAppNetwork());
+			return (subapp.getSubAppNetwork() != null) && subapp.getSubAppNetwork().equals(getModel().getFBNetwork());
 		}
 		return false;
 	}
