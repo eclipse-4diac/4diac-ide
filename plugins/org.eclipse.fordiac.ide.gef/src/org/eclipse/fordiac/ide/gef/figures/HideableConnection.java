@@ -220,8 +220,10 @@ public class HideableConnection extends PolylineConnection {
 		if (hiddenConnections.size() > 1) {
 			final StringBuilder builder = new StringBuilder();
 			hiddenConnections.forEach(con -> {
-				builder.append(generateIEString(con.getDestination()));
-				builder.append('\n');
+				if (con.getDestination() != null) {
+					builder.append(generateIEString(con.getDestination()));
+					builder.append('\n');
+				}
 			});
 			builder.deleteCharAt(builder.length() - 1);
 			return new ConLabelToolTip(builder.toString());
@@ -234,8 +236,10 @@ public class HideableConnection extends PolylineConnection {
 		if (hiddenConnections.size() > 1) {
 			final StringBuilder builder = new StringBuilder();
 			hiddenConnections.forEach(con -> {
-				builder.append(generateIEString(con.getSource()));
-				builder.append('\n');
+				if (con.getSource() != null) {
+					builder.append(generateIEString(con.getSource()));
+					builder.append('\n');
+				}
 			});
 			builder.deleteCharAt(builder.length() - 1);
 			return new ConLabelToolTip(builder.toString());
