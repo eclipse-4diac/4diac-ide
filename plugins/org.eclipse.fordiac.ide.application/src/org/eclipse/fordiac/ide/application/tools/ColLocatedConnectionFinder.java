@@ -58,8 +58,15 @@ final class ColLocatedConnectionFinder {
 	}
 
 	private static Set<Connection> getAllRelatedConnections(final ConnectionEditPart connEP) {
-		final Set<Connection> conns = new HashSet<>(connEP.getModel().getSource().getOutputConnections());
-		conns.addAll(connEP.getModel().getDestination().getInputConnections());
+		final Set<Connection> conns = new HashSet<>();
+		if(connEP.getModel() != null) {
+			if(connEP.getModel().getSource() != null) {
+				conns.addAll(connEP.getModel().getSource().getOutputConnections());
+			}
+			if(connEP.getModel().getDestination() != null) {
+				conns.addAll(connEP.getModel().getDestination().getInputConnections());
+			}
+		}
 		return conns;
 	}
 
