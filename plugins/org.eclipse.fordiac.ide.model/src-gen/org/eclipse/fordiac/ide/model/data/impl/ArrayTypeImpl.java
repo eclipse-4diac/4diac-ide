@@ -48,28 +48,34 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	 * @ordered */
 	protected EList<Subrange> subranges;
 
-	/** The default value of the '{@link #getInitialValues() <em>Initial Values</em>}' attribute. <!-- begin-user-doc
+	/**
+	 * The default value of the '{@link #getInitialValues() <em>Initial Values</em>}' attribute.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
 	 * @see #getInitialValues()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String INITIAL_VALUES_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getInitialValues() <em>Initial Values</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getInitialValues() <em>Initial Values</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getInitialValues()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String initialValues = INITIAL_VALUES_EDEFAULT;
 
-	/** The cached value of the '{@link #getBaseType() <em>Base Type</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getBaseType() <em>Base Type</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getBaseType()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected DataType baseType;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

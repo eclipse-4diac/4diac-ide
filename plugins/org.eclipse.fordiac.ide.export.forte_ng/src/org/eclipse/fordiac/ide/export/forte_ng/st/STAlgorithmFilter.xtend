@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.FordiacKeywords
 import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
@@ -100,11 +99,6 @@ class STAlgorithmFilter {
 	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
 		getResourceServiceProvider(URI.createURI(SYNTHETIC_URI_NAME + URI_SEPERATOR + ST_URI_EXTENSION))
 
-	def createFBResource(XtextResourceSet resourceSet, FBTypePaletteEntry entry) {
-		createFBResource(resourceSet, entry.type as BaseFBType)
-	}
-
-
 	def createFBResource(XtextResourceSet resourceSet, BaseFBType fbType) {
 		// create resource for function block and add copy
 		val fbResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION))
@@ -142,7 +136,7 @@ class STAlgorithmFilter {
 
 	def parseAlgorithm(STAlgorithm alg) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
-		createFBResource(resourceSet, alg.rootContainer as FBTypePaletteEntry)
+		createFBResource(resourceSet, alg.rootContainer as BaseFBType)
 		// create resource for algorithm
 		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
 		resource.load(new LazyStringInputStream(alg.text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})

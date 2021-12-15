@@ -24,7 +24,6 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -34,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.xtend.lib.annotations.AccessorType;
@@ -283,9 +281,7 @@ public class BasicFBFilter {
     CharSequence _xblockexpression = null;
     {
       EObject _rootContainer = EcoreUtil.getRootContainer(tran);
-      final FBTypePaletteEntry entry = ((FBTypePaletteEntry) _rootContainer);
-      FBType _type = entry.getType();
-      final BasicFBType type = ((BasicFBType) _type);
+      final BasicFBType type = ((BasicFBType) _rootContainer);
       _xblockexpression = this.stAlgorithmFilter.lua(type, tran.getConditionExpression());
     }
     return _xblockexpression;

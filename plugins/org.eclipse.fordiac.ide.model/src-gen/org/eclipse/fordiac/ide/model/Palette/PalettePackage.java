@@ -411,7 +411,7 @@ public interface PalettePackage extends EPackage {
 	int PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = 2;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -429,7 +429,7 @@ public interface PalettePackage extends EPackage {
 	int PALETTE_ENTRY__PALETTE = 4;
 
 	/**
-	 * The feature id for the '<em><b>Type Editable</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type Editable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -484,7 +484,7 @@ public interface PalettePackage extends EPackage {
 	int ADAPTER_TYPE_PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -502,7 +502,7 @@ public interface PalettePackage extends EPackage {
 	int ADAPTER_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
 
 	/**
-	 * The feature id for the '<em><b>Type Editable</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type Editable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -557,7 +557,7 @@ public interface PalettePackage extends EPackage {
 	int DATA_TYPE_PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -575,7 +575,7 @@ public interface PalettePackage extends EPackage {
 	int DATA_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
 
 	/**
-	 * The feature id for the '<em><b>Type Editable</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type Editable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -630,7 +630,7 @@ public interface PalettePackage extends EPackage {
 	int DEVICE_TYPE_PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -648,7 +648,7 @@ public interface PalettePackage extends EPackage {
 	int DEVICE_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
 
 	/**
-	 * The feature id for the '<em><b>Type Editable</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type Editable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -703,7 +703,7 @@ public interface PalettePackage extends EPackage {
 	int FB_TYPE_PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -721,7 +721,7 @@ public interface PalettePackage extends EPackage {
 	int FB_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
 
 	/**
-	 * The feature id for the '<em><b>Type Editable</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type Editable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -776,7 +776,7 @@ public interface PalettePackage extends EPackage {
 	int RESOURCE_TYPE_ENTRY__LAST_MODIFICATION_TIMESTAMP = PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -794,7 +794,7 @@ public interface PalettePackage extends EPackage {
 	int RESOURCE_TYPE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
 
 	/**
-	 * The feature id for the '<em><b>Type Editable</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type Editable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -849,7 +849,7 @@ public interface PalettePackage extends EPackage {
 	int SEGMENT_TYPE_PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -867,7 +867,7 @@ public interface PalettePackage extends EPackage {
 	int SEGMENT_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
 
 	/**
-	 * The feature id for the '<em><b>Type Editable</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type Editable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -922,7 +922,7 @@ public interface PalettePackage extends EPackage {
 	int SUB_APPLICATION_TYPE_PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -940,7 +940,7 @@ public interface PalettePackage extends EPackage {
 	int SUB_APPLICATION_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
 
 	/**
-	 * The feature id for the '<em><b>Type Editable</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type Editable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -995,7 +995,7 @@ public interface PalettePackage extends EPackage {
 	int SYSTEM_PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1013,7 +1013,7 @@ public interface PalettePackage extends EPackage {
 	int SYSTEM_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
 
 	/**
-	 * The feature id for the '<em><b>Type Editable</b></em>' containment reference.
+	 * The feature id for the '<em><b>Type Editable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1426,10 +1426,10 @@ public interface PalettePackage extends EPackage {
 	EAttribute getPaletteEntry_LastModificationTimestamp();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType <em>Type</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Type</em>'.
+	 * @return the meta object for the reference '<em>Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType()
 	 * @see #getPaletteEntry()
 	 * @generated
@@ -1448,10 +1448,10 @@ public interface PalettePackage extends EPackage {
 	EReference getPaletteEntry_Palette();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getTypeEditable <em>Type Editable</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getTypeEditable <em>Type Editable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Type Editable</em>'.
+	 * @return the meta object for the reference '<em>Type Editable</em>'.
 	 * @see org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getTypeEditable()
 	 * @see #getPaletteEntry()
 	 * @generated
@@ -1883,7 +1883,7 @@ public interface PalettePackage extends EPackage {
 		EAttribute PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = eINSTANCE.getPaletteEntry_LastModificationTimestamp();
 
 		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Type</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1899,7 +1899,7 @@ public interface PalettePackage extends EPackage {
 		EReference PALETTE_ENTRY__PALETTE = eINSTANCE.getPaletteEntry_Palette();
 
 		/**
-		 * The meta object literal for the '<em><b>Type Editable</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Type Editable</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

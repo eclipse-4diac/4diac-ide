@@ -31,36 +31,44 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
  *
  * @generated */
 public class SubrangeImpl extends EObjectImpl implements Subrange {
-	/** The default value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getLowerLimit()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int LOWER_LIMIT_EDEFAULT = 0;
 
-	/** The cached value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getLowerLimit()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int lowerLimit = LOWER_LIMIT_EDEFAULT;
 
-	/** The default value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getUpperLimit()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int UPPER_LIMIT_EDEFAULT = 0;
 
-	/** The cached value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getUpperLimit()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int upperLimit = UPPER_LIMIT_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

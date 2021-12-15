@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -76,17 +75,19 @@ public final class PaletteAnnotations {
 			palette.getSubAppTypes().removeKey(entry.getLabel());
 		} else {
 			FordiacLogHelper
-					.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName()); //$NON-NLS-1$
+			.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
-	public static LibraryElement loadType(final PaletteEntryImpl paletteEntryImpl) {
+	public static LibraryElement loadType(final PaletteEntry paletteEntryImpl) {
 		final CommonElementImporter importer = paletteEntryImpl.getImporter();
 		importer.loadElement();
 		final LibraryElement retval = importer.getElement();
 
 		if (null == retval) {
 			FordiacLogHelper.logError("Error loading type: " + paletteEntryImpl.getFile().getName()); //$NON-NLS-1$
+		} else {
+			retval.setPaletteEntry(paletteEntryImpl);
 		}
 		return retval;
 	}

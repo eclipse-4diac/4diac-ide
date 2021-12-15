@@ -506,8 +506,8 @@
     <genClasses ecoreClass="lib.ecore#//LibraryElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/versionInfo"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/identification"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/paletteEntry"/>
       <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getPaletteEntry()) {&#xA;&#x9;return getPaletteEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
-      <genOperations ecoreOperation="lib.ecore#//LibraryElement/getPaletteEntry" body="if (eContainer() instanceof PaletteEntry) {&#xA;&#x9;return (PaletteEntry)eContainer();&#xA;}&#xA;return null;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompilableType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilableType/compilerInfo"/>

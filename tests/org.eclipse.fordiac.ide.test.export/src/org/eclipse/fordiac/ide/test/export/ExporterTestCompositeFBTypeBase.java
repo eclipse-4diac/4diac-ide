@@ -44,7 +44,7 @@ public class ExporterTestCompositeFBTypeBase extends ExporterTestBase<CompositeF
 		fbNetwork.addConnection(dataconn);
 		functionBlock.setFBNetwork(fbNetwork);
 
-		preparePaletteWithTypeLib().setType(functionBlock);
+		functionBlock.setPaletteEntry(preparePaletteWithTypeLib());
 	}
 
 }

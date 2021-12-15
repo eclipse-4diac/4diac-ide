@@ -26,444 +26,532 @@ import org.eclipse.emf.common.util.Enumerator;
  * @model
  * @generated */
 public enum BaseType1 implements Enumerator {
-	/** The '<em><b>DATEANDTIME</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>DATEANDTIME</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #DATEANDTIME_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	DATEANDTIME(0, "DATEANDTIME", "DATE_AND_TIME"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>BYTE</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>BYTE</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #BYTE_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	BYTE(1, "BYTE", "BYTE"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>SINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>SINT</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #SINT_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	SINT(2, "SINT", "SINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>USINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>USINT</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #USINT_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	USINT(3, "USINT", "USINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>LWORD</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>LWORD</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #LWORD_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	LWORD(4, "LWORD", "LWORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>TIME</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>TIME</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #TIME_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	TIME(5, "TIME", "TIME"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>WORD</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>WORD</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #WORD_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	WORD(6, "WORD", "WORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>STRING</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>STRING</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #STRING_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	STRING(7, "STRING", "STRING"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>BOOL</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>BOOL</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #BOOL_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	BOOL(8, "BOOL", "BOOL"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>LREAL</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>LREAL</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #LREAL_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	LREAL(9, "LREAL", "LREAL"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>REAL</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>REAL</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #REAL_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	REAL(10, "REAL", "REAL"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>LINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>LINT</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #LINT_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	LINT(11, "LINT", "LINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>ULINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>ULINT</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #ULINT_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	ULINT(12, "ULINT", "ULINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>UINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>UINT</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #UINT_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	UINT(13, "UINT", "UINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>DATE</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>DATE</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #DATE_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	DATE(14, "DATE", "DATE"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>DWORD</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>DWORD</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #DWORD_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	DWORD(15, "DWORD", "DWORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>INT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>INT</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #INT_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	INT(16, "INT", "INT"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>TIMEOFDAY</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>TIMEOFDAY</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #TIMEOFDAY_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	TIMEOFDAY(17, "TIMEOFDAY", "TIME_OF_DAY"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>WSTRING</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>WSTRING</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #WSTRING_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	WSTRING(18, "WSTRING", "WSTRING"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>DINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>DINT</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #DINT_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	DINT(19, "DINT", "DINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>UDINT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>UDINT</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #UDINT_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	UDINT(20, "UDINT", "UDINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>ANY</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The '<em><b>ANY</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #ANY_VALUE
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	ANY(21, "ANY", "ANY"); //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The '<em><b>DATEANDTIME</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>DATEANDTIME</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>DATEANDTIME</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #DATEANDTIME
 	 * @model literal="DATE_AND_TIME"
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int DATEANDTIME_VALUE = 0;
 
-	/** The '<em><b>BYTE</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>BYTE</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>BYTE</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #BYTE
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int BYTE_VALUE = 1;
 
-	/** The '<em><b>SINT</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>SINT</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>SINT</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #SINT
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int SINT_VALUE = 2;
 
-	/** The '<em><b>USINT</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>USINT</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>USINT</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #USINT
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int USINT_VALUE = 3;
 
-	/** The '<em><b>LWORD</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>LWORD</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>LWORD</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #LWORD
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int LWORD_VALUE = 4;
 
-	/** The '<em><b>TIME</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>TIME</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>TIME</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #TIME
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int TIME_VALUE = 5;
 
-	/** The '<em><b>WORD</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>WORD</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>WORD</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #WORD
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int WORD_VALUE = 6;
 
-	/** The '<em><b>STRING</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>STRING</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>STRING</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #STRING
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int STRING_VALUE = 7;
 
-	/** The '<em><b>BOOL</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>BOOL</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>BOOL</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #BOOL
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int BOOL_VALUE = 8;
 
-	/** The '<em><b>LREAL</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>LREAL</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>LREAL</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #LREAL
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int LREAL_VALUE = 9;
 
-	/** The '<em><b>REAL</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>REAL</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>REAL</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #REAL
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int REAL_VALUE = 10;
 
-	/** The '<em><b>LINT</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>LINT</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>LINT</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #LINT
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int LINT_VALUE = 11;
 
-	/** The '<em><b>ULINT</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>ULINT</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>ULINT</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #ULINT
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int ULINT_VALUE = 12;
 
-	/** The '<em><b>UINT</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>UINT</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>UINT</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #UINT
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int UINT_VALUE = 13;
 
-	/** The '<em><b>DATE</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>DATE</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>DATE</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #DATE
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int DATE_VALUE = 14;
 
-	/** The '<em><b>DWORD</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>DWORD</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>DWORD</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #DWORD
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int DWORD_VALUE = 15;
 
-	/** The '<em><b>INT</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>INT</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>INT</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #INT
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int INT_VALUE = 16;
 
-	/** The '<em><b>TIMEOFDAY</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>TIMEOFDAY</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>TIMEOFDAY</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #TIMEOFDAY
 	 * @model literal="TIME_OF_DAY"
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int TIMEOFDAY_VALUE = 17;
 
-	/** The '<em><b>WSTRING</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>WSTRING</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>WSTRING</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #WSTRING
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int WSTRING_VALUE = 18;
 
-	/** The '<em><b>DINT</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>DINT</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>DINT</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #DINT
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int DINT_VALUE = 19;
 
-	/** The '<em><b>UDINT</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>UDINT</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>UDINT</b></em>' literal object isn't clear, there really should be more of a
 	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #UDINT
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int UDINT_VALUE = 20;
 
-	/** The '<em><b>ANY</b></em>' literal value. <!-- begin-user-doc -->
+	/**
+	 * The '<em><b>ANY</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>ANY</b></em>' literal object isn't clear, there really should be more of a description
 	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #ANY
 	 * @model
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	public static final int ANY_VALUE = 21;
 
 	/** An array of all the '<em><b>Base Type1</b></em>' enumerators. <!-- begin-user-doc --> <!-- end-user-doc -->

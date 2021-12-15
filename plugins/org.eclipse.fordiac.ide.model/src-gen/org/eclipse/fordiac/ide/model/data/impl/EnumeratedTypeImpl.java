@@ -37,12 +37,13 @@ import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
  *
  * @generated */
 public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType {
-	/** The cached value of the '{@link #getEnumeratedValue() <em>Enumerated Value</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getEnumeratedValue() <em>Enumerated Value</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @see #getEnumeratedValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<EnumeratedValue> enumeratedValue;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

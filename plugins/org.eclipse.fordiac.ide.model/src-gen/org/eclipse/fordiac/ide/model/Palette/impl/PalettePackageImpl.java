@@ -968,9 +968,9 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		initEAttribute(getPaletteEntry_Label(), ecorePackage.getEString(), "label", null, 0, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getPaletteEntry_File(), this.getIFile(), "file", null, 0, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getPaletteEntry_LastModificationTimestamp(), theXMLTypePackage.getLong(), "lastModificationTimestamp", null, 0, 1, PaletteEntry.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, !IS_ORDERED); //$NON-NLS-1$
-		initEReference(getPaletteEntry_Type(), theLibraryElementPackage.getLibraryElement(), null, "type", null, 1, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPaletteEntry_Type(), theLibraryElementPackage.getLibraryElement(), null, "type", null, 1, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPaletteEntry_Palette(), this.getPalette(), null, "palette", null, 1, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getPaletteEntry_TypeEditable(), theLibraryElementPackage.getLibraryElement(), null, "typeEditable", null, 1, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPaletteEntry_TypeEditable(), theLibraryElementPackage.getLibraryElement(), null, "typeEditable", null, 1, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(paletteEntryEClass, theXMLTypePackage.getString(), "getProjectRelativeTypePath", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 

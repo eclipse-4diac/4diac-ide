@@ -17,10 +17,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network.actions;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -49,12 +45,6 @@ public class OpenCompositeInstanceViewerOpenListener extends AbstractOpenSystemE
 			openInSubappTypeEditor((SubAppType) root, compositeFBInstance);
 		} else if (root instanceof CompositeFBType) {
 			openInFBTypeEditor((CompositeFBType) root, compositeFBInstance);
-		} else if (root instanceof SystemPaletteEntry) {
-			openInSystemEditor(((PaletteEntry) root).getFile(), compositeFBInstance);
-		} else if (root instanceof SubApplicationTypePaletteEntry) {
-			openInSubappTypeEditor(((SubApplicationTypePaletteEntry) root).getType(), compositeFBInstance);
-		} else if (root instanceof FBTypePaletteEntry) {
-			openInFBTypeEditor(((FBTypePaletteEntry) root).getType(), compositeFBInstance);
 		}
 	}
 

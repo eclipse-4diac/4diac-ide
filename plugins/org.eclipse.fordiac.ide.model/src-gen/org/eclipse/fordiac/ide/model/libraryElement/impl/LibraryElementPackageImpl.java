@@ -2354,6 +2354,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EReference getLibraryElement_PaletteEntry() {
+		return (EReference)libraryElementEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCompilableType() {
 		return compilableTypeEClass;
 	}
@@ -3483,6 +3493,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		libraryElementEClass = createEClass(LIBRARY_ELEMENT);
 		createEReference(libraryElementEClass, LIBRARY_ELEMENT__VERSION_INFO);
 		createEReference(libraryElementEClass, LIBRARY_ELEMENT__IDENTIFICATION);
+		createEReference(libraryElementEClass, LIBRARY_ELEMENT__PALETTE_ENTRY);
 
 		compilableTypeEClass = createEClass(COMPILABLE_TYPE);
 		createEReference(compilableTypeEClass, COMPILABLE_TYPE__COMPILER_INFO);
@@ -4082,10 +4093,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(libraryElementEClass, LibraryElement.class, "LibraryElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getLibraryElement_VersionInfo(), this.getVersionInfo(), null, "versionInfo", null, 1, -1, LibraryElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getLibraryElement_Identification(), this.getIdentification(), null, "identification", null, 0, 1, LibraryElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getLibraryElement_PaletteEntry(), thePalettePackage.getPaletteEntry(), null, "paletteEntry", null, 0, 1, LibraryElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(libraryElementEClass, thePalettePackage.getTypeLibrary(), "getTypeLibrary", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(libraryElementEClass, thePalettePackage.getPaletteEntry(), "getPaletteEntry", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(compilableTypeEClass, CompilableType.class, "CompilableType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getCompilableType_CompilerInfo(), this.getCompilerInfo(), null, "compilerInfo", null, 0, 1, CompilableType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
