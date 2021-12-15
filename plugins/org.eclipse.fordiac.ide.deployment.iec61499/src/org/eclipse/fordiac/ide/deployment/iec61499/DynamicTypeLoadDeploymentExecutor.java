@@ -53,6 +53,7 @@ import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateComm
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -208,7 +209,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private static void setAttribute(final Device device, final String string, final Set<String> hashSet) {
 		Display.getDefault().asyncExec(
-				() -> device.setAttribute(string, "STRING", String.join(", ", hashSet), "created during deployment") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				() -> device.setAttribute(string, IecTypes.ElementaryTypes.STRING.getName(), String.join(", ", hashSet), //$NON-NLS-1$
+						"created during deployment")  //$NON-NLS-1$
 				);
 	}
 
@@ -306,10 +308,10 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				// TODO currently no subapps supported - bug 538333
 				final String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
 				final FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
-				final IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);
+				final IInterfaceElement srcIE = srcFB.getInterfaceElement(src[src.length - 1]);
 				final String[] dst = connection.getDestination().split("\\."); //$NON-NLS-1$
 				final FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
-				final IInterfaceElement dstIE = Annotations.getInterfaceElement(dstFB, dst[dst.length - 1]);
+				final IInterfaceElement dstIE = dstFB.getInterfaceElement(dst[dst.length - 1]);
 				createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
 			}
 		}

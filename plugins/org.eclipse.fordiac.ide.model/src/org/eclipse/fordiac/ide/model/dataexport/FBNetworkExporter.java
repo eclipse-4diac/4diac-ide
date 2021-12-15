@@ -24,6 +24,7 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.impl.SubApplicationTypePaletteEntryImpl;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -89,6 +91,10 @@ class FBNetworkExporter extends CommonElementExporter {
 					// for untyped subapp initial values are stored in the vardeclarations
 					addParamsConfig(fbnElement.getInterface().getInputVars());
 				}
+
+				if (fbnElement.isInGroup()) {
+					addGroupAttribute(fbnElement.getGroup());
+				}
 				addEndElement();
 			}
 		}
@@ -114,6 +120,10 @@ class FBNetworkExporter extends CommonElementExporter {
 
 			if (fbnElement instanceof SubApp) {
 				return LibraryElementTags.SUBAPP_ELEMENT;
+			}
+
+			if (fbnElement instanceof Group) {
+				return LibraryElementTags.GROUP_ELEMENT;
 			}
 		}
 		return null;
@@ -201,6 +211,11 @@ class FBNetworkExporter extends CommonElementExporter {
 						CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDy()));
 			}
 		}
+	}
+
+	private void addGroupAttribute(final Group group) throws XMLStreamException {
+		addAttributeElement(LibraryElementTags.GROUP_NAME, IecTypes.ElementaryTypes.STRING.getName(), group.getName(),
+				null);
 	}
 
 }

@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
@@ -99,7 +100,9 @@ public class STAlgorithmFilter {
     try {
       final ResourceSet resourceSet = STAlgorithmFilter.SERVICE_PRIVIDER.<ResourceSet>get(ResourceSet.class);
       final Resource fbResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_FB_URI);
-      final EObject fbCopy = EcoreUtil.<EObject>copy(EcoreUtil.getRootContainer(alg));
+      EObject _rootContainer = EcoreUtil.getRootContainer(alg);
+      final FBTypePaletteEntry entry = ((FBTypePaletteEntry) _rootContainer);
+      final FBType fbCopy = EcoreUtil.<FBType>copy(entry.getType());
       fbResource.getContents().add(fbCopy);
       Resource _createResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_ST_URI);
       final XtextResource resource = ((XtextResource) _createResource);
@@ -127,8 +130,8 @@ public class STAlgorithmFilter {
         return it.getVar();
       };
       final Function1<VarDeclaration, Boolean> _function_3 = (VarDeclaration it) -> {
-        EObject _rootContainer = EcoreUtil.getRootContainer(it);
-        return Boolean.valueOf((_rootContainer instanceof FBType));
+        EObject _rootContainer_1 = EcoreUtil.getRootContainer(it);
+        return Boolean.valueOf((_rootContainer_1 instanceof FBType));
       };
       final Set<VarDeclaration> usedFBVariables = IteratorExtensions.<VarDeclaration>toSet(IteratorExtensions.<VarDeclaration>filter(IteratorExtensions.<PrimaryVariable, VarDeclaration>map(Iterators.<PrimaryVariable>filter(EcoreUtil.<Object>getAllProperContents(stalg, true), PrimaryVariable.class), _function_2), _function_3));
       StringConcatenation _builder = new StringConcatenation();

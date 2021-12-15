@@ -47,36 +47,44 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * @ordered */
 	protected EList<org.eclipse.fordiac.ide.model.libraryElement.Compiler> compiler;
 
-	/** The default value of the '{@link #getClassdef() <em>Classdef</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getClassdef() <em>Classdef</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getClassdef()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String CLASSDEF_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getClassdef() <em>Classdef</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getClassdef() <em>Classdef</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getClassdef()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String classdef = CLASSDEF_EDEFAULT;
 
-	/** The default value of the '{@link #getHeader() <em>Header</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getHeader() <em>Header</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getHeader()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String HEADER_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getHeader() <em>Header</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getHeader() <em>Header</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getHeader()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String header = HEADER_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

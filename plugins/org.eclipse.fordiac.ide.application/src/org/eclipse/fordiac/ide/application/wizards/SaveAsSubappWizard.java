@@ -78,6 +78,8 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		final EObject obj = EcoreUtil.getRootContainer(subApp);
 		if (obj instanceof SubAppType) {
 			project = ((SubAppType) obj).getPaletteEntry().getFile().getProject();
+		} else if (obj instanceof PaletteEntry) {
+			return ((PaletteEntry) obj).getFile().getProject();
 		} else {
 			project = getSystem().getSystemFile().getProject();
 		}

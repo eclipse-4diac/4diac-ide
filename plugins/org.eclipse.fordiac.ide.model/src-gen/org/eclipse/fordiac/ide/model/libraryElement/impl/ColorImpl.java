@@ -48,20 +48,24 @@ public class ColorImpl extends EObjectImpl implements Color {
 	 * @ordered */
 	protected int red = RED_EDEFAULT;
 
-	/** The default value of the '{@link #getGreen() <em>Green</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getGreen() <em>Green</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getGreen()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int GREEN_EDEFAULT = 34;
 
-	/** The cached value of the '{@link #getGreen() <em>Green</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getGreen() <em>Green</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getGreen()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int green = GREEN_EDEFAULT;
 
 	/** The default value of the '{@link #getBlue() <em>Blue</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc

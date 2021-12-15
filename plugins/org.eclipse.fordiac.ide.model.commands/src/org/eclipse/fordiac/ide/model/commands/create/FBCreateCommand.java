@@ -36,9 +36,9 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private static FB createNewFb(final FBTypePaletteEntry paletteEntry) {
-		if (paletteEntry.getFBType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
+		if (paletteEntry.getType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
 			return LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else if (paletteEntry.getFBType().getName().equals("STRUCT_DEMUX")) { //$NON-NLS-1$
+		} else if (paletteEntry.getType().getName().equals("STRUCT_DEMUX")) { //$NON-NLS-1$
 			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		} else if (paletteEntry.getType() instanceof CompositeFBType) {
 			return LibraryElementFactory.eINSTANCE.createCFBInstance();
@@ -72,10 +72,10 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 		super.execute();
 		if (getFB() instanceof Multiplexer) {
 			((Multiplexer) getFB()).setStructTypeElementsAtInterface(
-					(StructuredType) paletteEntry.getFBType().getInterfaceList().getOutputVars().get(0).getType());
+					(StructuredType) paletteEntry.getType().getInterfaceList().getOutputVars().get(0).getType());
 		} else if (getFB() instanceof Demultiplexer) {
 			((Demultiplexer) getFB()).setStructTypeElementsAtInterface(
-					(StructuredType) paletteEntry.getFBType().getInterfaceList().getInputVars().get(0).getType());
+					(StructuredType) paletteEntry.getType().getInterfaceList().getInputVars().get(0).getType());
 		}
 	}
 
@@ -86,7 +86,7 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 
 	@Override
 	protected InterfaceList getTypeInterfaceList() {
-		return paletteEntry.getFBType().getInterfaceList();
+		return paletteEntry.getType().getInterfaceList();
 	}
 
 }

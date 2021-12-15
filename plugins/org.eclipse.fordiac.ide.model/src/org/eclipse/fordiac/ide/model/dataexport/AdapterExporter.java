@@ -21,8 +21,8 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 
 class AdapterExporter extends AbstractBlockTypeExporter {
 
-	public AdapterExporter(AdapterTypePaletteEntry entry) {
-		super(entry.getType().getAdapterFBType());
+	public AdapterExporter(final AdapterTypePaletteEntry entry) {
+		super(entry.getTypeEditable().getAdapterFBType());
 	}
 
 	@Override

@@ -17,14 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.AlignmentRetargetAction;
 import org.eclipse.gef.ui.actions.DeleteRetargetAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
-import org.eclipse.gef.ui.actions.ZoomComboContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -36,33 +34,31 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 
 public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBarContributor {
 
-	private ActionRegistry registry = new ActionRegistry();
-	private List<RetargetAction> retargetActions = new ArrayList<>();
-	private List<String> globalActionKeys = new ArrayList<>();
-	private ZoomComboContributionItem zoomCombo;
+	private final ActionRegistry registry = new ActionRegistry();
+	private final List<RetargetAction> retargetActions = new ArrayList<>();
+	private final List<String> globalActionKeys = new ArrayList<>();
 
 	public GraphicalMultipageEditorContributor() {
 		super();
 	}
 
 	@Override
-	public void setActiveEditor(IEditorPart editor) {
+	public void setActiveEditor(final IEditorPart editor) {
 		setGlobalActionHandler(editor.getAdapter(ActionRegistry.class));
 		super.setActiveEditor(editor);
 
 	}
 
 	@Override
-	public void setActivePage(IEditorPart activeEditor) {
+	public void setActivePage(final IEditorPart activeEditor) {
 		if (null != activeEditor) {
 			setGlobalActionHandler(activeEditor.getAdapter(ActionRegistry.class));
-			zoomCombo.setZoomManager(activeEditor.getAdapter(ZoomManager.class));
 		}
 	}
 
-	private void setGlobalActionHandler(ActionRegistry editorRegistry) {
-		IActionBars bars = getActionBars();
-		for (String id : globalActionKeys) {
+	private void setGlobalActionHandler(final ActionRegistry editorRegistry) {
+		final IActionBars bars = getActionBars();
+		for (final String id : globalActionKeys) {
 			if (null != editorRegistry) {
 				bars.setGlobalActionHandler(id, editorRegistry.getAction(id));
 			} else {
@@ -91,13 +87,6 @@ public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBa
 		toolBarManager.add(getAction(ActionFactory.REDO.getId()));
 
 		toolBarManager.add(new Separator());
-
-		toolBarManager.add(new Separator());
-		String[] zoomStrings = new String[] { ZoomManager.FIT_ALL, ZoomManager.FIT_HEIGHT, ZoomManager.FIT_WIDTH };
-		zoomCombo = new ZoomComboContributionItem(getPage(), zoomStrings);
-		toolBarManager.add(zoomCombo);
-
-		toolBarManager.add(new Separator());
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_LEFT));
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_CENTER));
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_RIGHT));
@@ -107,7 +96,7 @@ public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBa
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
 	}
 
-	protected IAction getAction(String id) {
+	protected IAction getAction(final String id) {
 		return getActionRegistry().getAction(id);
 	}
 
@@ -115,18 +104,18 @@ public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBa
 		return registry;
 	}
 
-	protected void addRetargetAction(RetargetAction action) {
+	protected void addRetargetAction(final RetargetAction action) {
 		addAction(action);
 		retargetActions.add(action);
 		getPage().addPartListener(action);
 		addGlobalActionKey(action.getId());
 	}
 
-	protected void addAction(IAction action) {
+	protected void addAction(final IAction action) {
 		getActionRegistry().registerAction(action);
 	}
 
-	protected void addGlobalActionKey(String key) {
+	protected void addGlobalActionKey(final String key) {
 		globalActionKeys.add(key);
 	}
 
@@ -135,7 +124,7 @@ public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBa
 	}
 
 	@Override
-	public void init(IActionBars bars) {
+	public void init(final IActionBars bars) {
 		buildActions();
 		declareGlobalActionKeys();
 		super.init(bars);

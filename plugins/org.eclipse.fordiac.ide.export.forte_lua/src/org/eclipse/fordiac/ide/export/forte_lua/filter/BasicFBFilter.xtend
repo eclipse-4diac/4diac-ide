@@ -31,6 +31,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry
 
 class BasicFBFilter {
 
@@ -120,7 +121,8 @@ class BasicFBFilter {
 		ECTransition tran) '''«IF tran.conditionEvent !== null»«tran.conditionEvent.luaInputEventName» == id«ELSE»true«ENDIF» and «IF !tran.conditionExpression.nullOrEmpty»«tran.luaTransitionConditionExpression»«ELSE»true«ENDIF»'''
 
 	def private luaTransitionConditionExpression(ECTransition tran) {
-		val type = tran.rootContainer as BasicFBType
+		val entry = tran.rootContainer as FBTypePaletteEntry
+		val type = entry.type as BasicFBType
 		stAlgorithmFilter.lua(type, tran.conditionExpression)
 	}
 

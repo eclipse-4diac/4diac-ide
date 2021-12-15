@@ -44,12 +44,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
  *
  * @generated */
 public class SystemConfigurationImpl extends EObjectImpl implements SystemConfiguration {
-	/** The cached value of the '{@link #getDevices() <em>Devices</em>}' containment reference list. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getDevices() <em>Devices</em>}' containment reference list.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getDevices()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Device> devices;
 	/** The cached value of the '{@link #getSegments() <em>Segments</em>}' containment reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -58,12 +60,14 @@ public class SystemConfigurationImpl extends EObjectImpl implements SystemConfig
 	 * @generated
 	 * @ordered */
 	protected EList<Segment> segments;
-	/** The cached value of the '{@link #getLinks() <em>Links</em>}' containment reference list. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getLinks() <em>Links</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getLinks()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Link> links;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

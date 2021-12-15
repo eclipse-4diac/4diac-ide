@@ -51,12 +51,14 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 	 * @ordered */
 	protected EList<VarDeclaration> varDeclaration;
 
-	/** The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getFBNetwork()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBNetwork fBNetwork;
 
 	/** The cached value of the '{@link #getSupportedFBTypes() <em>Supported FB Types</em>}' reference. <!--

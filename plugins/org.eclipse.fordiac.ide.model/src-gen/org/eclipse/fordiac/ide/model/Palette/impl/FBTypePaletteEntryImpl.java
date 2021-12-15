@@ -15,15 +15,13 @@
  */
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>FB Type Palette Entry</b></em>'. <!--
  * end-user-doc -->
@@ -49,8 +47,8 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 	 *
 	 * @generated */
 	@Override
-	public FBType getFBType() {
-		final LibraryElement type = getType();
+	public FBType getType() {
+		LibraryElement type = super.getType();
 		if (type instanceof FBType) {
 			return (FBType) type;
 		}
@@ -67,9 +65,7 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 		} else {
 			super.setType(null);
 			if (null != type) {
-				final Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"tried to set no FBType as type entry for FBTypePaletteEntry"); //$NON-NLS-1$
-				Activator.getDefault().getLog().log(exception);
+				FordiacLogHelper.logError("tried to set no FBType as type entry for FBTypePaletteEntry"); //$NON-NLS-1$
 			}
 		}
 	}
@@ -80,6 +76,18 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 	@Override
 	public CommonElementImporter getImporter() {
 		return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(getFile());
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public FBType getTypeEditable() {
+		LibraryElement type = super.getTypeEditable();
+		if (type instanceof FBType) {
+			return (FBType) type;
+		}
+		return null;
 	}
 
 } // FBTypePaletteEntryImpl

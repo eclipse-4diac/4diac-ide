@@ -58,20 +58,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated */
 public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
-	/** The cached value of the '{@link #getPlugs() <em>Plugs</em>}' containment reference list. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getPlugs() <em>Plugs</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getPlugs()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<AdapterDeclaration> plugs;
 
-	/** The cached value of the '{@link #getSockets() <em>Sockets</em>}' containment reference list. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getSockets() <em>Sockets</em>}' containment reference list.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getSockets()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<AdapterDeclaration> sockets;
 
 	/** The cached value of the '{@link #getEventInputs() <em>Event Inputs</em>}' containment reference list. <!--

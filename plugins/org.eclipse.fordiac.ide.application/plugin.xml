@@ -373,6 +373,18 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewGroupHandler"
+            id="org.eclipse.fordiac.ide.application.commands.newGroup"
+            name="Group">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.UngroupHandler"
+            id="org.eclipse.fordiac.ide.application.commands.ungroup"
+            name="Ungroup">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
             name="Flatten Subapplication">
       </command>
@@ -381,7 +393,6 @@
             id="org.eclipse.fordiac.ide.application.commands.expandSubApp"
             name="Expand Subapp">
       </command>
-
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.SaveAsSubappTypeHandler"
@@ -416,9 +427,33 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
-            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowConnectionHandler"
-            id="org.eclipse.fordiac.ide.application.commands.followConnection"
-            name="Follow Connection">
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoChildHandler"
+            id="org.eclipse.fordiac.ide.application.commands.gotochild"
+            name="Go To Child">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoPinUnderHandler"
+            id="org.eclipse.fordiac.ide.application.commands.gotopinunder"
+            name="Go To Pin Below">
+      </command>
+	  <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoPinAboveHandler"
+            id="org.eclipse.fordiac.ide.application.commands.gotopinabove"
+            name="Go To Pin Below">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
+            id="org.eclipse.fordiac.ide.application.commands.followLeftConnection"
+            name="Follow Left Connection">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
+            id="org.eclipse.fordiac.ide.application.commands.followRightConnection"
+            name="Follow Right Connection">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
@@ -439,6 +474,12 @@
                  class="org.eclipse.ui.handlers.RegistryToggleState"
                  id="org.eclipse.ui.commands.toggleState">
            </state>
+      </command>
+      <command 
+      		categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.ToggleConnectionsHandler"
+            id="org.eclipse.fordiac.ide.application.commands.toggleConnections"
+            name="Toggle Connections Visibility">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
@@ -528,7 +569,6 @@
          		</with> 
 			 </and>   
 			</activeWhen>
-
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.UpdateFBTypeHandler"
@@ -583,17 +623,6 @@
             		</iterate>
             	</with>
             </activeWhen>
-      </handler>
-      <handler 
-            class="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
-            commandId="org.eclipse.fordiac.ide.application.commands.newSubApp">
-         <activeWhen>
-            <iterate>
-               <adapt
-                     type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
-               </adapt>
-            </iterate>
-         </activeWhen>
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.UnmapHandler"
@@ -655,7 +684,31 @@
             sequence="M1+M2+ARROW_UP">
       </key>
       <key
-            commandId="org.eclipse.fordiac.ide.application.commands.followConnection"
+            commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+ARROW_DOWN">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.gotopinunder"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+ARROW_DOWN">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.gotopinabove"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+ARROW_UP">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+ARROW_LEFT">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+ARROW_RIGHT">
@@ -666,6 +719,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+B">
       </key>
+      <key 
+      		commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
+         	contextId="org.eclipse.ui.contexts.window"
+         	schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         	sequence="M1+T">
+    </key>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -681,9 +740,14 @@
             locationURI="menu:navigate?after=goTo">
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
-                  icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
+                  icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_prev.png"/>
             <command
-                  commandId="org.eclipse.fordiac.ide.application.commands.followConnection" />
+                  commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
+                  icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_next.png"/>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection" />
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection" />
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.showInstance"
                   style="push">
@@ -757,6 +821,22 @@
       
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup"> 
             <command
+               commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
+               label="New subapplication"
+               tooltip="Create a new subapplication">
+               
+            </command>
+            <command
+               commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
+               label="Group"
+               tooltip="Create a new group">
+            </command>               
+            <command
+               commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
+               label="Ungroup"
+               tooltip="Remove group">
+            </command>               
+            <command
                   commandId="org.eclipse.fordiac.ide.application.commands.changeType"
                   label="Change Type">
                 <visibleWhen checkEnabled="false">
@@ -792,6 +872,9 @@
                   commandId="org.eclipse.fordiac.ide.application.unmapAll"
                   label="Unmap All">
             </command>
+            <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
+               label="Toggle Connection Visibility">
+      		</command>
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -823,7 +906,10 @@
             locationURI="toolbar:org.eclipse.ui.workbench.navigate">
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
-                  icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
+                  icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_prev.png"/>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
+                  icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_next.png"/>
       </menuContribution>    
       <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
@@ -911,7 +997,46 @@
 	            </with>
             </visibleWhen>
          </command>
-         
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
+               label="New group"
+               tooltip="Create a new group">
+            <visibleWhen
+                  checkEnabled="false">
+                <and> 
+	            	<with variable="activeEditor">
+                    	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            		</with>
+	
+            		<with variable="selection">
+	            		<iterate ifEmpty="true">
+	            			<or>
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+            					<instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
+            				</or>
+            			</iterate>
+        			</with>
+    			</and>
+            </visibleWhen>
+         </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
+               label="Toggle Connection Visibility">
+         	<visibleWhen checkEnabled="true"></visibleWhen>
+      	 </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
+               label="Ungroup"
+               tooltip="Remove group">
+            <visibleWhen
+                  checkEnabled="true">
+	            	<with variable="activeEditor">
+                    	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            		</with>
+            </visibleWhen>
+         </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
             <visibleWhen checkEnabled="true">
 	             <or>
@@ -993,7 +1118,7 @@
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.fordiac.ide.group.navigate">
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
-               icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png">
+               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_prev.png">
             <visibleWhen checkEnabled="true">
 		       <with variable="activeEditor">
 		          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
@@ -1001,7 +1126,40 @@
             </visibleWhen>
          </command>
          <command
-               commandId="org.eclipse.fordiac.ide.application.commands.followConnection" >
+               commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
+               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_next.png">
+            <visibleWhen checkEnabled="true">
+		       <with variable="activeEditor">
+		          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+		       </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection" >
+            <visibleWhen checkEnabled="true">
+            <and>
+            	<with variable="selection">
+                   <count value="1"/>
+                   <iterate>
+                      <or>
+                        <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+                      </or>
+                   </iterate>
+                </with>
+                <!-- we are in an application or subapp editor or in a subapp/cfb viewer -->
+               	<or> 
+	                <with variable="activeEditor">
+		            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+		            </with>
+		            <with variable="activeEditor">
+		            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+		            </with>
+            	</or>
+            </and>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection" >
             <visibleWhen checkEnabled="true">
             <and>
             	<with variable="selection">

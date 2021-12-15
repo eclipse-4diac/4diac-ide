@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.export.forte_lua.filter
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.common.util.EList
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
@@ -159,7 +160,7 @@ class LuaConstants {
 	def static luaFBStateVariable() '''fb[«luaFBStateVarName»]'''
 
 	def static luaFBVariable(VarDeclaration decl) {
-		val type = decl.rootContainer as FBType
+		val type = getRootFBType(decl) 
 		if (type.interfaceList.inputVars.contains(decl)) {
 			'''fb[«decl.luaFBInputVarName»]'''
 		} else if (type.interfaceList.outputVars.contains(decl)) {
@@ -169,6 +170,14 @@ class LuaConstants {
 		} else {
 			throw new IllegalArgumentException('''Unknown kind of variable «decl.name»''')
 		}
+	}
+	
+	protected def static FBType getRootFBType(VarDeclaration decl) {
+		val root = decl.rootContainer
+		if(root instanceof FBTypePaletteEntry){
+			return root.type
+		} 
+		root as FBType
 	}
 
 	def static luaFBVariablesPrefix(Iterable<VarDeclaration> variables) '''

@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
@@ -80,6 +81,8 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 				@Override
 				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 					exporter.writeToFile(entry.getFile());
+					// make the edit result available for the reading entities
+					entry.setType(EcoreUtil.copy(entry.getTypeEditable()));
 					// "reset" the modification timestamp in the PaletteEntry to avoid reload - as for this timestamp it
 					// is not necessary as the data is in memory
 					entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
@@ -113,7 +116,7 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		} else if (entry instanceof SubApplicationTypePaletteEntry) {
 			return new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
 		} else if (entry instanceof DataTypePaletteEntry) {
-			return new DataTypeExporter((AnyDerivedType) entry.getType());
+			return new DataTypeExporter((AnyDerivedType) entry.getTypeEditable());
 		}
 		return null;
 	}

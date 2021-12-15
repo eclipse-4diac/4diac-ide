@@ -38,20 +38,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class ECActionImpl extends EObjectImpl implements ECAction {
-	/** The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getAlgorithm()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Algorithm algorithm;
 
-	/** The cached value of the '{@link #getOutput() <em>Output</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getOutput() <em>Output</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getOutput()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Event output;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

@@ -65,6 +65,8 @@ public enum FordiacImage {
 	ICON_TRIGGER_EVENT,
 	ICON_WATCHES_VIEW,
 	ICON_WATCH_INTERFACE_ELEMENTS,
+	ICON_ZOOM_100,
+	ICON_ZOOM_PAGE,
 
 	// to be deleted with removing the tester
 	ICON_TesterTemplate,

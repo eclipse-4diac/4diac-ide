@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -254,6 +255,8 @@ public final class FBNetworkHelper {
 		final EObject root = EcoreUtil.getRootContainer(element);
 		if (root instanceof FBType) {
 			return (FBType) root;
+		} else if (root instanceof FBTypePaletteEntry) {
+			return ((FBTypePaletteEntry) root).getTypeEditable();
 		}
 		return null;
 	}

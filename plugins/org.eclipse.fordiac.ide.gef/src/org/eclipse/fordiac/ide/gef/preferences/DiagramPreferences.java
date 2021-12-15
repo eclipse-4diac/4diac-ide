@@ -59,7 +59,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
 
-	public boolean changesOnLabelSize = false;
+	private boolean changesOnLabelSize = false;
 
 	/**
 	 * Instantiates a new diagram preferences.

@@ -15,15 +15,13 @@
  */
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Sub Application Type Palette Entry</b></em>'.
  * <!-- end-user-doc -->
@@ -49,8 +47,8 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 	 *
 	 * @generated */
 	@Override
-	public SubAppType getSubApplicationType() {
-		final LibraryElement type = getType();
+	public SubAppType getType() {
+		LibraryElement type = super.getType();
 		if (type instanceof SubAppType) {
 			return (SubAppType) type;
 		}
@@ -67,9 +65,8 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 		} else {
 			super.setType(null);
 			if (null != type) {
-				final Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry"); //$NON-NLS-1$
-				Activator.getDefault().getLog().log(exception);
+				FordiacLogHelper
+						.logError("tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry"); //$NON-NLS-1$
 			}
 		}
 	}
@@ -80,6 +77,18 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 	@Override
 	public CommonElementImporter getImporter() {
 		return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(getFile());
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public SubAppType getTypeEditable() {
+		LibraryElement type = super.getTypeEditable();
+		if (type instanceof SubAppType) {
+			return (SubAppType) type;
+		}
+		return null;
 	}
 
 } // SubApplicationTypePaletteEntryImpl

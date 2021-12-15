@@ -60,20 +60,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *
  * @generated */
 public class VarDeclarationImpl extends ConfigurableObjectImpl implements VarDeclaration {
-	/** The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final boolean IS_INPUT_EDEFAULT = false;
 
-	/** The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected boolean isInput = IS_INPUT_EDEFAULT;
 
 	/** The cached value of the '{@link #getInputConnections() <em>Input Connections</em>}' reference list. <!--
@@ -100,52 +104,64 @@ public class VarDeclarationImpl extends ConfigurableObjectImpl implements VarDec
 	 * @ordered */
 	protected DataType type;
 
-	/** The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String TYPE_NAME_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String typeName = TYPE_NAME_EDEFAULT;
 
-	/** The default value of the '{@link #getArraySize() <em>Array Size</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getArraySize() <em>Array Size</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getArraySize()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int ARRAY_SIZE_EDEFAULT = 0;
 
-	/** The cached value of the '{@link #getArraySize() <em>Array Size</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getArraySize()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int arraySize = ARRAY_SIZE_EDEFAULT;
 
-	/** The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getWiths()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<With> withs;
 
-	/** The cached value of the '{@link #getValue() <em>Value</em>}' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Value value;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

@@ -24,12 +24,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
+import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
@@ -48,12 +50,9 @@ import org.eclipse.gef.requests.CreateRequest;
 
 public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
-	private ZoomManager zoomManager;
-
 	@Override
 	public void setHost(final EditPart host) {
 		super.setHost(host);
-		zoomManager = ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
 	}
 
 	@Override
@@ -100,29 +99,47 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected Command getAddCommand(final Request request) {
-		if (isDragAndDropRequestFromSubAppToRoot(request, getTargetEditPart(request))) {
-			final List<EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
-			final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
-			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts);
-			if (!fbEls.isEmpty()) {
-				return new MoveElementsFromSubAppCommand(fbEls,
-						new org.eclipse.swt.graphics.Point(destination.x, destination.y));
-			}
+		if (isDragAndDropRequestToRoot(request, getTargetEditPart(request))) {
+			return handleDragToRootRequest((ChangeBoundsRequest) request);
 		}
 		return null;
 	}
 
-	private org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
+	protected ZoomManager getZoomManager() {
+		return ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
+	}
+
+	private Command handleDragToRootRequest(final ChangeBoundsRequest request) {
+		final List<EditPart> editParts = request.getEditParts();
+		final Point destination = getTranslatedAndZoomedPoint(request);
+		List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts);
+		if (!fbEls.isEmpty()) {
+			return new MoveElementsFromSubAppCommand(fbEls,
+					new org.eclipse.swt.graphics.Point(destination.x, destination.y));
+		}
+		fbEls = collectFromGroupDraggedFBs(editParts);
+		if (!fbEls.isEmpty()) {
+			return new RemoveElementsFromGroup(fbEls, new org.eclipse.swt.graphics.Point(destination.x, destination.y));
+		}
+		return null;
+	}
+
+	protected org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
 		final FigureCanvas viewerControl = (FigureCanvas) getTargetEditPart(request).getViewer().getControl();
 		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
 		return new org.eclipse.draw2d.geometry.Point(request.getLocation().x + location.x,
-				request.getLocation().y + location.y).scale(1.0 / zoomManager.getZoom());
+				request.getLocation().y + location.y).scale(1.0 / getZoomManager().getZoom());
 	}
 
-	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts) {
+	private static List<FBNetworkElement> collectFromSubappDraggedFBs(final List<EditPart> editParts) {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
 				.map(ep -> (FBNetworkElement) ep.getModel()).filter(FBNetworkElement::isNestedInSubApp)
 				.collect(Collectors.toList());
+	}
+
+	private static List<FBNetworkElement> collectFromGroupDraggedFBs(final List<EditPart> editParts) {
+		return editParts.stream().filter(ep -> ep.getParent() instanceof GroupContentEditPart)
+				.map(ep -> (FBNetworkElement) ep.getModel()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -134,13 +151,14 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	private Point getDestinationPoint(final ChangeBoundsRequest request) {
-		return request.getMoveDelta().getScaled(1.0 / zoomManager.getZoom());
+		return request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
 	}
 
-	public static boolean isDragAndDropRequestFromSubAppToRoot(final Request generic, final EditPart targetEditPart) {
+	public static boolean isDragAndDropRequestToRoot(final Request generic, final EditPart targetEditPart) {
 		return (generic instanceof ChangeBoundsRequest)
 				&& ((targetEditPart instanceof FBNetworkEditPart)
 						|| (targetEditPart instanceof UISubAppNetworkEditPart))
-				&& !(targetEditPart instanceof UnfoldedSubappContentEditPart);
+				&& !(targetEditPart instanceof UnfoldedSubappContentEditPart)
+				&& !(targetEditPart instanceof GroupContentEditPart);
 	}
 }

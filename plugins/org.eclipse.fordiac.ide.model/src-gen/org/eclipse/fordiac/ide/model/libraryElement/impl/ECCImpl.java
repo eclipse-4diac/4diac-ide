@@ -60,12 +60,14 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	 * @ordered */
 	protected EList<ECTransition> eCTransition;
 
-	/** The cached value of the '{@link #getStart() <em>Start</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getStart() <em>Start</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getStart()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ECState start;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

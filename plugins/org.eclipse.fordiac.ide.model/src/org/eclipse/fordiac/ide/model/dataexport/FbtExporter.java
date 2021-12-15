@@ -51,8 +51,8 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 *
 	 * @param entry
 	 */
-	FbtExporter(FBTypePaletteEntry entry) {
-		super(entry.getFBType());
+	FbtExporter(final FBTypePaletteEntry entry) {
+		super(entry.getTypeEditable());
 	}
 
 	@Override
@@ -81,7 +81,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		addStartElement(LibraryElementTags.BASIC_F_B_ELEMENT);
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
 		addECC(type.getECC());
-		for (Algorithm alg : type.getAlgorithm()) {
+		for (final Algorithm alg : type.getAlgorithm()) {
 			addAlgorithm(alg);
 		}
 		addEndElement();
@@ -104,7 +104,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 
 	private void writeTextAlgorithmText(final TextAlgorithm algorithm) throws XMLStreamException {
 		if (null != algorithm.getText()) {
-			Matcher endPatternMatcher = CDATA_END_PATTERN.matcher(algorithm.getText());
+			final Matcher endPatternMatcher = CDATA_END_PATTERN.matcher(algorithm.getText());
 			int currentPosition = 0;
 			if (endPatternMatcher.find()) { // Check if we have at least one CData end pattern in the string
 				do {
@@ -148,7 +148,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		addStartElement(LibraryElementTags.ECC_ELEMENT);
 		if (ecc != null) {
 			addECStates(ecc.getECState(), ecc.getStart());
-			for (ECTransition transition : ecc.getECTransition()) {
+			for (final ECTransition transition : ecc.getECTransition()) {
 				createTransitionEntry(transition);
 			}
 		}
@@ -181,7 +181,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 */
 	private void addECStates(final List<ECState> states, final ECState startState) throws XMLStreamException {
 		createECState(startState);
-		for (ECState state : states) {
+		for (final ECState state : states) {
 			if (!state.equals(startState)) {
 				createECState(state);
 			}
@@ -213,7 +213,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addECActions(final List<ECAction> actions) throws XMLStreamException {
-		for (ECAction action : actions) {
+		for (final ECAction action : actions) {
 			addEmptyStartElement(LibraryElementTags.ECACTION_ELEMENT);
 			if (action.getAlgorithm() != null) {
 				getWriter().writeAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm().getName());

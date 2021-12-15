@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- *                           Johannes Kepler University,
- *                           Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * 							Johannes Kepler University,
+ *                          Primetals Technologies Germany GmbH
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,6 +20,7 @@
  *                 creation
  *               - added checking code to deactivate connection creation when alt
  *                 key is not pressed anymore
+ *               - show however feedback for collocated connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.tools;
 
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.gef.tools.FordiacConnectionDragCreationTool;
@@ -153,6 +156,38 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 		}
 		super.keyUp(evt, viewer);
 	}
+
+	@Override
+	protected void showTargetFeedback() {
+		if (getTargetEditPart() instanceof ConnectionEditPart) {
+			showConnectionTargetFeedback((ConnectionEditPart) getTargetEditPart());
+		}
+		super.showTargetFeedback();
+	}
+
+	@Override
+	protected void eraseTargetFeedback() {
+		if (getTargetEditPart() instanceof ConnectionEditPart) {
+			eraseConnectionTargetFeedback((ConnectionEditPart) getTargetEditPart());
+		}
+		super.eraseTargetFeedback();
+	}
+
+	private void showConnectionTargetFeedback(final ConnectionEditPart targetEditPart) {
+		final EditPartViewer viewer = getCurrentViewer();
+		final List<ConnectionEditPart> connections = ColLocatedConnectionFinder.getCoLocatedConnections(targetEditPart,
+				viewer, getLocation());
+		connections.forEach(con -> con.showTargetFeedback(getTargetRequest()));
+	}
+
+	private void eraseConnectionTargetFeedback(final ConnectionEditPart targetEditPart) {
+		final EditPartViewer viewer = getCurrentViewer();
+		final List<ConnectionEditPart> connections = ColLocatedConnectionFinder
+				.getLeftCoLocatedConnections(targetEditPart,
+						viewer, getLocation());
+		connections.forEach(con -> con.eraseTargetFeedback(getTargetRequest()));
+	}
+
 
 	private void activateConnectionCreation(final EditPartViewer viewer) {
 		final List<Object> editParts = viewer.getSelectedEditParts();

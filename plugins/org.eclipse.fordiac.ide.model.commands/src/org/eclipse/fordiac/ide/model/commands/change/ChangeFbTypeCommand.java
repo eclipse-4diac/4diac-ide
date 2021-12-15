@@ -34,7 +34,7 @@ public class ChangeFbTypeCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return FBNetworkHelper.isTypeInsertionSave(newType.getFBType(), fb);
+		return FBNetworkHelper.isTypeInsertionSave(newType.getType(), fb);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class ChangeFbTypeCommand extends Command {
 
 	private void setFBType(final FBTypePaletteEntry paletteEntry) {
 		fb.setPaletteEntry(paletteEntry);
-		fb.setInterface(paletteEntry.getFBType().getInterfaceList().copy());
+		fb.setInterface(paletteEntry.getType().getInterfaceList().copy());
 	}
 
 	@Override

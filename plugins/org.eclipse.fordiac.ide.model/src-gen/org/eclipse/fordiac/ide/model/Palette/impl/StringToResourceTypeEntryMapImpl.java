@@ -44,28 +44,34 @@ import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
  * @generated */
 public class StringToResourceTypeEntryMapImpl extends EObjectImpl
 		implements BasicEMap.Entry<String, ResourceTypeEntry> {
-	/** The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String KEY_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String key = KEY_EDEFAULT;
 
-	/** The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypedValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ResourceTypeEntry value;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

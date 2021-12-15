@@ -35,20 +35,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
  *
  * @generated */
 public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
-	/** The default value of the '{@link #getAuthor() <em>Author</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getAuthor() <em>Author</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getAuthor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String AUTHOR_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getAuthor() <em>Author</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getAuthor() <em>Author</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getAuthor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String author = AUTHOR_EDEFAULT;
 
 	/** The default value of the '{@link #getDate() <em>Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
@@ -67,52 +71,64 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @ordered */
 	protected String date = DATE_EDEFAULT;
 
-	/** The default value of the '{@link #getOrganization() <em>Organization</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getOrganization() <em>Organization</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getOrganization()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String ORGANIZATION_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getOrganization() <em>Organization</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getOrganization() <em>Organization</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getOrganization()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String organization = ORGANIZATION_EDEFAULT;
 
-	/** The default value of the '{@link #getRemarks() <em>Remarks</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getRemarks() <em>Remarks</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getRemarks()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String REMARKS_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getRemarks() <em>Remarks</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getRemarks() <em>Remarks</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getRemarks()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String remarks = REMARKS_EDEFAULT;
 
-	/** The default value of the '{@link #getVersion() <em>Version</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getVersion()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String VERSION_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getVersion() <em>Version</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getVersion()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String version = VERSION_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

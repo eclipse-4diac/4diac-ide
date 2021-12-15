@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2016, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,10 +22,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementCommand {
 
-	private SubApplicationTypePaletteEntry paletteEntry;
+	private final SubApplicationTypePaletteEntry paletteEntry;
 
 	public CreateSubAppInstanceCommand(final SubApplicationTypePaletteEntry paletteEntry, final FBNetwork fbNetwork,
-			int x, int y) {
+			final int x, final int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
 		this.paletteEntry = paletteEntry;
 		setLabel(Messages.CreateSubAppInstanceCommand_CreateSubapplicationInstance);
@@ -39,7 +39,7 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 
 	@Override
 	protected InterfaceList getTypeInterfaceList() {
-		return paletteEntry.getSubApplicationType().getInterfaceList();
+		return paletteEntry.getType().getInterfaceList();
 	}
 
 	public SubApp getSubApp() {

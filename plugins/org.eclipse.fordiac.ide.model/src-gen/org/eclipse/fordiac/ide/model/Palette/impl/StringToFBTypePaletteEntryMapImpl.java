@@ -45,28 +45,34 @@ import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
  * @generated */
 public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		implements BasicEMap.Entry<String, FBTypePaletteEntry> {
-	/** The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String KEY_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String key = KEY_EDEFAULT;
 
-	/** The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getTypedValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBTypePaletteEntry value;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

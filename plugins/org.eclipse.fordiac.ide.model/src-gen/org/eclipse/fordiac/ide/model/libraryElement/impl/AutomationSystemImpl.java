@@ -1,6 +1,7 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,9 +9,10 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
@@ -25,7 +27,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -34,7 +35,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.gef.commands.CommandStack;
 
-/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>System</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Automation System</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -55,77 +57,90 @@ import org.eclipse.gef.commands.CommandStack;
 public class AutomationSystemImpl extends LibraryElementImpl implements AutomationSystem {
 	/** The cached value of the '{@link #getApplication() <em>Application</em>}' containment reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getApplication()
 	 * @generated
 	 * @ordered */
 	protected EList<Application> application;
 
-	/** The cached value of the '{@link #getMapping() <em>Mapping</em>}' containment reference list. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getMapping() <em>Mapping</em>}' containment reference list.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getMapping()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Mapping> mapping;
 
-	/** The cached value of the '{@link #getPalette() <em>Palette</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getPalette() <em>Palette</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getPalette()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Palette palette;
 
-	/** The cached value of the '{@link #getSystemConfiguration() <em>System Configuration</em>}' containment reference.
+	/**
+	 * The cached value of the '{@link #getSystemConfiguration() <em>System Configuration</em>}' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getSystemConfiguration()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected SystemConfiguration systemConfiguration;
 
-	/** The default value of the '{@link #getSystemFile() <em>System File</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getSystemFile() <em>System File</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getSystemFile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final IFile SYSTEM_FILE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getSystemFile() <em>System File</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getSystemFile() <em>System File</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getSystemFile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected IFile systemFile = SYSTEM_FILE_EDEFAULT;
 
-	/** The default value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The default value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getCommandStack()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final CommandStack COMMAND_STACK_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getCommandStack()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected CommandStack commandStack = COMMAND_STACK_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected AutomationSystemImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -133,58 +148,55 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<Application> getApplication() {
 		if (application == null) {
-			application = new EObjectContainmentEList<Application>(Application.class, this,
+			application = new EObjectContainmentEList<>(Application.class, this,
 					LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION);
 		}
 		return application;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<Mapping> getMapping() {
 		if (mapping == null) {
-			mapping = new EObjectContainmentEList<Mapping>(Mapping.class, this,
+			mapping = new EObjectContainmentEList<>(Mapping.class, this,
 					LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING);
 		}
 		return mapping;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT */
+	 *
+	 * @generated */
 	@Override
 	public Palette getPalette() {
 		if (palette != null && palette.eIsProxy()) {
 			InternalEObject oldPalette = (InternalEObject) palette;
 			palette = (Palette) eResolveProxy(oldPalette);
 			if (palette != oldPalette) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, oldPalette, palette));
-				}
 			}
-		} else if (palette == null) {
-			palette = PaletteFactory.eINSTANCE.createPalette();
 		}
 		return palette;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public Palette basicGetPalette() {
 		return palette;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setPalette(Palette newPalette) {
@@ -196,7 +208,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public SystemConfiguration getSystemConfiguration() {
@@ -225,14 +237,14 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public SystemConfiguration basicGetSystemConfiguration() {
 		return systemConfiguration;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public NotificationChain basicSetSystemConfiguration(SystemConfiguration newSystemConfiguration,
 			NotificationChain msgs) {
@@ -251,7 +263,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setSystemConfiguration(SystemConfiguration newSystemConfiguration) {
@@ -275,7 +287,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public IFile getSystemFile() {
@@ -283,7 +295,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setSystemFile(IFile newSystemFile) {
@@ -295,7 +307,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public CommandStack getCommandStack() {
@@ -303,7 +315,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setCommandStack(CommandStack newCommandStack) {
@@ -315,7 +327,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Device getDeviceNamed(final String name) {
@@ -323,7 +335,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Application getApplicationNamed(final String name) {
@@ -331,7 +343,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -348,7 +360,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -375,7 +387,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -408,7 +420,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -438,7 +450,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -461,7 +473,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {
@@ -477,4 +489,4 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		return result.toString();
 	}
 
-} // SystemImpl
+} // AutomationSystemImpl

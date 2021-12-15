@@ -99,7 +99,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 					PaletteFactory.eINSTANCE.createSubApplicationTypePaletteEntry().eClass());
 		}
 		subApp.setPaletteEntry(subEntry);
-		subApp.setInterface(subEntry.getSubApplicationType().getInterfaceList().copy());
+		subApp.setInterface(subEntry.getType().getInterfaceList().copy());
 		return subApp;
 	}
 

@@ -67,7 +67,7 @@ public final class TestingManager {
 	}
 
 	public void addTestElement(final TestElement element) {
-		testElements.put(generateElementString(element), element);
+		testElements.put(generateElementString(element), element); 
 	}
 	
 	public void deleteTestElement(TestElement element) {
@@ -79,7 +79,7 @@ public final class TestingManager {
 		final Map<String, TestElement> elements = new HashMap<>();
 		for (final Entry<String, TestElement> entry : testElements.entrySet()) {
 			final TestElement element = entry.getValue();
-			if (element.getFb().getType().equals(type)) {
+			if (element.getFb().getType().getName() ==  type.getName()) {
 				element.addSetValueListener(valueListener);
 				element.addTriggerEventListener(eventListener);
 				if ((element.getInterfaceElement() instanceof VarDeclaration)

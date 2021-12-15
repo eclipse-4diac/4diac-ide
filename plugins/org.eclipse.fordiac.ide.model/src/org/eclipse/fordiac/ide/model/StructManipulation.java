@@ -23,6 +23,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -56,8 +57,7 @@ public final class StructManipulation {
 		if (null == struct) {
 			muxer.deleteAttribute(STRUCT_ATTRIBUTE);
 		} else {
-			muxer.setAttribute(STRUCT_ATTRIBUTE, "STRING", struct.getName(), //$NON-NLS-1$
-					""); //$NON-NLS-1$
+			muxer.setAttribute(STRUCT_ATTRIBUTE, IecTypes.ElementaryTypes.STRING.getName(), struct.getName(), null);
 		}
 	}
 

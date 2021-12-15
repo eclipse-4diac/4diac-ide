@@ -36,12 +36,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
  *
  * @generated */
 public class PositionableElementImpl extends EObjectImpl implements PositionableElement {
-	/** The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getPosition()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Position position;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

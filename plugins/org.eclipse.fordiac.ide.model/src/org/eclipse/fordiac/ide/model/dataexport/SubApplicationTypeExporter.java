@@ -23,15 +23,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
 class SubApplicationTypeExporter extends AbstractBlockTypeExporter {
 
-	SubApplicationTypeExporter(SubApplicationTypePaletteEntry entry) {
-		super(entry.getSubApplicationType());
+	SubApplicationTypeExporter(final SubApplicationTypePaletteEntry entry) {
+		super(entry.getTypeEditable());
 	}
 
 	/*
 	 * constructor to allow to use this exporter also for exporting the interface
 	 * element of untyped subapps in fbnetworks
 	 */
-	SubApplicationTypeExporter(CommonElementExporter parent) {
+	SubApplicationTypeExporter(final CommonElementExporter parent) {
 		super(parent);
 	}
 

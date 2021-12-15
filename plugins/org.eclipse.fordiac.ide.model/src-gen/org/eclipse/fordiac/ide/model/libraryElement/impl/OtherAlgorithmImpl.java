@@ -30,20 +30,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
  *
  * @generated */
 public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgorithm {
-	/** The default value of the '{@link #getLanguage() <em>Language</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getLanguage() <em>Language</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getLanguage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String LANGUAGE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getLanguage() <em>Language</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getLanguage() <em>Language</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getLanguage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String language = LANGUAGE_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

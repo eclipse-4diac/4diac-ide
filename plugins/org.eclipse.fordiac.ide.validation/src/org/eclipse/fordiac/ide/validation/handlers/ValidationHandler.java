@@ -24,25 +24,25 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class ValidationHandler extends AbstractHandler {
 	@Override
-	public Object execute(ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
-		INamedElement selectedElement = getSelectedElement(
+	public Object execute(final ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
+		final INamedElement selectedElement = getSelectedElement(
 				(StructuredSelection) HandlerUtil.getCurrentSelection(event));
 		ValidationHelper.validate(selectedElement);
 		return null;
 	}
 
-	private static INamedElement getSelectedElement(StructuredSelection currentSelection) {
-		Object obj = currentSelection.getFirstElement();
+	private static INamedElement getSelectedElement(final StructuredSelection currentSelection) {
+		final Object obj = currentSelection.getFirstElement();
 		if (obj instanceof IFile) {
 			return checkSelectedFile((IFile) obj);
 		}
 		return (obj instanceof INamedElement) ? (INamedElement) obj : null;
 	}
 
-	private static INamedElement checkSelectedFile(IFile file) {
-		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
+	private static INamedElement checkSelectedFile(final IFile file) {
+		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (entry instanceof FBTypePaletteEntry) {
-			return ((FBTypePaletteEntry) entry).getFBType();
+			return ((FBTypePaletteEntry) entry).getType();
 		}
 		return null;
 	}

@@ -61,12 +61,13 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	 * @ordered */
 	protected ServiceInterface leftInterface;
 
-	/** The cached value of the '{@link #getServiceSequence() <em>Service Sequence</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getServiceSequence() <em>Service Sequence</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getServiceSequence()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<ServiceSequence> serviceSequence;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

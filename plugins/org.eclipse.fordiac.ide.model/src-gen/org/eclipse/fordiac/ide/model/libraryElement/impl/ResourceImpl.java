@@ -50,48 +50,59 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated */
 public class ResourceImpl extends TypedConfigureableObjectImpl implements Resource {
-	/** The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getVarDeclarations()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VarDeclaration> varDeclarations;
 
-	/** The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getFBNetwork()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBNetwork fBNetwork;
 
-	/** The default value of the '{@link #getX() <em>X</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The default value of the '{@link #getX() <em>X</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getX()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String X_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getX() <em>X</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getX() <em>X</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getX()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String x = X_EDEFAULT;
 
-	/** The default value of the '{@link #getY() <em>Y</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The default value of the '{@link #getY() <em>Y</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getY()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String Y_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getY()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String y = Y_EDEFAULT;
 
 	/** The default value of the '{@link #isDeviceTypeResource() <em>Device Type Resource</em>}' attribute. <!--

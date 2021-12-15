@@ -12,47 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.handlers;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.gef.editparts.AdvancedZoomManager;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.handlers.HandlerUtil;
 
-public class Zoom100Handler extends AbstractHandler {
+public class Zoom100Handler extends AbstractZoomHandler {
 
 	@Override
-	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IWorkbenchPart part = HandlerUtil.getActiveEditor(event);
-		if (part != null) {
-			final ZoomManager zoomManager = part.getAdapter(ZoomManager.class);
-			if (zoomManager != null) {
-				handleMouseLocation(part, zoomManager);
-				Display.getDefault().syncExec(() -> zoomManager.setZoom(1.0));
-			}
-
-		}
-		return Status.OK_STATUS;
+	protected void performZoom(final ZoomManager zoomManager) {
+		zoomManager.setZoom(1.0);
 	}
 
-	private static void handleMouseLocation(final IWorkbenchPart part, final ZoomManager zoomManager) {
-		if (zoomManager instanceof AdvancedZoomManager) {
-			final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
-			if (viewer != null) {
-				final Rectangle controlBounds = viewer.getControl().getBounds();
-				Point cursorLocation = Display.getDefault().getCursorLocation();
-				cursorLocation = viewer.getControl().getParent().toControl(cursorLocation);
-				if (controlBounds.contains(cursorLocation)) {
-					((AdvancedZoomManager) zoomManager).setLastMousePos(cursorLocation.x, cursorLocation.y);
-				}
-			}
-		}
-	}
 
 }

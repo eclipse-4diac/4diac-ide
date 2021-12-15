@@ -8,6 +8,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - refactored this class to be the base class of the followConnection handlers
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -38,11 +39,13 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -71,13 +74,27 @@ public class FollowConnectionHandler extends AbstractHandler {
 			final Rectangle rect = getShell().getBounds();
 			rect.x = pt.x;
 			rect.y = pt.y;
+			rect.width += 6;
+			rect.height += 6;
 			getShell().setBounds(rect);
 		}
 
 		@Override
+		protected Control createTitleMenuArea(final Composite parent) {
+
+			final Composite titleAreaComposite = (Composite) super.createTitleMenuArea(parent);
+
+			final GridData gd_label = new GridData(GridData.FILL);
+			gd_label.horizontalIndent = 5;
+			titleAreaComposite.setLayoutData(gd_label);
+			return titleAreaComposite;
+		}
+
+		@Override
 		protected Control createDialogArea(final Composite parent) {
+
 			final Composite dialogArea = (Composite) super.createDialogArea(parent);
-			final ListViewer listViewer = new ListViewer(dialogArea, SWT.SINGLE);
+			final ListViewer listViewer = new ListViewer(dialogArea, SWT.SIMPLE);
 			listViewer.setContentProvider(new ArrayContentProvider());
 			listViewer.setLabelProvider(new LabelProvider() {
 
@@ -115,12 +132,18 @@ public class FollowConnectionHandler extends AbstractHandler {
 				}
 			});
 
+			final GridData gd = new GridData(GridData.CENTER);
+			gd.horizontalIndent = 3;
+			gd.verticalIndent = 2;
+			dialogArea.setLayoutData(gd);
+
+			listViewer.setSelection(new StructuredSelection(listViewer.getElementAt(0)), true);
 			return dialogArea;
 		}
 
 	}
 
-	private static void selectElement(final Object element, final GraphicalViewer viewer) {
+	protected static void selectElement(final Object element, final GraphicalViewer viewer) {
 		final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
 		if (null != editPart) {
 			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
@@ -134,22 +157,10 @@ public class FollowConnectionHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
-		final List<IInterfaceElement> opposites = getConnectionOposites(HandlerUtil.getCurrentSelection(event),
-				getFBNetwork(editor));
-
-		if (!opposites.isEmpty()) {
-			if (opposites.size() == 1) {
-				selectElement(opposites.get(0), viewer);
-			} else {
-				showOppositeSelectionDialog(opposites, event, viewer);
-			}
-		}
-		return Status.OK_STATUS;
+		return Status.CANCEL_STATUS;
 	}
 
-	private static FBNetwork getFBNetwork(final IEditorPart editor) {
+	protected static FBNetwork getFBNetwork(final IEditorPart editor) {
 		final FBNetwork network = editor.getAdapter(FBNetwork.class);
 		if (null == network) {
 			// we have a viewer
@@ -168,10 +179,17 @@ public class FollowConnectionHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_NAME);
-		setBaseEnabled(editor != null && !getConnectionOposites(selection, getFBNetwork(editor)).isEmpty());
+
+		if (selection != null && ((IStructuredSelection) selection).size() == 1) {
+			setBaseEnabled(editor != null && ((IStructuredSelection) selection).getFirstElement() instanceof InterfaceEditPart);
+		} else {
+			setBaseEnabled(false);
+		}
+
+
 	}
 
-	private static List<IInterfaceElement> getConnectionOposites(final ISelection selection,
+	protected static List<IInterfaceElement> getConnectionOposites(final ISelection selection,
 			final FBNetwork fbNetwork) {
 		if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
@@ -200,19 +218,66 @@ public class FollowConnectionHandler extends AbstractHandler {
 		return ie.eContainer().eContainer() instanceof FBType;
 	}
 
-	private static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
+	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
 		final FBNetworkElement fbnElement = ie.getFBNetworkElement();
 		return ((fbnElement instanceof SubApp) || (fbnElement instanceof CFBInstance))
 				&& (!fbNetwork.equals(fbnElement.eContainer()));
 	}
 
-	private static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites, final ExecutionEvent event,
+	protected static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites,
+			final ExecutionEvent event,
 			final GraphicalViewer viewer) throws ExecutionException {
 
 		final OppositeSelectionDialog dialog = new OppositeSelectionDialog(HandlerUtil.getActiveShellChecked(event),
 				opposites, viewer);
-
 		dialog.open();
 	}
 
+	protected IInterfaceElement getInternalOppositePin(final ISelection selection) {
+		final InterfaceEditPart pin = (InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement();
+
+		if (hasOpposites(pin)) {
+			if(pin.isEvent()) {
+				return getInternalOppositeEventPin(pin);
+			}
+			else if (pin.isVariable() && !pin.isAdapter()) {
+				return getInternalOppositeVarPin(pin);
+			} else {
+				return getInternalOppositePlugOrSocketPin(pin);
+			}
+		}
+		return null;
+	}
+
+	@SuppressWarnings("static-method")
+	protected IInterfaceElement getInternalOppositeEventPin(final InterfaceEditPart pin) {
+		return null;
+	}
+
+	@SuppressWarnings("static-method")
+	protected IInterfaceElement getInternalOppositeVarPin(final InterfaceEditPart pin) {
+		return null;
+	}
+
+	@SuppressWarnings("static-method")
+	protected IInterfaceElement getInternalOppositePlugOrSocketPin(final InterfaceEditPart pin) {
+		return null;
+	}
+
+	@SuppressWarnings("static-method")
+	protected boolean hasOpposites(final InterfaceEditPart pin) {
+		return false;
+	}
+
+	protected static IInterfaceElement calcInternalOppositePin(final EList<?> source, final EList<?> destination,
+			final InterfaceEditPart pin) {
+		if (!source.contains(pin.getModel())) {
+			return (IInterfaceElement) destination.get(0);
+		}
+
+		if ((destination.size() - 1) < source.indexOf(pin.getModel())) {
+			return (IInterfaceElement) destination.get(destination.size() - 1);
+		}
+		return (IInterfaceElement) destination.get(source.indexOf(pin.getModel()));
+	}
 }

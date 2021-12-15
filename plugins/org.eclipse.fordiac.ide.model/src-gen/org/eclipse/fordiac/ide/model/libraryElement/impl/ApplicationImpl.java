@@ -33,12 +33,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class ApplicationImpl extends ConfigurableObjectImpl implements Application {
-	/** The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getFBNetwork()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBNetwork fBNetwork;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

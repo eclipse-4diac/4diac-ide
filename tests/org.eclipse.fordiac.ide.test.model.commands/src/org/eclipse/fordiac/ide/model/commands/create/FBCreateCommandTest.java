@@ -48,17 +48,17 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getName());
 		t.test(state.getFbNetwork().getNetworkElements().get(0).eContainer());
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs()
-				.equals(state.getFunctionblock().getFBType().getInterfaceList().getEventInputs()));
+				.equals(state.getFunctionblock().getType().getInterfaceList().getEventInputs()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs()
-				.equals(state.getFunctionblock().getFBType().getInterfaceList().getEventOutputs()));
+				.equals(state.getFunctionblock().getType().getInterfaceList().getEventOutputs()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars()
-				.equals(state.getFunctionblock().getFBType().getInterfaceList().getInputVars()));
+				.equals(state.getFunctionblock().getType().getInterfaceList().getInputVars()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars()
-				.equals(state.getFunctionblock().getFBType().getInterfaceList().getOutputVars()));
+				.equals(state.getFunctionblock().getType().getInterfaceList().getOutputVars()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getPlugs()
-				.equals(state.getFunctionblock().getFBType().getInterfaceList().getPlugs()));
+				.equals(state.getFunctionblock().getType().getInterfaceList().getPlugs()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getSockets()
-				.equals(state.getFunctionblock().getFBType().getInterfaceList().getSockets()));
+				.equals(state.getFunctionblock().getType().getInterfaceList().getSockets()));
 	}
 
 	// parameter creation function

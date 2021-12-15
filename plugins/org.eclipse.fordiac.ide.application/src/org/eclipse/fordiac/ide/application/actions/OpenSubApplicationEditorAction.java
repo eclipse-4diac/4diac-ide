@@ -15,6 +15,9 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -45,6 +48,10 @@ public class OpenSubApplicationEditorAction extends AbstractOpenSystemElementLis
 			openInSystemEditor(((AutomationSystem) root).getSystemFile(), subApp);
 		} else if (root instanceof SubAppType) {
 			openInSubappTypeEditor((SubAppType) root, subApp);
+		} else if (root instanceof SystemPaletteEntry) {
+			openInSystemEditor(((PaletteEntry) root).getFile(), subApp);
+		} else if (root instanceof SubApplicationTypePaletteEntry) {
+			openInSubappTypeEditor(((SubApplicationTypePaletteEntry) root).getType(), subApp);
 		}
 	}
 

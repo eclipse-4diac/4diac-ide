@@ -20,23 +20,31 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Demultiplexer</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Demultiplexer</b></em>'.
+ * <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class DemultiplexerImpl extends StructManipulatorImpl implements Demultiplexer {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	protected DemultiplexerImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.DEMULTIPLEXER;
 	}
 
-} // DemultiplexerImpl
+} //DemultiplexerImpl

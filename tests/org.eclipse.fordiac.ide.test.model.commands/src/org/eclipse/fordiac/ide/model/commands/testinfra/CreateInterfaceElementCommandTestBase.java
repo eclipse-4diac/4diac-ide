@@ -56,7 +56,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 	}
 
 	protected static InterfaceList getTypeInterfaceList(final State s) {
-		return s.getFunctionblock().getFBType().getInterfaceList();
+		return s.getFunctionblock().getType().getInterfaceList();
 	}
 
 	protected static InterfaceList getInstanceInterfaceList(final State s) {

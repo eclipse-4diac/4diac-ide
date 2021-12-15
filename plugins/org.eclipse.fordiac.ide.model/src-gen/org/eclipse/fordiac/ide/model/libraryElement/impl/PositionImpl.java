@@ -37,32 +37,40 @@ import org.eclipse.fordiac.ide.model.libraryElement.Position;
  *
  * @generated */
 public class PositionImpl extends EObjectImpl implements Position {
-	/** The default value of the '{@link #getX() <em>X</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The default value of the '{@link #getX() <em>X</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getX()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int X_EDEFAULT = 0;
 
-	/** The cached value of the '{@link #getX() <em>X</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getX() <em>X</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getX()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int x = X_EDEFAULT;
 
-	/** The default value of the '{@link #getY() <em>Y</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The default value of the '{@link #getY() <em>Y</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getY()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int Y_EDEFAULT = 0;
 
-	/** The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getY()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int y = Y_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

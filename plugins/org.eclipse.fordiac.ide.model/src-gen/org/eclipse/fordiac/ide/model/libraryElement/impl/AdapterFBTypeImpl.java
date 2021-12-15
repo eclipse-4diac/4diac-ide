@@ -33,12 +33,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
-	/** The cached value of the '{@link #getAdapterType() <em>Adapter Type</em>}' reference. <!-- begin-user-doc -->
+	/**
+	 * The cached value of the '{@link #getAdapterType() <em>Adapter Type</em>}' reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getAdapterType()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected AdapterType adapterType;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

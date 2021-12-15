@@ -81,7 +81,7 @@ public class CreateInternalFBCommand extends Command implements CreationCommand 
 		internalFB = LibraryElementFactory.eINSTANCE.createFB();
 		internalFB.setPaletteEntry(fbType);
 		internalFB.setComment(""); //$NON-NLS-1$
-		internalFB.setInterface(fbType.getFBType().getInterfaceList().copy());
+		internalFB.setInterface(fbType.getType().getInterfaceList().copy());
 		getInteralFBList().add(index, internalFB);
 		internalFB.setName(NameRepository.createUniqueName(internalFB, name));
 	}

@@ -67,12 +67,13 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	public void setInterface() {
 		newElement.setInterface(newElement.getType().getInterfaceList().copy());
 		if (newElement instanceof Multiplexer) {
-			((Multiplexer)newElement).setStructTypeElementsAtInterface((StructuredType) ((FBTypePaletteEntryImpl) entry)
-					.getFBType().getInterfaceList().getOutputVars().get(0).getType());
+			((Multiplexer) newElement)
+			.setStructTypeElementsAtInterface((StructuredType) ((FBTypePaletteEntryImpl) entry).getType()
+					.getInterfaceList().getOutputVars().get(0).getType());
 		}
 		if(newElement instanceof Demultiplexer){
 			((Demultiplexer) newElement)
-			.setStructTypeElementsAtInterface((StructuredType) ((FBTypePaletteEntryImpl) entry).getFBType()
+			.setStructTypeElementsAtInterface((StructuredType) ((FBTypePaletteEntryImpl) entry).getType()
 					.getInterfaceList().getInputVars().get(0).getType());
 		}
 	}

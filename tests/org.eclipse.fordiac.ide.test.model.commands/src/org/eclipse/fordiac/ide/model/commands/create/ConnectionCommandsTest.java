@@ -29,10 +29,10 @@ public class ConnectionCommandsTest extends FBNetworkTestBase {
 
 	public static State addIOWiths(final State state) {
 		final CompoundCommand c = new CompoundCommand();
-		c.add(new WithCreateCommand(state.getFunctionblock().getFBType().getInterfaceList().getEventInputs().get(0),
-				state.getFunctionblock().getFBType().getInterfaceList().getInputVars().get(0)));
-		c.add(new WithCreateCommand(state.getFunctionblock().getFBType().getInterfaceList().getEventOutputs().get(0),
-				state.getFunctionblock().getFBType().getInterfaceList().getOutputVars().get(0)));
+		c.add(new WithCreateCommand(state.getFunctionblock().getType().getInterfaceList().getEventInputs().get(0),
+				state.getFunctionblock().getType().getInterfaceList().getInputVars().get(0)));
+		c.add(new WithCreateCommand(state.getFunctionblock().getType().getInterfaceList().getEventOutputs().get(0),
+				state.getFunctionblock().getType().getInterfaceList().getOutputVars().get(0)));
 		state.setCommand(c);
 		return commandExecution(state);
 	}

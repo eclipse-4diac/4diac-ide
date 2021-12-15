@@ -68,7 +68,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
-	private ValueEditPart referencedPart;
 	private int mouseState;
 	private static int maxWidth = -1;
 
@@ -252,7 +251,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 		@Override
 		public Dimension getTextSize() {
-                        //call super class to set TextSize
+			//call super class to set TextSize
 			super.getTextSize();
 			return getSubStringTextSize();
 		}
@@ -379,7 +378,6 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(preferenceListener);
 			removeSourcePinAdapter();
 		}
-		referencedPart = null;
 	}
 
 	@Override
@@ -439,13 +437,13 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	public ValueEditPart getReferencedValueEditPart() {
-		if ((null == referencedPart) && (getModel() instanceof VarDeclaration)) {
+		if ((getModel() instanceof VarDeclaration)) {
 			final Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration) getModel()).getValue());
 			if (temp instanceof ValueEditPart) {
-				referencedPart = (ValueEditPart) temp;
+				return (ValueEditPart) temp;
 			}
 		}
-		return referencedPart;
+		return null;
 	}
 
 	private void addSourcePinAdapter() {

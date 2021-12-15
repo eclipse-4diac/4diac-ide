@@ -55,6 +55,8 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 
 	private AbstractConnectionCreateCommand mirroredConnection;
 
+	private boolean visible = true;
+
 	protected AbstractConnectionCreateCommand(final FBNetwork parent) {
 		super();
 		// initialize values
@@ -152,6 +154,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		connection.setSource(source);
 		connection.setDestination(destination);
 		connection.setRoutingData(routingData);
+		connection.setVisible(visible);
 
 		parent.addConnection(connection);
 
@@ -260,6 +263,10 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 
 	private void setPerformMappingCheck(final boolean performMappingCheck) {
 		this.performMappingCheck = performMappingCheck;
+	}
+
+	public void setVisible(final boolean visible) {
+		this.visible = visible;
 	}
 
 }

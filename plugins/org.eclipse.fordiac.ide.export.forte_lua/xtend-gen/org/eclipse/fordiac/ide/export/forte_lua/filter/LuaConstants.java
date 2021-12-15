@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -423,8 +424,7 @@ public class LuaConstants {
   public static CharSequence luaFBVariable(final VarDeclaration decl) {
     CharSequence _xblockexpression = null;
     {
-      EObject _rootContainer = EcoreUtil.getRootContainer(decl);
-      final FBType type = ((FBType) _rootContainer);
+      final FBType type = LuaConstants.getRootFBType(decl);
       CharSequence _xifexpression = null;
       boolean _contains = type.getInterfaceList().getInputVars().contains(decl);
       if (_contains) {
@@ -465,6 +465,18 @@ public class LuaConstants {
         _xifexpression = _xifexpression_1;
       }
       _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
+  }
+  
+  protected static FBType getRootFBType(final VarDeclaration decl) {
+    FBType _xblockexpression = null;
+    {
+      final EObject root = EcoreUtil.getRootContainer(decl);
+      if ((root instanceof FBTypePaletteEntry)) {
+        return ((FBTypePaletteEntry)root).getType();
+      }
+      _xblockexpression = ((FBType) root);
     }
     return _xblockexpression;
   }

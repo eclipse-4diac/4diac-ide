@@ -39,12 +39,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
-	/** The cached value of the '{@link #getECC() <em>ECC</em>}' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getECC() <em>ECC</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getECC()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ECC eCC;
 
 	/** The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' containment reference list. <!--

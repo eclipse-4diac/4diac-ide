@@ -54,12 +54,13 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * @ordered */
 	protected InputPrimitive inputPrimitive;
 
-	/** The cached value of the '{@link #getOutputPrimitive() <em>Output Primitive</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getOutputPrimitive() <em>Output Primitive</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @see #getOutputPrimitive()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<OutputPrimitive> outputPrimitive;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

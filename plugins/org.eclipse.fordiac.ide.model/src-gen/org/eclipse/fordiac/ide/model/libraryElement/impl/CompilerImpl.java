@@ -33,74 +33,92 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated */
 public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide.model.libraryElement.Compiler {
-	/** The default value of the '{@link #getLanguage() <em>Language</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getLanguage() <em>Language</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getLanguage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final Language LANGUAGE_EDEFAULT = Language.C;
 
-	/** The cached value of the '{@link #getLanguage() <em>Language</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getLanguage() <em>Language</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getLanguage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Language language = LANGUAGE_EDEFAULT;
 
-	/** This is true if the Language attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * This is true if the Language attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected boolean languageESet;
 
-	/** The default value of the '{@link #getProduct() <em>Product</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getProduct() <em>Product</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getProduct()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String PRODUCT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getProduct() <em>Product</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getProduct() <em>Product</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getProduct()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String product = PRODUCT_EDEFAULT;
 
-	/** The default value of the '{@link #getVendor() <em>Vendor</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getVendor() <em>Vendor</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getVendor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String VENDOR_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getVendor() <em>Vendor</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getVendor() <em>Vendor</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getVendor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String vendor = VENDOR_EDEFAULT;
 
-	/** The default value of the '{@link #getVersion() <em>Version</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getVersion()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String VERSION_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getVersion() <em>Version</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getVersion()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String version = VERSION_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

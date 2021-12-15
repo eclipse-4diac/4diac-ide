@@ -76,6 +76,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 		}
 	}
 
+	@Override
 	public boolean isRunning() {
 		return running;
 	}
@@ -131,7 +132,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 						run.setSelection(false);
 						return;
 					}
-					testDeploymentExecutor.addWatches(); 
+					testDeploymentExecutor.addWatches();
 					final Thread t = new Thread(new TriggerRequestRunnable());
 					t.start();
 					try {
@@ -142,7 +143,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 					}
 				} else {
 					setRunning(false);
-					String response = testDeploymentExecutor.cleanNetwork();
+					final String response = testDeploymentExecutor.cleanNetwork();
 					if (response != null) {
 						final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
 						msb.setMessage(MessageFormat.format(
@@ -174,7 +175,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 		return configuration;
 
 	}
-	
+
 	@Override
 	public String close() {
 		if(isRunning()){
@@ -183,7 +184,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String clean() {
 		if(isRunning()){
@@ -193,23 +194,25 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 		}
 		return null;
 	}
-	
+
+	@Override
 	public String resetFB() {
 		if(isRunning()) {
 			try {
 				testDeploymentExecutor.resetFB();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				return e.getMessage();
 			}
 		}
 		return null;
 	}
-	
+
+	@Override
 	public String startFB() {
 		if(isRunning()) {
 			try {
 				testDeploymentExecutor.startFB();
-			} catch (DeploymentException e) {
+			} catch (final DeploymentException e) {
 				return e.getMessage();
 			}
 		}
@@ -225,13 +228,14 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 			}
 		}
 	}
-	
+
 	private IDeploymentListener getDeploymentListener() {
 		return this;
 	}
 
 	private Map<String, TestElement> getTestElements() {
-		return testElements = TestingManager.getInstance().getTestElements(type, this, this);
+		testElements = TestingManager.getInstance().getTestElements(type, this, this);
+		return testElements;
 	}
 
 	class TriggerRequestRunnable implements Runnable {
@@ -248,47 +252,49 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 				if (running) {
 					try {
 						evaluateResponse(testDeploymentExecutor.readWatches());
-					} catch (DeploymentException e) {
+					} catch (final DeploymentException e) {
 						FordiacLogHelper.logError(e.getMessage(), e);
 					}
 				}
 			}
 		}
-	}
 
-	private void evaluateResponse(final Response resp) {
-		if (resp.getWatches() != null) {
-			for (final Resource res : resp.getWatches().getResources()) {
-				for (final FB fb : res.getFbs()) {
-					evaluateFbResponse(res, fb);
+		private void evaluateResponse(final Response resp) {
+			if (resp.getWatches() != null) {
+				for (final Resource res : resp.getWatches().getResources()) {
+					for (final FB fb : res.getFbs()) {
+						evaluateFbResponse(res, fb);
+					}
 				}
 			}
 		}
-	}
 
-	private void evaluateFbResponse(final Resource res, final FB fb) {
-		for (final Port p : fb.getPorts()) {
-			for (final Data d : p.getDataValues()) {
-				final TestElement element = testElements.get(res.getName() + "." + fb.getName() //$NON-NLS-1$
-						+ "." + p.getName()); //$NON-NLS-1$
-				if (element != null ) {
-					element.updateValue(d.getValue(), 0);
+		private void evaluateFbResponse(final Resource res, final FB fb) {
+			for (final Port p : fb.getPorts()) {
+				for (final Data d : p.getDataValues()) {
+					final TestElement element = testElements.get(res.getName() + "." + fb.getName() //$NON-NLS-1$
+							+ "." + p.getName()); //$NON-NLS-1$
+					if (element != null) {
+						element.updateValue(d.getValue(), 0);
+					}
 				}
 			}
 		}
+
 	}
+
 
 	public void setValue(final TestElement element) {
 		if (isRunning()) {
 			try {
-				String value = element.getValue();
+				final String value = element.getValue();
 				testDeploymentExecutor.setValue(element,value);
-			} catch (DeploymentException e) {
+			} catch (final DeploymentException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 	}
-	
+
 	/** "Type" : "FB", "Name" : "FB_ADD_INT", "Resource" : "RES1", "Port" : "IN1", "force" : true, "forceValue" : "10"
 	 *
 	 * @param element */
@@ -298,7 +304,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 			if (element != null) {
 				try {
 					testDeploymentExecutor.sendEvent(element);
-				} catch (DeploymentException e) {
+				} catch (final DeploymentException e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
@@ -321,12 +327,12 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 	}
 
 	@Override
-	public void postCommandSent(String info, String destination, String command) {
+	public void postCommandSent(final String info, final String destination, final String command) {
 		//currently not used method
 	}
 
 	@Override
-	public  void postResponseReceived(String response, String source) {
+	public  void postResponseReceived(final String response, final String source) {
 		if(response.contains(UNSUPPORTED_TYPE)){
 			final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
 			msb.setMessage(MessageFormat.format(
@@ -345,13 +351,12 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 			setRunning(false);
 			run.setSelection(false);
 			testDeploymentExecutor.cleanNetwork();
-			return;
 		}
-		
+
 	}
 
 	@Override
-	public void connectionClosed() {	
+	public void connectionClosed() {
 		//currently not used method
 	}
 

@@ -102,19 +102,26 @@ public final class WatchValueTreeNodeUtils {
 		return buildSubTreeString(dbgStruct.getChildren(), CLAMP_OP) + CLAMP_CL;
 	}
 
-	private static String buildSubTreeString(final List<AbstractStructTreeNode> list, String valString) {
+	private static String buildSubTreeString(final List<AbstractStructTreeNode> list, final String valString) {
+		final StringBuilder sb = new StringBuilder(valString);
 		for (final AbstractStructTreeNode tn : list) {
 			final WatchValueTreeNode wtn = (WatchValueTreeNode) tn;
 			if (wtn.hasChildren()) {
-				valString += wtn.getPinName() + ASSIGN + CLAMP_OP;
-				valString += buildSubTreeString(wtn.getChildren(), valString) + CLAMP_CL + DELIMITER;
+				sb.append(wtn.getPinName());
+				sb.append(ASSIGN + CLAMP_OP);
+				sb.append(buildSubTreeString(wtn.getChildren(), valString));
+				sb.append(CLAMP_CL + DELIMITER);
 				continue;
 			}
 			if (wtn.getVariable() != null) {
-				valString += wtn.getVariable().getName() + ASSIGN + wtn.getValue() + DELIMITER;
+				sb.append(wtn.getVariable().getName());
+				sb.append(ASSIGN);
+				sb.append(wtn.getValue());
+				sb.append(DELIMITER);
 			}
 		}
-		return valString.substring(0, valString.length() - 1); // remove last delimiter
+		sb.deleteCharAt(sb.length() - 1); // remove last delimiter
+		return sb.toString();
 	}
 
 	private static boolean isStruct(final DataType type) {
@@ -134,4 +141,7 @@ public final class WatchValueTreeNodeUtils {
 		return (type instanceof AnyBitType) && !(type instanceof BoolType);
 	}
 
+	private WatchValueTreeNodeUtils() {
+		throw new UnsupportedOperationException("Utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

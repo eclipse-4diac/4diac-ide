@@ -61,6 +61,7 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry
 
 class STAlgorithmFilter {
 
@@ -77,7 +78,8 @@ class STAlgorithmFilter {
 		val resourceSet = SERVICE_PRIVIDER.get(ResourceSet)
 		// create resource for function block and add copy
 		val fbResource = resourceSet.createResource(SYNTHETIC_FB_URI)
-		val fbCopy = alg.rootContainer.copy
+		val entry = alg.rootContainer as FBTypePaletteEntry
+		val fbCopy = entry.type.copy
 		fbResource.contents.add(fbCopy)
 		// create resource for algorithm
 		val resource = resourceSet.createResource(SYNTHETIC_ST_URI) as XtextResource

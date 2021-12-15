@@ -29,6 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -50,38 +52,52 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		EditPart part = null;
-		if (modelElement instanceof ErrorMarkerFBNElement) {
-			part = new ErrorMarkerFBNEditPart();
-		} else
-			if (modelElement instanceof UnfoldedSubappContentNetwork) {
-				part = new UnfoldedSubappContentEditPart();
-			} else if (modelElement instanceof FBNetwork) {
-				part = getPartForFBNetwork((FBNetwork) modelElement);
-			} else if (modelElement instanceof FB) {
-				if (null != ((FB) modelElement).getType()) {
-					if (((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
-						return new MultiplexerEditPart();
-					} else if (((FB) modelElement).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
-						return new DemultiplexerEditPart();
-					}
-				}
-				part = new FBEditPart();
-			} else if (modelElement instanceof InstanceName) {
-				part = new InstanceNameEditPart();
-			} else if (modelElement instanceof InstanceComment) {
-				part = new InstanceCommentEditPart();
-			} else if (modelElement instanceof Connection) {
-				part = new ConnectionEditPart();
-			} else if (modelElement instanceof SubApp) {
-				part = new SubAppForFBNetworkEditPart();
-			} else if (modelElement instanceof IInterfaceElement) {
-				part = createInterfaceEditPart(modelElement, context);
-			} else if (modelElement instanceof Value) {
-				part = new ValueEditPart();
-			} else {
-				throw createEditpartCreationException(modelElement);
-			}
+		if (modelElement instanceof UnfoldedSubappContentNetwork) {
+			part = new UnfoldedSubappContentEditPart();
+		} else if (modelElement instanceof GroupContentNetwork) {
+			part = new GroupContentEditPart();
+		} else if (modelElement instanceof FBNetwork) {
+			part = getPartForFBNetwork((FBNetwork) modelElement);
+		} else if (modelElement instanceof FBNetworkElement) {
+			part = getPartForFBNetworkElement((FBNetworkElement) modelElement);
+		} else if (modelElement instanceof InstanceName) {
+			part = new InstanceNameEditPart();
+		} else if (modelElement instanceof InstanceComment) {
+			part = new InstanceCommentEditPart();
+		} else if (modelElement instanceof Connection) {
+			part = new ConnectionEditPart();
+		} else if (modelElement instanceof IInterfaceElement) {
+			part = createInterfaceEditPart(modelElement, context);
+		} else if (modelElement instanceof Value) {
+			part = new ValueEditPart();
+		} else {
+			throw createEditpartCreationException(modelElement);
+		}
 		return part;
+	}
+
+	private static EditPart getPartForFBNetworkElement(final FBNetworkElement element) {
+		if (element instanceof ErrorMarkerFBNElement) {
+			return new ErrorMarkerFBNEditPart();
+		}
+		if (element instanceof FB) {
+			if (null != ((FB) element).getType()) {
+				if (((FB) element).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
+					return new MultiplexerEditPart();
+				} else if (((FB) element).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
+					return new DemultiplexerEditPart();
+				}
+			}
+			return new FBEditPart();
+		}
+		if (element instanceof SubApp) {
+			return new SubAppForFBNetworkEditPart();
+		}
+		if (element instanceof Group) {
+			return new GroupEditPart();
+		}
+
+		throw createEditpartCreationException(element);
 	}
 
 	@SuppressWarnings("static-method")  // not static to allow subclasses to provide own elements
