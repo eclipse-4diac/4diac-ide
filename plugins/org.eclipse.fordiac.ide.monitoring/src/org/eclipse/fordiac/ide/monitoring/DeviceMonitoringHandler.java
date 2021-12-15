@@ -135,10 +135,12 @@ class DeviceMonitoringHandler implements Runnable {
 	private void checkSubappGroups(final HashMap<String, SubappGroup> collectedGroups, final Port port,
 			String portString, final MonitoringBaseElement element) {
 		List<MonitoringElement> subappPins = systemMonData.getSubappElements().get(portString);
-		final Entry<String, List<MonitoringElement>> subappEntry = systemMonData.getSubappElements(element);
-		if (element != null && subappPins == null && subappEntry != null) {
-			subappPins = subappEntry.getValue();
-			portString = subappEntry.getKey();
+		if (element != null && subappPins == null) {
+			final Entry<String, List<MonitoringElement>> subappEntry = systemMonData.getSubappElements(element);
+			if (subappEntry != null) {
+				subappPins = subappEntry.getValue();
+				portString = subappEntry.getKey();
+			}
 		}
 
 		if (subappPins != null) {
@@ -225,7 +227,7 @@ class DeviceMonitoringHandler implements Runnable {
 				.equals(monitoringElement.getCurrentValue());
 	}
 
-	public static boolean isEventPin(final MonitoringElement monitoringElement) {
+	public static boolean isEventPin(final MonitoringBaseElement monitoringElement) {
 		return monitoringElement.getPort().getInterfaceElement() instanceof Event;
 	}
 

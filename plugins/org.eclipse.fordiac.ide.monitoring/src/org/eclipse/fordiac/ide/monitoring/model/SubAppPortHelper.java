@@ -55,7 +55,7 @@ public final class SubAppPortHelper {
 	public static String findConnectedMonitoredSubappPort(final IInterfaceElement interfaceElement,
 			final Map<String, List<MonitoringElement>> subappElements) {
 
-		final boolean searchDirection = !interfaceElement.isIsInput();
+		final boolean searchDirection = interfaceElement.isIsInput();
 
 		IInterfaceElement currentIe = interfaceElement;
 		do {
