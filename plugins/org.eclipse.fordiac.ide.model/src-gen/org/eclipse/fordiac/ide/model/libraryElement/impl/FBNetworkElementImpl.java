@@ -279,10 +279,21 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated not 
 	 */
 	@Override
-	public void setMapping(Mapping newMapping) {
+	public void setMapping(final Mapping newMapping) {
+		setMappingGen(newMapping);
+		checkConnections();
+	}
+
+	/** 
+	 * <!-- begin-user-doc --> 
+	 * <!-- end-user-doc -->
+	 *
+	 * @generated 
+	 */
+	public void setMappingGen(final Mapping newMapping) {
 		Mapping oldMapping = mapping;
 		mapping = newMapping;
 		if (eNotificationRequired())

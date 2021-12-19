@@ -168,8 +168,14 @@ public class CMakeListsMarker implements LibraryElement {
 	}
 
 	@Override
+	public void setPaletteEntry(final PaletteEntry value) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public TypeLibrary getTypeLibrary() {
 		throw new UnsupportedOperationException();
 	}
+
 
 }

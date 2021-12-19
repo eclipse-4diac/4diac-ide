@@ -63,36 +63,55 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int DATA_TYPE = 2;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATA_TYPE__NAME = LibraryElementPackage.LIBRARY_ELEMENT__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATA_TYPE__COMMENT = LibraryElementPackage.LIBRARY_ELEMENT__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATA_TYPE__VERSION_INFO = LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATA_TYPE__IDENTIFICATION = LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int DATA_TYPE__PALETTE_ENTRY = LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Type</em>' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int DATA_TYPE_FEATURE_COUNT = LibraryElementPackage.LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyTypeImpl <em>Any Type</em>}'
@@ -103,31 +122,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_TYPE = 13;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_TYPE__NAME = DATA_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_TYPE__COMMENT = DATA_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_TYPE__VERSION_INFO = DATA_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Any Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -144,44 +180,65 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_DERIVED_TYPE = 0;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DERIVED_TYPE__NAME = ANY_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DERIVED_TYPE__COMMENT = ANY_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DERIVED_TYPE__VERSION_INFO = ANY_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DERIVED_TYPE__IDENTIFICATION = ANY_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_DERIVED_TYPE__PALETTE_ENTRY = ANY_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_DERIVED_TYPE__COMPILER_INFO = ANY_TYPE_FEATURE_COUNT + 0;
 
-	/** The number of structural features of the '<em>Any Derived Type</em>' class. <!-- begin-user-doc --> <!--
+	/**
+	 * The number of structural features of the '<em>Any Derived Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DERIVED_TYPE_FEATURE_COUNT = ANY_TYPE_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array Type</em>}'
@@ -192,56 +249,81 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ARRAY_TYPE = 1;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ARRAY_TYPE__NAME = ANY_DERIVED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ARRAY_TYPE__COMMENT = ANY_DERIVED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ARRAY_TYPE__VERSION_INFO = ANY_DERIVED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ARRAY_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ARRAY_TYPE__PALETTE_ENTRY = ANY_DERIVED_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ARRAY_TYPE__COMPILER_INFO = ANY_DERIVED_TYPE__COMPILER_INFO;
 
-	/** The feature id for the '<em><b>Subranges</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Subranges</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ARRAY_TYPE__SUBRANGES = ANY_DERIVED_TYPE_FEATURE_COUNT + 0;
 
-	/** The feature id for the '<em><b>Initial Values</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Initial Values</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ARRAY_TYPE__INITIAL_VALUES = ANY_DERIVED_TYPE_FEATURE_COUNT + 1;
 
-	/** The feature id for the '<em><b>Base Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Base Type</b></em>' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ARRAY_TYPE__BASE_TYPE = ANY_DERIVED_TYPE_FEATURE_COUNT + 2;
 
 	/** The number of structural features of the '<em>Array Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
@@ -259,31 +341,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int VALUE_TYPE = 9;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VALUE_TYPE__NAME = DATA_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VALUE_TYPE__COMMENT = DATA_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VALUE_TYPE__VERSION_INFO = DATA_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VALUE_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Value Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -300,43 +399,64 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int DERIVED_TYPE = 11;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DERIVED_TYPE__NAME = VALUE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DERIVED_TYPE__COMMENT = VALUE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DERIVED_TYPE__VERSION_INFO = VALUE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DERIVED_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Base Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int DERIVED_TYPE__PALETTE_ENTRY = VALUE_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Base Type</b></em>' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int DERIVED_TYPE__BASE_TYPE = VALUE_TYPE_FEATURE_COUNT + 0;
 
-	/** The number of structural features of the '<em>Derived Type</em>' class. <!-- begin-user-doc --> <!--
+	/**
+	 * The number of structural features of the '<em>Derived Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DERIVED_TYPE_FEATURE_COUNT = VALUE_TYPE_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DirectlyDerivedTypeImpl <em>Directly
@@ -347,43 +467,64 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int DIRECTLY_DERIVED_TYPE = 3;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DIRECTLY_DERIVED_TYPE__NAME = DERIVED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DIRECTLY_DERIVED_TYPE__COMMENT = DERIVED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DIRECTLY_DERIVED_TYPE__VERSION_INFO = DERIVED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DIRECTLY_DERIVED_TYPE__IDENTIFICATION = DERIVED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Base Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int DIRECTLY_DERIVED_TYPE__PALETTE_ENTRY = DERIVED_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Base Type</b></em>' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int DIRECTLY_DERIVED_TYPE__BASE_TYPE = DERIVED_TYPE__BASE_TYPE;
 
-	/** The number of structural features of the '<em>Directly Derived Type</em>' class. <!-- begin-user-doc --> <!--
+	/**
+	 * The number of structural features of the '<em>Directly Derived Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DIRECTLY_DERIVED_TYPE_FEATURE_COUNT = DERIVED_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl <em>Enumerated
@@ -394,44 +535,65 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ENUMERATED_TYPE = 4;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ENUMERATED_TYPE__NAME = VALUE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ENUMERATED_TYPE__COMMENT = VALUE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ENUMERATED_TYPE__VERSION_INFO = VALUE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ENUMERATED_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Enumerated Value</b></em>' containment reference list. <!-- begin-user-doc -->
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ENUMERATED_TYPE__PALETTE_ENTRY = VALUE_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Enumerated Value</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ENUMERATED_TYPE__ENUMERATED_VALUE = VALUE_TYPE_FEATURE_COUNT + 0;
 
-	/** The number of structural features of the '<em>Enumerated Type</em>' class. <!-- begin-user-doc --> <!--
+	/**
+	 * The number of structural features of the '<em>Enumerated Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ENUMERATED_TYPE_FEATURE_COUNT = VALUE_TYPE_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl <em>Enumerated
@@ -442,23 +604,29 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ENUMERATED_VALUE = 5;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ENUMERATED_VALUE__COMMENT = 0;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ENUMERATED_VALUE__NAME = 1;
 
-	/** The number of structural features of the '<em>Enumerated Value</em>' class. <!-- begin-user-doc --> <!--
+	/**
+	 * The number of structural features of the '<em>Enumerated Value</em>' class.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ENUMERATED_VALUE_FEATURE_COUNT = 2;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl <em>Structured
@@ -469,51 +637,74 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int STRUCTURED_TYPE = 6;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRUCTURED_TYPE__NAME = ANY_DERIVED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRUCTURED_TYPE__COMMENT = ANY_DERIVED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRUCTURED_TYPE__VERSION_INFO = ANY_DERIVED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRUCTURED_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Compiler Info</b></em>' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int STRUCTURED_TYPE__PALETTE_ENTRY = ANY_DERIVED_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int STRUCTURED_TYPE__COMPILER_INFO = ANY_DERIVED_TYPE__COMPILER_INFO;
 
-	/** The feature id for the '<em><b>Member Variables</b></em>' containment reference list. <!-- begin-user-doc -->
+	/**
+	 * The feature id for the '<em><b>Member Variables</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRUCTURED_TYPE__MEMBER_VARIABLES = ANY_DERIVED_TYPE_FEATURE_COUNT + 0;
 
-	/** The number of structural features of the '<em>Structured Type</em>' class. <!-- begin-user-doc --> <!--
+	/**
+	 * The number of structural features of the '<em>Structured Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRUCTURED_TYPE_FEATURE_COUNT = ANY_DERIVED_TYPE_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl <em>Subrange</em>}'
@@ -524,16 +715,20 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int SUBRANGE = 7;
 
-	/** The feature id for the '<em><b>Lower Limit</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Lower Limit</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SUBRANGE__LOWER_LIMIT = 0;
 
-	/** The feature id for the '<em><b>Upper Limit</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Upper Limit</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SUBRANGE__UPPER_LIMIT = 1;
 
 	/** The number of structural features of the '<em>Subrange</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
@@ -551,50 +746,73 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int SUBRANGE_TYPE = 8;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SUBRANGE_TYPE__NAME = DERIVED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SUBRANGE_TYPE__COMMENT = DERIVED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SUBRANGE_TYPE__VERSION_INFO = DERIVED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SUBRANGE_TYPE__IDENTIFICATION = DERIVED_TYPE__IDENTIFICATION;
 
-	/** The feature id for the '<em><b>Base Type</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int SUBRANGE_TYPE__PALETTE_ENTRY = DERIVED_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Base Type</b></em>' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int SUBRANGE_TYPE__BASE_TYPE = DERIVED_TYPE__BASE_TYPE;
 
-	/** The feature id for the '<em><b>Subrange</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Subrange</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SUBRANGE_TYPE__SUBRANGE = DERIVED_TYPE_FEATURE_COUNT + 0;
 
-	/** The number of structural features of the '<em>Subrange Type</em>' class. <!-- begin-user-doc --> <!--
+	/**
+	 * The number of structural features of the '<em>Subrange Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SUBRANGE_TYPE_FEATURE_COUNT = DERIVED_TYPE_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ElementaryTypeImpl <em>Elementary
@@ -605,37 +823,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ELEMENTARY_TYPE = 10;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ELEMENTARY_TYPE__NAME = VALUE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ELEMENTARY_TYPE__COMMENT = VALUE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ELEMENTARY_TYPE__VERSION_INFO = VALUE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ELEMENTARY_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Elementary Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ELEMENTARY_TYPE__PALETTE_ENTRY = VALUE_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Elementary Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ELEMENTARY_TYPE_FEATURE_COUNT = VALUE_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EventTypeImpl <em>Event Type</em>}'
@@ -646,31 +883,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int EVENT_TYPE = 12;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int EVENT_TYPE__NAME = DATA_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int EVENT_TYPE__COMMENT = DATA_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int EVENT_TYPE__VERSION_INFO = DATA_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int EVENT_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Event Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -687,37 +941,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_ELEMENTARY_TYPE = 14;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_ELEMENTARY_TYPE__NAME = ANY_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_ELEMENTARY_TYPE__COMMENT = ANY_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_ELEMENTARY_TYPE__VERSION_INFO = ANY_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_ELEMENTARY_TYPE__IDENTIFICATION = ANY_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Elementary Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_ELEMENTARY_TYPE__PALETTE_ENTRY = ANY_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Elementary Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_ELEMENTARY_TYPE_FEATURE_COUNT = ANY_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyMagnitudeTypeImpl <em>Any
@@ -728,37 +1001,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_MAGNITUDE_TYPE = 15;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_MAGNITUDE_TYPE__NAME = ANY_ELEMENTARY_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_MAGNITUDE_TYPE__COMMENT = ANY_ELEMENTARY_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_MAGNITUDE_TYPE__VERSION_INFO = ANY_ELEMENTARY_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_MAGNITUDE_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Magnitude Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_MAGNITUDE_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Magnitude Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_MAGNITUDE_TYPE_FEATURE_COUNT = ANY_ELEMENTARY_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyNumTypeImpl <em>Any Num
@@ -769,37 +1061,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_NUM_TYPE = 16;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_NUM_TYPE__NAME = ANY_MAGNITUDE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_NUM_TYPE__COMMENT = ANY_MAGNITUDE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_NUM_TYPE__VERSION_INFO = ANY_MAGNITUDE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_NUM_TYPE__IDENTIFICATION = ANY_MAGNITUDE_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Num Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_NUM_TYPE__PALETTE_ENTRY = ANY_MAGNITUDE_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Num Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_NUM_TYPE_FEATURE_COUNT = ANY_MAGNITUDE_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyRealTypeImpl <em>Any Real
@@ -810,37 +1121,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_REAL_TYPE = 17;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_REAL_TYPE__NAME = ANY_NUM_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_REAL_TYPE__COMMENT = ANY_NUM_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_REAL_TYPE__VERSION_INFO = ANY_NUM_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_REAL_TYPE__IDENTIFICATION = ANY_NUM_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Real Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_REAL_TYPE__PALETTE_ENTRY = ANY_NUM_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Real Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_REAL_TYPE_FEATURE_COUNT = ANY_NUM_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.RealTypeImpl <em>Real Type</em>}'
@@ -851,31 +1181,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int REAL_TYPE = 18;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int REAL_TYPE__NAME = ANY_REAL_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int REAL_TYPE__COMMENT = ANY_REAL_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int REAL_TYPE__VERSION_INFO = ANY_REAL_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int REAL_TYPE__IDENTIFICATION = ANY_REAL_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REAL_TYPE__PALETTE_ENTRY = ANY_REAL_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Real Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -892,31 +1239,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int LREAL_TYPE = 19;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LREAL_TYPE__NAME = ANY_REAL_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LREAL_TYPE__COMMENT = ANY_REAL_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LREAL_TYPE__VERSION_INFO = ANY_REAL_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LREAL_TYPE__IDENTIFICATION = ANY_REAL_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LREAL_TYPE__PALETTE_ENTRY = ANY_REAL_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Lreal Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -933,37 +1297,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_INT_TYPE = 20;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_INT_TYPE__NAME = ANY_NUM_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_INT_TYPE__COMMENT = ANY_NUM_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_INT_TYPE__VERSION_INFO = ANY_NUM_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_INT_TYPE__IDENTIFICATION = ANY_NUM_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Int Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_INT_TYPE__PALETTE_ENTRY = ANY_NUM_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Int Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_INT_TYPE_FEATURE_COUNT = ANY_NUM_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyUnsignedTypeImpl <em>Any Unsigned
@@ -974,37 +1357,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_UNSIGNED_TYPE = 21;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_UNSIGNED_TYPE__NAME = ANY_INT_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_UNSIGNED_TYPE__COMMENT = ANY_INT_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_UNSIGNED_TYPE__VERSION_INFO = ANY_INT_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_UNSIGNED_TYPE__IDENTIFICATION = ANY_INT_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Unsigned Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_UNSIGNED_TYPE__PALETTE_ENTRY = ANY_INT_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Unsigned Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_UNSIGNED_TYPE_FEATURE_COUNT = ANY_INT_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.UsintTypeImpl <em>Usint Type</em>}'
@@ -1015,31 +1417,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int USINT_TYPE = 22;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int USINT_TYPE__NAME = ANY_UNSIGNED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int USINT_TYPE__COMMENT = ANY_UNSIGNED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int USINT_TYPE__VERSION_INFO = ANY_UNSIGNED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int USINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Usint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1056,31 +1475,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int UINT_TYPE = 23;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UINT_TYPE__NAME = ANY_UNSIGNED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UINT_TYPE__COMMENT = ANY_UNSIGNED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UINT_TYPE__VERSION_INFO = ANY_UNSIGNED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Uint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1097,31 +1533,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int UDINT_TYPE = 24;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UDINT_TYPE__NAME = ANY_UNSIGNED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UDINT_TYPE__COMMENT = ANY_UNSIGNED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UDINT_TYPE__VERSION_INFO = ANY_UNSIGNED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UDINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UDINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Udint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1138,31 +1591,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ULINT_TYPE = 25;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ULINT_TYPE__NAME = ANY_UNSIGNED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ULINT_TYPE__COMMENT = ANY_UNSIGNED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ULINT_TYPE__VERSION_INFO = ANY_UNSIGNED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ULINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ULINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Ulint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1179,37 +1649,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_SIGNED_TYPE = 26;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_SIGNED_TYPE__NAME = ANY_INT_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_SIGNED_TYPE__COMMENT = ANY_INT_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_SIGNED_TYPE__VERSION_INFO = ANY_INT_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_SIGNED_TYPE__IDENTIFICATION = ANY_INT_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Signed Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_SIGNED_TYPE__PALETTE_ENTRY = ANY_INT_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Signed Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_SIGNED_TYPE_FEATURE_COUNT = ANY_INT_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.SintTypeImpl <em>Sint Type</em>}'
@@ -1220,31 +1709,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int SINT_TYPE = 27;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SINT_TYPE__NAME = ANY_SIGNED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SINT_TYPE__COMMENT = ANY_SIGNED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SINT_TYPE__VERSION_INFO = ANY_SIGNED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SINT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Sint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1261,31 +1767,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int INT_TYPE = 28;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int INT_TYPE__NAME = ANY_SIGNED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int INT_TYPE__COMMENT = ANY_SIGNED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int INT_TYPE__VERSION_INFO = ANY_SIGNED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int INT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Int Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1302,31 +1825,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int DINT_TYPE = 29;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DINT_TYPE__NAME = ANY_SIGNED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DINT_TYPE__COMMENT = ANY_SIGNED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DINT_TYPE__VERSION_INFO = ANY_SIGNED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DINT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Dint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1343,31 +1883,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int LINT_TYPE = 30;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LINT_TYPE__NAME = ANY_SIGNED_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LINT_TYPE__COMMENT = ANY_SIGNED_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LINT_TYPE__VERSION_INFO = ANY_SIGNED_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Lint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1384,37 +1941,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_DURATION_TYPE = 31;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DURATION_TYPE__NAME = ANY_MAGNITUDE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DURATION_TYPE__COMMENT = ANY_MAGNITUDE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DURATION_TYPE__VERSION_INFO = ANY_MAGNITUDE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DURATION_TYPE__IDENTIFICATION = ANY_MAGNITUDE_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Duration Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_DURATION_TYPE__PALETTE_ENTRY = ANY_MAGNITUDE_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Duration Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_DURATION_TYPE_FEATURE_COUNT = ANY_MAGNITUDE_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.TimeTypeImpl <em>Time Type</em>}'
@@ -1425,31 +2001,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int TIME_TYPE = 32;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int TIME_TYPE__NAME = ANY_DURATION_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int TIME_TYPE__COMMENT = ANY_DURATION_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int TIME_TYPE__VERSION_INFO = ANY_DURATION_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int TIME_TYPE__IDENTIFICATION = ANY_DURATION_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TIME_TYPE__PALETTE_ENTRY = ANY_DURATION_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Time Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1466,31 +2059,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int LTIME_TYPE = 33;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTIME_TYPE__NAME = ANY_DURATION_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTIME_TYPE__COMMENT = ANY_DURATION_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTIME_TYPE__VERSION_INFO = ANY_DURATION_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTIME_TYPE__IDENTIFICATION = ANY_DURATION_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LTIME_TYPE__PALETTE_ENTRY = ANY_DURATION_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Ltime Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1507,37 +2117,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_BIT_TYPE = 34;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_BIT_TYPE__NAME = ANY_ELEMENTARY_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_BIT_TYPE__COMMENT = ANY_ELEMENTARY_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_BIT_TYPE__VERSION_INFO = ANY_ELEMENTARY_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_BIT_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Bit Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_BIT_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Bit Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_BIT_TYPE_FEATURE_COUNT = ANY_ELEMENTARY_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.BoolTypeImpl <em>Bool Type</em>}'
@@ -1548,31 +2177,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int BOOL_TYPE = 35;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BOOL_TYPE__NAME = ANY_BIT_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BOOL_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BOOL_TYPE__VERSION_INFO = ANY_BIT_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BOOL_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOL_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Bool Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1589,31 +2235,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int BYTE_TYPE = 36;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BYTE_TYPE__NAME = ANY_BIT_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BYTE_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BYTE_TYPE__VERSION_INFO = ANY_BIT_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BYTE_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BYTE_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Byte Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1630,31 +2293,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int WORD_TYPE = 37;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WORD_TYPE__NAME = ANY_BIT_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WORD_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WORD_TYPE__VERSION_INFO = ANY_BIT_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORD_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Word Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1671,31 +2351,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int DWORD_TYPE = 38;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DWORD_TYPE__NAME = ANY_BIT_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DWORD_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DWORD_TYPE__VERSION_INFO = ANY_BIT_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DWORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DWORD_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Dword Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1712,31 +2409,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int LWORD_TYPE = 39;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LWORD_TYPE__NAME = ANY_BIT_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LWORD_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LWORD_TYPE__VERSION_INFO = ANY_BIT_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LWORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LWORD_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Lword Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1753,37 +2467,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_CHARS_TYPE = 40;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_CHARS_TYPE__NAME = ANY_ELEMENTARY_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_CHARS_TYPE__COMMENT = ANY_ELEMENTARY_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_CHARS_TYPE__VERSION_INFO = ANY_ELEMENTARY_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_CHARS_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Chars Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_CHARS_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Chars Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_CHARS_TYPE_FEATURE_COUNT = ANY_ELEMENTARY_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyStringTypeImpl <em>Any String
@@ -1794,37 +2527,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_STRING_TYPE = 41;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_STRING_TYPE__NAME = ANY_CHARS_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_STRING_TYPE__COMMENT = ANY_CHARS_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_STRING_TYPE__VERSION_INFO = ANY_CHARS_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_STRING_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any String Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_STRING_TYPE__PALETTE_ENTRY = ANY_CHARS_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any String Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_STRING_TYPE_FEATURE_COUNT = ANY_CHARS_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.StringTypeImpl <em>String Type</em>}'
@@ -1835,31 +2587,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int STRING_TYPE = 42;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRING_TYPE__NAME = ANY_STRING_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRING_TYPE__COMMENT = ANY_STRING_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRING_TYPE__VERSION_INFO = ANY_STRING_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRING_TYPE__IDENTIFICATION = ANY_STRING_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_TYPE__PALETTE_ENTRY = ANY_STRING_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>String Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1876,37 +2645,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int WSTRING_TYPE = 43;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WSTRING_TYPE__NAME = ANY_STRING_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WSTRING_TYPE__COMMENT = ANY_STRING_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WSTRING_TYPE__VERSION_INFO = ANY_STRING_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WSTRING_TYPE__IDENTIFICATION = ANY_STRING_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Wstring Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int WSTRING_TYPE__PALETTE_ENTRY = ANY_STRING_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Wstring Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int WSTRING_TYPE_FEATURE_COUNT = ANY_STRING_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyCharTypeImpl <em>Any Char
@@ -1917,37 +2705,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_CHAR_TYPE = 44;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_CHAR_TYPE__NAME = ANY_CHARS_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_CHAR_TYPE__COMMENT = ANY_CHARS_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_CHAR_TYPE__VERSION_INFO = ANY_CHARS_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_CHAR_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Char Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_CHAR_TYPE__PALETTE_ENTRY = ANY_CHARS_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Char Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_CHAR_TYPE_FEATURE_COUNT = ANY_CHARS_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.CharTypeImpl <em>Char Type</em>}'
@@ -1958,31 +2765,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int CHAR_TYPE = 45;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int CHAR_TYPE__NAME = ANY_CHAR_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int CHAR_TYPE__COMMENT = ANY_CHAR_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int CHAR_TYPE__VERSION_INFO = ANY_CHAR_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int CHAR_TYPE__IDENTIFICATION = ANY_CHAR_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHAR_TYPE__PALETTE_ENTRY = ANY_CHAR_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Char Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -1999,31 +2823,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int WCHAR_TYPE = 46;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WCHAR_TYPE__NAME = ANY_CHAR_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WCHAR_TYPE__COMMENT = ANY_CHAR_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WCHAR_TYPE__VERSION_INFO = ANY_CHAR_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WCHAR_TYPE__IDENTIFICATION = ANY_CHAR_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WCHAR_TYPE__PALETTE_ENTRY = ANY_CHAR_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Wchar Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -2040,37 +2881,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int ANY_DATE_TYPE = 47;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DATE_TYPE__NAME = ANY_ELEMENTARY_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DATE_TYPE__COMMENT = ANY_ELEMENTARY_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DATE_TYPE__VERSION_INFO = ANY_ELEMENTARY_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_DATE_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Any Date Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int ANY_DATE_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any Date Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int ANY_DATE_TYPE_FEATURE_COUNT = ANY_ELEMENTARY_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DateAndTimeTypeImpl <em>Date And Time
@@ -2081,37 +2941,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int DATE_AND_TIME_TYPE = 48;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATE_AND_TIME_TYPE__NAME = ANY_DATE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATE_AND_TIME_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATE_AND_TIME_TYPE__VERSION_INFO = ANY_DATE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATE_AND_TIME_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Date And Time Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int DATE_AND_TIME_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Date And Time Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int DATE_AND_TIME_TYPE_FEATURE_COUNT = ANY_DATE_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LdtTypeImpl <em>Ldt Type</em>}'
@@ -2122,31 +3001,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int LDT_TYPE = 49;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDT_TYPE__NAME = ANY_DATE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDT_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDT_TYPE__VERSION_INFO = ANY_DATE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDT_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LDT_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Ldt Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -2163,31 +3059,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int DATE_TYPE = 50;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATE_TYPE__NAME = ANY_DATE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATE_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATE_TYPE__VERSION_INFO = ANY_DATE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATE_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Date Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -2204,37 +3117,56 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int TIME_OF_DAY_TYPE = 51;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int TIME_OF_DAY_TYPE__NAME = ANY_DATE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int TIME_OF_DAY_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int TIME_OF_DAY_TYPE__VERSION_INFO = ANY_DATE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int TIME_OF_DAY_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
-	/** The number of structural features of the '<em>Time Of Day Type</em>' class. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
+	int TIME_OF_DAY_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Time Of Day Type</em>' class.
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
 	int TIME_OF_DAY_TYPE_FEATURE_COUNT = ANY_DATE_TYPE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LtodTypeImpl <em>Ltod Type</em>}'
@@ -2245,31 +3177,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int LTOD_TYPE = 52;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTOD_TYPE__NAME = ANY_DATE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTOD_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTOD_TYPE__VERSION_INFO = ANY_DATE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTOD_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LTOD_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Ltod Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -2286,31 +3235,48 @@ public interface DataPackage extends EPackage {
 	 * @generated */
 	int LDATE_TYPE = 53;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDATE_TYPE__NAME = ANY_DATE_TYPE__NAME;
 
-	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDATE_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
 
-	/** The feature id for the '<em><b>Version Info</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDATE_TYPE__VERSION_INFO = ANY_DATE_TYPE__VERSION_INFO;
 
-	/** The feature id for the '<em><b>Identification</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDATE_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LDATE_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
 
 	/** The number of structural features of the '<em>Ldate Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->

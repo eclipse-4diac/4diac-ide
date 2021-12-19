@@ -40,12 +40,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated */
 public class StructuredTypeImpl extends AnyDerivedTypeImpl implements StructuredType {
-	/** The cached value of the '{@link #getMemberVariables() <em>Member Variables</em>}' containment reference list.
+	/**
+	 * The cached value of the '{@link #getMemberVariables() <em>Member Variables</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @see #getMemberVariables()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VarDeclaration> memberVariables;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

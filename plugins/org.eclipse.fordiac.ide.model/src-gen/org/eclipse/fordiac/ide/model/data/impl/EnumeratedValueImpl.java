@@ -32,20 +32,24 @@ import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
  *
  * @generated */
 public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue {
-	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String COMMENT_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String comment = COMMENT_EDEFAULT;
 
 	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc

@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
+import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -74,18 +75,15 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	private TableViewer structViewer;
 	private DataTypeDropdown typeDropDown;
-	private final DataTypeLibrary dataTypeLibrary;
 	private final CommandStack cmdStack;
 	private final IWorkbenchPart part;
+	private final DataTypePaletteEntry dataTypePaletteEntry;
 
-	private final StructuredType dataType;
-
-	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
-			final StructuredType dataType, final DataTypeLibrary dataTypeLibrary, final IWorkbenchPart part) {
+	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack, 
+			final DataTypePaletteEntry dataTypePaletteEntry, final IWorkbenchPart part) {
 		super(parent, style);
 		this.cmdStack = cmdStack;
-		this.dataType = dataType;
-		this.dataTypeLibrary = dataTypeLibrary;
+		this.dataTypePaletteEntry = dataTypePaletteEntry;
 		this.part = part;
 	}
 
@@ -126,7 +124,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		structViewer.setLabelProvider(new DataLabelProvider());
 		structViewer.setCellModifier(new StructCellModifier());
 
-		structViewer.setInput(dataType.getMemberVariables());
+		structViewer.setInput(getType().getMemberVariables());
 	}
 
 	private DataType getDataType() {
@@ -156,11 +154,15 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private StructuredType getType() {
-		return dataType;
+		return (StructuredType) dataTypePaletteEntry.getTypeEditable();
+	}
+	
+	private DataTypeLibrary getDataTypeLibrary() {
+		return dataTypePaletteEntry.getTypeLibrary().getDataTypeLibrary();
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
-		typeDropDown = new DataTypeDropdown(() -> dataTypeLibrary.getDataTypesSorted().stream().filter(Objects::nonNull)
+		typeDropDown = new DataTypeDropdown(() -> getDataTypeLibrary().getDataTypesSorted().stream().filter(Objects::nonNull)
 				.filter(type -> !type.getName().equals(StructViewingComposite.this.getType().getName()))
 				.filter(type -> !(type instanceof StructuredType) || isValidStruct((StructuredType) type))
 				.collect(Collectors.toList()), structViewer);
@@ -172,7 +174,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		return type.getMemberVariables().stream()
 				.filter(memVar -> memVar.getType() instanceof StructuredType)
 				.noneMatch(memVar -> memVar.getTypeName().equals(StructViewingComposite.this.getType().getName())
-						|| !isValidStruct(dataTypeLibrary.getStructuredType(memVar.getTypeName())));
+						|| !isValidStruct(getDataTypeLibrary().getStructuredType(memVar.getTypeName())));
 	}
 
 	private static void configureTableLayout(final Table table) {
@@ -193,6 +195,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		layout.addColumnData(new ColumnWeightData(5, 50));
 		layout.addColumnData(new ColumnWeightData(2, 20));
 		table.setLayout(layout);
+	}
+	
+	public void reload() {
+		structViewer.setInput(getType().getMemberVariables());
 	}
 
 	@Override
@@ -267,7 +273,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
-			cmd.add(new InsertVariableCommand(dataType.getMemberVariables(), varEntry, index));
+			cmd.add(new InsertVariableCommand(getType().getMemberVariables(), varEntry, index));
 		}
 	}
 
@@ -284,7 +290,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	public DataType getStruct() {
-		return dataType;
+		return getType();
 	}
 
 	public Object getEntry(final int index) {

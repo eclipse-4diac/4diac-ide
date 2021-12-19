@@ -31,12 +31,14 @@ import org.eclipse.fordiac.ide.model.data.ElementaryType;
  *
  * @generated */
 public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
-	/** The cached value of the '{@link #getBaseType() <em>Base Type</em>}' reference. <!-- begin-user-doc --> <!--
+	/**
+	 * The cached value of the '{@link #getBaseType() <em>Base Type</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @see #getBaseType()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ElementaryType baseType;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

@@ -22,7 +22,6 @@ package org.eclipse.fordiac.ide.datatypeeditor.editors;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -33,14 +32,11 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
@@ -92,7 +88,6 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	private final List<String> propertyActions = new ArrayList<>();
 
 	private DataTypePaletteEntry dataTypePaletteEntry;
-	private final AtomicReference<StructuredType> dataType = new AtomicReference<>();
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -144,7 +139,6 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		removeListenerFromDataTypeObj();
-		dataTypePaletteEntry.setTypeEditable(EcoreUtil.copy(dataType.get()));
 		AbstractTypeExporter.saveType(dataTypePaletteEntry);
 		addListenerToDataTypeObj();
 
@@ -204,25 +198,9 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		if (file.exists()) {
 			dataTypePaletteEntry = (DataTypePaletteEntry) TypeLibrary.getPaletteEntryForFile(file);
 			setPartName(dataTypePaletteEntry.getFile().getName());
-			final DataTypeImporter importer = new DataTypeImporter(file);
-			importer.loadElement();
-			return updateDatatTypeObject(importer);
+			return !(dataTypePaletteEntry.getTypeEditable() instanceof StructuredType);
 		}
 		return true; // import failed
-	}
-
-	private boolean updateDatatTypeObject(final DataTypeImporter importer) {
-		final AnyDerivedType element = importer.getElement();
-		if (element instanceof StructuredType) {
-			if (!dataType.compareAndSet(null, (StructuredType) element)) {
-				dataType.get().getMemberVariables().clear();
-				dataType.get().getMemberVariables().addAll(((StructuredType) element).getMemberVariables());
-			}
-
-			dataTypePaletteEntry.setType(EcoreUtil.copy(dataType.get()));
-			return false;
-		}
-		return true;
 	}
 
 	private void setActionHandlers(final IEditorSite site) {
@@ -249,9 +227,8 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		if (dataType.get() != null && (!importFailed)) {
-			editComposite = new StructViewingComposite(parent, 1, commandStack, dataType.get(),
-					dataTypePaletteEntry.getTypeLibrary().getDataTypeLibrary(), this);
+		if (dataTypePaletteEntry.getTypeEditable() != null && (!importFailed)) {
+			editComposite = new StructViewingComposite(parent, 1, commandStack, dataTypePaletteEntry, this);
 			editComposite.createPartControl(parent);
 			TableWidgetFactory.enableCopyPasteCut(this);
 		} else if (importFailed) {
@@ -353,9 +330,9 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	public void reloadFile() {
 		try {
 			removeListenerFromDataTypeObj();
+			dataTypePaletteEntry.setTypeEditable(null);
 			importType(getEditorInput());
-			setInput(new FileEditorInput(dataTypePaletteEntry.getFile()));
-			editComposite.getViewer().refresh();
+			editComposite.reload();
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper

@@ -993,15 +993,11 @@
         <details key="body" value="if (null != getPaletteEntry()) {&#xA;&#x9;return getPaletteEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getPaletteEntry" lowerBound="1" eType="ecore:EClass palette.ecore#//PaletteEntry">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if (eContainer() instanceof PaletteEntry) {&#xA;&#x9;return (PaletteEntry)eContainer();&#xA;}&#xA;return null;"/>
-      </eAnnotations>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="versionInfo" lowerBound="1"
         upperBound="-1" eType="#//VersionInfo" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="identification" eType="#//Identification"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paletteEntry" eType="ecore:EClass palette.ecore#//PaletteEntry"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompilableType" eSuperTypes="#//LibraryElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="compilerInfo" eType="#//CompilerInfo"

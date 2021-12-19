@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -160,8 +159,6 @@ public class ErrorMarkerBuilder {
 			systemFile = ((AutomationSystem) rootContainer).getSystemFile();
 		} else if (rootContainer instanceof FBType) {
 			systemFile = ((FBType) rootContainer).getPaletteEntry().getFile();
-		} else if (rootContainer instanceof PaletteEntry) {
-			systemFile = ((PaletteEntry) rootContainer).getFile();
 		}
 		Assert.isNotNull(systemFile);
 		return systemFile;

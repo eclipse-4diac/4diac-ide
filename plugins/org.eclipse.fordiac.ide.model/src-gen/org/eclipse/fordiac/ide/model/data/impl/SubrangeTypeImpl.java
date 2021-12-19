@@ -32,12 +32,14 @@ import org.eclipse.fordiac.ide.model.data.SubrangeType;
  *
  * @generated */
 public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
-	/** The cached value of the '{@link #getSubrange() <em>Subrange</em>}' containment reference. <!-- begin-user-doc
+	/**
+	 * The cached value of the '{@link #getSubrange() <em>Subrange</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
 	 * @see #getSubrange()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Subrange subrange;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
