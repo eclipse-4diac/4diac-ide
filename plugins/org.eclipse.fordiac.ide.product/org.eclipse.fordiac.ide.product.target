@@ -21,5 +21,9 @@
 			<unit id="org.eclipse.elk.algorithms.feature.feature.group" version="0.8.1"/>
 			<unit id="org.eclipse.elk.feature.feature.group" version="0.8.1"/>
 		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/nebula/releases/2.5.0/"/>
+			<unit id="org.eclipse.nebula.feature.feature.group" version="2.5.0.202106201019"/>
+		</location>
 	</locations>
 </target>
