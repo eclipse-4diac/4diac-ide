@@ -52,6 +52,9 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	private PaletteFilter paletteFilter;
 	private boolean blockTableSelection = false;
 	private PaletteEntry selectedEntry = null;
+	private Text textControl;
+
+	private ResultListLabelProvider resultListLabelProvider;
 
 	public NewInstanceCellEditor() {
 		super();
@@ -76,12 +79,12 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	@Override
 	protected Control createControl(final Composite parent) {
 		container = createContainer(parent);
-		final Text textControl = (Text) super.createControl(container);
-		configureTextControl(textControl);
+		textControl = (Text) super.createControl(container);
+		configureTextControl();
 		createTypeMenuButton(container);
 		createPopUpList(container);
 		// initial population of the selection list
-		updateSelectionList(textControl.getText());
+		updateSelectionList();
 		return container;
 	}
 
@@ -164,17 +167,18 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		return newContainer;
 	}
 
-	private void configureTextControl(final Text textControl) {
+	private void configureTextControl() {
 		textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		textControl.setMessage(Messages.NewInstanceCellEditor_SearchForType);
-		textControl.addListener(SWT.Modify, event -> updateSelectionList(textControl.getText()));
+		textControl.addListener(SWT.Modify, event -> updateSelectionList());
 		textControl.addListener(SWT.KeyDown, event -> handleKeyPress(event, textControl));
 	}
 
-	private void updateSelectionList(final String searchString) {
+	private void updateSelectionList() {
 		blockTableSelection = true;
-		if (searchString.length() >= 2) {
-			final List<PaletteEntry> entries = paletteFilter.findFBAndSubappTypes(searchString);
+		if (textControl.getText().length() >= 2) {
+			final List<PaletteEntry> entries = paletteFilter.findFBAndSubappTypes((textControl.getText()));
+			resultListLabelProvider.setSearchString(textControl.getText());
 			tableViewer.setInput(entries);
 			if (!entries.isEmpty()) {
 				selectItemAtIndex(0);
@@ -231,7 +235,11 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		tableViewer = new TableViewer(popupShell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
 		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new ResultListLabelProvider()));
+
+		resultListLabelProvider = new ResultListLabelProvider();
+		final DelegatingStyledCellLabelProvider delegatingStyledCellLabelProvider = new DelegatingStyledCellLabelProvider(
+				resultListLabelProvider);
+		tableViewer.setLabelProvider(delegatingStyledCellLabelProvider);
 
 		new TableColumn(tableViewer.getTable(), SWT.NONE);
 		final TableLayout layout = new TableLayout();

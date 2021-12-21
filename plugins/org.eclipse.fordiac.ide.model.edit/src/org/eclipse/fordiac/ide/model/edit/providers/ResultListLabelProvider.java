@@ -29,6 +29,16 @@ import org.eclipse.swt.graphics.Image;
 
 public class ResultListLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
+	private String searchString;
+
+	public ResultListLabelProvider(final String searchString) {
+		this.searchString = searchString;
+	}
+
+	public ResultListLabelProvider() {
+		this.searchString = "";
+	}
+
 	@Override
 	public StyledString getStyledText(final Object element) {
 		StyledString styledString = null;
@@ -37,6 +47,9 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 			styledString = new StyledString(entry.getLabel());
 			styledString.append(" - " + entry.getType().getComment(), //$NON-NLS-1$
 					StyledString.QUALIFIER_STYLER);
+			styledString.setStyle(styledString.toString().toUpperCase().indexOf((searchString.toUpperCase())),
+					searchString.length(),
+					BoldStyler.INSTANCE_DEFAULT);
 		} else {
 			styledString = new StyledString(element.toString());
 		}
@@ -74,6 +87,10 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	public String getText(final Object element) {
 		return (element instanceof PaletteEntry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
 				((PaletteEntry) element).getFile().getFullPath()) : "-"; //$NON-NLS-1$
+	}
+
+	public void setSearchString(final String searchString) {
+		this.searchString = searchString;
 	}
 
 }
