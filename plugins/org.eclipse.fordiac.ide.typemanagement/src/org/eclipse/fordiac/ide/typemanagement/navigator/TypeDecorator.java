@@ -22,7 +22,7 @@ import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 public class TypeDecorator implements ILightweightLabelDecorator {
 
 	@Override
-	public void addListener(ILabelProviderListener listener) {
+	public void addListener(final ILabelProviderListener listener) {
 		// currently nothing to do here
 	}
 
@@ -32,22 +32,22 @@ public class TypeDecorator implements ILightweightLabelDecorator {
 	}
 
 	@Override
-	public boolean isLabelProperty(Object element, String property) {
+	public boolean isLabelProperty(final Object element, final String property) {
 		return false;
 	}
 
 	@Override
-	public void removeListener(ILabelProviderListener listener) {
+	public void removeListener(final ILabelProviderListener listener) {
 		// currently nothing to do here
 
 	}
 
 	@Override
-	public void decorate(Object element, IDecoration decoration) {
+	public void decorate(final Object element, final IDecoration decoration) {
 		if (element instanceof IFile) {
-			PaletteEntry entry = TypeLibrary.getPaletteEntryForFile((IFile) element);
+			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile((IFile) element);
 			if (null != entry) {
-				decoration.addSuffix(" [" + entry.getType().getComment() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+				decoration.addSuffix(" [" + entry.getTypeEditable().getComment() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
