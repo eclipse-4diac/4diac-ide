@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RoundedRectangle;
@@ -26,7 +25,7 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 	@Override
 	public void paintBackground(final IFigure figure, final Graphics graphics, final Insets insets) {
 		graphics.pushState();
-		graphics.setBackgroundColor(ColorConstants.black);
+		graphics.setBackgroundColor(figure.getForegroundColor());
 
 		if (figure instanceof RoundedRectangle) {
 			cornerRadius = ((RoundedRectangle) figure).getCornerDimensions().getExpanded(2, 2);

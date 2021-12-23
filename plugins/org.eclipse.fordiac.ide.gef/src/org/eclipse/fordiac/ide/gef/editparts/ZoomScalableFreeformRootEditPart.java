@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayeredPane;
@@ -60,8 +61,11 @@ import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.resource.ColorRegistry;
+import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -364,13 +368,25 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	private static void configureDrawingContainer(final FreeformLayeredPane drawingArea,
 			final AbstractFreeformFigure drawingAreaContainer) {
 		drawingAreaContainer.setOpaque(true);
-
-		final ColorRegistry colorRegistry = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme()
-				.getColorRegistry();
-
-		drawingAreaContainer.setBackgroundColor(colorRegistry.get("org.eclipse.ui.editors.backgroundColor")); //$NON-NLS-1$
+		drawingAreaContainer.setBackgroundColor(getDrawingAreaBGColor());
 		drawingAreaContainer.setBorder(new SingleLineBorder());
 		drawingAreaContainer.setContents(drawingArea);
+	}
+
+	private static Color getDrawingAreaBGColor() {
+		final String background = InstanceScope.INSTANCE.getNode("org.eclipse.ui.editors") //$NON-NLS-1$
+				.get("AbstractTextEditor.Color.Background", null); //$NON-NLS-1$
+
+		if (background != null) {
+			// we have a color in the preferences set
+			final RGB rgb = StringConverter.asRGB(background, null);
+			return new Color(rgb);
+		}
+
+		// if not in the preferences try to get it from the current theme
+		final ColorRegistry colorRegistry = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme()
+				.getColorRegistry();
+		return colorRegistry.get("org.eclipse.ui.editors.backgroundColor"); //$NON-NLS-1$
 	}
 
 }

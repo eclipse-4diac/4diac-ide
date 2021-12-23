@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.gef.figures;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
@@ -27,7 +26,7 @@ public class FBShapeShadowBorder extends AbstractShadowBorder {
 		final FBShape fbShape = (FBShape) figure;
 
 		graphics.pushState();
-		graphics.setBackgroundColor(ColorConstants.black);
+		graphics.setBackgroundColor(figure.getForegroundColor());
 
 		final Rectangle topShadowRect = fbShape.getTop().getBounds().getExpanded(2, 2);
 		final Rectangle middleShadowRect = fbShape.getMiddle().getBounds().getExpanded(2, 0);
