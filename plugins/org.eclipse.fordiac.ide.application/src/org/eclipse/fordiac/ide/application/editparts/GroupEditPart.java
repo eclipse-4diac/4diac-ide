@@ -15,8 +15,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.AbstractBackground;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.RoundedRectangle;
@@ -26,6 +24,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
+import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
@@ -95,16 +94,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 
 	@Override
 	protected IFigure createFigureForModel() {
-		final RoundedRectangle mainFigure = new RoundedRectangle() {
-			@Override
-			public void paintFigure(final Graphics graphics) {
-				// paint figure of shape does not check for background borders, needed for drop shadow
-				if (getBorder() instanceof AbstractBackground) {
-					((AbstractBackground) getBorder()).paintBackground(this, graphics, NO_INSETS);
-				}
-				super.paintFigure(graphics);
-			}
-		};
+		final RoundedRectangle mainFigure = new BorderedRoundedRectangle();
 		mainFigure.setOutline(false);
 		mainFigure.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		mainFigure.setFillXOR(false);

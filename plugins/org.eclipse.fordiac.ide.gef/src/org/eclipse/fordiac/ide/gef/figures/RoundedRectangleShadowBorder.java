@@ -15,15 +15,22 @@ package org.eclipse.fordiac.ide.gef.figures;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
+	Dimension cornerRadius = new Dimension(SHADOW_CORNER_RADIUS, SHADOW_CORNER_RADIUS);
 
 	@Override
 	public void paintBackground(final IFigure figure, final Graphics graphics, final Insets insets) {
 		graphics.pushState();
 		graphics.setBackgroundColor(ColorConstants.black);
+
+		if (figure instanceof RoundedRectangle) {
+			cornerRadius = ((RoundedRectangle) figure).getCornerDimensions().getExpanded(2, 2);
+		}
 
 		final Rectangle shadowRect = figure.getBounds().getExpanded(2, 2);
 		final Rectangle clipRect = shadowRect.getCopy();
@@ -38,7 +45,7 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 		graphics.popState();
 	}
 
-	private static void drawShadowHalo(final Graphics graphics, final Rectangle shadowRect) {
+	private void drawShadowHalo(final Graphics graphics, final Rectangle shadowRect) {
 		graphics.setAlpha(SHADOW_ALPHA);
 		drawShadowFigure(graphics, shadowRect);
 		shadowRect.shrink(1, 1);
@@ -46,7 +53,7 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 		drawShadowFigure(graphics, shadowRect);
 	}
 
-	private static void drawDropShadow(final Graphics graphics, final Rectangle shadowRect) {
+	private void drawDropShadow(final Graphics graphics, final Rectangle shadowRect) {
 		graphics.setAlpha(SHADOW_ALPHA);
 		final double horInc = 0.7;  // emulate a roughly 30° shadow angle
 		double horI = 0;
@@ -60,8 +67,8 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 		}
 	}
 
-	private static void drawShadowFigure(final Graphics graphics, final Rectangle shadowRect) {
-		graphics.fillRoundRectangle(shadowRect, SHADOW_CORNER_RADIUS, SHADOW_CORNER_RADIUS);
+	private void drawShadowFigure(final Graphics graphics, final Rectangle shadowRect) {
+		graphics.fillRoundRectangle(shadowRect, cornerRadius.width, cornerRadius.height);
 	}
 
 

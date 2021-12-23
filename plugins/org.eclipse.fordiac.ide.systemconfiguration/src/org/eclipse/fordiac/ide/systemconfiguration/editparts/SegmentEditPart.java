@@ -39,7 +39,9 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
+import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
+import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -202,7 +204,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		private final Label typeLabel;
 		private final Figure main = new Figure();
 
-		private final RoundedRectangle rect = new RoundedRectangle() {
+		private final RoundedRectangle rect = new BorderedRoundedRectangle() {
 			@Override
 			protected void outlineShape(final Graphics graphics) {
 				// nothing to do here right now
@@ -251,6 +253,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 
 			main.add(rect);
 			main.setConstraint(rect, rectLayoutData);
+			rect.setBorder(new RoundedRectangleShadowBorder());
 			rect.add(instanceNameLabel);
 			instanceNameLabel.setBorder(new MarginBorder(4, 0, 4, 0));
 
