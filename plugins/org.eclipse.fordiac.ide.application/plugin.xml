@@ -265,15 +265,6 @@
                   label="Open Subapplication">
     </openListener>
   </extension>
-  <extension point="org.eclipse.ui.views">
-    <view category="org.eclipse.fordiac.ide.view.category"
-          class="org.eclipse.fordiac.ide.application.FordiacMarkersView"
-          icon="fordiacimage://ICON_FB"
-          id="org.eclipse.fordiac.ide.application.FordiacMarkersView"
-          name="Problems and Warnings"
-          restorable="true">
-    </view>
-  </extension>
   <extension point="org.eclipse.ui.commands">
     <category id="org.eclipse.fordiac.ide.commands.category"
               name="4diac IDE Commands">
