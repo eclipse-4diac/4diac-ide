@@ -17,12 +17,14 @@ package org.eclipse.fordiac.ide.typemanagement.preferences;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
-import org.eclipse.fordiac.ide.typemanagement.Activator;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public final class TypeManagementPreferencesHelper {
 
@@ -32,21 +34,23 @@ public final class TypeManagementPreferencesHelper {
 
 	public static void setupVersionInfo(LibraryElement type) {
 		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+				PreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
 
 		// version
-		setupVersion(versionInfo);
+		setupVersion(versionInfo, store);
 
 		// Organization
-		setupOrganization(versionInfo);
+		setupOrganization(versionInfo, store);
 
 		// Author
-		setupAuthor(versionInfo);
+		setupAuthor(versionInfo, store);
 
 		// Date
 		setupDate(versionInfo);
 
 		// Remarks
-		setupRemarks(versionInfo);
+		setupRemarks(versionInfo, store);
 
 		if (type instanceof AdapterType) {
 			type = ((AdapterType) type).getAdapterFBType();
@@ -55,25 +59,25 @@ public final class TypeManagementPreferencesHelper {
 		type.getVersionInfo().add(versionInfo);
 	}
 
-	public static void setupVersion(final VersionInfo versionInfo) {
-		versionInfo.setVersion(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_VERSION));
+	private static void setupVersion(final VersionInfo versionInfo, final IPreferenceStore store) {
+		versionInfo.setVersion(store.getString(PreferenceConstants.P_VERSION));
 	}
 
-	public static void setupOrganization(final VersionInfo versionInfo) {
+	private static void setupOrganization(final VersionInfo versionInfo, final IPreferenceStore store) {
 		versionInfo.setOrganization(
-				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_ORGANIZATION));
+				store.getString(PreferenceConstants.P_ORGANIZATION));
 	}
 
-	public static void setupAuthor(final VersionInfo versionInfo) {
-		versionInfo.setAuthor(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_AUTHOR));
+	private static void setupAuthor(final VersionInfo versionInfo, final IPreferenceStore store) {
+		versionInfo.setAuthor(store.getString(PreferenceConstants.P_AUTHOR));
 	}
 
-	public static void setupDate(final VersionInfo versionInfo) {
+	private static void setupDate(final VersionInfo versionInfo) {
 		versionInfo.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()))); //$NON-NLS-1$
 	}
 
-	public static void setupRemarks(final VersionInfo versionInfo) {
-		versionInfo.setRemarks(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_REMARKS));
+	private static void setupRemarks(final VersionInfo versionInfo, final IPreferenceStore store) {
+		versionInfo.setRemarks(store.getString(PreferenceConstants.P_REMARKS));
 	}
 
 	public static void setupIdentification(LibraryElement type) {
@@ -88,57 +92,56 @@ public final class TypeManagementPreferencesHelper {
 			identification = LibraryElementFactory.eINSTANCE.createIdentification();
 		}
 
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+				PreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
+
 		// Standard.
-		setupStandard(identification);
+		setupStandard(identification, store);
 
 		// Classification
-		setupClassification(identification);
+		setupClassification(identification, store);
 
 		// Application Domain
-		setupTypeDomain(identification);
+		setupTypeDomain(identification, store);
 
 		// Function
-		setupFunction(identification);
+		setupFunction(identification, store);
 
 		// Type
-		setupType(identification);
+		setupType(identification, store);
 
 		// Description
-		setupDescription(identification);
+		setupDescription(identification, store);
 
 		type.setIdentification(identification);
 	}
 
-	public static void setupStandard(final Identification identification) {
+	public static void setupStandard(final Identification identification, final IPreferenceStore store) {
 		// If the standard is defined and the preference is empty, don't load it
-		if (!(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_STANDARD).isEmpty())) {
+		if (!(store.getString(PreferenceConstants.P_STANDARD).isEmpty())) {
 			identification
-			.setStandard(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_STANDARD));
+					.setStandard(store.getString(PreferenceConstants.P_STANDARD));
 		}
 	}
 
-	public static void setupClassification(final Identification identification) {
-		identification.setClassification(
-				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CLASSIFICATION));
+	public static void setupClassification(final Identification identification, final IPreferenceStore store) {
+		identification.setClassification(store.getString(PreferenceConstants.P_CLASSIFICATION));
 	}
 
-	public static void setupTypeDomain(final Identification identification) {
-		identification.setApplicationDomain(
-				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_APPLICATION_DOMAIN));
+	public static void setupTypeDomain(final Identification identification, final IPreferenceStore store) {
+		identification.setApplicationDomain(store.getString(PreferenceConstants.P_APPLICATION_DOMAIN));
 	}
 
-	public static void setupFunction(final Identification identification) {
-		identification
-		.setFunction(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_FUNCTION));
+	public static void setupFunction(final Identification identification, final IPreferenceStore store) {
+		identification.setFunction(store.getString(PreferenceConstants.P_FUNCTION));
 	}
 
-	public static void setupType(final Identification identification) {
-		identification.setType(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TYPE));
+	public static void setupType(final Identification identification, final IPreferenceStore store) {
+		identification.setType(store.getString(PreferenceConstants.P_TYPE));
 	}
 
-	public static void setupDescription(final Identification identification) {
-		identification.setDescription(
-				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_DESCRIPTION));
+	public static void setupDescription(final Identification identification, final IPreferenceStore store) {
+		identification.setDescription(store.getString(PreferenceConstants.P_DESCRIPTION));
 	}
 
 }

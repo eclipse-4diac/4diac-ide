@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.preferences;
 
-import org.eclipse.fordiac.ide.typemanagement.Activator;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -23,6 +23,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -42,7 +43,8 @@ public class TypeManagementPreferencePage extends FieldEditorPreferencePage impl
 	 */
 	public TypeManagementPreferencePage() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(
+				new ScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID));
 		setDescription(Messages.typeManagementPreferencePageTitle);
 	}
 

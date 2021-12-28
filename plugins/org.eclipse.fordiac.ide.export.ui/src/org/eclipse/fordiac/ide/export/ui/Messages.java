@@ -52,8 +52,6 @@ public final class Messages extends NLS {
 
 	public static String FORTEExportPreferences_DefaultCompareEditorOpener;
 
-	public static String PreferenceInitializer_InitializeDefaultPreferences;
-
 	public static String SelectFBTypesWizardPage_Browse;
 
 	public static String SelectFBTypesWizardPage_ExportDestination;

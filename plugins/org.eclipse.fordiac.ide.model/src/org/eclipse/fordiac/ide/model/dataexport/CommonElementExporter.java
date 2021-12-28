@@ -37,10 +37,12 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
@@ -51,7 +53,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 
 class CommonElementExporter {
 
@@ -119,8 +120,15 @@ class CommonElementExporter {
 	private static class ByteBufferOutputStream extends OutputStream {
 		private static final int SI_PREFIX_KI = 1024;
 		private static final int SI_PREFIX_MI = SI_PREFIX_KI * SI_PREFIX_KI;
-		private static final int SINGLE_DATA_BUFFER_CAPACITY = Activator.getDefault().getPreferenceStore()
-				.getInt(PreferenceConstants.P_ALLOCATION_SIZE) * SI_PREFIX_MI;
+		private static final int SINGLE_DATA_BUFFER_CAPACITY = getSingleDataBufCap();
+		private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
+
+		private static int getSingleDataBufCap(){
+			final IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(PLUGIN_ID);
+			return preferences.getInt(PreferenceConstants.P_ALLOCATION_SIZE,
+					PreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE) * SI_PREFIX_MI;
+		}
+
 		private List<ByteBuffer> dataBuffers = new ArrayList<>(5); // give it an initial capacity of 5 to reduce
 		// reallocation
 		private ByteBuffer currentDataBuffer;

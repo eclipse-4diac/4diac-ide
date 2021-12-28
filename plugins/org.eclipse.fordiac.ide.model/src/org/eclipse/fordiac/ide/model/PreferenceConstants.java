@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.model;
 /**
  * Constant definitions for plug-in preferences.
  *
- * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public final class PreferenceConstants {
 

@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.export.ui.preferences;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
 import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.export.utils.CompareEditorOpenerUtil;
@@ -28,6 +29,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * The Class FORTEExportPreferences.
@@ -39,7 +41,7 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 	 */
 	public FORTEExportPreferences() {
 		super(GRID);
-		setPreferenceStore(org.eclipse.fordiac.ide.export.Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.fordiac.ide.export")); //$NON-NLS-1$
 	}
 
 	/**

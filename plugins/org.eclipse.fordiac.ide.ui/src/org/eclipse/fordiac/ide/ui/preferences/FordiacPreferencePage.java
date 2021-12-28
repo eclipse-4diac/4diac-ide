@@ -15,13 +15,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class FordiacPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -70,7 +71,8 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements 
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		setPreferenceStore(UIPlugin.getDefault().getPreferenceStore());
+		setPreferenceStore(
+				new ScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceConstants.FORDIAC_UI_PREFERENCES_ID));
 		setDescription(FordiacMessages.FordiacPreferencePage_LABEL_PreferencePageDescription);
 	}
 

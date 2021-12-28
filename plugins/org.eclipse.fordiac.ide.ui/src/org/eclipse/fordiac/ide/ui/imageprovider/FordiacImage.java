@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
@@ -35,6 +34,8 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 public enum FordiacImage {
 	// @formatter:off
@@ -78,7 +79,8 @@ public enum FordiacImage {
 
 	private static final String IMAGES_DIRECTORY = "images"; //$NON-NLS-1$
 	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages"; //$NON-NLS-1$
-	private static ResourceBundle foridacImageProperties = getFordiacImageProperties();
+	private static ResourceBundle fordiacImageProperties = getFordiacImageProperties();
+	private static Bundle bundle = null;
 
 	private static final ResourceBundle getFordiacImageProperties() {
 		try {
@@ -92,6 +94,13 @@ public enum FordiacImage {
 				}
 			};
 		}
+	}
+
+	private static synchronized Bundle getBundle() {
+		if (bundle == null) {
+			bundle = FrameworkUtil.getBundle(FordiacImage.class);
+		}
+		return bundle;
 	}
 
 	private static Map<Image, Image> errorImages = new HashMap<>();
@@ -160,9 +169,8 @@ public enum FordiacImage {
 	}
 
 	private static URL getImageURL(final String name) {
-		final String fileName = foridacImageProperties.getString(name);
-		return FileLocator.find(UIPlugin.getDefault().getBundle(),
-				new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
+		final String fileName = fordiacImageProperties.getString(name);
+		return FileLocator.find(getBundle(), new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
 	}
 
 	private static Image getErrorImage() {

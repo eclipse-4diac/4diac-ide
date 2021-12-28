@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.fordiac.ide.runtime.Activator;
 import org.eclipse.fordiac.ide.runtime.IRuntimeLauncher;
 import org.eclipse.fordiac.ide.runtime.LaunchParameter;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeException;
@@ -55,6 +54,8 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class RuntimeLauncherView {
+
+	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.runtime"; //$NON-NLS-1$
 
 	private FormToolkit toolkit;
 
@@ -269,8 +270,7 @@ public class RuntimeLauncherView {
 
 	private static IConfigurationElement[] getRuntimeLaunchers() {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
-				"RuntimeLauncher"); //$NON-NLS-1$
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID, "RuntimeLauncher"); //$NON-NLS-1$
 		Arrays.sort(elems, (element1, element2) -> {
 			final String order1 = element1.getAttribute("order"); //$NON-NLS-1$
 			final String order2 = element2.getAttribute("order"); //$NON-NLS-1$

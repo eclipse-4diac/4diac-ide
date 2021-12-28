@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -37,6 +36,7 @@ public enum DeviceManagementInteractorFactory {
 
 	INSTANCE;
 
+	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.deployment"; //$NON-NLS-1$
 	private List<IDeviceManagementInteractorProvider> deviceManagementInteractorProviders = null;
 
 	/**
@@ -84,7 +84,7 @@ public enum DeviceManagementInteractorFactory {
 
 	private static List<IDeviceManagementInteractorProvider> loadDeviceManagmentInteractors() {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID,
 				"devicemanagementinteractor"); //$NON-NLS-1$
 		final ArrayList<IDeviceManagementInteractorProvider> interactors = new ArrayList<>(elems.length);
 		for (final IConfigurationElement element : elems) {

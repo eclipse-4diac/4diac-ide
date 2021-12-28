@@ -65,6 +65,8 @@ public enum SystemManager {
 
 	INSTANCE;
 
+	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.systemmanagement"; //$NON-NLS-1$
+
 	public static final String FORDIAC_PROJECT_NATURE_ID = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
 	public static final String OLD_DISTRIBUTED_PROJECT_NATURE_ID = "org.fordiac.systemManagement.DistributedNature"; //$NON-NLS-1$
 
@@ -271,8 +273,7 @@ public enum SystemManager {
 		final ArrayList<ITagProvider> providers = getTagProviderList(project);
 		if (project.exists()) {
 			final IExtensionRegistry registry = Platform.getExtensionRegistry();
-			final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
-					"tagProvider"); //$NON-NLS-1$
+			final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID, "tagProvider"); //$NON-NLS-1$
 			for (final IConfigurationElement element : elems) {
 				try {
 					final Object object = element.createExecutableExtension("Interface"); //$NON-NLS-1$

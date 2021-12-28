@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.export.ui.Activator;
 import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
@@ -42,7 +41,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	public ExportStatusMessageDialog(final Shell parentShell, final List<String> warnings, final List<String> errors) {
 		super(parentShell, Messages.ExportStatusMessageDialog_4diacIDETypeExportErrors,
 				Messages.ExportStatusMessageDialog_DuringTypeExportTheFollowingIssuesHaveBeenIdentified,
-				new Status(IStatus.INFO, Activator.PLUGIN_ID,
+				new Status(IStatus.INFO, "org.eclipse.fordiac.ide.export", //$NON-NLS-1$
 						MessageFormat.format(Messages.ExportStatusMessageDialog_ExportStatusMessageDialog,
 								Integer.valueOf(errors.size()), Integer.valueOf(warnings.size()))),
 				IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
