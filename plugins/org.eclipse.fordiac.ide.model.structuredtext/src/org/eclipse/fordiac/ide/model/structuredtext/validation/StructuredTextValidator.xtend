@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *
  *   Ernst Blecha - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - fixes partial index validator for primary variables
+ * 		and adds one for adapter variables
  *******************************************************************************/
 
 /*
@@ -28,6 +31,8 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral
 import org.eclipse.fordiac.ide.model.FordiacKeywords
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.data.DataType
 
 /**
  * This class contains custom validation rules.
@@ -35,23 +40,64 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 class StructuredTextValidator extends AbstractStructuredTextValidator {
-
-	def private isIndexInRange(PartialAccess p, int start, int stop) {
-  		(p.index >= start && p.index <= stop)
+	
+	def private isPartialIndexInDataType(Variable variable) {
+		val varBitSize = variable.BitSize
+		val partSize = variable.part.BitSize
+		val index = variable.part.index
+		val startIndex = index * partSize
+		val endIndex = startIndex + partSize
+		endIndex > varBitSize
 	}
 
 	@Check
 	def checkPartialAccess(PrimaryVariable v) {
-		if (null !== v.part) {
-			if (!isIndexInRange(v.part, 0, v.^var.arraySize - 1)) {
+		if(v.part !== null) {
+			if(v.isPartialIndexInDataType) {
 				error("Incorrect partial access: index not within limits.", StructuredTextPackage.Literals.PRIMARY_VARIABLE__VAR)
 			}
 		}
 	}
 	
-	def private dispatch int BitSize(VarDeclaration v) { BitSize(v.extractTypeInformation)	}
+	@Check
+	def checkPartialAccess(AdapterVariable v) {
+		if(v.part !== null) {			
+			if(v.isPartialIndexInDataType) {
+				error("Incorrect partial access: index not within limits.", StructuredTextPackage.Literals.ADAPTER_VARIABLE__VAR)
+			}
+		}
+	}
 	
-	def private dispatch int BitSize(PrimaryVariable v) { BitSize(v.extractTypeInformation)	}
+	def private dispatch int BitSize(PartialAccess part) {
+		if(part !== null) {
+			if(part.bitaccess)			ElementaryTypes.BOOL.BitSize
+			else if(part.byteaccess)	ElementaryTypes.BYTE.BitSize
+			else if(part.wordaccess)	ElementaryTypes.WORD.BitSize
+			else if(part.dwordaccess)	ElementaryTypes.DWORD.BitSize
+			else					    0
+		} else 0
+	}
+	
+	def private dispatch int BitSize(PrimaryVariable variable) {
+		variable.^var.type.BitSize
+	}
+	
+	def private dispatch int BitSize(AdapterVariable variable) {
+		variable.^var.type.BitSize
+	}
+	
+	def private dispatch int BitSize(DataType type) {
+		switch(type) {
+			case ElementaryTypes.LWORD: 64
+			case ElementaryTypes.DWORD: 32
+			case ElementaryTypes.WORD: 16
+			case ElementaryTypes.BYTE: 8
+			case ElementaryTypes.BOOL: 1
+			default: 0
+		}
+	}
+	
+	def private dispatch int BitSize(VarDeclaration v) { BitSize(v.extractTypeInformation)	}
 	
 	def private dispatch int BitSize(LocalVariable v) { BitSize(v.extractTypeInformation) }
 	

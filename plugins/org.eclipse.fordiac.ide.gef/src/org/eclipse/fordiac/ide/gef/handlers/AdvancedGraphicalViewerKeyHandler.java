@@ -20,13 +20,13 @@ import org.eclipse.swt.events.KeyEvent;
 public class AdvancedGraphicalViewerKeyHandler extends GraphicalViewerKeyHandler {
 	private static final int SCROLL_SPEED = 400;
 
-	public AdvancedGraphicalViewerKeyHandler(AdvancedScrollingGraphicalViewer viewer) {
+	public AdvancedGraphicalViewerKeyHandler(final AdvancedScrollingGraphicalViewer viewer) {
 		super(viewer);
 	}
 
 	@Override
-	public boolean keyPressed(KeyEvent event) {
-		boolean modifierPressed = (event.stateMask & SWT.MODIFIER_MASK) == 0;
+	public boolean keyPressed(final KeyEvent event) {
+		final boolean modifierPressed = (event.stateMask & SWT.MODIFIER_MASK) != 0;
 		switch (event.keyCode) {
 		case SWT.ARROW_DOWN:
 			if (!modifierPressed) {

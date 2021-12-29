@@ -248,6 +248,7 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_INVALID_WSTRING_WCHAR_LITERAL;
 	public static String VALIDATOR_INVALID_TIME_LITERAL;
 	public static String VALIDATOR_TOO_MANY_TIME_DEFINITIONS_FOUND;
+	public static String VALIDATOR_CONCRETE_TYPE_SPECIFIER_MANDATORY_FOR_ANYS;
 
 	public static String Error_SelfInsertion;
 	public static String Error_RecursiveType;

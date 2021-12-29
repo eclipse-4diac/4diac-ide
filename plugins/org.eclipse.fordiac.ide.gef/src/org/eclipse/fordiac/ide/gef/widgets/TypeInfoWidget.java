@@ -91,11 +91,8 @@ public class TypeInfoWidget implements CommandExecutor {
 	}
 
 	public Composite createControls(final Composite parent) {
-		final Composite rootComposite = getWidgetFactory().createComposite(parent);
-		rootComposite.setLayout(new GridLayout(2, true));
-		rootComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-		createControls(createComposite(rootComposite), createComposite(rootComposite));
-		return rootComposite;
+		createControls(createComposite(parent), createComposite(parent));
+		return parent;
 	}
 
 	public void createControls(final Composite leftComposite, final Composite rightComposite) {

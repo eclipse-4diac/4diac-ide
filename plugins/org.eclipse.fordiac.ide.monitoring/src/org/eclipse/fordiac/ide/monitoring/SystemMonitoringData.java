@@ -17,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -175,12 +174,12 @@ public class SystemMonitoringData {
 
 
 	public void removeSubappElement(final MonitoringBaseElement element, final String portString) {
-		if (subappElements.containsKey(portString)) {
-			final List<MonitoringElement> subappPins = subappElements.get(portString);
+		if (getSubappElements().containsKey(portString)) {
+			final List<MonitoringElement> subappPins = getSubappElements().get(portString);
 			final boolean remove = subappPins.remove(element);
 			Assert.isTrue(remove);
 			if (subappPins.isEmpty()) {
-				subappElements.remove(portString);
+				getSubappElements().remove(portString);
 			}
 		}
 	}
@@ -190,9 +189,14 @@ public class SystemMonitoringData {
 		monitoredElements.put(port.getInterfaceElement(), element);
 
 		if (port instanceof SubAppPortElement) {
+			final String portString = SubAppPortHelper
+					.findConnectedMonitoredSubappPort(port.getInterfaceElement(), getSubappElements());
+			if (portString != null) {
+				addToSubappGroup(element, portString);
+			}
 			addSubappMonitoringElement(element);
 		} else {
-			checkForSubappGroup(element, port);
+			addToSubappGroup(element, port);
 			handleConnectedSubappPorts(element);
 			monitoredElementsPerPortStrings.put(port.getPortString(), element);
 		}
@@ -202,29 +206,34 @@ public class SystemMonitoringData {
 		}
 	}
 
+
 	public void addSubappMonitoringElement(final MonitoringBaseElement element) {
 		final PortElement anchor = ((SubappMonitoringElement) element).getAnchor().getPort();
 		final String portString = anchor.getPortString();
-		if (subappElements.containsKey(portString)) {
-			final List<MonitoringElement> subappPins = subappElements.get(portString);
-			subappPins.add((MonitoringElement) element);
-		} else {
+		if (!addToSubappGroup(element, anchor)) {
 			createNewSubappGroup(element, portString);
 		}
 	}
 
-	public void checkForSubappGroup(final MonitoringBaseElement element, final PortElement port) {
+	public boolean addToSubappGroup(final MonitoringBaseElement element, final PortElement port) {
 		// This element has not been created, but there exists a dummy subapp port
-		if (subappElements.containsKey(port.getPortString())) {
-			final List<MonitoringElement> subappPins = subappElements.get(port.getPortString());
+		return addToSubappGroup(element, port.getPortString());
+	}
+
+	public boolean addToSubappGroup(final MonitoringBaseElement element, final String portString) {
+		if (getSubappElements().containsKey(portString)) {
+			final List<MonitoringElement> subappPins = getSubappElements().get(portString);
 			subappPins.add((MonitoringElement) element);
+			return true;
 		}
+
+		return false;
 	}
 
 	public void createNewSubappGroup(final MonitoringBaseElement element, final String portString) {
 		final List<MonitoringElement> l = new ArrayList<>();
 		l.add((SubappMonitoringElement) element);
-		subappElements.put(portString, l);
+		getSubappElements().put(portString, l);
 		addExistingElementToSubappGroup(portString, l);
 	}
 
@@ -244,7 +253,7 @@ public class SystemMonitoringData {
 		final IInterfaceElement interfaceElement = element.getPort().getInterfaceElement();
 
 		final String findConnectedMonitoredSubappPort = SubAppPortHelper
-				.findConnectedMonitoredSubappPort(interfaceElement, subappElements);
+				.findConnectedMonitoredSubappPort(interfaceElement, getSubappElements());
 
 		if (findConnectedMonitoredSubappPort != null) {
 			final List<MonitoringElement> list = subappElements.get(findConnectedMonitoredSubappPort);
@@ -260,13 +269,9 @@ public class SystemMonitoringData {
 		return monitoredElements.get(port);
 	}
 
-	public Entry<String, List<MonitoringElement>> getSubappElements(final MonitoringBaseElement m)
-	{
-		final Iterator<Entry<String, List<MonitoringElement>>> entries = getSubappElements().entrySet().iterator();
-		while (entries.hasNext()) {
-			final Entry<String, List<MonitoringElement>> e = entries.next();
-			final List<MonitoringElement> l = e.getValue();
-			for (final MonitoringElement me : l) {
+	public Entry<String, List<MonitoringElement>> getSubappElements(final MonitoringBaseElement m) {
+		for (final Entry<String, List<MonitoringElement>> e : getSubappElements().entrySet()) {
+			for (final MonitoringElement me : e.getValue()) {
 				if (me.equals(m)) {
 					return e;
 				}

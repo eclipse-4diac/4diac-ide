@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018-2021 Johannes Kepler University, Primetals Technologies Germany GmbH
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Michael Jaeger - initial API and implementation and/or initial documentation
  *   Alois Zoitl	- added ANY_STRUCT to the generic type list
+ *   Martin Melik Merkumians - adds DT and TOD
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.datatype.helper;
 
@@ -95,8 +97,11 @@ public final class IecTypes {
 		public static final DateType DATE = DataFactory.eINSTANCE.createDateType();
 		public static final LdateType LDATE = DataFactory.eINSTANCE.createLdateType();
 		public static final DateAndTimeType DATE_AND_TIME = DataFactory.eINSTANCE.createDateAndTimeType();
-		public static final LdtType LDT = DataFactory.eINSTANCE.createLdtType();
+		public static final DateAndTimeType DT = DATE_AND_TIME;
+		public static final LdtType LDATE_AND_TIME = DataFactory.eINSTANCE.createLdtType();
+		public static final LdtType LDT = LDATE_AND_TIME;
 		public static final TimeOfDayType TIME_OF_DAY = DataFactory.eINSTANCE.createTimeOfDayType();
+		public static final TimeOfDayType TOD = TIME_OF_DAY;
 		public static final LtodType LTOD = DataFactory.eINSTANCE.createLtodType();
 
 		static {
@@ -131,15 +136,18 @@ public final class IecTypes {
 			DATE.setName(FordiacKeywords.DATE);
 			LDATE.setName(FordiacKeywords.LDATE);
 			DATE_AND_TIME.setName(FordiacKeywords.DATE_AND_TIME);
+			DT.setName(FordiacKeywords.DT);
+			LDATE_AND_TIME.setName(FordiacKeywords.LDATE_AND_TIME);
 			LDT.setName(FordiacKeywords.LDATE_AND_TIME);
 			TIME_OF_DAY.setName(FordiacKeywords.TIME_OF_DAY);
+			TOD.setName(FordiacKeywords.TOD);
 			LTOD.setName(FordiacKeywords.LTIME_OF_DAY);
 		}
 
 		public static DataType[] getAllElementaryType() {
 			return new DataType[] { REAL, LREAL, USINT, UINT, UDINT, ULINT, SINT, INT, DINT, LINT, TIME, LTIME, BOOL,
-					BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE, LDATE, DATE_AND_TIME, LDT,
-					TIME_OF_DAY, LTOD };
+					BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE, LDATE, DATE_AND_TIME, DT,
+					LDATE_AND_TIME, LDT, TIME_OF_DAY, TOD, LTOD };
 		}
 
 		public static DataType getTypeByName(final String name) {

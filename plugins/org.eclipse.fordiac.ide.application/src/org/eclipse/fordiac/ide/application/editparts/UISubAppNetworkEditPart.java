@@ -72,9 +72,6 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 			case Notification.REMOVE_MANY:
 				refreshChildren();
 				break;
-			case Notification.SET:
-				refreshVisuals();
-				break;
 			default:
 				break;
 			}

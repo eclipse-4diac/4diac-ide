@@ -159,7 +159,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 				portString.append(getPort().getFb().getName());
 				portString.append("."); //$NON-NLS-1$
 
-				if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
+				if (getPort().getInterfaceElement().eContainer() != null && getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
 					portString.append(((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName());
 					portString.append("."); //$NON-NLS-1$
 				}

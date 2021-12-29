@@ -23,7 +23,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class NameRepositoryTest {
 
-	public static Stream<Arguments> createUniqueNameTestCases() {
+	static Stream<Arguments> createUniqueNameTestCases() {
 		return Stream.of(
 				Arguments.of("a2147483646", "a2147483647"),//$NON-NLS-1$ //$NON-NLS-2$
 				Arguments.of("a2147483647", "a2147483647_1"),//$NON-NLS-1$ //$NON-NLS-2$
@@ -44,7 +44,7 @@ class NameRepositoryTest {
 	@ParameterizedTest(name = "{index}: {0}->{1}")
 	@MethodSource("createUniqueNameTestCases")
 	@SuppressWarnings({ "squid:S5803", "squid:S5960", "static-method" })
-	public void createUniqueName(final String input, final String output) {
+	void createUniqueName(final String input, final String output) {
 		assertEquals(NameRepository.createUniqueName(input, input), output);
 	}
 

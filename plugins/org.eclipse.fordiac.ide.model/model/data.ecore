@@ -437,5 +437,12 @@
       <eParameters name="other" lowerBound="1" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LdateType" eSuperTypes="#//AnyDateType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LdateType" eSuperTypes="#//AnyDateType">
+    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLdateCompatibleWith(other);"/>
+      </eAnnotations>
+      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+    </eOperations>
+  </eClassifiers>
 </ecore:EPackage>

@@ -189,6 +189,11 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	public void reloadType(final FBType type) {
 		fbType = type;
+		try {
+			init(getEditorSite(), new FBTypeEditorInput(type, type.getPaletteEntry()));
+		} catch (final PartInitException e) {
+			org.eclipse.fordiac.ide.fbtypeeditor.Activator.getDefault().logError(PROPERTY_CONTRIBUTOR_ID, e);
+		}
 		getGraphicalViewer().setContents(fbType);
 
 	}
@@ -233,6 +238,14 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	private static int calculateCenterScrollPos(final RangeModel rangeModel) {
 		final int center = (rangeModel.getMaximum() + rangeModel.getMinimum()) / 2;
 		return center - rangeModel.getExtent() / 2;
+	}
+
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getEditPartRegistry().get(fbType);
 	}
 
 }

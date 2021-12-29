@@ -38,6 +38,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -167,33 +168,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		textControl.setMessage(Messages.NewInstanceCellEditor_SearchForType);
 		textControl.addListener(SWT.Modify, event -> updateSelectionList(textControl.getText()));
-		textControl.addListener(SWT.KeyDown, event -> {
-			switch (event.keyCode) {
-			case SWT.ARROW_DOWN:
-				int index = (tableViewer.getTable().getSelectionIndex() + 1) % tableViewer.getTable().getItemCount();
-				selectItemAtIndex(index);
-				event.doit = false;
-				break;
-			case SWT.ARROW_UP:
-				index = tableViewer.getTable().getSelectionIndex() - 1;
-				if (index < 0) {
-					index = tableViewer.getTable().getItemCount() - 1;
-				}
-				selectItemAtIndex(index);
-				event.doit = false;
-				break;
-			case SWT.CR:
-				if (popupShell.isVisible() && (tableViewer.getTable().getSelectionIndex() != -1)) {
-					selectedEntry = (PaletteEntry) tableViewer.getStructuredSelection().getFirstElement();
-					textControl.setText(selectedEntry.getLabel());
-				} else {
-					event.doit = false;
-				}
-				break;
-			default:
-				break;
-			}
-		});
+		textControl.addListener(SWT.KeyDown, event -> handleKeyPress(event, textControl));
 	}
 
 	private void updateSelectionList(final String searchString) {
@@ -208,6 +183,38 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			tableViewer.setInput(null);
 		}
 		blockTableSelection = false;
+	}
+
+	private void handleKeyPress(final Event event, final Text textControl) {
+		switch (event.keyCode) {
+		case SWT.ARROW_DOWN:
+			if (tableViewer.getTable().getItemCount() > 0) {
+				final int index = (tableViewer.getTable().getSelectionIndex() + 1) % tableViewer.getTable().getItemCount();
+				selectItemAtIndex(index);
+			}
+			event.doit = false;
+			break;
+		case SWT.ARROW_UP:
+			if (tableViewer.getTable().getItemCount() > 0) {
+				int index = tableViewer.getTable().getSelectionIndex() - 1;
+				if (index < 0) {
+					index = tableViewer.getTable().getItemCount() - 1;
+				}
+				selectItemAtIndex(index);
+			}
+			event.doit = false;
+			break;
+		case SWT.CR:
+			if (popupShell.isVisible() && (tableViewer.getTable().getSelectionIndex() != -1)) {
+				selectedEntry = (PaletteEntry) tableViewer.getStructuredSelection().getFirstElement();
+				textControl.setText(selectedEntry.getLabel());
+			} else {
+				event.doit = false;
+			}
+			break;
+		default:
+			break;
+		}
 	}
 
 	private void selectItemAtIndex(final int index) {

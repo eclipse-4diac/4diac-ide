@@ -119,7 +119,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 	@Override
 	public void keyDown(final KeyEvent evt, final EditPartViewer viewer) {
 		if ((Character.isLetterOrDigit(evt.character)) && (TYPE_DISTANCE > getLocation().getDistance(lastLeftClick))) {
-			final EditPart editPart = getCurrentViewer().findObjectAt(getLocation());
+			final EditPart editPart = viewer.findObjectAt(getLocation());
 			if (null != editPart) {
 				final SelectionRequest request = new SelectionRequest();
 				request.setLocation(lastLeftClick);
@@ -132,7 +132,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 			}
 		}
 		if (evt.keyCode == CONNECTION_CREATION_MOD_KEY && (connectionCreationTool == null)) {
-			activateConnectionCreation();
+			activateConnectionCreation(viewer);
 		}
 		super.keyDown(evt, viewer);
 	}
@@ -154,11 +154,11 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 		super.keyUp(evt, viewer);
 	}
 
-	private void activateConnectionCreation() {
-		final List<Object> editParts = getCurrentViewer().getSelectedEditParts();
+	private void activateConnectionCreation(final EditPartViewer viewer) {
+		final List<Object> editParts = viewer.getSelectedEditParts();
 		if ((editParts.size() == 1) && (editParts.get(0) instanceof InterfaceEditPart)) {
 			connectionCreationTool = new InlineConnectionCreationTool((EditPart) editParts.get(0));
-			connectionCreationTool.setViewer(getCurrentViewer());
+			connectionCreationTool.setViewer(viewer);
 			connectionCreationTool.setEditDomain(getDomain());
 			connectionCreationTool.startup(getCurrentInput().getMouseLocation());
 		}

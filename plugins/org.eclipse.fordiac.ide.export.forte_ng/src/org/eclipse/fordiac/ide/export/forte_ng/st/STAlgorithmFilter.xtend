@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
  *               2020 Johannes Kepler University Linz
+ * 				 2021 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,18 +12,24 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Ernst Blecha - add multibit partial access
+ *   Martin Melik Merkumians - fixes partial access and changes type resolution from
+ * 		String information to object comparison
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
 import java.text.MessageFormat
+import java.util.ArrayList
 import java.util.List
+import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.FordiacKeywords
+import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -32,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource
@@ -79,7 +87,6 @@ import org.eclipse.xtext.validation.CheckMode
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 
 class STAlgorithmFilter {
 
@@ -183,8 +190,41 @@ class STAlgorithmFilter {
 		«alg.localVariables.generateLocalVariables»
 		«alg.statements.generateStatementList»
 	'''
+	
+	def private dispatch int BitSize(PartialAccess part) {
+		if(part !== null) {
+			if(part.bitaccess)			ElementaryTypes.BOOL.BitSize
+			else if(part.byteaccess)	ElementaryTypes.BYTE.BitSize
+			else if(part.wordaccess)	ElementaryTypes.WORD.BitSize
+			else if(part.dwordaccess)	ElementaryTypes.DWORD.BitSize
+			else					    0
+		} else 0
+	}
+	
+	def private dispatch int BitSize(PrimaryVariable variable) {
+		variable.^var.type.BitSize
+	}
+	
+	def private dispatch int BitSize(AdapterVariable variable) {
+		variable.^var.type.BitSize
+	}
+	
+	def private dispatch int BitSize(VarDeclaration declaration) {
+		declaration.type.BitSize
+	}
+	
+	def private dispatch int BitSize(DataType type) {
+		switch(type) {
+			case ElementaryTypes.LWORD: 64
+			case ElementaryTypes.DWORD: 32
+			case ElementaryTypes.WORD: 16
+			case ElementaryTypes.BYTE: 8
+			case ElementaryTypes.BOOL: 1
+			default: 0
+		}
+	}
 
-	def private BitSize(CharSequence str) {
+	def private dispatch int BitSize(CharSequence str) {
 		switch str {
 			case FordiacKeywords.LWORD: 64
 			case FordiacKeywords.DWORD: 32
@@ -482,18 +522,99 @@ class STAlgorithmFilter {
 	def protected dispatch generateStatement(ExitStatement stmt) '''break;'''
 
 	def protected dispatch generateStatement(ContinueStatement stmt) '''continue;'''
+	
+	def private dispatch containedStatements(IfStatement statement) {
+		val EList<Statement> list = new BasicEList<Statement>()
+		list.addAll(statement.statments.statements)
+		for(elseif : statement.elseif) {
+			if(elseif?.statements?.statements !== null) {
+				list.addAll(elseif.statements.statements)
+			}
+		}
+		if(statement?.^else?.statements?.statements !== null) {
+			list.addAll(statement.^else.statements.statements)
+		}
+		return list
+	}
+	
+	def private dispatch containedStatements(CaseStatement statement) {
+		val EList<Statement> list = new BasicEList<Statement>()
+		for(casz : statement.^case) {
+			if(casz?.statements?.statements !== null) {
+				list.addAll(casz.statements.statements)
+			}
+		}
+		if(statement.^else.statements.statements !== null) list.addAll(statement.^else.statements.statements)
+		
+		return list
+	}
+	
+	def private dispatch containedStatements(ForStatement statement) {
+		statement.statements.statements		
+	}
+	
+	def private dispatch containedStatements(WhileStatement statement) {
+		statement.statements.statements
+	}
+	
+	def private dispatch containedStatements(RepeatStatement statement) {
+		statement.statements.statements
+	}
+	
+	def private dispatch containedStatements(Statement statement) {
+		val EList<Statement> list = new BasicEList<Statement>()
+		return list
+	}
+	
+	def private indexForLoopVariables(ForStatement forStatement) {
+		val forRootAlgorithm = forStatement.rootContainer as StructuredTextAlgorithm
+		
+		var Statement searchItem = forStatement
+		var container = forStatement.eContainer.eContainer
+		var containmentLevel = 0
+		val indexList = new ArrayList<Integer>()
+		while(container !== forRootAlgorithm) {
+			if(container instanceof Statement) {
+				val forStatementsInContainer = container.containedStatements.filter[it instanceof ForStatement]
+				for(var i = 0; i < forStatementsInContainer.size; i++) {
+					if(searchItem === forStatementsInContainer.get(i)) {
+						indexList.add(i)
+					}
+				}
+				containmentLevel++;
+				searchItem = container
+			}
+			container = container.eContainer.eContainer
+		}
+		val forStatementsInAlgorithm = forRootAlgorithm.statements.statements.filter[it instanceof ForStatement]
+		
+		for(var i = 0; i < forStatementsInAlgorithm.size; i++) {
+			if(searchItem === forStatementsInAlgorithm.get(i)) {
+				indexList.add(i)
+			}
+		}
+		
+		var indexString = ""
+		
+		for(Integer i : indexList.reverse) {
+			indexString += "_" + i			
+		}
+		return indexString
+	}
 
-	def protected dispatch generateStatement(ForStatement stmt) '''
-		// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5
-		auto by = «IF stmt.by !== null »«stmt.by.generateExpression»«ELSE»1«ENDIF»;
-		auto to = «stmt.to.generateExpression»;
+	def protected dispatch generateStatement(ForStatement stmt) {
+		val loopVarIndex = stmt.indexForLoopVariables 
+	'''
+		const auto by«loopVarIndex» = «IF stmt.by !== null »«stmt.by.generateExpression»«ELSE»1«ENDIF»;
+		const auto to«loopVarIndex» = «stmt.to.generateExpression»;
 		for(«stmt.variable.generateExpression» = «stmt.from.generateExpression»;
-		    (by >  0 && «stmt.variable.generateExpression» <= to) ||
-		    (by <= 0 && «stmt.variable.generateExpression» >= to);
-		    «stmt.variable.generateExpression» = «stmt.variable.generateExpression» + by){
+		    (by«loopVarIndex» >  0 && «stmt.variable.generateExpression» <= to«loopVarIndex») ||
+		    (by«loopVarIndex» <= 0 && «stmt.variable.generateExpression» >= to«loopVarIndex»);
+		    «stmt.variable.generateExpression» = «stmt.variable.generateExpression» + by«loopVarIndex»){
 			«stmt.statements.generateStatementList»
 		}
 	'''
+	}
 
 	def protected dispatch generateStatement(WhileStatement stmt) '''
 		while(«stmt.expression.generateExpression») {
@@ -601,23 +722,38 @@ class STAlgorithmFilter {
 	def protected generateBitaccess(AdapterVariable variable) {
 		if (null !== variable.part) {
 			val lastvar = variable.^var
-			generateBitaccess(lastvar, lastvar.type.name, variable.extractTypeInformation, variable.part.index)
+			generateBitaccess(lastvar, variable.part)
 		}
 	}
 
 	def protected generateBitaccess(PrimaryVariable variable) {
 		if (null !== variable.part) {
-			generateBitaccess(variable.^var, variable.^var.type.name, variable.extractTypeInformation,
-				variable.part.index)
+			generateBitaccess(variable.^var, variable.part)
 		}
 	}
+	
+	def protected partialAccessTypeName(PartialAccess part) {
+		if (part.bitaccess)        FordiacKeywords.BOOL
+		else if (part.byteaccess)  FordiacKeywords.BYTE
+		else if (part.wordaccess)  FordiacKeywords.WORD
+		else if (part.dwordaccess) FordiacKeywords.DWORD
+		else                       ""
+	}
+	
+	def protected generateBitaccess(VarDeclaration variable, PartialAccess part) {
+		val maxVarBitIndex = variable.BitSize
+		val endBitIndexAccessor = part.BitSize * (part.index + 1)
+		if(maxVarBitIndex > endBitIndexAccessor) {
+			'''.partial<CIEC_«part.partialAccessTypeName»,«Long.toString(part.index)»>()'''
+		}
+		
+	}
 
-	def protected generateBitaccess(VarDeclaration variable, CharSequence DataType, CharSequence AccessorType,
-		int Index) {
-		if (BitSize(AccessorType) > 0 && variable.array &&
-			variable.arraySize * BitSize(DataType) > BitSize(AccessorType)) {
-			'''.partial<CIEC_«AccessorType»,«Long.toString(Index)»>()'''
-		} else if (BitSize(DataType) == BitSize(AccessorType)) {
+	def protected generateBitaccess(VarDeclaration variable, CharSequence dataType, CharSequence accessorType, int index) {
+		if (BitSize(accessorType) > 0 && variable.array &&
+			variable.arraySize * BitSize(dataType) > BitSize(accessorType)) {
+			'''.partial<CIEC_«accessorType»,«Long.toString(index)»>()'''
+		} else if (BitSize(dataType) == BitSize(accessorType)) {
 			''''''
 		} else {
 			'''''' // This should never happen - we cannot access more bits than are available in the source type
@@ -654,6 +790,10 @@ class STAlgorithmFilter {
 
 	def protected dispatch extractTypeInformation(VarDeclaration variable) {
 		variable.type.name
+	}
+	
+	def protected dispatch extractTypeInformation(AdapterVariable variable) {
+		variable.^var.type.name
 	}
 
 }

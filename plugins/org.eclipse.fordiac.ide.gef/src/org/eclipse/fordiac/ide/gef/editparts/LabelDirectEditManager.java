@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Text;
 public class LabelDirectEditManager extends TextDirectEditManager {
 
 	/** The label. */
-	private Label label;
+	private final Label label;
 
 	/** The scaled font. */
 	private Font scaledFont;
@@ -59,7 +59,7 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 	 * @param aditionalVerifyListener the aditional verify listener
 	 */
 	public LabelDirectEditManager(final GraphicalEditPart source, final Label label,
-			VerifyListener aditionalVerifyListener) {
+			final VerifyListener aditionalVerifyListener) {
 		super(source, TextCellEditor.class, new NameCellEditorLocator(label));
 		this.label = label;
 		this.aditionalVerify = aditionalVerifyListener;
@@ -74,7 +74,7 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 		initialString = new String(new char[] { initialChar });
 		this.show();
 		// Get the Text control
-		Text textControl = (Text) getCellEditor().getControl();
+		final Text textControl = (Text) getCellEditor().getControl();
 		// Set the controls text and position the caret at the end of the text
 		textControl.setSelection(1);
 		setDirty(true);
@@ -88,10 +88,9 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 	 */
 	@Override
 	protected void bringDown() {
-		Font disposeFont = scaledFont;
+		final Font disposeFont = scaledFont;
 		scaledFont = null;
 		initialString = null;
-		getLocator().relocate(getCellEditor());
 		super.bringDown();
 		if (disposeFont != null) {
 			disposeFont.dispose();
@@ -105,7 +104,8 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 	 */
 	@Override
 	protected void initCellEditor() {
-		Text text = (Text) getCellEditor().getControl();
+		super.initCellEditor();
+		final Text text = (Text) getCellEditor().getControl();
 
 		if (aditionalVerify != null) {
 			text.addVerifyListener(aditionalVerify);
@@ -119,10 +119,10 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 			initialLabelText = initialString;
 			getCellEditor().setValue(initialLabelText);
 		}
-		IFigure figure = getEditPart().getFigure();
+		final IFigure figure = getEditPart().getFigure();
 		scaledFont = figure.getFont();
-		FontData data = scaledFont.getFontData()[0];
-		Dimension fontSize = new Dimension(0, data.getHeight());
+		final FontData data = scaledFont.getFontData()[0];
+		final Dimension fontSize = new Dimension(0, data.getHeight());
 		label.translateToAbsolute(fontSize);
 		data.setHeight(fontSize.height);
 		scaledFont = new Font(null, data);
@@ -130,27 +130,15 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 		text.selectAll();
 	}
 
-	public void setInitialString(String val) {
-		initialString = val;
-		if (null != getCellEditor()) {
-			getCellEditor().setValue(initialString);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.tools.DirectEditManager#unhookListeners()
-	 */
 	@Override
 	protected void unhookListeners() {
 		super.unhookListeners();
 		try {
-			Text text = (Text) getCellEditor().getControl();
+			final Text text = (Text) getCellEditor().getControl();
 			if (aditionalVerify != null) {
 				text.removeVerifyListener(aditionalVerify);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}

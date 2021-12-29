@@ -52,6 +52,10 @@ public final class Messages extends NLS {
 
 	public static String CutEditPartsAction_Text;
 
+	public static String ErrorMarkerFBNEditPart_ErrorMarker;
+
+	public static String ErrorMarkerFBNEditPart_OldType;
+
 	/** The FB edit part_ erro r_ unsupported fb type. */
 	public static String FBEditPart_ERROR_UnsupportedFBType;
 

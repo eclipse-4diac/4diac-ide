@@ -12,7 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.text.MessageFormat;
+
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.figures.ErrorMarkerFBNeworkElementFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -43,17 +46,12 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 		if (getModel().getPaletteEntry() != null) {
 			final FBType type = (FBType) getModel().getPaletteEntry().getType();
 			if (type != null) {
-				errorText.append("old type: " + type.getName()); //$NON-NLS-1$
-				errorText.append(System.lineSeparator());
+				errorText.append(MessageFormat.format(Messages.ErrorMarkerFBNEditPart_OldType, type.getName()));
 			}
 		}
 
-		if (getModel().getErrorMessage() != null) {
-			errorText.append(getModel().getErrorMessage());
-		}
-
 		if (errorText.length() == 0) {
-			errorText.append("Error Marker"); //$NON-NLS-1$
+			errorText.append(Messages.ErrorMarkerFBNEditPart_ErrorMarker);
 		}
 
 		setText(errorText.toString());

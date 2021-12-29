@@ -14,6 +14,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *   Lukas Wais - Implemented a max size for monitoring values
+ *   Michael Oberlehner - Added deletion of monitorign elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
@@ -26,6 +27,10 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
@@ -33,16 +38,21 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.monitoring.Activator;
+import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.handlers.AbstractMonitoringHandler;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.RootEditPart;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -51,10 +61,48 @@ import org.eclipse.swt.graphics.FontMetrics;
 public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPart implements SpecificLayerEditPart {
 
 	private InterfaceEditPart parentPart;
+	private final List<EObject> fBnetworks = new ArrayList<>();
 
 	private IPropertyChangeListener listener;
+	private final Adapter deleteInterfaceAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			switch (notification.getEventType()) {
+			case Notification.REMOVE:
+			case Notification.REMOVE_MANY:
+				if (isElementOrParentDeleted(notification)) {
+					deleteMonitoringElement();
+				}
+				break;
+			default:
+			}
+		}
 
-	/** FIXME implement deactivate */
+		public void deleteMonitoringElement() {
+			MonitoringManager.getInstance().removeMonitoringElement(getModel());
+			MonitoringManager.getInstance().notifyWatchesChanged();
+			if (getViewer() != null) {
+				final RootEditPart rootEditPart = getViewer().getRootEditPart();
+				if (rootEditPart != null) {
+					AbstractMonitoringHandler.refresh(rootEditPart);
+				}
+			}
+		}
+	};
+
+	public boolean isElementOrParentDeleted(final Notification notification) {
+		final FBNetworkElement fbNetworkElement = getInterfaceElement().getFBNetworkElement();
+		return fbNetworkElement == null || notification.getOldValue() == fbNetworkElement
+				|| fbNetworkElement.isNestedInSubApp() && fBnetworks.contains(fbNetworkElement.getFbNetwork());
+	}
+
+
+	@Override
+	public void deactivate() {
+		fBnetworks.forEach(n -> n.eAdapters().remove(deleteInterfaceAdapter));
+		super.deactivate();
+	}
+
 	@Override
 	public void activate() {
 		super.activate();
@@ -151,9 +199,28 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 				}
 			}
 		}
+
+		addDeleteAdapterToNetworks();
 		org.eclipse.fordiac.ide.monitoring.Activator.getDefault().getPreferenceStore()
-				.addPropertyChangeListener(getPreferenceChangeListener());
+		.addPropertyChangeListener(getPreferenceChangeListener());
 		refreshVisuals();
+	}
+
+	public void addDeleteAdapterToNetworks() {
+		FBNetworkElement fbNetworkElement = getInterfaceElement().getFBNetworkElement();
+		addNetwork(fbNetworkElement);
+		while (fbNetworkElement != null && fbNetworkElement.isNestedInSubApp()) {
+			fbNetworkElement = fbNetworkElement.getOuterFBNetworkElement();
+			addNetwork(fbNetworkElement);
+		}
+	}
+
+	public void addNetwork(final FBNetworkElement fbNetworkElement) {
+		if (fbNetworkElement != null) {
+			final FBNetwork fbNetwork = fbNetworkElement.getFbNetwork();
+			fBnetworks.add(fbNetwork);
+			fbNetwork.eAdapters().add(deleteInterfaceAdapter);
+		}
 	}
 
 	@Override

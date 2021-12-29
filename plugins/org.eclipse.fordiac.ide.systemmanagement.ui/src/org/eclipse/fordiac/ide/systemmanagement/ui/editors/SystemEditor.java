@@ -48,6 +48,7 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -86,9 +87,11 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 	private final Adapter appListener = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			if ((null != appTreeViewer) && (!appTreeViewer.getControl().isDisposed())) {
-				appTreeViewer.refresh();
-			}
+			Display.getDefault().asyncExec(() -> {
+				if ((null != appTreeViewer) && (!appTreeViewer.getControl().isDisposed())) {
+					appTreeViewer.refresh();
+				}
+			});
 		}
 	};
 
@@ -228,11 +231,13 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 
 	private void createInfoSection(final FormToolkit toolkit, final SashForm sash) {
 		final Section infoSection = createExpandableSection(toolkit, sash, "System Information:");
-		infoSection.setLayout(new GridLayout(1, true));
+		infoSection.setLayout(new GridLayout());
 
 		typeInfo = new TypeInfoWidget(toolkit);
-		final Composite typeInfoRoot = typeInfo.createControls(infoSection);
-		infoSection.setClient(typeInfoRoot);
+		final Composite composite = toolkit.createComposite(infoSection);
+		composite.setLayout(new GridLayout(2, true));
+		typeInfo.createControls(composite);
+		infoSection.setClient(composite);
 	}
 
 	private static Section createExpandableSection(final FormToolkit toolkit, final Composite parent,

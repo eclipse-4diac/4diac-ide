@@ -53,7 +53,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 			// only report connections and fbelements, isMarqueeslectable can not be used
 			// for that as it affects connection selection in the wrong way
 			return marqueeSelectedEditParts.stream()
-					.filter(ep -> (ep instanceof ConnectionEditPart) || (ep instanceof AbstractFBNElementEditPart))
+					.filter(ep -> (ep instanceof ConnectionEditPart && ep.isSelectable())
+							|| (ep instanceof AbstractFBNElementEditPart))
 					.collect(Collectors.toSet());
 		}
 

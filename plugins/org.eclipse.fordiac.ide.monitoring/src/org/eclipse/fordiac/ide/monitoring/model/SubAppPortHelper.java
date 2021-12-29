@@ -12,8 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
@@ -22,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
@@ -42,46 +46,105 @@ public final class SubAppPortHelper {
 			if (outConns.isEmpty()) {
 				return null;
 			}
-			current = assignNextInterfaceElement(isInput, outConns);
+			current = assignNextInterfaceElement(isInput, outConns).get(0);
 		}
 		return current;
 
 	}
 
-	public static String findConnectedMonitoredSubappPort(IInterfaceElement interfaceElement,
+	public static String findConnectedMonitoredSubappPort(final IInterfaceElement interfaceElement,
 			final Map<String, List<MonitoringElement>> subappElements) {
 
-		final boolean searchDirection = !interfaceElement.isIsInput();
+		final boolean searchDirection = interfaceElement.isIsInput();
 
+		IInterfaceElement currentIe = interfaceElement;
 		do {
-			final EList<Connection> connections = getConnections(interfaceElement, searchDirection);
+			final EList<Connection> connections = getConnections(currentIe, searchDirection);
 
 			if (connections.isEmpty()) {
 				return null;
 			}
 
-			interfaceElement = assignNextInterfaceElement(searchDirection, connections);
+			final List<IInterfaceElement> nextElements = assignNextInterfaceElement(searchDirection, connections);
 
-			if (!interfaceElement.getFBNetworkElement().isMapped()) {
-				return null;
+			for (final IInterfaceElement nextIe : nextElements) {
+				currentIe = nextIe;
+				if (!currentIe.getFBNetworkElement().isMapped()) {
+					continue;
+				}
+				final PortElement subappPortCanidate = MonitoringManagerUtils
+						.createPortElement(currentIe.getFBNetworkElement(), currentIe);
+
+				final String anchor = searchSubappAnchor(subappElements, subappPortCanidate);
+				if (subappElements.containsKey(anchor)) {
+					return anchor;
+				}
+
 			}
-			final PortElement subappPortCanidate = MonitoringManagerUtils
-					.createPortElement(interfaceElement.getFBNetworkElement(), interfaceElement);
 
-			final String anchor = searchSubappAnchor(subappElements, subappPortCanidate);
-			if (subappElements.containsKey(anchor)) {
-				return anchor;
-			}
 
-		} while ((interfaceElement.getFBNetworkElement() instanceof SubApp));
+		} while ((currentIe.getFBNetworkElement() instanceof SubApp));
 
 		return null;
 	}
 
-	public static IInterfaceElement assignNextInterfaceElement(final boolean isInput,
-			final List<Connection> connections) {
-		final Connection connection = connections.get(0);
-		return isInput ? connection.getDestination() : connection.getSource();
+
+	public static List<MonitoringElement> findConnectedElements(final IInterfaceElement interfaceElement) {
+		final List<MonitoringElement> elements = new ArrayList<>();
+		final boolean searchDirection = interfaceElement.isIsInput();
+		findConnectedElements(elements, interfaceElement, searchDirection);
+		return elements;
+
+	}
+
+	public static List<MonitoringElement> findConnectedElements(final IInterfaceElement interfaceElement,
+			final boolean searchDirection) {
+		final List<MonitoringElement> elements = new ArrayList<>();
+		findConnectedElements(elements, interfaceElement, searchDirection);
+		return elements;
+
+	}
+
+
+	public static void findConnectedElements(final List<MonitoringElement> elements,
+			final IInterfaceElement interfaceElement) {
+		final boolean searchDirection = interfaceElement.isIsInput();
+		findConnectedElements(elements, interfaceElement, searchDirection);
+	}
+
+	public static void findConnectedElements(final List<MonitoringElement> elements,
+			final IInterfaceElement interfaceElement,
+			final boolean searchDirection) {
+		IInterfaceElement currentIe = interfaceElement;
+
+		final EList<Connection> connections = getConnections(currentIe, searchDirection);
+
+		if (connections.isEmpty()) {
+			return;
+		}
+
+		final List<IInterfaceElement> nextElements = assignNextInterfaceElement(searchDirection, connections);
+
+		for (final IInterfaceElement nextIe : nextElements) {
+			currentIe = nextIe;
+			if (nextIe.getFBNetworkElement() instanceof SubApp) {
+				findConnectedElements(elements, nextIe, searchDirection);
+			} else if (!(!nextIe.getFBNetworkElement().isNestedInSubApp()
+					&& !nextIe.getFBNetworkElement().isMapped())) {
+				final MonitoringBaseElement element = MonitoringFactory.eINSTANCE.createMonitoringElement();
+				final PortElement anchorPort = MonitoringManagerUtils.createPortElement(currentIe);
+				element.setPort(anchorPort);
+				elements.add((MonitoringElement) element);
+			}
+
+		}
+	}
+
+	public static List<IInterfaceElement> assignNextInterfaceElement(final boolean isInput,
+			final Collection<Connection> connections) {
+		return connections.stream()
+				.map(connection -> isInput ? connection.getDestination() : connection.getSource())
+				.collect(Collectors.toList());
 	}
 
 	public static boolean hasEmptyConnections(final IInterfaceElement ie, final boolean isInput) {

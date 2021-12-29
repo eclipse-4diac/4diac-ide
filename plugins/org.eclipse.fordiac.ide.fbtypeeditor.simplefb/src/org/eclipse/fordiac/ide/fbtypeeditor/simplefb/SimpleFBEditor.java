@@ -1,5 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2018 TU Wien/ACIN, Johannes Kepler University
+ * Copyright (c) 2018, 2021 TU Wien/ACIN, Johannes Kepler University
+ *  						Primetals Technologies Austria GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -7,24 +9,29 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Peter Gsellmann
- *   - initial implementation and/or initial documentation
- *   Alois Zoitl - reworked algorithm edting to reduce duplicated code
+ *   Peter Gsellmann - initial implementation and/or initial documentation
+ *   Alois Zoitl     - reworked algorithm edting to reduce duplicated code
+ *                   - introduced dedicated editpart for better interaction with
+ *                     property sheets
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB;
+import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
@@ -36,6 +43,20 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
+
+	/** simple placeholder editpart so that the property sheet can listen to something */
+	public static final class SimpleFBEditPart extends AbstractGraphicalEditPart {
+
+		@Override
+		protected IFigure createFigure() {
+			return new Figure();
+		}
+
+		@Override
+		protected void createEditPolicies() {
+			// edit policies need for this placeholder class
+		}
+	}
 
 	private final AlgorithmEditingCompositeSimpleFB baseAlgorithm = new AlgorithmEditingCompositeSimpleFB();
 	private SimpleFBType fbType;
@@ -102,7 +123,6 @@ public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
-
 	}
 
 	@Override
@@ -137,20 +157,47 @@ public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
 		if (type instanceof SimpleFBType) {
 			fbType = (SimpleFBType) type;
 			baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
+			try {
+				init(getEditorSite(), new FBTypeEditorInput(type, type.getPaletteEntry()));
+				initializeGraphicalViewer();
+			} catch (final PartInitException e) {
+				Activator.getDefault().logError(getContentDescription(), e);
+			}
+
 		}
 
 	}
 
+
+
 	@Override
 	protected void initializeGraphicalViewer() {
 		final var viewer = getGraphicalViewer();
-		viewer.setEditPartFactory(new FBInterfaceEditPartFactory(this, fbType.getTypeLibrary()));
+		viewer.setEditPartFactory(new Abstract4diacEditPartFactory(this) {
+
+			@Override
+			protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
+				if (modelElement instanceof SimpleFBType) {
+					return new SimpleFBEditPart();
+				}
+				return null;
+			}
+
+		});
 		viewer.setContents(fbType);
 	}
 
 	@Override
 	protected CommandStack getCommandStack() {
 		return commandStack;
+	}
+
+	@Override
+	public Object getSelectableEditPart() {
+		if (getGraphicalViewer() == null) {
+			return null;
+		}
+		return getGraphicalViewer().getEditPartRegistry().get(fbType);
 	}
 
 }
