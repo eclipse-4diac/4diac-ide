@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ant.core;resolution:=optional
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 2.0.1.qualifier
 Bundle-Name: System Management
 Bundle-Activator: org.eclipse.fordiac.ide.systemmanagement.Activator
 Bundle-ManifestVersion: 2
