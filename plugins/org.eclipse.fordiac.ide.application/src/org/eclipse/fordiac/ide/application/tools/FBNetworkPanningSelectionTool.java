@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.gef.tools.FordiacConnectionDragCreationTool;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.RequestConstants;
@@ -48,7 +49,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 	 *
 	 * The current default is on most system the Alt key.
 	 */
-	private static final int CONNECTION_CREATION_MOD_KEY = SWT.MOD3;
+	private static final int CONNECTION_CREATION_MOD_KEY = SWT.MOD1;
 
 	static class InlineConnectionCreationTool extends FordiacConnectionDragCreationTool {
 
@@ -101,15 +102,14 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	@Override
 	public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
-		checkConnCreationState(me); // check if conn creation needs to be deactivated
-		if (null == connectionCreationTool) {
+		if (!checkConnCreationState(me.stateMask)) {
 			super.mouseDown(me, viewer);
 		}
 	}
 
 	@Override
 	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
-		if (checkConnCreationState(me)) {
+		if (checkConnCreationState(me.stateMask)) {
 			connectionCreationTool.mouseUp(me, viewer);
 		} else {
 			if (LEFT_MOUSE == me.button) {
@@ -134,18 +134,20 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 				return;
 			}
 		}
-		if (evt.keyCode == CONNECTION_CREATION_MOD_KEY && (connectionCreationTool == null)) {
-			activateConnectionCreation(viewer);
-		}
+		// if (evt.keyCode == CONNECTION_CREATION_MOD_KEY && (connectionCreationTool == null)
+		// && isConnectionCreationTarget(getTargetEditPart())) {
+		// activateConnectionCreation(viewer);
+		// }
+		checkConnCreationState(evt.keyCode);
 		super.keyDown(evt, viewer);
 	}
 
 	@Override
 	public void mouseMove(final MouseEvent me, final EditPartViewer viewer) {
-		if (checkConnCreationState(me)) {
+		// the super call has to be first so that the target editpart is updated accordingly
+		super.mouseMove(me, viewer);
+		if (checkConnCreationState(me.stateMask)) {
 			connectionCreationTool.mouseDrag(me, viewer);
-		} else {
-			super.mouseMove(me, viewer);
 		}
 	}
 
@@ -204,16 +206,24 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 		connectionCreationTool = null;
 	}
 
-	private boolean checkConnCreationState(final MouseEvent me) {
-		if (null != connectionCreationTool) {
-			if ((me.stateMask & CONNECTION_CREATION_MOD_KEY) == 0) {
-				// connection key not pressed anymore deactivate connection creation
+
+	private boolean checkConnCreationState(final int stateMask) {
+		if (connectionCreationTool != null) {
+			if (((stateMask & CONNECTION_CREATION_MOD_KEY) == 0)
+					|| (!isConnectionCreationTarget(getTargetEditPart()))) {
 				deactivateConnectionCreation();
-				return false;
 			}
-			return true;
+		} else {
+			if (((stateMask & CONNECTION_CREATION_MOD_KEY) == CONNECTION_CREATION_MOD_KEY)
+					&& (isConnectionCreationTarget(getTargetEditPart()))) {
+				activateConnectionCreation(getCurrentViewer());
+			}
 		}
-		return false;
+		return connectionCreationTool != null;
+	}
+
+	private static boolean isConnectionCreationTarget(final EditPart targetEditPart) {
+		return (targetEditPart != null) && (targetEditPart.getModel() instanceof IInterfaceElement);
 	}
 
 }
