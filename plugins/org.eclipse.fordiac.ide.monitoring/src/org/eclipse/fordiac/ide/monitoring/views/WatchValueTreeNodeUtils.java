@@ -99,28 +99,24 @@ public final class WatchValueTreeNodeUtils {
 	}
 
 	private static String buildTreeString(final WatchValueTreeNode dbgStruct) {
-		return buildSubTreeString(dbgStruct.getChildren(), CLAMP_OP) + CLAMP_CL;
+		return buildSubTreeString(dbgStruct.getChildren());
 	}
 
-	private static String buildSubTreeString(final List<AbstractStructTreeNode> list, final String valString) {
-		final StringBuilder sb = new StringBuilder(valString);
+	private static String buildSubTreeString(final List<AbstractStructTreeNode> list) {
+		final StringBuilder sb = new StringBuilder(CLAMP_OP);
 		for (final AbstractStructTreeNode tn : list) {
 			final WatchValueTreeNode wtn = (WatchValueTreeNode) tn;
+			sb.append(wtn.getVarName());
+			sb.append(ASSIGN);
 			if (wtn.hasChildren()) {
-				sb.append(wtn.getPinName());
-				sb.append(ASSIGN + CLAMP_OP);
-				sb.append(buildSubTreeString(wtn.getChildren(), valString));
-				sb.append(CLAMP_CL + DELIMITER);
-				continue;
-			}
-			if (wtn.getVariable() != null) {
-				sb.append(wtn.getVariable().getName());
-				sb.append(ASSIGN);
+				sb.append(buildSubTreeString(wtn.getChildren()));
+			} else {
 				sb.append(wtn.getValue());
-				sb.append(DELIMITER);
 			}
+			sb.append(DELIMITER);
 		}
 		sb.deleteCharAt(sb.length() - 1); // remove last delimiter
+		sb.append(CLAMP_CL);
 		return sb.toString();
 	}
 
