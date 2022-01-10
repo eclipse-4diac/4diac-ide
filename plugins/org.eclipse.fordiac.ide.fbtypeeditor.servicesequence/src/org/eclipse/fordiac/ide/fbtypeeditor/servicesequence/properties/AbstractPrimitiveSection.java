@@ -204,10 +204,9 @@ public abstract class AbstractPrimitiveSection extends AbstractServiceSection {
 			final IInterfaceElement qiData = getType().getService().getFBType().getInterfaceList()
 					.getInterfaceElement("QI"); //$NON-NLS-1$
 
-			dataQualifyingCombo.setEnabled(qiData != null);
+			dataQualifyingCombo.setEnabled(qiData != null && !checkBox.getSelection());
 			customEventText.setEnabled(checkBox.getSelection());
 			eventCombo.setEnabled(!checkBox.getSelection());
-			dataQualifyingCombo.setEnabled(!checkBox.getSelection());
 		}
 		commandStack = commandStackBuffer;
 	}
