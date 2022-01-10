@@ -102,7 +102,7 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 	public static WatchValueTreeNode createOfflineNode(final MonitoringBaseElement monitoringBaseElement,
 			final DataType type, final WatchValueTreeNode parent) {
 		final String pinName = ((MonitoringElement) monitoringBaseElement).getPort().getInterfaceElement().getName();
-		final WatchValueTreeNode structRoot = new WatchValueTreeNode(monitoringBaseElement, (StructuredType) type, "",
+		final WatchValueTreeNode structRoot = new WatchValueTreeNode(monitoringBaseElement, (StructuredType) type, "", //$NON-NLS-1$
 				pinName, null,
 				parent);
 
@@ -179,10 +179,8 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 		}
 
 		if (isStructNode()) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
-
-
 
 		return "N/A";
 	}
@@ -201,6 +199,10 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	public boolean isStructLeaf() {
 		return !hasChildren() && isStructNode();
+	}
+
+	public String getVarName() {
+		return varName;
 	}
 
 }

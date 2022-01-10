@@ -109,6 +109,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		network.getNetworkElements().remove(oldElement);
 
 		newElement.setName(oldElement.getName());
+		checkGroup(oldElement, newElement);
 
 		// Map FB
 		if (resource != null) {
@@ -142,6 +143,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			errorMarkerBuilder.createMarkerInFile();
 		}
 
+		checkGroup(oldElement, newElement);
+
 		if (mapCmd != null) {
 			mapCmd.redo();
 			resourceConnCreateCmds.redo();
@@ -171,8 +174,17 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			errorMarkerBuilder.createMarkerInFile();
 		}
 
+		checkGroup(newElement, oldElement);
+
 		if (unmapCmd != null) {
 			unmapCmd.undo();
+		}
+	}
+
+	private static void checkGroup(final FBNetworkElement oldElem, final FBNetworkElement newElem) {
+		if (oldElem.isInGroup()) {
+			newElem.setGroup(oldElem.getGroup());
+			oldElem.setGroup(null);
 		}
 	}
 
