@@ -83,7 +83,7 @@
             </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.PrimitiveSection"
+               class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.InputPrimitiveSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.InputPrimitiveFilter"
                id="property.section.inputPrimitive"
                tab="property.tab.inputPrimitive">

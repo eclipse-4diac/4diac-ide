@@ -12,7 +12,7 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
- *   Melanie Winter - updated section, use comboboxes
+ *   Melanie Winter - updated section, use comboboxes, made abstract
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
@@ -46,7 +46,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class PrimitiveSection extends AbstractServiceSection {
+public abstract class AbstractPrimitiveSection extends AbstractServiceSection {
 
 
 	private Text parametersText;
@@ -145,7 +145,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	private boolean isCustomEvent() {
 		if (getType() != null) {
-			final FBType fb = getType().getService().getFBType();
+			final FBType fb = getFBType();
 			for (final Event event : getRelevantEvents(fb)) {
 				if (event.getName().equals(getType().getEvent())) {
 					return false;
@@ -212,12 +212,10 @@ public class PrimitiveSection extends AbstractServiceSection {
 		commandStack = commandStackBuffer;
 	}
 
-
+	protected abstract EList<Event> getRelevantEvents(final FBType fb);
 
 	@Override
-	protected Primitive getType() {
-		return (Primitive) type;
-	}
+	protected abstract Primitive getType();
 
 	protected FBType getFBType() {
 		return getType().getService().getFBType();
@@ -249,11 +247,10 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	public void setEventDropdown() {
 		eventCombo.removeAll();
-		final FBType fb = getType().getService().getFBType();
+		final FBType fb = getFBType();
 		for (final Event event : getRelevantEvents(fb)) {
 			eventCombo.add(event.getName());
 		}
-
 		selectCurrentEventInCombo();
 	}
 
@@ -281,14 +278,6 @@ public class PrimitiveSection extends AbstractServiceSection {
 			customEventText.setText(currentEvent);
 		}
 	}
-
-	private EList<Event> getRelevantEvents(final FBType fb) {
-		if (getType() instanceof InputPrimitive) {
-			return fb.getInterfaceList().getEventInputs();
-		}
-		return fb.getInterfaceList().getEventOutputs();
-	}
-
 
 	@Override
 	protected void setInputInit() {
