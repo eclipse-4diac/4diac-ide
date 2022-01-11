@@ -748,7 +748,7 @@ class STAlgorithmFilter {
 	def protected generateBitaccess(VarDeclaration variable, PartialAccess part) {
 		val maxVarBitIndex = variable.BitSize
 		val endBitIndexAccessor = part.BitSize * (part.index + 1)
-		if(maxVarBitIndex > endBitIndexAccessor) {
+		if(maxVarBitIndex >= endBitIndexAccessor) {
 			'''.partial<CIEC_«part.partialAccessTypeName»,«Long.toString(part.index)»>()'''
 		}
 		
