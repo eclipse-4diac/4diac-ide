@@ -51,11 +51,6 @@ import org.eclipse.gef.requests.CreateRequest;
 public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
-	public void setHost(final EditPart host) {
-		super.setHost(host);
-	}
-
-	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
 		return new ModifiedNonResizeableEditPolicy();
 
@@ -112,7 +107,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	private Command handleDragToRootRequest(final ChangeBoundsRequest request) {
 		final List<EditPart> editParts = request.getEditParts();
 		final Point destination = getTranslatedAndZoomedPoint(request);
-		List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts);
+		List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
 		if (!fbEls.isEmpty()) {
 			return new MoveElementsFromSubAppCommand(fbEls,
 					new org.eclipse.swt.graphics.Point(destination.x, destination.y));
@@ -131,9 +126,12 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				request.getLocation().y + location.y).scale(1.0 / getZoomManager().getZoom());
 	}
 
-	private static List<FBNetworkElement> collectFromSubappDraggedFBs(final List<EditPart> editParts) {
+	private static List<FBNetworkElement> collectFromSubappDraggedFBs(final List<EditPart> editParts,
+			final FBNetwork fbNetwork) {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
 				.map(ep -> (FBNetworkElement) ep.getModel()).filter(FBNetworkElement::isNestedInSubApp)
+				.filter(el -> !el.getFbNetwork().equals(fbNetwork))   // only take fbentworkelements that are not in the
+																	   // same subapp
 				.collect(Collectors.toList());
 	}
 
@@ -161,4 +159,10 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				&& !(targetEditPart instanceof UnfoldedSubappContentEditPart)
 				&& !(targetEditPart instanceof GroupContentEditPart);
 	}
+
+	private FBNetwork getFBNetwork() {
+		final Object model = getHost().getModel();
+		return (model instanceof FBNetwork) ? (FBNetwork) model : null;
+	}
+
 }
