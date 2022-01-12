@@ -21,7 +21,7 @@ import org.eclipse.swt.graphics.TextStyle;
 
 public class BoldStyler extends Styler {
 
-	public static BoldStyler INSTANCE_DEFAULT = new BoldStyler(JFaceResources.DEFAULT_FONT, null, null);
+	public static final BoldStyler INSTANCE_DEFAULT = new BoldStyler(JFaceResources.DEFAULT_FONT, null, null);
 
 	private final String fontName;
 	private final String foregroundColorName;

@@ -134,10 +134,6 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 				return;
 			}
 		}
-		// if (evt.keyCode == CONNECTION_CREATION_MOD_KEY && (connectionCreationTool == null)
-		// && isConnectionCreationTarget(getTargetEditPart())) {
-		// activateConnectionCreation(viewer);
-		// }
 		checkConnCreationState(evt.keyCode);
 		super.keyDown(evt, viewer);
 	}
