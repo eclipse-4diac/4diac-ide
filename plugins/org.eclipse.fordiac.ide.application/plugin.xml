@@ -333,22 +333,18 @@
              name="Go To Child">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoPinUnderHandler"
              id="org.eclipse.fordiac.ide.application.commands.gotopinunder"
              name="Go To Pin Below">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoPinAboveHandler"
              id="org.eclipse.fordiac.ide.application.commands.gotopinabove"
              name="Go To Pin Below">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
              id="org.eclipse.fordiac.ide.application.commands.followLeftConnection"
              name="Follow Left Connection">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
              id="org.eclipse.fordiac.ide.application.commands.followRightConnection"
              name="Follow Right Connection">
     </command>
@@ -413,6 +409,79 @@
     </command>
   </extension>
   <extension point="org.eclipse.ui.handlers">
+  
+  
+ <!-- HANDLER FOR FOLLOW LEFT CONNECTION, SECOND IS FOR OVERRIDING THE CONFLICTING SHORTCUT -->
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection">
+	  <activeWhen>
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+        </reference>
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
+             commandId="org.eclipse.ui.edit.text.goto.wordPrevious">
+	  <activeWhen>
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+        </reference>
+      </activeWhen>
+    </handler>
+    
+    
+<!-- HANDLER FOR FOLLOW RIGHT CONNECTION, SECOND IS FOR OVERRIDING THE CONFLICTING SHORTCUT -->
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection">
+	  <activeWhen>
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+        </reference>
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
+             commandId="org.eclipse.ui.edit.text.goto.wordNext">
+	  <activeWhen>
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+        </reference>
+      </activeWhen>
+    </handler>
+    
+    
+    <!-- HANDLER FOR Go TO PIN ABOVE, SECOND IS FOR OVERRIDING THE CONFLICTING SHORTCUT -->
+    <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinAboveHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.gotopinabove">
+	  <activeWhen>
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+        </reference>
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinAboveHandler"
+             commandId="org.eclipse.ui.edit.text.scroll.lineUp">
+	  <activeWhen>
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+        </reference>
+      </activeWhen>
+    </handler>
+    
+ 	<!-- HANDLER FOR Go TO PIN BELOW, SECOND IS FOR OVERRIDING THE CONFLICTING SHORTCUT -->
+    <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinUnderHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.gotopinunder">
+	  <activeWhen>
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+        </reference>
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinUnderHandler"
+             commandId="org.eclipse.ui.edit.text.scroll.lineDown">
+	  <activeWhen>
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+        </reference>
+      </activeWhen>
+    </handler>
+  
+ <!-- HANDLERS -->
     <handler class="org.eclipse.fordiac.ide.application.handlers.AddFBBookMark"
              commandId="org.eclipse.ui.edit.addBookmark">
       <activeWhen>
@@ -499,7 +568,7 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.UnmapAllHandler"
              commandId="org.eclipse.fordiac.ide.application.unmapAll">
       <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.UnmapAllActivation">
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
         </reference>
       </activeWhen>
     </handler>
@@ -893,14 +962,14 @@
                label="Unmap"
                style="push">
         <visibleWhen>
-          <reference definitionId="org.eclipse.fordiac.ide.application.UnmapAllActivation" />
+          <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor" />
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.unmapAll"
                label="Unmap All"
                style="push">
         <visibleWhen>
-          <reference definitionId="org.eclipse.fordiac.ide.application.UnmapAllActivation" />
+          <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor" />
         </visibleWhen>
       </command>
     </menuContribution>
@@ -1132,6 +1201,12 @@
         </iterate>
       </with>
     </definition>
+    <definition id="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+      <with variable="activeEditor">
+        <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+        </adapt>
+      </with>
+    </definition>
     <definition id="org.eclipse.fordiac.ide.application.SubAppSelection">
       <with variable="selection">
         <iterate>
@@ -1192,12 +1267,6 @@
           <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
           </instanceof>
         </iterate>
-      </with>
-    </definition>
-    <definition id="org.eclipse.fordiac.ide.application.UnmapAllActivation">
-      <with variable="activeEditor">
-        <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
-        </adapt>
       </with>
     </definition>
     <definition id="org.eclipse.fordiac.ide.application.InsideInstanceViewer">
