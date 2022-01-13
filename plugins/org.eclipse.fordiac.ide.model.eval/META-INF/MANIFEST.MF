@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Evaluator
+Bundle-SymbolicName: org.eclipse.fordiac.ide.model.eval;singleton:=true
+Bundle-Version: 2.0.1.qualifier
+Bundle-Vendor: Eclipse 4diac
+Automatic-Module-Name: org.eclipse.fordiac.ide.model.eval
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.xtext,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.structuredtext,
+ org.eclipse.fordiac.ide.model.xtext.fbt
+Export-Package: org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.model.eval.fb,
+ org.eclipse.fordiac.ide.model.eval.st,
+ org.eclipse.fordiac.ide.model.eval.value,
+ org.eclipse.fordiac.ide.model.eval.variable
