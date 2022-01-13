@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.eclipse.fordiac.ide.debug.ui.simple.SimpleFBLaunchShortcut"
+            id="org.eclipse.fordiac.ide.debug.ui.simpleFBShortcut"
+            label="Evaluate Simple FB"
+            modes="run, debug">
+         <contextualLaunch>
+            <contextLabel
+                  label="Run Simple FB"
+                  mode="run">
+            </contextLabel>
+            <contextLabel
+                  label="Debug Simple FB"
+                  mode="debug">
+            </contextLabel>
+            <enablement>
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                        <test
+                              property="org.eclipse.fordiac.ide.typemanagement.fbType"
+                              value="SimpleFBType">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.eclipse.fordiac.ide.debug.ui.simple.SimpleFBLaunchConfigurationTabGroup"
+            id="org.eclipse.fordiac.ide.debug.ui.simpleFBLaunchConfigurationTabGroup"
+            type="org.eclipse.fordiac.ide.debug.simpleFBLaunch">
+      </launchConfigurationTabGroup>
+   </extension>
+
+</plugin>

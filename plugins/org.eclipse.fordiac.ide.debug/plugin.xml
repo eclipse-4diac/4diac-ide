@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.eclipse.fordiac.ide.debug.simple.SimpleFBLaunchConfigurationDelegate"
+            delegateName="Evaluate Simple FB"
+            id="org.eclipse.fordiac.ide.debug.simpleFBLaunch"
+            modes="run, debug"
+            name="Evaluate Simple FB">
+      </launchConfigurationType>
+   </extension>
+
+</plugin>
