@@ -188,7 +188,8 @@ public class RuntimesView implements ILaunchesListener2 {
 	@Override
 	public void launchesTerminated(final ILaunch[] launches) {
 		// for now we remove the launches from the list, maybe in the future we want to show them terminated
-		lm.removeLaunches(launches);
+		// TODO handle this, but don't remove everyone else's launches
+		// lm.removeLaunches(launches);
 	}
 
 	private void addRuntime(final ILaunch l) {
