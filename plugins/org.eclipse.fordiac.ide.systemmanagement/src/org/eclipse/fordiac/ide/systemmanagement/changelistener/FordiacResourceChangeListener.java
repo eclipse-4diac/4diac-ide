@@ -506,19 +506,15 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				@Override
 				public IStatus runInWorkspace(final IProgressMonitor monitor) {
 					// do the actual work in here
-					final LibraryElement type = entry.getType();
+					final LibraryElement type = entry.getTypeEditable();
 					if ((null != type) && // this means we couldn't load the type seems
 							// like a problem in the type's XML file
 							// TODO report on error
 							(!newTypeName.equals(type.getName()))) {
 						type.setName(newTypeName);
-						saveType(entry);
+						AbstractTypeExporter.saveType(entry);
 					}
 					return Status.OK_STATUS;
-				}
-
-				private void saveType(final PaletteEntry entry) {
-					AbstractTypeExporter.saveType(entry);
 				}
 			};
 			job.setRule(newFile.getProject());
