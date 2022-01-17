@@ -12,14 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.tools;
 
+import java.util.List;
+
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingConnectionEndpointTracker;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.swt.SWT;
 
 public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEndpointTracker {
 	public FBNScrollingConnectionEndpointTracker(final org.eclipse.gef.ConnectionEditPart cep) {
@@ -27,6 +31,31 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 	}
 
 	private ConnectionRoutingData originalRoutingData;
+
+	@Override
+	protected boolean handleButtonDown(final int button) {
+		performSelection();
+		return super.handleButtonDown(button);
+	}
+
+
+	/** This selection updater is based on perform selection from {@link org.eclipse.gef.tools.SelectEditPartTracker} */
+	private void performSelection() {
+		final EditPartViewer viewer = getCurrentViewer();
+		final List<Object> selectedObjects = viewer.getSelectedEditParts();
+
+		if (getCurrentInput().isModKeyDown(SWT.MOD1)) {
+			if (selectedObjects.contains(getConnectionEditPart())) {
+				viewer.deselect(getConnectionEditPart());
+			} else {
+				viewer.appendSelection(getConnectionEditPart());
+			}
+		} else if (getCurrentInput().isShiftKeyDown()) {
+			viewer.appendSelection(getConnectionEditPart());
+		} else {
+			viewer.select(getConnectionEditPart());
+		}
+	}
 
 	@Override
 	protected boolean handleDragStarted() {
