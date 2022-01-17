@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory;
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -47,8 +49,11 @@ import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringAdapterInterfaceEditPart;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -62,6 +67,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 			final MonitoringManager manager = MonitoringManager.getInstance();
 			final Set<IInterfaceElement> foundElements = getSelectedWatchedElements(manager,
 					(StructuredSelection) selection);
+			handleMonitoringState(foundElements, HandlerUtil.getActiveSiteChecked(event).getShell());
 			for (final IInterfaceElement ie : foundElements) {
 				createElementFromPort(manager, ie);
 			}
@@ -213,4 +219,32 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		// currently IEC 61499 does not allow adapters in adapters.
 		// If this changes here also plugs and sockets need to be added
 	}
+
+	private static void handleMonitoringState(final Set<IInterfaceElement> foundElements, final Shell shell) {
+		if (!foundElements.isEmpty()) {
+			final AutomationSystem system = getAutomationSystem(foundElements.iterator().next());
+			if ((system != null) && !MonitoringManager.getInstance().isSystemMonitored(system)
+					&& shouldEnableMonitring(system, shell)) {
+				enableMonitoring(system);
+			}
+		}
+	}
+
+	private static AutomationSystem getAutomationSystem(final IInterfaceElement ie) {
+		final EObject root = EcoreUtil.getRootContainer(ie);
+		return (root instanceof AutomationSystem) ? (AutomationSystem) root : null;
+	}
+
+	private static boolean shouldEnableMonitring(final AutomationSystem system, final Shell shell) {
+		final int result = MessageDialog.open(MessageDialog.QUESTION, shell, "Enable Monitoring?",
+				MessageFormat.format("System '{0}' currently not monitored. Do you want to monitor it?",
+						system.getName()),
+				SWT.NONE, "Enable", "No");
+		return result == 0;
+	}
+
+	private static void enableMonitoring(final AutomationSystem system) {
+		MonitoringManager.getInstance().enableSystem(system);
+	}
+
 }
