@@ -43,7 +43,21 @@
             class="org.eclipse.fordiac.ide.debug.ui.simple.SimpleFBLaunchConfigurationTabGroup"
             id="org.eclipse.fordiac.ide.debug.ui.simpleFBLaunchConfigurationTabGroup"
             type="org.eclipse.fordiac.ide.debug.simpleFBLaunch">
+         <launchMode
+               mode="run">
+         </launchMode>
+         <launchMode
+               mode="debug"
+               perspective="org.eclipse.debug.ui.DebugPerspective">
+         </launchMode>
       </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.debugModelPresentations">
+      <debugModelPresentation
+            class="org.eclipse.fordiac.ide.debug.ui.EvaluatorDebugModelPresentation"
+            id="org.eclipse.fordiac.ide.debug.model">
+      </debugModelPresentation>
    </extension>
 
 </plugin>
