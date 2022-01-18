@@ -20,7 +20,6 @@ import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.SelectionTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -59,7 +58,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 * @return true if the space bar was the key event.
 	 */
 
-	protected boolean acceptSpaceBar(KeyEvent e) {
+	protected boolean acceptSpaceBar(final KeyEvent e) {
 		return ((e.character == ' ') && ((e.stateMask & SWT.MODIFIER_MASK) == 0));
 	}
 
@@ -81,22 +80,11 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 * @see org.eclipse.gef.tools.SelectionTool#handleButtonDown(int)
 	 */
 	@Override
-	protected boolean handleButtonDown(int which) {
+	protected boolean handleButtonDown(final int which) {
 		if (getCurrentViewer().getControl() instanceof FigureCanvas) {
 			viewLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
 		}
 		switch (which) {
-		case MOUSE_RIGHT:
-			refreshCursor();
-			updateTargetRequest();
-			((SelectionRequest) getTargetRequest()).setLastButtonPressed(which);
-			updateTargetUnderMouse();
-			EditPart editpart = getTargetEditPart();
-			if (editpart != null) {
-				setDragTracker(editpart.getDragTracker(getTargetRequest()));
-				lockTargetEditPart(editpart);
-			}
-			return true;
 		case MOUSE_LEFT:
 			if (stateTransition(PAN, PAN_IN_PROGRESS)) {
 				return true;
@@ -119,7 +107,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 * @see org.eclipse.gef.tools.SelectionTool#handleButtonUp(int)
 	 */
 	@Override
-	protected boolean handleButtonUp(int which) {
+	protected boolean handleButtonUp(final int which) {
 		if ((MOUSE_LEFT == which) && isSpaceBarDown && stateTransition(PAN_IN_PROGRESS, PAN)) {
 			return true;
 		}
@@ -146,7 +134,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	@Override
 	protected boolean handleDrag() {
 		if (isInState(PAN_IN_PROGRESS) && (getCurrentViewer().getControl() instanceof FigureCanvas)) {
-			FigureCanvas canvas = (FigureCanvas) getCurrentViewer().getControl();
+			final FigureCanvas canvas = (FigureCanvas) getCurrentViewer().getControl();
 			canvas.scrollTo(viewLocation.x - getDragMoveDelta().width, viewLocation.y - getDragMoveDelta().height);
 			return true;
 		}
@@ -170,7 +158,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 * @see org.eclipse.gef.tools.SelectionTool#handleKeyDown(org.eclipse.swt.events.KeyEvent)
 	 */
 	@Override
-	protected boolean handleKeyDown(KeyEvent e) {
+	protected boolean handleKeyDown(final KeyEvent e) {
 		if (acceptSpaceBar(e)) {
 			isSpaceBarDown = true;
 			if (stateTransition(STATE_INITIAL, PAN)) {
@@ -193,7 +181,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 * @see org.eclipse.gef.tools.SelectionTool#handleKeyUp(org.eclipse.swt.events.KeyEvent)
 	 */
 	@Override
-	protected boolean handleKeyUp(KeyEvent e) {
+	protected boolean handleKeyUp(final KeyEvent e) {
 		if (acceptSpaceBar(e)) {
 			isSpaceBarDown = false;
 			if (stateTransition(PAN, STATE_INITIAL)) {

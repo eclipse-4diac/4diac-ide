@@ -1894,7 +1894,7 @@ public class STAlgorithmFilter {
       int _plus = (_index + 1);
       final int endBitIndexAccessor = (_BitSize * _plus);
       CharSequence _xifexpression = null;
-      if ((maxVarBitIndex > endBitIndexAccessor)) {
+      if ((maxVarBitIndex >= endBitIndexAccessor)) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append(".partial<CIEC_");
         String _partialAccessTypeName = this.partialAccessTypeName(part);
