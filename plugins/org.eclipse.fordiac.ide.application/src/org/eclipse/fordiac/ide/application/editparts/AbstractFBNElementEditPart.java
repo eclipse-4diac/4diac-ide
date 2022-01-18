@@ -247,6 +247,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	/** The listener. */
 	private IPropertyChangeListener listener;
 
+	private InstanceName instanceName;
+
 	/** Returns an <code>IPropertyChangeListener</code> with implemented <code>propertyChange()</code>. e.g. a color
 	 * change event repaints the FunctionBlock.
 	 *
@@ -386,9 +388,16 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
-		elements.add(new InstanceName(getModel()));
+		elements.add(getInstanceName());
 		elements.addAll(getModel().getInterface().getAllInterfaceElements());
 		return elements;
+	}
+
+	private InstanceName getInstanceName() {
+		if (instanceName == null) {
+			instanceName = new InstanceName(getModel());
+		}
+		return instanceName;
 	}
 
 	@Override
@@ -408,7 +417,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			// forward direct edit request to instance name
 			final List<EditPart> children = getChildren();
 			children.stream().filter(InstanceNameEditPart.class::isInstance)
-					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
+			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);
