@@ -108,15 +108,21 @@ public final class NameRepository {
 	 * @return a valid unique element name
 	 */
 	public static String createUniqueName(final INamedElement element, final String nameProposal) {
-		Assert.isTrue(IdentifierVerifyer.isValidIdentifier(nameProposal),
+		String retVal = nameProposal;
+
+		if (!IdentifierVerifyer.isValidIdentifier(nameProposal) && nameProposal.contains(".")) //$NON-NLS-1$
+		{
+			retVal = nameProposal.replace(".", "_"); //$NON-NLS-1$//$NON-NLS-2$ }
+		}
+		Assert.isTrue(IdentifierVerifyer.isValidIdentifier(retVal),
 				"The given name proposal is not a valid identifier!"); //$NON-NLS-1$
+
 		Assert.isNotNull(element.eContainer(),
 				"For a correct operation createuniqueName expects that the model element is already added in its containing model!"); //$NON-NLS-1$
 
-		String retVal = nameProposal;
 		if (element instanceof IInterfaceElement) {
 			// for interface elements we need to check if it not a reserved keyword
-			retVal = checkReservedKeyWords(nameProposal);
+			retVal = checkReservedKeyWords(retVal);
 		}
 		return getUniqueName(getRefNames(element), retVal);
 	}
