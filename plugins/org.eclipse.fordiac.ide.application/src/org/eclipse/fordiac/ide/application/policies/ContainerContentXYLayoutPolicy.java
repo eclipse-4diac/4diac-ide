@@ -19,9 +19,11 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -37,6 +39,9 @@ public class ContainerContentXYLayoutPolicy extends FBNetworkXYLayoutEditPolicy 
 			constraintRect.x += getHost().getOffsetPoint().x;
 			constraintRect.y += getHost().getOffsetPoint().y;
 
+			if (child.getModel() instanceof Group) {
+				return new ChangeGroupBoundsCommand((Group) child.getModel(), request, (Rectangle) constraint);
+			}
 			if (child.getModel() instanceof FBNetworkElement) {
 				return new FBNetworkElementSetPositionCommand((FBNetworkElement) child.getModel(), request,
 						(Rectangle) constraint);

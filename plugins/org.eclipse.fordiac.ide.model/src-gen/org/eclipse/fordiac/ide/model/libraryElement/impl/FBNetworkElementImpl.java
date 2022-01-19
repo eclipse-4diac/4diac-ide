@@ -287,13 +287,12 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		checkConnections();
 	}
 
-	/** 
+	/**
 	 * <!-- begin-user-doc --> 
 	 * <!-- end-user-doc -->
-	 *
-	 * @generated 
+	 * @generated
 	 */
-	public void setMappingGen(final Mapping newMapping) {
+	public void setMappingGen(Mapping newMapping) {
 		Mapping oldMapping = mapping;
 		mapping = newMapping;
 		if (eNotificationRequired())

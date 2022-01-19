@@ -6166,13 +6166,31 @@ public interface LibraryElementPackage extends EPackage {
 	int GROUP__GROUP_ELEMENTS = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP__WIDTH = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP__HEIGHT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Group</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+	int GROUP_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
@@ -8796,6 +8814,28 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getGroup_GroupElements();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Group#getWidth <em>Width</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Width</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Group#getWidth()
+	 * @see #getGroup()
+	 * @generated
+	 */
+	EAttribute getGroup_Width();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Group#getHeight <em>Height</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Height</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Group#getHeight()
+	 * @see #getGroup()
+	 * @generated
+	 */
+	EAttribute getGroup_Height();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10960,6 +11000,22 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference GROUP__GROUP_ELEMENTS = eINSTANCE.getGroup_GroupElements();
+
+		/**
+		 * The meta object literal for the '<em><b>Width</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP__WIDTH = eINSTANCE.getGroup_Width();
+
+		/**
+		 * The meta object literal for the '<em><b>Height</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP__HEIGHT = eINSTANCE.getGroup_Height();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.

@@ -46,8 +46,7 @@ public class SetPositionCommand extends Command {
 		// make sure the Request is of a type we support: (Move or
 		// Move_Children)
 		// e.g. a FB moves within an application
-		return RequestConstants.REQ_MOVE.equals(type) || RequestConstants.REQ_MOVE_CHILDREN.equals(type)
-				|| RequestConstants.REQ_ALIGN_CHILDREN.equals(type);
+		return handlesRequestType(type);
 	}
 
 	/**
@@ -55,8 +54,7 @@ public class SetPositionCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldBounds = new Rectangle(positionableElement.getPosition().getX(), positionableElement.getPosition().getY(),
-				-1, -1);
+		oldBounds = getOldBounds();
 		setPosition(newBounds);
 	}
 
@@ -70,7 +68,19 @@ public class SetPositionCommand extends Command {
 		setPosition(oldBounds);
 	}
 
+	@SuppressWarnings("static-method")  // allow subclasses to override
+	protected boolean handlesRequestType(final Object type) {
+		return RequestConstants.REQ_MOVE.equals(type) || RequestConstants.REQ_MOVE_CHILDREN.equals(type)
+				|| RequestConstants.REQ_ALIGN_CHILDREN.equals(type);
+	}
+
 	protected void setPosition(final Rectangle bounds) {
 		positionableElement.updatePosition(bounds.getTopLeft());
 	}
+
+	protected Rectangle getOldBounds() {
+		return new Rectangle(positionableElement.getPosition().getX(), positionableElement.getPosition().getY(), -1,
+				-1);
+	}
 }
+

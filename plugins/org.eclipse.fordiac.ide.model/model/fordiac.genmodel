@@ -709,6 +709,8 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Group">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Group/groupElements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/height"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"

@@ -28,8 +28,10 @@ import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
@@ -37,6 +39,7 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -52,6 +55,9 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
+		if (child.getModel() instanceof Group) {
+			return new ModifiedResizeablePolicy();
+		}
 		return new ModifiedNonResizeableEditPolicy();
 	}
 
@@ -60,6 +66,9 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Object constraint) {
 		// return a command that can move a "ViewEditPart"
 		if ((child.getModel() instanceof PositionableElement) && (constraint instanceof Rectangle)) {
+			if (child.getModel() instanceof Group) {
+				return new ChangeGroupBoundsCommand((Group) child.getModel(), request, (Rectangle) constraint);
+			}
 			if (child.getModel() instanceof FBNetworkElement) {
 				return new FBNetworkElementSetPositionCommand((FBNetworkElement) child.getModel(), request,
 						(Rectangle) constraint);
@@ -130,7 +139,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
 				.map(ep -> (FBNetworkElement) ep.getModel()).filter(FBNetworkElement::isNestedInSubApp)
 				.filter(el -> !el.getFbNetwork().equals(fbNetwork))   // only take fbentworkelements that are not in the
-																	   // same subapp
+				// same subapp
 				.collect(Collectors.toList());
 	}
 

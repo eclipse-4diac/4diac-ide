@@ -20,6 +20,8 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -31,9 +33,11 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -81,6 +85,9 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 				if (LibraryElementPackage.eINSTANCE.getGroup_GroupElements().equals(feature)) {
 					// group elements changed tell the parent that fbs may now be at different places
 					getParent().refresh();
+				} else if (LibraryElementPackage.eINSTANCE.getGroup_Width().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getGroup_Height().equals(feature)) {
+					refreshPosition();
 				}
 			}
 		};
@@ -135,6 +142,21 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 				return new DeleteGroupCommand((Group) getHost().getModel());
 			}
 		});
+	}
+
+	@Override
+	protected void refreshPosition() {
+		if (getParent() != null) {
+			final Position position = getModel().getPosition();
+			final Point asPoint = position.asPoint();
+			final Rectangle bounds = new Rectangle(asPoint,
+					getGroupSize());
+			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
+		}
+	}
+
+	private Dimension getGroupSize() {
+		return new Dimension(Math.max(getModel().getWidth(), 200), Math.max(getModel().getHeight(), 100));
 	}
 
 	private InstanceComment getInstanceComment() {
