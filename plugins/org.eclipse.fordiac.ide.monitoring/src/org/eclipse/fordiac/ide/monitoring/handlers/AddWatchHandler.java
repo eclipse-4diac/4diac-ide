@@ -237,7 +237,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 
 	private static boolean shouldEnableMonitring(final AutomationSystem system, final Shell shell) {
 		final int result = MessageDialog.open(MessageDialog.QUESTION, shell, "Enable Monitoring?",
-				MessageFormat.format("System '{0}' currently not monitored. Do you want to monitor it?",
+				MessageFormat.format("System \"{0}\" currently not monitored. Do you want to monitor it?",
 						system.getName()),
 				SWT.NONE, "Enable", "No");
 		return result == 0;
