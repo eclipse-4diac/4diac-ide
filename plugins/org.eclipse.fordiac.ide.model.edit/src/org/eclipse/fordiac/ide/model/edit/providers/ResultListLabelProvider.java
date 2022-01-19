@@ -52,11 +52,11 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 
 			int lastIndex = 0;
 			for (final String searchStringElement : searchString) {
-				styledString.setStyle(
-						styledString.toString().toUpperCase().indexOf((searchStringElement.toUpperCase()), lastIndex),
-						searchStringElement.length(), BoldStyler.INSTANCE_DEFAULT);
-				lastIndex = styledString.toString().toUpperCase().indexOf((searchStringElement.toUpperCase()),
-						lastIndex) + searchStringElement.length();
+				int offset = styledString.toString().toUpperCase().indexOf((searchStringElement.toUpperCase()), lastIndex);
+				if (offset >= 0) {
+					styledString.setStyle(offset, searchStringElement.length(), BoldStyler.INSTANCE_DEFAULT);
+					lastIndex = offset + searchStringElement.length();
+				}
 			}
 
 		} else {
