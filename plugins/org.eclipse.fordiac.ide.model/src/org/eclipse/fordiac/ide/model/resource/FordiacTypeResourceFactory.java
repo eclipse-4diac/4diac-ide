@@ -18,11 +18,11 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory;
 
-public class FunctionBlockFactory implements Factory {
+public class FordiacTypeResourceFactory implements Factory {
 
 	@Override
 	public Resource createResource(final URI uri) {
-		return new FunctionBlockResource(uri);		
+		return new FordiacTypeResource(uri);		
 	}
 	
 }

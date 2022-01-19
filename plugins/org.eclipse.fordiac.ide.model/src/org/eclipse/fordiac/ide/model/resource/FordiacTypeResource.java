@@ -28,9 +28,9 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-public class FunctionBlockResource extends ResourceImpl {
+public class FordiacTypeResource extends ResourceImpl {
 
-	public FunctionBlockResource(final URI uri) {
+	public FordiacTypeResource(final URI uri) {
 		super(uri);
 	}
 
@@ -51,10 +51,8 @@ public class FunctionBlockResource extends ResourceImpl {
 		if (paletteEntryForFile == null) {
 			paletteEntryForFile = TypeLibrary.getTypeLibrary(fbtFile.getProject()).createPaletteEntry(fbtFile);
 		}
-		paletteEntryForFile.setType((LibraryElement)getContents().get(0));
-
+		paletteEntryForFile.setTypeEditable((LibraryElement) getContents().get(0));
 		paletteEntryForFile.setLastModificationTimestamp(paletteEntryForFile.getFile().getModificationStamp());
-
 		AbstractTypeExporter.saveType(paletteEntryForFile, outputStream);
 	}
 
