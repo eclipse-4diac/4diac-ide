@@ -1305,4 +1305,30 @@
                     type="java.lang.Object">
     </propertyTester>
   </extension>
+ 
+ <extension
+	id="ModelSearchResultPage"
+	point="org.eclipse.search.searchResultViewPages">
+	<viewPage
+		id="org.eclipse.fordiac.ide.application.search.ModelSearchResultPage"
+		searchResultClass="org.eclipse.fordiac.ide.application.search.ModelSearchResult"
+		class="org.eclipse.fordiac.ide.application.search.ModelSearchResultPage">
+	</viewPage> 
+ </extension>
+ 
+ <extension point="org.eclipse.search.searchPages">
+		<page
+			id="org.eclipse.fordiac.ide.application.search.ModelSearchPage"
+			label="Model Search"
+			sizeHint="250,160"
+			tabPosition="1"
+			extensions="*:1"
+			showScopeSection="false"		
+			canSearchEnclosingProjects="true"
+			class="org.eclipse.fordiac.ide.application.search.ModelSearchPage">
+		</page>
+	</extension>
+	
+
+ 
 </plugin>
