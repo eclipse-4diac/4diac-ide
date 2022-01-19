@@ -26,6 +26,9 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.SWT;
 
 public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEndpointTracker {
+
+	private static final int MOUSE_LEFT = 1;
+
 	public FBNScrollingConnectionEndpointTracker(final org.eclipse.gef.ConnectionEditPart cep) {
 		super(cep);
 	}
@@ -34,7 +37,10 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 
 	@Override
 	protected boolean handleButtonDown(final int button) {
-		performSelection();
+		if (button == MOUSE_LEFT) {
+			// only check selection on left mouse click
+			performSelection();
+		}
 		return super.handleButtonDown(button);
 	}
 

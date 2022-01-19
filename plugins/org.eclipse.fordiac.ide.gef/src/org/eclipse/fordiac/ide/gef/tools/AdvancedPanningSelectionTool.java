@@ -32,7 +32,6 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 
 	private static final int MOUSE_LEFT = 1;
 	private static final int MOUSE_MIDDLE = 2;
-	private static final int MOUSE_RIGHT = 3;
 
 	private boolean isSpaceBarDown;
 	private Point viewLocation;
