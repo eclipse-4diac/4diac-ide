@@ -53,7 +53,6 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		pe.setLabel(SUBAPP);
 		pe.setPalette(typelib.getBlockTypeLib());
 		pe.setType(subappType);
-
 		subapp.setPaletteEntry(pe);
 
 		return s;
@@ -130,8 +129,8 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 						new ExecutionDescription<>("untype subapp", //$NON-NLS-1$
 								UntypeSubAppCommandTest::untypeSubApp, //
 								UntypeSubAppCommandTest::verifyUntypeSubApp //
-						)) //
-		));
+								)) //
+				));
 
 		a.addAll(describeCommand("Start with typed subapp and two FBs in subapp network", //$NON-NLS-1$
 				UntypeSubAppCommandTest::initStateWithFilledSubAppNetwork, //
@@ -140,10 +139,10 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 						new ExecutionDescription<>("untype subapp", //$NON-NLS-1$
 								UntypeSubAppCommandTest::untypeSubApp, //
 								UntypeSubAppCommandTest::verifyUntypeSubAppWithFilledSubAppNetwork //
-						)) //
-		));
+								)) //
+				));
 
 		return a;
-		}
+	}
 
 }

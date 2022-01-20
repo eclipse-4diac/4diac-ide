@@ -52,9 +52,7 @@ public class FunctionBlockResource extends ResourceImpl {
 			paletteEntryForFile = TypeLibrary.getTypeLibrary(fbtFile.getProject()).createPaletteEntry(fbtFile);
 		}
 		paletteEntryForFile.setType((LibraryElement)getContents().get(0));
-
 		paletteEntryForFile.setLastModificationTimestamp(paletteEntryForFile.getFile().getModificationStamp());
-
 		AbstractTypeExporter.saveType(paletteEntryForFile, outputStream);
 	}
 
