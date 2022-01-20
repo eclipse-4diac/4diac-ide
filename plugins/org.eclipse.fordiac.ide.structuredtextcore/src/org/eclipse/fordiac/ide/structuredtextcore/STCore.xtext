@@ -1,0 +1,257 @@
+/*******************************************************************************
+ * Copyright (c) 2021 Primetals Technologies GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Melik Merkumians
+ *       - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
+
+generate sTCore "http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+import "org.eclipse.fordiac.ide.model.datatype" as datatype
+import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
+
+Code:
+	greetings+=STStatements*;
+
+VarDeclarationBlock returns VarDeclarationBlock:
+	{VarDeclarationBlock} 'VAR' (constant?='CONSTANT')?
+	varDeclarations+=VarDeclaration*
+	'END_VAR';
+
+VarTempDeclarationBlock returns VarDeclarationBlock:
+	{VarDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
+	varDeclarations+=VarDeclaration*
+	'END_VAR';
+
+VarInputDeclarationBlock returns VarDeclarationBlock:
+	{VarDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
+	varDeclarations+=VarDeclaration*
+	'END_VAR';
+
+VarOutputDeclarationBlock returns VarDeclarationBlock:
+	{VarDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+	varDeclarations+=VarDeclaration*
+	'END_VAR';
+
+VarDeclaration returns VarDeclaration:
+	name=ID ('AT' locatedAt=[VarDeclaration])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
+	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::LibraryElement]) ('[' maxLength=STExpression ']')? (':='
+	defaultValue=InitializerExpression)? ';';
+	
+InitializerExpression:
+	STExpression | ArrayInitializerExpression;
+
+ArrayInitializerExpression:
+	'[' values+=ArrayInitElement (',' values+=ArrayInitElement)* ']';
+
+ArrayInitElement:
+	indexOrInitExpression=STExpression ('(' initExpression=STExpression ')')?;
+	
+STStatements:
+	((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
+	{STStatements} ';';
+
+STAssignmentStatement:
+	lhs=[VarDeclaration] op=(':=' | '=>') rhs=STExpression
+;
+
+STBranchStatements:
+	STIfStatment | STCaseStatement;
+
+STIfStatment:
+	'IF' condition=STExpression 'THEN' statements+=STStatements* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
+
+STElseIfPart:
+	'ELSIF' condition=STExpression 'THEN' statements+=STStatements*;
+
+STCaseStatement:
+	'CASE' selector=STExpression 'OF' cases+=STCaseCases+ (else=STElsePart)? 'END_CASE';
+
+STCaseCases:
+	conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatements*;
+
+STElsePart:
+	{STElsePart} 'ELSE' statements+=STStatements*;
+
+STLoopStatements:
+	STForStatement | STWhileStatement | STRepeatStatement;
+
+STForStatement:
+	'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+	statements+=STStatements*
+	'END_FOR';
+
+STWhileStatement:
+	'WHILE' condition=STExpression 'DO'
+	statements+=STStatements*
+	'END_WHILE';
+
+STRepeatStatement:
+	'REPEAT'
+	statements+=STStatements*
+	'UNTIL' condition=STExpression
+	'END_REPEAT';
+
+STExpression returns STExpression:
+	STSubrangeExpression;
+
+STSubrangeExpression returns STExpression:
+	STOrExpression (({STSubrangeExpression.lowerBound=current} '..') upperBound=STOrExpression)*;
+
+STOrExpression returns STExpression:
+	STXorExpression (({STOrExpression.left=current} op='OR') right=STXorExpression)*;
+
+STXorExpression returns STExpression:
+	STAndExpression (({STXorExpression.left=current} op='XOR') right=STAndExpression)*;
+
+STAndExpression returns STExpression:
+	STEqualityExpression (({STAndExpression.left=current} op=('&' | 'AND')) right=STEqualityExpression)*;
+
+STEqualityExpression returns STExpression:
+	STComparisonExpression (({STEqualityExpression.left=current} op=('=' | '<>')) right=STComparisonExpression)*;
+
+STComparisonExpression returns STExpression:
+	STAddSubExpression (({STComparisonExpression.left=current} op=('<' | '>' | '<=' | '>=')) right=STAddSubExpression)*;
+
+STAddSubExpression returns STExpression:
+	STMulDivModExpression (({STAddSubExpression.left=current} op=('+' | '-')) right=STMulDivModExpression)*;
+
+STMulDivModExpression returns STExpression:
+	STPowerExpression (({STMulDivModExpression.left=current} op=('*' | '/' | 'MOD')) right=STPowerExpression)*;
+
+STPowerExpression returns STExpression:
+	STSignumExpression (({STPowerExpression.left=current} op='**') right=STSignumExpression)*;
+
+STSignumExpression returns STExpression:
+	STLiteralExpressions | STSelectionExpression | ({STSignumExpression} signum=('-' | '+' | 'NOT')
+	expression=STSelectionExpression);
+
+STSelectionExpression returns STExpression:
+	STAtomicExpression 
+	({STMemberSelection.receiver=current} (structAccess?='.' member=[VarDeclaration] | arrayAccess?='['
+	index+=STExpression (',' index+=STExpression)* ']')
+	(=>poeInvocation?='(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')?
+	(=>bitaccessor=MultibitPartialAccess)?
+	)*;
+
+MultibitPartialAccess:
+	(accessSpecifier=MultiBitAccessSpecifier) index=INT;
+
+enum MultiBitAccessSpecifier:
+	lwordAccess='.%L' | dwordAccess='.%D' | wordAccess='.%W' | byteAccess='.%B' | bitAccess='.%X' |
+	bitAccessShortcut='.';
+
+STAtomicExpression returns STExpression:
+	'(' STExpression ')' |
+	{STSymbol} (type=[datatype::DataType] '#')? symbol=[VarDeclaration] (bitaccessor=MultibitPartialAccess)? (=>poeInvocation?=
+	'(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? |
+	{STReturn} 'RETURN' |
+	{STContinue} 'CONTINUE' |
+	{STExit} 'EXIT';
+
+STLiteralExpressions returns STExpression:
+	{STBoolLiteral} boolLiteral=BOOL_LITERAL |
+	{STNumericLiteral} numericLiteral=NUMERIC_LITERAL |
+	{STDateLiteral} dateLiteral=DATE_LITERAL |
+	{STTimeLiteral} timeLiteral=TIME_LITERAL |
+	{STTimeOfDayLiteral} timeOfDayLiteral=TIME_OF_DAY_LITERAL |
+	{STDateAndTimeLiteral} timeLiteral=DATE_AND_TIME_LITERAL |
+	{STStringLiteral} stringLiteral=STRING_LITERAL;
+
+BOOL_LITERAL:
+	(not='NOT')? ('BOOL#')? keyWordValue=BOOL_VALUES
+;
+
+NUMERIC_LITERAL:
+	(not='NOT')?
+	(keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+	'UINT#' | 'UDINT#' | 'ULINT#' |	'REAL#' | 'LREAL#'))?
+	(intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL);
+
+DATE_LITERAL:
+	keyword=('DATE#' | 'LDATE#' | 'D#' | 'LD#') value=DATE;
+
+TIME_LITERAL:
+	keyword=('TIME#' | 'LTIME#' | 'T#' | 'LT#') value=TIME;
+
+TIME_OF_DAY_LITERAL:
+	keyword=('TIME_OF_DAY#' | 'TOD#' | 'LTOD#') value=TIME_OF_DAY;
+
+DATE_AND_TIME_LITERAL:
+	keyword=('DATE_AND_TIME#' | 'LDATE_AND_TIME#' | 'DT#' | 'LDT#') dateValue=DATE '-' timeOfDayValue=TIME_OF_DAY;
+
+STRING_LITERAL:
+	(keyword='STRING#' | 'WSTRING#' | 'CHAR#' | 'WCHAR#')? value=STRING;
+
+terminal BOOL_VALUES returns ecore::EBoolean:
+	'TRUE' | 'FALSE';
+
+terminal fragment HEX_DIGIT:
+	'0'..'9' | 'a'..'f' | 'A'..'F' | '_';
+
+terminal NON_DECIMAL returns ecore::EBigInteger:
+	('2#' | '8#' | '16#') HEX_DIGIT+;
+
+terminal INT returns ecore::EBigInteger:
+	('0'..'9') ('_'? '0'..'9')*;
+
+QualifiedName:
+	ID ('.' ID)*;
+
+INTEGER returns ecore::EBigInteger:
+	('+' | '-')? INT;
+
+REAL returns ecore::EBigDecimal:
+	INTEGER '.' (EXT_INT | INT); // INT ? '.' (EXT_INT | INT);
+
+DATE returns ecore::EDate:
+	INT '-' INT '-' INT;
+
+terminal TIME:
+	('+' | '-')? (INT ('.' INT)? ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
+
+TIME_OF_DAY:
+	INT ':' INT ':' INT ('.' INT)?;
+
+terminal EXT_INT:
+	INT ('e' | 'E') ('-' | '+')? INT;
+
+//DATA_TYPE_KEYWORDS:
+//	ANY_TYPE_KEYWORDS | BOOL_KEYWORD | MULTIBITS_TYPE_KEYWORDS | SIGNED_INT_TYPE_KEYWORDS | UNSIGNED_INT_TYPE_KEYWORDS |
+//	REAL_TYPE_KEYWORDS | DATE_TYPE_KEYWORDS | TIME_TYPE_KEYWORDS | DATE_AND_TIME_TYPE_KEYWORDS | TOD_TYPE_KEYWORDS |
+//	STRING_TYPE_KEYWORDS;
+
+//terminal ANY_TYPE_KEYWORDS:
+//	'ANY' | 'ANY_DERIVED' | 'ANY_ELEMENTARY' | 'ANY_MAGNITUDE' | 'ANY_NUM' | 'ANY_REAL' | 'ANY_INT' | 'ANY_UNSIGNED' |
+//	'ANY_SIGNED' | 'ANY_DURATION' | 'ANY_BIT' | 'ANY_CHARS' | 'ANY_STRING' | 'ANY_CHAR' | 'ANY_DATE';
+//
+
+terminal ID:
+	'^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+
+terminal STRING returns ecore::EString:
+	'"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"';
+
+terminal WSTRING returns ecore::EString:
+	"'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
+
+terminal ML_COMMENT:
+	'/*'->'*/' | '(*'->'*)';
+
+terminal SL_COMMENT:
+	'//' !('\n' | '\r')* ('\r'? '\n')?;
+
+terminal WS:
+	(' ' | '\t' | '\r' | '\n')+;
+
+terminal ANY_OTHER:
+	.;
