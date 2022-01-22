@@ -156,7 +156,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 	}
 
 	private Dimension getGroupSize() {
-		return new Dimension(Math.max(getModel().getWidth(), 200), Math.max(getModel().getHeight(), 100));
+		return new Dimension(getModel().getWidth(), getModel().getHeight());
 	}
 
 	private InstanceComment getInstanceComment() {

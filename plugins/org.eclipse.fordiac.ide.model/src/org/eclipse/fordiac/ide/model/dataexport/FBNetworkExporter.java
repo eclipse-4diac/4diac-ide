@@ -72,31 +72,48 @@ class FBNetworkExporter extends CommonElementExporter {
 				continue;
 			}
 			final String nodeName = getFBNElementNodeName(fbnElement);
-			if (null != nodeName) {
+			if (nodeName != null) {
 				addStartElement(nodeName);
-				addNameAttribute(fbnElement.getName());
-				if (null != fbnElement.getType()) {
-					addTypeAttribute(fbnElement.getType());
-				}
-				addCommentAttribute(fbnElement);
-				addXYAttributes(fbnElement);
-
-				if (isUntypedSubapp(fbnElement)) {
-					// we have an untyped subapp therefore add the subapp contents to it
-					createUntypedSubAppContents((SubApp) fbnElement);
-				}
-
-				addAttributes(fbnElement.getAttributes());
-				if (!isUntypedSubapp(fbnElement)) {
-					// for untyped subapp initial values are stored in the vardeclarations
-					addParamsConfig(fbnElement.getInterface().getInputVars());
-				}
-
-				if (fbnElement.isInGroup()) {
-					addGroupAttribute(fbnElement.getGroup());
-				}
+				addFBNetworkElementAttributes(fbnElement);
+				addFBNetworkElementChildren(fbnElement);
 				addEndElement();
 			}
+		}
+	}
+
+	private void addFBNetworkElementAttributes(final FBNetworkElement fbnElement) throws XMLStreamException {
+		addNameAttribute(fbnElement.getName());
+		if (fbnElement.getType() != null) {
+			addTypeAttribute(fbnElement.getType());
+		}
+		addCommentAttribute(fbnElement);
+		addXYAttributes(fbnElement);
+		if (fbnElement instanceof Group) {
+			addGroupAttributes((Group) fbnElement);
+		}
+	}
+
+	private void addGroupAttributes(final Group group) throws XMLStreamException {
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE,
+				CoordinateConverter.INSTANCE.convertTo1499XML(group.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
+				CoordinateConverter.INSTANCE.convertTo1499XML(group.getHeight()));
+	}
+
+	private void addFBNetworkElementChildren(final FBNetworkElement fbnElement) throws XMLStreamException {
+		if (isUntypedSubapp(fbnElement)) {
+			// we have an untyped subapp therefore add the subapp contents to it
+			createUntypedSubAppContents((SubApp) fbnElement);
+		}
+
+		addAttributes(fbnElement.getAttributes());
+		if (!isUntypedSubapp(fbnElement)) {
+			// for untyped subapp initial values are stored in the vardeclarations
+			addParamsConfig(fbnElement.getInterface().getInputVars());
+		}
+
+		if (fbnElement.isInGroup()) {
+			addGroupAttribute(fbnElement.getGroup());
 		}
 	}
 

@@ -53,13 +53,13 @@ public interface Group extends FBNetworkElement {
 
 	/**
 	 * Returns the value of the '<em><b>Width</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
+	 * The default value is <code>"200"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Width</em>' attribute.
 	 * @see #setWidth(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getGroup_Width()
-	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="200" dataType="org.eclipse.emf.ecore.xml.type.Int"
 	 * @generated
 	 */
 	int getWidth();
@@ -76,13 +76,13 @@ public interface Group extends FBNetworkElement {
 
 	/**
 	 * Returns the value of the '<em><b>Height</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
+	 * The default value is <code>"100"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Height</em>' attribute.
 	 * @see #setHeight(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getGroup_Height()
-	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="100" dataType="org.eclipse.emf.ecore.xml.type.Int"
 	 * @generated
 	 */
 	int getHeight();
