@@ -22,16 +22,13 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.XYLayout;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentXYLayoutPolicy;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -118,35 +115,24 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ContainerContentXYLayoutPolicy());
 	}
 
-	static final int VER_BORDER_WIDTH = 10;
-	static final int HOR_BORDER_WIDTH = 7 * VER_BORDER_WIDTH;
-	static final Insets BORDER_INSET = new Insets(VER_BORDER_WIDTH, HOR_BORDER_WIDTH, VER_BORDER_WIDTH,
-			HOR_BORDER_WIDTH);
+
 
 	@Override
 	protected IFigure createFigure() {
-
-		final IFigure figure = new Figure();
+		final IFigure figure = new Figure() {
+			@Override
+			public void setBounds(final Rectangle rect) {
+				final Rectangle clientArea = getParent().getClientArea();
+				final int maxAvailableHeight = clientArea.height - (rect.y - clientArea.y);
+				// expand content to the available group size
+				rect.height = Math.max(rect.height, maxAvailableHeight);
+				super.setBounds(rect);
+			}
+		};
 
 		figure.setOpaque(false);
-		figure.setBorder(new MarginBorder(BORDER_INSET));
-
 		figure.setLayoutManager(new XYLayout());
 		return figure;
 	}
 
-	@Override
-	public void setLayoutConstraint(final EditPart child, final IFigure childFigure, final Object constraint) {
-		if (constraint instanceof Rectangle) {
-			final Rectangle rectConstraint = (Rectangle) constraint;
-			if (child instanceof ValueEditPart) {
-				rectConstraint.performTranslate(-getFigure().getBounds().x - HOR_BORDER_WIDTH,
-						-getFigure().getBounds().y - VER_BORDER_WIDTH);
-			} else {
-				rectConstraint.performTranslate(-p.x, -p.y);
-			}
-		}
-		super.setLayoutConstraint(child, childFigure, constraint);
-
-	}
 }

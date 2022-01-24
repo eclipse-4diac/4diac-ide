@@ -14,13 +14,13 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.List;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
+import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 
 public class GroupContentEditPart extends AbstractContainerContentEditPart {
@@ -38,19 +38,14 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 	}
 
 	@Override
-	protected IFigure createFigure() {
-		final IFigure figure = new Figure() {
-			@Override
-			public void setBounds(final Rectangle rect) {
-				// TODO Auto-generated method stub
-				super.setBounds(rect);
-			}
-		};
-		figure.setOpaque(true);
-		figure.setLayoutManager(new XYLayout());
-		figure.setBackgroundColor(ColorConstants.darkGreen);
-		return figure;
-	}
+	public void setLayoutConstraint(final EditPart child, final IFigure childFigure, final Object constraint) {
+		if ((constraint instanceof Rectangle)  && (child instanceof ValueEditPart)){
+			final Rectangle rectConstraint = (Rectangle) constraint;
+			final Point topLeft = getFigure().getClientArea().getTopLeft();
+			rectConstraint.performTranslate(-topLeft.x, -topLeft.y);
+		}
+		super.setLayoutConstraint(child, childFigure, constraint);
 
+	}
 
 }

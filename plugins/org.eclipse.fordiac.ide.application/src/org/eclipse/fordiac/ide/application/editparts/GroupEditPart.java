@@ -134,7 +134,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 		mainFigure.setFillXOR(false);
 		mainFigure.setOpaque(false);
 		mainFigure.setBorder(new RoundedRectangleShadowBorder());
-		mainFigure.setLayoutManager(new ToolbarLayout(false));
+		mainFigure.setLayoutManager(new ToolbarLayout());
 		commentFigure = new InstanceCommentFigure();
 		mainFigure.add(commentFigure);
 		refreshComment();
