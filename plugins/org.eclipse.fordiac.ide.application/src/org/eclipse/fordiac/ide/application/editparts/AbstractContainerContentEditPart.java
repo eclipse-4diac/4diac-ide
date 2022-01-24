@@ -24,7 +24,6 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.XYLayout;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
@@ -132,13 +131,7 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		figure.setOpaque(false);
 		figure.setBorder(new MarginBorder(BORDER_INSET));
 
-		figure.setLayoutManager(new XYLayout() {
-			@Override
-			public Dimension calculatePreferredSize(final IFigure container, final int wHint, final int hHint) {
-				return super.calculatePreferredSize(container, wHint, hHint);
-			}
-
-		});
+		figure.setLayoutManager(new XYLayout());
 		return figure;
 	}
 

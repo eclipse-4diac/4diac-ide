@@ -14,11 +14,10 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.function.Consumer;
 
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 
 public class FBNetworkElementSetPositionCommand extends SetPositionCommand {
 
@@ -27,9 +26,8 @@ public class FBNetworkElementSetPositionCommand extends SetPositionCommand {
 	private static final Consumer<IInterfaceElement> OUTPUT_CONSUMER = ie -> ie.getOutputConnections()
 			.forEach(con -> con.getRoutingData().setNeedsValidation(true));
 
-	public FBNetworkElementSetPositionCommand(final FBNetworkElement fbe, final ChangeBoundsRequest req,
-			final Rectangle newBounds) {
-		super(fbe, req, newBounds);
+	public FBNetworkElementSetPositionCommand(final FBNetworkElement fbe, final int dx, final int dy) {
+		super(fbe, dx, dy);
 	}
 
 	@Override
@@ -38,8 +36,8 @@ public class FBNetworkElementSetPositionCommand extends SetPositionCommand {
 	}
 
 	@Override
-	protected void setPosition(final Rectangle bounds) {
-		super.setPosition(bounds);
+	protected void setPosition(final Position pos) {
+		super.setPosition(pos);
 		invalidateInputConnections(getPositionableElement().getInterface());
 		invalidateOutputConnections(getPositionableElement().getInterface());
 	}

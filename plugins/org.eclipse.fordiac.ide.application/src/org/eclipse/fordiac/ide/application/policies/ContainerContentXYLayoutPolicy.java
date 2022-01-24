@@ -17,43 +17,32 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
-import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
-import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
 
 public class ContainerContentXYLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
-	@Override
-	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
-			final Object constraint) {
-		// TODO constraint is the new position, can we somehow extract the a delta position?
-		if ((child.getModel() instanceof PositionableElement) && (constraint instanceof Rectangle)) {
-			final Rectangle constraintRect = (Rectangle) constraint;
-			constraintRect.x += getHost().getOffsetPoint().x;
-			constraintRect.y += getHost().getOffsetPoint().y;
 
-			if (child.getModel() instanceof Group) {
-				return new ChangeGroupBoundsCommand((Group) child.getModel(), request, (Rectangle) constraint);
-			}
-			if (child.getModel() instanceof FBNetworkElement) {
-				return new FBNetworkElementSetPositionCommand((FBNetworkElement) child.getModel(), request,
-						(Rectangle) constraint);
-			}
-			return new SetPositionCommand((PositionableElement) child.getModel(), request,
-					(Rectangle) constraint);
+	private Figure moveHandle;
+
+	@Override
+	protected void showLayoutTargetFeedback(final Request request) {
+		if (REQ_ADD.equals(request.getType()) && (moveHandle == null)) {
+			// we want to show the handle for the parent which is the whole group
+			moveHandle = new ModifiedMoveHandle((GraphicalEditPart) getTargetEditPart(request).getParent(),
+					new Insets(1), DiagramPreferences.CORNER_DIM_HALF);
+			addFeedback(moveHandle);
 		}
-		return null;
 	}
 
 	@Override
-	public AbstractContainerContentEditPart getHost() {
-		return (AbstractContainerContentEditPart) super.getHost();
+	protected void eraseLayoutTargetFeedback(final Request request) {
+		if (moveHandle != null) {
+			removeFeedback(moveHandle);
+			moveHandle = null;
+		}
 	}
 }

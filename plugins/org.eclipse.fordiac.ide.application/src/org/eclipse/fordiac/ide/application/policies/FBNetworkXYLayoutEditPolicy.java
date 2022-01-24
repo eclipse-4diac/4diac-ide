@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
+import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
@@ -64,18 +66,27 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
-		// return a command that can move a "ViewEditPart"
-		if ((child.getModel() instanceof PositionableElement) && (constraint instanceof Rectangle)) {
-			if (child.getModel() instanceof Group) {
-				return new ChangeGroupBoundsCommand((Group) child.getModel(), request, (Rectangle) constraint);
-			}
-			if (child.getModel() instanceof FBNetworkElement) {
-				return new FBNetworkElementSetPositionCommand((FBNetworkElement) child.getModel(), request,
-						(Rectangle) constraint);
-			}
-			return new SetPositionCommand((PositionableElement) child.getModel(), request, (Rectangle) constraint);
+		if (child.getModel() instanceof Group && RequestUtil.isResizeRequest(request)) {
+			return createChangeGroupSizeCommand((Group) child.getModel(), request);
+		}
+		if ((child.getModel() instanceof PositionableElement) && (RequestUtil.isMoveRequest(request))) {
+			return createMoveCommand((PositionableElement) child.getModel(), request);
 		}
 		return null;
+	}
+
+	private static Command createChangeGroupSizeCommand(final Group group, final ChangeBoundsRequest request) {
+		final Point moveDelta = request.getMoveDelta();
+		final Dimension sizeDelta = request.getSizeDelta();
+		return new ChangeGroupBoundsCommand(group, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
+	}
+
+	private static Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request) {
+		final Point moveDelta = request.getMoveDelta();
+		if (model instanceof FBNetworkElement) {
+			return new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y);
+		}
+		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
 	}
 
 	@Override

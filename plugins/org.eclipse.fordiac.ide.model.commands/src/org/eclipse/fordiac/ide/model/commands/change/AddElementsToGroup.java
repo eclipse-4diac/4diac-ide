@@ -110,11 +110,11 @@ public class AddElementsToGroup extends Command {
 	}
 
 	private int getOriginalPositionX() {
-		return offset.x - FBNetworkHelper.X_OFFSET_FROM_TOP_LEFT_CORNER;
+		return offset.x;
 	}
 
 	private int getOriginalPositionY() {
-		return offset.y - FBNetworkHelper.Y_OFFSET_FROM_TOP_LEFT_CORNER;
+		return offset.y;
 	}
 
 }

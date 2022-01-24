@@ -19,10 +19,11 @@ import java.util.List;
 
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
@@ -43,13 +44,13 @@ import org.eclipse.gef.requests.CreateRequest;
 
 public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
 		if (child.getModel() instanceof Segment) {
 			return new ResizableEditPolicy() {
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				@Override
 				protected List createSelectionHandles() {
-					List list = new ArrayList();
+					final List list = new ArrayList();
 					list.add(new ResizeHandle((GraphicalEditPart) getHost(), PositionConstants.EAST));
 					list.add(new ResizeHandle((GraphicalEditPart) getHost(), PositionConstants.WEST));
 					list.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), new Insets(0, 2, 0, 2), 20));
@@ -69,14 +70,15 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
 		if (constraint instanceof Rectangle) {
-			Rectangle rec = new Rectangle((Rectangle) constraint);
+			final Rectangle rec = new Rectangle((Rectangle) constraint);
 			if (child.getModel() instanceof Segment) {
 				return new SegmentSetConstraintCommand((Segment) child.getModel(), rec, request);
 			}
 			// return a command that can move a "PositionableElement"
-			if (child instanceof AbstractViewEditPart && child.getModel() instanceof PositionableElement) {
-				PositionableElement temp = (PositionableElement) child.getModel();
-				return new SetPositionCommand(temp, request, rec);
+			if (child.getModel() instanceof PositionableElement && RequestUtil.isMoveRequest(request)) {
+				final Point moveDelta = request.getMoveDelta();
+				final PositionableElement temp = (PositionableElement) child.getModel();
+				return new SetPositionCommand(temp, moveDelta.x, moveDelta.y);
 			}
 		}
 		return null;
@@ -87,10 +89,10 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (request == null) {
 			return null;
 		}
-		Object childClass = request.getNewObjectType();
-		Rectangle constraint = (Rectangle) getConstraintFor(request);
+		final Object childClass = request.getNewObjectType();
+		final Rectangle constraint = (Rectangle) getConstraintFor(request);
 		if (childClass instanceof org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry) {
-			org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry type = (org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry) request
+			final org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry type = (org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry) request
 					.getNewObjectType();
 			if (getHost().getModel() instanceof SystemConfiguration) {
 				return new DeviceCreateCommand(type, (SystemConfiguration) getHost().getModel(),
@@ -98,7 +100,7 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			}
 		}
 		if (childClass instanceof org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry) {
-			org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry type = (org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry) request
+			final org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry type = (org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry) request
 					.getNewObjectType();
 			if (getHost().getModel() instanceof SystemConfiguration) {
 				return new SegmentCreateCommand(type, (SystemConfiguration) getHost().getModel(), constraint);
