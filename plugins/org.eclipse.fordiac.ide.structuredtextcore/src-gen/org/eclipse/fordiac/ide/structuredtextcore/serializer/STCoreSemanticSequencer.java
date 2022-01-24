@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitializerExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL;
@@ -17,6 +18,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression;
@@ -80,6 +82,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ARRAY_INITIALIZER_EXPRESSION:
 				sequence_ArrayInitializerExpression(context, (ArrayInitializerExpression) semanticObject); 
 				return; 
+			case STCorePackage.BOOL_LITERAL:
+				sequence_BOOL_LITERAL(context, (BOOL_LITERAL) semanticObject); 
+				return; 
 			case STCorePackage.CODE:
 				sequence_Code(context, (Code) semanticObject); 
 				return; 
@@ -103,6 +108,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_ASSIGNMENT_STATEMENT:
 				sequence_STAssignmentStatement(context, (STAssignmentStatement) semanticObject); 
+				return; 
+			case STCorePackage.ST_BOOL_LITERAL:
+				sequence_STLiteralExpressions(context, (STBoolLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_CASE_CASES:
 				sequence_STCaseCases(context, (STCaseCases) semanticObject); 
@@ -250,6 +258,18 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
+	 *     BOOL_LITERAL returns BOOL_LITERAL
+	 *
+	 * Constraint:
+	 *     (not='NOT'? keyWordValue=BOOL_VALUES)
+	 */
+	protected void sequence_BOOL_LITERAL(ISerializationContext context, BOOL_LITERAL semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     Code returns Code
 	 *
 	 * Constraint:
@@ -313,7 +333,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     (
 	 *         not='NOT'? 
 	 *         (
-	 *             keyword='BOOL#' | 
 	 *             keyword='BYTE#' | 
 	 *             keyword='WORD#' | 
 	 *             keyword='DWORD#' | 
@@ -329,7 +348,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *             keyword='REAL#' | 
 	 *             keyword='LREAL#'
 	 *         )? 
-	 *         (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL | keyWordValue=BOOL_VALUES)
+	 *         (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL)
 	 *     )
 	 */
 	protected void sequence_NUMERIC_LITERAL(ISerializationContext context, NUMERIC_LITERAL semanticObject) {
@@ -715,6 +734,48 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
+	 *     InitializerExpression returns STBoolLiteral
+	 *     STExpression returns STBoolLiteral
+	 *     STSubrangeExpression returns STBoolLiteral
+	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STBoolLiteral
+	 *     STOrExpression returns STBoolLiteral
+	 *     STOrExpression.STOrExpression_1_0_0 returns STBoolLiteral
+	 *     STXorExpression returns STBoolLiteral
+	 *     STXorExpression.STXorExpression_1_0_0 returns STBoolLiteral
+	 *     STAndExpression returns STBoolLiteral
+	 *     STAndExpression.STAndExpression_1_0_0 returns STBoolLiteral
+	 *     STEqualityExpression returns STBoolLiteral
+	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STBoolLiteral
+	 *     STComparisonExpression returns STBoolLiteral
+	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STBoolLiteral
+	 *     STAddSubExpression returns STBoolLiteral
+	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STBoolLiteral
+	 *     STMulDivModExpression returns STBoolLiteral
+	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STBoolLiteral
+	 *     STPowerExpression returns STBoolLiteral
+	 *     STPowerExpression.STPowerExpression_1_0_0 returns STBoolLiteral
+	 *     STSignumExpression returns STBoolLiteral
+	 *     STSelectionExpression returns STBoolLiteral
+	 *     STSelectionExpression.STMemberSelection_1_0 returns STBoolLiteral
+	 *     STAtomicExpression returns STBoolLiteral
+	 *     STLiteralExpressions returns STBoolLiteral
+	 *
+	 * Constraint:
+	 *     boolLiteral=BOOL_LITERAL
+	 */
+	protected void sequence_STLiteralExpressions(ISerializationContext context, STBoolLiteral semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_BOOL_LITERAL__BOOL_LITERAL) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_BOOL_LITERAL__BOOL_LITERAL));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getBoolLiteralBOOL_LITERALParserRuleCall_0_1_0(), semanticObject.getBoolLiteral());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     InitializerExpression returns STDateAndTimeLiteral
 	 *     STExpression returns STDateAndTimeLiteral
 	 *     STSubrangeExpression returns STDateAndTimeLiteral
@@ -750,7 +811,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TIME_LITERAL));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_4_1_0(), semanticObject.getTimeLiteral());
+		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_5_1_0(), semanticObject.getTimeLiteral());
 		feeder.finish();
 	}
 	
@@ -792,7 +853,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_LITERAL__DATE_LITERAL));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getDateLiteralDATE_LITERALParserRuleCall_1_1_0(), semanticObject.getDateLiteral());
+		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getDateLiteralDATE_LITERALParserRuleCall_2_1_0(), semanticObject.getDateLiteral());
 		feeder.finish();
 	}
 	
@@ -834,7 +895,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_NUMERIC_LITERAL__NUMERIC_LITERAL));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getNumericLiteralNUMERIC_LITERALParserRuleCall_0_1_0(), semanticObject.getNumericLiteral());
+		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getNumericLiteralNUMERIC_LITERALParserRuleCall_1_1_0(), semanticObject.getNumericLiteral());
 		feeder.finish();
 	}
 	
@@ -876,7 +937,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_STRING_LITERAL__STRING_LITERAL));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getStringLiteralSTRING_LITERALParserRuleCall_5_1_0(), semanticObject.getStringLiteral());
+		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getStringLiteralSTRING_LITERALParserRuleCall_6_1_0(), semanticObject.getStringLiteral());
 		feeder.finish();
 	}
 	
@@ -918,7 +979,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_LITERAL__TIME_LITERAL));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralTIME_LITERALParserRuleCall_2_1_0(), semanticObject.getTimeLiteral());
+		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralTIME_LITERALParserRuleCall_3_1_0(), semanticObject.getTimeLiteral());
 		feeder.finish();
 	}
 	
@@ -960,7 +1021,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_3_1_0(), semanticObject.getTimeOfDayLiteral());
+		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_4_1_0(), semanticObject.getTimeOfDayLiteral());
 		feeder.finish();
 	}
 	

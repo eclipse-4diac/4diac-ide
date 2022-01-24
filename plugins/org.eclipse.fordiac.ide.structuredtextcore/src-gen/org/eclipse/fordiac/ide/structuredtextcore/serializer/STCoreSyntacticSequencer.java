@@ -21,6 +21,7 @@ import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 public class STCoreSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	protected STCoreGrammarAccess grammarAccess;
+	protected AbstractElementAlias match_BOOL_LITERAL_BOOLKeyword_1_q;
 	protected AbstractElementAlias match_STAtomicExpression_LeftParenthesisKeyword_0_0_a;
 	protected AbstractElementAlias match_STAtomicExpression_LeftParenthesisKeyword_0_0_p;
 	protected AbstractElementAlias match_STRING_LITERAL___CHARKeyword_0_2_or_WCHARKeyword_0_3_or_WSTRINGKeyword_0_1__q;
@@ -28,6 +29,7 @@ public class STCoreSyntacticSequencer extends AbstractSyntacticSequencer {
 	@Inject
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (STCoreGrammarAccess) access;
+		match_BOOL_LITERAL_BOOLKeyword_1_q = new TokenAlias(false, true, grammarAccess.getBOOL_LITERALAccess().getBOOLKeyword_1());
 		match_STAtomicExpression_LeftParenthesisKeyword_0_0_a = new TokenAlias(true, true, grammarAccess.getSTAtomicExpressionAccess().getLeftParenthesisKeyword_0_0());
 		match_STAtomicExpression_LeftParenthesisKeyword_0_0_p = new TokenAlias(true, false, grammarAccess.getSTAtomicExpressionAccess().getLeftParenthesisKeyword_0_0());
 		match_STRING_LITERAL___CHARKeyword_0_2_or_WCHARKeyword_0_3_or_WSTRINGKeyword_0_1__q = new AlternativeAlias(false, true, new TokenAlias(false, false, grammarAccess.getSTRING_LITERALAccess().getCHARKeyword_0_2()), new TokenAlias(false, false, grammarAccess.getSTRING_LITERALAccess().getWCHARKeyword_0_3()), new TokenAlias(false, false, grammarAccess.getSTRING_LITERALAccess().getWSTRINGKeyword_0_1()));
@@ -45,7 +47,9 @@ public class STCoreSyntacticSequencer extends AbstractSyntacticSequencer {
 		List<INode> transitionNodes = collectNodes(fromNode, toNode);
 		for (AbstractElementAlias syntax : transition.getAmbiguousSyntaxes()) {
 			List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
-			if (match_STAtomicExpression_LeftParenthesisKeyword_0_0_a.equals(syntax))
+			if (match_BOOL_LITERAL_BOOLKeyword_1_q.equals(syntax))
+				emit_BOOL_LITERAL_BOOLKeyword_1_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_STAtomicExpression_LeftParenthesisKeyword_0_0_a.equals(syntax))
 				emit_STAtomicExpression_LeftParenthesisKeyword_0_0_a(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_STAtomicExpression_LeftParenthesisKeyword_0_0_p.equals(syntax))
 				emit_STAtomicExpression_LeftParenthesisKeyword_0_0_p(semanticObject, getLastNavigableState(), syntaxNodes);
@@ -57,12 +61,25 @@ public class STCoreSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	/**
 	 * Ambiguous syntax:
+	 *     'BOOL#'?
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     (rule start) (ambiguity) keyWordValue=BOOL_VALUES
+	 *     not='NOT' (ambiguity) keyWordValue=BOOL_VALUES
+	 */
+	protected void emit_BOOL_LITERAL_BOOLKeyword_1_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
+	/**
+	 * Ambiguous syntax:
 	 *     '('*
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     (rule start) (ambiguity) 'CONTINUE' (rule start)
 	 *     (rule start) (ambiguity) 'EXIT' (rule start)
 	 *     (rule start) (ambiguity) 'RETURN' (rule start)
+	 *     (rule start) (ambiguity) boolLiteral=BOOL_LITERAL
 	 *     (rule start) (ambiguity) dateLiteral=DATE_LITERAL
 	 *     (rule start) (ambiguity) numericLiteral=NUMERIC_LITERAL
 	 *     (rule start) (ambiguity) signum='+'
@@ -94,6 +111,7 @@ public class STCoreSyntacticSequencer extends AbstractSyntacticSequencer {
 	 *     '('+
 	 *
 	 * This ambiguous syntax occurs at:
+	 *     (rule start) (ambiguity) boolLiteral=BOOL_LITERAL
 	 *     (rule start) (ambiguity) dateLiteral=DATE_LITERAL
 	 *     (rule start) (ambiguity) numericLiteral=NUMERIC_LITERAL
 	 *     (rule start) (ambiguity) signum='+'

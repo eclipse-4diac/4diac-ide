@@ -176,6 +176,11 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createMultibitPartialAccessAdapter();
       }
       @Override
+      public Adapter caseBOOL_LITERAL(BOOL_LITERAL object)
+      {
+        return createBOOL_LITERALAdapter();
+      }
+      @Override
       public Adapter caseNUMERIC_LITERAL(NUMERIC_LITERAL object)
       {
         return createNUMERIC_LITERALAdapter();
@@ -279,6 +284,11 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
       public Adapter caseSTExit(STExit object)
       {
         return createSTExitAdapter();
+      }
+      @Override
+      public Adapter caseSTBoolLiteral(STBoolLiteral object)
+      {
+        return createSTBoolLiteralAdapter();
       }
       @Override
       public Adapter caseSTNumericLiteral(STNumericLiteral object)
@@ -633,6 +643,21 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL <em>BOOL LITERAL</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL
+   * @generated
+   */
+  public Adapter createBOOL_LITERALAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL <em>NUMERIC LITERAL</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -943,6 +968,21 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSTExitAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral <em>ST Bool Literal</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral
+   * @generated
+   */
+  public Adapter createSTBoolLiteralAdapter()
   {
     return null;
   }

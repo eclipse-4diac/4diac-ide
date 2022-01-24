@@ -87,13 +87,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//MultibitPartialAccess/accessSpecifier"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//MultibitPartialAccess/index"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//BOOL_LITERAL">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//BOOL_LITERAL/not"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//BOOL_LITERAL/keyWordValue"/>
+    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//NUMERIC_LITERAL">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/not"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/keyword"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/intValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/realValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/hexValue"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/keyWordValue"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//DATE_LITERAL">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//DATE_LITERAL/keyword"/>
@@ -184,6 +187,9 @@
     <genClasses ecoreClass="STCore.ecore#//STReturn"/>
     <genClasses ecoreClass="STCore.ecore#//STContinue"/>
     <genClasses ecoreClass="STCore.ecore#//STExit"/>
+    <genClasses ecoreClass="STCore.ecore#//STBoolLiteral">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STBoolLiteral/boolLiteral"/>
+    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STNumericLiteral">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STNumericLiteral/numericLiteral"/>
     </genClasses>

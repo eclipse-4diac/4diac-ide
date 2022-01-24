@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl#getIntValue <em>Int Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl#getRealValue <em>Real Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl#getHexValue <em>Hex Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl#isKeyWordValue <em>Key Word Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -135,26 +134,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
    * @ordered
    */
   protected BigInteger hexValue = HEX_VALUE_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #isKeyWordValue() <em>Key Word Value</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isKeyWordValue()
-   * @generated
-   * @ordered
-   */
-  protected static final boolean KEY_WORD_VALUE_EDEFAULT = false;
-
-  /**
-   * The cached value of the '{@link #isKeyWordValue() <em>Key Word Value</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isKeyWordValue()
-   * @generated
-   * @ordered
-   */
-  protected boolean keyWordValue = KEY_WORD_VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -308,31 +287,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
    * @generated
    */
   @Override
-  public boolean isKeyWordValue()
-  {
-    return keyWordValue;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void setKeyWordValue(boolean newKeyWordValue)
-  {
-    boolean oldKeyWordValue = keyWordValue;
-    keyWordValue = newKeyWordValue;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.NUMERIC_LITERAL__KEY_WORD_VALUE, oldKeyWordValue, keyWordValue));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
@@ -347,8 +301,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
         return getRealValue();
       case STCorePackage.NUMERIC_LITERAL__HEX_VALUE:
         return getHexValue();
-      case STCorePackage.NUMERIC_LITERAL__KEY_WORD_VALUE:
-        return isKeyWordValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -377,9 +329,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
         return;
       case STCorePackage.NUMERIC_LITERAL__HEX_VALUE:
         setHexValue((BigInteger)newValue);
-        return;
-      case STCorePackage.NUMERIC_LITERAL__KEY_WORD_VALUE:
-        setKeyWordValue((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -410,9 +359,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
       case STCorePackage.NUMERIC_LITERAL__HEX_VALUE:
         setHexValue(HEX_VALUE_EDEFAULT);
         return;
-      case STCorePackage.NUMERIC_LITERAL__KEY_WORD_VALUE:
-        setKeyWordValue(KEY_WORD_VALUE_EDEFAULT);
-        return;
     }
     super.eUnset(featureID);
   }
@@ -437,8 +383,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
         return REAL_VALUE_EDEFAULT == null ? realValue != null : !REAL_VALUE_EDEFAULT.equals(realValue);
       case STCorePackage.NUMERIC_LITERAL__HEX_VALUE:
         return HEX_VALUE_EDEFAULT == null ? hexValue != null : !HEX_VALUE_EDEFAULT.equals(hexValue);
-      case STCorePackage.NUMERIC_LITERAL__KEY_WORD_VALUE:
-        return keyWordValue != KEY_WORD_VALUE_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -464,8 +408,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
     result.append(realValue);
     result.append(", hexValue: ");
     result.append(hexValue);
-    result.append(", keyWordValue: ");
-    result.append(keyWordValue);
     result.append(')');
     return result.toString();
   }

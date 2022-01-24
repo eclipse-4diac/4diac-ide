@@ -2762,16 +2762,45 @@ ruleSTLiteralExpressions returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTNumericLiteralAction_0_0(),
+						grammarAccess.getSTLiteralExpressionsAccess().getSTBoolLiteralAction_0_0(),
 						$current);
 				}
 			)
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getNumericLiteralNUMERIC_LITERALParserRuleCall_0_1_0());
+						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getBoolLiteralBOOL_LITERALParserRuleCall_0_1_0());
 					}
-					lv_numericLiteral_1_0=ruleNUMERIC_LITERAL
+					lv_boolLiteral_1_0=ruleBOOL_LITERAL
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
+						}
+						set(
+							$current,
+							"boolLiteral",
+							lv_boolLiteral_1_0,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.BOOL_LITERAL");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+		)
+		    |
+		(
+			(
+				{
+					$current = forceCreateModelElement(
+						grammarAccess.getSTLiteralExpressionsAccess().getSTNumericLiteralAction_1_0(),
+						$current);
+				}
+			)
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getNumericLiteralNUMERIC_LITERALParserRuleCall_1_1_0());
+					}
+					lv_numericLiteral_3_0=ruleNUMERIC_LITERAL
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
@@ -2779,7 +2808,7 @@ ruleSTLiteralExpressions returns [EObject current=null]
 						set(
 							$current,
 							"numericLiteral",
-							lv_numericLiteral_1_0,
+							lv_numericLiteral_3_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.NUMERIC_LITERAL");
 						afterParserOrEnumRuleCall();
 					}
@@ -2791,16 +2820,16 @@ ruleSTLiteralExpressions returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTDateLiteralAction_1_0(),
+						grammarAccess.getSTLiteralExpressionsAccess().getSTDateLiteralAction_2_0(),
 						$current);
 				}
 			)
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getDateLiteralDATE_LITERALParserRuleCall_1_1_0());
+						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getDateLiteralDATE_LITERALParserRuleCall_2_1_0());
 					}
-					lv_dateLiteral_3_0=ruleDATE_LITERAL
+					lv_dateLiteral_5_0=ruleDATE_LITERAL
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
@@ -2808,7 +2837,7 @@ ruleSTLiteralExpressions returns [EObject current=null]
 						set(
 							$current,
 							"dateLiteral",
-							lv_dateLiteral_3_0,
+							lv_dateLiteral_5_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.DATE_LITERAL");
 						afterParserOrEnumRuleCall();
 					}
@@ -2820,16 +2849,16 @@ ruleSTLiteralExpressions returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTTimeLiteralAction_2_0(),
+						grammarAccess.getSTLiteralExpressionsAccess().getSTTimeLiteralAction_3_0(),
 						$current);
 				}
 			)
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralTIME_LITERALParserRuleCall_2_1_0());
+						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralTIME_LITERALParserRuleCall_3_1_0());
 					}
-					lv_timeLiteral_5_0=ruleTIME_LITERAL
+					lv_timeLiteral_7_0=ruleTIME_LITERAL
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
@@ -2837,7 +2866,7 @@ ruleSTLiteralExpressions returns [EObject current=null]
 						set(
 							$current,
 							"timeLiteral",
-							lv_timeLiteral_5_0,
+							lv_timeLiteral_7_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_LITERAL");
 						afterParserOrEnumRuleCall();
 					}
@@ -2849,16 +2878,16 @@ ruleSTLiteralExpressions returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTTimeOfDayLiteralAction_3_0(),
+						grammarAccess.getSTLiteralExpressionsAccess().getSTTimeOfDayLiteralAction_4_0(),
 						$current);
 				}
 			)
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_3_1_0());
+						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_4_1_0());
 					}
-					lv_timeOfDayLiteral_7_0=ruleTIME_OF_DAY_LITERAL
+					lv_timeOfDayLiteral_9_0=ruleTIME_OF_DAY_LITERAL
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
@@ -2866,7 +2895,7 @@ ruleSTLiteralExpressions returns [EObject current=null]
 						set(
 							$current,
 							"timeOfDayLiteral",
-							lv_timeOfDayLiteral_7_0,
+							lv_timeOfDayLiteral_9_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_OF_DAY_LITERAL");
 						afterParserOrEnumRuleCall();
 					}
@@ -2878,16 +2907,16 @@ ruleSTLiteralExpressions returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTDateAndTimeLiteralAction_4_0(),
+						grammarAccess.getSTLiteralExpressionsAccess().getSTDateAndTimeLiteralAction_5_0(),
 						$current);
 				}
 			)
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_4_1_0());
+						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_5_1_0());
 					}
-					lv_timeLiteral_9_0=ruleDATE_AND_TIME_LITERAL
+					lv_timeLiteral_11_0=ruleDATE_AND_TIME_LITERAL
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
@@ -2895,7 +2924,7 @@ ruleSTLiteralExpressions returns [EObject current=null]
 						set(
 							$current,
 							"timeLiteral",
-							lv_timeLiteral_9_0,
+							lv_timeLiteral_11_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.DATE_AND_TIME_LITERAL");
 						afterParserOrEnumRuleCall();
 					}
@@ -2907,16 +2936,16 @@ ruleSTLiteralExpressions returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTStringLiteralAction_5_0(),
+						grammarAccess.getSTLiteralExpressionsAccess().getSTStringLiteralAction_6_0(),
 						$current);
 				}
 			)
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getStringLiteralSTRING_LITERALParserRuleCall_5_1_0());
+						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getStringLiteralSTRING_LITERALParserRuleCall_6_1_0());
 					}
-					lv_stringLiteral_11_0=ruleSTRING_LITERAL
+					lv_stringLiteral_13_0=ruleSTRING_LITERAL
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
@@ -2924,11 +2953,68 @@ ruleSTLiteralExpressions returns [EObject current=null]
 						set(
 							$current,
 							"stringLiteral",
-							lv_stringLiteral_11_0,
+							lv_stringLiteral_13_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STRING_LITERAL");
 						afterParserOrEnumRuleCall();
 					}
 				)
+			)
+		)
+	)
+;
+
+// Entry rule entryRuleBOOL_LITERAL
+entryRuleBOOL_LITERAL returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getBOOL_LITERALRule()); }
+	iv_ruleBOOL_LITERAL=ruleBOOL_LITERAL
+	{ $current=$iv_ruleBOOL_LITERAL.current; }
+	EOF;
+
+// Rule BOOL_LITERAL
+ruleBOOL_LITERAL returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			(
+				lv_not_0_0=NOT
+				{
+					newLeafNode(lv_not_0_0, grammarAccess.getBOOL_LITERALAccess().getNotNOTKeyword_0_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getBOOL_LITERALRule());
+					}
+					setWithLastConsumed($current, "not", lv_not_0_0, "NOT");
+				}
+			)
+		)?
+		(
+			otherlv_1=BOOL
+			{
+				newLeafNode(otherlv_1, grammarAccess.getBOOL_LITERALAccess().getBOOLKeyword_1());
+			}
+		)?
+		(
+			(
+				lv_keyWordValue_2_0=RULE_BOOL_VALUES
+				{
+					newLeafNode(lv_keyWordValue_2_0, grammarAccess.getBOOL_LITERALAccess().getKeyWordValueBOOL_VALUESTerminalRuleCall_2_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getBOOL_LITERALRule());
+					}
+					setWithLastConsumed(
+						$current,
+						"keyWordValue",
+						lv_keyWordValue_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.BOOL_VALUES");
+				}
 			)
 		)
 	)
@@ -2967,9 +3053,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 		(
 			(
 				(
-					lv_keyword_1_1=BOOL
+					lv_keyword_1_1=BYTE
 					{
-						newLeafNode(lv_keyword_1_1, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBOOLKeyword_1_0_0());
+						newLeafNode(lv_keyword_1_1, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBYTEKeyword_1_0_0());
 					}
 					{
 						if ($current==null) {
@@ -2978,9 +3064,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_1, null);
 					}
 					    |
-					lv_keyword_1_2=BYTE
+					lv_keyword_1_2=WORD
 					{
-						newLeafNode(lv_keyword_1_2, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBYTEKeyword_1_0_1());
+						newLeafNode(lv_keyword_1_2, grammarAccess.getNUMERIC_LITERALAccess().getKeywordWORDKeyword_1_0_1());
 					}
 					{
 						if ($current==null) {
@@ -2989,9 +3075,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_2, null);
 					}
 					    |
-					lv_keyword_1_3=WORD
+					lv_keyword_1_3=DWORD
 					{
-						newLeafNode(lv_keyword_1_3, grammarAccess.getNUMERIC_LITERALAccess().getKeywordWORDKeyword_1_0_2());
+						newLeafNode(lv_keyword_1_3, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDWORDKeyword_1_0_2());
 					}
 					{
 						if ($current==null) {
@@ -3000,9 +3086,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_3, null);
 					}
 					    |
-					lv_keyword_1_4=DWORD
+					lv_keyword_1_4=LWORD
 					{
-						newLeafNode(lv_keyword_1_4, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDWORDKeyword_1_0_3());
+						newLeafNode(lv_keyword_1_4, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLWORDKeyword_1_0_3());
 					}
 					{
 						if ($current==null) {
@@ -3011,9 +3097,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_4, null);
 					}
 					    |
-					lv_keyword_1_5=LWORD
+					lv_keyword_1_5=SINT
 					{
-						newLeafNode(lv_keyword_1_5, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLWORDKeyword_1_0_4());
+						newLeafNode(lv_keyword_1_5, grammarAccess.getNUMERIC_LITERALAccess().getKeywordSINTKeyword_1_0_4());
 					}
 					{
 						if ($current==null) {
@@ -3022,9 +3108,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_5, null);
 					}
 					    |
-					lv_keyword_1_6=SINT
+					lv_keyword_1_6=INT
 					{
-						newLeafNode(lv_keyword_1_6, grammarAccess.getNUMERIC_LITERALAccess().getKeywordSINTKeyword_1_0_5());
+						newLeafNode(lv_keyword_1_6, grammarAccess.getNUMERIC_LITERALAccess().getKeywordINTKeyword_1_0_5());
 					}
 					{
 						if ($current==null) {
@@ -3033,9 +3119,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_6, null);
 					}
 					    |
-					lv_keyword_1_7=INT
+					lv_keyword_1_7=DINT
 					{
-						newLeafNode(lv_keyword_1_7, grammarAccess.getNUMERIC_LITERALAccess().getKeywordINTKeyword_1_0_6());
+						newLeafNode(lv_keyword_1_7, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDINTKeyword_1_0_6());
 					}
 					{
 						if ($current==null) {
@@ -3044,9 +3130,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_7, null);
 					}
 					    |
-					lv_keyword_1_8=DINT
+					lv_keyword_1_8=LINT
 					{
-						newLeafNode(lv_keyword_1_8, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDINTKeyword_1_0_7());
+						newLeafNode(lv_keyword_1_8, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLINTKeyword_1_0_7());
 					}
 					{
 						if ($current==null) {
@@ -3055,9 +3141,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_8, null);
 					}
 					    |
-					lv_keyword_1_9=LINT
+					lv_keyword_1_9=USINT
 					{
-						newLeafNode(lv_keyword_1_9, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLINTKeyword_1_0_8());
+						newLeafNode(lv_keyword_1_9, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUSINTKeyword_1_0_8());
 					}
 					{
 						if ($current==null) {
@@ -3066,9 +3152,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_9, null);
 					}
 					    |
-					lv_keyword_1_10=USINT
+					lv_keyword_1_10=UINT
 					{
-						newLeafNode(lv_keyword_1_10, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUSINTKeyword_1_0_9());
+						newLeafNode(lv_keyword_1_10, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUINTKeyword_1_0_9());
 					}
 					{
 						if ($current==null) {
@@ -3077,9 +3163,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_10, null);
 					}
 					    |
-					lv_keyword_1_11=UINT
+					lv_keyword_1_11=UDINT
 					{
-						newLeafNode(lv_keyword_1_11, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUINTKeyword_1_0_10());
+						newLeafNode(lv_keyword_1_11, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUDINTKeyword_1_0_10());
 					}
 					{
 						if ($current==null) {
@@ -3088,9 +3174,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_11, null);
 					}
 					    |
-					lv_keyword_1_12=UDINT
+					lv_keyword_1_12=ULINT
 					{
-						newLeafNode(lv_keyword_1_12, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUDINTKeyword_1_0_11());
+						newLeafNode(lv_keyword_1_12, grammarAccess.getNUMERIC_LITERALAccess().getKeywordULINTKeyword_1_0_11());
 					}
 					{
 						if ($current==null) {
@@ -3099,9 +3185,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_12, null);
 					}
 					    |
-					lv_keyword_1_13=ULINT
+					lv_keyword_1_13=REAL
 					{
-						newLeafNode(lv_keyword_1_13, grammarAccess.getNUMERIC_LITERALAccess().getKeywordULINTKeyword_1_0_12());
+						newLeafNode(lv_keyword_1_13, grammarAccess.getNUMERIC_LITERALAccess().getKeywordREALKeyword_1_0_12());
 					}
 					{
 						if ($current==null) {
@@ -3110,26 +3196,15 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed($current, "keyword", lv_keyword_1_13, null);
 					}
 					    |
-					lv_keyword_1_14=REAL
+					lv_keyword_1_14=LREAL
 					{
-						newLeafNode(lv_keyword_1_14, grammarAccess.getNUMERIC_LITERALAccess().getKeywordREALKeyword_1_0_13());
+						newLeafNode(lv_keyword_1_14, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLREALKeyword_1_0_13());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
 						setWithLastConsumed($current, "keyword", lv_keyword_1_14, null);
-					}
-					    |
-					lv_keyword_1_15=LREAL
-					{
-						newLeafNode(lv_keyword_1_15, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLREALKeyword_1_0_14());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_15, null);
 					}
 				)
 			)
@@ -3190,25 +3265,6 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 							"hexValue",
 							lv_hexValue_4_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.NON_DECIMAL");
-					}
-				)
-			)
-			    |
-			(
-				(
-					lv_keyWordValue_5_0=RULE_BOOL_VALUES
-					{
-						newLeafNode(lv_keyWordValue_5_0, grammarAccess.getNUMERIC_LITERALAccess().getKeyWordValueBOOL_VALUESTerminalRuleCall_2_3_0());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed(
-							$current,
-							"keyWordValue",
-							lv_keyWordValue_5_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.BOOL_VALUES");
 					}
 				)
 			)

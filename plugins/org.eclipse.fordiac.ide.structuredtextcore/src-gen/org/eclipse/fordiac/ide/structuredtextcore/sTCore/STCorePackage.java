@@ -808,6 +808,43 @@ public interface STCorePackage extends EPackage
   int MULTIBIT_PARTIAL_ACCESS_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.BOOL_LITERALImpl <em>BOOL LITERAL</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.BOOL_LITERALImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getBOOL_LITERAL()
+   * @generated
+   */
+  int BOOL_LITERAL = 20;
+
+  /**
+   * The feature id for the '<em><b>Not</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BOOL_LITERAL__NOT = 0;
+
+  /**
+   * The feature id for the '<em><b>Key Word Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BOOL_LITERAL__KEY_WORD_VALUE = 1;
+
+  /**
+   * The number of structural features of the '<em>BOOL LITERAL</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BOOL_LITERAL_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl <em>NUMERIC LITERAL</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -815,7 +852,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getNUMERIC_LITERAL()
    * @generated
    */
-  int NUMERIC_LITERAL = 20;
+  int NUMERIC_LITERAL = 21;
 
   /**
    * The feature id for the '<em><b>Not</b></em>' attribute.
@@ -863,22 +900,13 @@ public interface STCorePackage extends EPackage
   int NUMERIC_LITERAL__HEX_VALUE = 4;
 
   /**
-   * The feature id for the '<em><b>Key Word Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int NUMERIC_LITERAL__KEY_WORD_VALUE = 5;
-
-  /**
    * The number of structural features of the '<em>NUMERIC LITERAL</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int NUMERIC_LITERAL_FEATURE_COUNT = 6;
+  int NUMERIC_LITERAL_FEATURE_COUNT = 5;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_LITERALImpl <em>DATE LITERAL</em>}' class.
@@ -888,7 +916,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getDATE_LITERAL()
    * @generated
    */
-  int DATE_LITERAL = 21;
+  int DATE_LITERAL = 22;
 
   /**
    * The feature id for the '<em><b>Keyword</b></em>' attribute.
@@ -925,7 +953,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getTIME_LITERAL()
    * @generated
    */
-  int TIME_LITERAL = 22;
+  int TIME_LITERAL = 23;
 
   /**
    * The feature id for the '<em><b>Keyword</b></em>' attribute.
@@ -962,7 +990,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getTIME_OF_DAY_LITERAL()
    * @generated
    */
-  int TIME_OF_DAY_LITERAL = 23;
+  int TIME_OF_DAY_LITERAL = 24;
 
   /**
    * The feature id for the '<em><b>Keyword</b></em>' attribute.
@@ -999,7 +1027,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getDATE_AND_TIME_LITERAL()
    * @generated
    */
-  int DATE_AND_TIME_LITERAL = 24;
+  int DATE_AND_TIME_LITERAL = 25;
 
   /**
    * The feature id for the '<em><b>Keyword</b></em>' attribute.
@@ -1045,7 +1073,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTRING_LITERAL()
    * @generated
    */
-  int STRING_LITERAL = 25;
+  int STRING_LITERAL = 26;
 
   /**
    * The feature id for the '<em><b>Keyword</b></em>' attribute.
@@ -1082,7 +1110,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSubrangeExpression()
    * @generated
    */
-  int ST_SUBRANGE_EXPRESSION = 26;
+  int ST_SUBRANGE_EXPRESSION = 27;
 
   /**
    * The feature id for the '<em><b>Lower Bound</b></em>' containment reference.
@@ -1119,7 +1147,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTOrExpression()
    * @generated
    */
-  int ST_OR_EXPRESSION = 27;
+  int ST_OR_EXPRESSION = 28;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1165,7 +1193,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTXorExpression()
    * @generated
    */
-  int ST_XOR_EXPRESSION = 28;
+  int ST_XOR_EXPRESSION = 29;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1211,7 +1239,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTAndExpression()
    * @generated
    */
-  int ST_AND_EXPRESSION = 29;
+  int ST_AND_EXPRESSION = 30;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1257,7 +1285,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTEqualityExpression()
    * @generated
    */
-  int ST_EQUALITY_EXPRESSION = 30;
+  int ST_EQUALITY_EXPRESSION = 31;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1303,7 +1331,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTComparisonExpression()
    * @generated
    */
-  int ST_COMPARISON_EXPRESSION = 31;
+  int ST_COMPARISON_EXPRESSION = 32;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1349,7 +1377,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTAddSubExpression()
    * @generated
    */
-  int ST_ADD_SUB_EXPRESSION = 32;
+  int ST_ADD_SUB_EXPRESSION = 33;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1395,7 +1423,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTMulDivModExpression()
    * @generated
    */
-  int ST_MUL_DIV_MOD_EXPRESSION = 33;
+  int ST_MUL_DIV_MOD_EXPRESSION = 34;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1441,7 +1469,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTPowerExpression()
    * @generated
    */
-  int ST_POWER_EXPRESSION = 34;
+  int ST_POWER_EXPRESSION = 35;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1487,7 +1515,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSignumExpression()
    * @generated
    */
-  int ST_SIGNUM_EXPRESSION = 35;
+  int ST_SIGNUM_EXPRESSION = 36;
 
   /**
    * The feature id for the '<em><b>Signum</b></em>' attribute.
@@ -1524,7 +1552,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTMemberSelection()
    * @generated
    */
-  int ST_MEMBER_SELECTION = 36;
+  int ST_MEMBER_SELECTION = 37;
 
   /**
    * The feature id for the '<em><b>Receiver</b></em>' containment reference.
@@ -1615,7 +1643,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSymbol()
    * @generated
    */
-  int ST_SYMBOL = 37;
+  int ST_SYMBOL = 38;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' reference.
@@ -1679,7 +1707,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTReturn()
    * @generated
    */
-  int ST_RETURN = 38;
+  int ST_RETURN = 39;
 
   /**
    * The number of structural features of the '<em>ST Return</em>' class.
@@ -1698,7 +1726,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTContinue()
    * @generated
    */
-  int ST_CONTINUE = 39;
+  int ST_CONTINUE = 40;
 
   /**
    * The number of structural features of the '<em>ST Continue</em>' class.
@@ -1717,7 +1745,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTExit()
    * @generated
    */
-  int ST_EXIT = 40;
+  int ST_EXIT = 41;
 
   /**
    * The number of structural features of the '<em>ST Exit</em>' class.
@@ -1729,6 +1757,34 @@ public interface STCorePackage extends EPackage
   int ST_EXIT_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl <em>ST Bool Literal</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBoolLiteral()
+   * @generated
+   */
+  int ST_BOOL_LITERAL = 42;
+
+  /**
+   * The feature id for the '<em><b>Bool Literal</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_BOOL_LITERAL__BOOL_LITERAL = ST_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>ST Bool Literal</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_BOOL_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl <em>ST Numeric Literal</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1736,7 +1792,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTNumericLiteral()
    * @generated
    */
-  int ST_NUMERIC_LITERAL = 41;
+  int ST_NUMERIC_LITERAL = 43;
 
   /**
    * The feature id for the '<em><b>Numeric Literal</b></em>' containment reference.
@@ -1764,7 +1820,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateLiteral()
    * @generated
    */
-  int ST_DATE_LITERAL = 42;
+  int ST_DATE_LITERAL = 44;
 
   /**
    * The feature id for the '<em><b>Date Literal</b></em>' containment reference.
@@ -1792,7 +1848,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeLiteral()
    * @generated
    */
-  int ST_TIME_LITERAL = 43;
+  int ST_TIME_LITERAL = 45;
 
   /**
    * The feature id for the '<em><b>Time Literal</b></em>' containment reference.
@@ -1820,7 +1876,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeOfDayLiteral()
    * @generated
    */
-  int ST_TIME_OF_DAY_LITERAL = 44;
+  int ST_TIME_OF_DAY_LITERAL = 46;
 
   /**
    * The feature id for the '<em><b>Time Of Day Literal</b></em>' containment reference.
@@ -1848,7 +1904,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateAndTimeLiteral()
    * @generated
    */
-  int ST_DATE_AND_TIME_LITERAL = 45;
+  int ST_DATE_AND_TIME_LITERAL = 47;
 
   /**
    * The feature id for the '<em><b>Time Literal</b></em>' containment reference.
@@ -1876,7 +1932,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTStringLiteral()
    * @generated
    */
-  int ST_STRING_LITERAL = 46;
+  int ST_STRING_LITERAL = 48;
 
   /**
    * The feature id for the '<em><b>String Literal</b></em>' containment reference.
@@ -1904,7 +1960,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getMultiBitAccessSpecifier()
    * @generated
    */
-  int MULTI_BIT_ACCESS_SPECIFIER = 47;
+  int MULTI_BIT_ACCESS_SPECIFIER = 49;
 
 
   /**
@@ -2504,6 +2560,38 @@ public interface STCorePackage extends EPackage
   EAttribute getMultibitPartialAccess_Index();
 
   /**
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL <em>BOOL LITERAL</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>BOOL LITERAL</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL
+   * @generated
+   */
+  EClass getBOOL_LITERAL();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL#getNot <em>Not</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Not</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL#getNot()
+   * @see #getBOOL_LITERAL()
+   * @generated
+   */
+  EAttribute getBOOL_LITERAL_Not();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL#isKeyWordValue <em>Key Word Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Key Word Value</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL#isKeyWordValue()
+   * @see #getBOOL_LITERAL()
+   * @generated
+   */
+  EAttribute getBOOL_LITERAL_KeyWordValue();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL <em>NUMERIC LITERAL</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2567,17 +2655,6 @@ public interface STCorePackage extends EPackage
    * @generated
    */
   EAttribute getNUMERIC_LITERAL_HexValue();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#isKeyWordValue <em>Key Word Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Key Word Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#isKeyWordValue()
-   * @see #getNUMERIC_LITERAL()
-   * @generated
-   */
-  EAttribute getNUMERIC_LITERAL_KeyWordValue();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL <em>DATE LITERAL</em>}'.
@@ -3352,6 +3429,27 @@ public interface STCorePackage extends EPackage
   EClass getSTExit();
 
   /**
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral <em>ST Bool Literal</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>ST Bool Literal</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral
+   * @generated
+   */
+  EClass getSTBoolLiteral();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral#getBoolLiteral <em>Bool Literal</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Bool Literal</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral#getBoolLiteral()
+   * @see #getSTBoolLiteral()
+   * @generated
+   */
+  EReference getSTBoolLiteral_BoolLiteral();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral <em>ST Numeric Literal</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3999,6 +4097,32 @@ public interface STCorePackage extends EPackage
     EAttribute MULTIBIT_PARTIAL_ACCESS__INDEX = eINSTANCE.getMultibitPartialAccess_Index();
 
     /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.BOOL_LITERALImpl <em>BOOL LITERAL</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.BOOL_LITERALImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getBOOL_LITERAL()
+     * @generated
+     */
+    EClass BOOL_LITERAL = eINSTANCE.getBOOL_LITERAL();
+
+    /**
+     * The meta object literal for the '<em><b>Not</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute BOOL_LITERAL__NOT = eINSTANCE.getBOOL_LITERAL_Not();
+
+    /**
+     * The meta object literal for the '<em><b>Key Word Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute BOOL_LITERAL__KEY_WORD_VALUE = eINSTANCE.getBOOL_LITERAL_KeyWordValue();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl <em>NUMERIC LITERAL</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4047,14 +4171,6 @@ public interface STCorePackage extends EPackage
      * @generated
      */
     EAttribute NUMERIC_LITERAL__HEX_VALUE = eINSTANCE.getNUMERIC_LITERAL_HexValue();
-
-    /**
-     * The meta object literal for the '<em><b>Key Word Value</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute NUMERIC_LITERAL__KEY_WORD_VALUE = eINSTANCE.getNUMERIC_LITERAL_KeyWordValue();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_LITERALImpl <em>DATE LITERAL</em>}' class.
@@ -4671,6 +4787,24 @@ public interface STCorePackage extends EPackage
      * @generated
      */
     EClass ST_EXIT = eINSTANCE.getSTExit();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl <em>ST Bool Literal</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBoolLiteral()
+     * @generated
+     */
+    EClass ST_BOOL_LITERAL = eINSTANCE.getSTBoolLiteral();
+
+    /**
+     * The meta object literal for the '<em><b>Bool Literal</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ST_BOOL_LITERAL__BOOL_LITERAL = eINSTANCE.getSTBoolLiteral_BoolLiteral();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl <em>ST Numeric Literal</em>}' class.

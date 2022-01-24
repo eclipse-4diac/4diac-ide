@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getIntValue <em>Int Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getRealValue <em>Real Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getHexValue <em>Hex Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#isKeyWordValue <em>Key Word Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getNUMERIC_LITERAL()
@@ -140,27 +139,5 @@ public interface NUMERIC_LITERAL extends EObject
    * @generated
    */
   void setHexValue(BigInteger value);
-
-  /**
-   * Returns the value of the '<em><b>Key Word Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Key Word Value</em>' attribute.
-   * @see #setKeyWordValue(boolean)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getNUMERIC_LITERAL_KeyWordValue()
-   * @model
-   * @generated
-   */
-  boolean isKeyWordValue();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#isKeyWordValue <em>Key Word Value</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Key Word Value</em>' attribute.
-   * @see #isKeyWordValue()
-   * @generated
-   */
-  void setKeyWordValue(boolean value);
 
 } // NUMERIC_LITERAL

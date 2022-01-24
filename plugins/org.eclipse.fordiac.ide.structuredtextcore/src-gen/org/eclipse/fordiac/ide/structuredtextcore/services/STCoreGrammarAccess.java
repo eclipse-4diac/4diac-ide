@@ -1880,31 +1880,36 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STLiteralExpressions");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Action cSTNumericLiteralAction_0_0 = (Action)cGroup_0.eContents().get(0);
-		private final Assignment cNumericLiteralAssignment_0_1 = (Assignment)cGroup_0.eContents().get(1);
-		private final RuleCall cNumericLiteralNUMERIC_LITERALParserRuleCall_0_1_0 = (RuleCall)cNumericLiteralAssignment_0_1.eContents().get(0);
+		private final Action cSTBoolLiteralAction_0_0 = (Action)cGroup_0.eContents().get(0);
+		private final Assignment cBoolLiteralAssignment_0_1 = (Assignment)cGroup_0.eContents().get(1);
+		private final RuleCall cBoolLiteralBOOL_LITERALParserRuleCall_0_1_0 = (RuleCall)cBoolLiteralAssignment_0_1.eContents().get(0);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Action cSTDateLiteralAction_1_0 = (Action)cGroup_1.eContents().get(0);
-		private final Assignment cDateLiteralAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cDateLiteralDATE_LITERALParserRuleCall_1_1_0 = (RuleCall)cDateLiteralAssignment_1_1.eContents().get(0);
+		private final Action cSTNumericLiteralAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Assignment cNumericLiteralAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cNumericLiteralNUMERIC_LITERALParserRuleCall_1_1_0 = (RuleCall)cNumericLiteralAssignment_1_1.eContents().get(0);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final Action cSTTimeLiteralAction_2_0 = (Action)cGroup_2.eContents().get(0);
-		private final Assignment cTimeLiteralAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cTimeLiteralTIME_LITERALParserRuleCall_2_1_0 = (RuleCall)cTimeLiteralAssignment_2_1.eContents().get(0);
+		private final Action cSTDateLiteralAction_2_0 = (Action)cGroup_2.eContents().get(0);
+		private final Assignment cDateLiteralAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cDateLiteralDATE_LITERALParserRuleCall_2_1_0 = (RuleCall)cDateLiteralAssignment_2_1.eContents().get(0);
 		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
-		private final Action cSTTimeOfDayLiteralAction_3_0 = (Action)cGroup_3.eContents().get(0);
-		private final Assignment cTimeOfDayLiteralAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
-		private final RuleCall cTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_3_1_0 = (RuleCall)cTimeOfDayLiteralAssignment_3_1.eContents().get(0);
+		private final Action cSTTimeLiteralAction_3_0 = (Action)cGroup_3.eContents().get(0);
+		private final Assignment cTimeLiteralAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cTimeLiteralTIME_LITERALParserRuleCall_3_1_0 = (RuleCall)cTimeLiteralAssignment_3_1.eContents().get(0);
 		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
-		private final Action cSTDateAndTimeLiteralAction_4_0 = (Action)cGroup_4.eContents().get(0);
-		private final Assignment cTimeLiteralAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
-		private final RuleCall cTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_4_1_0 = (RuleCall)cTimeLiteralAssignment_4_1.eContents().get(0);
+		private final Action cSTTimeOfDayLiteralAction_4_0 = (Action)cGroup_4.eContents().get(0);
+		private final Assignment cTimeOfDayLiteralAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_4_1_0 = (RuleCall)cTimeOfDayLiteralAssignment_4_1.eContents().get(0);
 		private final Group cGroup_5 = (Group)cAlternatives.eContents().get(5);
-		private final Action cSTStringLiteralAction_5_0 = (Action)cGroup_5.eContents().get(0);
-		private final Assignment cStringLiteralAssignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
-		private final RuleCall cStringLiteralSTRING_LITERALParserRuleCall_5_1_0 = (RuleCall)cStringLiteralAssignment_5_1.eContents().get(0);
+		private final Action cSTDateAndTimeLiteralAction_5_0 = (Action)cGroup_5.eContents().get(0);
+		private final Assignment cTimeLiteralAssignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
+		private final RuleCall cTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_5_1_0 = (RuleCall)cTimeLiteralAssignment_5_1.eContents().get(0);
+		private final Group cGroup_6 = (Group)cAlternatives.eContents().get(6);
+		private final Action cSTStringLiteralAction_6_0 = (Action)cGroup_6.eContents().get(0);
+		private final Assignment cStringLiteralAssignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
+		private final RuleCall cStringLiteralSTRING_LITERALParserRuleCall_6_1_0 = (RuleCall)cStringLiteralAssignment_6_1.eContents().get(0);
 		
 		//STLiteralExpressions returns STExpression:
+		//    {STBoolLiteral} boolLiteral=BOOL_LITERAL |
 		//    {STNumericLiteral} numericLiteral=NUMERIC_LITERAL |
 		//    {STDateLiteral} dateLiteral=DATE_LITERAL |
 		//    {STTimeLiteral} timeLiteral=TIME_LITERAL |
@@ -1913,6 +1918,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//    {STStringLiteral} stringLiteral=STRING_LITERAL;
 		@Override public ParserRule getRule() { return rule; }
 		
+		//{STBoolLiteral} boolLiteral=BOOL_LITERAL |
 		//{STNumericLiteral} numericLiteral=NUMERIC_LITERAL |
 		//{STDateLiteral} dateLiteral=DATE_LITERAL |
 		//{STTimeLiteral} timeLiteral=TIME_LITERAL |
@@ -1921,121 +1927,105 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//{STStringLiteral} stringLiteral=STRING_LITERAL
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//{STNumericLiteral} numericLiteral=NUMERIC_LITERAL
+		//{STBoolLiteral} boolLiteral=BOOL_LITERAL
 		public Group getGroup_0() { return cGroup_0; }
 		
-		//{STNumericLiteral}
-		public Action getSTNumericLiteralAction_0_0() { return cSTNumericLiteralAction_0_0; }
+		//{STBoolLiteral}
+		public Action getSTBoolLiteralAction_0_0() { return cSTBoolLiteralAction_0_0; }
 		
-		//numericLiteral=NUMERIC_LITERAL
-		public Assignment getNumericLiteralAssignment_0_1() { return cNumericLiteralAssignment_0_1; }
+		//boolLiteral=BOOL_LITERAL
+		public Assignment getBoolLiteralAssignment_0_1() { return cBoolLiteralAssignment_0_1; }
 		
-		//NUMERIC_LITERAL
-		public RuleCall getNumericLiteralNUMERIC_LITERALParserRuleCall_0_1_0() { return cNumericLiteralNUMERIC_LITERALParserRuleCall_0_1_0; }
+		//BOOL_LITERAL
+		public RuleCall getBoolLiteralBOOL_LITERALParserRuleCall_0_1_0() { return cBoolLiteralBOOL_LITERALParserRuleCall_0_1_0; }
 		
-		//{STDateLiteral} dateLiteral=DATE_LITERAL
+		//{STNumericLiteral} numericLiteral=NUMERIC_LITERAL
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//{STDateLiteral}
-		public Action getSTDateLiteralAction_1_0() { return cSTDateLiteralAction_1_0; }
+		//{STNumericLiteral}
+		public Action getSTNumericLiteralAction_1_0() { return cSTNumericLiteralAction_1_0; }
 		
-		//dateLiteral=DATE_LITERAL
-		public Assignment getDateLiteralAssignment_1_1() { return cDateLiteralAssignment_1_1; }
+		//numericLiteral=NUMERIC_LITERAL
+		public Assignment getNumericLiteralAssignment_1_1() { return cNumericLiteralAssignment_1_1; }
 		
-		//DATE_LITERAL
-		public RuleCall getDateLiteralDATE_LITERALParserRuleCall_1_1_0() { return cDateLiteralDATE_LITERALParserRuleCall_1_1_0; }
+		//NUMERIC_LITERAL
+		public RuleCall getNumericLiteralNUMERIC_LITERALParserRuleCall_1_1_0() { return cNumericLiteralNUMERIC_LITERALParserRuleCall_1_1_0; }
 		
-		//{STTimeLiteral} timeLiteral=TIME_LITERAL
+		//{STDateLiteral} dateLiteral=DATE_LITERAL
 		public Group getGroup_2() { return cGroup_2; }
 		
-		//{STTimeLiteral}
-		public Action getSTTimeLiteralAction_2_0() { return cSTTimeLiteralAction_2_0; }
+		//{STDateLiteral}
+		public Action getSTDateLiteralAction_2_0() { return cSTDateLiteralAction_2_0; }
 		
-		//timeLiteral=TIME_LITERAL
-		public Assignment getTimeLiteralAssignment_2_1() { return cTimeLiteralAssignment_2_1; }
+		//dateLiteral=DATE_LITERAL
+		public Assignment getDateLiteralAssignment_2_1() { return cDateLiteralAssignment_2_1; }
 		
-		//TIME_LITERAL
-		public RuleCall getTimeLiteralTIME_LITERALParserRuleCall_2_1_0() { return cTimeLiteralTIME_LITERALParserRuleCall_2_1_0; }
+		//DATE_LITERAL
+		public RuleCall getDateLiteralDATE_LITERALParserRuleCall_2_1_0() { return cDateLiteralDATE_LITERALParserRuleCall_2_1_0; }
 		
-		//{STTimeOfDayLiteral} timeOfDayLiteral=TIME_OF_DAY_LITERAL
+		//{STTimeLiteral} timeLiteral=TIME_LITERAL
 		public Group getGroup_3() { return cGroup_3; }
 		
-		//{STTimeOfDayLiteral}
-		public Action getSTTimeOfDayLiteralAction_3_0() { return cSTTimeOfDayLiteralAction_3_0; }
+		//{STTimeLiteral}
+		public Action getSTTimeLiteralAction_3_0() { return cSTTimeLiteralAction_3_0; }
 		
-		//timeOfDayLiteral=TIME_OF_DAY_LITERAL
-		public Assignment getTimeOfDayLiteralAssignment_3_1() { return cTimeOfDayLiteralAssignment_3_1; }
+		//timeLiteral=TIME_LITERAL
+		public Assignment getTimeLiteralAssignment_3_1() { return cTimeLiteralAssignment_3_1; }
 		
-		//TIME_OF_DAY_LITERAL
-		public RuleCall getTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_3_1_0() { return cTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_3_1_0; }
+		//TIME_LITERAL
+		public RuleCall getTimeLiteralTIME_LITERALParserRuleCall_3_1_0() { return cTimeLiteralTIME_LITERALParserRuleCall_3_1_0; }
 		
-		//{STDateAndTimeLiteral} timeLiteral=DATE_AND_TIME_LITERAL
+		//{STTimeOfDayLiteral} timeOfDayLiteral=TIME_OF_DAY_LITERAL
 		public Group getGroup_4() { return cGroup_4; }
 		
-		//{STDateAndTimeLiteral}
-		public Action getSTDateAndTimeLiteralAction_4_0() { return cSTDateAndTimeLiteralAction_4_0; }
+		//{STTimeOfDayLiteral}
+		public Action getSTTimeOfDayLiteralAction_4_0() { return cSTTimeOfDayLiteralAction_4_0; }
 		
-		//timeLiteral=DATE_AND_TIME_LITERAL
-		public Assignment getTimeLiteralAssignment_4_1() { return cTimeLiteralAssignment_4_1; }
+		//timeOfDayLiteral=TIME_OF_DAY_LITERAL
+		public Assignment getTimeOfDayLiteralAssignment_4_1() { return cTimeOfDayLiteralAssignment_4_1; }
 		
-		//DATE_AND_TIME_LITERAL
-		public RuleCall getTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_4_1_0() { return cTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_4_1_0; }
+		//TIME_OF_DAY_LITERAL
+		public RuleCall getTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_4_1_0() { return cTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_4_1_0; }
 		
-		//{STStringLiteral} stringLiteral=STRING_LITERAL
+		//{STDateAndTimeLiteral} timeLiteral=DATE_AND_TIME_LITERAL
 		public Group getGroup_5() { return cGroup_5; }
 		
+		//{STDateAndTimeLiteral}
+		public Action getSTDateAndTimeLiteralAction_5_0() { return cSTDateAndTimeLiteralAction_5_0; }
+		
+		//timeLiteral=DATE_AND_TIME_LITERAL
+		public Assignment getTimeLiteralAssignment_5_1() { return cTimeLiteralAssignment_5_1; }
+		
+		//DATE_AND_TIME_LITERAL
+		public RuleCall getTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_5_1_0() { return cTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_5_1_0; }
+		
+		//{STStringLiteral} stringLiteral=STRING_LITERAL
+		public Group getGroup_6() { return cGroup_6; }
+		
 		//{STStringLiteral}
-		public Action getSTStringLiteralAction_5_0() { return cSTStringLiteralAction_5_0; }
+		public Action getSTStringLiteralAction_6_0() { return cSTStringLiteralAction_6_0; }
 		
 		//stringLiteral=STRING_LITERAL
-		public Assignment getStringLiteralAssignment_5_1() { return cStringLiteralAssignment_5_1; }
+		public Assignment getStringLiteralAssignment_6_1() { return cStringLiteralAssignment_6_1; }
 		
 		//STRING_LITERAL
-		public RuleCall getStringLiteralSTRING_LITERALParserRuleCall_5_1_0() { return cStringLiteralSTRING_LITERALParserRuleCall_5_1_0; }
+		public RuleCall getStringLiteralSTRING_LITERALParserRuleCall_6_1_0() { return cStringLiteralSTRING_LITERALParserRuleCall_6_1_0; }
 	}
-	public class NUMERIC_LITERALElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.NUMERIC_LITERAL");
+	public class BOOL_LITERALElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.BOOL_LITERAL");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cNotAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final Keyword cNotNOTKeyword_0_0 = (Keyword)cNotAssignment_0.eContents().get(0);
-		private final Assignment cKeywordAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final Alternatives cKeywordAlternatives_1_0 = (Alternatives)cKeywordAssignment_1.eContents().get(0);
-		private final Keyword cKeywordBOOLKeyword_1_0_0 = (Keyword)cKeywordAlternatives_1_0.eContents().get(0);
-		private final Keyword cKeywordBYTEKeyword_1_0_1 = (Keyword)cKeywordAlternatives_1_0.eContents().get(1);
-		private final Keyword cKeywordWORDKeyword_1_0_2 = (Keyword)cKeywordAlternatives_1_0.eContents().get(2);
-		private final Keyword cKeywordDWORDKeyword_1_0_3 = (Keyword)cKeywordAlternatives_1_0.eContents().get(3);
-		private final Keyword cKeywordLWORDKeyword_1_0_4 = (Keyword)cKeywordAlternatives_1_0.eContents().get(4);
-		private final Keyword cKeywordSINTKeyword_1_0_5 = (Keyword)cKeywordAlternatives_1_0.eContents().get(5);
-		private final Keyword cKeywordINTKeyword_1_0_6 = (Keyword)cKeywordAlternatives_1_0.eContents().get(6);
-		private final Keyword cKeywordDINTKeyword_1_0_7 = (Keyword)cKeywordAlternatives_1_0.eContents().get(7);
-		private final Keyword cKeywordLINTKeyword_1_0_8 = (Keyword)cKeywordAlternatives_1_0.eContents().get(8);
-		private final Keyword cKeywordUSINTKeyword_1_0_9 = (Keyword)cKeywordAlternatives_1_0.eContents().get(9);
-		private final Keyword cKeywordUINTKeyword_1_0_10 = (Keyword)cKeywordAlternatives_1_0.eContents().get(10);
-		private final Keyword cKeywordUDINTKeyword_1_0_11 = (Keyword)cKeywordAlternatives_1_0.eContents().get(11);
-		private final Keyword cKeywordULINTKeyword_1_0_12 = (Keyword)cKeywordAlternatives_1_0.eContents().get(12);
-		private final Keyword cKeywordREALKeyword_1_0_13 = (Keyword)cKeywordAlternatives_1_0.eContents().get(13);
-		private final Keyword cKeywordLREALKeyword_1_0_14 = (Keyword)cKeywordAlternatives_1_0.eContents().get(14);
-		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
-		private final Assignment cIntValueAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
-		private final RuleCall cIntValueINTEGERParserRuleCall_2_0_0 = (RuleCall)cIntValueAssignment_2_0.eContents().get(0);
-		private final Assignment cRealValueAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
-		private final RuleCall cRealValueREALParserRuleCall_2_1_0 = (RuleCall)cRealValueAssignment_2_1.eContents().get(0);
-		private final Assignment cHexValueAssignment_2_2 = (Assignment)cAlternatives_2.eContents().get(2);
-		private final RuleCall cHexValueNON_DECIMALTerminalRuleCall_2_2_0 = (RuleCall)cHexValueAssignment_2_2.eContents().get(0);
-		private final Assignment cKeyWordValueAssignment_2_3 = (Assignment)cAlternatives_2.eContents().get(3);
-		private final RuleCall cKeyWordValueBOOL_VALUESTerminalRuleCall_2_3_0 = (RuleCall)cKeyWordValueAssignment_2_3.eContents().get(0);
+		private final Keyword cBOOLKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cKeyWordValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cKeyWordValueBOOL_VALUESTerminalRuleCall_2_0 = (RuleCall)cKeyWordValueAssignment_2.eContents().get(0);
 		
-		//NUMERIC_LITERAL:
-		//    (not='NOT')?
-		//    (keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
-		//    'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
-		//    (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL | keyWordValue=BOOL_VALUES);
+		//BOOL_LITERAL:
+		//    (not='NOT')? ('BOOL#')? keyWordValue=BOOL_VALUES
+		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(not='NOT')?
-		//(keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
-		//'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
-		//(intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL | keyWordValue=BOOL_VALUES)
+		//(not='NOT')? ('BOOL#')? keyWordValue=BOOL_VALUES
 		public Group getGroup() { return cGroup; }
 		
 		//(not='NOT')?
@@ -2044,60 +2034,114 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'NOT'
 		public Keyword getNotNOTKeyword_0_0() { return cNotNOTKeyword_0_0; }
 		
-		//(keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+		//('BOOL#')?
+		public Keyword getBOOLKeyword_1() { return cBOOLKeyword_1; }
+		
+		//keyWordValue=BOOL_VALUES
+		public Assignment getKeyWordValueAssignment_2() { return cKeyWordValueAssignment_2; }
+		
+		//BOOL_VALUES
+		public RuleCall getKeyWordValueBOOL_VALUESTerminalRuleCall_2_0() { return cKeyWordValueBOOL_VALUESTerminalRuleCall_2_0; }
+	}
+	public class NUMERIC_LITERALElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.NUMERIC_LITERAL");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cNotAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cNotNOTKeyword_0_0 = (Keyword)cNotAssignment_0.eContents().get(0);
+		private final Assignment cKeywordAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final Alternatives cKeywordAlternatives_1_0 = (Alternatives)cKeywordAssignment_1.eContents().get(0);
+		private final Keyword cKeywordBYTEKeyword_1_0_0 = (Keyword)cKeywordAlternatives_1_0.eContents().get(0);
+		private final Keyword cKeywordWORDKeyword_1_0_1 = (Keyword)cKeywordAlternatives_1_0.eContents().get(1);
+		private final Keyword cKeywordDWORDKeyword_1_0_2 = (Keyword)cKeywordAlternatives_1_0.eContents().get(2);
+		private final Keyword cKeywordLWORDKeyword_1_0_3 = (Keyword)cKeywordAlternatives_1_0.eContents().get(3);
+		private final Keyword cKeywordSINTKeyword_1_0_4 = (Keyword)cKeywordAlternatives_1_0.eContents().get(4);
+		private final Keyword cKeywordINTKeyword_1_0_5 = (Keyword)cKeywordAlternatives_1_0.eContents().get(5);
+		private final Keyword cKeywordDINTKeyword_1_0_6 = (Keyword)cKeywordAlternatives_1_0.eContents().get(6);
+		private final Keyword cKeywordLINTKeyword_1_0_7 = (Keyword)cKeywordAlternatives_1_0.eContents().get(7);
+		private final Keyword cKeywordUSINTKeyword_1_0_8 = (Keyword)cKeywordAlternatives_1_0.eContents().get(8);
+		private final Keyword cKeywordUINTKeyword_1_0_9 = (Keyword)cKeywordAlternatives_1_0.eContents().get(9);
+		private final Keyword cKeywordUDINTKeyword_1_0_10 = (Keyword)cKeywordAlternatives_1_0.eContents().get(10);
+		private final Keyword cKeywordULINTKeyword_1_0_11 = (Keyword)cKeywordAlternatives_1_0.eContents().get(11);
+		private final Keyword cKeywordREALKeyword_1_0_12 = (Keyword)cKeywordAlternatives_1_0.eContents().get(12);
+		private final Keyword cKeywordLREALKeyword_1_0_13 = (Keyword)cKeywordAlternatives_1_0.eContents().get(13);
+		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
+		private final Assignment cIntValueAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
+		private final RuleCall cIntValueINTEGERParserRuleCall_2_0_0 = (RuleCall)cIntValueAssignment_2_0.eContents().get(0);
+		private final Assignment cRealValueAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
+		private final RuleCall cRealValueREALParserRuleCall_2_1_0 = (RuleCall)cRealValueAssignment_2_1.eContents().get(0);
+		private final Assignment cHexValueAssignment_2_2 = (Assignment)cAlternatives_2.eContents().get(2);
+		private final RuleCall cHexValueNON_DECIMALTerminalRuleCall_2_2_0 = (RuleCall)cHexValueAssignment_2_2.eContents().get(0);
+		
+		//NUMERIC_LITERAL:
+		//    (not='NOT')?
+		//    (keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+		//    'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
+		//    (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL);
+		@Override public ParserRule getRule() { return rule; }
+		
+		//(not='NOT')?
+		//(keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+		//'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
+		//(intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL)
+		public Group getGroup() { return cGroup; }
+		
+		//(not='NOT')?
+		public Assignment getNotAssignment_0() { return cNotAssignment_0; }
+		
+		//'NOT'
+		public Keyword getNotNOTKeyword_0_0() { return cNotNOTKeyword_0_0; }
+		
+		//(keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 		//'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
 		public Assignment getKeywordAssignment_1() { return cKeywordAssignment_1; }
 		
-		//('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+		//('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 		//    'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#')
 		public Alternatives getKeywordAlternatives_1_0() { return cKeywordAlternatives_1_0; }
 		
-		//'BOOL#'
-		public Keyword getKeywordBOOLKeyword_1_0_0() { return cKeywordBOOLKeyword_1_0_0; }
-		
 		//'BYTE#'
-		public Keyword getKeywordBYTEKeyword_1_0_1() { return cKeywordBYTEKeyword_1_0_1; }
+		public Keyword getKeywordBYTEKeyword_1_0_0() { return cKeywordBYTEKeyword_1_0_0; }
 		
 		//'WORD#'
-		public Keyword getKeywordWORDKeyword_1_0_2() { return cKeywordWORDKeyword_1_0_2; }
+		public Keyword getKeywordWORDKeyword_1_0_1() { return cKeywordWORDKeyword_1_0_1; }
 		
 		//'DWORD#'
-		public Keyword getKeywordDWORDKeyword_1_0_3() { return cKeywordDWORDKeyword_1_0_3; }
+		public Keyword getKeywordDWORDKeyword_1_0_2() { return cKeywordDWORDKeyword_1_0_2; }
 		
 		//'LWORD#'
-		public Keyword getKeywordLWORDKeyword_1_0_4() { return cKeywordLWORDKeyword_1_0_4; }
+		public Keyword getKeywordLWORDKeyword_1_0_3() { return cKeywordLWORDKeyword_1_0_3; }
 		
 		//'SINT#'
-		public Keyword getKeywordSINTKeyword_1_0_5() { return cKeywordSINTKeyword_1_0_5; }
+		public Keyword getKeywordSINTKeyword_1_0_4() { return cKeywordSINTKeyword_1_0_4; }
 		
 		//'INT#'
-		public Keyword getKeywordINTKeyword_1_0_6() { return cKeywordINTKeyword_1_0_6; }
+		public Keyword getKeywordINTKeyword_1_0_5() { return cKeywordINTKeyword_1_0_5; }
 		
 		//'DINT#'
-		public Keyword getKeywordDINTKeyword_1_0_7() { return cKeywordDINTKeyword_1_0_7; }
+		public Keyword getKeywordDINTKeyword_1_0_6() { return cKeywordDINTKeyword_1_0_6; }
 		
 		//'LINT#'
-		public Keyword getKeywordLINTKeyword_1_0_8() { return cKeywordLINTKeyword_1_0_8; }
+		public Keyword getKeywordLINTKeyword_1_0_7() { return cKeywordLINTKeyword_1_0_7; }
 		
 		//'USINT#'
-		public Keyword getKeywordUSINTKeyword_1_0_9() { return cKeywordUSINTKeyword_1_0_9; }
+		public Keyword getKeywordUSINTKeyword_1_0_8() { return cKeywordUSINTKeyword_1_0_8; }
 		
 		//'UINT#'
-		public Keyword getKeywordUINTKeyword_1_0_10() { return cKeywordUINTKeyword_1_0_10; }
+		public Keyword getKeywordUINTKeyword_1_0_9() { return cKeywordUINTKeyword_1_0_9; }
 		
 		//'UDINT#'
-		public Keyword getKeywordUDINTKeyword_1_0_11() { return cKeywordUDINTKeyword_1_0_11; }
+		public Keyword getKeywordUDINTKeyword_1_0_10() { return cKeywordUDINTKeyword_1_0_10; }
 		
 		//'ULINT#'
-		public Keyword getKeywordULINTKeyword_1_0_12() { return cKeywordULINTKeyword_1_0_12; }
+		public Keyword getKeywordULINTKeyword_1_0_11() { return cKeywordULINTKeyword_1_0_11; }
 		
 		//'REAL#'
-		public Keyword getKeywordREALKeyword_1_0_13() { return cKeywordREALKeyword_1_0_13; }
+		public Keyword getKeywordREALKeyword_1_0_12() { return cKeywordREALKeyword_1_0_12; }
 		
 		//'LREAL#'
-		public Keyword getKeywordLREALKeyword_1_0_14() { return cKeywordLREALKeyword_1_0_14; }
+		public Keyword getKeywordLREALKeyword_1_0_13() { return cKeywordLREALKeyword_1_0_13; }
 		
-		//(intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL | keyWordValue=BOOL_VALUES)
+		//(intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL)
 		public Alternatives getAlternatives_2() { return cAlternatives_2; }
 		
 		//intValue=INTEGER
@@ -2117,12 +2161,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//NON_DECIMAL
 		public RuleCall getHexValueNON_DECIMALTerminalRuleCall_2_2_0() { return cHexValueNON_DECIMALTerminalRuleCall_2_2_0; }
-		
-		//keyWordValue=BOOL_VALUES
-		public Assignment getKeyWordValueAssignment_2_3() { return cKeyWordValueAssignment_2_3; }
-		
-		//BOOL_VALUES
-		public RuleCall getKeyWordValueBOOL_VALUESTerminalRuleCall_2_3_0() { return cKeyWordValueBOOL_VALUESTerminalRuleCall_2_3_0; }
 	}
 	public class DATE_LITERALElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.DATE_LITERAL");
@@ -2607,6 +2645,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final MultiBitAccessSpecifierElements eMultiBitAccessSpecifier;
 	private final STAtomicExpressionElements pSTAtomicExpression;
 	private final STLiteralExpressionsElements pSTLiteralExpressions;
+	private final BOOL_LITERALElements pBOOL_LITERAL;
 	private final NUMERIC_LITERALElements pNUMERIC_LITERAL;
 	private final DATE_LITERALElements pDATE_LITERAL;
 	private final TIME_LITERALElements pTIME_LITERAL;
@@ -2674,6 +2713,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.eMultiBitAccessSpecifier = new MultiBitAccessSpecifierElements();
 		this.pSTAtomicExpression = new STAtomicExpressionElements();
 		this.pSTLiteralExpressions = new STLiteralExpressionsElements();
+		this.pBOOL_LITERAL = new BOOL_LITERALElements();
 		this.pNUMERIC_LITERAL = new NUMERIC_LITERALElements();
 		this.pDATE_LITERAL = new DATE_LITERALElements();
 		this.pTIME_LITERAL = new TIME_LITERALElements();
@@ -3115,6 +3155,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STLiteralExpressions returns STExpression:
+	//    {STBoolLiteral} boolLiteral=BOOL_LITERAL |
 	//    {STNumericLiteral} numericLiteral=NUMERIC_LITERAL |
 	//    {STDateLiteral} dateLiteral=DATE_LITERAL |
 	//    {STTimeLiteral} timeLiteral=TIME_LITERAL |
@@ -3129,11 +3170,22 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTLiteralExpressionsAccess().getRule();
 	}
 	
+	//BOOL_LITERAL:
+	//    (not='NOT')? ('BOOL#')? keyWordValue=BOOL_VALUES
+	//;
+	public BOOL_LITERALElements getBOOL_LITERALAccess() {
+		return pBOOL_LITERAL;
+	}
+	
+	public ParserRule getBOOL_LITERALRule() {
+		return getBOOL_LITERALAccess().getRule();
+	}
+	
 	//NUMERIC_LITERAL:
 	//    (not='NOT')?
-	//    (keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+	//    (keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 	//    'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
-	//    (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL | keyWordValue=BOOL_VALUES);
+	//    (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL);
 	public NUMERIC_LITERALElements getNUMERIC_LITERALAccess() {
 		return pNUMERIC_LITERAL;
 	}

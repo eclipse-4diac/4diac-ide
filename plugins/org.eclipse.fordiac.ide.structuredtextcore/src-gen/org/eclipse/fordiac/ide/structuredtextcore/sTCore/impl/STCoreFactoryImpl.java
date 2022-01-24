@@ -86,6 +86,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ST_REPEAT_STATEMENT: return createSTRepeatStatement();
       case STCorePackage.ST_EXPRESSION: return createSTExpression();
       case STCorePackage.MULTIBIT_PARTIAL_ACCESS: return createMultibitPartialAccess();
+      case STCorePackage.BOOL_LITERAL: return createBOOL_LITERAL();
       case STCorePackage.NUMERIC_LITERAL: return createNUMERIC_LITERAL();
       case STCorePackage.DATE_LITERAL: return createDATE_LITERAL();
       case STCorePackage.TIME_LITERAL: return createTIME_LITERAL();
@@ -107,6 +108,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ST_RETURN: return createSTReturn();
       case STCorePackage.ST_CONTINUE: return createSTContinue();
       case STCorePackage.ST_EXIT: return createSTExit();
+      case STCorePackage.ST_BOOL_LITERAL: return createSTBoolLiteral();
       case STCorePackage.ST_NUMERIC_LITERAL: return createSTNumericLiteral();
       case STCorePackage.ST_DATE_LITERAL: return createSTDateLiteral();
       case STCorePackage.ST_TIME_LITERAL: return createSTTimeLiteral();
@@ -398,6 +400,18 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
+  public BOOL_LITERAL createBOOL_LITERAL()
+  {
+    BOOL_LITERALImpl booL_LITERAL = new BOOL_LITERALImpl();
+    return booL_LITERAL;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public NUMERIC_LITERAL createNUMERIC_LITERAL()
   {
     NUMERIC_LITERALImpl numeriC_LITERAL = new NUMERIC_LITERALImpl();
@@ -642,6 +656,18 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     STExitImpl stExit = new STExitImpl();
     return stExit;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STBoolLiteral createSTBoolLiteral()
+  {
+    STBoolLiteralImpl stBoolLiteral = new STBoolLiteralImpl();
+    return stBoolLiteral;
   }
 
   /**

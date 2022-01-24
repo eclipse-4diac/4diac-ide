@@ -228,6 +228,13 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case STCorePackage.BOOL_LITERAL:
+      {
+        BOOL_LITERAL booL_LITERAL = (BOOL_LITERAL)theEObject;
+        T result = caseBOOL_LITERAL(booL_LITERAL);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case STCorePackage.NUMERIC_LITERAL:
       {
         NUMERIC_LITERAL numeriC_LITERAL = (NUMERIC_LITERAL)theEObject;
@@ -402,6 +409,15 @@ public class STCoreSwitch<T> extends Switch<T>
         T result = caseSTExit(stExit);
         if (result == null) result = caseSTExpression(stExit);
         if (result == null) result = caseInitializerExpression(stExit);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case STCorePackage.ST_BOOL_LITERAL:
+      {
+        STBoolLiteral stBoolLiteral = (STBoolLiteral)theEObject;
+        T result = caseSTBoolLiteral(stBoolLiteral);
+        if (result == null) result = caseSTExpression(stBoolLiteral);
+        if (result == null) result = caseInitializerExpression(stBoolLiteral);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -784,6 +800,22 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>BOOL LITERAL</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>BOOL LITERAL</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseBOOL_LITERAL(BOOL_LITERAL object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>NUMERIC LITERAL</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1115,6 +1147,22 @@ public class STCoreSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSTExit(STExit object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Bool Literal</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Bool Literal</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTBoolLiteral(STBoolLiteral object)
   {
     return null;
   }

@@ -204,6 +204,15 @@ public interface STCoreFactory extends EFactory
   MultibitPartialAccess createMultibitPartialAccess();
 
   /**
+   * Returns a new object of class '<em>BOOL LITERAL</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>BOOL LITERAL</em>'.
+   * @generated
+   */
+  BOOL_LITERAL createBOOL_LITERAL();
+
+  /**
    * Returns a new object of class '<em>NUMERIC LITERAL</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -391,6 +400,15 @@ public interface STCoreFactory extends EFactory
    * @generated
    */
   STExit createSTExit();
+
+  /**
+   * Returns a new object of class '<em>ST Bool Literal</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Bool Literal</em>'.
+   * @generated
+   */
+  STBoolLiteral createSTBoolLiteral();
 
   /**
    * Returns a new object of class '<em>ST Numeric Literal</em>'.

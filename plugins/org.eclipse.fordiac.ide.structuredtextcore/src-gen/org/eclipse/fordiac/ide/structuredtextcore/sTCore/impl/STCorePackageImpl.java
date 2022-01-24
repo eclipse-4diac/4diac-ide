@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
@@ -215,6 +216,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass booL_LITERALEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass numeriC_LITERALEClass = null;
 
   /**
@@ -356,6 +364,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   private EClass stExitEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stBoolLiteralEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1096,6 +1111,39 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
+  public EClass getBOOL_LITERAL()
+  {
+    return booL_LITERALEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getBOOL_LITERAL_Not()
+  {
+    return (EAttribute)booL_LITERALEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getBOOL_LITERAL_KeyWordValue()
+  {
+    return (EAttribute)booL_LITERALEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getNUMERIC_LITERAL()
   {
     return numeriC_LITERALEClass;
@@ -1154,17 +1202,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
   public EAttribute getNUMERIC_LITERAL_HexValue()
   {
     return (EAttribute)numeriC_LITERALEClass.getEStructuralFeatures().get(4);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getNUMERIC_LITERAL_KeyWordValue()
-  {
-    return (EAttribute)numeriC_LITERALEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -1965,6 +2002,28 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
+  public EClass getSTBoolLiteral()
+  {
+    return stBoolLiteralEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTBoolLiteral_BoolLiteral()
+  {
+    return (EReference)stBoolLiteralEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getSTNumericLiteral()
   {
     return stNumericLiteralEClass;
@@ -2209,13 +2268,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEAttribute(multibitPartialAccessEClass, MULTIBIT_PARTIAL_ACCESS__ACCESS_SPECIFIER);
     createEAttribute(multibitPartialAccessEClass, MULTIBIT_PARTIAL_ACCESS__INDEX);
 
+    booL_LITERALEClass = createEClass(BOOL_LITERAL);
+    createEAttribute(booL_LITERALEClass, BOOL_LITERAL__NOT);
+    createEAttribute(booL_LITERALEClass, BOOL_LITERAL__KEY_WORD_VALUE);
+
     numeriC_LITERALEClass = createEClass(NUMERIC_LITERAL);
     createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__NOT);
     createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__KEYWORD);
     createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__INT_VALUE);
     createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__REAL_VALUE);
     createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__HEX_VALUE);
-    createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__KEY_WORD_VALUE);
 
     datE_LITERALEClass = createEClass(DATE_LITERAL);
     createEAttribute(datE_LITERALEClass, DATE_LITERAL__KEYWORD);
@@ -2309,6 +2371,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
 
     stExitEClass = createEClass(ST_EXIT);
 
+    stBoolLiteralEClass = createEClass(ST_BOOL_LITERAL);
+    createEReference(stBoolLiteralEClass, ST_BOOL_LITERAL__BOOL_LITERAL);
+
     stNumericLiteralEClass = createEClass(ST_NUMERIC_LITERAL);
     createEReference(stNumericLiteralEClass, ST_NUMERIC_LITERAL__NUMERIC_LITERAL);
 
@@ -2389,6 +2454,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stReturnEClass.getESuperTypes().add(this.getSTExpression());
     stContinueEClass.getESuperTypes().add(this.getSTExpression());
     stExitEClass.getESuperTypes().add(this.getSTExpression());
+    stBoolLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stNumericLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stDateLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
@@ -2473,13 +2539,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEAttribute(getMultibitPartialAccess_AccessSpecifier(), this.getMultiBitAccessSpecifier(), "accessSpecifier", null, 0, 1, MultibitPartialAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMultibitPartialAccess_Index(), ecorePackage.getEBigInteger(), "index", null, 0, 1, MultibitPartialAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(booL_LITERALEClass, org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL.class, "BOOL_LITERAL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getBOOL_LITERAL_Not(), ecorePackage.getEString(), "not", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getBOOL_LITERAL_KeyWordValue(), ecorePackage.getEBoolean(), "keyWordValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(numeriC_LITERALEClass, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, "NUMERIC_LITERAL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getNUMERIC_LITERAL_Not(), ecorePackage.getEString(), "not", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getNUMERIC_LITERAL_Keyword(), ecorePackage.getEString(), "keyword", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getNUMERIC_LITERAL_IntValue(), ecorePackage.getEBigInteger(), "intValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getNUMERIC_LITERAL_RealValue(), ecorePackage.getEBigDecimal(), "realValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getNUMERIC_LITERAL_HexValue(), ecorePackage.getEBigInteger(), "hexValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getNUMERIC_LITERAL_KeyWordValue(), ecorePackage.getEBoolean(), "keyWordValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(datE_LITERALEClass, org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL.class, "DATE_LITERAL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getDATE_LITERAL_Keyword(), ecorePackage.getEString(), "keyword", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2572,6 +2641,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEClass(stContinueEClass, STContinue.class, "STContinue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(stExitEClass, STExit.class, "STExit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(stBoolLiteralEClass, STBoolLiteral.class, "STBoolLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTBoolLiteral_BoolLiteral(), this.getBOOL_LITERAL(), null, "boolLiteral", null, 0, 1, STBoolLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stNumericLiteralEClass, STNumericLiteral.class, "STNumericLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTNumericLiteral_NumericLiteral(), this.getNUMERIC_LITERAL(), null, "numericLiteral", null, 0, 1, STNumericLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
