@@ -8,7 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Dunja Životin, Bianca Wiesmayr
+ *    - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.search;
 
@@ -28,16 +29,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.search.internal.ui.text.SearchResultUpdater;
 import org.eclipse.search.ui.ISearchQuery;
-import org.eclipse.search.ui.ISearchResult;
+import org.eclipse.search.ui.NewSearchUI;
+import org.eclipse.search2.internal.ui.SearchView;
+import org.eclipse.swt.widgets.Display;
 
 public class ModelSearchQuery implements ISearchQuery {
 
 	private final ModelQuerySpec modelQuerySpec;
 	private List<AutomationSystem> searchRoot;
-	private final String label = "ModelSearchQuery";
 	private ModelSearchResult searchResult;
 
 	public ModelSearchQuery(final ModelQuerySpec modelQuerySpec) {
@@ -46,8 +50,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	@Override
 	public IStatus run(final IProgressMonitor monitor) throws OperationCanceledException {
-
-		System.out.println("Searching...");
+		searchResult = getSearchResult();
 		searchRoot = new ArrayList<>();
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
@@ -56,19 +59,17 @@ public class ModelSearchQuery implements ISearchQuery {
 				searchRoot.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
 			}
 		}
-		searchResult = new ModelSearchResult(this);
 		// TO DO: populate searchResult with something
 		for (final AutomationSystem sys : searchRoot) {
 			searchApplications(sys);
 			searchTypeLibrary(sys);
+			searchResult.addResult(LibraryElementFactory.eINSTANCE.createApplication());
+			searchResult.addResult(LibraryElementFactory.eINSTANCE.createApplication());
+			searchResult.addResult(LibraryElementFactory.eINSTANCE.createApplication());
 		}
 
-		// Dummy data just so I'd print something out
-		searchResult.getResults().add("Result1");
-		searchResult.getResults().add("Result2");
-		searchResult.getResults().add("Result3");
-
-		System.err.println("Searching done, returning OK status");
+		Display.getDefault()
+				.asyncExec(() -> ((SearchView) NewSearchUI.getSearchResultView()).showSearchResult(getSearchResult()));
 
 		return Status.OK_STATUS;
 	}
@@ -109,14 +110,14 @@ public class ModelSearchQuery implements ISearchQuery {
 
 			if (el.getInterfaceElement(searchString) != null) { // if there is such an interface element
 				el.getInterface().getAllInterfaceElements().stream().filter(pin -> searchString.equals(pin.getName()))
-				.collect(Collectors.toList());
+						.collect(Collectors.toList());
 			}
 		}
 	}
 
 	@Override
 	public String getLabel() {
-		return label;
+		return modelQuerySpec.toString();
 	}
 
 	@Override
@@ -131,7 +132,12 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	@Override
-	public ISearchResult getSearchResult() {
+	public ModelSearchResult getSearchResult() {
+		if (searchResult == null) {
+			final ModelSearchResult mResult = new ModelSearchResult(this);
+			new SearchResultUpdater(mResult);
+			searchResult = mResult;
+		}
 		return searchResult;
 	}
 

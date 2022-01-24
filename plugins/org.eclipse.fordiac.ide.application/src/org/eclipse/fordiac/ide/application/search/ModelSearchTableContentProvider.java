@@ -14,14 +14,15 @@ package org.eclipse.fordiac.ide.application.search;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.search.ui.text.AbstractTextSearchResult;
 
 // Content provider supplies the data which should be displayed in the TableViewer
 public class ModelSearchTableContentProvider implements IStructuredContentProvider, IModelSearchContentProvider {
 
 	private final ModelSearchResultPage resultPage;
-	private AbstractTextSearchResult result;
-	private final Object[] EMPTY_ARR = new Object[0]; // Like in FileTableConProv
+	private ModelSearchResult result;
+	private final Object[] EMPTY_ARR = new Object[0];
 
 	public ModelSearchTableContentProvider(final ModelSearchResultPage page) {
 		this.resultPage = page;
@@ -31,17 +32,11 @@ public class ModelSearchTableContentProvider implements IStructuredContentProvid
 	// Once the setInput() method on the viewer is called, it uses the content provider to convert it.
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		if (inputElement != null) {
+		if (inputElement instanceof ModelSearchResult) {
 			// Parse the data
-			final ModelSearchResult msr = (ModelSearchResult) inputElement;
-			int index = 0;
-			// Stupid solution for now
-			final Object[] elements = new Object[msr.getResults().size()]; // Initialize it to the number of hits
-			for (final String s : msr.getResults()) {
-				elements[index] = s;
-				index++;
-			}
-			return elements;
+			result = (ModelSearchResult) inputElement;
+			return result.getResults().toArray();
+
 		}
 		return EMPTY_ARR;
 	}
@@ -52,7 +47,21 @@ public class ModelSearchTableContentProvider implements IStructuredContentProvid
 
 	@Override
 	public void clear() {
+		getViewer().setInput(null);
 		getViewer().refresh();
 	}
 
+	@Override
+	public void elementsChanged(Object[] updatedElements) {
+		// TODO implement updating
+	}
+
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		result = (ModelSearchResult) newInput;
+	}
+
+	AbstractTextSearchResult getSearchResult() {
+		return result;
+	}
 }

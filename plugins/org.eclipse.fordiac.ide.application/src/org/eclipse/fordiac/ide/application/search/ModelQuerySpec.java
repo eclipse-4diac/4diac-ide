@@ -75,9 +75,8 @@ public class ModelQuerySpec {
 
 	@Override
 	public String toString() {
-		return "ModelQuerySpec [searchString=" + searchString + ", isCheckedInstanceName=" + isCheckedInstanceName
-				+ ", isCheckedPinName=" + isCheckedPinName + ", isCheckedType=" + isCheckedType + ", isCheckedComment="
-				+ isCheckedComment + "]";
+		return "searchString=" + searchString + ", in instance name=" + isCheckedInstanceName + ", in pin name="
+				+ isCheckedPinName + ", in type =" + isCheckedType + ", in comment=" + isCheckedComment;
 	}
 
 }

@@ -8,16 +8,18 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Dunja Zivotin, Bianca Wiesmayr
+ *    - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.search;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.search.ui.ISearchQuery;
-import org.eclipse.search.ui.ISearchResultListener;
+import org.eclipse.search.ui.SearchResultEvent;
 import org.eclipse.search.ui.text.AbstractTextSearchResult;
 import org.eclipse.search.ui.text.IEditorMatchAdapter;
 import org.eclipse.search.ui.text.IFileMatchAdapter;
@@ -25,30 +27,24 @@ import org.eclipse.search.ui.text.IFileMatchAdapter;
 public class ModelSearchResult extends AbstractTextSearchResult {
 
 	private final ISearchQuery modelSearchQuery;
+	private final ModelSearchResultEvent searchResEvent;
 
-	private final List<String> results; // Just a dummy example to print things out; TODO: change for the actual search
+	private final List<EObject> results;
 
 	public ModelSearchResult(final ISearchQuery job) {
 		this.modelSearchQuery = job;
 		this.results = new ArrayList<>();
-	}
-
-	@Override
-	public void addListener(final ISearchResultListener l) {
-	}
-
-	@Override
-	public void removeListener(final ISearchResultListener l) {
+		searchResEvent = new ModelSearchResultEvent(this);
 	}
 
 	@Override
 	public String getLabel() {
-		return "Label for ModelSearchResult";
+		return modelSearchQuery.getLabel() + ": " + results.size() + " results"; //$NON-NLS-1$
 	}
 
 	@Override
 	public String getTooltip() {
-		return "Found strings";
+		return "Found model elements";
 	}
 
 	@Override
@@ -61,21 +57,30 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 		return modelSearchQuery;
 	}
 
-	public void addResults(final String res) {
+	public void addResult(final EObject res) {
 		results.add(res);
+		fireChange(getSearchResultEvent(res, ModelSearchResultEvent.ADDED));
 	}
 
-	public List<String> getResults() {
+	private SearchResultEvent getSearchResultEvent(EObject el, int eventKind) {
+		searchResEvent.setKind(eventKind);
+		searchResEvent.setResult(el);
+		return searchResEvent;
+	}
+
+	public List<EObject> getResults() {
 		return results;
 	}
 
 	@Override
 	public IEditorMatchAdapter getEditorMatchAdapter() {
+		// for clicking onto the results
 		return null;
 	}
 
 	@Override
 	public IFileMatchAdapter getFileMatchAdapter() {
+		// For clicking onto the results
 		return null;
 	}
 

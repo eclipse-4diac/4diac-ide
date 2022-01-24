@@ -42,7 +42,6 @@ public class ModelSearchTreeContentProvider implements ITreeContentProvider, IMo
 		return EMPTY_ARR;
 	}
 
-
 	@Override
 	public Object[] getChildren(final Object parentElement) {
 		return null;
@@ -64,6 +63,11 @@ public class ModelSearchTreeContentProvider implements ITreeContentProvider, IMo
 			treeViewer.refresh();
 		}
 
+	}
+
+	@Override
+	public void elementsChanged(Object[] updatedElements) {
+		System.err.println("not supported yet");
 	}
 
 }

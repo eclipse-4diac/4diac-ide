@@ -14,5 +14,6 @@ package org.eclipse.fordiac.ide.application.search;
 
 public interface IModelSearchContentProvider {
 	void clear();
-	// We'll need: void elementsChanged(Object[] updatedElements); at some point
+
+	void elementsChanged(Object[] updatedElements);
 }
