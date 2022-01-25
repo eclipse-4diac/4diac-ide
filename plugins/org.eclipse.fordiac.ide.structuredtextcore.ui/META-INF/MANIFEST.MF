@@ -21,4 +21,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist,
  org.eclipse.fordiac.ide.structuredtextcore.ui.internal,
  org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix
-Bundle-Activator: org.eclipse.fordiac.ide.structuredtextcore.ui.internal.StructuredtextcoreActivator
+Bundle-Activator: org.eclipse.fordiac.ide.structuredtextcore.ui.internal.StructuredtextcoreActivatorEx

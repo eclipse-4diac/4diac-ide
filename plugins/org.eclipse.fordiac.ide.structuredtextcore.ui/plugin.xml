@@ -431,4 +431,12 @@
 			type="text">
 		</fileTypes>
 	</extension>
+	<!-- register the Xtext UI language services to Xtext's registry -->
+	<extension
+		point="org.eclipse.xtext.extension_resourceServiceProvider">
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextcore.ui.DTPExecutableExtensionFactory:org.eclipse.xtext.ui.resource.generic.EmfResourceUIServiceProvider"
+			uriExtension="dtp">
+		</resourceServiceProvider>
+	</extension>
 </plugin>
