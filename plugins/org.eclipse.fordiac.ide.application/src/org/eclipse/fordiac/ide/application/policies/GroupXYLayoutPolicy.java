@@ -15,20 +15,39 @@ package org.eclipse.fordiac.ide.application.policies;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
+import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateRequest;
 
 public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
+
+	@Override
+	protected Command getCreateCommand(final CreateRequest request) {
+		if (null != request) {
+			final Object childClass = request.getNewObjectType();
+			final Point refPoint = ((Rectangle) getConstraintFor(request)).getTopLeft();
+			if (childClass instanceof PaletteEntry) {
+				return new CreateFBElementInGroupCommand((PaletteEntry) childClass, getGroup(), refPoint.x,
+						refPoint.y);
+			}
+		}
+		return null;
+	}
 
 	@Override
 	protected Command getAddCommand(final Request request) {
@@ -62,6 +81,16 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 			return new ModifiedResizeablePolicy();
 		}
 		return new ModifiedNonResizeableEditPolicy();
+	}
+
+	@Override
+	public GraphicalEditPart getHost() {
+		return (GraphicalEditPart) super.getHost();
+	}
+
+	private Group getGroup() {
+		final Object model = getHost().getModel();
+		return (model instanceof GroupContentNetwork) ? ((GroupContentNetwork) model).getGroup() : null;
 	}
 
 }
