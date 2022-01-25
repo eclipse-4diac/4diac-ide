@@ -1008,7 +1008,11 @@ final class ValueOperations {
 	}
 
 	def static asBoolean(Value value) {
-		(value as BoolValue).boolValue
+		switch (value) {
+			AnyBitValue: value.boolValue
+			AnyMagnitudeValue: value.intValue != 0
+			default: throw new UnsupportedOperationException('''The type «value.type.name» is not supported''')
+		}
 	}
 
 	def static int asInteger(Value value) {

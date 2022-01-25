@@ -9,6 +9,9 @@
          <source
                type="org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType">
          </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.BasicFBType">
+         </source>
       </factory>
    </extension>
 </plugin>

@@ -12,20 +12,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.fb
 
+import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.eval.Evaluator
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 
 class FBEvaluatorFactory implements EvaluatorFactory {
 	override createEvaluator(Object source, Variable context, Iterable<Variable> variables, Evaluator parent) {
 		if (source instanceof SimpleFBType) {
 			new SimpleFBEvaluator(source, context, variables, parent)
+		} else if (source instanceof BasicFBType) {
+			new BasicFBEvaluator(source, context, variables, parent)
 		}
 	}
-	
+
 	def static void register() {
 		val factory = new FBEvaluatorFactory
 		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(SimpleFBType, factory)
+		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(BasicFBType, factory)
 	}
 }
