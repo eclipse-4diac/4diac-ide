@@ -498,6 +498,10 @@ final class ValueOperations {
 			}
 	}
 
+	def static asBoolean(Value value) {
+		(value as BoolValue).boolValue
+	}
+
 	def static resultType(DataType first, DataType second) {
 		if(first.isCompatibleWith(second)) second else if(second.isCompatibleWith(first)) first else null
 	}

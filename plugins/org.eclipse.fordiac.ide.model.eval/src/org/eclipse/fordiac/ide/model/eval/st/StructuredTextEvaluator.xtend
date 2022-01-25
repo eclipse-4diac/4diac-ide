@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.st
 
-import java.util.HashMap
+import java.util.Collection
 import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
@@ -78,49 +78,46 @@ final class StructuredTextEvaluator extends AbstractEvaluator {
 	final String text
 	final BaseFBType fbType
 	final boolean singleExpression
-	final Map<VarDeclaration, Variable> localVariables = new HashMap<VarDeclaration, Variable>()
+	final Map<VarDeclaration, Variable> variables
 
-	new(STAlgorithm alg, Evaluator parent) {
+	new(STAlgorithm alg, Collection<Variable> variables, Evaluator parent) {
 		super(parent)
 		this.fbType = alg.rootContainer as BaseFBType
 		this.name = '''«fbType.name».«alg.name»'''
 		this.text = alg.text
 		this.singleExpression = false
+		this.variables = variables.toMap[declaration]
 	}
 
-	new(String text, BaseFBType fbType, Evaluator parent) {
+	new(String text, Collection<Variable> variables, BaseFBType fbType, Evaluator parent) {
 		super(parent)
 		this.name = "anonymous"
 		this.text = text
 		this.fbType = fbType
 		this.singleExpression = true
+		this.variables = variables.toMap[declaration]
 	}
 
 	override getVariables() {
-		localVariables.values.unmodifiableView
+		variables.values.unmodifiableView
 	}
 
 	override getSourceElement() {
 		this.fbType
 	}
 
-	override void evaluate() {
+	override Value evaluate() {
 		val parseResult = parse()
 		val root = parseResult.rootASTElement
 		root.evaluate
-		info('''
-			«name»:
-				«FOR lv : localVariables.entrySet»
-					«lv.key.name» := «lv.value»
-				«ENDFOR»
-		''');
 	}
 
-	def dispatch evaluate(StructuredTextAlgorithm alg) {
+	def dispatch Value evaluate(StructuredTextAlgorithm alg) {
 		alg.trap.evaluateStructuredTextAlgorithm
+		null
 	}
 
-	def dispatch evaluate(Expression expr) {
+	def dispatch Value evaluate(Expression expr) {
 		expr.trap.evaluateExpression
 	}
 
@@ -190,7 +187,7 @@ final class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def private void evaluateLocalVariable(LocalVariable variable) {
-		localVariables.put(variable, new ElementaryVariable(variable, variable.initialValue?.evaluateExpression))
+		variables.put(variable, new ElementaryVariable(variable, variable.initialValue?.evaluateExpression))
 	}
 
 	def private void evaluateStatementList(StatementList list) {
@@ -339,7 +336,7 @@ final class StructuredTextEvaluator extends AbstractEvaluator {
 	def private dispatch Value evaluateExpression(RealLiteral expr) { expr.value.toLRealValue }
 
 	def private dispatch Value evaluateExpression(PrimaryVariable expr) {
-		localVariables.get(expr.^var).value
+		variables.get(expr.^var).value
 	}
 
 	def private dispatch Variable evaluateVariable(
@@ -348,11 +345,7 @@ final class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def private dispatch Variable evaluateVariable(PrimaryVariable variable) {
-		localVariables.get(variable.^var)
-	}
-
-	def private asBoolean(Value value) {
-		(value as BoolValue).boolValue
+		variables.get(variable.^var)
 	}
 
 	static class StructuredTextException extends Exception {

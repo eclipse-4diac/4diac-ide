@@ -13,14 +13,15 @@
 package org.eclipse.fordiac.ide.model.eval.fb;
 
 import java.util.Collection;
+import java.util.Queue;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.xtend2.lib.StringConcatenation;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
@@ -28,14 +29,23 @@ public class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
   private Evaluator algorithmEvaluator;
   
   public SimpleFBEvaluator(final SimpleFBType type, final Evaluator parent) {
-    super(type, parent);
+    this(type, null, parent);
+  }
+  
+  public SimpleFBEvaluator(final SimpleFBType type, final Iterable<Variable> variables, final Evaluator parent) {
+    this(type, null, variables, parent);
+  }
+  
+  public SimpleFBEvaluator(final SimpleFBType type, final Queue<Event> queue, final Iterable<Variable> variables, final Evaluator parent) {
+    super(type, queue, variables, parent);
     StructuredTextEvaluator _switchResult = null;
     Algorithm _algorithm = type.getAlgorithm();
     final Algorithm alg = _algorithm;
     boolean _matched = false;
     if (alg instanceof STAlgorithm) {
       _matched=true;
-      _switchResult = new StructuredTextEvaluator(((STAlgorithm)alg), this);
+      Collection<Variable> _variables = this.getVariables();
+      _switchResult = new StructuredTextEvaluator(((STAlgorithm)alg), _variables, this);
     }
     if (!_matched) {
       StringConcatenation _builder = new StringConcatenation();
@@ -48,16 +58,17 @@ public class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
   }
   
   @Override
-  public void evaluate() {
+  public void evaluate(final Event event) {
     try {
-      this.algorithmEvaluator.evaluate();
+      if (((event == null) || this.getType().getInterfaceList().getEventInputs().contains(event))) {
+        this.algorithmEvaluator.evaluate();
+        Queue<Event> _queue = this.getQueue();
+        if (_queue!=null) {
+          _queue.addAll(this.getType().getInterfaceList().getEventOutputs());
+        }
+      }
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
-  }
-  
-  @Override
-  public Collection<Variable> getVariables() {
-    return CollectionLiterals.<Variable>emptyList();
   }
 }

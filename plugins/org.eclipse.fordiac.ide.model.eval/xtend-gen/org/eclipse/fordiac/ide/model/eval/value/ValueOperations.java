@@ -1469,6 +1469,10 @@ public final class ValueOperations {
     return _xifexpression;
   }
   
+  public static boolean asBoolean(final Value value) {
+    return ((BoolValue) value).boolValue();
+  }
+  
   public static DataType resultType(final DataType first, final DataType second) {
     DataType _xifexpression = null;
     boolean _isCompatibleWith = first.isCompatibleWith(second);

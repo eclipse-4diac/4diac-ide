@@ -13,11 +13,12 @@
 package org.eclipse.fordiac.ide.model.eval;
 
 import java.util.Collection;
+import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 @SuppressWarnings("all")
 public interface Evaluator {
-  void evaluate() throws EvaluatorException, InterruptedException;
+  Value evaluate() throws EvaluatorException, InterruptedException;
   
   String getName();
   

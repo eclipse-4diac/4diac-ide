@@ -12,27 +12,37 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.fb
 
+import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator
+import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 
 class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
 	Evaluator algorithmEvaluator
-	
+
 	new(SimpleFBType type, Evaluator parent) {
-		super(type, parent)
-		algorithmEvaluator = switch(alg : type.algorithm) {
-			STAlgorithm: new StructuredTextEvaluator(alg, this)
+		this(type, null, parent)
+	}
+
+	new(SimpleFBType type, Iterable<Variable> variables, Evaluator parent) {
+		this(type, null, variables, parent)
+	}
+
+	new(SimpleFBType type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
+		super(type, queue, variables, parent)
+		algorithmEvaluator = switch (alg : type.algorithm) {
+			STAlgorithm: new StructuredTextEvaluator(alg, this.variables, this)
 			default: throw new UnsupportedOperationException('''Cannot evaluate algorithm «alg.class»''')
 		}
 	}
-	
-	override evaluate() {
-		algorithmEvaluator.evaluate
-	}
-	
-	override getVariables() {
-		emptyList
+
+	override evaluate(Event event) {
+		if (event === null || type.interfaceList.eventInputs.contains(event)) {
+			algorithmEvaluator.evaluate
+			queue?.addAll(type.interfaceList.eventOutputs)
+		}
 	}
 }

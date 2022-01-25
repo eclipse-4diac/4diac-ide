@@ -16,10 +16,8 @@ import com.google.common.collect.Iterables;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -137,9 +135,9 @@ public final class StructuredTextEvaluator extends AbstractEvaluator {
   
   private final boolean singleExpression;
   
-  private final Map<VarDeclaration, Variable> localVariables = new HashMap<VarDeclaration, Variable>();
+  private final Map<VarDeclaration, Variable> variables;
   
-  public StructuredTextEvaluator(final STAlgorithm alg, final Evaluator parent) {
+  public StructuredTextEvaluator(final STAlgorithm alg, final Collection<Variable> variables, final Evaluator parent) {
     super(parent);
     EObject _rootContainer = EcoreUtil.getRootContainer(alg);
     this.fbType = ((BaseFBType) _rootContainer);
@@ -152,19 +150,27 @@ public final class StructuredTextEvaluator extends AbstractEvaluator {
     this.name = _builder.toString();
     this.text = alg.getText();
     this.singleExpression = false;
+    final Function1<Variable, VarDeclaration> _function = (Variable it) -> {
+      return it.getDeclaration();
+    };
+    this.variables = IterableExtensions.<VarDeclaration, Variable>toMap(variables, _function);
   }
   
-  public StructuredTextEvaluator(final String text, final BaseFBType fbType, final Evaluator parent) {
+  public StructuredTextEvaluator(final String text, final Collection<Variable> variables, final BaseFBType fbType, final Evaluator parent) {
     super(parent);
     this.name = "anonymous";
     this.text = text;
     this.fbType = fbType;
     this.singleExpression = true;
+    final Function1<Variable, VarDeclaration> _function = (Variable it) -> {
+      return it.getDeclaration();
+    };
+    this.variables = IterableExtensions.<VarDeclaration, Variable>toMap(variables, _function);
   }
   
   @Override
   public Collection<Variable> getVariables() {
-    return Collections.<Variable>unmodifiableCollection(this.localVariables.values());
+    return Collections.<Variable>unmodifiableCollection(this.variables.values());
   }
   
   @Override
@@ -173,34 +179,26 @@ public final class StructuredTextEvaluator extends AbstractEvaluator {
   }
   
   @Override
-  public void evaluate() {
-    final IParseResult parseResult = this.parse();
-    final EObject root = parseResult.getRootASTElement();
-    this.evaluate(root);
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append(this.name);
-    _builder.append(":");
-    _builder.newLineIfNotEmpty();
+  public Value evaluate() {
+    Value _xblockexpression = null;
     {
-      Set<Map.Entry<VarDeclaration, Variable>> _entrySet = this.localVariables.entrySet();
-      for(final Map.Entry<VarDeclaration, Variable> lv : _entrySet) {
-        _builder.append("\t");
-        String _name = lv.getKey().getName();
-        _builder.append(_name, "\t");
-        _builder.append(" := ");
-        Variable _value = lv.getValue();
-        _builder.append(_value, "\t");
-        _builder.newLineIfNotEmpty();
-      }
+      final IParseResult parseResult = this.parse();
+      final EObject root = parseResult.getRootASTElement();
+      _xblockexpression = this.evaluate(root);
     }
-    this.info(_builder.toString());
+    return _xblockexpression;
   }
   
-  protected Object _evaluate(final StructuredTextAlgorithm alg) {
-    return this.evaluateStructuredTextAlgorithm(this.<StructuredTextAlgorithm>trap(alg));
+  protected Value _evaluate(final StructuredTextAlgorithm alg) {
+    Object _xblockexpression = null;
+    {
+      this.evaluateStructuredTextAlgorithm(this.<StructuredTextAlgorithm>trap(alg));
+      _xblockexpression = null;
+    }
+    return ((Value)_xblockexpression);
   }
   
-  protected Object _evaluate(final Expression expr) {
+  protected Value _evaluate(final Expression expr) {
     return this.evaluateExpression(this.<Expression>trap(expr));
   }
   
@@ -371,7 +369,7 @@ public final class StructuredTextEvaluator extends AbstractEvaluator {
       _evaluateExpression=this.evaluateExpression(_initialValue);
     }
     ElementaryVariable _elementaryVariable = new ElementaryVariable(variable, _evaluateExpression);
-    this.localVariables.put(variable, _elementaryVariable);
+    this.variables.put(variable, _elementaryVariable);
   }
   
   private void evaluateStatementList(final StatementList list) {
@@ -402,13 +400,13 @@ public final class StructuredTextEvaluator extends AbstractEvaluator {
   }
   
   private void _evaluateStatement(final IfStatement stmt) {
-    boolean _asBoolean = this.asBoolean(this.evaluateExpression(this.<Expression>trap(stmt.getExpression())));
+    boolean _asBoolean = ValueOperations.asBoolean(this.evaluateExpression(this.<Expression>trap(stmt.getExpression())));
     if (_asBoolean) {
       this.evaluateStatementList(stmt.getStatments());
     } else {
       StatementList _elvis = null;
       final Function1<ElseIfClause, Boolean> _function = (ElseIfClause it) -> {
-        return Boolean.valueOf(this.asBoolean(this.evaluateExpression(this.<Expression>trap(it.getExpression()))));
+        return Boolean.valueOf(ValueOperations.asBoolean(this.evaluateExpression(this.<Expression>trap(it.getExpression()))));
       };
       ElseIfClause _findFirst = IterableExtensions.<ElseIfClause>findFirst(stmt.getElseif(), _function);
       StatementList _statements = null;
@@ -518,7 +516,7 @@ public final class StructuredTextEvaluator extends AbstractEvaluator {
   }
   
   private void _evaluateStatement(final WhileStatement stmt) {
-    while (this.asBoolean(this.evaluateExpression(this.<Expression>trap(stmt.getExpression())))) {
+    while (ValueOperations.asBoolean(this.evaluateExpression(this.<Expression>trap(stmt.getExpression())))) {
       try {
         this.evaluateStatementList(stmt.getStatements());
       } catch (final Throwable _t) {
@@ -540,7 +538,7 @@ public final class StructuredTextEvaluator extends AbstractEvaluator {
           throw Exceptions.sneakyThrow(_t);
         }
       }
-    } while((!this.asBoolean(this.evaluateExpression(this.<Expression>trap(stmt.getExpression())))));
+    } while((!ValueOperations.asBoolean(this.evaluateExpression(this.<Expression>trap(stmt.getExpression())))));
   }
   
   private void _evaluateStatement(final ContinueStatement stmt) {
@@ -755,7 +753,7 @@ public final class StructuredTextEvaluator extends AbstractEvaluator {
   }
   
   private Value _evaluateExpression(final PrimaryVariable expr) {
-    return this.localVariables.get(expr.getVar()).getValue();
+    return this.variables.get(expr.getVar()).getValue();
   }
   
   private Variable _evaluateVariable(final org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable variable) {
@@ -765,14 +763,10 @@ public final class StructuredTextEvaluator extends AbstractEvaluator {
   }
   
   private Variable _evaluateVariable(final PrimaryVariable variable) {
-    return this.localVariables.get(variable.getVar());
+    return this.variables.get(variable.getVar());
   }
   
-  private boolean asBoolean(final Value value) {
-    return ((BoolValue) value).boolValue();
-  }
-  
-  public Object evaluate(final EObject expr) {
+  public Value evaluate(final EObject expr) {
     if (expr instanceof Expression) {
       return _evaluate((Expression)expr);
     } else if (expr instanceof StructuredTextAlgorithm) {
