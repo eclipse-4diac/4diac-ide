@@ -13,9 +13,19 @@
  *******************************************************************************/
 package org.eclipse.foridac.ide.structuredtextfunctioneditor.scoping;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
+import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.scoping.IScope;
+import org.eclipse.xtext.scoping.Scopes;
+import org.eclipse.xtext.scoping.impl.SimpleScope;
+import org.eclipse.xtext.util.SimpleAttributeResolver;
 
 /**
  * This class contains custom scoping description.
@@ -26,19 +36,13 @@ import org.eclipse.xtext.scoping.IScope;
 public class STFunctionScopeProvider extends AbstractSTFunctionScopeProvider {
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
-		// TODO: add elementary final data types to global scope returns
-		// if (context instanceof VarDeclaration && reference == STCorePackage.Literals.VAR_DECLARATION__TYPE) {
-		// final STFunction rootElement = (STFunction) EcoreUtil.getRootContainer(context);
-		// final Resource resource = rootElement.eResource();
-		// final IFile functionFile = ResourcesPlugin.getWorkspace().getRoot()
-		// .getFile(new Path(resource.getURI().toPlatformString(true)));
-		// final IProject project = functionFile.getProject();
-		// final TypeLibrary typeLibrary = TypeLibrary.getTypeLibrary(project);
-		// final DataTypeLibrary dataTypeLibrary = typeLibrary.getDataTypeLibrary();
-		// final List<DataType> candidates = dataTypeLibrary.getNonUserDefinedDataTypes();
-		// return new SimpleScope(
-		// Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), false);
-		// }
+		if (context instanceof VarDeclaration && reference == STCorePackage.Literals.VAR_DECLARATION__TYPE) {
+			final IScope globalScope = super.getScope(context, reference);
+			final List<DataType> candidates = DataTypeLibrary.getNonUserDefinedDataTypes();
+			return new SimpleScope(globalScope,
+					Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)),
+					false);
+		}
 		return super.getScope(context, reference);
 	}
 }

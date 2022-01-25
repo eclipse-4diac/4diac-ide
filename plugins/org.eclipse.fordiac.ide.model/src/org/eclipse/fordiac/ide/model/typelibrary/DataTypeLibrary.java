@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -88,6 +89,10 @@ public final class DataTypeLibrary extends ResourceImpl {
 		dataTypes.addAll(derivedTypeMap.values().stream().map(DataTypePaletteEntry::getType).filter(Objects::nonNull)
 				.collect(Collectors.toList()));
 		return dataTypes;
+	}
+
+	public static List<DataType> getNonUserDefinedDataTypes() {
+		return Arrays.asList(IecTypes.ElementaryTypes.getAllElementaryType());
 	}
 
 	/** Gets the data types sorted alphabetically from a to z.
