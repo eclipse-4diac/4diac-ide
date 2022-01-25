@@ -34,8 +34,8 @@ import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.swt.graphics.Point;
 
 public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart {
@@ -94,13 +94,17 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		if (!(editPolicy instanceof ModifiedNonResizeableEditPolicy)) {
 			super.installEditPolicy(key, editPolicy);
 		} else {
-			// install an selection editpolicy which is forwarding selection requests to
-			// parents
-			super.installEditPolicy(key, new ModifiedNonResizeableEditPolicy() {
+			// install an selection editpolicy which is not showing any selection
+			super.installEditPolicy(key, new SelectionEditPolicy() {
 
 				@Override
-				public EditPart getTargetEditPart(final Request request) {
-					return getParent().getTargetEditPart(request);
+				protected void showSelection() {
+					// don't show any selection feedback
+				}
+
+				@Override
+				protected void hideSelection() {
+					// we don't need anything here
 				}
 			});
 		}
@@ -130,7 +134,7 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 			}
 		};
 
-		figure.setOpaque(false);
+		figure.setOpaque(true);
 		figure.setLayoutManager(new XYLayout());
 		return figure;
 	}
