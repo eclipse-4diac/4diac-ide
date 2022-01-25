@@ -12,29 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.simple;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.debug.ui.MainLaunchConfigurationTab;
+import org.eclipse.fordiac.ide.debug.ui.fb.FBLaunchConfigurationTab;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-public class SimpleFBLaunchConfigurationTab extends MainLaunchConfigurationTab {
+public class SimpleFBLaunchConfigurationTab extends FBLaunchConfigurationTab {
 
 	@Override
-	protected boolean filterTargetResource(IResource resource) throws CoreException {
-		if (resource instanceof IFile) {
-			return resource.getFileExtension().equals("fbt")
-					&& TypeLibrary.getPaletteEntryForFile((IFile) resource).getType() instanceof SimpleFBType;
-		} else if (resource instanceof IContainer) {
-			for (IResource child : ((IContainer) resource).members()) {
-				if (filterTargetResource(child)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		return true;
+	protected boolean filterTargetFBType(FBType fbType) throws CoreException {
+		return fbType instanceof SimpleFBType;
 	}
 }

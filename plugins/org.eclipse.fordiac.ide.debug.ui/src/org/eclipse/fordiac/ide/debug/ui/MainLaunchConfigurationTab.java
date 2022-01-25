@@ -40,7 +40,6 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 	private Text resourceText;
 	private Button resourceButton;
-
 	@Override
 	public void createControl(Composite parent) {
 		Composite comp = new Composite(parent, SWT.NONE);
@@ -78,11 +77,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 	}
 
 	private void handleResourceButtonSelected() {
-		IResource resource = null;
-		String resourceString = resourceText.getText();
-		if (resourceString != null && !resourceString.isEmpty()) {
-			resource = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(resourceString));
-		}
+		IResource resource = getResource();
 		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), new WorkbenchLabelProvider(),
 				new WorkbenchContentProvider());
 		dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
@@ -106,8 +101,9 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		Object[] result = dialog.getResult();
 		if (result != null && result.length > 0 && result[0] instanceof IResource) {
 			resource = (IResource) result[0];
-			resourceString = resource.getFullPath().toString();
+			String resourceString = resource.getFullPath().toString();
 			resourceText.setText(resourceString);
+			handleResourceUpdated();
 		}
 	}
 
@@ -131,10 +127,20 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		configuration.setAttribute(LaunchConfigurationAttributes.RESOURCE, resourceString);
 	}
 
+	protected abstract void handleResourceUpdated();
+	
 	protected abstract boolean filterTargetResource(IResource resource) throws CoreException;
 
 	@Override
 	public String getName() {
 		return "Main";
+	}
+
+	protected IResource getResource() {
+		String resourceString = resourceText.getText();
+		if (resourceString != null && !resourceString.isEmpty()) {
+			return ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(resourceString));
+		}
+		return null;
 	}
 }
