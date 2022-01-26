@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -93,11 +94,13 @@ public class ModelSearchQuery implements ISearchQuery {
 			if (matchEObject(fbnetworkElement)) {
 				searchResult.addResult(fbnetworkElement);
 			}
+			if (fbnetworkElement instanceof SubApp) {
+				searchFBNetwork(((SubApp) fbnetworkElement).getSubAppNetwork());
+			}
 
 			if (modelQuerySpec.isCheckedPinName()) {
 				final List<EObject> matchingPins = fbnetworkElement.getInterface().getAllInterfaceElements().stream()
-						.filter(pin -> pin.getName() != null
-								&& pin.getName().contains(modelQuerySpec.getSearchString()))
+						.filter(pin -> pin.getName() != null && compareStrings(pin.getName()))
 						.collect(Collectors.toList());
 				if (!matchingPins.isEmpty()) {
 					searchResult.addResults(matchingPins);
@@ -131,26 +134,31 @@ public class ModelSearchQuery implements ISearchQuery {
 	private boolean matchEObject(final EObject modelElement) {
 		if (modelQuerySpec.isCheckedInstanceName() && modelElement instanceof INamedElement) {
 			final String name = ((INamedElement) modelElement).getName();
-			final boolean matchInstanceName = name != null && name.contains(modelQuerySpec.getSearchString());
+			final boolean matchInstanceName = name != null && compareStrings(name);
 			if (matchInstanceName) {
 				return true;
 			}
 		}
 		if (modelQuerySpec.isCheckedComment() && modelElement instanceof INamedElement) {
 			final String comment = ((INamedElement) modelElement).getComment();
-			final boolean matchComment = comment != null && comment.contains(modelQuerySpec.getSearchString());
+			final boolean matchComment = comment != null && compareStrings(comment);
 			if (matchComment) {
 				return true;
 			}
 		}
 		if (modelQuerySpec.isCheckedType() && modelElement instanceof TypedConfigureableObject) {
 			final LibraryElement type = ((TypedConfigureableObject) modelElement).getType();
-			final boolean matchType = type != null && type.getName().contains(modelQuerySpec.getSearchString());
+			final boolean matchType = type != null && compareStrings(type.getName());
 			if (matchType) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	private boolean compareStrings(final String toTest) {
+		// TODO implement also case-sensitive search
+		return toTest.toLowerCase().contains(modelQuerySpec.getSearchString().toLowerCase());
 	}
 
 	@Override

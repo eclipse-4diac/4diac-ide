@@ -9,14 +9,22 @@
  *
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - add table design, context menu
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.search;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -24,10 +32,12 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.search.ui.IContextMenuConstants;
 import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.text.AbstractTextSearchViewPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
 
 public class ModelSearchResultPage extends AbstractTextSearchViewPage {
@@ -36,8 +46,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	private ModelSearchTableContentProvider contentProvider;
 	private String searchDescription;
 
-	private static final int TYPE_AND_COMMENT_COLUMN_WIDTH = 200;
-	private static final int NAME_COLUMN_WIDTH = 400;
+	private static final int TYPE_COLUMN_WIDTH = 100;
+	private static final int NAME_COMMENT_COLUMN_WIDTH = 200;
 
 	public ModelSearchResultPage() {
 		super(AbstractTextSearchViewPage.FLAG_LAYOUT_FLAT); // FLAG_LAYOUT_FLAT = table layout
@@ -106,9 +116,11 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colKind.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return element.getClass().getSimpleName();
+				final String kind = element.getClass().getSimpleName();
+				return kind.substring(0, kind.length() - 4);
 			}
 		});
+
 		final TableViewerColumn colName = new TableViewerColumn(viewer, SWT.LEAD);
 		colName.getColumn().setText(FordiacMessages.Name);
 
@@ -138,6 +150,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colType.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
+				if (element instanceof FBType) {
+					return ((FBType) element).getName();
+				}
 				if (element instanceof TypedConfigureableObject) {
 					final LibraryElement type = ((TypedConfigureableObject) element).getType();
 					return type != null ? type.getName() : "untyped";
@@ -154,10 +169,10 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	protected static TableLayout createTableLayout(final Table table) {
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(NAME_COLUMN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(TYPE_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(TYPE_COLUMN_WIDTH));
 		return layout;
 	}
 
@@ -165,5 +180,42 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	@Override
 	public StructuredViewer getViewer() {
 		return super.getViewer();
+	}
+
+	public static void showResult(EObject obj) {
+		EObject toOpen = obj;
+		if (obj instanceof VarDeclaration) {
+			toOpen = ((VarDeclaration) obj).getFBNetworkElement();
+		}
+		if (obj instanceof SubApp) {
+			toOpen = ((SubApp) toOpen).getOuterFBNetworkElement();
+		}
+		if (toOpen instanceof FBNetworkElement) {
+			final IEditorPart p = HandlerHelper.openParentEditor((FBNetworkElement) toOpen);
+			HandlerHelper.selectElement(obj, p);
+		}
+		HandlerHelper.openEditor(obj);
+	}
+
+	@Override
+	protected void fillContextMenu(IMenuManager mgr) {
+		final Action showInEditor = new ShowInEditorAction(this);
+		mgr.prependToGroup(IContextMenuConstants.GROUP_SHOW, showInEditor);
+		super.fillContextMenu(mgr);
+	}
+
+	private static class ShowInEditorAction extends Action {
+		private final ModelSearchResultPage fPage;
+
+		public ShowInEditorAction(AbstractTextSearchViewPage page) {
+			super("Show in Editor");
+			setToolTipText("Shows element in the editor");
+			fPage = (ModelSearchResultPage) page;
+		}
+
+		@Override
+		public void run() {
+			showResult((EObject) fPage.getViewer().getStructuredSelection().getFirstElement());
+		}
 	}
 }
