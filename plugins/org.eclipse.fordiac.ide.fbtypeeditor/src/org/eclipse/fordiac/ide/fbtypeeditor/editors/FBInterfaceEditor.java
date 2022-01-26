@@ -39,9 +39,9 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
-import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -225,12 +225,8 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	protected Point getInitialScrollPos() {
-		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
-				.getRootEditPart();
-
+	protected Point getInitialScrollPos(final GraphicalEditPart rootEditPart) {
 		final FreeformViewport rootviewPort = (FreeformViewport) rootEditPart.getFigure();
-
 		return new Point(calculateCenterScrollPos(rootviewPort.getHorizontalRangeModel()),
 				calculateCenterScrollPos(rootviewPort.getVerticalRangeModel()));
 	}
