@@ -20,7 +20,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * @model
  * @generated
  */
-public interface STBranchStatements extends STStatements
+public interface STBranchStatements extends STStatement
 {
   /**
    * Returns the value of the '<em><b>Else</b></em>' containment reference.

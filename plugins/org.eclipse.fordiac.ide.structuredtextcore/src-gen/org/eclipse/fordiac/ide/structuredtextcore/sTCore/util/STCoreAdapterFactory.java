@@ -106,9 +106,9 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createArrayInitElementAdapter();
       }
       @Override
-      public Adapter caseSTStatements(STStatements object)
+      public Adapter caseSTStatement(STStatement object)
       {
-        return createSTStatementsAdapter();
+        return createSTStatementAdapter();
       }
       @Override
       public Adapter caseSTAssignmentStatement(STAssignmentStatement object)
@@ -209,6 +209,11 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
       public Adapter caseSTRING_LITERAL(STRING_LITERAL object)
       {
         return createSTRING_LITERALAdapter();
+      }
+      @Override
+      public Adapter caseSTStatements(STStatements object)
+      {
+        return createSTStatementsAdapter();
       }
       @Override
       public Adapter caseSTSubrangeExpression(STSubrangeExpression object)
@@ -433,16 +438,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements <em>ST Statements</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement <em>ST Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement
    * @generated
    */
-  public Adapter createSTStatementsAdapter()
+  public Adapter createSTStatementAdapter()
   {
     return null;
   }
@@ -743,6 +748,21 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSTRING_LITERALAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements <em>ST Statements</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements
+   * @generated
+   */
+  public Adapter createSTStatementsAdapter()
   {
     return null;
   }

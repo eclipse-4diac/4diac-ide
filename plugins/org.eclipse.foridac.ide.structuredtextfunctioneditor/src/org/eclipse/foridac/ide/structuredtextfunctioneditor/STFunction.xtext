@@ -25,5 +25,5 @@ FunctionDefinition:
 	'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
 		(varDeclarations+=VarDeclaration | varTempDeclarations+=VarTempDeclarationBlock |
 		varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
-		code += STStatements*
+		code += STStatement*
 	'END_FUNCTION';

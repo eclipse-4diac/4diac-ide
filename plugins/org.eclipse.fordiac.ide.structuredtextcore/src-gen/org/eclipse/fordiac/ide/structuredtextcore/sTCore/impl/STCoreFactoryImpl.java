@@ -72,7 +72,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.INITIALIZER_EXPRESSION: return createInitializerExpression();
       case STCorePackage.ARRAY_INITIALIZER_EXPRESSION: return createArrayInitializerExpression();
       case STCorePackage.ARRAY_INIT_ELEMENT: return createArrayInitElement();
-      case STCorePackage.ST_STATEMENTS: return createSTStatements();
+      case STCorePackage.ST_STATEMENT: return createSTStatement();
       case STCorePackage.ST_ASSIGNMENT_STATEMENT: return createSTAssignmentStatement();
       case STCorePackage.ST_BRANCH_STATEMENTS: return createSTBranchStatements();
       case STCorePackage.ST_IF_STATMENT: return createSTIfStatment();
@@ -93,6 +93,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.TIME_OF_DAY_LITERAL: return createTIME_OF_DAY_LITERAL();
       case STCorePackage.DATE_AND_TIME_LITERAL: return createDATE_AND_TIME_LITERAL();
       case STCorePackage.STRING_LITERAL: return createSTRING_LITERAL();
+      case STCorePackage.ST_STATEMENTS: return createSTStatements();
       case STCorePackage.ST_SUBRANGE_EXPRESSION: return createSTSubrangeExpression();
       case STCorePackage.ST_OR_EXPRESSION: return createSTOrExpression();
       case STCorePackage.ST_XOR_EXPRESSION: return createSTXorExpression();
@@ -232,10 +233,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public STStatements createSTStatements()
+  public STStatement createSTStatement()
   {
-    STStatementsImpl stStatements = new STStatementsImpl();
-    return stStatements;
+    STStatementImpl stStatement = new STStatementImpl();
+    return stStatement;
   }
 
   /**
@@ -476,6 +477,18 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     STRING_LITERALImpl strinG_LITERAL = new STRING_LITERALImpl();
     return strinG_LITERAL;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STStatements createSTStatements()
+  {
+    STStatementsImpl stStatements = new STStatementsImpl();
+    return stStatements;
   }
 
   /**

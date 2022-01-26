@@ -50,7 +50,7 @@ public interface STElseIfPart extends EObject
 
   /**
    * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Statements</em>' containment reference list.
@@ -58,6 +58,6 @@ public interface STElseIfPart extends EObject
    * @model containment="true"
    * @generated
    */
-  EList<STStatements> getStatements();
+  EList<STStatement> getStatements();
 
 } // STElseIfPart

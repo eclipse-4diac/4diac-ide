@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatements;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
  *
  * @generated
  */
-public class STLoopStatementsImpl extends STStatementsImpl implements STLoopStatements
+public class STLoopStatementsImpl extends STStatementImpl implements STLoopStatements
 {
   /**
    * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference list.
@@ -42,7 +42,7 @@ public class STLoopStatementsImpl extends STStatementsImpl implements STLoopStat
    * @generated
    * @ordered
    */
-  protected EList<STStatements> statements;
+  protected EList<STStatement> statements;
 
   /**
    * <!-- begin-user-doc -->
@@ -71,11 +71,11 @@ public class STLoopStatementsImpl extends STStatementsImpl implements STLoopStat
    * @generated
    */
   @Override
-  public EList<STStatements> getStatements()
+  public EList<STStatement> getStatements()
   {
     if (statements == null)
     {
-      statements = new EObjectContainmentEList<STStatements>(STStatements.class, this, STCorePackage.ST_LOOP_STATEMENTS__STATEMENTS);
+      statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STCorePackage.ST_LOOP_STATEMENTS__STATEMENTS);
     }
     return statements;
   }
@@ -125,7 +125,7 @@ public class STLoopStatementsImpl extends STStatementsImpl implements STLoopStat
     {
       case STCorePackage.ST_LOOP_STATEMENTS__STATEMENTS:
         getStatements().clear();
-        getStatements().addAll((Collection<? extends STStatements>)newValue);
+        getStatements().addAll((Collection<? extends STStatement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

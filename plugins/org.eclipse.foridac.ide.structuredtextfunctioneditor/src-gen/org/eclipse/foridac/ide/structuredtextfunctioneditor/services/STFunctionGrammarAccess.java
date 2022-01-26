@@ -60,21 +60,21 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		private final Assignment cVarOutputDeclarationsAssignment_3_3 = (Assignment)cAlternatives_3.eContents().get(3);
 		private final RuleCall cVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_3_3_0 = (RuleCall)cVarOutputDeclarationsAssignment_3_3.eContents().get(0);
 		private final Assignment cCodeAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cCodeSTStatementsParserRuleCall_4_0 = (RuleCall)cCodeAssignment_4.eContents().get(0);
+		private final RuleCall cCodeSTStatementParserRuleCall_4_0 = (RuleCall)cCodeAssignment_4.eContents().get(0);
 		private final Keyword cEND_FUNCTIONKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		
 		//FunctionDefinition:
 		//    'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
 		//        (varDeclarations+=VarDeclaration | varTempDeclarations+=VarTempDeclarationBlock |
 		//        varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
-		//        code += STStatements*
+		//        code += STStatement*
 		//    'END_FUNCTION';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
 		//    (varDeclarations+=VarDeclaration | varTempDeclarations+=VarTempDeclarationBlock |
 		//    varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
-		//    code += STStatements*
+		//    code += STStatement*
 		//'END_FUNCTION'
 		public Group getGroup() { return cGroup; }
 		
@@ -130,11 +130,11 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		//VarOutputDeclarationBlock
 		public RuleCall getVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_3_3_0() { return cVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_3_3_0; }
 		
-		//code += STStatements*
+		//code += STStatement*
 		public Assignment getCodeAssignment_4() { return cCodeAssignment_4; }
 		
-		//STStatements
-		public RuleCall getCodeSTStatementsParserRuleCall_4_0() { return cCodeSTStatementsParserRuleCall_4_0; }
+		//STStatement
+		public RuleCall getCodeSTStatementParserRuleCall_4_0() { return cCodeSTStatementParserRuleCall_4_0; }
 		
 		//'END_FUNCTION'
 		public Keyword getEND_FUNCTIONKeyword_5() { return cEND_FUNCTIONKeyword_5; }
@@ -198,7 +198,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//    'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
 	//        (varDeclarations+=VarDeclaration | varTempDeclarations+=VarTempDeclarationBlock |
 	//        varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
-	//        code += STStatements*
+	//        code += STStatement*
 	//    'END_FUNCTION';
 	public FunctionDefinitionElements getFunctionDefinitionAccess() {
 		return pFunctionDefinition;
@@ -209,7 +209,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//Code:
-	//    greetings+=STStatements*;
+	//    statements+=STStatement*;
 	public STCoreGrammarAccess.CodeElements getCodeAccess() {
 		return gaSTCore.getCodeAccess();
 	}
@@ -308,15 +308,15 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getArrayInitElementAccess().getRule();
 	}
 	
-	//STStatements:
+	//STStatement:
 	//    ((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
 	//    {STStatements} ';';
-	public STCoreGrammarAccess.STStatementsElements getSTStatementsAccess() {
-		return gaSTCore.getSTStatementsAccess();
+	public STCoreGrammarAccess.STStatementElements getSTStatementAccess() {
+		return gaSTCore.getSTStatementAccess();
 	}
 	
-	public ParserRule getSTStatementsRule() {
-		return getSTStatementsAccess().getRule();
+	public ParserRule getSTStatementRule() {
+		return getSTStatementAccess().getRule();
 	}
 	
 	//STAssignmentStatement:
@@ -341,7 +341,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STIfStatment:
-	//    'IF' condition=STExpression 'THEN' statements+=STStatements* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
+	//    'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
 	public STCoreGrammarAccess.STIfStatmentElements getSTIfStatmentAccess() {
 		return gaSTCore.getSTIfStatmentAccess();
 	}
@@ -351,7 +351,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STElseIfPart:
-	//    'ELSIF' condition=STExpression 'THEN' statements+=STStatements*;
+	//    'ELSIF' condition=STExpression 'THEN' statements+=STStatement*;
 	public STCoreGrammarAccess.STElseIfPartElements getSTElseIfPartAccess() {
 		return gaSTCore.getSTElseIfPartAccess();
 	}
@@ -371,7 +371,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STCaseCases:
-	//    conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatements*;
+	//    conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatement*;
 	public STCoreGrammarAccess.STCaseCasesElements getSTCaseCasesAccess() {
 		return gaSTCore.getSTCaseCasesAccess();
 	}
@@ -381,7 +381,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STElsePart:
-	//    {STElsePart} 'ELSE' statements+=STStatements*;
+	//    {STElsePart} 'ELSE' statements+=STStatement*;
 	public STCoreGrammarAccess.STElsePartElements getSTElsePartAccess() {
 		return gaSTCore.getSTElsePartAccess();
 	}
@@ -402,7 +402,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	//STForStatement:
 	//    'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
-	//    statements+=STStatements*
+	//    statements+=STStatement*
 	//    'END_FOR';
 	public STCoreGrammarAccess.STForStatementElements getSTForStatementAccess() {
 		return gaSTCore.getSTForStatementAccess();
@@ -414,7 +414,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	//STWhileStatement:
 	//    'WHILE' condition=STExpression 'DO'
-	//    statements+=STStatements*
+	//    statements+=STStatement*
 	//    'END_WHILE';
 	public STCoreGrammarAccess.STWhileStatementElements getSTWhileStatementAccess() {
 		return gaSTCore.getSTWhileStatementAccess();
@@ -426,7 +426,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	//STRepeatStatement:
 	//    'REPEAT'
-	//    statements+=STStatements*
+	//    statements+=STStatement*
 	//    'UNTIL' condition=STExpression
 	//    'END_REPEAT';
 	public STCoreGrammarAccess.STRepeatStatementElements getSTRepeatStatementAccess() {

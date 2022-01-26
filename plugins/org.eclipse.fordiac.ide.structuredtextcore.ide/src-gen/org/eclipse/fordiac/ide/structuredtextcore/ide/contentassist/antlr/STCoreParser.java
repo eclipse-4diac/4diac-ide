@@ -33,8 +33,8 @@ public class STCoreParser extends AbstractContentAssistParser {
 		private static void init(ImmutableMap.Builder<AbstractElement, String> builder, STCoreGrammarAccess grammarAccess) {
 			builder.put(grammarAccess.getVarDeclarationAccess().getAlternatives_3_1(), "rule__VarDeclaration__Alternatives_3_1");
 			builder.put(grammarAccess.getInitializerExpressionAccess().getAlternatives(), "rule__InitializerExpression__Alternatives");
-			builder.put(grammarAccess.getSTStatementsAccess().getAlternatives(), "rule__STStatements__Alternatives");
-			builder.put(grammarAccess.getSTStatementsAccess().getAlternatives_0_0(), "rule__STStatements__Alternatives_0_0");
+			builder.put(grammarAccess.getSTStatementAccess().getAlternatives(), "rule__STStatement__Alternatives");
+			builder.put(grammarAccess.getSTStatementAccess().getAlternatives_0_0(), "rule__STStatement__Alternatives_0_0");
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getOpAlternatives_1_0(), "rule__STAssignmentStatement__OpAlternatives_1_0");
 			builder.put(grammarAccess.getSTBranchStatementsAccess().getAlternatives(), "rule__STBranchStatements__Alternatives");
 			builder.put(grammarAccess.getSTLoopStatementsAccess().getAlternatives(), "rule__STLoopStatements__Alternatives");
@@ -75,8 +75,8 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getArrayInitializerExpressionAccess().getGroup_2(), "rule__ArrayInitializerExpression__Group_2__0");
 			builder.put(grammarAccess.getArrayInitElementAccess().getGroup(), "rule__ArrayInitElement__Group__0");
 			builder.put(grammarAccess.getArrayInitElementAccess().getGroup_1(), "rule__ArrayInitElement__Group_1__0");
-			builder.put(grammarAccess.getSTStatementsAccess().getGroup_0(), "rule__STStatements__Group_0__0");
-			builder.put(grammarAccess.getSTStatementsAccess().getGroup_1(), "rule__STStatements__Group_1__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_0(), "rule__STStatement__Group_0__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_1(), "rule__STStatement__Group_1__0");
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getGroup(), "rule__STAssignmentStatement__Group__0");
 			builder.put(grammarAccess.getSTIfStatmentAccess().getGroup(), "rule__STIfStatment__Group__0");
 			builder.put(grammarAccess.getSTElseIfPartAccess().getGroup(), "rule__STElseIfPart__Group__0");
@@ -155,7 +155,7 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getDATEAccess().getGroup(), "rule__DATE__Group__0");
 			builder.put(grammarAccess.getTIME_OF_DAYAccess().getGroup(), "rule__TIME_OF_DAY__Group__0");
 			builder.put(grammarAccess.getTIME_OF_DAYAccess().getGroup_5(), "rule__TIME_OF_DAY__Group_5__0");
-			builder.put(grammarAccess.getCodeAccess().getGreetingsAssignment(), "rule__Code__GreetingsAssignment");
+			builder.put(grammarAccess.getCodeAccess().getStatementsAssignment(), "rule__Code__StatementsAssignment");
 			builder.put(grammarAccess.getVarDeclarationBlockAccess().getConstantAssignment_2(), "rule__VarDeclarationBlock__ConstantAssignment_2");
 			builder.put(grammarAccess.getVarDeclarationBlockAccess().getVarDeclarationsAssignment_3(), "rule__VarDeclarationBlock__VarDeclarationsAssignment_3");
 			builder.put(grammarAccess.getVarTempDeclarationBlockAccess().getConstantAssignment_2(), "rule__VarTempDeclarationBlock__ConstantAssignment_2");

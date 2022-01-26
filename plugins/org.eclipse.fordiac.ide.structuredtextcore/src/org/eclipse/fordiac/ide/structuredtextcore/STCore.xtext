@@ -20,7 +20,7 @@ import "org.eclipse.fordiac.ide.model.datatype" as datatype
 import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
 
 Code:
-	greetings+=STStatements*;
+	statements+=STStatement*;
 
 VarDeclarationBlock returns VarDeclarationBlock:
 	{VarDeclarationBlock} 'VAR' (constant?='CONSTANT')?
@@ -56,7 +56,7 @@ ArrayInitializerExpression:
 ArrayInitElement:
 	indexOrInitExpression=STExpression ('(' initExpression=STExpression ')')?;
 	
-STStatements:
+STStatement:
 	((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
 	{STStatements} ';';
 
@@ -68,36 +68,36 @@ STBranchStatements:
 	STIfStatment | STCaseStatement;
 
 STIfStatment:
-	'IF' condition=STExpression 'THEN' statements+=STStatements* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
+	'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
 
 STElseIfPart:
-	'ELSIF' condition=STExpression 'THEN' statements+=STStatements*;
+	'ELSIF' condition=STExpression 'THEN' statements+=STStatement*;
 
 STCaseStatement:
 	'CASE' selector=STExpression 'OF' cases+=STCaseCases+ (else=STElsePart)? 'END_CASE';
 
 STCaseCases:
-	conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatements*;
+	conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatement*;
 
 STElsePart:
-	{STElsePart} 'ELSE' statements+=STStatements*;
+	{STElsePart} 'ELSE' statements+=STStatement*;
 
 STLoopStatements:
 	STForStatement | STWhileStatement | STRepeatStatement;
 
 STForStatement:
 	'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
-	statements+=STStatements*
+	statements+=STStatement*
 	'END_FOR';
 
 STWhileStatement:
 	'WHILE' condition=STExpression 'DO'
-	statements+=STStatements*
+	statements+=STStatement*
 	'END_WHILE';
 
 STRepeatStatement:
 	'REPEAT'
-	statements+=STStatements*
+	statements+=STStatement*
 	'UNTIL' condition=STExpression
 	'END_REPEAT';
 

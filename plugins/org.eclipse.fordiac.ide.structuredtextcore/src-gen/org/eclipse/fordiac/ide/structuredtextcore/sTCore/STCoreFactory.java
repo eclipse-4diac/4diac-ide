@@ -78,13 +78,13 @@ public interface STCoreFactory extends EFactory
   ArrayInitElement createArrayInitElement();
 
   /**
-   * Returns a new object of class '<em>ST Statements</em>'.
+   * Returns a new object of class '<em>ST Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Statements</em>'.
+   * @return a new object of class '<em>ST Statement</em>'.
    * @generated
    */
-  STStatements createSTStatements();
+  STStatement createSTStatement();
 
   /**
    * Returns a new object of class '<em>ST Assignment Statement</em>'.
@@ -265,6 +265,15 @@ public interface STCoreFactory extends EFactory
    * @generated
    */
   STRING_LITERAL createSTRING_LITERAL();
+
+  /**
+   * Returns a new object of class '<em>ST Statements</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Statements</em>'.
+   * @generated
+   */
+  STStatements createSTStatements();
 
   /**
    * Returns a new object of class '<em>ST Subrange Expression</em>'.

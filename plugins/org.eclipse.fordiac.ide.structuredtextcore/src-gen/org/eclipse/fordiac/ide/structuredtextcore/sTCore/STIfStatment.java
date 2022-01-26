@@ -49,7 +49,7 @@ public interface STIfStatment extends STBranchStatements
 
   /**
    * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Statements</em>' containment reference list.
@@ -57,7 +57,7 @@ public interface STIfStatment extends STBranchStatements
    * @model containment="true"
    * @generated
    */
-  EList<STStatements> getStatements();
+  EList<STStatement> getStatements();
 
   /**
    * Returns the value of the '<em><b>Elseifs</b></em>' containment reference list.

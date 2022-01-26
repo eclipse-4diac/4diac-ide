@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code#getGreetings <em>Greetings</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code#getStatements <em>Statements</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getCode()
@@ -26,15 +26,15 @@ import org.eclipse.emf.ecore.EObject;
 public interface Code extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Greetings</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements}.
+   * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Greetings</em>' containment reference list.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getCode_Greetings()
+   * @return the value of the '<em>Statements</em>' containment reference list.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getCode_Statements()
    * @model containment="true"
    * @generated
    */
-  EList<STStatements> getGreetings();
+  EList<STStatement> getStatements();
 
 } // Code

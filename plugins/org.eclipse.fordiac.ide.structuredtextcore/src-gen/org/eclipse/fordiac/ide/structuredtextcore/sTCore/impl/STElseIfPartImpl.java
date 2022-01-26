@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 
 /**
  * <!-- begin-user-doc -->
@@ -58,7 +58,7 @@ public class STElseIfPartImpl extends MinimalEObjectImpl.Container implements ST
    * @generated
    * @ordered
    */
-  protected EList<STStatements> statements;
+  protected EList<STStatement> statements;
 
   /**
    * <!-- begin-user-doc -->
@@ -137,11 +137,11 @@ public class STElseIfPartImpl extends MinimalEObjectImpl.Container implements ST
    * @generated
    */
   @Override
-  public EList<STStatements> getStatements()
+  public EList<STStatement> getStatements()
   {
     if (statements == null)
     {
-      statements = new EObjectContainmentEList<STStatements>(STStatements.class, this, STCorePackage.ST_ELSE_IF_PART__STATEMENTS);
+      statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STCorePackage.ST_ELSE_IF_PART__STATEMENTS);
     }
     return statements;
   }
@@ -198,7 +198,7 @@ public class STElseIfPartImpl extends MinimalEObjectImpl.Container implements ST
         return;
       case STCorePackage.ST_ELSE_IF_PART__STATEMENTS:
         getStatements().clear();
-        getStatements().addAll((Collection<? extends STStatements>)newValue);
+        getStatements().addAll((Collection<? extends STStatement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

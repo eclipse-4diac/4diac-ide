@@ -27,18 +27,18 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	public class CodeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.Code");
-		private final Assignment cGreetingsAssignment = (Assignment)rule.eContents().get(1);
-		private final RuleCall cGreetingsSTStatementsParserRuleCall_0 = (RuleCall)cGreetingsAssignment.eContents().get(0);
+		private final Assignment cStatementsAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cStatementsSTStatementParserRuleCall_0 = (RuleCall)cStatementsAssignment.eContents().get(0);
 		
 		//Code:
-		//    greetings+=STStatements*;
+		//    statements+=STStatement*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//greetings+=STStatements*
-		public Assignment getGreetingsAssignment() { return cGreetingsAssignment; }
+		//statements+=STStatement*
+		public Assignment getStatementsAssignment() { return cStatementsAssignment; }
 		
-		//STStatements
-		public RuleCall getGreetingsSTStatementsParserRuleCall_0() { return cGreetingsSTStatementsParserRuleCall_0; }
+		//STStatement
+		public RuleCall getStatementsSTStatementParserRuleCall_0() { return cStatementsSTStatementParserRuleCall_0; }
 	}
 	public class VarDeclarationBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.VarDeclarationBlock");
@@ -509,8 +509,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//')'
 		public Keyword getRightParenthesisKeyword_1_2() { return cRightParenthesisKeyword_1_2; }
 	}
-	public class STStatementsElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStatements");
+	public class STStatementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStatement");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
 		private final Alternatives cAlternatives_0_0 = (Alternatives)cGroup_0.eContents().get(0);
@@ -522,7 +522,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Action cSTStatementsAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		
-		//STStatements:
+		//STStatement:
 		//    ((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
 		//    {STStatements} ';';
 		@Override public ParserRule getRule() { return rule; }
@@ -633,7 +633,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cConditionSTExpressionParserRuleCall_1_0 = (RuleCall)cConditionAssignment_1.eContents().get(0);
 		private final Keyword cTHENKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Assignment cStatementsAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cStatementsSTStatementsParserRuleCall_3_0 = (RuleCall)cStatementsAssignment_3.eContents().get(0);
+		private final RuleCall cStatementsSTStatementParserRuleCall_3_0 = (RuleCall)cStatementsAssignment_3.eContents().get(0);
 		private final Assignment cElseifsAssignment_4 = (Assignment)cGroup.eContents().get(4);
 		private final RuleCall cElseifsSTElseIfPartParserRuleCall_4_0 = (RuleCall)cElseifsAssignment_4.eContents().get(0);
 		private final Assignment cElseAssignment_5 = (Assignment)cGroup.eContents().get(5);
@@ -641,10 +641,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cEND_IFKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
 		//STIfStatment:
-		//    'IF' condition=STExpression 'THEN' statements+=STStatements* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
+		//    'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'IF' condition=STExpression 'THEN' statements+=STStatements* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF'
+		//'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF'
 		public Group getGroup() { return cGroup; }
 		
 		//'IF'
@@ -659,11 +659,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'THEN'
 		public Keyword getTHENKeyword_2() { return cTHENKeyword_2; }
 		
-		//statements+=STStatements*
+		//statements+=STStatement*
 		public Assignment getStatementsAssignment_3() { return cStatementsAssignment_3; }
 		
-		//STStatements
-		public RuleCall getStatementsSTStatementsParserRuleCall_3_0() { return cStatementsSTStatementsParserRuleCall_3_0; }
+		//STStatement
+		public RuleCall getStatementsSTStatementParserRuleCall_3_0() { return cStatementsSTStatementParserRuleCall_3_0; }
 		
 		//elseifs+=(STElseIfPart)*
 		public Assignment getElseifsAssignment_4() { return cElseifsAssignment_4; }
@@ -688,13 +688,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cConditionSTExpressionParserRuleCall_1_0 = (RuleCall)cConditionAssignment_1.eContents().get(0);
 		private final Keyword cTHENKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Assignment cStatementsAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cStatementsSTStatementsParserRuleCall_3_0 = (RuleCall)cStatementsAssignment_3.eContents().get(0);
+		private final RuleCall cStatementsSTStatementParserRuleCall_3_0 = (RuleCall)cStatementsAssignment_3.eContents().get(0);
 		
 		//STElseIfPart:
-		//    'ELSIF' condition=STExpression 'THEN' statements+=STStatements*;
+		//    'ELSIF' condition=STExpression 'THEN' statements+=STStatement*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'ELSIF' condition=STExpression 'THEN' statements+=STStatements*
+		//'ELSIF' condition=STExpression 'THEN' statements+=STStatement*
 		public Group getGroup() { return cGroup; }
 		
 		//'ELSIF'
@@ -709,11 +709,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'THEN'
 		public Keyword getTHENKeyword_2() { return cTHENKeyword_2; }
 		
-		//statements+=STStatements*
+		//statements+=STStatement*
 		public Assignment getStatementsAssignment_3() { return cStatementsAssignment_3; }
 		
-		//STStatements
-		public RuleCall getStatementsSTStatementsParserRuleCall_3_0() { return cStatementsSTStatementsParserRuleCall_3_0; }
+		//STStatement
+		public RuleCall getStatementsSTStatementParserRuleCall_3_0() { return cStatementsSTStatementParserRuleCall_3_0; }
 	}
 	public class STCaseStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STCaseStatement");
@@ -773,13 +773,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cConditionsSTExpressionParserRuleCall_1_1_0 = (RuleCall)cConditionsAssignment_1_1.eContents().get(0);
 		private final Keyword cColonKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Assignment cStatementsAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cStatementsSTStatementsParserRuleCall_3_0 = (RuleCall)cStatementsAssignment_3.eContents().get(0);
+		private final RuleCall cStatementsSTStatementParserRuleCall_3_0 = (RuleCall)cStatementsAssignment_3.eContents().get(0);
 		
 		//STCaseCases:
-		//    conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatements*;
+		//    conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatement*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatements*
+		//conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatement*
 		public Group getGroup() { return cGroup; }
 		
 		//conditions+=STExpression
@@ -803,11 +803,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//':'
 		public Keyword getColonKeyword_2() { return cColonKeyword_2; }
 		
-		//=> statements+=STStatements*
+		//=> statements+=STStatement*
 		public Assignment getStatementsAssignment_3() { return cStatementsAssignment_3; }
 		
-		//STStatements
-		public RuleCall getStatementsSTStatementsParserRuleCall_3_0() { return cStatementsSTStatementsParserRuleCall_3_0; }
+		//STStatement
+		public RuleCall getStatementsSTStatementParserRuleCall_3_0() { return cStatementsSTStatementParserRuleCall_3_0; }
 	}
 	public class STElsePartElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STElsePart");
@@ -815,13 +815,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Action cSTElsePartAction_0 = (Action)cGroup.eContents().get(0);
 		private final Keyword cELSEKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cStatementsAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cStatementsSTStatementsParserRuleCall_2_0 = (RuleCall)cStatementsAssignment_2.eContents().get(0);
+		private final RuleCall cStatementsSTStatementParserRuleCall_2_0 = (RuleCall)cStatementsAssignment_2.eContents().get(0);
 		
 		//STElsePart:
-		//    {STElsePart} 'ELSE' statements+=STStatements*;
+		//    {STElsePart} 'ELSE' statements+=STStatement*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STElsePart} 'ELSE' statements+=STStatements*
+		//{STElsePart} 'ELSE' statements+=STStatement*
 		public Group getGroup() { return cGroup; }
 		
 		//{STElsePart}
@@ -830,11 +830,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'ELSE'
 		public Keyword getELSEKeyword_1() { return cELSEKeyword_1; }
 		
-		//statements+=STStatements*
+		//statements+=STStatement*
 		public Assignment getStatementsAssignment_2() { return cStatementsAssignment_2; }
 		
-		//STStatements
-		public RuleCall getStatementsSTStatementsParserRuleCall_2_0() { return cStatementsSTStatementsParserRuleCall_2_0; }
+		//STStatement
+		public RuleCall getStatementsSTStatementParserRuleCall_2_0() { return cStatementsSTStatementParserRuleCall_2_0; }
 	}
 	public class STLoopStatementsElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STLoopStatements");
@@ -874,17 +874,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cBySTExpressionParserRuleCall_4_1_0 = (RuleCall)cByAssignment_4_1.eContents().get(0);
 		private final Keyword cDOKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		private final Assignment cStatementsAssignment_6 = (Assignment)cGroup.eContents().get(6);
-		private final RuleCall cStatementsSTStatementsParserRuleCall_6_0 = (RuleCall)cStatementsAssignment_6.eContents().get(0);
+		private final RuleCall cStatementsSTStatementParserRuleCall_6_0 = (RuleCall)cStatementsAssignment_6.eContents().get(0);
 		private final Keyword cEND_FORKeyword_7 = (Keyword)cGroup.eContents().get(7);
 		
 		//STForStatement:
 		//    'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
-		//    statements+=STStatements*
+		//    statements+=STStatement*
 		//    'END_FOR';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
-		//statements+=STStatements*
+		//statements+=STStatement*
 		//'END_FOR'
 		public Group getGroup() { return cGroup; }
 		
@@ -921,11 +921,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'DO'
 		public Keyword getDOKeyword_5() { return cDOKeyword_5; }
 		
-		//statements+=STStatements*
+		//statements+=STStatement*
 		public Assignment getStatementsAssignment_6() { return cStatementsAssignment_6; }
 		
-		//STStatements
-		public RuleCall getStatementsSTStatementsParserRuleCall_6_0() { return cStatementsSTStatementsParserRuleCall_6_0; }
+		//STStatement
+		public RuleCall getStatementsSTStatementParserRuleCall_6_0() { return cStatementsSTStatementParserRuleCall_6_0; }
 		
 		//'END_FOR'
 		public Keyword getEND_FORKeyword_7() { return cEND_FORKeyword_7; }
@@ -938,17 +938,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cConditionSTExpressionParserRuleCall_1_0 = (RuleCall)cConditionAssignment_1.eContents().get(0);
 		private final Keyword cDOKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Assignment cStatementsAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cStatementsSTStatementsParserRuleCall_3_0 = (RuleCall)cStatementsAssignment_3.eContents().get(0);
+		private final RuleCall cStatementsSTStatementParserRuleCall_3_0 = (RuleCall)cStatementsAssignment_3.eContents().get(0);
 		private final Keyword cEND_WHILEKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//STWhileStatement:
 		//    'WHILE' condition=STExpression 'DO'
-		//    statements+=STStatements*
+		//    statements+=STStatement*
 		//    'END_WHILE';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//'WHILE' condition=STExpression 'DO'
-		//statements+=STStatements*
+		//statements+=STStatement*
 		//'END_WHILE'
 		public Group getGroup() { return cGroup; }
 		
@@ -964,11 +964,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'DO'
 		public Keyword getDOKeyword_2() { return cDOKeyword_2; }
 		
-		//statements+=STStatements*
+		//statements+=STStatement*
 		public Assignment getStatementsAssignment_3() { return cStatementsAssignment_3; }
 		
-		//STStatements
-		public RuleCall getStatementsSTStatementsParserRuleCall_3_0() { return cStatementsSTStatementsParserRuleCall_3_0; }
+		//STStatement
+		public RuleCall getStatementsSTStatementParserRuleCall_3_0() { return cStatementsSTStatementParserRuleCall_3_0; }
 		
 		//'END_WHILE'
 		public Keyword getEND_WHILEKeyword_4() { return cEND_WHILEKeyword_4; }
@@ -978,7 +978,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cREPEATKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cStatementsAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cStatementsSTStatementsParserRuleCall_1_0 = (RuleCall)cStatementsAssignment_1.eContents().get(0);
+		private final RuleCall cStatementsSTStatementParserRuleCall_1_0 = (RuleCall)cStatementsAssignment_1.eContents().get(0);
 		private final Keyword cUNTILKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Assignment cConditionAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cConditionSTExpressionParserRuleCall_3_0 = (RuleCall)cConditionAssignment_3.eContents().get(0);
@@ -986,13 +986,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//STRepeatStatement:
 		//    'REPEAT'
-		//    statements+=STStatements*
+		//    statements+=STStatement*
 		//    'UNTIL' condition=STExpression
 		//    'END_REPEAT';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//'REPEAT'
-		//statements+=STStatements*
+		//statements+=STStatement*
 		//'UNTIL' condition=STExpression
 		//'END_REPEAT'
 		public Group getGroup() { return cGroup; }
@@ -1000,11 +1000,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'REPEAT'
 		public Keyword getREPEATKeyword_0() { return cREPEATKeyword_0; }
 		
-		//statements+=STStatements*
+		//statements+=STStatement*
 		public Assignment getStatementsAssignment_1() { return cStatementsAssignment_1; }
 		
-		//STStatements
-		public RuleCall getStatementsSTStatementsParserRuleCall_1_0() { return cStatementsSTStatementsParserRuleCall_1_0; }
+		//STStatement
+		public RuleCall getStatementsSTStatementParserRuleCall_1_0() { return cStatementsSTStatementParserRuleCall_1_0; }
 		
 		//'UNTIL'
 		public Keyword getUNTILKeyword_2() { return cUNTILKeyword_2; }
@@ -2617,7 +2617,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final InitializerExpressionElements pInitializerExpression;
 	private final ArrayInitializerExpressionElements pArrayInitializerExpression;
 	private final ArrayInitElementElements pArrayInitElement;
-	private final STStatementsElements pSTStatements;
+	private final STStatementElements pSTStatement;
 	private final STAssignmentStatementElements pSTAssignmentStatement;
 	private final STBranchStatementsElements pSTBranchStatements;
 	private final STIfStatmentElements pSTIfStatment;
@@ -2685,7 +2685,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pInitializerExpression = new InitializerExpressionElements();
 		this.pArrayInitializerExpression = new ArrayInitializerExpressionElements();
 		this.pArrayInitElement = new ArrayInitElementElements();
-		this.pSTStatements = new STStatementsElements();
+		this.pSTStatement = new STStatementElements();
 		this.pSTAssignmentStatement = new STAssignmentStatementElements();
 		this.pSTBranchStatements = new STBranchStatementsElements();
 		this.pSTIfStatment = new STIfStatmentElements();
@@ -2764,7 +2764,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 
 	
 	//Code:
-	//    greetings+=STStatements*;
+	//    statements+=STStatement*;
 	public CodeElements getCodeAccess() {
 		return pCode;
 	}
@@ -2863,15 +2863,15 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getArrayInitElementAccess().getRule();
 	}
 	
-	//STStatements:
+	//STStatement:
 	//    ((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
 	//    {STStatements} ';';
-	public STStatementsElements getSTStatementsAccess() {
-		return pSTStatements;
+	public STStatementElements getSTStatementAccess() {
+		return pSTStatement;
 	}
 	
-	public ParserRule getSTStatementsRule() {
-		return getSTStatementsAccess().getRule();
+	public ParserRule getSTStatementRule() {
+		return getSTStatementAccess().getRule();
 	}
 	
 	//STAssignmentStatement:
@@ -2896,7 +2896,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STIfStatment:
-	//    'IF' condition=STExpression 'THEN' statements+=STStatements* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
+	//    'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
 	public STIfStatmentElements getSTIfStatmentAccess() {
 		return pSTIfStatment;
 	}
@@ -2906,7 +2906,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STElseIfPart:
-	//    'ELSIF' condition=STExpression 'THEN' statements+=STStatements*;
+	//    'ELSIF' condition=STExpression 'THEN' statements+=STStatement*;
 	public STElseIfPartElements getSTElseIfPartAccess() {
 		return pSTElseIfPart;
 	}
@@ -2926,7 +2926,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STCaseCases:
-	//    conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatements*;
+	//    conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatement*;
 	public STCaseCasesElements getSTCaseCasesAccess() {
 		return pSTCaseCases;
 	}
@@ -2936,7 +2936,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STElsePart:
-	//    {STElsePart} 'ELSE' statements+=STStatements*;
+	//    {STElsePart} 'ELSE' statements+=STStatement*;
 	public STElsePartElements getSTElsePartAccess() {
 		return pSTElsePart;
 	}
@@ -2957,7 +2957,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	//STForStatement:
 	//    'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
-	//    statements+=STStatements*
+	//    statements+=STStatement*
 	//    'END_FOR';
 	public STForStatementElements getSTForStatementAccess() {
 		return pSTForStatement;
@@ -2969,7 +2969,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	//STWhileStatement:
 	//    'WHILE' condition=STExpression 'DO'
-	//    statements+=STStatements*
+	//    statements+=STStatement*
 	//    'END_WHILE';
 	public STWhileStatementElements getSTWhileStatementAccess() {
 		return pSTWhileStatement;
@@ -2981,7 +2981,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	//STRepeatStatement:
 	//    'REPEAT'
-	//    statements+=STStatements*
+	//    statements+=STStatement*
 	//    'UNTIL' condition=STExpression
 	//    'END_REPEAT';
 	public STRepeatStatementElements getSTRepeatStatementAccess() {

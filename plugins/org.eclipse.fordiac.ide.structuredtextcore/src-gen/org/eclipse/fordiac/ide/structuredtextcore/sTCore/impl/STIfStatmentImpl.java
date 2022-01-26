@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 
 /**
  * <!-- begin-user-doc -->
@@ -59,7 +59,7 @@ public class STIfStatmentImpl extends STBranchStatementsImpl implements STIfStat
    * @generated
    * @ordered
    */
-  protected EList<STStatements> statements;
+  protected EList<STStatement> statements;
 
   /**
    * The cached value of the '{@link #getElseifs() <em>Elseifs</em>}' containment reference list.
@@ -148,11 +148,11 @@ public class STIfStatmentImpl extends STBranchStatementsImpl implements STIfStat
    * @generated
    */
   @Override
-  public EList<STStatements> getStatements()
+  public EList<STStatement> getStatements()
   {
     if (statements == null)
     {
-      statements = new EObjectContainmentEList<STStatements>(STStatements.class, this, STCorePackage.ST_IF_STATMENT__STATEMENTS);
+      statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STCorePackage.ST_IF_STATMENT__STATEMENTS);
     }
     return statements;
   }
@@ -228,7 +228,7 @@ public class STIfStatmentImpl extends STBranchStatementsImpl implements STIfStat
         return;
       case STCorePackage.ST_IF_STATMENT__STATEMENTS:
         getStatements().clear();
-        getStatements().addAll((Collection<? extends STStatements>)newValue);
+        getStatements().addAll((Collection<? extends STStatement>)newValue);
         return;
       case STCorePackage.ST_IF_STATMENT__ELSEIFS:
         getElseifs().clear();

@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
  *
  * @generated
  */
-public class STBranchStatementsImpl extends STStatementsImpl implements STBranchStatements
+public class STBranchStatementsImpl extends STStatementImpl implements STBranchStatements
 {
   /**
    * The cached value of the '{@link #getElse() <em>Else</em>}' containment reference.

@@ -9,7 +9,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 
@@ -131,7 +131,7 @@ public interface FunctionDefinition extends EObject
 
   /**
    * Returns the value of the '<em><b>Code</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Code</em>' containment reference list.
@@ -139,6 +139,6 @@ public interface FunctionDefinition extends EObject
    * @model containment="true"
    * @generated
    */
-  EList<STStatements> getCode();
+  EList<STStatement> getCode();
 
 } // FunctionDefinition

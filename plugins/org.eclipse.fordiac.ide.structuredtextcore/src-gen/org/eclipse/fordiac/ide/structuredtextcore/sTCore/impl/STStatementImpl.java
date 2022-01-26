@@ -5,24 +5,26 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Statements</b></em>'.
+ * An implementation of the model object '<em><b>ST Statement</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class STStatementsImpl extends STStatementImpl implements STStatements
+public class STStatementImpl extends MinimalEObjectImpl.Container implements STStatement
 {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected STStatementsImpl()
+  protected STStatementImpl()
   {
     super();
   }
@@ -35,7 +37,7 @@ public class STStatementsImpl extends STStatementImpl implements STStatements
   @Override
   protected EClass eStaticClass()
   {
-    return STCorePackage.Literals.ST_STATEMENTS;
+    return STCorePackage.Literals.ST_STATEMENT;
   }
 
-} //STStatementsImpl
+} //STStatementImpl

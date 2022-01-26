@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 
@@ -127,7 +127,7 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * @generated
    * @ordered
    */
-  protected EList<STStatements> code;
+  protected EList<STStatement> code;
 
   /**
    * <!-- begin-user-doc -->
@@ -286,11 +286,11 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * @generated
    */
   @Override
-  public EList<STStatements> getCode()
+  public EList<STStatement> getCode()
   {
     if (code == null)
     {
-      code = new EObjectContainmentEList<STStatements>(STStatements.class, this, STFunctionPackage.FUNCTION_DEFINITION__CODE);
+      code = new EObjectContainmentEList<STStatement>(STStatement.class, this, STFunctionPackage.FUNCTION_DEFINITION__CODE);
     }
     return code;
   }
@@ -383,7 +383,7 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
         return;
       case STFunctionPackage.FUNCTION_DEFINITION__CODE:
         getCode().clear();
-        getCode().addAll((Collection<? extends STStatements>)newValue);
+        getCode().addAll((Collection<? extends STStatement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

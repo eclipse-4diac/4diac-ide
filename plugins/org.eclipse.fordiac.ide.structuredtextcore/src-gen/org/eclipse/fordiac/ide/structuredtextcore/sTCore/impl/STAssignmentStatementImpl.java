@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
  *
  * @generated
  */
-public class STAssignmentStatementImpl extends STStatementsImpl implements STAssignmentStatement
+public class STAssignmentStatementImpl extends STStatementImpl implements STAssignmentStatement
 {
   /**
    * The cached value of the '{@link #getLhs() <em>Lhs</em>}' reference.

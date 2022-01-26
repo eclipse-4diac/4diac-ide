@@ -22,7 +22,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * @model
  * @generated
  */
-public interface STAssignmentStatement extends STStatements
+public interface STAssignmentStatement extends STStatement
 {
   /**
    * Returns the value of the '<em><b>Lhs</b></em>' reference.

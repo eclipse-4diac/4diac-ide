@@ -176,7 +176,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				sequence_STSignumExpression(context, (STSignumExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_STATEMENTS:
-				sequence_STStatements(context, (STStatements) semanticObject); 
+				sequence_STStatement(context, (STStatements) semanticObject); 
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STLiteralExpressions(context, (STStringLiteral) semanticObject); 
@@ -273,7 +273,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     Code returns Code
 	 *
 	 * Constraint:
-	 *     greetings+=STStatements+
+	 *     statements+=STStatement+
 	 */
 	protected void sequence_Code(ISerializationContext context, Code semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -428,7 +428,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatements returns STAssignmentStatement
+	 *     STStatement returns STAssignmentStatement
 	 *     STAssignmentStatement returns STAssignmentStatement
 	 *
 	 * Constraint:
@@ -589,7 +589,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STCaseCases returns STCaseCases
 	 *
 	 * Constraint:
-	 *     (conditions+=STExpression conditions+=STExpression* statements+=STStatements*)
+	 *     (conditions+=STExpression conditions+=STExpression* statements+=STStatement*)
 	 */
 	protected void sequence_STCaseCases(ISerializationContext context, STCaseCases semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -598,7 +598,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatements returns STCaseStatement
+	 *     STStatement returns STCaseStatement
 	 *     STBranchStatements returns STCaseStatement
 	 *     STCaseStatement returns STCaseStatement
 	 *
@@ -650,7 +650,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STElseIfPart returns STElseIfPart
 	 *
 	 * Constraint:
-	 *     (condition=STExpression statements+=STStatements*)
+	 *     (condition=STExpression statements+=STStatement*)
 	 */
 	protected void sequence_STElseIfPart(ISerializationContext context, STElseIfPart semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -662,7 +662,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STElsePart returns STElsePart
 	 *
 	 * Constraint:
-	 *     statements+=STStatements*
+	 *     statements+=STStatement*
 	 */
 	protected void sequence_STElsePart(ISerializationContext context, STElsePart semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -706,12 +706,12 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatements returns STForStatement
+	 *     STStatement returns STForStatement
 	 *     STLoopStatements returns STForStatement
 	 *     STForStatement returns STForStatement
 	 *
 	 * Constraint:
-	 *     (for=STExpression to=STExpression by=STExpression? statements+=STStatements*)
+	 *     (for=STExpression to=STExpression by=STExpression? statements+=STStatement*)
 	 */
 	protected void sequence_STForStatement(ISerializationContext context, STForStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -720,12 +720,12 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatements returns STIfStatment
+	 *     STStatement returns STIfStatment
 	 *     STBranchStatements returns STIfStatment
 	 *     STIfStatment returns STIfStatment
 	 *
 	 * Constraint:
-	 *     (condition=STExpression statements+=STStatements* elseifs+=STElseIfPart* else=STElsePart?)
+	 *     (condition=STExpression statements+=STStatement* elseifs+=STElseIfPart* else=STElsePart?)
 	 */
 	protected void sequence_STIfStatment(ISerializationContext context, STIfStatment semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1169,12 +1169,12 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatements returns STRepeatStatement
+	 *     STStatement returns STRepeatStatement
 	 *     STLoopStatements returns STRepeatStatement
 	 *     STRepeatStatement returns STRepeatStatement
 	 *
 	 * Constraint:
-	 *     (statements+=STStatements* condition=STExpression)
+	 *     (statements+=STStatement* condition=STExpression)
 	 */
 	protected void sequence_STRepeatStatement(ISerializationContext context, STRepeatStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1258,12 +1258,12 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatements returns STStatements
+	 *     STStatement returns STStatements
 	 *
 	 * Constraint:
 	 *     {STStatements}
 	 */
-	protected void sequence_STStatements(ISerializationContext context, STStatements semanticObject) {
+	protected void sequence_STStatement(ISerializationContext context, STStatements semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -1314,12 +1314,12 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatements returns STWhileStatement
+	 *     STStatement returns STWhileStatement
 	 *     STLoopStatements returns STWhileStatement
 	 *     STWhileStatement returns STWhileStatement
 	 *
 	 * Constraint:
-	 *     (condition=STExpression statements+=STStatements*)
+	 *     (condition=STExpression statements+=STStatement*)
 	 */
 	protected void sequence_STWhileStatement(ISerializationContext context, STWhileStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

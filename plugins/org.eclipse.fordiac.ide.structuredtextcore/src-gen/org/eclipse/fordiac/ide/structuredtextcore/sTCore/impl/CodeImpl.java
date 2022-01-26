@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.CodeImpl#getGreetings <em>Greetings</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.CodeImpl#getStatements <em>Statements</em>}</li>
  * </ul>
  *
  * @generated
@@ -37,14 +37,14 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
 public class CodeImpl extends MinimalEObjectImpl.Container implements Code
 {
   /**
-   * The cached value of the '{@link #getGreetings() <em>Greetings</em>}' containment reference list.
+   * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getGreetings()
+   * @see #getStatements()
    * @generated
    * @ordered
    */
-  protected EList<STStatements> greetings;
+  protected EList<STStatement> statements;
 
   /**
    * <!-- begin-user-doc -->
@@ -73,13 +73,13 @@ public class CodeImpl extends MinimalEObjectImpl.Container implements Code
    * @generated
    */
   @Override
-  public EList<STStatements> getGreetings()
+  public EList<STStatement> getStatements()
   {
-    if (greetings == null)
+    if (statements == null)
     {
-      greetings = new EObjectContainmentEList<STStatements>(STStatements.class, this, STCorePackage.CODE__GREETINGS);
+      statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STCorePackage.CODE__STATEMENTS);
     }
-    return greetings;
+    return statements;
   }
 
   /**
@@ -92,8 +92,8 @@ public class CodeImpl extends MinimalEObjectImpl.Container implements Code
   {
     switch (featureID)
     {
-      case STCorePackage.CODE__GREETINGS:
-        return ((InternalEList<?>)getGreetings()).basicRemove(otherEnd, msgs);
+      case STCorePackage.CODE__STATEMENTS:
+        return ((InternalEList<?>)getStatements()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -108,8 +108,8 @@ public class CodeImpl extends MinimalEObjectImpl.Container implements Code
   {
     switch (featureID)
     {
-      case STCorePackage.CODE__GREETINGS:
-        return getGreetings();
+      case STCorePackage.CODE__STATEMENTS:
+        return getStatements();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -125,9 +125,9 @@ public class CodeImpl extends MinimalEObjectImpl.Container implements Code
   {
     switch (featureID)
     {
-      case STCorePackage.CODE__GREETINGS:
-        getGreetings().clear();
-        getGreetings().addAll((Collection<? extends STStatements>)newValue);
+      case STCorePackage.CODE__STATEMENTS:
+        getStatements().clear();
+        getStatements().addAll((Collection<? extends STStatement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -143,8 +143,8 @@ public class CodeImpl extends MinimalEObjectImpl.Container implements Code
   {
     switch (featureID)
     {
-      case STCorePackage.CODE__GREETINGS:
-        getGreetings().clear();
+      case STCorePackage.CODE__STATEMENTS:
+        getStatements().clear();
         return;
     }
     super.eUnset(featureID);
@@ -160,8 +160,8 @@ public class CodeImpl extends MinimalEObjectImpl.Container implements Code
   {
     switch (featureID)
     {
-      case STCorePackage.CODE__GREETINGS:
-        return greetings != null && !greetings.isEmpty();
+      case STCorePackage.CODE__STATEMENTS:
+        return statements != null && !statements.isEmpty();
     }
     return super.eIsSet(featureID);
   }

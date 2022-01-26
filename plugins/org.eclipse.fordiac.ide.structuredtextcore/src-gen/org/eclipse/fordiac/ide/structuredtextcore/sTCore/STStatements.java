@@ -3,7 +3,6 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,6 +14,6 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface STStatements extends EObject
+public interface STStatements extends STStatement
 {
 } // STStatements

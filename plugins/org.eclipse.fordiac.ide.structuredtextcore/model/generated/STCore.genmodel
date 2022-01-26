@@ -15,7 +15,7 @@
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//MultiBitAccessSpecifier/bitAccessShortcut"/>
     </genEnums>
     <genClasses ecoreClass="STCore.ecore#//Code">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//Code/greetings"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//Code/statements"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//VarDeclarationBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclarationBlock/constant"/>
@@ -39,7 +39,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//ArrayInitElement/indexOrInitExpression"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//ArrayInitElement/initExpression"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STStatements"/>
+    <genClasses ecoreClass="STCore.ecore#//STStatement"/>
     <genClasses ecoreClass="STCore.ecore#//STAssignmentStatement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/lhs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STAssignmentStatement/op"/>
@@ -119,6 +119,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRING_LITERAL/keyword"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRING_LITERAL/value"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STStatements"/>
     <genClasses ecoreClass="STCore.ecore#//STSubrangeExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSubrangeExpression/lowerBound"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSubrangeExpression/upperBound"/>

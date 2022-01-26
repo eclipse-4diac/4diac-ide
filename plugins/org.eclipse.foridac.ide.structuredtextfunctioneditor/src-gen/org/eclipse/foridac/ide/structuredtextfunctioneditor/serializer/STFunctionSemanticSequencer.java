@@ -177,7 +177,7 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				sequence_STSignumExpression(context, (STSignumExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_STATEMENTS:
-				sequence_STStatements(context, (STStatements) semanticObject); 
+				sequence_STStatement(context, (STStatements) semanticObject); 
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STLiteralExpressions(context, (STStringLiteral) semanticObject); 
@@ -255,7 +255,7 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 	 *             varInpuDeclarations+=VarInputDeclarationBlock | 
 	 *             varOutputDeclarations+=VarOutputDeclarationBlock
 	 *         )* 
-	 *         code+=STStatements*
+	 *         code+=STStatement*
 	 *     )
 	 */
 	protected void sequence_FunctionDefinition(ISerializationContext context, FunctionDefinition semanticObject) {
