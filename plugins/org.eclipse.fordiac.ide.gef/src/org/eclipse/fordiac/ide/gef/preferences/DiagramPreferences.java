@@ -121,10 +121,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	@Override
 	public boolean performOk() {
+		super.performOk();
 		if (changesOnLabelSize) {
 			changesOnLabelSize = false;
-
-			super.performOk();
 			showMessageBox();
 		}
 		return true;
