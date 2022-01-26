@@ -15,7 +15,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
  *
  * @generated
  */
-public class STContinueImpl extends STExpressionImpl implements STContinue
+public class STContinueImpl extends STStatementImpl implements STContinue
 {
   /**
    * <!-- begin-user-doc -->

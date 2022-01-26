@@ -94,6 +94,9 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.DATE_AND_TIME_LITERAL: return createDATE_AND_TIME_LITERAL();
       case STCorePackage.STRING_LITERAL: return createSTRING_LITERAL();
       case STCorePackage.ST_STATEMENTS: return createSTStatements();
+      case STCorePackage.ST_RETURN: return createSTReturn();
+      case STCorePackage.ST_CONTINUE: return createSTContinue();
+      case STCorePackage.ST_EXIT: return createSTExit();
       case STCorePackage.ST_SUBRANGE_EXPRESSION: return createSTSubrangeExpression();
       case STCorePackage.ST_OR_EXPRESSION: return createSTOrExpression();
       case STCorePackage.ST_XOR_EXPRESSION: return createSTXorExpression();
@@ -106,9 +109,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ST_SIGNUM_EXPRESSION: return createSTSignumExpression();
       case STCorePackage.ST_MEMBER_SELECTION: return createSTMemberSelection();
       case STCorePackage.ST_SYMBOL: return createSTSymbol();
-      case STCorePackage.ST_RETURN: return createSTReturn();
-      case STCorePackage.ST_CONTINUE: return createSTContinue();
-      case STCorePackage.ST_EXIT: return createSTExit();
       case STCorePackage.ST_BOOL_LITERAL: return createSTBoolLiteral();
       case STCorePackage.ST_NUMERIC_LITERAL: return createSTNumericLiteral();
       case STCorePackage.ST_DATE_LITERAL: return createSTDateLiteral();
@@ -497,6 +497,42 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
+  public STReturn createSTReturn()
+  {
+    STReturnImpl stReturn = new STReturnImpl();
+    return stReturn;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STContinue createSTContinue()
+  {
+    STContinueImpl stContinue = new STContinueImpl();
+    return stContinue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STExit createSTExit()
+  {
+    STExitImpl stExit = new STExitImpl();
+    return stExit;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public STSubrangeExpression createSTSubrangeExpression()
   {
     STSubrangeExpressionImpl stSubrangeExpression = new STSubrangeExpressionImpl();
@@ -633,42 +669,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     STSymbolImpl stSymbol = new STSymbolImpl();
     return stSymbol;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STReturn createSTReturn()
-  {
-    STReturnImpl stReturn = new STReturnImpl();
-    return stReturn;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STContinue createSTContinue()
-  {
-    STContinueImpl stContinue = new STContinueImpl();
-    return stContinue;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STExit createSTExit()
-  {
-    STExitImpl stExit = new STExitImpl();
-    return stExit;
   }
 
   /**

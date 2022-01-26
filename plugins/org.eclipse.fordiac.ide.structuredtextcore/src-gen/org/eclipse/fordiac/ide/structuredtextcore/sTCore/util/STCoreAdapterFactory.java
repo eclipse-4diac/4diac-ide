@@ -216,6 +216,21 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTStatementsAdapter();
       }
       @Override
+      public Adapter caseSTReturn(STReturn object)
+      {
+        return createSTReturnAdapter();
+      }
+      @Override
+      public Adapter caseSTContinue(STContinue object)
+      {
+        return createSTContinueAdapter();
+      }
+      @Override
+      public Adapter caseSTExit(STExit object)
+      {
+        return createSTExitAdapter();
+      }
+      @Override
       public Adapter caseSTSubrangeExpression(STSubrangeExpression object)
       {
         return createSTSubrangeExpressionAdapter();
@@ -274,21 +289,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
       public Adapter caseSTSymbol(STSymbol object)
       {
         return createSTSymbolAdapter();
-      }
-      @Override
-      public Adapter caseSTReturn(STReturn object)
-      {
-        return createSTReturnAdapter();
-      }
-      @Override
-      public Adapter caseSTContinue(STContinue object)
-      {
-        return createSTContinueAdapter();
-      }
-      @Override
-      public Adapter caseSTExit(STExit object)
-      {
-        return createSTExitAdapter();
       }
       @Override
       public Adapter caseSTBoolLiteral(STBoolLiteral object)
@@ -768,6 +768,51 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn <em>ST Return</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn
+   * @generated
+   */
+  public Adapter createSTReturnAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue <em>ST Continue</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue
+   * @generated
+   */
+  public Adapter createSTContinueAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit <em>ST Exit</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit
+   * @generated
+   */
+  public Adapter createSTExitAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression <em>ST Subrange Expression</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -943,51 +988,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSTSymbolAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn <em>ST Return</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn
-   * @generated
-   */
-  public Adapter createSTReturnAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue <em>ST Continue</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue
-   * @generated
-   */
-  public Adapter createSTContinueAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit <em>ST Exit</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit
-   * @generated
-   */
-  public Adapter createSTExitAdapter()
   {
     return null;
   }

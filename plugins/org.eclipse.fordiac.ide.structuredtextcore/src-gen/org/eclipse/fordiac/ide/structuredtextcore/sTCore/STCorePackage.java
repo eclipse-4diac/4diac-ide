@@ -1122,6 +1122,63 @@ public interface STCorePackage extends EPackage
   int ST_STATEMENTS_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTReturn()
+   * @generated
+   */
+  int ST_RETURN = 28;
+
+  /**
+   * The number of structural features of the '<em>ST Return</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_RETURN_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STContinueImpl <em>ST Continue</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STContinueImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTContinue()
+   * @generated
+   */
+  int ST_CONTINUE = 29;
+
+  /**
+   * The number of structural features of the '<em>ST Continue</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_CONTINUE_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STExitImpl <em>ST Exit</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STExitImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTExit()
+   * @generated
+   */
+  int ST_EXIT = 30;
+
+  /**
+   * The number of structural features of the '<em>ST Exit</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_EXIT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSubrangeExpressionImpl <em>ST Subrange Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1129,7 +1186,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSubrangeExpression()
    * @generated
    */
-  int ST_SUBRANGE_EXPRESSION = 28;
+  int ST_SUBRANGE_EXPRESSION = 31;
 
   /**
    * The feature id for the '<em><b>Lower Bound</b></em>' containment reference.
@@ -1166,7 +1223,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTOrExpression()
    * @generated
    */
-  int ST_OR_EXPRESSION = 29;
+  int ST_OR_EXPRESSION = 32;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1212,7 +1269,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTXorExpression()
    * @generated
    */
-  int ST_XOR_EXPRESSION = 30;
+  int ST_XOR_EXPRESSION = 33;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1258,7 +1315,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTAndExpression()
    * @generated
    */
-  int ST_AND_EXPRESSION = 31;
+  int ST_AND_EXPRESSION = 34;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1304,7 +1361,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTEqualityExpression()
    * @generated
    */
-  int ST_EQUALITY_EXPRESSION = 32;
+  int ST_EQUALITY_EXPRESSION = 35;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1350,7 +1407,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTComparisonExpression()
    * @generated
    */
-  int ST_COMPARISON_EXPRESSION = 33;
+  int ST_COMPARISON_EXPRESSION = 36;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1396,7 +1453,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTAddSubExpression()
    * @generated
    */
-  int ST_ADD_SUB_EXPRESSION = 34;
+  int ST_ADD_SUB_EXPRESSION = 37;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1442,7 +1499,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTMulDivModExpression()
    * @generated
    */
-  int ST_MUL_DIV_MOD_EXPRESSION = 35;
+  int ST_MUL_DIV_MOD_EXPRESSION = 38;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1488,7 +1545,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTPowerExpression()
    * @generated
    */
-  int ST_POWER_EXPRESSION = 36;
+  int ST_POWER_EXPRESSION = 39;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1534,7 +1591,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSignumExpression()
    * @generated
    */
-  int ST_SIGNUM_EXPRESSION = 37;
+  int ST_SIGNUM_EXPRESSION = 40;
 
   /**
    * The feature id for the '<em><b>Signum</b></em>' attribute.
@@ -1571,7 +1628,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTMemberSelection()
    * @generated
    */
-  int ST_MEMBER_SELECTION = 38;
+  int ST_MEMBER_SELECTION = 41;
 
   /**
    * The feature id for the '<em><b>Receiver</b></em>' containment reference.
@@ -1662,7 +1719,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSymbol()
    * @generated
    */
-  int ST_SYMBOL = 39;
+  int ST_SYMBOL = 42;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' reference.
@@ -1717,63 +1774,6 @@ public interface STCorePackage extends EPackage
    * @ordered
    */
   int ST_SYMBOL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 5;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTReturn()
-   * @generated
-   */
-  int ST_RETURN = 40;
-
-  /**
-   * The number of structural features of the '<em>ST Return</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_RETURN_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STContinueImpl <em>ST Continue</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STContinueImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTContinue()
-   * @generated
-   */
-  int ST_CONTINUE = 41;
-
-  /**
-   * The number of structural features of the '<em>ST Continue</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_CONTINUE_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STExitImpl <em>ST Exit</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STExitImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTExit()
-   * @generated
-   */
-  int ST_EXIT = 42;
-
-  /**
-   * The number of structural features of the '<em>ST Exit</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_EXIT_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl <em>ST Bool Literal</em>}' class.
@@ -2857,6 +2857,36 @@ public interface STCorePackage extends EPackage
   EClass getSTStatements();
 
   /**
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn <em>ST Return</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>ST Return</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn
+   * @generated
+   */
+  EClass getSTReturn();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue <em>ST Continue</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>ST Continue</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue
+   * @generated
+   */
+  EClass getSTContinue();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit <em>ST Exit</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>ST Exit</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit
+   * @generated
+   */
+  EClass getSTExit();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression <em>ST Subrange Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3426,36 +3456,6 @@ public interface STCorePackage extends EPackage
    * @generated
    */
   EReference getSTSymbol_Parameters();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn <em>ST Return</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Return</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn
-   * @generated
-   */
-  EClass getSTReturn();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue <em>ST Continue</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Continue</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue
-   * @generated
-   */
-  EClass getSTContinue();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit <em>ST Exit</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Exit</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit
-   * @generated
-   */
-  EClass getSTExit();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral <em>ST Bool Literal</em>}'.
@@ -4350,6 +4350,36 @@ public interface STCorePackage extends EPackage
     EClass ST_STATEMENTS = eINSTANCE.getSTStatements();
 
     /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTReturn()
+     * @generated
+     */
+    EClass ST_RETURN = eINSTANCE.getSTReturn();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STContinueImpl <em>ST Continue</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STContinueImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTContinue()
+     * @generated
+     */
+    EClass ST_CONTINUE = eINSTANCE.getSTContinue();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STExitImpl <em>ST Exit</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STExitImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTExit()
+     * @generated
+     */
+    EClass ST_EXIT = eINSTANCE.getSTExit();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSubrangeExpressionImpl <em>ST Subrange Expression</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4796,36 +4826,6 @@ public interface STCorePackage extends EPackage
      * @generated
      */
     EReference ST_SYMBOL__PARAMETERS = eINSTANCE.getSTSymbol_Parameters();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTReturn()
-     * @generated
-     */
-    EClass ST_RETURN = eINSTANCE.getSTReturn();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STContinueImpl <em>ST Continue</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STContinueImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTContinue()
-     * @generated
-     */
-    EClass ST_CONTINUE = eINSTANCE.getSTContinue();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STExitImpl <em>ST Exit</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STExitImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTExit()
-     * @generated
-     */
-    EClass ST_EXIT = eINSTANCE.getSTExit();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl <em>ST Bool Literal</em>}' class.

@@ -285,6 +285,30 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case STCorePackage.ST_RETURN:
+      {
+        STReturn stReturn = (STReturn)theEObject;
+        T result = caseSTReturn(stReturn);
+        if (result == null) result = caseSTStatement(stReturn);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case STCorePackage.ST_CONTINUE:
+      {
+        STContinue stContinue = (STContinue)theEObject;
+        T result = caseSTContinue(stContinue);
+        if (result == null) result = caseSTStatement(stContinue);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case STCorePackage.ST_EXIT:
+      {
+        STExit stExit = (STExit)theEObject;
+        T result = caseSTExit(stExit);
+        if (result == null) result = caseSTStatement(stExit);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case STCorePackage.ST_SUBRANGE_EXPRESSION:
       {
         STSubrangeExpression stSubrangeExpression = (STSubrangeExpression)theEObject;
@@ -390,33 +414,6 @@ public class STCoreSwitch<T> extends Switch<T>
         T result = caseSTSymbol(stSymbol);
         if (result == null) result = caseSTExpression(stSymbol);
         if (result == null) result = caseInitializerExpression(stSymbol);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_RETURN:
-      {
-        STReturn stReturn = (STReturn)theEObject;
-        T result = caseSTReturn(stReturn);
-        if (result == null) result = caseSTExpression(stReturn);
-        if (result == null) result = caseInitializerExpression(stReturn);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_CONTINUE:
-      {
-        STContinue stContinue = (STContinue)theEObject;
-        T result = caseSTContinue(stContinue);
-        if (result == null) result = caseSTExpression(stContinue);
-        if (result == null) result = caseInitializerExpression(stContinue);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_EXIT:
-      {
-        STExit stExit = (STExit)theEObject;
-        T result = caseSTExit(stExit);
-        if (result == null) result = caseSTExpression(stExit);
-        if (result == null) result = caseInitializerExpression(stExit);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -936,6 +933,54 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Return</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Return</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTReturn(STReturn object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Continue</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Continue</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTContinue(STContinue object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Exit</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Exit</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTExit(STExit object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>ST Subrange Expression</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1123,54 +1168,6 @@ public class STCoreSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSTSymbol(STSymbol object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Return</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Return</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTReturn(STReturn object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Continue</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Continue</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTContinue(STContinue object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Exit</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Exit</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTExit(STExit object)
   {
     return null;
   }

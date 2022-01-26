@@ -580,6 +580,60 @@ ruleSTStatement returns [EObject current=null]
 				newLeafNode(otherlv_5, grammarAccess.getSTStatementAccess().getSemicolonKeyword_1_1());
 			}
 		)
+		    |
+		(
+			(
+				{
+					$current = forceCreateModelElement(
+						grammarAccess.getSTStatementAccess().getSTReturnAction_2_0(),
+						$current);
+				}
+			)
+			otherlv_7=RETURN
+			{
+				newLeafNode(otherlv_7, grammarAccess.getSTStatementAccess().getRETURNKeyword_2_1());
+			}
+			otherlv_8=Semicolon
+			{
+				newLeafNode(otherlv_8, grammarAccess.getSTStatementAccess().getSemicolonKeyword_2_2());
+			}
+		)
+		    |
+		(
+			(
+				{
+					$current = forceCreateModelElement(
+						grammarAccess.getSTStatementAccess().getSTContinueAction_3_0(),
+						$current);
+				}
+			)
+			otherlv_10=CONTINUE
+			{
+				newLeafNode(otherlv_10, grammarAccess.getSTStatementAccess().getCONTINUEKeyword_3_1());
+			}
+			otherlv_11=Semicolon
+			{
+				newLeafNode(otherlv_11, grammarAccess.getSTStatementAccess().getSemicolonKeyword_3_2());
+			}
+		)
+		    |
+		(
+			(
+				{
+					$current = forceCreateModelElement(
+						grammarAccess.getSTStatementAccess().getSTExitAction_4_0(),
+						$current);
+				}
+			)
+			otherlv_13=EXIT
+			{
+				newLeafNode(otherlv_13, grammarAccess.getSTStatementAccess().getEXITKeyword_4_1());
+			}
+			otherlv_14=Semicolon
+			{
+				newLeafNode(otherlv_14, grammarAccess.getSTStatementAccess().getSemicolonKeyword_4_2());
+			}
+		)
 	)
 ;
 
@@ -2696,48 +2750,6 @@ ruleSTAtomicExpression returns [EObject current=null]
 					newLeafNode(otherlv_12, grammarAccess.getSTAtomicExpressionAccess().getRightParenthesisKeyword_1_4_2());
 				}
 			)?
-		)
-		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTAtomicExpressionAccess().getSTReturnAction_2_0(),
-						$current);
-				}
-			)
-			otherlv_14=RETURN
-			{
-				newLeafNode(otherlv_14, grammarAccess.getSTAtomicExpressionAccess().getRETURNKeyword_2_1());
-			}
-		)
-		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTAtomicExpressionAccess().getSTContinueAction_3_0(),
-						$current);
-				}
-			)
-			otherlv_16=CONTINUE
-			{
-				newLeafNode(otherlv_16, grammarAccess.getSTAtomicExpressionAccess().getCONTINUEKeyword_3_1());
-			}
-		)
-		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTAtomicExpressionAccess().getSTExitAction_4_0(),
-						$current);
-				}
-			)
-			otherlv_18=EXIT
-			{
-				newLeafNode(otherlv_18, grammarAccess.getSTAtomicExpressionAccess().getEXITKeyword_4_1());
-			}
 		)
 	)
 ;

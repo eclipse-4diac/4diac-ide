@@ -276,6 +276,33 @@ public interface STCoreFactory extends EFactory
   STStatements createSTStatements();
 
   /**
+   * Returns a new object of class '<em>ST Return</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Return</em>'.
+   * @generated
+   */
+  STReturn createSTReturn();
+
+  /**
+   * Returns a new object of class '<em>ST Continue</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Continue</em>'.
+   * @generated
+   */
+  STContinue createSTContinue();
+
+  /**
+   * Returns a new object of class '<em>ST Exit</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Exit</em>'.
+   * @generated
+   */
+  STExit createSTExit();
+
+  /**
    * Returns a new object of class '<em>ST Subrange Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -382,33 +409,6 @@ public interface STCoreFactory extends EFactory
    * @generated
    */
   STSymbol createSTSymbol();
-
-  /**
-   * Returns a new object of class '<em>ST Return</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Return</em>'.
-   * @generated
-   */
-  STReturn createSTReturn();
-
-  /**
-   * Returns a new object of class '<em>ST Continue</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Continue</em>'.
-   * @generated
-   */
-  STContinue createSTContinue();
-
-  /**
-   * Returns a new object of class '<em>ST Exit</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Exit</em>'.
-   * @generated
-   */
-  STExit createSTExit();
 
   /**
    * Returns a new object of class '<em>ST Bool Literal</em>'.

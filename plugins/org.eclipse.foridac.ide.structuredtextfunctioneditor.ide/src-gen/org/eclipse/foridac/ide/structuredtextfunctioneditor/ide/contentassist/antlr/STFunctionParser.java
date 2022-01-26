@@ -80,6 +80,9 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getArrayInitElementAccess().getGroup_1(), "rule__ArrayInitElement__Group_1__0");
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_0(), "rule__STStatement__Group_0__0");
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_1(), "rule__STStatement__Group_1__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_2(), "rule__STStatement__Group_2__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_3(), "rule__STStatement__Group_3__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_4(), "rule__STStatement__Group_4__0");
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getGroup(), "rule__STAssignmentStatement__Group__0");
 			builder.put(grammarAccess.getSTIfStatmentAccess().getGroup(), "rule__STIfStatment__Group__0");
 			builder.put(grammarAccess.getSTElseIfPartAccess().getGroup(), "rule__STElseIfPart__Group__0");
@@ -134,9 +137,6 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTAtomicExpressionAccess().getGroup_1_4(), "rule__STAtomicExpression__Group_1_4__0");
 			builder.put(grammarAccess.getSTAtomicExpressionAccess().getGroup_1_4_1(), "rule__STAtomicExpression__Group_1_4_1__0");
 			builder.put(grammarAccess.getSTAtomicExpressionAccess().getGroup_1_4_1_1(), "rule__STAtomicExpression__Group_1_4_1_1__0");
-			builder.put(grammarAccess.getSTAtomicExpressionAccess().getGroup_2(), "rule__STAtomicExpression__Group_2__0");
-			builder.put(grammarAccess.getSTAtomicExpressionAccess().getGroup_3(), "rule__STAtomicExpression__Group_3__0");
-			builder.put(grammarAccess.getSTAtomicExpressionAccess().getGroup_4(), "rule__STAtomicExpression__Group_4__0");
 			builder.put(grammarAccess.getSTLiteralExpressionsAccess().getGroup_0(), "rule__STLiteralExpressions__Group_0__0");
 			builder.put(grammarAccess.getSTLiteralExpressionsAccess().getGroup_1(), "rule__STLiteralExpressions__Group_1__0");
 			builder.put(grammarAccess.getSTLiteralExpressionsAccess().getGroup_2(), "rule__STLiteralExpressions__Group_2__0");

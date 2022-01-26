@@ -122,7 +122,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				sequence_STComparisonExpression(context, (STComparisonExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_CONTINUE:
-				sequence_STAtomicExpression(context, (STContinue) semanticObject); 
+				sequence_STStatement(context, (STContinue) semanticObject); 
 				return; 
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL:
 				sequence_STLiteralExpressions(context, (STDateAndTimeLiteral) semanticObject); 
@@ -140,7 +140,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				sequence_STEqualityExpression(context, (STEqualityExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_EXIT:
-				sequence_STAtomicExpression(context, (STExit) semanticObject); 
+				sequence_STStatement(context, (STExit) semanticObject); 
 				return; 
 			case STCorePackage.ST_FOR_STATEMENT:
 				sequence_STForStatement(context, (STForStatement) semanticObject); 
@@ -170,7 +170,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				sequence_STRepeatStatement(context, (STRepeatStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_RETURN:
-				sequence_STAtomicExpression(context, (STReturn) semanticObject); 
+				sequence_STStatement(context, (STReturn) semanticObject); 
 				return; 
 			case STCorePackage.ST_SIGNUM_EXPRESSION:
 				sequence_STSignumExpression(context, (STSignumExpression) semanticObject); 
@@ -435,111 +435,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     (lhs=[VarDeclaration|ID] (op=':=' | op='=>') rhs=STExpression)
 	 */
 	protected void sequence_STAssignmentStatement(ISerializationContext context, STAssignmentStatement semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STContinue
-	 *     STExpression returns STContinue
-	 *     STSubrangeExpression returns STContinue
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STContinue
-	 *     STOrExpression returns STContinue
-	 *     STOrExpression.STOrExpression_1_0_0 returns STContinue
-	 *     STXorExpression returns STContinue
-	 *     STXorExpression.STXorExpression_1_0_0 returns STContinue
-	 *     STAndExpression returns STContinue
-	 *     STAndExpression.STAndExpression_1_0_0 returns STContinue
-	 *     STEqualityExpression returns STContinue
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STContinue
-	 *     STComparisonExpression returns STContinue
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STContinue
-	 *     STAddSubExpression returns STContinue
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STContinue
-	 *     STMulDivModExpression returns STContinue
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STContinue
-	 *     STPowerExpression returns STContinue
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STContinue
-	 *     STSignumExpression returns STContinue
-	 *     STSelectionExpression returns STContinue
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STContinue
-	 *     STAtomicExpression returns STContinue
-	 *
-	 * Constraint:
-	 *     {STContinue}
-	 */
-	protected void sequence_STAtomicExpression(ISerializationContext context, STContinue semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STExit
-	 *     STExpression returns STExit
-	 *     STSubrangeExpression returns STExit
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STExit
-	 *     STOrExpression returns STExit
-	 *     STOrExpression.STOrExpression_1_0_0 returns STExit
-	 *     STXorExpression returns STExit
-	 *     STXorExpression.STXorExpression_1_0_0 returns STExit
-	 *     STAndExpression returns STExit
-	 *     STAndExpression.STAndExpression_1_0_0 returns STExit
-	 *     STEqualityExpression returns STExit
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STExit
-	 *     STComparisonExpression returns STExit
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STExit
-	 *     STAddSubExpression returns STExit
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STExit
-	 *     STMulDivModExpression returns STExit
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STExit
-	 *     STPowerExpression returns STExit
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STExit
-	 *     STSignumExpression returns STExit
-	 *     STSelectionExpression returns STExit
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STExit
-	 *     STAtomicExpression returns STExit
-	 *
-	 * Constraint:
-	 *     {STExit}
-	 */
-	protected void sequence_STAtomicExpression(ISerializationContext context, STExit semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STReturn
-	 *     STExpression returns STReturn
-	 *     STSubrangeExpression returns STReturn
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STReturn
-	 *     STOrExpression returns STReturn
-	 *     STOrExpression.STOrExpression_1_0_0 returns STReturn
-	 *     STXorExpression returns STReturn
-	 *     STXorExpression.STXorExpression_1_0_0 returns STReturn
-	 *     STAndExpression returns STReturn
-	 *     STAndExpression.STAndExpression_1_0_0 returns STReturn
-	 *     STEqualityExpression returns STReturn
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STReturn
-	 *     STComparisonExpression returns STReturn
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STReturn
-	 *     STAddSubExpression returns STReturn
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STReturn
-	 *     STMulDivModExpression returns STReturn
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STReturn
-	 *     STPowerExpression returns STReturn
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STReturn
-	 *     STSignumExpression returns STReturn
-	 *     STSelectionExpression returns STReturn
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STReturn
-	 *     STAtomicExpression returns STReturn
-	 *
-	 * Constraint:
-	 *     {STReturn}
-	 */
-	protected void sequence_STAtomicExpression(ISerializationContext context, STReturn semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -1252,6 +1147,42 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     ((signum='-' | signum='+' | signum='NOT') expression=STSelectionExpression)
 	 */
 	protected void sequence_STSignumExpression(ISerializationContext context, STSignumExpression semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STStatement returns STContinue
+	 *
+	 * Constraint:
+	 *     {STContinue}
+	 */
+	protected void sequence_STStatement(ISerializationContext context, STContinue semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STStatement returns STExit
+	 *
+	 * Constraint:
+	 *     {STExit}
+	 */
+	protected void sequence_STStatement(ISerializationContext context, STExit semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STStatement returns STReturn
+	 *
+	 * Constraint:
+	 *     {STReturn}
+	 */
+	protected void sequence_STStatement(ISerializationContext context, STReturn semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

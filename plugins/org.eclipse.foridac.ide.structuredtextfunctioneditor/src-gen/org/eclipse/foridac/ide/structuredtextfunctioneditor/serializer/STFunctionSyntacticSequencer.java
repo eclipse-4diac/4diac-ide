@@ -76,9 +76,6 @@ public class STFunctionSyntacticSequencer extends AbstractSyntacticSequencer {
 	 *     '('*
 	 *
 	 * This ambiguous syntax occurs at:
-	 *     (rule start) (ambiguity) 'CONTINUE' (rule start)
-	 *     (rule start) (ambiguity) 'EXIT' (rule start)
-	 *     (rule start) (ambiguity) 'RETURN' (rule start)
 	 *     (rule start) (ambiguity) boolLiteral=BOOL_LITERAL
 	 *     (rule start) (ambiguity) dateLiteral=DATE_LITERAL
 	 *     (rule start) (ambiguity) numericLiteral=NUMERIC_LITERAL

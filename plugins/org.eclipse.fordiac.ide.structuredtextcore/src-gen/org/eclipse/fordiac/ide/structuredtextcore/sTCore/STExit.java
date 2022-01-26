@@ -14,6 +14,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * @model
  * @generated
  */
-public interface STExit extends STExpression
+public interface STExit extends STStatement
 {
 } // STExit

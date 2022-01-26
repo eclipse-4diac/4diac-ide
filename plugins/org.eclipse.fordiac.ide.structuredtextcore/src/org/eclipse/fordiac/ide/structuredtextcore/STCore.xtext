@@ -58,7 +58,10 @@ ArrayInitElement:
 	
 STStatement:
 	((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
-	{STStatements} ';';
+	{STStatements} ';' |
+	{STReturn} 'RETURN' ';' |
+	{STContinue} 'CONTINUE' ';' |
+	{STExit} 'EXIT' ';';
 
 STAssignmentStatement:
 	lhs=[VarDeclaration] op=(':=' | '=>') rhs=STExpression
@@ -153,10 +156,7 @@ enum MultiBitAccessSpecifier:
 STAtomicExpression returns STExpression:
 	'(' STExpression ')' |
 	{STSymbol} (type=[datatype::DataType] '#')? symbol=[VarDeclaration] (bitaccessor=MultibitPartialAccess)? (=>poeInvocation?=
-	'(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? |
-	{STReturn} 'RETURN' |
-	{STContinue} 'CONTINUE' |
-	{STExit} 'EXIT';
+	'(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? ;
 
 STLiteralExpressions returns STExpression:
 	{STBoolLiteral} boolLiteral=BOOL_LITERAL |

@@ -120,6 +120,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRING_LITERAL/value"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStatements"/>
+    <genClasses ecoreClass="STCore.ecore#//STReturn"/>
+    <genClasses ecoreClass="STCore.ecore#//STContinue"/>
+    <genClasses ecoreClass="STCore.ecore#//STExit"/>
     <genClasses ecoreClass="STCore.ecore#//STSubrangeExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSubrangeExpression/lowerBound"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSubrangeExpression/upperBound"/>
@@ -185,9 +188,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STSymbol/poeInvocation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSymbol/parameters"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STReturn"/>
-    <genClasses ecoreClass="STCore.ecore#//STContinue"/>
-    <genClasses ecoreClass="STCore.ecore#//STExit"/>
     <genClasses ecoreClass="STCore.ecore#//STBoolLiteral">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STBoolLiteral/boolLiteral"/>
     </genClasses>

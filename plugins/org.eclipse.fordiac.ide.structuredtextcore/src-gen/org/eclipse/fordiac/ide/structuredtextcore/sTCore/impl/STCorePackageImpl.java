@@ -273,6 +273,27 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass stReturnEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stContinueEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stExitEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass stSubrangeExpressionEClass = null;
 
   /**
@@ -351,27 +372,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   private EClass stSymbolEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stReturnEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stContinueEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stExitEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1405,6 +1405,39 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
+  public EClass getSTReturn()
+  {
+    return stReturnEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getSTContinue()
+  {
+    return stContinueEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getSTExit()
+  {
+    return stExitEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getSTSubrangeExpression()
   {
     return stSubrangeExpressionEClass;
@@ -1988,39 +2021,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getSTReturn()
-  {
-    return stReturnEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getSTContinue()
-  {
-    return stContinueEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getSTExit()
-  {
-    return stExitEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EClass getSTBoolLiteral()
   {
     return stBoolLiteralEClass;
@@ -2321,6 +2321,12 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
 
     stStatementsEClass = createEClass(ST_STATEMENTS);
 
+    stReturnEClass = createEClass(ST_RETURN);
+
+    stContinueEClass = createEClass(ST_CONTINUE);
+
+    stExitEClass = createEClass(ST_EXIT);
+
     stSubrangeExpressionEClass = createEClass(ST_SUBRANGE_EXPRESSION);
     createEReference(stSubrangeExpressionEClass, ST_SUBRANGE_EXPRESSION__LOWER_BOUND);
     createEReference(stSubrangeExpressionEClass, ST_SUBRANGE_EXPRESSION__UPPER_BOUND);
@@ -2385,12 +2391,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEReference(stSymbolEClass, ST_SYMBOL__BITACCESSOR);
     createEAttribute(stSymbolEClass, ST_SYMBOL__POE_INVOCATION);
     createEReference(stSymbolEClass, ST_SYMBOL__PARAMETERS);
-
-    stReturnEClass = createEClass(ST_RETURN);
-
-    stContinueEClass = createEClass(ST_CONTINUE);
-
-    stExitEClass = createEClass(ST_EXIT);
 
     stBoolLiteralEClass = createEClass(ST_BOOL_LITERAL);
     createEReference(stBoolLiteralEClass, ST_BOOL_LITERAL__BOOL_LITERAL);
@@ -2461,6 +2461,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stRepeatStatementEClass.getESuperTypes().add(this.getSTLoopStatements());
     stExpressionEClass.getESuperTypes().add(this.getInitializerExpression());
     stStatementsEClass.getESuperTypes().add(this.getSTStatement());
+    stReturnEClass.getESuperTypes().add(this.getSTStatement());
+    stContinueEClass.getESuperTypes().add(this.getSTStatement());
+    stExitEClass.getESuperTypes().add(this.getSTStatement());
     stSubrangeExpressionEClass.getESuperTypes().add(this.getSTExpression());
     stOrExpressionEClass.getESuperTypes().add(this.getSTExpression());
     stXorExpressionEClass.getESuperTypes().add(this.getSTExpression());
@@ -2473,9 +2476,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stSignumExpressionEClass.getESuperTypes().add(this.getSTExpression());
     stMemberSelectionEClass.getESuperTypes().add(this.getSTExpression());
     stSymbolEClass.getESuperTypes().add(this.getSTExpression());
-    stReturnEClass.getESuperTypes().add(this.getSTExpression());
-    stContinueEClass.getESuperTypes().add(this.getSTExpression());
-    stExitEClass.getESuperTypes().add(this.getSTExpression());
     stBoolLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stNumericLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stDateLiteralEClass.getESuperTypes().add(this.getSTExpression());
@@ -2595,6 +2595,12 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
 
     initEClass(stStatementsEClass, STStatements.class, "STStatements", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+    initEClass(stReturnEClass, STReturn.class, "STReturn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(stContinueEClass, STContinue.class, "STContinue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(stExitEClass, STExit.class, "STExit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
     initEClass(stSubrangeExpressionEClass, STSubrangeExpression.class, "STSubrangeExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTSubrangeExpression_LowerBound(), this.getSTExpression(), null, "lowerBound", null, 0, 1, STSubrangeExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTSubrangeExpression_UpperBound(), this.getSTExpression(), null, "upperBound", null, 0, 1, STSubrangeExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2659,12 +2665,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEReference(getSTSymbol_Bitaccessor(), this.getMultibitPartialAccess(), null, "bitaccessor", null, 0, 1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSTSymbol_PoeInvocation(), ecorePackage.getEBoolean(), "poeInvocation", null, 0, 1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTSymbol_Parameters(), this.getSTExpression(), null, "parameters", null, 0, -1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(stReturnEClass, STReturn.class, "STReturn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-    initEClass(stContinueEClass, STContinue.class, "STContinue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-    initEClass(stExitEClass, STExit.class, "STExit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(stBoolLiteralEClass, STBoolLiteral.class, "STBoolLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTBoolLiteral_BoolLiteral(), this.getBOOL_LITERAL(), null, "boolLiteral", null, 0, 1, STBoolLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

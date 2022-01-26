@@ -15,7 +15,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
  *
  * @generated
  */
-public class STExitImpl extends STExpressionImpl implements STExit
+public class STExitImpl extends STStatementImpl implements STExit
 {
   /**
    * <!-- begin-user-doc -->

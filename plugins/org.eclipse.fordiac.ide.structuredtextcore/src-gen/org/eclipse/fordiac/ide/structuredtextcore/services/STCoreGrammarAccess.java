@@ -521,14 +521,32 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Action cSTStatementsAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
+		private final Action cSTReturnAction_2_0 = (Action)cGroup_2.eContents().get(0);
+		private final Keyword cRETURNKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
+		private final Keyword cSemicolonKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
+		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
+		private final Action cSTContinueAction_3_0 = (Action)cGroup_3.eContents().get(0);
+		private final Keyword cCONTINUEKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
+		private final Keyword cSemicolonKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
+		private final Action cSTExitAction_4_0 = (Action)cGroup_4.eContents().get(0);
+		private final Keyword cEXITKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
+		private final Keyword cSemicolonKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
 		
 		//STStatement:
 		//    ((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
-		//    {STStatements} ';';
+		//    {STStatements} ';' |
+		//    {STReturn} 'RETURN' ';' |
+		//    {STContinue} 'CONTINUE' ';' |
+		//    {STExit} 'EXIT' ';';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
-		//{STStatements} ';'
+		//{STStatements} ';' |
+		//{STReturn} 'RETURN' ';' |
+		//{STContinue} 'CONTINUE' ';' |
+		//{STExit} 'EXIT' ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';'
@@ -557,6 +575,42 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//';'
 		public Keyword getSemicolonKeyword_1_1() { return cSemicolonKeyword_1_1; }
+		
+		//{STReturn} 'RETURN' ';'
+		public Group getGroup_2() { return cGroup_2; }
+		
+		//{STReturn}
+		public Action getSTReturnAction_2_0() { return cSTReturnAction_2_0; }
+		
+		//'RETURN'
+		public Keyword getRETURNKeyword_2_1() { return cRETURNKeyword_2_1; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_2_2() { return cSemicolonKeyword_2_2; }
+		
+		//{STContinue} 'CONTINUE' ';'
+		public Group getGroup_3() { return cGroup_3; }
+		
+		//{STContinue}
+		public Action getSTContinueAction_3_0() { return cSTContinueAction_3_0; }
+		
+		//'CONTINUE'
+		public Keyword getCONTINUEKeyword_3_1() { return cCONTINUEKeyword_3_1; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_3_2() { return cSemicolonKeyword_3_2; }
+		
+		//{STExit} 'EXIT' ';'
+		public Group getGroup_4() { return cGroup_4; }
+		
+		//{STExit}
+		public Action getSTExitAction_4_0() { return cSTExitAction_4_0; }
+		
+		//'EXIT'
+		public Keyword getEXITKeyword_4_1() { return cEXITKeyword_4_1; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_4_2() { return cSemicolonKeyword_4_2; }
 	}
 	public class STAssignmentStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STAssignmentStatement");
@@ -1738,31 +1792,16 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Assignment cParametersAssignment_1_4_1_1_1 = (Assignment)cGroup_1_4_1_1.eContents().get(1);
 		private final RuleCall cParametersSTExpressionParserRuleCall_1_4_1_1_1_0 = (RuleCall)cParametersAssignment_1_4_1_1_1.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_1_4_2 = (Keyword)cGroup_1_4.eContents().get(2);
-		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final Action cSTReturnAction_2_0 = (Action)cGroup_2.eContents().get(0);
-		private final Keyword cRETURNKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
-		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
-		private final Action cSTContinueAction_3_0 = (Action)cGroup_3.eContents().get(0);
-		private final Keyword cCONTINUEKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
-		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
-		private final Action cSTExitAction_4_0 = (Action)cGroup_4.eContents().get(0);
-		private final Keyword cEXITKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
 		
 		//STAtomicExpression returns STExpression:
 		//    '(' STExpression ')' |
 		//    {STSymbol} (type=[datatype::DataType] '#')? symbol=[VarDeclaration] (bitaccessor=MultibitPartialAccess)? (=>poeInvocation?=
-		//    '(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? |
-		//    {STReturn} 'RETURN' |
-		//    {STContinue} 'CONTINUE' |
-		//    {STExit} 'EXIT';
+		//    '(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? ;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//'(' STExpression ')' |
 		//{STSymbol} (type=[datatype::DataType] '#')? symbol=[VarDeclaration] (bitaccessor=MultibitPartialAccess)? (=>poeInvocation?=
-		//'(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? |
-		//{STReturn} 'RETURN' |
-		//{STContinue} 'CONTINUE' |
-		//{STExit} 'EXIT'
+		//'(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')?
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//'(' STExpression ')'
@@ -1848,33 +1887,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//')'
 		public Keyword getRightParenthesisKeyword_1_4_2() { return cRightParenthesisKeyword_1_4_2; }
-		
-		//{STReturn} 'RETURN'
-		public Group getGroup_2() { return cGroup_2; }
-		
-		//{STReturn}
-		public Action getSTReturnAction_2_0() { return cSTReturnAction_2_0; }
-		
-		//'RETURN'
-		public Keyword getRETURNKeyword_2_1() { return cRETURNKeyword_2_1; }
-		
-		//{STContinue} 'CONTINUE'
-		public Group getGroup_3() { return cGroup_3; }
-		
-		//{STContinue}
-		public Action getSTContinueAction_3_0() { return cSTContinueAction_3_0; }
-		
-		//'CONTINUE'
-		public Keyword getCONTINUEKeyword_3_1() { return cCONTINUEKeyword_3_1; }
-		
-		//{STExit} 'EXIT'
-		public Group getGroup_4() { return cGroup_4; }
-		
-		//{STExit}
-		public Action getSTExitAction_4_0() { return cSTExitAction_4_0; }
-		
-		//'EXIT'
-		public Keyword getEXITKeyword_4_1() { return cEXITKeyword_4_1; }
 	}
 	public class STLiteralExpressionsElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STLiteralExpressions");
@@ -2865,7 +2877,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	//STStatement:
 	//    ((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
-	//    {STStatements} ';';
+	//    {STStatements} ';' |
+	//    {STReturn} 'RETURN' ';' |
+	//    {STContinue} 'CONTINUE' ';' |
+	//    {STExit} 'EXIT' ';';
 	public STStatementElements getSTStatementAccess() {
 		return pSTStatement;
 	}
@@ -3142,10 +3157,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	//STAtomicExpression returns STExpression:
 	//    '(' STExpression ')' |
 	//    {STSymbol} (type=[datatype::DataType] '#')? symbol=[VarDeclaration] (bitaccessor=MultibitPartialAccess)? (=>poeInvocation?=
-	//    '(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? |
-	//    {STReturn} 'RETURN' |
-	//    {STContinue} 'CONTINUE' |
-	//    {STExit} 'EXIT';
+	//    '(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? ;
 	public STAtomicExpressionElements getSTAtomicExpressionAccess() {
 		return pSTAtomicExpression;
 	}

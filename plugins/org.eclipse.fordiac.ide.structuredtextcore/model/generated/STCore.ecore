@@ -143,6 +143,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STStatements" eSuperTypes="#//STStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STReturn" eSuperTypes="#//STStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STContinue" eSuperTypes="#//STStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STExit" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STSubrangeExpression" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lowerBound" eType="#//STExpression"
         containment="true"/>
@@ -233,9 +236,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="#//STExpression" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STReturn" eSuperTypes="#//STExpression"/>
-  <eClassifiers xsi:type="ecore:EClass" name="STContinue" eSuperTypes="#//STExpression"/>
-  <eClassifiers xsi:type="ecore:EClass" name="STExit" eSuperTypes="#//STExpression"/>
   <eClassifiers xsi:type="ecore:EClass" name="STBoolLiteral" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="boolLiteral" eType="#//BOOL_LITERAL"
         containment="true"/>

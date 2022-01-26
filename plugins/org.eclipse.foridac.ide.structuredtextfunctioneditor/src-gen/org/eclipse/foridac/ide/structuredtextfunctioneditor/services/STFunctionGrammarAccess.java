@@ -310,7 +310,10 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	//STStatement:
 	//    ((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
-	//    {STStatements} ';';
+	//    {STStatements} ';' |
+	//    {STReturn} 'RETURN' ';' |
+	//    {STContinue} 'CONTINUE' ';' |
+	//    {STExit} 'EXIT' ';';
 	public STCoreGrammarAccess.STStatementElements getSTStatementAccess() {
 		return gaSTCore.getSTStatementAccess();
 	}
@@ -587,10 +590,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//STAtomicExpression returns STExpression:
 	//    '(' STExpression ')' |
 	//    {STSymbol} (type=[datatype::DataType] '#')? symbol=[VarDeclaration] (bitaccessor=MultibitPartialAccess)? (=>poeInvocation?=
-	//    '(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? |
-	//    {STReturn} 'RETURN' |
-	//    {STContinue} 'CONTINUE' |
-	//    {STExit} 'EXIT';
+	//    '(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? ;
 	public STCoreGrammarAccess.STAtomicExpressionElements getSTAtomicExpressionAccess() {
 		return gaSTCore.getSTAtomicExpressionAccess();
 	}

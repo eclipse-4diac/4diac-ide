@@ -14,6 +14,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * @model
  * @generated
  */
-public interface STReturn extends STExpression
+public interface STReturn extends STStatement
 {
 } // STReturn

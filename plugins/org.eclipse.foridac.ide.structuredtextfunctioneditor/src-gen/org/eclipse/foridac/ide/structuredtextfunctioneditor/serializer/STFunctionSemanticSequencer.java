@@ -123,7 +123,7 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				sequence_STComparisonExpression(context, (STComparisonExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_CONTINUE:
-				sequence_STAtomicExpression(context, (STContinue) semanticObject); 
+				sequence_STStatement(context, (STContinue) semanticObject); 
 				return; 
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL:
 				sequence_STLiteralExpressions(context, (STDateAndTimeLiteral) semanticObject); 
@@ -141,7 +141,7 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				sequence_STEqualityExpression(context, (STEqualityExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_EXIT:
-				sequence_STAtomicExpression(context, (STExit) semanticObject); 
+				sequence_STStatement(context, (STExit) semanticObject); 
 				return; 
 			case STCorePackage.ST_FOR_STATEMENT:
 				sequence_STForStatement(context, (STForStatement) semanticObject); 
@@ -171,7 +171,7 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				sequence_STRepeatStatement(context, (STRepeatStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_RETURN:
-				sequence_STAtomicExpression(context, (STReturn) semanticObject); 
+				sequence_STStatement(context, (STReturn) semanticObject); 
 				return; 
 			case STCorePackage.ST_SIGNUM_EXPRESSION:
 				sequence_STSignumExpression(context, (STSignumExpression) semanticObject); 

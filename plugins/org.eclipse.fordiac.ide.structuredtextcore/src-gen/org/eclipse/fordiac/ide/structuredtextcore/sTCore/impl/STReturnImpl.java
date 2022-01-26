@@ -15,7 +15,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn;
  *
  * @generated
  */
-public class STReturnImpl extends STExpressionImpl implements STReturn
+public class STReturnImpl extends STStatementImpl implements STReturn
 {
   /**
    * <!-- begin-user-doc -->

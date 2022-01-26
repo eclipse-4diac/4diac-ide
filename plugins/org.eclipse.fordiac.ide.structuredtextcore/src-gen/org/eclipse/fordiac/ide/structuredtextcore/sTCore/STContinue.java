@@ -14,6 +14,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * @model
  * @generated
  */
-public interface STContinue extends STExpression
+public interface STContinue extends STStatement
 {
 } // STContinue
