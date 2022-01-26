@@ -135,7 +135,6 @@ public enum SystemManager {
 		entry.setFile(systemFile);
 		entry.setType(system);
 		entry.setPalette(system.getPalette());
-		system.setPaletteEntry(entry);
 		saveSystem(system);
 		return system;
 	}

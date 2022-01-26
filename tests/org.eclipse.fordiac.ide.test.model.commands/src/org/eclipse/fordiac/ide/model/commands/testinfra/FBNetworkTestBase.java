@@ -577,7 +577,6 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 			functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 			functionBlock.setName(FUNCTIONBLOCK_NAME);
-
 			functionBlock.setECC(LibraryElementFactory.eINSTANCE.createECC());
 
 			pe.setLabel(FUNCTIONBLOCK_NAME);

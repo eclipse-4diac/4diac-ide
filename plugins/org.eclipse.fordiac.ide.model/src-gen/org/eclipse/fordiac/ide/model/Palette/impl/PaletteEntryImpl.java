@@ -269,13 +269,20 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		return type;
 	}
 
+	@Override
+	public void setType(final LibraryElement newType) {
+		setTypeGen(newType);
+		if (newType != null) {
+			newType.setPaletteEntry(this);
+		}
+	}
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setType(LibraryElement newType) {
+	public void setTypeGen(LibraryElement newType) {
 		LibraryElement oldType = type;
 		type = newType;
 		if (eNotificationRequired())
@@ -344,13 +351,20 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		return typeEditable;
 	}
 
+	@Override
+	public void setTypeEditable(final LibraryElement newTypeEditable) {
+		setTypeEditableGen(newTypeEditable);
+		if (newTypeEditable != null) {
+			newTypeEditable.setPaletteEntry(this);
+		}
+	}
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setTypeEditable(LibraryElement newTypeEditable) {
+	public void setTypeEditableGen(LibraryElement newTypeEditable) {
 		LibraryElement oldTypeEditable = typeEditable;
 		typeEditable = newTypeEditable;
 		if (eNotificationRequired())
