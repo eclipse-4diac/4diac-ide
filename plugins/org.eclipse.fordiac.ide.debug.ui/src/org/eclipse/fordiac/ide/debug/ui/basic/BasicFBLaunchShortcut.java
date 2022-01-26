@@ -10,17 +10,17 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.debug.ui.simple;
+package org.eclipse.fordiac.ide.debug.ui.basic;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.fordiac.ide.debug.simple.SimpleFBLaunchConfigurationAttributes;
+import org.eclipse.fordiac.ide.debug.basic.BasicFBLaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.debug.ui.fb.FBLaunchShortcut;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class SimpleFBLaunchShortcut extends FBLaunchShortcut {
+public class BasicFBLaunchShortcut extends FBLaunchShortcut {
 
 	@Override
 	public void launch(final FBType type, final ILaunchConfiguration configuration, final String mode) {
@@ -33,6 +33,6 @@ public class SimpleFBLaunchShortcut extends FBLaunchShortcut {
 
 	@Override
 	public String getLaunchConfigurationId() {
-		return SimpleFBLaunchConfigurationAttributes.ID;
+		return BasicFBLaunchConfigurationAttributes.ID;
 	}
 }

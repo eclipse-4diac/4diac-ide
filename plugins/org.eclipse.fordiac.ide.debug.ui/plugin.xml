@@ -36,6 +36,39 @@
             </enablement>
          </contextualLaunch>
       </shortcut>
+      <shortcut
+            class="org.eclipse.fordiac.ide.debug.ui.basic.BasicFBLaunchShortcut"
+            id="org.eclipse.fordiac.ide.debug.ui.basicFBShortcut"
+            label="Evaluate Basic FB"
+            modes="run, debug">
+         <contextualLaunch>
+            <contextLabel
+                  label="Run Basic FB"
+                  mode="run">
+            </contextLabel>
+            <contextLabel
+                  label="Debug Basic FB"
+                  mode="debug">
+            </contextLabel>
+            <enablement>
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                        <test
+                              property="org.eclipse.fordiac.ide.typemanagement.fbType"
+                              value="BasicFBType">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -43,6 +76,18 @@
             class="org.eclipse.fordiac.ide.debug.ui.simple.SimpleFBLaunchConfigurationTabGroup"
             id="org.eclipse.fordiac.ide.debug.ui.simpleFBLaunchConfigurationTabGroup"
             type="org.eclipse.fordiac.ide.debug.simpleFBLaunch">
+         <launchMode
+               mode="run">
+         </launchMode>
+         <launchMode
+               mode="debug"
+               perspective="org.eclipse.debug.ui.DebugPerspective">
+         </launchMode>
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.eclipse.fordiac.ide.debug.ui.basic.BasicFBLaunchConfigurationTabGroup"
+            id="org.eclipse.fordiac.ide.debug.ui.basicFBLaunchConfigurationTabGroup"
+            type="org.eclipse.fordiac.ide.debug.basicFBLaunch">
          <launchMode
                mode="run">
          </launchMode>

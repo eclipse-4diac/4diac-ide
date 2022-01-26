@@ -16,7 +16,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.emf.common.ui,
- org.eclipse.emf.edit.ui
+ org.eclipse.emf.edit.ui,
+ org.eclipse.fordiac.ide.ui
 Export-Package: org.eclipse.fordiac.ide.debug.ui,
  org.eclipse.fordiac.ide.debug.ui.fb,
+ org.eclipse.fordiac.ide.debug.ui.basic,
  org.eclipse.fordiac.ide.debug.ui.simple
