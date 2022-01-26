@@ -24,12 +24,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.search.internal.ui.text.SearchResultUpdater;
@@ -41,7 +46,6 @@ import org.eclipse.swt.widgets.Display;
 public class ModelSearchQuery implements ISearchQuery {
 
 	private final ModelQuerySpec modelQuerySpec;
-	private List<AutomationSystem> searchRoot;
 	private ModelSearchResult searchResult;
 
 	public ModelSearchQuery(final ModelQuerySpec modelQuerySpec) {
@@ -51,21 +55,18 @@ public class ModelSearchQuery implements ISearchQuery {
 	@Override
 	public IStatus run(final IProgressMonitor monitor) throws OperationCanceledException {
 		searchResult = getSearchResult();
-		searchRoot = new ArrayList<>();
+		final List<AutomationSystem> searchRootSystems = new ArrayList<>();
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		for (final IProject proj : root.getProjects()) {
 			if (proj.isOpen()) {
-				searchRoot.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
+				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
 			}
 		}
-		// TO DO: populate searchResult with something
-		for (final AutomationSystem sys : searchRoot) {
+		for (final AutomationSystem sys : searchRootSystems) {
 			searchApplications(sys);
+			searchResources(sys);
 			searchTypeLibrary(sys);
-			searchResult.addResult(LibraryElementFactory.eINSTANCE.createApplication());
-			searchResult.addResult(LibraryElementFactory.eINSTANCE.createApplication());
-			searchResult.addResult(LibraryElementFactory.eINSTANCE.createApplication());
 		}
 
 		Display.getDefault()
@@ -74,45 +75,82 @@ public class ModelSearchQuery implements ISearchQuery {
 		return Status.OK_STATUS;
 	}
 
-	private void searchTypeLibrary(final AutomationSystem sys) {
-		final TypeLibrary lib = sys.getTypeLibrary();
-		lib.getProject();
-	}
-
 	private void searchApplications(final AutomationSystem sys) {
-		final EList<Application> apps = sys.getApplication();
-		for (final Application app : apps) {
+		for (final Application app : sys.getApplication()) {
 			searchApplication(app);
 		}
 	}
 
 	private void searchApplication(final Application app) {
-		for (final FBNetworkElement el : app.getFBNetwork().getNetworkElements()) {
+		if (matchEObject(app)) {
+			searchResult.addResult(app);
+		}
+		searchFBNetwork(app.getFBNetwork());
+	}
 
-			final String searchString = modelQuerySpec.getSearchString(); // Get the string user typed in
-			String instance = "";
-			final String pinName = "";
-			FBType type = null;
-			String comment = "";
-
-			if (modelQuerySpec.isCheckedInstanceName() && el.getName() != null) { // [] Instance Name
-				instance = el.getName();
-			}
-			if (modelQuerySpec.isCheckedPinName()) { // [] Pin Name
-				// TO DO - find the pins
-			}
-			if (modelQuerySpec.isCheckedType() && el.getType() != null) { // [] Type
-				type = el.getType();
-			}
-			if (modelQuerySpec.isCheckedComment() && el.getComment() != null) { // [] Comment
-				comment = el.getComment();
+	private void searchFBNetwork(final FBNetwork network) {
+		for (final FBNetworkElement fbnetworkElement : network.getNetworkElements()) {
+			if (matchEObject(fbnetworkElement)) {
+				searchResult.addResult(fbnetworkElement);
 			}
 
-			if (el.getInterfaceElement(searchString) != null) { // if there is such an interface element
-				el.getInterface().getAllInterfaceElements().stream().filter(pin -> searchString.equals(pin.getName()))
+			if (modelQuerySpec.isCheckedPinName()) {
+				final List<EObject> matchingPins = fbnetworkElement.getInterface().getAllInterfaceElements().stream()
+						.filter(pin -> pin.getName() != null
+								&& pin.getName().contains(modelQuerySpec.getSearchString()))
 						.collect(Collectors.toList());
+				if (!matchingPins.isEmpty()) {
+					searchResult.addResults(matchingPins);
+				}
 			}
 		}
+	}
+
+	private void searchResources(AutomationSystem sys) {
+		for (final Device dev : sys.getSystemConfiguration().getDevices()) {
+			if (matchEObject(dev)) {
+				searchResult.addResult(dev);
+			}
+			for (final Resource res : dev.getResource()) {
+				if (matchEObject(res)) {
+					searchResult.addResult(res);
+				}
+			}
+		}
+	}
+
+	private void searchTypeLibrary(final AutomationSystem sys) {
+		final TypeLibrary lib = sys.getTypeLibrary();
+		for (final PaletteEntry entry : lib.getBlockTypeLib().getFbTypes().values()) {
+			if (matchEObject(entry.getType())) {
+				searchResult.addResult(entry.getType());
+			}
+		}
+	}
+
+	private boolean matchEObject(final EObject modelElement) {
+		if (modelQuerySpec.isCheckedInstanceName() && modelElement instanceof INamedElement) {
+			final String name = ((INamedElement) modelElement).getName();
+			final boolean matchInstanceName = name != null && name.contains(modelQuerySpec.getSearchString());
+			if (matchInstanceName) {
+				return true;
+			}
+		}
+		if (modelQuerySpec.isCheckedComment() && modelElement instanceof INamedElement) {
+			final String comment = ((INamedElement) modelElement).getComment();
+			final boolean matchComment = comment != null && comment.contains(modelQuerySpec.getSearchString());
+			if (matchComment) {
+				return true;
+			}
+		}
+		if (modelQuerySpec.isCheckedType() && modelElement instanceof TypedConfigureableObject) {
+			final LibraryElement type = ((TypedConfigureableObject) modelElement).getType();
+			final boolean matchType = type != null && type.getName().contains(modelQuerySpec.getSearchString());
+			if (matchType) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

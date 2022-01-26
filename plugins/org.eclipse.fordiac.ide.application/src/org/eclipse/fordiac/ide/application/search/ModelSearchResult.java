@@ -62,6 +62,11 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 		fireChange(getSearchResultEvent(res, ModelSearchResultEvent.ADDED));
 	}
 
+	public void addResults(List<EObject> res) {
+		results.addAll(res);
+		fireChange(getSearchResultEvent(res.get(0), ModelSearchResultEvent.ADDED));
+	}
+
 	private SearchResultEvent getSearchResultEvent(EObject el, int eventKind) {
 		searchResEvent.setKind(eventKind);
 		searchResEvent.setResult(el);

@@ -25,7 +25,6 @@ import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class ModelSearchPage extends DialogPage implements ISearchPage {
@@ -34,17 +33,12 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	public static final String ID = "ModelSearchPage"; //$NON-NLS-1$
 
 	private ISearchPageContainer container;
-	private Label label;
 	private Button instanceName;
 	private Button pinName;
 	private Button type;
 	private Button comment;
 	private Text query;
 	private Composite composite;
-
-	public Label getLabel() {
-		return label;
-	}
 
 	public Button getInstanceName() {
 		return instanceName;
@@ -93,8 +87,9 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		comment.setSelection(true);
 
 		// Text box for the actual search
-		labelFactory.text("Containing Text:").create(composite);
+		labelFactory.text("Containing Text:").create(composite); 
 		query = WidgetFactory.text(SWT.BORDER).message("Type query").create(composite);
+		query.setFocus();
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(query);
 		setControl(composite);
 	}

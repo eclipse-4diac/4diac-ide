@@ -16,10 +16,10 @@ package org.eclipse.fordiac.ide.application.search;
 public class ModelQuerySpec {
 
 	private String searchString;
-	private boolean isCheckedInstanceName;
-	private boolean isCheckedPinName;
-	private boolean isCheckedType;
-	private boolean isCheckedComment;
+	private boolean checkInstanceName;
+	private boolean checkPinName;
+	private boolean checkType;
+	private boolean checkComments;
 
 	public ModelQuerySpec() {
 	}
@@ -27,10 +27,10 @@ public class ModelQuerySpec {
 	public ModelQuerySpec(final String searchString, final boolean isCheckedInstanceName,
 			final boolean isCheckedPinName, final boolean isCheckedType, final boolean isCheckedComment) {
 		this.searchString = searchString;
-		this.isCheckedInstanceName = isCheckedInstanceName;
-		this.isCheckedPinName = isCheckedPinName;
-		this.isCheckedType = isCheckedType;
-		this.isCheckedComment = isCheckedComment;
+		this.checkInstanceName = isCheckedInstanceName;
+		this.checkPinName = isCheckedPinName;
+		this.checkType = isCheckedType;
+		this.checkComments = isCheckedComment;
 	}
 
 	public String getSearchString() {
@@ -38,19 +38,19 @@ public class ModelQuerySpec {
 	}
 
 	public boolean isCheckedInstanceName() {
-		return isCheckedInstanceName;
+		return checkInstanceName;
 	}
 
 	public boolean isCheckedPinName() {
-		return isCheckedPinName;
+		return checkPinName;
 	}
 
 	public boolean isCheckedType() {
-		return isCheckedType;
+		return checkType;
 	}
 
 	public boolean isCheckedComment() {
-		return isCheckedComment;
+		return checkComments;
 	}
 
 	public void setSearchString(final String searchString) {
@@ -58,25 +58,25 @@ public class ModelQuerySpec {
 	}
 
 	public void setCheckedInstanceName(final boolean isCheckedInstanceName) {
-		this.isCheckedInstanceName = isCheckedInstanceName;
+		this.checkInstanceName = isCheckedInstanceName;
 	}
 
 	public void setCheckedPinName(final boolean isCheckedPinName) {
-		this.isCheckedPinName = isCheckedPinName;
+		this.checkPinName = isCheckedPinName;
 	}
 
 	public void setCheckedType(final boolean isCheckedType) {
-		this.isCheckedType = isCheckedType;
+		this.checkType = isCheckedType;
 	}
 
 	public void setCheckedComment(final boolean isCheckedComment) {
-		this.isCheckedComment = isCheckedComment;
+		this.checkComments = isCheckedComment;
 	}
 
 	@Override
 	public String toString() {
-		return "searchString=" + searchString + ", in instance name=" + isCheckedInstanceName + ", in pin name="
-				+ isCheckedPinName + ", in type =" + isCheckedType + ", in comment=" + isCheckedComment;
+		return "searchString=" + searchString + ", in instance name=" + checkInstanceName + ", in pin name="
+				+ checkPinName + ", in type =" + checkType + ", in comment=" + checkComments;
 	}
 
 }
