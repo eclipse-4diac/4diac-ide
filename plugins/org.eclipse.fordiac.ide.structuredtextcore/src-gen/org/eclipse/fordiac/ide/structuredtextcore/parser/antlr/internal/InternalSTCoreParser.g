@@ -676,33 +676,10 @@ ruleSTAssignmentStatement returns [EObject current=null]
 				}
 			)
 		)
-		(
-			(
-				(
-					lv_op_1_1=ColonEqualsSign
-					{
-						newLeafNode(lv_op_1_1, grammarAccess.getSTAssignmentStatementAccess().getOpColonEqualsSignKeyword_1_0_0());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getSTAssignmentStatementRule());
-						}
-						setWithLastConsumed($current, "op", lv_op_1_1, null);
-					}
-					    |
-					lv_op_1_2=EqualsSignGreaterThanSign
-					{
-						newLeafNode(lv_op_1_2, grammarAccess.getSTAssignmentStatementAccess().getOpEqualsSignGreaterThanSignKeyword_1_0_1());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getSTAssignmentStatementRule());
-						}
-						setWithLastConsumed($current, "op", lv_op_1_2, null);
-					}
-				)
-			)
-		)
+		otherlv_1=ColonEqualsSign
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTAssignmentStatementAccess().getColonEqualsSignKeyword_1());
+		}
 		(
 			(
 				{

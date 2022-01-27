@@ -54,7 +54,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
 		tokenNameToValue.put("ColonEqualsSign", "':='");
 		tokenNameToValue.put("LessThanSignEqualsSign", "'<='");
 		tokenNameToValue.put("LessThanSignGreaterThanSign", "'<>'");
-		tokenNameToValue.put("EqualsSignGreaterThanSign", "'=>'");
 		tokenNameToValue.put("GreaterThanSignEqualsSign", "'>='");
 		tokenNameToValue.put("AT", "'AT'");
 		tokenNameToValue.put("BY", "'BY'");
@@ -1327,27 +1326,6 @@ rule__STStatement__Alternatives
 		{ before(grammarAccess.getSTStatementAccess().getGroup_6()); }
 		(rule__STStatement__Group_6__0)
 		{ after(grammarAccess.getSTStatementAccess().getGroup_6()); }
-	)
-;
-finally {
-	restoreStackSize(stackSize);
-}
-
-rule__STAssignmentStatement__OpAlternatives_1_0
-	@init {
-		int stackSize = keepStackSize();
-	}
-:
-	(
-		{ before(grammarAccess.getSTAssignmentStatementAccess().getOpColonEqualsSignKeyword_1_0_0()); }
-		ColonEqualsSign
-		{ after(grammarAccess.getSTAssignmentStatementAccess().getOpColonEqualsSignKeyword_1_0_0()); }
-	)
-	|
-	(
-		{ before(grammarAccess.getSTAssignmentStatementAccess().getOpEqualsSignGreaterThanSignKeyword_1_0_1()); }
-		EqualsSignGreaterThanSign
-		{ after(grammarAccess.getSTAssignmentStatementAccess().getOpEqualsSignGreaterThanSignKeyword_1_0_1()); }
 	)
 ;
 finally {
@@ -3649,9 +3627,9 @@ rule__STAssignmentStatement__Group__1__Impl
 	}
 :
 (
-	{ before(grammarAccess.getSTAssignmentStatementAccess().getOpAssignment_1()); }
-	(rule__STAssignmentStatement__OpAssignment_1)
-	{ after(grammarAccess.getSTAssignmentStatementAccess().getOpAssignment_1()); }
+	{ before(grammarAccess.getSTAssignmentStatementAccess().getColonEqualsSignKeyword_1()); }
+	ColonEqualsSign
+	{ after(grammarAccess.getSTAssignmentStatementAccess().getColonEqualsSignKeyword_1()); }
 )
 ;
 finally {
@@ -9161,21 +9139,6 @@ rule__STAssignmentStatement__LhsAssignment_0
 			{ after(grammarAccess.getSTAssignmentStatementAccess().getLhsVarDeclarationIDTerminalRuleCall_0_0_1()); }
 		)
 		{ after(grammarAccess.getSTAssignmentStatementAccess().getLhsVarDeclarationCrossReference_0_0()); }
-	)
-;
-finally {
-	restoreStackSize(stackSize);
-}
-
-rule__STAssignmentStatement__OpAssignment_1
-	@init {
-		int stackSize = keepStackSize();
-	}
-:
-	(
-		{ before(grammarAccess.getSTAssignmentStatementAccess().getOpAlternatives_1_0()); }
-		(rule__STAssignmentStatement__OpAlternatives_1_0)
-		{ after(grammarAccess.getSTAssignmentStatementAccess().getOpAlternatives_1_0()); }
 	)
 ;
 finally {

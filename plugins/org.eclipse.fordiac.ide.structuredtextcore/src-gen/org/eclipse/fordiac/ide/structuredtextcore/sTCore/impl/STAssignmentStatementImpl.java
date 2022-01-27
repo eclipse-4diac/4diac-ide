@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAssignmentStatementImpl#getLhs <em>Lhs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAssignmentStatementImpl#getOp <em>Op</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAssignmentStatementImpl#getRhs <em>Rhs</em>}</li>
  * </ul>
  *
@@ -42,26 +41,6 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
    * @ordered
    */
   protected VarDeclaration lhs;
-
-  /**
-   * The default value of the '{@link #getOp() <em>Op</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOp()
-   * @generated
-   * @ordered
-   */
-  protected static final String OP_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getOp() <em>Op</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOp()
-   * @generated
-   * @ordered
-   */
-  protected String op = OP_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getRhs() <em>Rhs</em>}' containment reference.
@@ -145,31 +124,6 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
    * @generated
    */
   @Override
-  public String getOp()
-  {
-    return op;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void setOp(String newOp)
-  {
-    String oldOp = op;
-    op = newOp;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__OP, oldOp, op));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public STExpression getRhs()
   {
     return rhs;
@@ -243,8 +197,6 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
       case STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS:
         if (resolve) return getLhs();
         return basicGetLhs();
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__OP:
-        return getOp();
       case STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS:
         return getRhs();
     }
@@ -263,9 +215,6 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
     {
       case STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS:
         setLhs((VarDeclaration)newValue);
-        return;
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__OP:
-        setOp((String)newValue);
         return;
       case STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS:
         setRhs((STExpression)newValue);
@@ -287,9 +236,6 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
       case STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS:
         setLhs((VarDeclaration)null);
         return;
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__OP:
-        setOp(OP_EDEFAULT);
-        return;
       case STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS:
         setRhs((STExpression)null);
         return;
@@ -309,29 +255,10 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
     {
       case STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS:
         return lhs != null;
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__OP:
-        return OP_EDEFAULT == null ? op != null : !OP_EDEFAULT.equals(op);
       case STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS:
         return rhs != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (op: ");
-    result.append(op);
-    result.append(')');
-    return result.toString();
   }
 
 } //STAssignmentStatementImpl

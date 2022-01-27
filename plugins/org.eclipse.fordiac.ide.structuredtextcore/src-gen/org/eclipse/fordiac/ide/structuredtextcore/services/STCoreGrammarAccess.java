@@ -634,19 +634,16 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Assignment cLhsAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final CrossReference cLhsVarDeclarationCrossReference_0_0 = (CrossReference)cLhsAssignment_0.eContents().get(0);
 		private final RuleCall cLhsVarDeclarationIDTerminalRuleCall_0_0_1 = (RuleCall)cLhsVarDeclarationCrossReference_0_0.eContents().get(1);
-		private final Assignment cOpAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final Alternatives cOpAlternatives_1_0 = (Alternatives)cOpAssignment_1.eContents().get(0);
-		private final Keyword cOpColonEqualsSignKeyword_1_0_0 = (Keyword)cOpAlternatives_1_0.eContents().get(0);
-		private final Keyword cOpEqualsSignGreaterThanSignKeyword_1_0_1 = (Keyword)cOpAlternatives_1_0.eContents().get(1);
+		private final Keyword cColonEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cRhsAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cRhsSTExpressionParserRuleCall_2_0 = (RuleCall)cRhsAssignment_2.eContents().get(0);
 		
 		//STAssignmentStatement:
-		//    lhs=[VarDeclaration] op=(':=' | '=>') rhs=STExpression
+		//    lhs=[VarDeclaration] ':=' rhs=STExpression
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//lhs=[VarDeclaration] op=(':=' | '=>') rhs=STExpression
+		//lhs=[VarDeclaration] ':=' rhs=STExpression
 		public Group getGroup() { return cGroup; }
 		
 		//lhs=[VarDeclaration]
@@ -658,17 +655,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//ID
 		public RuleCall getLhsVarDeclarationIDTerminalRuleCall_0_0_1() { return cLhsVarDeclarationIDTerminalRuleCall_0_0_1; }
 		
-		//op=(':=' | '=>')
-		public Assignment getOpAssignment_1() { return cOpAssignment_1; }
-		
-		//(':=' | '=>')
-		public Alternatives getOpAlternatives_1_0() { return cOpAlternatives_1_0; }
-		
 		//':='
-		public Keyword getOpColonEqualsSignKeyword_1_0_0() { return cOpColonEqualsSignKeyword_1_0_0; }
-		
-		//'=>'
-		public Keyword getOpEqualsSignGreaterThanSignKeyword_1_0_1() { return cOpEqualsSignGreaterThanSignKeyword_1_0_1; }
+		public Keyword getColonEqualsSignKeyword_1() { return cColonEqualsSignKeyword_1; }
 		
 		//rhs=STExpression
 		public Assignment getRhsAssignment_2() { return cRhsAssignment_2; }
@@ -2908,7 +2896,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STAssignmentStatement:
-	//    lhs=[VarDeclaration] op=(':=' | '=>') rhs=STExpression
+	//    lhs=[VarDeclaration] ':=' rhs=STExpression
 	//;
 	public STAssignmentStatementElements getSTAssignmentStatementAccess() {
 		return pSTAssignmentStatement;

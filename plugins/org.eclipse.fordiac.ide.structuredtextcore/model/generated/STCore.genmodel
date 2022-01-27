@@ -42,7 +42,6 @@
     <genClasses ecoreClass="STCore.ecore#//STStatement"/>
     <genClasses ecoreClass="STCore.ecore#//STAssignmentStatement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/lhs"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STAssignmentStatement/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/rhs"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STBranchStatement">

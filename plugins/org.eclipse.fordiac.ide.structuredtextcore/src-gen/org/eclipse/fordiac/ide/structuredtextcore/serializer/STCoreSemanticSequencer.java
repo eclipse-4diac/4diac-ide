@@ -432,10 +432,19 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STAssignmentStatement returns STAssignmentStatement
 	 *
 	 * Constraint:
-	 *     (lhs=[VarDeclaration|ID] (op=':=' | op='=>') rhs=STExpression)
+	 *     (lhs=[VarDeclaration|ID] rhs=STExpression)
 	 */
 	protected void sequence_STAssignmentStatement(ISerializationContext context, STAssignmentStatement semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LHS) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LHS));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RHS) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RHS));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTAssignmentStatementAccess().getLhsVarDeclarationIDTerminalRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LHS, false));
+		feeder.accept(grammarAccess.getSTAssignmentStatementAccess().getRhsSTExpressionParserRuleCall_2_0(), semanticObject.getRhs());
+		feeder.finish();
 	}
 	
 	

@@ -325,7 +325,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STAssignmentStatement:
-	//    lhs=[VarDeclaration] op=(':=' | '=>') rhs=STExpression
+	//    lhs=[VarDeclaration] ':=' rhs=STExpression
 	//;
 	public STCoreGrammarAccess.STAssignmentStatementElements getSTAssignmentStatementAccess() {
 		return gaSTCore.getSTAssignmentStatementAccess();

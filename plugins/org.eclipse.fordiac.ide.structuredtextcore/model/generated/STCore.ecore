@@ -39,7 +39,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STAssignmentStatement" eSuperTypes="#//STStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="#//VarDeclaration"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>

@@ -756,20 +756,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getSTAssignmentStatement_Op()
-  {
-    return (EAttribute)stAssignmentStatementEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EReference getSTAssignmentStatement_Rhs()
   {
-    return (EReference)stAssignmentStatementEClass.getEStructuralFeatures().get(2);
+    return (EReference)stAssignmentStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2241,7 +2230,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
 
     stAssignmentStatementEClass = createEClass(ST_ASSIGNMENT_STATEMENT);
     createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__LHS);
-    createEAttribute(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__OP);
     createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__RHS);
 
     stBranchStatementEClass = createEClass(ST_BRANCH_STATEMENT);
@@ -2515,7 +2503,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
 
     initEClass(stAssignmentStatementEClass, STAssignmentStatement.class, "STAssignmentStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTAssignmentStatement_Lhs(), this.getVarDeclaration(), null, "lhs", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSTAssignmentStatement_Op(), ecorePackage.getEString(), "op", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTAssignmentStatement_Rhs(), this.getSTExpression(), null, "rhs", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stBranchStatementEClass, STBranchStatement.class, "STBranchStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

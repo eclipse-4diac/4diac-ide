@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getLhs <em>Lhs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getOp <em>Op</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getRhs <em>Rhs</em>}</li>
  * </ul>
  *
@@ -45,28 +44,6 @@ public interface STAssignmentStatement extends STStatement
    * @generated
    */
   void setLhs(VarDeclaration value);
-
-  /**
-   * Returns the value of the '<em><b>Op</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Op</em>' attribute.
-   * @see #setOp(String)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTAssignmentStatement_Op()
-   * @model
-   * @generated
-   */
-  String getOp();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getOp <em>Op</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Op</em>' attribute.
-   * @see #getOp()
-   * @generated
-   */
-  void setOp(String value);
 
   /**
    * Returns the value of the '<em><b>Rhs</b></em>' containment reference.

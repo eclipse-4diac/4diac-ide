@@ -34,7 +34,6 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getVarDeclarationAccess().getAlternatives_3_1(), "rule__VarDeclaration__Alternatives_3_1");
 			builder.put(grammarAccess.getInitializerExpressionAccess().getAlternatives(), "rule__InitializerExpression__Alternatives");
 			builder.put(grammarAccess.getSTStatementAccess().getAlternatives(), "rule__STStatement__Alternatives");
-			builder.put(grammarAccess.getSTAssignmentStatementAccess().getOpAlternatives_1_0(), "rule__STAssignmentStatement__OpAlternatives_1_0");
 			builder.put(grammarAccess.getSTBranchStatementAccess().getAlternatives(), "rule__STBranchStatement__Alternatives");
 			builder.put(grammarAccess.getSTLoopStatementAccess().getAlternatives(), "rule__STLoopStatement__Alternatives");
 			builder.put(grammarAccess.getSTAndExpressionAccess().getOpAlternatives_1_0_1_0(), "rule__STAndExpression__OpAlternatives_1_0_1_0");
@@ -180,7 +179,6 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getArrayInitElementAccess().getIndexOrInitExpressionAssignment_0(), "rule__ArrayInitElement__IndexOrInitExpressionAssignment_0");
 			builder.put(grammarAccess.getArrayInitElementAccess().getInitExpressionAssignment_1_1(), "rule__ArrayInitElement__InitExpressionAssignment_1_1");
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getLhsAssignment_0(), "rule__STAssignmentStatement__LhsAssignment_0");
-			builder.put(grammarAccess.getSTAssignmentStatementAccess().getOpAssignment_1(), "rule__STAssignmentStatement__OpAssignment_1");
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getRhsAssignment_2(), "rule__STAssignmentStatement__RhsAssignment_2");
 			builder.put(grammarAccess.getSTIfStatmentAccess().getConditionAssignment_1(), "rule__STIfStatment__ConditionAssignment_1");
 			builder.put(grammarAccess.getSTIfStatmentAccess().getStatementsAssignment_3(), "rule__STIfStatment__StatementsAssignment_3");

@@ -337,22 +337,13 @@ public interface STCorePackage extends EPackage
   int ST_ASSIGNMENT_STATEMENT__LHS = ST_STATEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Op</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_ASSIGNMENT_STATEMENT__OP = ST_STATEMENT_FEATURE_COUNT + 1;
-
-  /**
    * The feature id for the '<em><b>Rhs</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_ASSIGNMENT_STATEMENT__RHS = ST_STATEMENT_FEATURE_COUNT + 2;
+  int ST_ASSIGNMENT_STATEMENT__RHS = ST_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>ST Assignment Statement</em>' class.
@@ -361,7 +352,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_ASSIGNMENT_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 3;
+  int ST_ASSIGNMENT_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementImpl <em>ST Branch Statement</em>}' class.
@@ -2228,17 +2219,6 @@ public interface STCorePackage extends EPackage
   EReference getSTAssignmentStatement_Lhs();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getOp <em>Op</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Op</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getOp()
-   * @see #getSTAssignmentStatement()
-   * @generated
-   */
-  EAttribute getSTAssignmentStatement_Op();
-
-  /**
    * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getRhs <em>Rhs</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3836,14 +3816,6 @@ public interface STCorePackage extends EPackage
      * @generated
      */
     EReference ST_ASSIGNMENT_STATEMENT__LHS = eINSTANCE.getSTAssignmentStatement_Lhs();
-
-    /**
-     * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ST_ASSIGNMENT_STATEMENT__OP = eINSTANCE.getSTAssignmentStatement_Op();
 
     /**
      * The meta object literal for the '<em><b>Rhs</b></em>' containment reference feature.
