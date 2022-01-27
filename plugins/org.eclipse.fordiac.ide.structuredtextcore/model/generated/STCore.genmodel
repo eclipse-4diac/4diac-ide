@@ -6,6 +6,30 @@
     complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.20" usedGenPackages="platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement">
   <genPackages prefix="STCore" basePackage="org.eclipse.fordiac.ide.structuredtextcore"
       disposableProviderFactory="true" fileExtensions="stcore" ecorePackage="STCore.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//BinaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/Range"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/OR"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/XOR"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/AMPERSAND"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/EQ"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/NE"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/LT"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/LE"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/GT"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/GE"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/ADD"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/SUB"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/MUL"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/DIV"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/MOD"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/POWER"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//UnaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//UnaryOperator/MINUS"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//UnaryOperator/PLUS"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//UnaryOperator/NOT"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//MultiBitAccessSpecifier">
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//MultiBitAccessSpecifier/lwordAccess"/>
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//MultiBitAccessSpecifier/dwordAccess"/>
@@ -122,53 +146,14 @@
     <genClasses ecoreClass="STCore.ecore#//STReturn"/>
     <genClasses ecoreClass="STCore.ecore#//STContinue"/>
     <genClasses ecoreClass="STCore.ecore#//STExit"/>
-    <genClasses ecoreClass="STCore.ecore#//STSubrangeExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSubrangeExpression/lowerBound"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSubrangeExpression/upperBound"/>
+    <genClasses ecoreClass="STCore.ecore#//STBinaryExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STBinaryExpression/left"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STBinaryExpression/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STBinaryExpression/right"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STOrExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STOrExpression/left"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STOrExpression/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STOrExpression/right"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STXorExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STXorExpression/left"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STXorExpression/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STXorExpression/right"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STAndExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAndExpression/left"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STAndExpression/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAndExpression/right"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STEqualityExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STEqualityExpression/left"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STEqualityExpression/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STEqualityExpression/right"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STComparisonExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STComparisonExpression/left"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STComparisonExpression/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STComparisonExpression/right"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STAddSubExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAddSubExpression/left"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STAddSubExpression/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAddSubExpression/right"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STMulDivModExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STMulDivModExpression/left"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMulDivModExpression/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STMulDivModExpression/right"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STPowerExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STPowerExpression/left"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STPowerExpression/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STPowerExpression/right"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STSignumExpression">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STSignumExpression/signum"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSignumExpression/expression"/>
+    <genClasses ecoreClass="STCore.ecore#//STUnaryExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STUnaryExpression/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STUnaryExpression/expression"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STMemberSelection">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STMemberSelection/receiver"/>

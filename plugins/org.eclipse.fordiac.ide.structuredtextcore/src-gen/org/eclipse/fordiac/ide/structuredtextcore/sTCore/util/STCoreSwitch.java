@@ -309,93 +309,21 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.ST_SUBRANGE_EXPRESSION:
+      case STCorePackage.ST_BINARY_EXPRESSION:
       {
-        STSubrangeExpression stSubrangeExpression = (STSubrangeExpression)theEObject;
-        T result = caseSTSubrangeExpression(stSubrangeExpression);
-        if (result == null) result = caseSTExpression(stSubrangeExpression);
-        if (result == null) result = caseInitializerExpression(stSubrangeExpression);
+        STBinaryExpression stBinaryExpression = (STBinaryExpression)theEObject;
+        T result = caseSTBinaryExpression(stBinaryExpression);
+        if (result == null) result = caseSTExpression(stBinaryExpression);
+        if (result == null) result = caseInitializerExpression(stBinaryExpression);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.ST_OR_EXPRESSION:
+      case STCorePackage.ST_UNARY_EXPRESSION:
       {
-        STOrExpression stOrExpression = (STOrExpression)theEObject;
-        T result = caseSTOrExpression(stOrExpression);
-        if (result == null) result = caseSTExpression(stOrExpression);
-        if (result == null) result = caseInitializerExpression(stOrExpression);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_XOR_EXPRESSION:
-      {
-        STXorExpression stXorExpression = (STXorExpression)theEObject;
-        T result = caseSTXorExpression(stXorExpression);
-        if (result == null) result = caseSTExpression(stXorExpression);
-        if (result == null) result = caseInitializerExpression(stXorExpression);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_AND_EXPRESSION:
-      {
-        STAndExpression stAndExpression = (STAndExpression)theEObject;
-        T result = caseSTAndExpression(stAndExpression);
-        if (result == null) result = caseSTExpression(stAndExpression);
-        if (result == null) result = caseInitializerExpression(stAndExpression);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_EQUALITY_EXPRESSION:
-      {
-        STEqualityExpression stEqualityExpression = (STEqualityExpression)theEObject;
-        T result = caseSTEqualityExpression(stEqualityExpression);
-        if (result == null) result = caseSTExpression(stEqualityExpression);
-        if (result == null) result = caseInitializerExpression(stEqualityExpression);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_COMPARISON_EXPRESSION:
-      {
-        STComparisonExpression stComparisonExpression = (STComparisonExpression)theEObject;
-        T result = caseSTComparisonExpression(stComparisonExpression);
-        if (result == null) result = caseSTExpression(stComparisonExpression);
-        if (result == null) result = caseInitializerExpression(stComparisonExpression);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_ADD_SUB_EXPRESSION:
-      {
-        STAddSubExpression stAddSubExpression = (STAddSubExpression)theEObject;
-        T result = caseSTAddSubExpression(stAddSubExpression);
-        if (result == null) result = caseSTExpression(stAddSubExpression);
-        if (result == null) result = caseInitializerExpression(stAddSubExpression);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_MUL_DIV_MOD_EXPRESSION:
-      {
-        STMulDivModExpression stMulDivModExpression = (STMulDivModExpression)theEObject;
-        T result = caseSTMulDivModExpression(stMulDivModExpression);
-        if (result == null) result = caseSTExpression(stMulDivModExpression);
-        if (result == null) result = caseInitializerExpression(stMulDivModExpression);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_POWER_EXPRESSION:
-      {
-        STPowerExpression stPowerExpression = (STPowerExpression)theEObject;
-        T result = caseSTPowerExpression(stPowerExpression);
-        if (result == null) result = caseSTExpression(stPowerExpression);
-        if (result == null) result = caseInitializerExpression(stPowerExpression);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_SIGNUM_EXPRESSION:
-      {
-        STSignumExpression stSignumExpression = (STSignumExpression)theEObject;
-        T result = caseSTSignumExpression(stSignumExpression);
-        if (result == null) result = caseSTExpression(stSignumExpression);
-        if (result == null) result = caseInitializerExpression(stSignumExpression);
+        STUnaryExpression stUnaryExpression = (STUnaryExpression)theEObject;
+        T result = caseSTUnaryExpression(stUnaryExpression);
+        if (result == null) result = caseSTExpression(stUnaryExpression);
+        if (result == null) result = caseInitializerExpression(stUnaryExpression);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -981,161 +909,33 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Subrange Expression</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Binary Expression</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Subrange Expression</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Binary Expression</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSTSubrangeExpression(STSubrangeExpression object)
+  public T caseSTBinaryExpression(STBinaryExpression object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Or Expression</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Unary Expression</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Or Expression</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Unary Expression</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSTOrExpression(STOrExpression object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Xor Expression</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Xor Expression</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTXorExpression(STXorExpression object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST And Expression</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST And Expression</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTAndExpression(STAndExpression object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Equality Expression</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Equality Expression</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTEqualityExpression(STEqualityExpression object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Comparison Expression</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Comparison Expression</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTComparisonExpression(STComparisonExpression object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Add Sub Expression</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Add Sub Expression</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTAddSubExpression(STAddSubExpression object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Mul Div Mod Expression</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Mul Div Mod Expression</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTMulDivModExpression(STMulDivModExpression object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Power Expression</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Power Expression</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTPowerExpression(STPowerExpression object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Signum Expression</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Signum Expression</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTSignumExpression(STSignumExpression object)
+  public T caseSTUnaryExpression(STUnaryExpression object)
   {
     return null;
   }

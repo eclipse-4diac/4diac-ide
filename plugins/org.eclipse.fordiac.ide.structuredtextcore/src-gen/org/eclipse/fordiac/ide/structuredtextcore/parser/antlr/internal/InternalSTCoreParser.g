@@ -1491,29 +1491,44 @@ ruleSTSubrangeExpression returns [EObject current=null]
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSTSubrangeExpressionAccess().getSTSubrangeExpressionLowerBoundAction_1_0_0(),
+							grammarAccess.getSTSubrangeExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0(),
 							$current);
 					}
 				)
-				otherlv_2=FullStopFullStop
-				{
-					newLeafNode(otherlv_2, grammarAccess.getSTSubrangeExpressionAccess().getFullStopFullStopKeyword_1_0_1());
-				}
+				(
+					(
+						{
+							newCompositeNode(grammarAccess.getSTSubrangeExpressionAccess().getOpSubrangeOperatorEnumRuleCall_1_0_1_0());
+						}
+						lv_op_2_0=ruleSubrangeOperator
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getSTSubrangeExpressionRule());
+							}
+							set(
+								$current,
+								"op",
+								lv_op_2_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.SubrangeOperator");
+							afterParserOrEnumRuleCall();
+						}
+					)
+				)
 			)
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTSubrangeExpressionAccess().getUpperBoundSTOrExpressionParserRuleCall_1_1_0());
+						newCompositeNode(grammarAccess.getSTSubrangeExpressionAccess().getRightSTOrExpressionParserRuleCall_1_1_0());
 					}
-					lv_upperBound_3_0=ruleSTOrExpression
+					lv_right_3_0=ruleSTOrExpression
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTSubrangeExpressionRule());
 						}
 						set(
 							$current,
-							"upperBound",
-							lv_upperBound_3_0,
+							"right",
+							lv_right_3_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STOrExpression");
 						afterParserOrEnumRuleCall();
 					}
@@ -1552,21 +1567,26 @@ ruleSTOrExpression returns [EObject current=null]
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSTOrExpressionAccess().getSTOrExpressionLeftAction_1_0_0(),
+							grammarAccess.getSTOrExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0(),
 							$current);
 					}
 				)
 				(
 					(
-						lv_op_2_0=OR
 						{
-							newLeafNode(lv_op_2_0, grammarAccess.getSTOrExpressionAccess().getOpORKeyword_1_0_1_0());
+							newCompositeNode(grammarAccess.getSTOrExpressionAccess().getOpOrOperatorEnumRuleCall_1_0_1_0());
 						}
+						lv_op_2_0=ruleOrOperator
 						{
 							if ($current==null) {
-								$current = createModelElement(grammarAccess.getSTOrExpressionRule());
+								$current = createModelElementForParent(grammarAccess.getSTOrExpressionRule());
 							}
-							setWithLastConsumed($current, "op", lv_op_2_0, "OR");
+							set(
+								$current,
+								"op",
+								lv_op_2_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.OrOperator");
+							afterParserOrEnumRuleCall();
 						}
 					)
 				)
@@ -1623,21 +1643,26 @@ ruleSTXorExpression returns [EObject current=null]
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSTXorExpressionAccess().getSTXorExpressionLeftAction_1_0_0(),
+							grammarAccess.getSTXorExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0(),
 							$current);
 					}
 				)
 				(
 					(
-						lv_op_2_0=XOR
 						{
-							newLeafNode(lv_op_2_0, grammarAccess.getSTXorExpressionAccess().getOpXORKeyword_1_0_1_0());
+							newCompositeNode(grammarAccess.getSTXorExpressionAccess().getOpXorOperatorEnumRuleCall_1_0_1_0());
 						}
+						lv_op_2_0=ruleXorOperator
 						{
 							if ($current==null) {
-								$current = createModelElement(grammarAccess.getSTXorExpressionRule());
+								$current = createModelElementForParent(grammarAccess.getSTXorExpressionRule());
 							}
-							setWithLastConsumed($current, "op", lv_op_2_0, "XOR");
+							set(
+								$current,
+								"op",
+								lv_op_2_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.XorOperator");
+							afterParserOrEnumRuleCall();
 						}
 					)
 				)
@@ -1694,35 +1719,27 @@ ruleSTAndExpression returns [EObject current=null]
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSTAndExpressionAccess().getSTAndExpressionLeftAction_1_0_0(),
+							grammarAccess.getSTAndExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0(),
 							$current);
 					}
 				)
 				(
 					(
-						(
-							lv_op_2_1=Ampersand
-							{
-								newLeafNode(lv_op_2_1, grammarAccess.getSTAndExpressionAccess().getOpAmpersandKeyword_1_0_1_0_0());
+						{
+							newCompositeNode(grammarAccess.getSTAndExpressionAccess().getOpAndOperatorEnumRuleCall_1_0_1_0());
+						}
+						lv_op_2_0=ruleAndOperator
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getSTAndExpressionRule());
 							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTAndExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_1, null);
-							}
-							    |
-							lv_op_2_2=AND
-							{
-								newLeafNode(lv_op_2_2, grammarAccess.getSTAndExpressionAccess().getOpANDKeyword_1_0_1_0_1());
-							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTAndExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_2, null);
-							}
-						)
+							set(
+								$current,
+								"op",
+								lv_op_2_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.AndOperator");
+							afterParserOrEnumRuleCall();
+						}
 					)
 				)
 			)
@@ -1778,35 +1795,27 @@ ruleSTEqualityExpression returns [EObject current=null]
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSTEqualityExpressionAccess().getSTEqualityExpressionLeftAction_1_0_0(),
+							grammarAccess.getSTEqualityExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0(),
 							$current);
 					}
 				)
 				(
 					(
-						(
-							lv_op_2_1=EqualsSign
-							{
-								newLeafNode(lv_op_2_1, grammarAccess.getSTEqualityExpressionAccess().getOpEqualsSignKeyword_1_0_1_0_0());
+						{
+							newCompositeNode(grammarAccess.getSTEqualityExpressionAccess().getOpEqualityOperatorEnumRuleCall_1_0_1_0());
+						}
+						lv_op_2_0=ruleEqualityOperator
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getSTEqualityExpressionRule());
 							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTEqualityExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_1, null);
-							}
-							    |
-							lv_op_2_2=LessThanSignGreaterThanSign
-							{
-								newLeafNode(lv_op_2_2, grammarAccess.getSTEqualityExpressionAccess().getOpLessThanSignGreaterThanSignKeyword_1_0_1_0_1());
-							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTEqualityExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_2, null);
-							}
-						)
+							set(
+								$current,
+								"op",
+								lv_op_2_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.EqualityOperator");
+							afterParserOrEnumRuleCall();
+						}
 					)
 				)
 			)
@@ -1862,57 +1871,27 @@ ruleSTComparisonExpression returns [EObject current=null]
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSTComparisonExpressionAccess().getSTComparisonExpressionLeftAction_1_0_0(),
+							grammarAccess.getSTComparisonExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0(),
 							$current);
 					}
 				)
 				(
 					(
-						(
-							lv_op_2_1=LessThanSign
-							{
-								newLeafNode(lv_op_2_1, grammarAccess.getSTComparisonExpressionAccess().getOpLessThanSignKeyword_1_0_1_0_0());
+						{
+							newCompositeNode(grammarAccess.getSTComparisonExpressionAccess().getOpCompareOperatorEnumRuleCall_1_0_1_0());
+						}
+						lv_op_2_0=ruleCompareOperator
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getSTComparisonExpressionRule());
 							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTComparisonExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_1, null);
-							}
-							    |
-							lv_op_2_2=GreaterThanSign
-							{
-								newLeafNode(lv_op_2_2, grammarAccess.getSTComparisonExpressionAccess().getOpGreaterThanSignKeyword_1_0_1_0_1());
-							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTComparisonExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_2, null);
-							}
-							    |
-							lv_op_2_3=LessThanSignEqualsSign
-							{
-								newLeafNode(lv_op_2_3, grammarAccess.getSTComparisonExpressionAccess().getOpLessThanSignEqualsSignKeyword_1_0_1_0_2());
-							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTComparisonExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_3, null);
-							}
-							    |
-							lv_op_2_4=GreaterThanSignEqualsSign
-							{
-								newLeafNode(lv_op_2_4, grammarAccess.getSTComparisonExpressionAccess().getOpGreaterThanSignEqualsSignKeyword_1_0_1_0_3());
-							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTComparisonExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_4, null);
-							}
-						)
+							set(
+								$current,
+								"op",
+								lv_op_2_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.CompareOperator");
+							afterParserOrEnumRuleCall();
+						}
 					)
 				)
 			)
@@ -1968,35 +1947,27 @@ ruleSTAddSubExpression returns [EObject current=null]
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSTAddSubExpressionAccess().getSTAddSubExpressionLeftAction_1_0_0(),
+							grammarAccess.getSTAddSubExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0(),
 							$current);
 					}
 				)
 				(
 					(
-						(
-							lv_op_2_1=PlusSign
-							{
-								newLeafNode(lv_op_2_1, grammarAccess.getSTAddSubExpressionAccess().getOpPlusSignKeyword_1_0_1_0_0());
+						{
+							newCompositeNode(grammarAccess.getSTAddSubExpressionAccess().getOpAddSubOperatorEnumRuleCall_1_0_1_0());
+						}
+						lv_op_2_0=ruleAddSubOperator
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getSTAddSubExpressionRule());
 							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTAddSubExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_1, null);
-							}
-							    |
-							lv_op_2_2=HyphenMinus
-							{
-								newLeafNode(lv_op_2_2, grammarAccess.getSTAddSubExpressionAccess().getOpHyphenMinusKeyword_1_0_1_0_1());
-							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTAddSubExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_2, null);
-							}
-						)
+							set(
+								$current,
+								"op",
+								lv_op_2_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.AddSubOperator");
+							afterParserOrEnumRuleCall();
+						}
 					)
 				)
 			)
@@ -2052,46 +2023,27 @@ ruleSTMulDivModExpression returns [EObject current=null]
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSTMulDivModExpressionAccess().getSTMulDivModExpressionLeftAction_1_0_0(),
+							grammarAccess.getSTMulDivModExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0(),
 							$current);
 					}
 				)
 				(
 					(
-						(
-							lv_op_2_1=Asterisk
-							{
-								newLeafNode(lv_op_2_1, grammarAccess.getSTMulDivModExpressionAccess().getOpAsteriskKeyword_1_0_1_0_0());
+						{
+							newCompositeNode(grammarAccess.getSTMulDivModExpressionAccess().getOpMulDivModOperatorEnumRuleCall_1_0_1_0());
+						}
+						lv_op_2_0=ruleMulDivModOperator
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getSTMulDivModExpressionRule());
 							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTMulDivModExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_1, null);
-							}
-							    |
-							lv_op_2_2=Solidus
-							{
-								newLeafNode(lv_op_2_2, grammarAccess.getSTMulDivModExpressionAccess().getOpSolidusKeyword_1_0_1_0_1());
-							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTMulDivModExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_2, null);
-							}
-							    |
-							lv_op_2_3=MOD
-							{
-								newLeafNode(lv_op_2_3, grammarAccess.getSTMulDivModExpressionAccess().getOpMODKeyword_1_0_1_0_2());
-							}
-							{
-								if ($current==null) {
-									$current = createModelElement(grammarAccess.getSTMulDivModExpressionRule());
-								}
-								setWithLastConsumed($current, "op", lv_op_2_3, null);
-							}
-						)
+							set(
+								$current,
+								"op",
+								lv_op_2_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.MulDivModOperator");
+							afterParserOrEnumRuleCall();
+						}
 					)
 				)
 			)
@@ -2147,21 +2099,26 @@ ruleSTPowerExpression returns [EObject current=null]
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSTPowerExpressionAccess().getSTPowerExpressionLeftAction_1_0_0(),
+							grammarAccess.getSTPowerExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0(),
 							$current);
 					}
 				)
 				(
 					(
-						lv_op_2_0=AsteriskAsterisk
 						{
-							newLeafNode(lv_op_2_0, grammarAccess.getSTPowerExpressionAccess().getOpAsteriskAsteriskKeyword_1_0_1_0());
+							newCompositeNode(grammarAccess.getSTPowerExpressionAccess().getOpPowerOperatorEnumRuleCall_1_0_1_0());
 						}
+						lv_op_2_0=rulePowerOperator
 						{
 							if ($current==null) {
-								$current = createModelElement(grammarAccess.getSTPowerExpressionRule());
+								$current = createModelElementForParent(grammarAccess.getSTPowerExpressionRule());
 							}
-							setWithLastConsumed($current, "op", lv_op_2_0, "**");
+							set(
+								$current,
+								"op",
+								lv_op_2_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.PowerOperator");
+							afterParserOrEnumRuleCall();
 						}
 					)
 				)
@@ -2227,46 +2184,27 @@ ruleSTSignumExpression returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTSignumExpressionAccess().getSTSignumExpressionAction_2_0(),
+						grammarAccess.getSTSignumExpressionAccess().getSTUnaryExpressionAction_2_0(),
 						$current);
 				}
 			)
 			(
 				(
-					(
-						lv_signum_3_1=HyphenMinus
-						{
-							newLeafNode(lv_signum_3_1, grammarAccess.getSTSignumExpressionAccess().getSignumHyphenMinusKeyword_2_1_0_0());
+					{
+						newCompositeNode(grammarAccess.getSTSignumExpressionAccess().getOpUnaryOperatorEnumRuleCall_2_1_0());
+					}
+					lv_op_3_0=ruleUnaryOperator
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getSTSignumExpressionRule());
 						}
-						{
-							if ($current==null) {
-								$current = createModelElement(grammarAccess.getSTSignumExpressionRule());
-							}
-							setWithLastConsumed($current, "signum", lv_signum_3_1, null);
-						}
-						    |
-						lv_signum_3_2=PlusSign
-						{
-							newLeafNode(lv_signum_3_2, grammarAccess.getSTSignumExpressionAccess().getSignumPlusSignKeyword_2_1_0_1());
-						}
-						{
-							if ($current==null) {
-								$current = createModelElement(grammarAccess.getSTSignumExpressionRule());
-							}
-							setWithLastConsumed($current, "signum", lv_signum_3_2, null);
-						}
-						    |
-						lv_signum_3_3=NOT
-						{
-							newLeafNode(lv_signum_3_3, grammarAccess.getSTSignumExpressionAccess().getSignumNOTKeyword_2_1_0_2());
-						}
-						{
-							if ($current==null) {
-								$current = createModelElement(grammarAccess.getSTSignumExpressionRule());
-							}
-							setWithLastConsumed($current, "signum", lv_signum_3_3, null);
-						}
-					)
+						set(
+							$current,
+							"op",
+							lv_op_3_0,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.UnaryOperator");
+						afterParserOrEnumRuleCall();
+					}
 				)
 			)
 			(
@@ -3899,6 +3837,268 @@ ruleTIME_OF_DAY returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleTok
 				newLeafNode(this_INT_6, grammarAccess.getTIME_OF_DAYAccess().getINTTerminalRuleCall_5_1());
 			}
 		)?
+	)
+;
+
+// Rule SubrangeOperator
+ruleSubrangeOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		enumLiteral_0=FullStopFullStop
+		{
+			$current = grammarAccess.getSubrangeOperatorAccess().getRangeEnumLiteralDeclaration().getEnumLiteral().getInstance();
+			newLeafNode(enumLiteral_0, grammarAccess.getSubrangeOperatorAccess().getRangeEnumLiteralDeclaration());
+		}
+	)
+;
+
+// Rule OrOperator
+ruleOrOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		enumLiteral_0=OR
+		{
+			$current = grammarAccess.getOrOperatorAccess().getOREnumLiteralDeclaration().getEnumLiteral().getInstance();
+			newLeafNode(enumLiteral_0, grammarAccess.getOrOperatorAccess().getOREnumLiteralDeclaration());
+		}
+	)
+;
+
+// Rule XorOperator
+ruleXorOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		enumLiteral_0=XOR
+		{
+			$current = grammarAccess.getXorOperatorAccess().getXOREnumLiteralDeclaration().getEnumLiteral().getInstance();
+			newLeafNode(enumLiteral_0, grammarAccess.getXorOperatorAccess().getXOREnumLiteralDeclaration());
+		}
+	)
+;
+
+// Rule AndOperator
+ruleAndOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			enumLiteral_0=AND
+			{
+				$current = grammarAccess.getAndOperatorAccess().getANDEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_0, grammarAccess.getAndOperatorAccess().getANDEnumLiteralDeclaration_0());
+			}
+		)
+		    |
+		(
+			enumLiteral_1=Ampersand
+			{
+				$current = grammarAccess.getAndOperatorAccess().getAMPERSANDEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_1, grammarAccess.getAndOperatorAccess().getAMPERSANDEnumLiteralDeclaration_1());
+			}
+		)
+	)
+;
+
+// Rule EqualityOperator
+ruleEqualityOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			enumLiteral_0=EqualsSign
+			{
+				$current = grammarAccess.getEqualityOperatorAccess().getEQEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_0, grammarAccess.getEqualityOperatorAccess().getEQEnumLiteralDeclaration_0());
+			}
+		)
+		    |
+		(
+			enumLiteral_1=LessThanSignGreaterThanSign
+			{
+				$current = grammarAccess.getEqualityOperatorAccess().getNEEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_1, grammarAccess.getEqualityOperatorAccess().getNEEnumLiteralDeclaration_1());
+			}
+		)
+	)
+;
+
+// Rule CompareOperator
+ruleCompareOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			enumLiteral_0=LessThanSign
+			{
+				$current = grammarAccess.getCompareOperatorAccess().getLTEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_0, grammarAccess.getCompareOperatorAccess().getLTEnumLiteralDeclaration_0());
+			}
+		)
+		    |
+		(
+			enumLiteral_1=LessThanSignEqualsSign
+			{
+				$current = grammarAccess.getCompareOperatorAccess().getLEEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_1, grammarAccess.getCompareOperatorAccess().getLEEnumLiteralDeclaration_1());
+			}
+		)
+		    |
+		(
+			enumLiteral_2=GreaterThanSign
+			{
+				$current = grammarAccess.getCompareOperatorAccess().getGTEnumLiteralDeclaration_2().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_2, grammarAccess.getCompareOperatorAccess().getGTEnumLiteralDeclaration_2());
+			}
+		)
+		    |
+		(
+			enumLiteral_3=GreaterThanSignEqualsSign
+			{
+				$current = grammarAccess.getCompareOperatorAccess().getGEEnumLiteralDeclaration_3().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_3, grammarAccess.getCompareOperatorAccess().getGEEnumLiteralDeclaration_3());
+			}
+		)
+	)
+;
+
+// Rule AddSubOperator
+ruleAddSubOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			enumLiteral_0=PlusSign
+			{
+				$current = grammarAccess.getAddSubOperatorAccess().getADDEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_0, grammarAccess.getAddSubOperatorAccess().getADDEnumLiteralDeclaration_0());
+			}
+		)
+		    |
+		(
+			enumLiteral_1=HyphenMinus
+			{
+				$current = grammarAccess.getAddSubOperatorAccess().getSUBEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_1, grammarAccess.getAddSubOperatorAccess().getSUBEnumLiteralDeclaration_1());
+			}
+		)
+	)
+;
+
+// Rule MulDivModOperator
+ruleMulDivModOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			enumLiteral_0=Asterisk
+			{
+				$current = grammarAccess.getMulDivModOperatorAccess().getMULEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_0, grammarAccess.getMulDivModOperatorAccess().getMULEnumLiteralDeclaration_0());
+			}
+		)
+		    |
+		(
+			enumLiteral_1=Solidus
+			{
+				$current = grammarAccess.getMulDivModOperatorAccess().getDIVEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_1, grammarAccess.getMulDivModOperatorAccess().getDIVEnumLiteralDeclaration_1());
+			}
+		)
+		    |
+		(
+			enumLiteral_2=MOD
+			{
+				$current = grammarAccess.getMulDivModOperatorAccess().getMODEnumLiteralDeclaration_2().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_2, grammarAccess.getMulDivModOperatorAccess().getMODEnumLiteralDeclaration_2());
+			}
+		)
+	)
+;
+
+// Rule PowerOperator
+rulePowerOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		enumLiteral_0=AsteriskAsterisk
+		{
+			$current = grammarAccess.getPowerOperatorAccess().getPOWEREnumLiteralDeclaration().getEnumLiteral().getInstance();
+			newLeafNode(enumLiteral_0, grammarAccess.getPowerOperatorAccess().getPOWEREnumLiteralDeclaration());
+		}
+	)
+;
+
+// Rule UnaryOperator
+ruleUnaryOperator returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			enumLiteral_0=HyphenMinus
+			{
+				$current = grammarAccess.getUnaryOperatorAccess().getMINUSEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_0, grammarAccess.getUnaryOperatorAccess().getMINUSEnumLiteralDeclaration_0());
+			}
+		)
+		    |
+		(
+			enumLiteral_1=PlusSign
+			{
+				$current = grammarAccess.getUnaryOperatorAccess().getPLUSEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_1, grammarAccess.getUnaryOperatorAccess().getPLUSEnumLiteralDeclaration_1());
+			}
+		)
+		    |
+		(
+			enumLiteral_2=NOT
+			{
+				$current = grammarAccess.getUnaryOperatorAccess().getNOTEnumLiteralDeclaration_2().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_2, grammarAccess.getUnaryOperatorAccess().getNOTEnumLiteralDeclaration_2());
+			}
+		)
 	)
 ;
 

@@ -1170,51 +1170,14 @@ public interface STCorePackage extends EPackage
   int ST_EXIT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSubrangeExpressionImpl <em>ST Subrange Expression</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBinaryExpressionImpl <em>ST Binary Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSubrangeExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSubrangeExpression()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBinaryExpressionImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBinaryExpression()
    * @generated
    */
-  int ST_SUBRANGE_EXPRESSION = 31;
-
-  /**
-   * The feature id for the '<em><b>Lower Bound</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_SUBRANGE_EXPRESSION__LOWER_BOUND = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Upper Bound</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_SUBRANGE_EXPRESSION__UPPER_BOUND = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The number of structural features of the '<em>ST Subrange Expression</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_SUBRANGE_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STOrExpressionImpl <em>ST Or Expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STOrExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTOrExpression()
-   * @generated
-   */
-  int ST_OR_EXPRESSION = 32;
+  int ST_BINARY_EXPRESSION = 31;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1223,7 +1186,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_OR_EXPRESSION__LEFT = ST_EXPRESSION_FEATURE_COUNT + 0;
+  int ST_BINARY_EXPRESSION__LEFT = ST_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1232,7 +1195,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_OR_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 1;
+  int ST_BINARY_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -1241,35 +1204,26 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_OR_EXPRESSION__RIGHT = ST_EXPRESSION_FEATURE_COUNT + 2;
+  int ST_BINARY_EXPRESSION__RIGHT = ST_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The number of structural features of the '<em>ST Or Expression</em>' class.
+   * The number of structural features of the '<em>ST Binary Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_OR_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
+  int ST_BINARY_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STXorExpressionImpl <em>ST Xor Expression</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STUnaryExpressionImpl <em>ST Unary Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STXorExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTXorExpression()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STUnaryExpressionImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTUnaryExpression()
    * @generated
    */
-  int ST_XOR_EXPRESSION = 33;
-
-  /**
-   * The feature id for the '<em><b>Left</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_XOR_EXPRESSION__LEFT = ST_EXPRESSION_FEATURE_COUNT + 0;
+  int ST_UNARY_EXPRESSION = 32;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1278,320 +1232,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_XOR_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Right</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_XOR_EXPRESSION__RIGHT = ST_EXPRESSION_FEATURE_COUNT + 2;
-
-  /**
-   * The number of structural features of the '<em>ST Xor Expression</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_XOR_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAndExpressionImpl <em>ST And Expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAndExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTAndExpression()
-   * @generated
-   */
-  int ST_AND_EXPRESSION = 34;
-
-  /**
-   * The feature id for the '<em><b>Left</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_AND_EXPRESSION__LEFT = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Op</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_AND_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Right</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_AND_EXPRESSION__RIGHT = ST_EXPRESSION_FEATURE_COUNT + 2;
-
-  /**
-   * The number of structural features of the '<em>ST And Expression</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_AND_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STEqualityExpressionImpl <em>ST Equality Expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STEqualityExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTEqualityExpression()
-   * @generated
-   */
-  int ST_EQUALITY_EXPRESSION = 35;
-
-  /**
-   * The feature id for the '<em><b>Left</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_EQUALITY_EXPRESSION__LEFT = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Op</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_EQUALITY_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Right</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_EQUALITY_EXPRESSION__RIGHT = ST_EXPRESSION_FEATURE_COUNT + 2;
-
-  /**
-   * The number of structural features of the '<em>ST Equality Expression</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_EQUALITY_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STComparisonExpressionImpl <em>ST Comparison Expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STComparisonExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTComparisonExpression()
-   * @generated
-   */
-  int ST_COMPARISON_EXPRESSION = 36;
-
-  /**
-   * The feature id for the '<em><b>Left</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_COMPARISON_EXPRESSION__LEFT = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Op</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_COMPARISON_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Right</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_COMPARISON_EXPRESSION__RIGHT = ST_EXPRESSION_FEATURE_COUNT + 2;
-
-  /**
-   * The number of structural features of the '<em>ST Comparison Expression</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_COMPARISON_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAddSubExpressionImpl <em>ST Add Sub Expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAddSubExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTAddSubExpression()
-   * @generated
-   */
-  int ST_ADD_SUB_EXPRESSION = 37;
-
-  /**
-   * The feature id for the '<em><b>Left</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_ADD_SUB_EXPRESSION__LEFT = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Op</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_ADD_SUB_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Right</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_ADD_SUB_EXPRESSION__RIGHT = ST_EXPRESSION_FEATURE_COUNT + 2;
-
-  /**
-   * The number of structural features of the '<em>ST Add Sub Expression</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_ADD_SUB_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STMulDivModExpressionImpl <em>ST Mul Div Mod Expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STMulDivModExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTMulDivModExpression()
-   * @generated
-   */
-  int ST_MUL_DIV_MOD_EXPRESSION = 38;
-
-  /**
-   * The feature id for the '<em><b>Left</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_MUL_DIV_MOD_EXPRESSION__LEFT = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Op</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_MUL_DIV_MOD_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Right</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_MUL_DIV_MOD_EXPRESSION__RIGHT = ST_EXPRESSION_FEATURE_COUNT + 2;
-
-  /**
-   * The number of structural features of the '<em>ST Mul Div Mod Expression</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_MUL_DIV_MOD_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STPowerExpressionImpl <em>ST Power Expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STPowerExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTPowerExpression()
-   * @generated
-   */
-  int ST_POWER_EXPRESSION = 39;
-
-  /**
-   * The feature id for the '<em><b>Left</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_POWER_EXPRESSION__LEFT = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Op</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_POWER_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Right</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_POWER_EXPRESSION__RIGHT = ST_EXPRESSION_FEATURE_COUNT + 2;
-
-  /**
-   * The number of structural features of the '<em>ST Power Expression</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_POWER_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSignumExpressionImpl <em>ST Signum Expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSignumExpressionImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSignumExpression()
-   * @generated
-   */
-  int ST_SIGNUM_EXPRESSION = 40;
-
-  /**
-   * The feature id for the '<em><b>Signum</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_SIGNUM_EXPRESSION__SIGNUM = ST_EXPRESSION_FEATURE_COUNT + 0;
+  int ST_UNARY_EXPRESSION__OP = ST_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -1600,16 +1241,16 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_SIGNUM_EXPRESSION__EXPRESSION = ST_EXPRESSION_FEATURE_COUNT + 1;
+  int ST_UNARY_EXPRESSION__EXPRESSION = ST_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>ST Signum Expression</em>' class.
+   * The number of structural features of the '<em>ST Unary Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_SIGNUM_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
+  int ST_UNARY_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STMemberSelectionImpl <em>ST Member Selection</em>}' class.
@@ -1619,7 +1260,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTMemberSelection()
    * @generated
    */
-  int ST_MEMBER_SELECTION = 41;
+  int ST_MEMBER_SELECTION = 33;
 
   /**
    * The feature id for the '<em><b>Receiver</b></em>' containment reference.
@@ -1710,7 +1351,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSymbol()
    * @generated
    */
-  int ST_SYMBOL = 42;
+  int ST_SYMBOL = 34;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' reference.
@@ -1774,7 +1415,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBoolLiteral()
    * @generated
    */
-  int ST_BOOL_LITERAL = 43;
+  int ST_BOOL_LITERAL = 35;
 
   /**
    * The feature id for the '<em><b>Bool Literal</b></em>' containment reference.
@@ -1802,7 +1443,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTNumericLiteral()
    * @generated
    */
-  int ST_NUMERIC_LITERAL = 44;
+  int ST_NUMERIC_LITERAL = 36;
 
   /**
    * The feature id for the '<em><b>Numeric Literal</b></em>' containment reference.
@@ -1830,7 +1471,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateLiteral()
    * @generated
    */
-  int ST_DATE_LITERAL = 45;
+  int ST_DATE_LITERAL = 37;
 
   /**
    * The feature id for the '<em><b>Date Literal</b></em>' containment reference.
@@ -1858,7 +1499,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeLiteral()
    * @generated
    */
-  int ST_TIME_LITERAL = 46;
+  int ST_TIME_LITERAL = 38;
 
   /**
    * The feature id for the '<em><b>Time Literal</b></em>' containment reference.
@@ -1886,7 +1527,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeOfDayLiteral()
    * @generated
    */
-  int ST_TIME_OF_DAY_LITERAL = 47;
+  int ST_TIME_OF_DAY_LITERAL = 39;
 
   /**
    * The feature id for the '<em><b>Time Of Day Literal</b></em>' containment reference.
@@ -1914,7 +1555,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateAndTimeLiteral()
    * @generated
    */
-  int ST_DATE_AND_TIME_LITERAL = 48;
+  int ST_DATE_AND_TIME_LITERAL = 40;
 
   /**
    * The feature id for the '<em><b>Time Literal</b></em>' containment reference.
@@ -1942,7 +1583,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTStringLiteral()
    * @generated
    */
-  int ST_STRING_LITERAL = 49;
+  int ST_STRING_LITERAL = 41;
 
   /**
    * The feature id for the '<em><b>String Literal</b></em>' containment reference.
@@ -1963,6 +1604,26 @@ public interface STCorePackage extends EPackage
   int ST_STRING_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator <em>Binary Operator</em>}' enum.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getBinaryOperator()
+   * @generated
+   */
+  int BINARY_OPERATOR = 42;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator <em>Unary Operator</em>}' enum.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getUnaryOperator()
+   * @generated
+   */
+  int UNARY_OPERATOR = 43;
+
+  /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultiBitAccessSpecifier <em>Multi Bit Access Specifier</em>}' enum.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1970,7 +1631,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getMultiBitAccessSpecifier()
    * @generated
    */
-  int MULTI_BIT_ACCESS_SPECIFIER = 50;
+  int MULTI_BIT_ACCESS_SPECIFIER = 44;
 
 
   /**
@@ -2867,412 +2528,79 @@ public interface STCorePackage extends EPackage
   EClass getSTExit();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression <em>ST Subrange Expression</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression <em>ST Binary Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Subrange Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression
+   * @return the meta object for class '<em>ST Binary Expression</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression
    * @generated
    */
-  EClass getSTSubrangeExpression();
+  EClass getSTBinaryExpression();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression#getLowerBound <em>Lower Bound</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Lower Bound</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression#getLowerBound()
-   * @see #getSTSubrangeExpression()
-   * @generated
-   */
-  EReference getSTSubrangeExpression_LowerBound();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression#getUpperBound <em>Upper Bound</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Upper Bound</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression#getUpperBound()
-   * @see #getSTSubrangeExpression()
-   * @generated
-   */
-  EReference getSTSubrangeExpression_UpperBound();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression <em>ST Or Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Or Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression
-   * @generated
-   */
-  EClass getSTOrExpression();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression#getLeft <em>Left</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getLeft <em>Left</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression#getLeft()
-   * @see #getSTOrExpression()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getLeft()
+   * @see #getSTBinaryExpression()
    * @generated
    */
-  EReference getSTOrExpression_Left();
+  EReference getSTBinaryExpression_Left();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression#getOp <em>Op</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getOp <em>Op</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Op</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression#getOp()
-   * @see #getSTOrExpression()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getOp()
+   * @see #getSTBinaryExpression()
    * @generated
    */
-  EAttribute getSTOrExpression_Op();
+  EAttribute getSTBinaryExpression_Op();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression#getRight <em>Right</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getRight <em>Right</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression#getRight()
-   * @see #getSTOrExpression()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getRight()
+   * @see #getSTBinaryExpression()
    * @generated
    */
-  EReference getSTOrExpression_Right();
+  EReference getSTBinaryExpression_Right();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression <em>ST Xor Expression</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression <em>ST Unary Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Xor Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression
+   * @return the meta object for class '<em>ST Unary Expression</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression
    * @generated
    */
-  EClass getSTXorExpression();
+  EClass getSTUnaryExpression();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression#getLeft <em>Left</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression#getLeft()
-   * @see #getSTXorExpression()
-   * @generated
-   */
-  EReference getSTXorExpression_Left();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression#getOp <em>Op</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression#getOp <em>Op</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Op</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression#getOp()
-   * @see #getSTXorExpression()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression#getOp()
+   * @see #getSTUnaryExpression()
    * @generated
    */
-  EAttribute getSTXorExpression_Op();
+  EAttribute getSTUnaryExpression_Op();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression#getRight <em>Right</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression#getRight()
-   * @see #getSTXorExpression()
-   * @generated
-   */
-  EReference getSTXorExpression_Right();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression <em>ST And Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST And Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression
-   * @generated
-   */
-  EClass getSTAndExpression();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression#getLeft <em>Left</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression#getLeft()
-   * @see #getSTAndExpression()
-   * @generated
-   */
-  EReference getSTAndExpression_Left();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression#getOp <em>Op</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Op</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression#getOp()
-   * @see #getSTAndExpression()
-   * @generated
-   */
-  EAttribute getSTAndExpression_Op();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression#getRight <em>Right</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression#getRight()
-   * @see #getSTAndExpression()
-   * @generated
-   */
-  EReference getSTAndExpression_Right();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression <em>ST Equality Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Equality Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression
-   * @generated
-   */
-  EClass getSTEqualityExpression();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getLeft <em>Left</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getLeft()
-   * @see #getSTEqualityExpression()
-   * @generated
-   */
-  EReference getSTEqualityExpression_Left();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getOp <em>Op</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Op</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getOp()
-   * @see #getSTEqualityExpression()
-   * @generated
-   */
-  EAttribute getSTEqualityExpression_Op();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getRight <em>Right</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getRight()
-   * @see #getSTEqualityExpression()
-   * @generated
-   */
-  EReference getSTEqualityExpression_Right();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression <em>ST Comparison Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Comparison Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression
-   * @generated
-   */
-  EClass getSTComparisonExpression();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression#getLeft <em>Left</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression#getLeft()
-   * @see #getSTComparisonExpression()
-   * @generated
-   */
-  EReference getSTComparisonExpression_Left();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression#getOp <em>Op</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Op</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression#getOp()
-   * @see #getSTComparisonExpression()
-   * @generated
-   */
-  EAttribute getSTComparisonExpression_Op();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression#getRight <em>Right</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression#getRight()
-   * @see #getSTComparisonExpression()
-   * @generated
-   */
-  EReference getSTComparisonExpression_Right();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression <em>ST Add Sub Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Add Sub Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression
-   * @generated
-   */
-  EClass getSTAddSubExpression();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression#getLeft <em>Left</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression#getLeft()
-   * @see #getSTAddSubExpression()
-   * @generated
-   */
-  EReference getSTAddSubExpression_Left();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression#getOp <em>Op</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Op</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression#getOp()
-   * @see #getSTAddSubExpression()
-   * @generated
-   */
-  EAttribute getSTAddSubExpression_Op();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression#getRight <em>Right</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression#getRight()
-   * @see #getSTAddSubExpression()
-   * @generated
-   */
-  EReference getSTAddSubExpression_Right();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression <em>ST Mul Div Mod Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Mul Div Mod Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression
-   * @generated
-   */
-  EClass getSTMulDivModExpression();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression#getLeft <em>Left</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression#getLeft()
-   * @see #getSTMulDivModExpression()
-   * @generated
-   */
-  EReference getSTMulDivModExpression_Left();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression#getOp <em>Op</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Op</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression#getOp()
-   * @see #getSTMulDivModExpression()
-   * @generated
-   */
-  EAttribute getSTMulDivModExpression_Op();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression#getRight <em>Right</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression#getRight()
-   * @see #getSTMulDivModExpression()
-   * @generated
-   */
-  EReference getSTMulDivModExpression_Right();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression <em>ST Power Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Power Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression
-   * @generated
-   */
-  EClass getSTPowerExpression();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression#getLeft <em>Left</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression#getLeft()
-   * @see #getSTPowerExpression()
-   * @generated
-   */
-  EReference getSTPowerExpression_Left();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression#getOp <em>Op</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Op</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression#getOp()
-   * @see #getSTPowerExpression()
-   * @generated
-   */
-  EAttribute getSTPowerExpression_Op();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression#getRight <em>Right</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression#getRight()
-   * @see #getSTPowerExpression()
-   * @generated
-   */
-  EReference getSTPowerExpression_Right();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression <em>ST Signum Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Signum Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression
-   * @generated
-   */
-  EClass getSTSignumExpression();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression#getSignum <em>Signum</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Signum</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression#getSignum()
-   * @see #getSTSignumExpression()
-   * @generated
-   */
-  EAttribute getSTSignumExpression_Signum();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression#getExpression <em>Expression</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression#getExpression <em>Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Expression</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression#getExpression()
-   * @see #getSTSignumExpression()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression#getExpression()
+   * @see #getSTUnaryExpression()
    * @generated
    */
-  EReference getSTSignumExpression_Expression();
+  EReference getSTUnaryExpression_Expression();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection <em>ST Member Selection</em>}'.
@@ -3583,6 +2911,26 @@ public interface STCorePackage extends EPackage
    * @generated
    */
   EReference getSTStringLiteral_StringLiteral();
+
+  /**
+   * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator <em>Binary Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for enum '<em>Binary Operator</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator
+   * @generated
+   */
+  EEnum getBinaryOperator();
+
+  /**
+   * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator <em>Unary Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for enum '<em>Unary Operator</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator
+   * @generated
+   */
+  EEnum getUnaryOperator();
 
   /**
    * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultiBitAccessSpecifier <em>Multi Bit Access Specifier</em>}'.
@@ -4352,40 +3700,14 @@ public interface STCorePackage extends EPackage
     EClass ST_EXIT = eINSTANCE.getSTExit();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSubrangeExpressionImpl <em>ST Subrange Expression</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBinaryExpressionImpl <em>ST Binary Expression</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSubrangeExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSubrangeExpression()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBinaryExpressionImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBinaryExpression()
      * @generated
      */
-    EClass ST_SUBRANGE_EXPRESSION = eINSTANCE.getSTSubrangeExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Lower Bound</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_SUBRANGE_EXPRESSION__LOWER_BOUND = eINSTANCE.getSTSubrangeExpression_LowerBound();
-
-    /**
-     * The meta object literal for the '<em><b>Upper Bound</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_SUBRANGE_EXPRESSION__UPPER_BOUND = eINSTANCE.getSTSubrangeExpression_UpperBound();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STOrExpressionImpl <em>ST Or Expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STOrExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTOrExpression()
-     * @generated
-     */
-    EClass ST_OR_EXPRESSION = eINSTANCE.getSTOrExpression();
+    EClass ST_BINARY_EXPRESSION = eINSTANCE.getSTBinaryExpression();
 
     /**
      * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
@@ -4393,7 +3715,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_OR_EXPRESSION__LEFT = eINSTANCE.getSTOrExpression_Left();
+    EReference ST_BINARY_EXPRESSION__LEFT = eINSTANCE.getSTBinaryExpression_Left();
 
     /**
      * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
@@ -4401,7 +3723,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ST_OR_EXPRESSION__OP = eINSTANCE.getSTOrExpression_Op();
+    EAttribute ST_BINARY_EXPRESSION__OP = eINSTANCE.getSTBinaryExpression_Op();
 
     /**
      * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
@@ -4409,25 +3731,17 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_OR_EXPRESSION__RIGHT = eINSTANCE.getSTOrExpression_Right();
+    EReference ST_BINARY_EXPRESSION__RIGHT = eINSTANCE.getSTBinaryExpression_Right();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STXorExpressionImpl <em>ST Xor Expression</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STUnaryExpressionImpl <em>ST Unary Expression</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STXorExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTXorExpression()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STUnaryExpressionImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTUnaryExpression()
      * @generated
      */
-    EClass ST_XOR_EXPRESSION = eINSTANCE.getSTXorExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_XOR_EXPRESSION__LEFT = eINSTANCE.getSTXorExpression_Left();
+    EClass ST_UNARY_EXPRESSION = eINSTANCE.getSTUnaryExpression();
 
     /**
      * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
@@ -4435,237 +3749,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ST_XOR_EXPRESSION__OP = eINSTANCE.getSTXorExpression_Op();
-
-    /**
-     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_XOR_EXPRESSION__RIGHT = eINSTANCE.getSTXorExpression_Right();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAndExpressionImpl <em>ST And Expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAndExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTAndExpression()
-     * @generated
-     */
-    EClass ST_AND_EXPRESSION = eINSTANCE.getSTAndExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_AND_EXPRESSION__LEFT = eINSTANCE.getSTAndExpression_Left();
-
-    /**
-     * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ST_AND_EXPRESSION__OP = eINSTANCE.getSTAndExpression_Op();
-
-    /**
-     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_AND_EXPRESSION__RIGHT = eINSTANCE.getSTAndExpression_Right();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STEqualityExpressionImpl <em>ST Equality Expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STEqualityExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTEqualityExpression()
-     * @generated
-     */
-    EClass ST_EQUALITY_EXPRESSION = eINSTANCE.getSTEqualityExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_EQUALITY_EXPRESSION__LEFT = eINSTANCE.getSTEqualityExpression_Left();
-
-    /**
-     * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ST_EQUALITY_EXPRESSION__OP = eINSTANCE.getSTEqualityExpression_Op();
-
-    /**
-     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_EQUALITY_EXPRESSION__RIGHT = eINSTANCE.getSTEqualityExpression_Right();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STComparisonExpressionImpl <em>ST Comparison Expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STComparisonExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTComparisonExpression()
-     * @generated
-     */
-    EClass ST_COMPARISON_EXPRESSION = eINSTANCE.getSTComparisonExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_COMPARISON_EXPRESSION__LEFT = eINSTANCE.getSTComparisonExpression_Left();
-
-    /**
-     * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ST_COMPARISON_EXPRESSION__OP = eINSTANCE.getSTComparisonExpression_Op();
-
-    /**
-     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_COMPARISON_EXPRESSION__RIGHT = eINSTANCE.getSTComparisonExpression_Right();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAddSubExpressionImpl <em>ST Add Sub Expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAddSubExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTAddSubExpression()
-     * @generated
-     */
-    EClass ST_ADD_SUB_EXPRESSION = eINSTANCE.getSTAddSubExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_ADD_SUB_EXPRESSION__LEFT = eINSTANCE.getSTAddSubExpression_Left();
-
-    /**
-     * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ST_ADD_SUB_EXPRESSION__OP = eINSTANCE.getSTAddSubExpression_Op();
-
-    /**
-     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_ADD_SUB_EXPRESSION__RIGHT = eINSTANCE.getSTAddSubExpression_Right();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STMulDivModExpressionImpl <em>ST Mul Div Mod Expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STMulDivModExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTMulDivModExpression()
-     * @generated
-     */
-    EClass ST_MUL_DIV_MOD_EXPRESSION = eINSTANCE.getSTMulDivModExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_MUL_DIV_MOD_EXPRESSION__LEFT = eINSTANCE.getSTMulDivModExpression_Left();
-
-    /**
-     * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ST_MUL_DIV_MOD_EXPRESSION__OP = eINSTANCE.getSTMulDivModExpression_Op();
-
-    /**
-     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_MUL_DIV_MOD_EXPRESSION__RIGHT = eINSTANCE.getSTMulDivModExpression_Right();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STPowerExpressionImpl <em>ST Power Expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STPowerExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTPowerExpression()
-     * @generated
-     */
-    EClass ST_POWER_EXPRESSION = eINSTANCE.getSTPowerExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_POWER_EXPRESSION__LEFT = eINSTANCE.getSTPowerExpression_Left();
-
-    /**
-     * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ST_POWER_EXPRESSION__OP = eINSTANCE.getSTPowerExpression_Op();
-
-    /**
-     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_POWER_EXPRESSION__RIGHT = eINSTANCE.getSTPowerExpression_Right();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSignumExpressionImpl <em>ST Signum Expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSignumExpressionImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTSignumExpression()
-     * @generated
-     */
-    EClass ST_SIGNUM_EXPRESSION = eINSTANCE.getSTSignumExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Signum</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ST_SIGNUM_EXPRESSION__SIGNUM = eINSTANCE.getSTSignumExpression_Signum();
+    EAttribute ST_UNARY_EXPRESSION__OP = eINSTANCE.getSTUnaryExpression_Op();
 
     /**
      * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
@@ -4673,7 +3757,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_SIGNUM_EXPRESSION__EXPRESSION = eINSTANCE.getSTSignumExpression_Expression();
+    EReference ST_UNARY_EXPRESSION__EXPRESSION = eINSTANCE.getSTUnaryExpression_Expression();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STMemberSelectionImpl <em>ST Member Selection</em>}' class.
@@ -4924,6 +4008,26 @@ public interface STCorePackage extends EPackage
      * @generated
      */
     EReference ST_STRING_LITERAL__STRING_LITERAL = eINSTANCE.getSTStringLiteral_StringLiteral();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator <em>Binary Operator</em>}' enum.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getBinaryOperator()
+     * @generated
+     */
+    EEnum BINARY_OPERATOR = eINSTANCE.getBinaryOperator();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator <em>Unary Operator</em>}' enum.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getUnaryOperator()
+     * @generated
+     */
+    EEnum UNARY_OPERATOR = eINSTANCE.getUnaryOperator();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultiBitAccessSpecifier <em>Multi Bit Access Specifier</em>}' enum.

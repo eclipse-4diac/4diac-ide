@@ -15,40 +15,32 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSymbol;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
@@ -101,14 +93,11 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.NUMERIC_LITERAL:
 				sequence_NUMERIC_LITERAL(context, (NUMERIC_LITERAL) semanticObject); 
 				return; 
-			case STCorePackage.ST_ADD_SUB_EXPRESSION:
-				sequence_STAddSubExpression(context, (STAddSubExpression) semanticObject); 
-				return; 
-			case STCorePackage.ST_AND_EXPRESSION:
-				sequence_STAndExpression(context, (STAndExpression) semanticObject); 
-				return; 
 			case STCorePackage.ST_ASSIGNMENT_STATEMENT:
 				sequence_STAssignmentStatement(context, (STAssignmentStatement) semanticObject); 
+				return; 
+			case STCorePackage.ST_BINARY_EXPRESSION:
+				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_BOOL_LITERAL:
 				sequence_STLiteralExpressions(context, (STBoolLiteral) semanticObject); 
@@ -118,9 +107,6 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				return; 
 			case STCorePackage.ST_CASE_STATEMENT:
 				sequence_STCaseStatement(context, (STCaseStatement) semanticObject); 
-				return; 
-			case STCorePackage.ST_COMPARISON_EXPRESSION:
-				sequence_STComparisonExpression(context, (STComparisonExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_CONTINUE:
 				sequence_STStatement(context, (STContinue) semanticObject); 
@@ -137,9 +123,6 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_ELSE_PART:
 				sequence_STElsePart(context, (STElsePart) semanticObject); 
 				return; 
-			case STCorePackage.ST_EQUALITY_EXPRESSION:
-				sequence_STEqualityExpression(context, (STEqualityExpression) semanticObject); 
-				return; 
 			case STCorePackage.ST_EXIT:
 				sequence_STStatement(context, (STExit) semanticObject); 
 				return; 
@@ -152,20 +135,11 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_MEMBER_SELECTION:
 				sequence_STSelectionExpression(context, (STMemberSelection) semanticObject); 
 				return; 
-			case STCorePackage.ST_MUL_DIV_MOD_EXPRESSION:
-				sequence_STMulDivModExpression(context, (STMulDivModExpression) semanticObject); 
-				return; 
 			case STCorePackage.ST_NOP:
 				sequence_STStatement(context, (STNop) semanticObject); 
 				return; 
 			case STCorePackage.ST_NUMERIC_LITERAL:
 				sequence_STLiteralExpressions(context, (STNumericLiteral) semanticObject); 
-				return; 
-			case STCorePackage.ST_OR_EXPRESSION:
-				sequence_STOrExpression(context, (STOrExpression) semanticObject); 
-				return; 
-			case STCorePackage.ST_POWER_EXPRESSION:
-				sequence_STPowerExpression(context, (STPowerExpression) semanticObject); 
 				return; 
 			case STCorePackage.STRING_LITERAL:
 				sequence_STRING_LITERAL(context, (STRING_LITERAL) semanticObject); 
@@ -176,14 +150,8 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_RETURN:
 				sequence_STStatement(context, (STReturn) semanticObject); 
 				return; 
-			case STCorePackage.ST_SIGNUM_EXPRESSION:
-				sequence_STSignumExpression(context, (STSignumExpression) semanticObject); 
-				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STLiteralExpressions(context, (STStringLiteral) semanticObject); 
-				return; 
-			case STCorePackage.ST_SUBRANGE_EXPRESSION:
-				sequence_STSubrangeExpression(context, (STSubrangeExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_SYMBOL:
 				sequence_STAtomicExpression(context, (STSymbol) semanticObject); 
@@ -194,11 +162,11 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_TIME_OF_DAY_LITERAL:
 				sequence_STLiteralExpressions(context, (STTimeOfDayLiteral) semanticObject); 
 				return; 
+			case STCorePackage.ST_UNARY_EXPRESSION:
+				sequence_STSignumExpression(context, (STUnaryExpression) semanticObject); 
+				return; 
 			case STCorePackage.ST_WHILE_STATEMENT:
 				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
-				return; 
-			case STCorePackage.ST_XOR_EXPRESSION:
-				sequence_STXorExpression(context, (STXorExpression) semanticObject); 
 				return; 
 			case STCorePackage.TIME_LITERAL:
 				sequence_TIME_LITERAL(context, (TIME_LITERAL) semanticObject); 

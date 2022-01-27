@@ -79,25 +79,15 @@ public class STCoreSyntacticSequencer extends AbstractSyntacticSequencer {
 	 *     (rule start) (ambiguity) boolLiteral=BOOL_LITERAL
 	 *     (rule start) (ambiguity) dateLiteral=DATE_LITERAL
 	 *     (rule start) (ambiguity) numericLiteral=NUMERIC_LITERAL
-	 *     (rule start) (ambiguity) signum='+'
-	 *     (rule start) (ambiguity) signum='-'
-	 *     (rule start) (ambiguity) signum='NOT'
+	 *     (rule start) (ambiguity) op=UnaryOperator
 	 *     (rule start) (ambiguity) stringLiteral=STRING_LITERAL
 	 *     (rule start) (ambiguity) symbol=[VarDeclaration|ID]
 	 *     (rule start) (ambiguity) timeLiteral=DATE_AND_TIME_LITERAL
 	 *     (rule start) (ambiguity) timeLiteral=TIME_LITERAL
 	 *     (rule start) (ambiguity) timeOfDayLiteral=TIME_OF_DAY_LITERAL
 	 *     (rule start) (ambiguity) type=[DataType|ID]
-	 *     (rule start) (ambiguity) {STAddSubExpression.left=}
-	 *     (rule start) (ambiguity) {STAndExpression.left=}
-	 *     (rule start) (ambiguity) {STComparisonExpression.left=}
-	 *     (rule start) (ambiguity) {STEqualityExpression.left=}
+	 *     (rule start) (ambiguity) {STBinaryExpression.left=}
 	 *     (rule start) (ambiguity) {STMemberSelection.receiver=}
-	 *     (rule start) (ambiguity) {STMulDivModExpression.left=}
-	 *     (rule start) (ambiguity) {STOrExpression.left=}
-	 *     (rule start) (ambiguity) {STPowerExpression.left=}
-	 *     (rule start) (ambiguity) {STSubrangeExpression.lowerBound=}
-	 *     (rule start) (ambiguity) {STXorExpression.left=}
 	 */
 	protected void emit_STAtomicExpression_LeftParenthesisKeyword_0_0_a(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
@@ -111,23 +101,13 @@ public class STCoreSyntacticSequencer extends AbstractSyntacticSequencer {
 	 *     (rule start) (ambiguity) boolLiteral=BOOL_LITERAL
 	 *     (rule start) (ambiguity) dateLiteral=DATE_LITERAL
 	 *     (rule start) (ambiguity) numericLiteral=NUMERIC_LITERAL
-	 *     (rule start) (ambiguity) signum='+'
-	 *     (rule start) (ambiguity) signum='-'
-	 *     (rule start) (ambiguity) signum='NOT'
+	 *     (rule start) (ambiguity) op=UnaryOperator
 	 *     (rule start) (ambiguity) stringLiteral=STRING_LITERAL
 	 *     (rule start) (ambiguity) timeLiteral=DATE_AND_TIME_LITERAL
 	 *     (rule start) (ambiguity) timeLiteral=TIME_LITERAL
 	 *     (rule start) (ambiguity) timeOfDayLiteral=TIME_OF_DAY_LITERAL
-	 *     (rule start) (ambiguity) {STAddSubExpression.left=}
-	 *     (rule start) (ambiguity) {STAndExpression.left=}
-	 *     (rule start) (ambiguity) {STComparisonExpression.left=}
-	 *     (rule start) (ambiguity) {STEqualityExpression.left=}
+	 *     (rule start) (ambiguity) {STBinaryExpression.left=}
 	 *     (rule start) (ambiguity) {STMemberSelection.receiver=}
-	 *     (rule start) (ambiguity) {STMulDivModExpression.left=}
-	 *     (rule start) (ambiguity) {STOrExpression.left=}
-	 *     (rule start) (ambiguity) {STPowerExpression.left=}
-	 *     (rule start) (ambiguity) {STSubrangeExpression.lowerBound=}
-	 *     (rule start) (ambiguity) {STXorExpression.left=}
 	 */
 	protected void emit_STAtomicExpression_LeftParenthesisKeyword_0_0_p(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);

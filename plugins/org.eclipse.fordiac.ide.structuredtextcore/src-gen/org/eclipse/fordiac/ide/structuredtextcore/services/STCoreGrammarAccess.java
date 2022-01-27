@@ -1093,38 +1093,42 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTOrExpressionParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
-		private final Action cSTSubrangeExpressionLowerBoundAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
-		private final Keyword cFullStopFullStopKeyword_1_0_1 = (Keyword)cGroup_1_0.eContents().get(1);
-		private final Assignment cUpperBoundAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cUpperBoundSTOrExpressionParserRuleCall_1_1_0 = (RuleCall)cUpperBoundAssignment_1_1.eContents().get(0);
+		private final Action cSTBinaryExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Assignment cOpAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
+		private final RuleCall cOpSubrangeOperatorEnumRuleCall_1_0_1_0 = (RuleCall)cOpAssignment_1_0_1.eContents().get(0);
+		private final Assignment cRightAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cRightSTOrExpressionParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//STSubrangeExpression returns STExpression:
-		//    STOrExpression (({STSubrangeExpression.lowerBound=current} '..') upperBound=STOrExpression)*;
+		//    STOrExpression (({STBinaryExpression.left=current} op=SubrangeOperator) right=STOrExpression)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STOrExpression (({STSubrangeExpression.lowerBound=current} '..') upperBound=STOrExpression)*
+		//STOrExpression (({STBinaryExpression.left=current} op=SubrangeOperator) right=STOrExpression)*
 		public Group getGroup() { return cGroup; }
 		
 		//STOrExpression
 		public RuleCall getSTOrExpressionParserRuleCall_0() { return cSTOrExpressionParserRuleCall_0; }
 		
-		//(({STSubrangeExpression.lowerBound=current} '..') upperBound=STOrExpression)*
+		//(({STBinaryExpression.left=current} op=SubrangeOperator) right=STOrExpression)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//({STSubrangeExpression.lowerBound=current} '..')
+		//({STBinaryExpression.left=current} op=SubrangeOperator)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 		
-		//{STSubrangeExpression.lowerBound=current}
-		public Action getSTSubrangeExpressionLowerBoundAction_1_0_0() { return cSTSubrangeExpressionLowerBoundAction_1_0_0; }
+		//{STBinaryExpression.left=current}
+		public Action getSTBinaryExpressionLeftAction_1_0_0() { return cSTBinaryExpressionLeftAction_1_0_0; }
 		
-		//'..'
-		public Keyword getFullStopFullStopKeyword_1_0_1() { return cFullStopFullStopKeyword_1_0_1; }
+		//op=SubrangeOperator
+		public Assignment getOpAssignment_1_0_1() { return cOpAssignment_1_0_1; }
 		
-		//upperBound=STOrExpression
-		public Assignment getUpperBoundAssignment_1_1() { return cUpperBoundAssignment_1_1; }
+		//SubrangeOperator
+		public RuleCall getOpSubrangeOperatorEnumRuleCall_1_0_1_0() { return cOpSubrangeOperatorEnumRuleCall_1_0_1_0; }
+		
+		//right=STOrExpression
+		public Assignment getRightAssignment_1_1() { return cRightAssignment_1_1; }
 		
 		//STOrExpression
-		public RuleCall getUpperBoundSTOrExpressionParserRuleCall_1_1_0() { return cUpperBoundSTOrExpressionParserRuleCall_1_1_0; }
+		public RuleCall getRightSTOrExpressionParserRuleCall_1_1_0() { return cRightSTOrExpressionParserRuleCall_1_1_0; }
 	}
 	public class STOrExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STOrExpression");
@@ -1132,36 +1136,36 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTXorExpressionParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
-		private final Action cSTOrExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Action cSTBinaryExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
 		private final Assignment cOpAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
-		private final Keyword cOpORKeyword_1_0_1_0 = (Keyword)cOpAssignment_1_0_1.eContents().get(0);
+		private final RuleCall cOpOrOperatorEnumRuleCall_1_0_1_0 = (RuleCall)cOpAssignment_1_0_1.eContents().get(0);
 		private final Assignment cRightAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cRightSTXorExpressionParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//STOrExpression returns STExpression:
-		//    STXorExpression (({STOrExpression.left=current} op='OR') right=STXorExpression)*;
+		//    STXorExpression (({STBinaryExpression.left=current} op=OrOperator) right=STXorExpression)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STXorExpression (({STOrExpression.left=current} op='OR') right=STXorExpression)*
+		//STXorExpression (({STBinaryExpression.left=current} op=OrOperator) right=STXorExpression)*
 		public Group getGroup() { return cGroup; }
 		
 		//STXorExpression
 		public RuleCall getSTXorExpressionParserRuleCall_0() { return cSTXorExpressionParserRuleCall_0; }
 		
-		//(({STOrExpression.left=current} op='OR') right=STXorExpression)*
+		//(({STBinaryExpression.left=current} op=OrOperator) right=STXorExpression)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//({STOrExpression.left=current} op='OR')
+		//({STBinaryExpression.left=current} op=OrOperator)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 		
-		//{STOrExpression.left=current}
-		public Action getSTOrExpressionLeftAction_1_0_0() { return cSTOrExpressionLeftAction_1_0_0; }
+		//{STBinaryExpression.left=current}
+		public Action getSTBinaryExpressionLeftAction_1_0_0() { return cSTBinaryExpressionLeftAction_1_0_0; }
 		
-		//op='OR'
+		//op=OrOperator
 		public Assignment getOpAssignment_1_0_1() { return cOpAssignment_1_0_1; }
 		
-		//'OR'
-		public Keyword getOpORKeyword_1_0_1_0() { return cOpORKeyword_1_0_1_0; }
+		//OrOperator
+		public RuleCall getOpOrOperatorEnumRuleCall_1_0_1_0() { return cOpOrOperatorEnumRuleCall_1_0_1_0; }
 		
 		//right=STXorExpression
 		public Assignment getRightAssignment_1_1() { return cRightAssignment_1_1; }
@@ -1175,36 +1179,36 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTAndExpressionParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
-		private final Action cSTXorExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Action cSTBinaryExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
 		private final Assignment cOpAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
-		private final Keyword cOpXORKeyword_1_0_1_0 = (Keyword)cOpAssignment_1_0_1.eContents().get(0);
+		private final RuleCall cOpXorOperatorEnumRuleCall_1_0_1_0 = (RuleCall)cOpAssignment_1_0_1.eContents().get(0);
 		private final Assignment cRightAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cRightSTAndExpressionParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//STXorExpression returns STExpression:
-		//    STAndExpression (({STXorExpression.left=current} op='XOR') right=STAndExpression)*;
+		//    STAndExpression (({STBinaryExpression.left=current} op=XorOperator) right=STAndExpression)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STAndExpression (({STXorExpression.left=current} op='XOR') right=STAndExpression)*
+		//STAndExpression (({STBinaryExpression.left=current} op=XorOperator) right=STAndExpression)*
 		public Group getGroup() { return cGroup; }
 		
 		//STAndExpression
 		public RuleCall getSTAndExpressionParserRuleCall_0() { return cSTAndExpressionParserRuleCall_0; }
 		
-		//(({STXorExpression.left=current} op='XOR') right=STAndExpression)*
+		//(({STBinaryExpression.left=current} op=XorOperator) right=STAndExpression)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//({STXorExpression.left=current} op='XOR')
+		//({STBinaryExpression.left=current} op=XorOperator)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 		
-		//{STXorExpression.left=current}
-		public Action getSTXorExpressionLeftAction_1_0_0() { return cSTXorExpressionLeftAction_1_0_0; }
+		//{STBinaryExpression.left=current}
+		public Action getSTBinaryExpressionLeftAction_1_0_0() { return cSTBinaryExpressionLeftAction_1_0_0; }
 		
-		//op='XOR'
+		//op=XorOperator
 		public Assignment getOpAssignment_1_0_1() { return cOpAssignment_1_0_1; }
 		
-		//'XOR'
-		public Keyword getOpXORKeyword_1_0_1_0() { return cOpXORKeyword_1_0_1_0; }
+		//XorOperator
+		public RuleCall getOpXorOperatorEnumRuleCall_1_0_1_0() { return cOpXorOperatorEnumRuleCall_1_0_1_0; }
 		
 		//right=STAndExpression
 		public Assignment getRightAssignment_1_1() { return cRightAssignment_1_1; }
@@ -1218,44 +1222,36 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTEqualityExpressionParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
-		private final Action cSTAndExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Action cSTBinaryExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
 		private final Assignment cOpAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
-		private final Alternatives cOpAlternatives_1_0_1_0 = (Alternatives)cOpAssignment_1_0_1.eContents().get(0);
-		private final Keyword cOpAmpersandKeyword_1_0_1_0_0 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(0);
-		private final Keyword cOpANDKeyword_1_0_1_0_1 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(1);
+		private final RuleCall cOpAndOperatorEnumRuleCall_1_0_1_0 = (RuleCall)cOpAssignment_1_0_1.eContents().get(0);
 		private final Assignment cRightAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cRightSTEqualityExpressionParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//STAndExpression returns STExpression:
-		//    STEqualityExpression (({STAndExpression.left=current} op=('&' | 'AND')) right=STEqualityExpression)*;
+		//    STEqualityExpression (({STBinaryExpression.left=current} op=AndOperator) right=STEqualityExpression)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STEqualityExpression (({STAndExpression.left=current} op=('&' | 'AND')) right=STEqualityExpression)*
+		//STEqualityExpression (({STBinaryExpression.left=current} op=AndOperator) right=STEqualityExpression)*
 		public Group getGroup() { return cGroup; }
 		
 		//STEqualityExpression
 		public RuleCall getSTEqualityExpressionParserRuleCall_0() { return cSTEqualityExpressionParserRuleCall_0; }
 		
-		//(({STAndExpression.left=current} op=('&' | 'AND')) right=STEqualityExpression)*
+		//(({STBinaryExpression.left=current} op=AndOperator) right=STEqualityExpression)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//({STAndExpression.left=current} op=('&' | 'AND'))
+		//({STBinaryExpression.left=current} op=AndOperator)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 		
-		//{STAndExpression.left=current}
-		public Action getSTAndExpressionLeftAction_1_0_0() { return cSTAndExpressionLeftAction_1_0_0; }
+		//{STBinaryExpression.left=current}
+		public Action getSTBinaryExpressionLeftAction_1_0_0() { return cSTBinaryExpressionLeftAction_1_0_0; }
 		
-		//op=('&' | 'AND')
+		//op=AndOperator
 		public Assignment getOpAssignment_1_0_1() { return cOpAssignment_1_0_1; }
 		
-		//('&' | 'AND')
-		public Alternatives getOpAlternatives_1_0_1_0() { return cOpAlternatives_1_0_1_0; }
-		
-		//'&'
-		public Keyword getOpAmpersandKeyword_1_0_1_0_0() { return cOpAmpersandKeyword_1_0_1_0_0; }
-		
-		//'AND'
-		public Keyword getOpANDKeyword_1_0_1_0_1() { return cOpANDKeyword_1_0_1_0_1; }
+		//AndOperator
+		public RuleCall getOpAndOperatorEnumRuleCall_1_0_1_0() { return cOpAndOperatorEnumRuleCall_1_0_1_0; }
 		
 		//right=STEqualityExpression
 		public Assignment getRightAssignment_1_1() { return cRightAssignment_1_1; }
@@ -1269,44 +1265,36 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTComparisonExpressionParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
-		private final Action cSTEqualityExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Action cSTBinaryExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
 		private final Assignment cOpAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
-		private final Alternatives cOpAlternatives_1_0_1_0 = (Alternatives)cOpAssignment_1_0_1.eContents().get(0);
-		private final Keyword cOpEqualsSignKeyword_1_0_1_0_0 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(0);
-		private final Keyword cOpLessThanSignGreaterThanSignKeyword_1_0_1_0_1 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(1);
+		private final RuleCall cOpEqualityOperatorEnumRuleCall_1_0_1_0 = (RuleCall)cOpAssignment_1_0_1.eContents().get(0);
 		private final Assignment cRightAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cRightSTComparisonExpressionParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//STEqualityExpression returns STExpression:
-		//    STComparisonExpression (({STEqualityExpression.left=current} op=('=' | '<>')) right=STComparisonExpression)*;
+		//    STComparisonExpression (({STBinaryExpression.left=current} op=EqualityOperator) right=STComparisonExpression)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STComparisonExpression (({STEqualityExpression.left=current} op=('=' | '<>')) right=STComparisonExpression)*
+		//STComparisonExpression (({STBinaryExpression.left=current} op=EqualityOperator) right=STComparisonExpression)*
 		public Group getGroup() { return cGroup; }
 		
 		//STComparisonExpression
 		public RuleCall getSTComparisonExpressionParserRuleCall_0() { return cSTComparisonExpressionParserRuleCall_0; }
 		
-		//(({STEqualityExpression.left=current} op=('=' | '<>')) right=STComparisonExpression)*
+		//(({STBinaryExpression.left=current} op=EqualityOperator) right=STComparisonExpression)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//({STEqualityExpression.left=current} op=('=' | '<>'))
+		//({STBinaryExpression.left=current} op=EqualityOperator)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 		
-		//{STEqualityExpression.left=current}
-		public Action getSTEqualityExpressionLeftAction_1_0_0() { return cSTEqualityExpressionLeftAction_1_0_0; }
+		//{STBinaryExpression.left=current}
+		public Action getSTBinaryExpressionLeftAction_1_0_0() { return cSTBinaryExpressionLeftAction_1_0_0; }
 		
-		//op=('=' | '<>')
+		//op=EqualityOperator
 		public Assignment getOpAssignment_1_0_1() { return cOpAssignment_1_0_1; }
 		
-		//('=' | '<>')
-		public Alternatives getOpAlternatives_1_0_1_0() { return cOpAlternatives_1_0_1_0; }
-		
-		//'='
-		public Keyword getOpEqualsSignKeyword_1_0_1_0_0() { return cOpEqualsSignKeyword_1_0_1_0_0; }
-		
-		//'<>'
-		public Keyword getOpLessThanSignGreaterThanSignKeyword_1_0_1_0_1() { return cOpLessThanSignGreaterThanSignKeyword_1_0_1_0_1; }
+		//EqualityOperator
+		public RuleCall getOpEqualityOperatorEnumRuleCall_1_0_1_0() { return cOpEqualityOperatorEnumRuleCall_1_0_1_0; }
 		
 		//right=STComparisonExpression
 		public Assignment getRightAssignment_1_1() { return cRightAssignment_1_1; }
@@ -1320,52 +1308,36 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTAddSubExpressionParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
-		private final Action cSTComparisonExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Action cSTBinaryExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
 		private final Assignment cOpAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
-		private final Alternatives cOpAlternatives_1_0_1_0 = (Alternatives)cOpAssignment_1_0_1.eContents().get(0);
-		private final Keyword cOpLessThanSignKeyword_1_0_1_0_0 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(0);
-		private final Keyword cOpGreaterThanSignKeyword_1_0_1_0_1 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(1);
-		private final Keyword cOpLessThanSignEqualsSignKeyword_1_0_1_0_2 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(2);
-		private final Keyword cOpGreaterThanSignEqualsSignKeyword_1_0_1_0_3 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(3);
+		private final RuleCall cOpCompareOperatorEnumRuleCall_1_0_1_0 = (RuleCall)cOpAssignment_1_0_1.eContents().get(0);
 		private final Assignment cRightAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cRightSTAddSubExpressionParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//STComparisonExpression returns STExpression:
-		//    STAddSubExpression (({STComparisonExpression.left=current} op=('<' | '>' | '<=' | '>=')) right=STAddSubExpression)*;
+		//    STAddSubExpression (({STBinaryExpression.left=current} op=CompareOperator) right=STAddSubExpression)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STAddSubExpression (({STComparisonExpression.left=current} op=('<' | '>' | '<=' | '>=')) right=STAddSubExpression)*
+		//STAddSubExpression (({STBinaryExpression.left=current} op=CompareOperator) right=STAddSubExpression)*
 		public Group getGroup() { return cGroup; }
 		
 		//STAddSubExpression
 		public RuleCall getSTAddSubExpressionParserRuleCall_0() { return cSTAddSubExpressionParserRuleCall_0; }
 		
-		//(({STComparisonExpression.left=current} op=('<' | '>' | '<=' | '>=')) right=STAddSubExpression)*
+		//(({STBinaryExpression.left=current} op=CompareOperator) right=STAddSubExpression)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//({STComparisonExpression.left=current} op=('<' | '>' | '<=' | '>='))
+		//({STBinaryExpression.left=current} op=CompareOperator)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 		
-		//{STComparisonExpression.left=current}
-		public Action getSTComparisonExpressionLeftAction_1_0_0() { return cSTComparisonExpressionLeftAction_1_0_0; }
+		//{STBinaryExpression.left=current}
+		public Action getSTBinaryExpressionLeftAction_1_0_0() { return cSTBinaryExpressionLeftAction_1_0_0; }
 		
-		//op=('<' | '>' | '<=' | '>=')
+		//op=CompareOperator
 		public Assignment getOpAssignment_1_0_1() { return cOpAssignment_1_0_1; }
 		
-		//('<' | '>' | '<=' | '>=')
-		public Alternatives getOpAlternatives_1_0_1_0() { return cOpAlternatives_1_0_1_0; }
-		
-		//'<'
-		public Keyword getOpLessThanSignKeyword_1_0_1_0_0() { return cOpLessThanSignKeyword_1_0_1_0_0; }
-		
-		//'>'
-		public Keyword getOpGreaterThanSignKeyword_1_0_1_0_1() { return cOpGreaterThanSignKeyword_1_0_1_0_1; }
-		
-		//'<='
-		public Keyword getOpLessThanSignEqualsSignKeyword_1_0_1_0_2() { return cOpLessThanSignEqualsSignKeyword_1_0_1_0_2; }
-		
-		//'>='
-		public Keyword getOpGreaterThanSignEqualsSignKeyword_1_0_1_0_3() { return cOpGreaterThanSignEqualsSignKeyword_1_0_1_0_3; }
+		//CompareOperator
+		public RuleCall getOpCompareOperatorEnumRuleCall_1_0_1_0() { return cOpCompareOperatorEnumRuleCall_1_0_1_0; }
 		
 		//right=STAddSubExpression
 		public Assignment getRightAssignment_1_1() { return cRightAssignment_1_1; }
@@ -1379,44 +1351,36 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTMulDivModExpressionParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
-		private final Action cSTAddSubExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Action cSTBinaryExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
 		private final Assignment cOpAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
-		private final Alternatives cOpAlternatives_1_0_1_0 = (Alternatives)cOpAssignment_1_0_1.eContents().get(0);
-		private final Keyword cOpPlusSignKeyword_1_0_1_0_0 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(0);
-		private final Keyword cOpHyphenMinusKeyword_1_0_1_0_1 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(1);
+		private final RuleCall cOpAddSubOperatorEnumRuleCall_1_0_1_0 = (RuleCall)cOpAssignment_1_0_1.eContents().get(0);
 		private final Assignment cRightAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cRightSTMulDivModExpressionParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//STAddSubExpression returns STExpression:
-		//    STMulDivModExpression (({STAddSubExpression.left=current} op=('+' | '-')) right=STMulDivModExpression)*;
+		//    STMulDivModExpression (({STBinaryExpression.left=current} op=AddSubOperator) right=STMulDivModExpression)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STMulDivModExpression (({STAddSubExpression.left=current} op=('+' | '-')) right=STMulDivModExpression)*
+		//STMulDivModExpression (({STBinaryExpression.left=current} op=AddSubOperator) right=STMulDivModExpression)*
 		public Group getGroup() { return cGroup; }
 		
 		//STMulDivModExpression
 		public RuleCall getSTMulDivModExpressionParserRuleCall_0() { return cSTMulDivModExpressionParserRuleCall_0; }
 		
-		//(({STAddSubExpression.left=current} op=('+' | '-')) right=STMulDivModExpression)*
+		//(({STBinaryExpression.left=current} op=AddSubOperator) right=STMulDivModExpression)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//({STAddSubExpression.left=current} op=('+' | '-'))
+		//({STBinaryExpression.left=current} op=AddSubOperator)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 		
-		//{STAddSubExpression.left=current}
-		public Action getSTAddSubExpressionLeftAction_1_0_0() { return cSTAddSubExpressionLeftAction_1_0_0; }
+		//{STBinaryExpression.left=current}
+		public Action getSTBinaryExpressionLeftAction_1_0_0() { return cSTBinaryExpressionLeftAction_1_0_0; }
 		
-		//op=('+' | '-')
+		//op=AddSubOperator
 		public Assignment getOpAssignment_1_0_1() { return cOpAssignment_1_0_1; }
 		
-		//('+' | '-')
-		public Alternatives getOpAlternatives_1_0_1_0() { return cOpAlternatives_1_0_1_0; }
-		
-		//'+'
-		public Keyword getOpPlusSignKeyword_1_0_1_0_0() { return cOpPlusSignKeyword_1_0_1_0_0; }
-		
-		//'-'
-		public Keyword getOpHyphenMinusKeyword_1_0_1_0_1() { return cOpHyphenMinusKeyword_1_0_1_0_1; }
+		//AddSubOperator
+		public RuleCall getOpAddSubOperatorEnumRuleCall_1_0_1_0() { return cOpAddSubOperatorEnumRuleCall_1_0_1_0; }
 		
 		//right=STMulDivModExpression
 		public Assignment getRightAssignment_1_1() { return cRightAssignment_1_1; }
@@ -1430,48 +1394,36 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTPowerExpressionParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
-		private final Action cSTMulDivModExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Action cSTBinaryExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
 		private final Assignment cOpAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
-		private final Alternatives cOpAlternatives_1_0_1_0 = (Alternatives)cOpAssignment_1_0_1.eContents().get(0);
-		private final Keyword cOpAsteriskKeyword_1_0_1_0_0 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(0);
-		private final Keyword cOpSolidusKeyword_1_0_1_0_1 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(1);
-		private final Keyword cOpMODKeyword_1_0_1_0_2 = (Keyword)cOpAlternatives_1_0_1_0.eContents().get(2);
+		private final RuleCall cOpMulDivModOperatorEnumRuleCall_1_0_1_0 = (RuleCall)cOpAssignment_1_0_1.eContents().get(0);
 		private final Assignment cRightAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cRightSTPowerExpressionParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//STMulDivModExpression returns STExpression:
-		//    STPowerExpression (({STMulDivModExpression.left=current} op=('*' | '/' | 'MOD')) right=STPowerExpression)*;
+		//    STPowerExpression (({STBinaryExpression.left=current} op=MulDivModOperator) right=STPowerExpression)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STPowerExpression (({STMulDivModExpression.left=current} op=('*' | '/' | 'MOD')) right=STPowerExpression)*
+		//STPowerExpression (({STBinaryExpression.left=current} op=MulDivModOperator) right=STPowerExpression)*
 		public Group getGroup() { return cGroup; }
 		
 		//STPowerExpression
 		public RuleCall getSTPowerExpressionParserRuleCall_0() { return cSTPowerExpressionParserRuleCall_0; }
 		
-		//(({STMulDivModExpression.left=current} op=('*' | '/' | 'MOD')) right=STPowerExpression)*
+		//(({STBinaryExpression.left=current} op=MulDivModOperator) right=STPowerExpression)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//({STMulDivModExpression.left=current} op=('*' | '/' | 'MOD'))
+		//({STBinaryExpression.left=current} op=MulDivModOperator)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 		
-		//{STMulDivModExpression.left=current}
-		public Action getSTMulDivModExpressionLeftAction_1_0_0() { return cSTMulDivModExpressionLeftAction_1_0_0; }
+		//{STBinaryExpression.left=current}
+		public Action getSTBinaryExpressionLeftAction_1_0_0() { return cSTBinaryExpressionLeftAction_1_0_0; }
 		
-		//op=('*' | '/' | 'MOD')
+		//op=MulDivModOperator
 		public Assignment getOpAssignment_1_0_1() { return cOpAssignment_1_0_1; }
 		
-		//('*' | '/' | 'MOD')
-		public Alternatives getOpAlternatives_1_0_1_0() { return cOpAlternatives_1_0_1_0; }
-		
-		//'*'
-		public Keyword getOpAsteriskKeyword_1_0_1_0_0() { return cOpAsteriskKeyword_1_0_1_0_0; }
-		
-		//'/'
-		public Keyword getOpSolidusKeyword_1_0_1_0_1() { return cOpSolidusKeyword_1_0_1_0_1; }
-		
-		//'MOD'
-		public Keyword getOpMODKeyword_1_0_1_0_2() { return cOpMODKeyword_1_0_1_0_2; }
+		//MulDivModOperator
+		public RuleCall getOpMulDivModOperatorEnumRuleCall_1_0_1_0() { return cOpMulDivModOperatorEnumRuleCall_1_0_1_0; }
 		
 		//right=STPowerExpression
 		public Assignment getRightAssignment_1_1() { return cRightAssignment_1_1; }
@@ -1485,36 +1437,36 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTSignumExpressionParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
-		private final Action cSTPowerExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Action cSTBinaryExpressionLeftAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
 		private final Assignment cOpAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
-		private final Keyword cOpAsteriskAsteriskKeyword_1_0_1_0 = (Keyword)cOpAssignment_1_0_1.eContents().get(0);
+		private final RuleCall cOpPowerOperatorEnumRuleCall_1_0_1_0 = (RuleCall)cOpAssignment_1_0_1.eContents().get(0);
 		private final Assignment cRightAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cRightSTSignumExpressionParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//STPowerExpression returns STExpression:
-		//    STSignumExpression (({STPowerExpression.left=current} op='**') right=STSignumExpression)*;
+		//    STSignumExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STSignumExpression)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STSignumExpression (({STPowerExpression.left=current} op='**') right=STSignumExpression)*
+		//STSignumExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STSignumExpression)*
 		public Group getGroup() { return cGroup; }
 		
 		//STSignumExpression
 		public RuleCall getSTSignumExpressionParserRuleCall_0() { return cSTSignumExpressionParserRuleCall_0; }
 		
-		//(({STPowerExpression.left=current} op='**') right=STSignumExpression)*
+		//(({STBinaryExpression.left=current} op=PowerOperator) right=STSignumExpression)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//({STPowerExpression.left=current} op='**')
+		//({STBinaryExpression.left=current} op=PowerOperator)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 		
-		//{STPowerExpression.left=current}
-		public Action getSTPowerExpressionLeftAction_1_0_0() { return cSTPowerExpressionLeftAction_1_0_0; }
+		//{STBinaryExpression.left=current}
+		public Action getSTBinaryExpressionLeftAction_1_0_0() { return cSTBinaryExpressionLeftAction_1_0_0; }
 		
-		//op='**'
+		//op=PowerOperator
 		public Assignment getOpAssignment_1_0_1() { return cOpAssignment_1_0_1; }
 		
-		//'**'
-		public Keyword getOpAsteriskAsteriskKeyword_1_0_1_0() { return cOpAsteriskAsteriskKeyword_1_0_1_0; }
+		//PowerOperator
+		public RuleCall getOpPowerOperatorEnumRuleCall_1_0_1_0() { return cOpPowerOperatorEnumRuleCall_1_0_1_0; }
 		
 		//right=STSignumExpression
 		public Assignment getRightAssignment_1_1() { return cRightAssignment_1_1; }
@@ -1528,21 +1480,18 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTLiteralExpressionsParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final RuleCall cSTSelectionExpressionParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final Action cSTSignumExpressionAction_2_0 = (Action)cGroup_2.eContents().get(0);
-		private final Assignment cSignumAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final Alternatives cSignumAlternatives_2_1_0 = (Alternatives)cSignumAssignment_2_1.eContents().get(0);
-		private final Keyword cSignumHyphenMinusKeyword_2_1_0_0 = (Keyword)cSignumAlternatives_2_1_0.eContents().get(0);
-		private final Keyword cSignumPlusSignKeyword_2_1_0_1 = (Keyword)cSignumAlternatives_2_1_0.eContents().get(1);
-		private final Keyword cSignumNOTKeyword_2_1_0_2 = (Keyword)cSignumAlternatives_2_1_0.eContents().get(2);
+		private final Action cSTUnaryExpressionAction_2_0 = (Action)cGroup_2.eContents().get(0);
+		private final Assignment cOpAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cOpUnaryOperatorEnumRuleCall_2_1_0 = (RuleCall)cOpAssignment_2_1.eContents().get(0);
 		private final Assignment cExpressionAssignment_2_2 = (Assignment)cGroup_2.eContents().get(2);
 		private final RuleCall cExpressionSTSelectionExpressionParserRuleCall_2_2_0 = (RuleCall)cExpressionAssignment_2_2.eContents().get(0);
 		
 		//STSignumExpression returns STExpression:
-		//    STLiteralExpressions | STSelectionExpression | ({STSignumExpression} signum=('-' | '+' | 'NOT')
+		//    STLiteralExpressions | STSelectionExpression | ({STUnaryExpression} op=UnaryOperator
 		//    expression=STSelectionExpression);
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STLiteralExpressions | STSelectionExpression | ({STSignumExpression} signum=('-' | '+' | 'NOT')
+		//STLiteralExpressions | STSelectionExpression | ({STUnaryExpression} op=UnaryOperator
 		//expression=STSelectionExpression)
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
@@ -1552,27 +1501,18 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STSelectionExpression
 		public RuleCall getSTSelectionExpressionParserRuleCall_1() { return cSTSelectionExpressionParserRuleCall_1; }
 		
-		//({STSignumExpression} signum=('-' | '+' | 'NOT')
+		//({STUnaryExpression} op=UnaryOperator
 		//   expression=STSelectionExpression)
 		public Group getGroup_2() { return cGroup_2; }
 		
-		//{STSignumExpression}
-		public Action getSTSignumExpressionAction_2_0() { return cSTSignumExpressionAction_2_0; }
+		//{STUnaryExpression}
+		public Action getSTUnaryExpressionAction_2_0() { return cSTUnaryExpressionAction_2_0; }
 		
-		//signum=('-' | '+' | 'NOT')
-		public Assignment getSignumAssignment_2_1() { return cSignumAssignment_2_1; }
+		//op=UnaryOperator
+		public Assignment getOpAssignment_2_1() { return cOpAssignment_2_1; }
 		
-		//('-' | '+' | 'NOT')
-		public Alternatives getSignumAlternatives_2_1_0() { return cSignumAlternatives_2_1_0; }
-		
-		//'-'
-		public Keyword getSignumHyphenMinusKeyword_2_1_0_0() { return cSignumHyphenMinusKeyword_2_1_0_0; }
-		
-		//'+'
-		public Keyword getSignumPlusSignKeyword_2_1_0_1() { return cSignumPlusSignKeyword_2_1_0_1; }
-		
-		//'NOT'
-		public Keyword getSignumNOTKeyword_2_1_0_2() { return cSignumNOTKeyword_2_1_0_2; }
+		//UnaryOperator
+		public RuleCall getOpUnaryOperatorEnumRuleCall_2_1_0() { return cOpUnaryOperatorEnumRuleCall_2_1_0; }
 		
 		//expression=STSelectionExpression
 		public Assignment getExpressionAssignment_2_2() { return cExpressionAssignment_2_2; }
@@ -2562,6 +2502,245 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		public RuleCall getINTTerminalRuleCall_5_1() { return cINTTerminalRuleCall_5_1; }
 	}
 	
+	public class SubrangeOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.SubrangeOperator");
+		private final EnumLiteralDeclaration cRangeEnumLiteralDeclaration = (EnumLiteralDeclaration)rule.eContents().get(1);
+		private final Keyword cRangeFullStopFullStopKeyword_0 = (Keyword)cRangeEnumLiteralDeclaration.eContents().get(0);
+		
+		//enum SubrangeOperator returns BinaryOperator: Range='..';
+		public EnumRule getRule() { return rule; }
+		
+		//Range='..'
+		public EnumLiteralDeclaration getRangeEnumLiteralDeclaration() { return cRangeEnumLiteralDeclaration; }
+		
+		//'..'
+		public Keyword getRangeFullStopFullStopKeyword_0() { return cRangeFullStopFullStopKeyword_0; }
+	}
+	public class OrOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.OrOperator");
+		private final EnumLiteralDeclaration cOREnumLiteralDeclaration = (EnumLiteralDeclaration)rule.eContents().get(1);
+		private final Keyword cORORKeyword_0 = (Keyword)cOREnumLiteralDeclaration.eContents().get(0);
+		
+		//enum OrOperator returns BinaryOperator: OR;
+		public EnumRule getRule() { return rule; }
+		
+		//OR
+		public EnumLiteralDeclaration getOREnumLiteralDeclaration() { return cOREnumLiteralDeclaration; }
+		
+		public Keyword getORORKeyword_0() { return cORORKeyword_0; }
+	}
+	public class XorOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.XorOperator");
+		private final EnumLiteralDeclaration cXOREnumLiteralDeclaration = (EnumLiteralDeclaration)rule.eContents().get(1);
+		private final Keyword cXORXORKeyword_0 = (Keyword)cXOREnumLiteralDeclaration.eContents().get(0);
+		
+		//enum XorOperator returns BinaryOperator: XOR;
+		public EnumRule getRule() { return rule; }
+		
+		//XOR
+		public EnumLiteralDeclaration getXOREnumLiteralDeclaration() { return cXOREnumLiteralDeclaration; }
+		
+		public Keyword getXORXORKeyword_0() { return cXORXORKeyword_0; }
+	}
+	public class AndOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.AndOperator");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cANDEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cANDANDKeyword_0_0 = (Keyword)cANDEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cAMPERSANDEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cAMPERSANDAmpersandKeyword_1_0 = (Keyword)cAMPERSANDEnumLiteralDeclaration_1.eContents().get(0);
+		
+		//enum AndOperator returns BinaryOperator: AND | AMPERSAND='&';
+		public EnumRule getRule() { return rule; }
+		
+		//AND | AMPERSAND='&'
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//AND
+		public EnumLiteralDeclaration getANDEnumLiteralDeclaration_0() { return cANDEnumLiteralDeclaration_0; }
+		
+		public Keyword getANDANDKeyword_0_0() { return cANDANDKeyword_0_0; }
+		
+		//AMPERSAND='&'
+		public EnumLiteralDeclaration getAMPERSANDEnumLiteralDeclaration_1() { return cAMPERSANDEnumLiteralDeclaration_1; }
+		
+		//'&'
+		public Keyword getAMPERSANDAmpersandKeyword_1_0() { return cAMPERSANDAmpersandKeyword_1_0; }
+	}
+	public class EqualityOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.EqualityOperator");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cEQEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cEQEqualsSignKeyword_0_0 = (Keyword)cEQEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cNEEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cNELessThanSignGreaterThanSignKeyword_1_0 = (Keyword)cNEEnumLiteralDeclaration_1.eContents().get(0);
+		
+		//enum EqualityOperator returns BinaryOperator: EQ='=' | NE='<>';
+		public EnumRule getRule() { return rule; }
+		
+		//EQ='=' | NE='<>'
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//EQ='='
+		public EnumLiteralDeclaration getEQEnumLiteralDeclaration_0() { return cEQEnumLiteralDeclaration_0; }
+		
+		//'='
+		public Keyword getEQEqualsSignKeyword_0_0() { return cEQEqualsSignKeyword_0_0; }
+		
+		//NE='<>'
+		public EnumLiteralDeclaration getNEEnumLiteralDeclaration_1() { return cNEEnumLiteralDeclaration_1; }
+		
+		//'<>'
+		public Keyword getNELessThanSignGreaterThanSignKeyword_1_0() { return cNELessThanSignGreaterThanSignKeyword_1_0; }
+	}
+	public class CompareOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.CompareOperator");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cLTEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cLTLessThanSignKeyword_0_0 = (Keyword)cLTEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cLEEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cLELessThanSignEqualsSignKeyword_1_0 = (Keyword)cLEEnumLiteralDeclaration_1.eContents().get(0);
+		private final EnumLiteralDeclaration cGTEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
+		private final Keyword cGTGreaterThanSignKeyword_2_0 = (Keyword)cGTEnumLiteralDeclaration_2.eContents().get(0);
+		private final EnumLiteralDeclaration cGEEnumLiteralDeclaration_3 = (EnumLiteralDeclaration)cAlternatives.eContents().get(3);
+		private final Keyword cGEGreaterThanSignEqualsSignKeyword_3_0 = (Keyword)cGEEnumLiteralDeclaration_3.eContents().get(0);
+		
+		//enum CompareOperator returns BinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
+		public EnumRule getRule() { return rule; }
+		
+		//LT='<' | LE='<=' | GT='>' | GE='>='
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//LT='<'
+		public EnumLiteralDeclaration getLTEnumLiteralDeclaration_0() { return cLTEnumLiteralDeclaration_0; }
+		
+		//'<'
+		public Keyword getLTLessThanSignKeyword_0_0() { return cLTLessThanSignKeyword_0_0; }
+		
+		//LE='<='
+		public EnumLiteralDeclaration getLEEnumLiteralDeclaration_1() { return cLEEnumLiteralDeclaration_1; }
+		
+		//'<='
+		public Keyword getLELessThanSignEqualsSignKeyword_1_0() { return cLELessThanSignEqualsSignKeyword_1_0; }
+		
+		//GT='>'
+		public EnumLiteralDeclaration getGTEnumLiteralDeclaration_2() { return cGTEnumLiteralDeclaration_2; }
+		
+		//'>'
+		public Keyword getGTGreaterThanSignKeyword_2_0() { return cGTGreaterThanSignKeyword_2_0; }
+		
+		//GE='>='
+		public EnumLiteralDeclaration getGEEnumLiteralDeclaration_3() { return cGEEnumLiteralDeclaration_3; }
+		
+		//'>='
+		public Keyword getGEGreaterThanSignEqualsSignKeyword_3_0() { return cGEGreaterThanSignEqualsSignKeyword_3_0; }
+	}
+	public class AddSubOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.AddSubOperator");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cADDEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cADDPlusSignKeyword_0_0 = (Keyword)cADDEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cSUBEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cSUBHyphenMinusKeyword_1_0 = (Keyword)cSUBEnumLiteralDeclaration_1.eContents().get(0);
+		
+		//enum AddSubOperator returns BinaryOperator: ADD='+' | SUB='-';
+		public EnumRule getRule() { return rule; }
+		
+		//ADD='+' | SUB='-'
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//ADD='+'
+		public EnumLiteralDeclaration getADDEnumLiteralDeclaration_0() { return cADDEnumLiteralDeclaration_0; }
+		
+		//'+'
+		public Keyword getADDPlusSignKeyword_0_0() { return cADDPlusSignKeyword_0_0; }
+		
+		//SUB='-'
+		public EnumLiteralDeclaration getSUBEnumLiteralDeclaration_1() { return cSUBEnumLiteralDeclaration_1; }
+		
+		//'-'
+		public Keyword getSUBHyphenMinusKeyword_1_0() { return cSUBHyphenMinusKeyword_1_0; }
+	}
+	public class MulDivModOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.MulDivModOperator");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cMULEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cMULAsteriskKeyword_0_0 = (Keyword)cMULEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cDIVEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cDIVSolidusKeyword_1_0 = (Keyword)cDIVEnumLiteralDeclaration_1.eContents().get(0);
+		private final EnumLiteralDeclaration cMODEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
+		private final Keyword cMODMODKeyword_2_0 = (Keyword)cMODEnumLiteralDeclaration_2.eContents().get(0);
+		
+		//enum MulDivModOperator returns BinaryOperator: MUL='*' | DIV='/' | MOD;
+		public EnumRule getRule() { return rule; }
+		
+		//MUL='*' | DIV='/' | MOD
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//MUL='*'
+		public EnumLiteralDeclaration getMULEnumLiteralDeclaration_0() { return cMULEnumLiteralDeclaration_0; }
+		
+		//'*'
+		public Keyword getMULAsteriskKeyword_0_0() { return cMULAsteriskKeyword_0_0; }
+		
+		//DIV='/'
+		public EnumLiteralDeclaration getDIVEnumLiteralDeclaration_1() { return cDIVEnumLiteralDeclaration_1; }
+		
+		//'/'
+		public Keyword getDIVSolidusKeyword_1_0() { return cDIVSolidusKeyword_1_0; }
+		
+		//MOD
+		public EnumLiteralDeclaration getMODEnumLiteralDeclaration_2() { return cMODEnumLiteralDeclaration_2; }
+		
+		public Keyword getMODMODKeyword_2_0() { return cMODMODKeyword_2_0; }
+	}
+	public class PowerOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.PowerOperator");
+		private final EnumLiteralDeclaration cPOWEREnumLiteralDeclaration = (EnumLiteralDeclaration)rule.eContents().get(1);
+		private final Keyword cPOWERAsteriskAsteriskKeyword_0 = (Keyword)cPOWEREnumLiteralDeclaration.eContents().get(0);
+		
+		//enum PowerOperator returns BinaryOperator: POWER='**';
+		public EnumRule getRule() { return rule; }
+		
+		//POWER='**'
+		public EnumLiteralDeclaration getPOWEREnumLiteralDeclaration() { return cPOWEREnumLiteralDeclaration; }
+		
+		//'**'
+		public Keyword getPOWERAsteriskAsteriskKeyword_0() { return cPOWERAsteriskAsteriskKeyword_0; }
+	}
+	public class UnaryOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.UnaryOperator");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cMINUSEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cMINUSHyphenMinusKeyword_0_0 = (Keyword)cMINUSEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cPLUSEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cPLUSPlusSignKeyword_1_0 = (Keyword)cPLUSEnumLiteralDeclaration_1.eContents().get(0);
+		private final EnumLiteralDeclaration cNOTEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
+		private final Keyword cNOTNOTKeyword_2_0 = (Keyword)cNOTEnumLiteralDeclaration_2.eContents().get(0);
+		
+		//enum UnaryOperator returns UnaryOperator: MINUS='-' | PLUS='+' | NOT;
+		public EnumRule getRule() { return rule; }
+		
+		//MINUS='-' | PLUS='+' | NOT
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//MINUS='-'
+		public EnumLiteralDeclaration getMINUSEnumLiteralDeclaration_0() { return cMINUSEnumLiteralDeclaration_0; }
+		
+		//'-'
+		public Keyword getMINUSHyphenMinusKeyword_0_0() { return cMINUSHyphenMinusKeyword_0_0; }
+		
+		//PLUS='+'
+		public EnumLiteralDeclaration getPLUSEnumLiteralDeclaration_1() { return cPLUSEnumLiteralDeclaration_1; }
+		
+		//'+'
+		public Keyword getPLUSPlusSignKeyword_1_0() { return cPLUSPlusSignKeyword_1_0; }
+		
+		//NOT
+		public EnumLiteralDeclaration getNOTEnumLiteralDeclaration_2() { return cNOTEnumLiteralDeclaration_2; }
+		
+		public Keyword getNOTNOTKeyword_2_0() { return cNOTNOTKeyword_2_0; }
+	}
 	public class MultiBitAccessSpecifierElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
 		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.MultiBitAccessSpecifier");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
@@ -2646,15 +2825,25 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STWhileStatementElements pSTWhileStatement;
 	private final STRepeatStatementElements pSTRepeatStatement;
 	private final STExpressionElements pSTExpression;
+	private final SubrangeOperatorElements eSubrangeOperator;
 	private final STSubrangeExpressionElements pSTSubrangeExpression;
+	private final OrOperatorElements eOrOperator;
 	private final STOrExpressionElements pSTOrExpression;
+	private final XorOperatorElements eXorOperator;
 	private final STXorExpressionElements pSTXorExpression;
+	private final AndOperatorElements eAndOperator;
 	private final STAndExpressionElements pSTAndExpression;
+	private final EqualityOperatorElements eEqualityOperator;
 	private final STEqualityExpressionElements pSTEqualityExpression;
+	private final CompareOperatorElements eCompareOperator;
 	private final STComparisonExpressionElements pSTComparisonExpression;
+	private final AddSubOperatorElements eAddSubOperator;
 	private final STAddSubExpressionElements pSTAddSubExpression;
+	private final MulDivModOperatorElements eMulDivModOperator;
 	private final STMulDivModExpressionElements pSTMulDivModExpression;
+	private final PowerOperatorElements ePowerOperator;
 	private final STPowerExpressionElements pSTPowerExpression;
+	private final UnaryOperatorElements eUnaryOperator;
 	private final STSignumExpressionElements pSTSignumExpression;
 	private final STSelectionExpressionElements pSTSelectionExpression;
 	private final MultibitPartialAccessElements pMultibitPartialAccess;
@@ -2714,15 +2903,25 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pSTWhileStatement = new STWhileStatementElements();
 		this.pSTRepeatStatement = new STRepeatStatementElements();
 		this.pSTExpression = new STExpressionElements();
+		this.eSubrangeOperator = new SubrangeOperatorElements();
 		this.pSTSubrangeExpression = new STSubrangeExpressionElements();
+		this.eOrOperator = new OrOperatorElements();
 		this.pSTOrExpression = new STOrExpressionElements();
+		this.eXorOperator = new XorOperatorElements();
 		this.pSTXorExpression = new STXorExpressionElements();
+		this.eAndOperator = new AndOperatorElements();
 		this.pSTAndExpression = new STAndExpressionElements();
+		this.eEqualityOperator = new EqualityOperatorElements();
 		this.pSTEqualityExpression = new STEqualityExpressionElements();
+		this.eCompareOperator = new CompareOperatorElements();
 		this.pSTComparisonExpression = new STComparisonExpressionElements();
+		this.eAddSubOperator = new AddSubOperatorElements();
 		this.pSTAddSubExpression = new STAddSubExpressionElements();
+		this.eMulDivModOperator = new MulDivModOperatorElements();
 		this.pSTMulDivModExpression = new STMulDivModExpressionElements();
+		this.ePowerOperator = new PowerOperatorElements();
 		this.pSTPowerExpression = new STPowerExpressionElements();
+		this.eUnaryOperator = new UnaryOperatorElements();
 		this.pSTSignumExpression = new STSignumExpressionElements();
 		this.pSTSelectionExpression = new STSelectionExpressionElements();
 		this.pMultibitPartialAccess = new MultibitPartialAccessElements();
@@ -3023,8 +3222,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTExpressionAccess().getRule();
 	}
 	
+	//enum SubrangeOperator returns BinaryOperator: Range='..';
+	public SubrangeOperatorElements getSubrangeOperatorAccess() {
+		return eSubrangeOperator;
+	}
+	
+	public EnumRule getSubrangeOperatorRule() {
+		return getSubrangeOperatorAccess().getRule();
+	}
+	
 	//STSubrangeExpression returns STExpression:
-	//    STOrExpression (({STSubrangeExpression.lowerBound=current} '..') upperBound=STOrExpression)*;
+	//    STOrExpression (({STBinaryExpression.left=current} op=SubrangeOperator) right=STOrExpression)*;
 	public STSubrangeExpressionElements getSTSubrangeExpressionAccess() {
 		return pSTSubrangeExpression;
 	}
@@ -3033,8 +3241,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTSubrangeExpressionAccess().getRule();
 	}
 	
+	//enum OrOperator returns BinaryOperator: OR;
+	public OrOperatorElements getOrOperatorAccess() {
+		return eOrOperator;
+	}
+	
+	public EnumRule getOrOperatorRule() {
+		return getOrOperatorAccess().getRule();
+	}
+	
 	//STOrExpression returns STExpression:
-	//    STXorExpression (({STOrExpression.left=current} op='OR') right=STXorExpression)*;
+	//    STXorExpression (({STBinaryExpression.left=current} op=OrOperator) right=STXorExpression)*;
 	public STOrExpressionElements getSTOrExpressionAccess() {
 		return pSTOrExpression;
 	}
@@ -3043,8 +3260,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTOrExpressionAccess().getRule();
 	}
 	
+	//enum XorOperator returns BinaryOperator: XOR;
+	public XorOperatorElements getXorOperatorAccess() {
+		return eXorOperator;
+	}
+	
+	public EnumRule getXorOperatorRule() {
+		return getXorOperatorAccess().getRule();
+	}
+	
 	//STXorExpression returns STExpression:
-	//    STAndExpression (({STXorExpression.left=current} op='XOR') right=STAndExpression)*;
+	//    STAndExpression (({STBinaryExpression.left=current} op=XorOperator) right=STAndExpression)*;
 	public STXorExpressionElements getSTXorExpressionAccess() {
 		return pSTXorExpression;
 	}
@@ -3053,8 +3279,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTXorExpressionAccess().getRule();
 	}
 	
+	//enum AndOperator returns BinaryOperator: AND | AMPERSAND='&';
+	public AndOperatorElements getAndOperatorAccess() {
+		return eAndOperator;
+	}
+	
+	public EnumRule getAndOperatorRule() {
+		return getAndOperatorAccess().getRule();
+	}
+	
 	//STAndExpression returns STExpression:
-	//    STEqualityExpression (({STAndExpression.left=current} op=('&' | 'AND')) right=STEqualityExpression)*;
+	//    STEqualityExpression (({STBinaryExpression.left=current} op=AndOperator) right=STEqualityExpression)*;
 	public STAndExpressionElements getSTAndExpressionAccess() {
 		return pSTAndExpression;
 	}
@@ -3063,8 +3298,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTAndExpressionAccess().getRule();
 	}
 	
+	//enum EqualityOperator returns BinaryOperator: EQ='=' | NE='<>';
+	public EqualityOperatorElements getEqualityOperatorAccess() {
+		return eEqualityOperator;
+	}
+	
+	public EnumRule getEqualityOperatorRule() {
+		return getEqualityOperatorAccess().getRule();
+	}
+	
 	//STEqualityExpression returns STExpression:
-	//    STComparisonExpression (({STEqualityExpression.left=current} op=('=' | '<>')) right=STComparisonExpression)*;
+	//    STComparisonExpression (({STBinaryExpression.left=current} op=EqualityOperator) right=STComparisonExpression)*;
 	public STEqualityExpressionElements getSTEqualityExpressionAccess() {
 		return pSTEqualityExpression;
 	}
@@ -3073,8 +3317,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTEqualityExpressionAccess().getRule();
 	}
 	
+	//enum CompareOperator returns BinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
+	public CompareOperatorElements getCompareOperatorAccess() {
+		return eCompareOperator;
+	}
+	
+	public EnumRule getCompareOperatorRule() {
+		return getCompareOperatorAccess().getRule();
+	}
+	
 	//STComparisonExpression returns STExpression:
-	//    STAddSubExpression (({STComparisonExpression.left=current} op=('<' | '>' | '<=' | '>=')) right=STAddSubExpression)*;
+	//    STAddSubExpression (({STBinaryExpression.left=current} op=CompareOperator) right=STAddSubExpression)*;
 	public STComparisonExpressionElements getSTComparisonExpressionAccess() {
 		return pSTComparisonExpression;
 	}
@@ -3083,8 +3336,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTComparisonExpressionAccess().getRule();
 	}
 	
+	//enum AddSubOperator returns BinaryOperator: ADD='+' | SUB='-';
+	public AddSubOperatorElements getAddSubOperatorAccess() {
+		return eAddSubOperator;
+	}
+	
+	public EnumRule getAddSubOperatorRule() {
+		return getAddSubOperatorAccess().getRule();
+	}
+	
 	//STAddSubExpression returns STExpression:
-	//    STMulDivModExpression (({STAddSubExpression.left=current} op=('+' | '-')) right=STMulDivModExpression)*;
+	//    STMulDivModExpression (({STBinaryExpression.left=current} op=AddSubOperator) right=STMulDivModExpression)*;
 	public STAddSubExpressionElements getSTAddSubExpressionAccess() {
 		return pSTAddSubExpression;
 	}
@@ -3093,8 +3355,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTAddSubExpressionAccess().getRule();
 	}
 	
+	//enum MulDivModOperator returns BinaryOperator: MUL='*' | DIV='/' | MOD;
+	public MulDivModOperatorElements getMulDivModOperatorAccess() {
+		return eMulDivModOperator;
+	}
+	
+	public EnumRule getMulDivModOperatorRule() {
+		return getMulDivModOperatorAccess().getRule();
+	}
+	
 	//STMulDivModExpression returns STExpression:
-	//    STPowerExpression (({STMulDivModExpression.left=current} op=('*' | '/' | 'MOD')) right=STPowerExpression)*;
+	//    STPowerExpression (({STBinaryExpression.left=current} op=MulDivModOperator) right=STPowerExpression)*;
 	public STMulDivModExpressionElements getSTMulDivModExpressionAccess() {
 		return pSTMulDivModExpression;
 	}
@@ -3103,8 +3374,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTMulDivModExpressionAccess().getRule();
 	}
 	
+	//enum PowerOperator returns BinaryOperator: POWER='**';
+	public PowerOperatorElements getPowerOperatorAccess() {
+		return ePowerOperator;
+	}
+	
+	public EnumRule getPowerOperatorRule() {
+		return getPowerOperatorAccess().getRule();
+	}
+	
 	//STPowerExpression returns STExpression:
-	//    STSignumExpression (({STPowerExpression.left=current} op='**') right=STSignumExpression)*;
+	//    STSignumExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STSignumExpression)*;
 	public STPowerExpressionElements getSTPowerExpressionAccess() {
 		return pSTPowerExpression;
 	}
@@ -3113,8 +3393,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTPowerExpressionAccess().getRule();
 	}
 	
+	//enum UnaryOperator returns UnaryOperator: MINUS='-' | PLUS='+' | NOT;
+	public UnaryOperatorElements getUnaryOperatorAccess() {
+		return eUnaryOperator;
+	}
+	
+	public EnumRule getUnaryOperatorRule() {
+		return getUnaryOperatorAccess().getRule();
+	}
+	
 	//STSignumExpression returns STExpression:
-	//    STLiteralExpressions | STSelectionExpression | ({STSignumExpression} signum=('-' | '+' | 'NOT')
+	//    STLiteralExpressions | STSelectionExpression | ({STUnaryExpression} op=UnaryOperator
 	//    expression=STSelectionExpression);
 	public STSignumExpressionElements getSTSignumExpressionAccess() {
 		return pSTSignumExpression;

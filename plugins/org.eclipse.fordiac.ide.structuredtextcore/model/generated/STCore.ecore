@@ -97,6 +97,30 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STExpression" eSuperTypes="#//InitializerExpression"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="BinaryOperator">
+    <eLiterals name="Range" literal=".."/>
+    <eLiterals name="OR" value="1" literal="OR"/>
+    <eLiterals name="XOR" value="2" literal="XOR"/>
+    <eLiterals name="AND" value="3" literal="AND"/>
+    <eLiterals name="AMPERSAND" value="4" literal="&amp;"/>
+    <eLiterals name="EQ" value="5" literal="="/>
+    <eLiterals name="NE" value="6" literal="&lt;>"/>
+    <eLiterals name="LT" value="7" literal="&lt;"/>
+    <eLiterals name="LE" value="8" literal="&lt;="/>
+    <eLiterals name="GT" value="9" literal=">"/>
+    <eLiterals name="GE" value="10" literal=">="/>
+    <eLiterals name="ADD" value="11" literal="+"/>
+    <eLiterals name="SUB" value="12" literal="-"/>
+    <eLiterals name="MUL" value="13" literal="*"/>
+    <eLiterals name="DIV" value="14" literal="/"/>
+    <eLiterals name="MOD" value="15" literal="MOD"/>
+    <eLiterals name="POWER" value="16" literal="**"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="UnaryOperator">
+    <eLiterals name="MINUS" literal="-"/>
+    <eLiterals name="PLUS" value="1" literal="+"/>
+    <eLiterals name="NOT" value="2" literal="NOT"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MultibitPartialAccess">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="accessSpecifier" eType="#//MultiBitAccessSpecifier"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
@@ -145,70 +169,15 @@
   <eClassifiers xsi:type="ecore:EClass" name="STReturn" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STContinue" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STExit" eSuperTypes="#//STStatement"/>
-  <eClassifiers xsi:type="ecore:EClass" name="STSubrangeExpression" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lowerBound" eType="#//STExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="upperBound" eType="#//STExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STOrExpression" eSuperTypes="#//STExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="STBinaryExpression" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//BinaryOperator"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STXorExpression" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STAndExpression" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STEqualityExpression" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STComparisonExpression" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STAddSubExpression" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STMulDivModExpression" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STPowerExpression" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STSignumExpression" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STUnaryExpression" eSuperTypes="#//STExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//UnaryOperator"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>

@@ -303,94 +303,22 @@ public interface STCoreFactory extends EFactory
   STExit createSTExit();
 
   /**
-   * Returns a new object of class '<em>ST Subrange Expression</em>'.
+   * Returns a new object of class '<em>ST Binary Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Subrange Expression</em>'.
+   * @return a new object of class '<em>ST Binary Expression</em>'.
    * @generated
    */
-  STSubrangeExpression createSTSubrangeExpression();
+  STBinaryExpression createSTBinaryExpression();
 
   /**
-   * Returns a new object of class '<em>ST Or Expression</em>'.
+   * Returns a new object of class '<em>ST Unary Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Or Expression</em>'.
+   * @return a new object of class '<em>ST Unary Expression</em>'.
    * @generated
    */
-  STOrExpression createSTOrExpression();
-
-  /**
-   * Returns a new object of class '<em>ST Xor Expression</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Xor Expression</em>'.
-   * @generated
-   */
-  STXorExpression createSTXorExpression();
-
-  /**
-   * Returns a new object of class '<em>ST And Expression</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST And Expression</em>'.
-   * @generated
-   */
-  STAndExpression createSTAndExpression();
-
-  /**
-   * Returns a new object of class '<em>ST Equality Expression</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Equality Expression</em>'.
-   * @generated
-   */
-  STEqualityExpression createSTEqualityExpression();
-
-  /**
-   * Returns a new object of class '<em>ST Comparison Expression</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Comparison Expression</em>'.
-   * @generated
-   */
-  STComparisonExpression createSTComparisonExpression();
-
-  /**
-   * Returns a new object of class '<em>ST Add Sub Expression</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Add Sub Expression</em>'.
-   * @generated
-   */
-  STAddSubExpression createSTAddSubExpression();
-
-  /**
-   * Returns a new object of class '<em>ST Mul Div Mod Expression</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Mul Div Mod Expression</em>'.
-   * @generated
-   */
-  STMulDivModExpression createSTMulDivModExpression();
-
-  /**
-   * Returns a new object of class '<em>ST Power Expression</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Power Expression</em>'.
-   * @generated
-   */
-  STPowerExpression createSTPowerExpression();
-
-  /**
-   * Returns a new object of class '<em>ST Signum Expression</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Signum Expression</em>'.
-   * @generated
-   */
-  STSignumExpression createSTSignumExpression();
+  STUnaryExpression createSTUnaryExpression();
 
   /**
    * Returns a new object of class '<em>ST Member Selection</em>'.

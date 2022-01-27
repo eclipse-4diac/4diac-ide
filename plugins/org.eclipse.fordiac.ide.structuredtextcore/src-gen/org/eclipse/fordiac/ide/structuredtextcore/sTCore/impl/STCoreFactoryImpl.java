@@ -97,16 +97,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ST_RETURN: return createSTReturn();
       case STCorePackage.ST_CONTINUE: return createSTContinue();
       case STCorePackage.ST_EXIT: return createSTExit();
-      case STCorePackage.ST_SUBRANGE_EXPRESSION: return createSTSubrangeExpression();
-      case STCorePackage.ST_OR_EXPRESSION: return createSTOrExpression();
-      case STCorePackage.ST_XOR_EXPRESSION: return createSTXorExpression();
-      case STCorePackage.ST_AND_EXPRESSION: return createSTAndExpression();
-      case STCorePackage.ST_EQUALITY_EXPRESSION: return createSTEqualityExpression();
-      case STCorePackage.ST_COMPARISON_EXPRESSION: return createSTComparisonExpression();
-      case STCorePackage.ST_ADD_SUB_EXPRESSION: return createSTAddSubExpression();
-      case STCorePackage.ST_MUL_DIV_MOD_EXPRESSION: return createSTMulDivModExpression();
-      case STCorePackage.ST_POWER_EXPRESSION: return createSTPowerExpression();
-      case STCorePackage.ST_SIGNUM_EXPRESSION: return createSTSignumExpression();
+      case STCorePackage.ST_BINARY_EXPRESSION: return createSTBinaryExpression();
+      case STCorePackage.ST_UNARY_EXPRESSION: return createSTUnaryExpression();
       case STCorePackage.ST_MEMBER_SELECTION: return createSTMemberSelection();
       case STCorePackage.ST_SYMBOL: return createSTSymbol();
       case STCorePackage.ST_BOOL_LITERAL: return createSTBoolLiteral();
@@ -131,6 +123,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     switch (eDataType.getClassifierID())
     {
+      case STCorePackage.BINARY_OPERATOR:
+        return createBinaryOperatorFromString(eDataType, initialValue);
+      case STCorePackage.UNARY_OPERATOR:
+        return createUnaryOperatorFromString(eDataType, initialValue);
       case STCorePackage.MULTI_BIT_ACCESS_SPECIFIER:
         return createMultiBitAccessSpecifierFromString(eDataType, initialValue);
       default:
@@ -148,6 +144,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     switch (eDataType.getClassifierID())
     {
+      case STCorePackage.BINARY_OPERATOR:
+        return convertBinaryOperatorToString(eDataType, instanceValue);
+      case STCorePackage.UNARY_OPERATOR:
+        return convertUnaryOperatorToString(eDataType, instanceValue);
       case STCorePackage.MULTI_BIT_ACCESS_SPECIFIER:
         return convertMultiBitAccessSpecifierToString(eDataType, instanceValue);
       default:
@@ -533,10 +533,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public STSubrangeExpression createSTSubrangeExpression()
+  public STBinaryExpression createSTBinaryExpression()
   {
-    STSubrangeExpressionImpl stSubrangeExpression = new STSubrangeExpressionImpl();
-    return stSubrangeExpression;
+    STBinaryExpressionImpl stBinaryExpression = new STBinaryExpressionImpl();
+    return stBinaryExpression;
   }
 
   /**
@@ -545,106 +545,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public STOrExpression createSTOrExpression()
+  public STUnaryExpression createSTUnaryExpression()
   {
-    STOrExpressionImpl stOrExpression = new STOrExpressionImpl();
-    return stOrExpression;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STXorExpression createSTXorExpression()
-  {
-    STXorExpressionImpl stXorExpression = new STXorExpressionImpl();
-    return stXorExpression;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STAndExpression createSTAndExpression()
-  {
-    STAndExpressionImpl stAndExpression = new STAndExpressionImpl();
-    return stAndExpression;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STEqualityExpression createSTEqualityExpression()
-  {
-    STEqualityExpressionImpl stEqualityExpression = new STEqualityExpressionImpl();
-    return stEqualityExpression;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STComparisonExpression createSTComparisonExpression()
-  {
-    STComparisonExpressionImpl stComparisonExpression = new STComparisonExpressionImpl();
-    return stComparisonExpression;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STAddSubExpression createSTAddSubExpression()
-  {
-    STAddSubExpressionImpl stAddSubExpression = new STAddSubExpressionImpl();
-    return stAddSubExpression;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STMulDivModExpression createSTMulDivModExpression()
-  {
-    STMulDivModExpressionImpl stMulDivModExpression = new STMulDivModExpressionImpl();
-    return stMulDivModExpression;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STPowerExpression createSTPowerExpression()
-  {
-    STPowerExpressionImpl stPowerExpression = new STPowerExpressionImpl();
-    return stPowerExpression;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STSignumExpression createSTSignumExpression()
-  {
-    STSignumExpressionImpl stSignumExpression = new STSignumExpressionImpl();
-    return stSignumExpression;
+    STUnaryExpressionImpl stUnaryExpression = new STUnaryExpressionImpl();
+    return stUnaryExpression;
   }
 
   /**
@@ -753,6 +657,50 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     STStringLiteralImpl stStringLiteral = new STStringLiteralImpl();
     return stStringLiteral;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public BinaryOperator createBinaryOperatorFromString(EDataType eDataType, String initialValue)
+  {
+    BinaryOperator result = BinaryOperator.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertBinaryOperatorToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public UnaryOperator createUnaryOperatorFromString(EDataType eDataType, String initialValue)
+  {
+    UnaryOperator result = UnaryOperator.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertUnaryOperatorToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
   }
 
   /**

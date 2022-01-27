@@ -109,35 +109,45 @@ STRepeatStatement:
 STExpression returns STExpression:
 	STSubrangeExpression;
 
+enum SubrangeOperator returns BinaryOperator: Range='..';
 STSubrangeExpression returns STExpression:
-	STOrExpression (({STSubrangeExpression.lowerBound=current} '..') upperBound=STOrExpression)*;
+	STOrExpression (({STBinaryExpression.left=current} op=SubrangeOperator) right=STOrExpression)*;
 
+enum OrOperator returns BinaryOperator: OR;
 STOrExpression returns STExpression:
-	STXorExpression (({STOrExpression.left=current} op='OR') right=STXorExpression)*;
+	STXorExpression (({STBinaryExpression.left=current} op=OrOperator) right=STXorExpression)*;
 
+enum XorOperator returns BinaryOperator: XOR;
 STXorExpression returns STExpression:
-	STAndExpression (({STXorExpression.left=current} op='XOR') right=STAndExpression)*;
+	STAndExpression (({STBinaryExpression.left=current} op=XorOperator) right=STAndExpression)*;
 
+enum AndOperator returns BinaryOperator: AND | AMPERSAND='&';
 STAndExpression returns STExpression:
-	STEqualityExpression (({STAndExpression.left=current} op=('&' | 'AND')) right=STEqualityExpression)*;
+	STEqualityExpression (({STBinaryExpression.left=current} op=AndOperator) right=STEqualityExpression)*;
 
+enum EqualityOperator returns BinaryOperator: EQ='=' | NE='<>';
 STEqualityExpression returns STExpression:
-	STComparisonExpression (({STEqualityExpression.left=current} op=('=' | '<>')) right=STComparisonExpression)*;
+	STComparisonExpression (({STBinaryExpression.left=current} op=EqualityOperator) right=STComparisonExpression)*;
 
+enum CompareOperator returns BinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
 STComparisonExpression returns STExpression:
-	STAddSubExpression (({STComparisonExpression.left=current} op=('<' | '>' | '<=' | '>=')) right=STAddSubExpression)*;
+	STAddSubExpression (({STBinaryExpression.left=current} op=CompareOperator) right=STAddSubExpression)*;
 
+enum AddSubOperator returns BinaryOperator: ADD='+' | SUB='-';
 STAddSubExpression returns STExpression:
-	STMulDivModExpression (({STAddSubExpression.left=current} op=('+' | '-')) right=STMulDivModExpression)*;
+	STMulDivModExpression (({STBinaryExpression.left=current} op=AddSubOperator) right=STMulDivModExpression)*;
 
+enum MulDivModOperator returns BinaryOperator: MUL='*' | DIV='/' | MOD;
 STMulDivModExpression returns STExpression:
-	STPowerExpression (({STMulDivModExpression.left=current} op=('*' | '/' | 'MOD')) right=STPowerExpression)*;
+	STPowerExpression (({STBinaryExpression.left=current} op=MulDivModOperator) right=STPowerExpression)*;
 
+enum PowerOperator returns BinaryOperator: POWER='**';
 STPowerExpression returns STExpression:
-	STSignumExpression (({STPowerExpression.left=current} op='**') right=STSignumExpression)*;
+	STSignumExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STSignumExpression)*;
 
+enum UnaryOperator returns UnaryOperator: MINUS='-' | PLUS='+' | NOT;
 STSignumExpression returns STExpression:
-	STLiteralExpressions | STSelectionExpression | ({STSignumExpression} signum=('-' | '+' | 'NOT')
+	STLiteralExpressions | STSelectionExpression | ({STUnaryExpression} op=UnaryOperator
 	expression=STSelectionExpression);
 
 STSelectionExpression returns STExpression:

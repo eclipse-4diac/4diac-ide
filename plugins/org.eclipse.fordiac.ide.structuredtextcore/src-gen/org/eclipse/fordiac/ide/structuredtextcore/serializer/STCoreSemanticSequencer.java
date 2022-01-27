@@ -15,40 +15,32 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSymbol;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
@@ -100,14 +92,11 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.NUMERIC_LITERAL:
 				sequence_NUMERIC_LITERAL(context, (NUMERIC_LITERAL) semanticObject); 
 				return; 
-			case STCorePackage.ST_ADD_SUB_EXPRESSION:
-				sequence_STAddSubExpression(context, (STAddSubExpression) semanticObject); 
-				return; 
-			case STCorePackage.ST_AND_EXPRESSION:
-				sequence_STAndExpression(context, (STAndExpression) semanticObject); 
-				return; 
 			case STCorePackage.ST_ASSIGNMENT_STATEMENT:
 				sequence_STAssignmentStatement(context, (STAssignmentStatement) semanticObject); 
+				return; 
+			case STCorePackage.ST_BINARY_EXPRESSION:
+				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_BOOL_LITERAL:
 				sequence_STLiteralExpressions(context, (STBoolLiteral) semanticObject); 
@@ -117,9 +106,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_CASE_STATEMENT:
 				sequence_STCaseStatement(context, (STCaseStatement) semanticObject); 
-				return; 
-			case STCorePackage.ST_COMPARISON_EXPRESSION:
-				sequence_STComparisonExpression(context, (STComparisonExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_CONTINUE:
 				sequence_STStatement(context, (STContinue) semanticObject); 
@@ -136,9 +122,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ST_ELSE_PART:
 				sequence_STElsePart(context, (STElsePart) semanticObject); 
 				return; 
-			case STCorePackage.ST_EQUALITY_EXPRESSION:
-				sequence_STEqualityExpression(context, (STEqualityExpression) semanticObject); 
-				return; 
 			case STCorePackage.ST_EXIT:
 				sequence_STStatement(context, (STExit) semanticObject); 
 				return; 
@@ -151,20 +134,11 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ST_MEMBER_SELECTION:
 				sequence_STSelectionExpression(context, (STMemberSelection) semanticObject); 
 				return; 
-			case STCorePackage.ST_MUL_DIV_MOD_EXPRESSION:
-				sequence_STMulDivModExpression(context, (STMulDivModExpression) semanticObject); 
-				return; 
 			case STCorePackage.ST_NOP:
 				sequence_STStatement(context, (STNop) semanticObject); 
 				return; 
 			case STCorePackage.ST_NUMERIC_LITERAL:
 				sequence_STLiteralExpressions(context, (STNumericLiteral) semanticObject); 
-				return; 
-			case STCorePackage.ST_OR_EXPRESSION:
-				sequence_STOrExpression(context, (STOrExpression) semanticObject); 
-				return; 
-			case STCorePackage.ST_POWER_EXPRESSION:
-				sequence_STPowerExpression(context, (STPowerExpression) semanticObject); 
 				return; 
 			case STCorePackage.STRING_LITERAL:
 				sequence_STRING_LITERAL(context, (STRING_LITERAL) semanticObject); 
@@ -175,14 +149,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ST_RETURN:
 				sequence_STStatement(context, (STReturn) semanticObject); 
 				return; 
-			case STCorePackage.ST_SIGNUM_EXPRESSION:
-				sequence_STSignumExpression(context, (STSignumExpression) semanticObject); 
-				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STLiteralExpressions(context, (STStringLiteral) semanticObject); 
-				return; 
-			case STCorePackage.ST_SUBRANGE_EXPRESSION:
-				sequence_STSubrangeExpression(context, (STSubrangeExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_SYMBOL:
 				sequence_STAtomicExpression(context, (STSymbol) semanticObject); 
@@ -193,11 +161,11 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ST_TIME_OF_DAY_LITERAL:
 				sequence_STLiteralExpressions(context, (STTimeOfDayLiteral) semanticObject); 
 				return; 
+			case STCorePackage.ST_UNARY_EXPRESSION:
+				sequence_STSignumExpression(context, (STUnaryExpression) semanticObject); 
+				return; 
 			case STCorePackage.ST_WHILE_STATEMENT:
 				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
-				return; 
-			case STCorePackage.ST_XOR_EXPRESSION:
-				sequence_STXorExpression(context, (STXorExpression) semanticObject); 
 				return; 
 			case STCorePackage.TIME_LITERAL:
 				sequence_TIME_LITERAL(context, (TIME_LITERAL) semanticObject); 
@@ -358,70 +326,45 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STAddSubExpression
-	 *     STExpression returns STAddSubExpression
-	 *     STSubrangeExpression returns STAddSubExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STAddSubExpression
-	 *     STOrExpression returns STAddSubExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STAddSubExpression
-	 *     STXorExpression returns STAddSubExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STAddSubExpression
-	 *     STAndExpression returns STAddSubExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STAddSubExpression
-	 *     STEqualityExpression returns STAddSubExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STAddSubExpression
-	 *     STComparisonExpression returns STAddSubExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STAddSubExpression
-	 *     STAddSubExpression returns STAddSubExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STAddSubExpression
-	 *     STMulDivModExpression returns STAddSubExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STAddSubExpression
-	 *     STPowerExpression returns STAddSubExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STAddSubExpression
-	 *     STSignumExpression returns STAddSubExpression
-	 *     STSelectionExpression returns STAddSubExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STAddSubExpression
-	 *     STAtomicExpression returns STAddSubExpression
+	 *     InitializerExpression returns STBinaryExpression
+	 *     STExpression returns STBinaryExpression
+	 *     STSubrangeExpression returns STBinaryExpression
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
+	 *     STOrExpression returns STBinaryExpression
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
+	 *     STXorExpression returns STBinaryExpression
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
+	 *     STAndExpression returns STBinaryExpression
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
+	 *     STEqualityExpression returns STBinaryExpression
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
+	 *     STComparisonExpression returns STBinaryExpression
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
+	 *     STAddSubExpression returns STBinaryExpression
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
+	 *     STMulDivModExpression returns STBinaryExpression
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
+	 *     STPowerExpression returns STBinaryExpression
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
+	 *     STSignumExpression returns STBinaryExpression
+	 *     STSelectionExpression returns STBinaryExpression
+	 *     STSelectionExpression.STMemberSelection_1_0 returns STBinaryExpression
+	 *     STAtomicExpression returns STBinaryExpression
 	 *
 	 * Constraint:
-	 *     (left=STAddSubExpression_STAddSubExpression_1_0_0 (op='+' | op='-') right=STMulDivModExpression)
+	 *     (
+	 *         (left=STSubrangeExpression_STBinaryExpression_1_0_0 op=SubrangeOperator right=STOrExpression) | 
+	 *         (left=STOrExpression_STBinaryExpression_1_0_0 op=OrOperator right=STXorExpression) | 
+	 *         (left=STXorExpression_STBinaryExpression_1_0_0 op=XorOperator right=STAndExpression) | 
+	 *         (left=STAndExpression_STBinaryExpression_1_0_0 op=AndOperator right=STEqualityExpression) | 
+	 *         (left=STEqualityExpression_STBinaryExpression_1_0_0 op=EqualityOperator right=STComparisonExpression) | 
+	 *         (left=STComparisonExpression_STBinaryExpression_1_0_0 op=CompareOperator right=STAddSubExpression) | 
+	 *         (left=STAddSubExpression_STBinaryExpression_1_0_0 op=AddSubOperator right=STMulDivModExpression) | 
+	 *         (left=STMulDivModExpression_STBinaryExpression_1_0_0 op=MulDivModOperator right=STPowerExpression) | 
+	 *         (left=STPowerExpression_STBinaryExpression_1_0_0 op=PowerOperator right=STSignumExpression)
+	 *     )
 	 */
-	protected void sequence_STAddSubExpression(ISerializationContext context, STAddSubExpression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STAndExpression
-	 *     STExpression returns STAndExpression
-	 *     STSubrangeExpression returns STAndExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STAndExpression
-	 *     STOrExpression returns STAndExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STAndExpression
-	 *     STXorExpression returns STAndExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STAndExpression
-	 *     STAndExpression returns STAndExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STAndExpression
-	 *     STEqualityExpression returns STAndExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STAndExpression
-	 *     STComparisonExpression returns STAndExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STAndExpression
-	 *     STAddSubExpression returns STAndExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STAndExpression
-	 *     STMulDivModExpression returns STAndExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STAndExpression
-	 *     STPowerExpression returns STAndExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STAndExpression
-	 *     STSignumExpression returns STAndExpression
-	 *     STSelectionExpression returns STAndExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STAndExpression
-	 *     STAtomicExpression returns STAndExpression
-	 *
-	 * Constraint:
-	 *     (left=STAndExpression_STAndExpression_1_0_0 (op='&' | op='AND') right=STEqualityExpression)
-	 */
-	protected void sequence_STAndExpression(ISerializationContext context, STAndExpression semanticObject) {
+	protected void sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(ISerializationContext context, STBinaryExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -453,23 +396,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     InitializerExpression returns STSymbol
 	 *     STExpression returns STSymbol
 	 *     STSubrangeExpression returns STSymbol
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STSymbol
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STSymbol
 	 *     STOrExpression returns STSymbol
-	 *     STOrExpression.STOrExpression_1_0_0 returns STSymbol
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STSymbol
 	 *     STXorExpression returns STSymbol
-	 *     STXorExpression.STXorExpression_1_0_0 returns STSymbol
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STSymbol
 	 *     STAndExpression returns STSymbol
-	 *     STAndExpression.STAndExpression_1_0_0 returns STSymbol
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STSymbol
 	 *     STEqualityExpression returns STSymbol
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STSymbol
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STSymbol
 	 *     STComparisonExpression returns STSymbol
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STSymbol
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STSymbol
 	 *     STAddSubExpression returns STSymbol
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STSymbol
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STSymbol
 	 *     STMulDivModExpression returns STSymbol
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STSymbol
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STSymbol
 	 *     STPowerExpression returns STSymbol
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STSymbol
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STSymbol
 	 *     STSignumExpression returns STSymbol
 	 *     STSelectionExpression returns STSymbol
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STSymbol
@@ -516,41 +459,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STComparisonExpression
-	 *     STExpression returns STComparisonExpression
-	 *     STSubrangeExpression returns STComparisonExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STComparisonExpression
-	 *     STOrExpression returns STComparisonExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STComparisonExpression
-	 *     STXorExpression returns STComparisonExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STComparisonExpression
-	 *     STAndExpression returns STComparisonExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STComparisonExpression
-	 *     STEqualityExpression returns STComparisonExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STComparisonExpression
-	 *     STComparisonExpression returns STComparisonExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STComparisonExpression
-	 *     STAddSubExpression returns STComparisonExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STComparisonExpression
-	 *     STMulDivModExpression returns STComparisonExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STComparisonExpression
-	 *     STPowerExpression returns STComparisonExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STComparisonExpression
-	 *     STSignumExpression returns STComparisonExpression
-	 *     STSelectionExpression returns STComparisonExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STComparisonExpression
-	 *     STAtomicExpression returns STComparisonExpression
-	 *
-	 * Constraint:
-	 *     (left=STComparisonExpression_STComparisonExpression_1_0_0 (op='<' | op='>' | op='<=' | op='>=') right=STAddSubExpression)
-	 */
-	protected void sequence_STComparisonExpression(ISerializationContext context, STComparisonExpression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
 	 *     STElseIfPart returns STElseIfPart
 	 *
 	 * Constraint:
@@ -569,41 +477,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     statements+=STStatement*
 	 */
 	protected void sequence_STElsePart(ISerializationContext context, STElsePart semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STEqualityExpression
-	 *     STExpression returns STEqualityExpression
-	 *     STSubrangeExpression returns STEqualityExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STEqualityExpression
-	 *     STOrExpression returns STEqualityExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STEqualityExpression
-	 *     STXorExpression returns STEqualityExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STEqualityExpression
-	 *     STAndExpression returns STEqualityExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STEqualityExpression
-	 *     STEqualityExpression returns STEqualityExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STEqualityExpression
-	 *     STComparisonExpression returns STEqualityExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STEqualityExpression
-	 *     STAddSubExpression returns STEqualityExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STEqualityExpression
-	 *     STMulDivModExpression returns STEqualityExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STEqualityExpression
-	 *     STPowerExpression returns STEqualityExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STEqualityExpression
-	 *     STSignumExpression returns STEqualityExpression
-	 *     STSelectionExpression returns STEqualityExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STEqualityExpression
-	 *     STAtomicExpression returns STEqualityExpression
-	 *
-	 * Constraint:
-	 *     (left=STEqualityExpression_STEqualityExpression_1_0_0 (op='=' | op='<>') right=STComparisonExpression)
-	 */
-	protected void sequence_STEqualityExpression(ISerializationContext context, STEqualityExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -641,23 +514,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     InitializerExpression returns STBoolLiteral
 	 *     STExpression returns STBoolLiteral
 	 *     STSubrangeExpression returns STBoolLiteral
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STBoolLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
 	 *     STOrExpression returns STBoolLiteral
-	 *     STOrExpression.STOrExpression_1_0_0 returns STBoolLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
 	 *     STXorExpression returns STBoolLiteral
-	 *     STXorExpression.STXorExpression_1_0_0 returns STBoolLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
 	 *     STAndExpression returns STBoolLiteral
-	 *     STAndExpression.STAndExpression_1_0_0 returns STBoolLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
 	 *     STEqualityExpression returns STBoolLiteral
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STBoolLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
 	 *     STComparisonExpression returns STBoolLiteral
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STBoolLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
 	 *     STAddSubExpression returns STBoolLiteral
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STBoolLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
 	 *     STMulDivModExpression returns STBoolLiteral
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STBoolLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
 	 *     STPowerExpression returns STBoolLiteral
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STBoolLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
 	 *     STSignumExpression returns STBoolLiteral
 	 *     STSelectionExpression returns STBoolLiteral
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STBoolLiteral
@@ -683,23 +556,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     InitializerExpression returns STDateAndTimeLiteral
 	 *     STExpression returns STDateAndTimeLiteral
 	 *     STSubrangeExpression returns STDateAndTimeLiteral
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
 	 *     STOrExpression returns STDateAndTimeLiteral
-	 *     STOrExpression.STOrExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
 	 *     STXorExpression returns STDateAndTimeLiteral
-	 *     STXorExpression.STXorExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
 	 *     STAndExpression returns STDateAndTimeLiteral
-	 *     STAndExpression.STAndExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
 	 *     STEqualityExpression returns STDateAndTimeLiteral
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
 	 *     STComparisonExpression returns STDateAndTimeLiteral
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
 	 *     STAddSubExpression returns STDateAndTimeLiteral
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
 	 *     STMulDivModExpression returns STDateAndTimeLiteral
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
 	 *     STPowerExpression returns STDateAndTimeLiteral
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
 	 *     STSignumExpression returns STDateAndTimeLiteral
 	 *     STSelectionExpression returns STDateAndTimeLiteral
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STDateAndTimeLiteral
@@ -725,23 +598,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     InitializerExpression returns STDateLiteral
 	 *     STExpression returns STDateLiteral
 	 *     STSubrangeExpression returns STDateLiteral
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STDateLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateLiteral
 	 *     STOrExpression returns STDateLiteral
-	 *     STOrExpression.STOrExpression_1_0_0 returns STDateLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STDateLiteral
 	 *     STXorExpression returns STDateLiteral
-	 *     STXorExpression.STXorExpression_1_0_0 returns STDateLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STDateLiteral
 	 *     STAndExpression returns STDateLiteral
-	 *     STAndExpression.STAndExpression_1_0_0 returns STDateLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STDateLiteral
 	 *     STEqualityExpression returns STDateLiteral
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STDateLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STDateLiteral
 	 *     STComparisonExpression returns STDateLiteral
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STDateLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STDateLiteral
 	 *     STAddSubExpression returns STDateLiteral
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STDateLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STDateLiteral
 	 *     STMulDivModExpression returns STDateLiteral
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STDateLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STDateLiteral
 	 *     STPowerExpression returns STDateLiteral
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STDateLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STDateLiteral
 	 *     STSignumExpression returns STDateLiteral
 	 *     STSelectionExpression returns STDateLiteral
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STDateLiteral
@@ -767,23 +640,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     InitializerExpression returns STNumericLiteral
 	 *     STExpression returns STNumericLiteral
 	 *     STSubrangeExpression returns STNumericLiteral
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STNumericLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
 	 *     STOrExpression returns STNumericLiteral
-	 *     STOrExpression.STOrExpression_1_0_0 returns STNumericLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
 	 *     STXorExpression returns STNumericLiteral
-	 *     STXorExpression.STXorExpression_1_0_0 returns STNumericLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
 	 *     STAndExpression returns STNumericLiteral
-	 *     STAndExpression.STAndExpression_1_0_0 returns STNumericLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
 	 *     STEqualityExpression returns STNumericLiteral
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STNumericLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
 	 *     STComparisonExpression returns STNumericLiteral
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STNumericLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
 	 *     STAddSubExpression returns STNumericLiteral
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STNumericLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
 	 *     STMulDivModExpression returns STNumericLiteral
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STNumericLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
 	 *     STPowerExpression returns STNumericLiteral
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STNumericLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
 	 *     STSignumExpression returns STNumericLiteral
 	 *     STSelectionExpression returns STNumericLiteral
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STNumericLiteral
@@ -809,23 +682,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     InitializerExpression returns STStringLiteral
 	 *     STExpression returns STStringLiteral
 	 *     STSubrangeExpression returns STStringLiteral
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STStringLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STStringLiteral
 	 *     STOrExpression returns STStringLiteral
-	 *     STOrExpression.STOrExpression_1_0_0 returns STStringLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STStringLiteral
 	 *     STXorExpression returns STStringLiteral
-	 *     STXorExpression.STXorExpression_1_0_0 returns STStringLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STStringLiteral
 	 *     STAndExpression returns STStringLiteral
-	 *     STAndExpression.STAndExpression_1_0_0 returns STStringLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STStringLiteral
 	 *     STEqualityExpression returns STStringLiteral
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STStringLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STStringLiteral
 	 *     STComparisonExpression returns STStringLiteral
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STStringLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STStringLiteral
 	 *     STAddSubExpression returns STStringLiteral
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STStringLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STStringLiteral
 	 *     STMulDivModExpression returns STStringLiteral
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STStringLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STStringLiteral
 	 *     STPowerExpression returns STStringLiteral
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STStringLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STStringLiteral
 	 *     STSignumExpression returns STStringLiteral
 	 *     STSelectionExpression returns STStringLiteral
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STStringLiteral
@@ -851,23 +724,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     InitializerExpression returns STTimeLiteral
 	 *     STExpression returns STTimeLiteral
 	 *     STSubrangeExpression returns STTimeLiteral
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STTimeLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
 	 *     STOrExpression returns STTimeLiteral
-	 *     STOrExpression.STOrExpression_1_0_0 returns STTimeLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
 	 *     STXorExpression returns STTimeLiteral
-	 *     STXorExpression.STXorExpression_1_0_0 returns STTimeLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
 	 *     STAndExpression returns STTimeLiteral
-	 *     STAndExpression.STAndExpression_1_0_0 returns STTimeLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
 	 *     STEqualityExpression returns STTimeLiteral
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STTimeLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
 	 *     STComparisonExpression returns STTimeLiteral
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STTimeLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
 	 *     STAddSubExpression returns STTimeLiteral
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STTimeLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
 	 *     STMulDivModExpression returns STTimeLiteral
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STTimeLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
 	 *     STPowerExpression returns STTimeLiteral
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STTimeLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
 	 *     STSignumExpression returns STTimeLiteral
 	 *     STSelectionExpression returns STTimeLiteral
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STTimeLiteral
@@ -893,23 +766,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     InitializerExpression returns STTimeOfDayLiteral
 	 *     STExpression returns STTimeOfDayLiteral
 	 *     STSubrangeExpression returns STTimeOfDayLiteral
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
 	 *     STOrExpression returns STTimeOfDayLiteral
-	 *     STOrExpression.STOrExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
 	 *     STXorExpression returns STTimeOfDayLiteral
-	 *     STXorExpression.STXorExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
 	 *     STAndExpression returns STTimeOfDayLiteral
-	 *     STAndExpression.STAndExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
 	 *     STEqualityExpression returns STTimeOfDayLiteral
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
 	 *     STComparisonExpression returns STTimeOfDayLiteral
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
 	 *     STAddSubExpression returns STTimeOfDayLiteral
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
 	 *     STMulDivModExpression returns STTimeOfDayLiteral
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
 	 *     STPowerExpression returns STTimeOfDayLiteral
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
 	 *     STSignumExpression returns STTimeOfDayLiteral
 	 *     STSelectionExpression returns STTimeOfDayLiteral
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STTimeOfDayLiteral
@@ -926,135 +799,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_4_1_0(), semanticObject.getTimeOfDayLiteral());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STMulDivModExpression
-	 *     STExpression returns STMulDivModExpression
-	 *     STSubrangeExpression returns STMulDivModExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STMulDivModExpression
-	 *     STOrExpression returns STMulDivModExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STMulDivModExpression
-	 *     STXorExpression returns STMulDivModExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STMulDivModExpression
-	 *     STAndExpression returns STMulDivModExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STMulDivModExpression
-	 *     STEqualityExpression returns STMulDivModExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STMulDivModExpression
-	 *     STComparisonExpression returns STMulDivModExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STMulDivModExpression
-	 *     STAddSubExpression returns STMulDivModExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STMulDivModExpression
-	 *     STMulDivModExpression returns STMulDivModExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STMulDivModExpression
-	 *     STPowerExpression returns STMulDivModExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STMulDivModExpression
-	 *     STSignumExpression returns STMulDivModExpression
-	 *     STSelectionExpression returns STMulDivModExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STMulDivModExpression
-	 *     STAtomicExpression returns STMulDivModExpression
-	 *
-	 * Constraint:
-	 *     (left=STMulDivModExpression_STMulDivModExpression_1_0_0 (op='*' | op='/' | op='MOD') right=STPowerExpression)
-	 */
-	protected void sequence_STMulDivModExpression(ISerializationContext context, STMulDivModExpression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STOrExpression
-	 *     STExpression returns STOrExpression
-	 *     STSubrangeExpression returns STOrExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STOrExpression
-	 *     STOrExpression returns STOrExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STOrExpression
-	 *     STXorExpression returns STOrExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STOrExpression
-	 *     STAndExpression returns STOrExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STOrExpression
-	 *     STEqualityExpression returns STOrExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STOrExpression
-	 *     STComparisonExpression returns STOrExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STOrExpression
-	 *     STAddSubExpression returns STOrExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STOrExpression
-	 *     STMulDivModExpression returns STOrExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STOrExpression
-	 *     STPowerExpression returns STOrExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STOrExpression
-	 *     STSignumExpression returns STOrExpression
-	 *     STSelectionExpression returns STOrExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STOrExpression
-	 *     STAtomicExpression returns STOrExpression
-	 *
-	 * Constraint:
-	 *     (left=STOrExpression_STOrExpression_1_0_0 op='OR' right=STXorExpression)
-	 */
-	protected void sequence_STOrExpression(ISerializationContext context, STOrExpression semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_OR_EXPRESSION__LEFT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_OR_EXPRESSION__LEFT));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_OR_EXPRESSION__OP) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_OR_EXPRESSION__OP));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_OR_EXPRESSION__RIGHT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_OR_EXPRESSION__RIGHT));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTOrExpressionAccess().getSTOrExpressionLeftAction_1_0_0(), semanticObject.getLeft());
-		feeder.accept(grammarAccess.getSTOrExpressionAccess().getOpORKeyword_1_0_1_0(), semanticObject.getOp());
-		feeder.accept(grammarAccess.getSTOrExpressionAccess().getRightSTXorExpressionParserRuleCall_1_1_0(), semanticObject.getRight());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STPowerExpression
-	 *     STExpression returns STPowerExpression
-	 *     STSubrangeExpression returns STPowerExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STPowerExpression
-	 *     STOrExpression returns STPowerExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STPowerExpression
-	 *     STXorExpression returns STPowerExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STPowerExpression
-	 *     STAndExpression returns STPowerExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STPowerExpression
-	 *     STEqualityExpression returns STPowerExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STPowerExpression
-	 *     STComparisonExpression returns STPowerExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STPowerExpression
-	 *     STAddSubExpression returns STPowerExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STPowerExpression
-	 *     STMulDivModExpression returns STPowerExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STPowerExpression
-	 *     STPowerExpression returns STPowerExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STPowerExpression
-	 *     STSignumExpression returns STPowerExpression
-	 *     STSelectionExpression returns STPowerExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STPowerExpression
-	 *     STAtomicExpression returns STPowerExpression
-	 *
-	 * Constraint:
-	 *     (left=STPowerExpression_STPowerExpression_1_0_0 op='**' right=STSignumExpression)
-	 */
-	protected void sequence_STPowerExpression(ISerializationContext context, STPowerExpression semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_POWER_EXPRESSION__LEFT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_POWER_EXPRESSION__LEFT));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_POWER_EXPRESSION__OP) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_POWER_EXPRESSION__OP));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_POWER_EXPRESSION__RIGHT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_POWER_EXPRESSION__RIGHT));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTPowerExpressionAccess().getSTPowerExpressionLeftAction_1_0_0(), semanticObject.getLeft());
-		feeder.accept(grammarAccess.getSTPowerExpressionAccess().getOpAsteriskAsteriskKeyword_1_0_1_0(), semanticObject.getOp());
-		feeder.accept(grammarAccess.getSTPowerExpressionAccess().getRightSTSignumExpressionParserRuleCall_1_1_0(), semanticObject.getRight());
 		feeder.finish();
 	}
 	
@@ -1090,23 +834,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     InitializerExpression returns STMemberSelection
 	 *     STExpression returns STMemberSelection
 	 *     STSubrangeExpression returns STMemberSelection
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STMemberSelection
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STMemberSelection
 	 *     STOrExpression returns STMemberSelection
-	 *     STOrExpression.STOrExpression_1_0_0 returns STMemberSelection
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STMemberSelection
 	 *     STXorExpression returns STMemberSelection
-	 *     STXorExpression.STXorExpression_1_0_0 returns STMemberSelection
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STMemberSelection
 	 *     STAndExpression returns STMemberSelection
-	 *     STAndExpression.STAndExpression_1_0_0 returns STMemberSelection
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STMemberSelection
 	 *     STEqualityExpression returns STMemberSelection
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STMemberSelection
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STMemberSelection
 	 *     STComparisonExpression returns STMemberSelection
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STMemberSelection
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STMemberSelection
 	 *     STAddSubExpression returns STMemberSelection
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STMemberSelection
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STMemberSelection
 	 *     STMulDivModExpression returns STMemberSelection
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STMemberSelection
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STMemberSelection
 	 *     STPowerExpression returns STMemberSelection
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STMemberSelection
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STMemberSelection
 	 *     STSignumExpression returns STMemberSelection
 	 *     STSelectionExpression returns STMemberSelection
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STMemberSelection
@@ -1127,36 +871,45 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STSignumExpression
-	 *     STExpression returns STSignumExpression
-	 *     STSubrangeExpression returns STSignumExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STSignumExpression
-	 *     STOrExpression returns STSignumExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STSignumExpression
-	 *     STXorExpression returns STSignumExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STSignumExpression
-	 *     STAndExpression returns STSignumExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STSignumExpression
-	 *     STEqualityExpression returns STSignumExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STSignumExpression
-	 *     STComparisonExpression returns STSignumExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STSignumExpression
-	 *     STAddSubExpression returns STSignumExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STSignumExpression
-	 *     STMulDivModExpression returns STSignumExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STSignumExpression
-	 *     STPowerExpression returns STSignumExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STSignumExpression
-	 *     STSignumExpression returns STSignumExpression
-	 *     STSelectionExpression returns STSignumExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STSignumExpression
-	 *     STAtomicExpression returns STSignumExpression
+	 *     InitializerExpression returns STUnaryExpression
+	 *     STExpression returns STUnaryExpression
+	 *     STSubrangeExpression returns STUnaryExpression
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
+	 *     STOrExpression returns STUnaryExpression
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
+	 *     STXorExpression returns STUnaryExpression
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
+	 *     STAndExpression returns STUnaryExpression
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
+	 *     STEqualityExpression returns STUnaryExpression
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
+	 *     STComparisonExpression returns STUnaryExpression
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
+	 *     STAddSubExpression returns STUnaryExpression
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
+	 *     STMulDivModExpression returns STUnaryExpression
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
+	 *     STPowerExpression returns STUnaryExpression
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
+	 *     STSignumExpression returns STUnaryExpression
+	 *     STSelectionExpression returns STUnaryExpression
+	 *     STSelectionExpression.STMemberSelection_1_0 returns STUnaryExpression
+	 *     STAtomicExpression returns STUnaryExpression
 	 *
 	 * Constraint:
-	 *     ((signum='-' | signum='+' | signum='NOT') expression=STSelectionExpression)
+	 *     (op=UnaryOperator expression=STSelectionExpression)
 	 */
-	protected void sequence_STSignumExpression(ISerializationContext context, STSignumExpression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
+	protected void sequence_STSignumExpression(ISerializationContext context, STUnaryExpression semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_UNARY_EXPRESSION__OP) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_UNARY_EXPRESSION__OP));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_UNARY_EXPRESSION__EXPRESSION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_UNARY_EXPRESSION__EXPRESSION));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTSignumExpressionAccess().getOpUnaryOperatorEnumRuleCall_2_1_0(), semanticObject.getOp());
+		feeder.accept(grammarAccess.getSTSignumExpressionAccess().getExpressionSTSelectionExpressionParserRuleCall_2_2_0(), semanticObject.getExpression());
+		feeder.finish();
 	}
 	
 	
@@ -1210,50 +963,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STSubrangeExpression
-	 *     STExpression returns STSubrangeExpression
-	 *     STSubrangeExpression returns STSubrangeExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STSubrangeExpression
-	 *     STOrExpression returns STSubrangeExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STSubrangeExpression
-	 *     STXorExpression returns STSubrangeExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STSubrangeExpression
-	 *     STAndExpression returns STSubrangeExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STSubrangeExpression
-	 *     STEqualityExpression returns STSubrangeExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STSubrangeExpression
-	 *     STComparisonExpression returns STSubrangeExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STSubrangeExpression
-	 *     STAddSubExpression returns STSubrangeExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STSubrangeExpression
-	 *     STMulDivModExpression returns STSubrangeExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STSubrangeExpression
-	 *     STPowerExpression returns STSubrangeExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STSubrangeExpression
-	 *     STSignumExpression returns STSubrangeExpression
-	 *     STSelectionExpression returns STSubrangeExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STSubrangeExpression
-	 *     STAtomicExpression returns STSubrangeExpression
-	 *
-	 * Constraint:
-	 *     (lowerBound=STSubrangeExpression_STSubrangeExpression_1_0_0 upperBound=STOrExpression)
-	 */
-	protected void sequence_STSubrangeExpression(ISerializationContext context, STSubrangeExpression semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_SUBRANGE_EXPRESSION__LOWER_BOUND) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_SUBRANGE_EXPRESSION__LOWER_BOUND));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_SUBRANGE_EXPRESSION__UPPER_BOUND) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_SUBRANGE_EXPRESSION__UPPER_BOUND));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTSubrangeExpressionAccess().getSTSubrangeExpressionLowerBoundAction_1_0_0(), semanticObject.getLowerBound());
-		feeder.accept(grammarAccess.getSTSubrangeExpressionAccess().getUpperBoundSTOrExpressionParserRuleCall_1_1_0(), semanticObject.getUpperBound());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
 	 *     STStatement returns STWhileStatement
 	 *     STLoopStatement returns STWhileStatement
 	 *     STWhileStatement returns STWhileStatement
@@ -1263,53 +972,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 */
 	protected void sequence_STWhileStatement(ISerializationContext context, STWhileStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STXorExpression
-	 *     STExpression returns STXorExpression
-	 *     STSubrangeExpression returns STXorExpression
-	 *     STSubrangeExpression.STSubrangeExpression_1_0_0 returns STXorExpression
-	 *     STOrExpression returns STXorExpression
-	 *     STOrExpression.STOrExpression_1_0_0 returns STXorExpression
-	 *     STXorExpression returns STXorExpression
-	 *     STXorExpression.STXorExpression_1_0_0 returns STXorExpression
-	 *     STAndExpression returns STXorExpression
-	 *     STAndExpression.STAndExpression_1_0_0 returns STXorExpression
-	 *     STEqualityExpression returns STXorExpression
-	 *     STEqualityExpression.STEqualityExpression_1_0_0 returns STXorExpression
-	 *     STComparisonExpression returns STXorExpression
-	 *     STComparisonExpression.STComparisonExpression_1_0_0 returns STXorExpression
-	 *     STAddSubExpression returns STXorExpression
-	 *     STAddSubExpression.STAddSubExpression_1_0_0 returns STXorExpression
-	 *     STMulDivModExpression returns STXorExpression
-	 *     STMulDivModExpression.STMulDivModExpression_1_0_0 returns STXorExpression
-	 *     STPowerExpression returns STXorExpression
-	 *     STPowerExpression.STPowerExpression_1_0_0 returns STXorExpression
-	 *     STSignumExpression returns STXorExpression
-	 *     STSelectionExpression returns STXorExpression
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STXorExpression
-	 *     STAtomicExpression returns STXorExpression
-	 *
-	 * Constraint:
-	 *     (left=STXorExpression_STXorExpression_1_0_0 op='XOR' right=STAndExpression)
-	 */
-	protected void sequence_STXorExpression(ISerializationContext context, STXorExpression semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_XOR_EXPRESSION__LEFT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_XOR_EXPRESSION__LEFT));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_XOR_EXPRESSION__OP) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_XOR_EXPRESSION__OP));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_XOR_EXPRESSION__RIGHT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_XOR_EXPRESSION__RIGHT));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTXorExpressionAccess().getSTXorExpressionLeftAction_1_0_0(), semanticObject.getLeft());
-		feeder.accept(grammarAccess.getSTXorExpressionAccess().getOpXORKeyword_1_0_1_0(), semanticObject.getOp());
-		feeder.accept(grammarAccess.getSTXorExpressionAccess().getRightSTAndExpressionParserRuleCall_1_1_0(), semanticObject.getRight());
-		feeder.finish();
 	}
 	
 	

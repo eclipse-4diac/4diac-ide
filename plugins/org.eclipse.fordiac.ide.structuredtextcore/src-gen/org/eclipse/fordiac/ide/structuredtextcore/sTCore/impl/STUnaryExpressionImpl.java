@@ -13,43 +13,44 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Signum Expression</b></em>'.
+ * An implementation of the model object '<em><b>ST Unary Expression</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSignumExpressionImpl#getSignum <em>Signum</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STSignumExpressionImpl#getExpression <em>Expression</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STUnaryExpressionImpl#getOp <em>Op</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STUnaryExpressionImpl#getExpression <em>Expression</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STSignumExpressionImpl extends STExpressionImpl implements STSignumExpression
+public class STUnaryExpressionImpl extends STExpressionImpl implements STUnaryExpression
 {
   /**
-   * The default value of the '{@link #getSignum() <em>Signum</em>}' attribute.
+   * The default value of the '{@link #getOp() <em>Op</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getSignum()
+   * @see #getOp()
    * @generated
    * @ordered
    */
-  protected static final String SIGNUM_EDEFAULT = null;
+  protected static final UnaryOperator OP_EDEFAULT = UnaryOperator.MINUS;
 
   /**
-   * The cached value of the '{@link #getSignum() <em>Signum</em>}' attribute.
+   * The cached value of the '{@link #getOp() <em>Op</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getSignum()
+   * @see #getOp()
    * @generated
    * @ordered
    */
-  protected String signum = SIGNUM_EDEFAULT;
+  protected UnaryOperator op = OP_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
@@ -66,7 +67,7 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
    * <!-- end-user-doc -->
    * @generated
    */
-  protected STSignumExpressionImpl()
+  protected STUnaryExpressionImpl()
   {
     super();
   }
@@ -79,7 +80,7 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
   @Override
   protected EClass eStaticClass()
   {
-    return STCorePackage.Literals.ST_SIGNUM_EXPRESSION;
+    return STCorePackage.Literals.ST_UNARY_EXPRESSION;
   }
 
   /**
@@ -88,9 +89,9 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
    * @generated
    */
   @Override
-  public String getSignum()
+  public UnaryOperator getOp()
   {
-    return signum;
+    return op;
   }
 
   /**
@@ -99,12 +100,12 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
    * @generated
    */
   @Override
-  public void setSignum(String newSignum)
+  public void setOp(UnaryOperator newOp)
   {
-    String oldSignum = signum;
-    signum = newSignum;
+    UnaryOperator oldOp = op;
+    op = newOp == null ? OP_EDEFAULT : newOp;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_SIGNUM_EXPRESSION__SIGNUM, oldSignum, signum));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_UNARY_EXPRESSION__OP, oldOp, op));
   }
 
   /**
@@ -129,7 +130,7 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
     expression = newExpression;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_SIGNUM_EXPRESSION__EXPRESSION, oldExpression, newExpression);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION, oldExpression, newExpression);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -147,14 +148,14 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
     {
       NotificationChain msgs = null;
       if (expression != null)
-        msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_SIGNUM_EXPRESSION__EXPRESSION, null, msgs);
+        msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION, null, msgs);
       if (newExpression != null)
-        msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_SIGNUM_EXPRESSION__EXPRESSION, null, msgs);
+        msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION, null, msgs);
       msgs = basicSetExpression(newExpression, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_SIGNUM_EXPRESSION__EXPRESSION, newExpression, newExpression));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION, newExpression, newExpression));
   }
 
   /**
@@ -167,7 +168,7 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
   {
     switch (featureID)
     {
-      case STCorePackage.ST_SIGNUM_EXPRESSION__EXPRESSION:
+      case STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION:
         return basicSetExpression(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -183,9 +184,9 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
   {
     switch (featureID)
     {
-      case STCorePackage.ST_SIGNUM_EXPRESSION__SIGNUM:
-        return getSignum();
-      case STCorePackage.ST_SIGNUM_EXPRESSION__EXPRESSION:
+      case STCorePackage.ST_UNARY_EXPRESSION__OP:
+        return getOp();
+      case STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION:
         return getExpression();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -201,10 +202,10 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
   {
     switch (featureID)
     {
-      case STCorePackage.ST_SIGNUM_EXPRESSION__SIGNUM:
-        setSignum((String)newValue);
+      case STCorePackage.ST_UNARY_EXPRESSION__OP:
+        setOp((UnaryOperator)newValue);
         return;
-      case STCorePackage.ST_SIGNUM_EXPRESSION__EXPRESSION:
+      case STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION:
         setExpression((STExpression)newValue);
         return;
     }
@@ -221,10 +222,10 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
   {
     switch (featureID)
     {
-      case STCorePackage.ST_SIGNUM_EXPRESSION__SIGNUM:
-        setSignum(SIGNUM_EDEFAULT);
+      case STCorePackage.ST_UNARY_EXPRESSION__OP:
+        setOp(OP_EDEFAULT);
         return;
-      case STCorePackage.ST_SIGNUM_EXPRESSION__EXPRESSION:
+      case STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION:
         setExpression((STExpression)null);
         return;
     }
@@ -241,9 +242,9 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
   {
     switch (featureID)
     {
-      case STCorePackage.ST_SIGNUM_EXPRESSION__SIGNUM:
-        return SIGNUM_EDEFAULT == null ? signum != null : !SIGNUM_EDEFAULT.equals(signum);
-      case STCorePackage.ST_SIGNUM_EXPRESSION__EXPRESSION:
+      case STCorePackage.ST_UNARY_EXPRESSION__OP:
+        return op != OP_EDEFAULT;
+      case STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION:
         return expression != null;
     }
     return super.eIsSet(featureID);
@@ -260,10 +261,10 @@ public class STSignumExpressionImpl extends STExpressionImpl implements STSignum
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (signum: ");
-    result.append(signum);
+    result.append(" (op: ");
+    result.append(op);
     result.append(')');
     return result.toString();
   }
 
-} //STSignumExpressionImpl
+} //STUnaryExpressionImpl

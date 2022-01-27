@@ -6,23 +6,23 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>ST Equality Expression</b></em>'.
+ * A representation of the model object '<em><b>ST Binary Expression</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getLeft <em>Left</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getOp <em>Op</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getRight <em>Right</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getLeft <em>Left</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getOp <em>Op</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getRight <em>Right</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTEqualityExpression()
+ * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTBinaryExpression()
  * @model
  * @generated
  */
-public interface STEqualityExpression extends STExpression
+public interface STBinaryExpression extends STExpression
 {
   /**
    * Returns the value of the '<em><b>Left</b></em>' containment reference.
@@ -30,14 +30,14 @@ public interface STEqualityExpression extends STExpression
    * <!-- end-user-doc -->
    * @return the value of the '<em>Left</em>' containment reference.
    * @see #setLeft(STExpression)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTEqualityExpression_Left()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTBinaryExpression_Left()
    * @model containment="true"
    * @generated
    */
   STExpression getLeft();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getLeft <em>Left</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getLeft <em>Left</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Left</em>' containment reference.
@@ -48,25 +48,28 @@ public interface STEqualityExpression extends STExpression
 
   /**
    * Returns the value of the '<em><b>Op</b></em>' attribute.
+   * The literals are from the enumeration {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Op</em>' attribute.
-   * @see #setOp(String)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTEqualityExpression_Op()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator
+   * @see #setOp(BinaryOperator)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTBinaryExpression_Op()
    * @model
    * @generated
    */
-  String getOp();
+  BinaryOperator getOp();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getOp <em>Op</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getOp <em>Op</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Op</em>' attribute.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator
    * @see #getOp()
    * @generated
    */
-  void setOp(String value);
+  void setOp(BinaryOperator value);
 
   /**
    * Returns the value of the '<em><b>Right</b></em>' containment reference.
@@ -74,14 +77,14 @@ public interface STEqualityExpression extends STExpression
    * <!-- end-user-doc -->
    * @return the value of the '<em>Right</em>' containment reference.
    * @see #setRight(STExpression)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTEqualityExpression_Right()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTBinaryExpression_Right()
    * @model containment="true"
    * @generated
    */
   STExpression getRight();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression#getRight <em>Right</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression#getRight <em>Right</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Right</em>' containment reference.
@@ -90,4 +93,4 @@ public interface STEqualityExpression extends STExpression
    */
   void setRight(STExpression value);
 
-} // STEqualityExpression
+} // STBinaryExpression

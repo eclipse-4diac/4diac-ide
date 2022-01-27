@@ -452,8 +452,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTExpressionAccess().getRule();
 	}
 	
+	//enum SubrangeOperator returns BinaryOperator: Range='..';
+	public STCoreGrammarAccess.SubrangeOperatorElements getSubrangeOperatorAccess() {
+		return gaSTCore.getSubrangeOperatorAccess();
+	}
+	
+	public EnumRule getSubrangeOperatorRule() {
+		return getSubrangeOperatorAccess().getRule();
+	}
+	
 	//STSubrangeExpression returns STExpression:
-	//    STOrExpression (({STSubrangeExpression.lowerBound=current} '..') upperBound=STOrExpression)*;
+	//    STOrExpression (({STBinaryExpression.left=current} op=SubrangeOperator) right=STOrExpression)*;
 	public STCoreGrammarAccess.STSubrangeExpressionElements getSTSubrangeExpressionAccess() {
 		return gaSTCore.getSTSubrangeExpressionAccess();
 	}
@@ -462,8 +471,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTSubrangeExpressionAccess().getRule();
 	}
 	
+	//enum OrOperator returns BinaryOperator: OR;
+	public STCoreGrammarAccess.OrOperatorElements getOrOperatorAccess() {
+		return gaSTCore.getOrOperatorAccess();
+	}
+	
+	public EnumRule getOrOperatorRule() {
+		return getOrOperatorAccess().getRule();
+	}
+	
 	//STOrExpression returns STExpression:
-	//    STXorExpression (({STOrExpression.left=current} op='OR') right=STXorExpression)*;
+	//    STXorExpression (({STBinaryExpression.left=current} op=OrOperator) right=STXorExpression)*;
 	public STCoreGrammarAccess.STOrExpressionElements getSTOrExpressionAccess() {
 		return gaSTCore.getSTOrExpressionAccess();
 	}
@@ -472,8 +490,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTOrExpressionAccess().getRule();
 	}
 	
+	//enum XorOperator returns BinaryOperator: XOR;
+	public STCoreGrammarAccess.XorOperatorElements getXorOperatorAccess() {
+		return gaSTCore.getXorOperatorAccess();
+	}
+	
+	public EnumRule getXorOperatorRule() {
+		return getXorOperatorAccess().getRule();
+	}
+	
 	//STXorExpression returns STExpression:
-	//    STAndExpression (({STXorExpression.left=current} op='XOR') right=STAndExpression)*;
+	//    STAndExpression (({STBinaryExpression.left=current} op=XorOperator) right=STAndExpression)*;
 	public STCoreGrammarAccess.STXorExpressionElements getSTXorExpressionAccess() {
 		return gaSTCore.getSTXorExpressionAccess();
 	}
@@ -482,8 +509,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTXorExpressionAccess().getRule();
 	}
 	
+	//enum AndOperator returns BinaryOperator: AND | AMPERSAND='&';
+	public STCoreGrammarAccess.AndOperatorElements getAndOperatorAccess() {
+		return gaSTCore.getAndOperatorAccess();
+	}
+	
+	public EnumRule getAndOperatorRule() {
+		return getAndOperatorAccess().getRule();
+	}
+	
 	//STAndExpression returns STExpression:
-	//    STEqualityExpression (({STAndExpression.left=current} op=('&' | 'AND')) right=STEqualityExpression)*;
+	//    STEqualityExpression (({STBinaryExpression.left=current} op=AndOperator) right=STEqualityExpression)*;
 	public STCoreGrammarAccess.STAndExpressionElements getSTAndExpressionAccess() {
 		return gaSTCore.getSTAndExpressionAccess();
 	}
@@ -492,8 +528,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTAndExpressionAccess().getRule();
 	}
 	
+	//enum EqualityOperator returns BinaryOperator: EQ='=' | NE='<>';
+	public STCoreGrammarAccess.EqualityOperatorElements getEqualityOperatorAccess() {
+		return gaSTCore.getEqualityOperatorAccess();
+	}
+	
+	public EnumRule getEqualityOperatorRule() {
+		return getEqualityOperatorAccess().getRule();
+	}
+	
 	//STEqualityExpression returns STExpression:
-	//    STComparisonExpression (({STEqualityExpression.left=current} op=('=' | '<>')) right=STComparisonExpression)*;
+	//    STComparisonExpression (({STBinaryExpression.left=current} op=EqualityOperator) right=STComparisonExpression)*;
 	public STCoreGrammarAccess.STEqualityExpressionElements getSTEqualityExpressionAccess() {
 		return gaSTCore.getSTEqualityExpressionAccess();
 	}
@@ -502,8 +547,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTEqualityExpressionAccess().getRule();
 	}
 	
+	//enum CompareOperator returns BinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
+	public STCoreGrammarAccess.CompareOperatorElements getCompareOperatorAccess() {
+		return gaSTCore.getCompareOperatorAccess();
+	}
+	
+	public EnumRule getCompareOperatorRule() {
+		return getCompareOperatorAccess().getRule();
+	}
+	
 	//STComparisonExpression returns STExpression:
-	//    STAddSubExpression (({STComparisonExpression.left=current} op=('<' | '>' | '<=' | '>=')) right=STAddSubExpression)*;
+	//    STAddSubExpression (({STBinaryExpression.left=current} op=CompareOperator) right=STAddSubExpression)*;
 	public STCoreGrammarAccess.STComparisonExpressionElements getSTComparisonExpressionAccess() {
 		return gaSTCore.getSTComparisonExpressionAccess();
 	}
@@ -512,8 +566,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTComparisonExpressionAccess().getRule();
 	}
 	
+	//enum AddSubOperator returns BinaryOperator: ADD='+' | SUB='-';
+	public STCoreGrammarAccess.AddSubOperatorElements getAddSubOperatorAccess() {
+		return gaSTCore.getAddSubOperatorAccess();
+	}
+	
+	public EnumRule getAddSubOperatorRule() {
+		return getAddSubOperatorAccess().getRule();
+	}
+	
 	//STAddSubExpression returns STExpression:
-	//    STMulDivModExpression (({STAddSubExpression.left=current} op=('+' | '-')) right=STMulDivModExpression)*;
+	//    STMulDivModExpression (({STBinaryExpression.left=current} op=AddSubOperator) right=STMulDivModExpression)*;
 	public STCoreGrammarAccess.STAddSubExpressionElements getSTAddSubExpressionAccess() {
 		return gaSTCore.getSTAddSubExpressionAccess();
 	}
@@ -522,8 +585,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTAddSubExpressionAccess().getRule();
 	}
 	
+	//enum MulDivModOperator returns BinaryOperator: MUL='*' | DIV='/' | MOD;
+	public STCoreGrammarAccess.MulDivModOperatorElements getMulDivModOperatorAccess() {
+		return gaSTCore.getMulDivModOperatorAccess();
+	}
+	
+	public EnumRule getMulDivModOperatorRule() {
+		return getMulDivModOperatorAccess().getRule();
+	}
+	
 	//STMulDivModExpression returns STExpression:
-	//    STPowerExpression (({STMulDivModExpression.left=current} op=('*' | '/' | 'MOD')) right=STPowerExpression)*;
+	//    STPowerExpression (({STBinaryExpression.left=current} op=MulDivModOperator) right=STPowerExpression)*;
 	public STCoreGrammarAccess.STMulDivModExpressionElements getSTMulDivModExpressionAccess() {
 		return gaSTCore.getSTMulDivModExpressionAccess();
 	}
@@ -532,8 +604,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTMulDivModExpressionAccess().getRule();
 	}
 	
+	//enum PowerOperator returns BinaryOperator: POWER='**';
+	public STCoreGrammarAccess.PowerOperatorElements getPowerOperatorAccess() {
+		return gaSTCore.getPowerOperatorAccess();
+	}
+	
+	public EnumRule getPowerOperatorRule() {
+		return getPowerOperatorAccess().getRule();
+	}
+	
 	//STPowerExpression returns STExpression:
-	//    STSignumExpression (({STPowerExpression.left=current} op='**') right=STSignumExpression)*;
+	//    STSignumExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STSignumExpression)*;
 	public STCoreGrammarAccess.STPowerExpressionElements getSTPowerExpressionAccess() {
 		return gaSTCore.getSTPowerExpressionAccess();
 	}
@@ -542,8 +623,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTPowerExpressionAccess().getRule();
 	}
 	
+	//enum UnaryOperator returns UnaryOperator: MINUS='-' | PLUS='+' | NOT;
+	public STCoreGrammarAccess.UnaryOperatorElements getUnaryOperatorAccess() {
+		return gaSTCore.getUnaryOperatorAccess();
+	}
+	
+	public EnumRule getUnaryOperatorRule() {
+		return getUnaryOperatorAccess().getRule();
+	}
+	
 	//STSignumExpression returns STExpression:
-	//    STLiteralExpressions | STSelectionExpression | ({STSignumExpression} signum=('-' | '+' | 'NOT')
+	//    STLiteralExpressions | STSelectionExpression | ({STUnaryExpression} op=UnaryOperator
 	//    expression=STSelectionExpression);
 	public STCoreGrammarAccess.STSignumExpressionElements getSTSignumExpressionAccess() {
 		return gaSTCore.getSTSignumExpressionAccess();

@@ -231,54 +231,14 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTExitAdapter();
       }
       @Override
-      public Adapter caseSTSubrangeExpression(STSubrangeExpression object)
+      public Adapter caseSTBinaryExpression(STBinaryExpression object)
       {
-        return createSTSubrangeExpressionAdapter();
+        return createSTBinaryExpressionAdapter();
       }
       @Override
-      public Adapter caseSTOrExpression(STOrExpression object)
+      public Adapter caseSTUnaryExpression(STUnaryExpression object)
       {
-        return createSTOrExpressionAdapter();
-      }
-      @Override
-      public Adapter caseSTXorExpression(STXorExpression object)
-      {
-        return createSTXorExpressionAdapter();
-      }
-      @Override
-      public Adapter caseSTAndExpression(STAndExpression object)
-      {
-        return createSTAndExpressionAdapter();
-      }
-      @Override
-      public Adapter caseSTEqualityExpression(STEqualityExpression object)
-      {
-        return createSTEqualityExpressionAdapter();
-      }
-      @Override
-      public Adapter caseSTComparisonExpression(STComparisonExpression object)
-      {
-        return createSTComparisonExpressionAdapter();
-      }
-      @Override
-      public Adapter caseSTAddSubExpression(STAddSubExpression object)
-      {
-        return createSTAddSubExpressionAdapter();
-      }
-      @Override
-      public Adapter caseSTMulDivModExpression(STMulDivModExpression object)
-      {
-        return createSTMulDivModExpressionAdapter();
-      }
-      @Override
-      public Adapter caseSTPowerExpression(STPowerExpression object)
-      {
-        return createSTPowerExpressionAdapter();
-      }
-      @Override
-      public Adapter caseSTSignumExpression(STSignumExpression object)
-      {
-        return createSTSignumExpressionAdapter();
+        return createSTUnaryExpressionAdapter();
       }
       @Override
       public Adapter caseSTMemberSelection(STMemberSelection object)
@@ -813,151 +773,31 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression <em>ST Subrange Expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression <em>ST Binary Expression</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression
    * @generated
    */
-  public Adapter createSTSubrangeExpressionAdapter()
+  public Adapter createSTBinaryExpressionAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression <em>ST Or Expression</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression <em>ST Unary Expression</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression
    * @generated
    */
-  public Adapter createSTOrExpressionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression <em>ST Xor Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STXorExpression
-   * @generated
-   */
-  public Adapter createSTXorExpressionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression <em>ST And Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAndExpression
-   * @generated
-   */
-  public Adapter createSTAndExpressionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression <em>ST Equality Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STEqualityExpression
-   * @generated
-   */
-  public Adapter createSTEqualityExpressionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression <em>ST Comparison Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STComparisonExpression
-   * @generated
-   */
-  public Adapter createSTComparisonExpressionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression <em>ST Add Sub Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAddSubExpression
-   * @generated
-   */
-  public Adapter createSTAddSubExpressionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression <em>ST Mul Div Mod Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression
-   * @generated
-   */
-  public Adapter createSTMulDivModExpressionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression <em>ST Power Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression
-   * @generated
-   */
-  public Adapter createSTPowerExpressionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression <em>ST Signum Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression
-   * @generated
-   */
-  public Adapter createSTSignumExpressionAdapter()
+  public Adapter createSTUnaryExpressionAdapter()
   {
     return null;
   }
