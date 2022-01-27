@@ -16,13 +16,14 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement#getSelector <em>Selector</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement#getCases <em>Cases</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement#getElse <em>Else</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTCaseStatement()
  * @model
  * @generated
  */
-public interface STCaseStatement extends STBranchStatement
+public interface STCaseStatement extends STStatement
 {
   /**
    * Returns the value of the '<em><b>Selector</b></em>' containment reference.
@@ -57,5 +58,27 @@ public interface STCaseStatement extends STBranchStatement
    * @generated
    */
   EList<STCaseCases> getCases();
+
+  /**
+   * Returns the value of the '<em><b>Else</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Else</em>' containment reference.
+   * @see #setElse(STElsePart)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTCaseStatement_Else()
+   * @model containment="true"
+   * @generated
+   */
+  STElsePart getElse();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement#getElse <em>Else</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Else</em>' containment reference.
+   * @see #getElse()
+   * @generated
+   */
+  void setElse(STElsePart value);
 
 } // STCaseStatement

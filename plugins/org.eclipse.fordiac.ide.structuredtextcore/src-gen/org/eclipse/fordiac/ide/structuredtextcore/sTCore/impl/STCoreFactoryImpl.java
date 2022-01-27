@@ -74,13 +74,11 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ARRAY_INIT_ELEMENT: return createArrayInitElement();
       case STCorePackage.ST_STATEMENT: return createSTStatement();
       case STCorePackage.ST_ASSIGNMENT_STATEMENT: return createSTAssignmentStatement();
-      case STCorePackage.ST_BRANCH_STATEMENT: return createSTBranchStatement();
       case STCorePackage.ST_IF_STATMENT: return createSTIfStatment();
       case STCorePackage.ST_ELSE_IF_PART: return createSTElseIfPart();
       case STCorePackage.ST_CASE_STATEMENT: return createSTCaseStatement();
       case STCorePackage.ST_CASE_CASES: return createSTCaseCases();
       case STCorePackage.ST_ELSE_PART: return createSTElsePart();
-      case STCorePackage.ST_LOOP_STATEMENT: return createSTLoopStatement();
       case STCorePackage.ST_FOR_STATEMENT: return createSTForStatement();
       case STCorePackage.ST_WHILE_STATEMENT: return createSTWhileStatement();
       case STCorePackage.ST_REPEAT_STATEMENT: return createSTRepeatStatement();
@@ -93,10 +91,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.TIME_OF_DAY_LITERAL: return createTIME_OF_DAY_LITERAL();
       case STCorePackage.DATE_AND_TIME_LITERAL: return createDATE_AND_TIME_LITERAL();
       case STCorePackage.STRING_LITERAL: return createSTRING_LITERAL();
-      case STCorePackage.ST_NOP: return createSTNop();
       case STCorePackage.ST_RETURN: return createSTReturn();
       case STCorePackage.ST_CONTINUE: return createSTContinue();
       case STCorePackage.ST_EXIT: return createSTExit();
+      case STCorePackage.ST_NOP: return createSTNop();
       case STCorePackage.ST_BINARY_EXPRESSION: return createSTBinaryExpression();
       case STCorePackage.ST_UNARY_EXPRESSION: return createSTUnaryExpression();
       case STCorePackage.ST_MEMBER_SELECTION: return createSTMemberSelection();
@@ -257,18 +255,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public STBranchStatement createSTBranchStatement()
-  {
-    STBranchStatementImpl stBranchStatement = new STBranchStatementImpl();
-    return stBranchStatement;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public STIfStatment createSTIfStatment()
   {
     STIfStatmentImpl stIfStatment = new STIfStatmentImpl();
@@ -321,18 +307,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     STElsePartImpl stElsePart = new STElsePartImpl();
     return stElsePart;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STLoopStatement createSTLoopStatement()
-  {
-    STLoopStatementImpl stLoopStatement = new STLoopStatementImpl();
-    return stLoopStatement;
   }
 
   /**
@@ -485,18 +459,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public STNop createSTNop()
-  {
-    STNopImpl stNop = new STNopImpl();
-    return stNop;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public STReturn createSTReturn()
   {
     STReturnImpl stReturn = new STReturnImpl();
@@ -525,6 +487,18 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     STExitImpl stExit = new STExitImpl();
     return stExit;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STNop createSTNop()
+  {
+    STNopImpl stNop = new STNopImpl();
+    return stNop;
   }
 
   /**

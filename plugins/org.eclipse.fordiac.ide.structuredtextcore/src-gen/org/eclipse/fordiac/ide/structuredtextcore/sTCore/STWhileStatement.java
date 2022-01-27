@@ -3,6 +3,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -14,13 +15,14 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement#getCondition <em>Condition</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement#getStatements <em>Statements</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTWhileStatement()
  * @model
  * @generated
  */
-public interface STWhileStatement extends STLoopStatement
+public interface STWhileStatement extends STStatement
 {
   /**
    * Returns the value of the '<em><b>Condition</b></em>' containment reference.
@@ -43,5 +45,17 @@ public interface STWhileStatement extends STLoopStatement
    * @generated
    */
   void setCondition(STExpression value);
+
+  /**
+   * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Statements</em>' containment reference list.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTWhileStatement_Statements()
+   * @model containment="true"
+   * @generated
+   */
+  EList<STStatement> getStatements();
 
 } // STWhileStatement

@@ -3,17 +3,25 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,13 +31,24 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STRepeatStatementImpl#getStatements <em>Statements</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STRepeatStatementImpl#getCondition <em>Condition</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STRepeatStatementImpl extends STLoopStatementImpl implements STRepeatStatement
+public class STRepeatStatementImpl extends STStatementImpl implements STRepeatStatement
 {
+  /**
+   * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getStatements()
+   * @generated
+   * @ordered
+   */
+  protected EList<STStatement> statements;
+
   /**
    * The cached value of the '{@link #getCondition() <em>Condition</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -59,6 +78,21 @@ public class STRepeatStatementImpl extends STLoopStatementImpl implements STRepe
   protected EClass eStaticClass()
   {
     return STCorePackage.Literals.ST_REPEAT_STATEMENT;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EList<STStatement> getStatements()
+  {
+    if (statements == null)
+    {
+      statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STCorePackage.ST_REPEAT_STATEMENT__STATEMENTS);
+    }
+    return statements;
   }
 
   /**
@@ -121,6 +155,8 @@ public class STRepeatStatementImpl extends STLoopStatementImpl implements STRepe
   {
     switch (featureID)
     {
+      case STCorePackage.ST_REPEAT_STATEMENT__STATEMENTS:
+        return ((InternalEList<?>)getStatements()).basicRemove(otherEnd, msgs);
       case STCorePackage.ST_REPEAT_STATEMENT__CONDITION:
         return basicSetCondition(null, msgs);
     }
@@ -137,6 +173,8 @@ public class STRepeatStatementImpl extends STLoopStatementImpl implements STRepe
   {
     switch (featureID)
     {
+      case STCorePackage.ST_REPEAT_STATEMENT__STATEMENTS:
+        return getStatements();
       case STCorePackage.ST_REPEAT_STATEMENT__CONDITION:
         return getCondition();
     }
@@ -148,11 +186,16 @@ public class STRepeatStatementImpl extends STLoopStatementImpl implements STRepe
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
+      case STCorePackage.ST_REPEAT_STATEMENT__STATEMENTS:
+        getStatements().clear();
+        getStatements().addAll((Collection<? extends STStatement>)newValue);
+        return;
       case STCorePackage.ST_REPEAT_STATEMENT__CONDITION:
         setCondition((STExpression)newValue);
         return;
@@ -170,6 +213,9 @@ public class STRepeatStatementImpl extends STLoopStatementImpl implements STRepe
   {
     switch (featureID)
     {
+      case STCorePackage.ST_REPEAT_STATEMENT__STATEMENTS:
+        getStatements().clear();
+        return;
       case STCorePackage.ST_REPEAT_STATEMENT__CONDITION:
         setCondition((STExpression)null);
         return;
@@ -187,6 +233,8 @@ public class STRepeatStatementImpl extends STLoopStatementImpl implements STRepe
   {
     switch (featureID)
     {
+      case STCorePackage.ST_REPEAT_STATEMENT__STATEMENTS:
+        return statements != null && !statements.isEmpty();
       case STCorePackage.ST_REPEAT_STATEMENT__CONDITION:
         return condition != null;
     }

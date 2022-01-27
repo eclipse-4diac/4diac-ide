@@ -17,13 +17,14 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getCondition <em>Condition</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getStatements <em>Statements</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElseifs <em>Elseifs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElse <em>Else</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatment()
  * @model
  * @generated
  */
-public interface STIfStatment extends STBranchStatement
+public interface STIfStatment extends STStatement
 {
   /**
    * Returns the value of the '<em><b>Condition</b></em>' containment reference.
@@ -70,5 +71,27 @@ public interface STIfStatment extends STBranchStatement
    * @generated
    */
   EList<STElseIfPart> getElseifs();
+
+  /**
+   * Returns the value of the '<em><b>Else</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Else</em>' containment reference.
+   * @see #setElse(STElsePart)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatment_Else()
+   * @model containment="true"
+   * @generated
+   */
+  STElsePart getElse();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElse <em>Else</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Else</em>' containment reference.
+   * @see #getElse()
+   * @generated
+   */
+  void setElse(STElsePart value);
 
 } // STIfStatment

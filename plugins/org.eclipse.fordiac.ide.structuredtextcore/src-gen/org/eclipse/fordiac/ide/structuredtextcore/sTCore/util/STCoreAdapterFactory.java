@@ -116,11 +116,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTAssignmentStatementAdapter();
       }
       @Override
-      public Adapter caseSTBranchStatement(STBranchStatement object)
-      {
-        return createSTBranchStatementAdapter();
-      }
-      @Override
       public Adapter caseSTIfStatment(STIfStatment object)
       {
         return createSTIfStatmentAdapter();
@@ -144,11 +139,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
       public Adapter caseSTElsePart(STElsePart object)
       {
         return createSTElsePartAdapter();
-      }
-      @Override
-      public Adapter caseSTLoopStatement(STLoopStatement object)
-      {
-        return createSTLoopStatementAdapter();
       }
       @Override
       public Adapter caseSTForStatement(STForStatement object)
@@ -211,11 +201,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTRING_LITERALAdapter();
       }
       @Override
-      public Adapter caseSTNop(STNop object)
-      {
-        return createSTNopAdapter();
-      }
-      @Override
       public Adapter caseSTReturn(STReturn object)
       {
         return createSTReturnAdapter();
@@ -229,6 +214,11 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
       public Adapter caseSTExit(STExit object)
       {
         return createSTExitAdapter();
+      }
+      @Override
+      public Adapter caseSTNop(STNop object)
+      {
+        return createSTNopAdapter();
       }
       @Override
       public Adapter caseSTBinaryExpression(STBinaryExpression object)
@@ -428,21 +418,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement <em>ST Branch Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement
-   * @generated
-   */
-  public Adapter createSTBranchStatementAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment <em>ST If Statment</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -513,21 +488,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSTElsePartAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement <em>ST Loop Statement</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement
-   * @generated
-   */
-  public Adapter createSTLoopStatementAdapter()
   {
     return null;
   }
@@ -713,21 +673,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop <em>ST Nop</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop
-   * @generated
-   */
-  public Adapter createSTNopAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn <em>ST Return</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -768,6 +713,21 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSTExitAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop <em>ST Nop</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop
+   * @generated
+   */
+  public Adapter createSTNopAdapter()
   {
     return null;
   }

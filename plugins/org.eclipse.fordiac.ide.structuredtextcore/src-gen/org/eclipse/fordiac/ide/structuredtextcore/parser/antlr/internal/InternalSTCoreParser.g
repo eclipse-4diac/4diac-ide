@@ -533,47 +533,106 @@ ruleSTStatement returns [EObject current=null]
 }:
 	(
 		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTStatementAccess().getSTIfStatmentParserRuleCall_0_0_0());
+				}
+				this_STIfStatment_0=ruleSTIfStatment
+				{
+					$current = $this_STIfStatment_0.current;
+					afterParserOrEnumRuleCall();
+				}
+				    |
+				{
+					newCompositeNode(grammarAccess.getSTStatementAccess().getSTCaseStatementParserRuleCall_0_0_1());
+				}
+				this_STCaseStatement_1=ruleSTCaseStatement
+				{
+					$current = $this_STCaseStatement_1.current;
+					afterParserOrEnumRuleCall();
+				}
+				    |
+				{
+					newCompositeNode(grammarAccess.getSTStatementAccess().getSTForStatementParserRuleCall_0_0_2());
+				}
+				this_STForStatement_2=ruleSTForStatement
+				{
+					$current = $this_STForStatement_2.current;
+					afterParserOrEnumRuleCall();
+				}
+				    |
+				{
+					newCompositeNode(grammarAccess.getSTStatementAccess().getSTWhileStatementParserRuleCall_0_0_3());
+				}
+				this_STWhileStatement_3=ruleSTWhileStatement
+				{
+					$current = $this_STWhileStatement_3.current;
+					afterParserOrEnumRuleCall();
+				}
+				    |
+				{
+					newCompositeNode(grammarAccess.getSTStatementAccess().getSTRepeatStatementParserRuleCall_0_0_4());
+				}
+				this_STRepeatStatement_4=ruleSTRepeatStatement
+				{
+					$current = $this_STRepeatStatement_4.current;
+					afterParserOrEnumRuleCall();
+				}
+				    |
+				{
+					newCompositeNode(grammarAccess.getSTStatementAccess().getSTAssignmentStatementParserRuleCall_0_0_5());
+				}
+				this_STAssignmentStatement_5=ruleSTAssignmentStatement
+				{
+					$current = $this_STAssignmentStatement_5.current;
+					afterParserOrEnumRuleCall();
+				}
+				    |
+				(
+					(
+						{
+							$current = forceCreateModelElement(
+								grammarAccess.getSTStatementAccess().getSTReturnAction_0_0_6_0(),
+								$current);
+						}
+					)
+					otherlv_7=RETURN
+					{
+						newLeafNode(otherlv_7, grammarAccess.getSTStatementAccess().getRETURNKeyword_0_0_6_1());
+					}
+				)
+				    |
+				(
+					(
+						{
+							$current = forceCreateModelElement(
+								grammarAccess.getSTStatementAccess().getSTContinueAction_0_0_7_0(),
+								$current);
+						}
+					)
+					otherlv_9=CONTINUE
+					{
+						newLeafNode(otherlv_9, grammarAccess.getSTStatementAccess().getCONTINUEKeyword_0_0_7_1());
+					}
+				)
+				    |
+				(
+					(
+						{
+							$current = forceCreateModelElement(
+								grammarAccess.getSTStatementAccess().getSTExitAction_0_0_8_0(),
+								$current);
+						}
+					)
+					otherlv_11=EXIT
+					{
+						newLeafNode(otherlv_11, grammarAccess.getSTStatementAccess().getEXITKeyword_0_0_8_1());
+					}
+				)
+			)
+			otherlv_12=Semicolon
 			{
-				newCompositeNode(grammarAccess.getSTStatementAccess().getSTBranchStatementParserRuleCall_0_0());
-			}
-			this_STBranchStatement_0=ruleSTBranchStatement
-			{
-				$current = $this_STBranchStatement_0.current;
-				afterParserOrEnumRuleCall();
-			}
-			otherlv_1=Semicolon
-			{
-				newLeafNode(otherlv_1, grammarAccess.getSTStatementAccess().getSemicolonKeyword_0_1());
-			}
-		)
-		    |
-		(
-			{
-				newCompositeNode(grammarAccess.getSTStatementAccess().getSTLoopStatementParserRuleCall_1_0());
-			}
-			this_STLoopStatement_2=ruleSTLoopStatement
-			{
-				$current = $this_STLoopStatement_2.current;
-				afterParserOrEnumRuleCall();
-			}
-			otherlv_3=Semicolon
-			{
-				newLeafNode(otherlv_3, grammarAccess.getSTStatementAccess().getSemicolonKeyword_1_1());
-			}
-		)
-		    |
-		(
-			{
-				newCompositeNode(grammarAccess.getSTStatementAccess().getSTAssignmentStatementParserRuleCall_2_0());
-			}
-			this_STAssignmentStatement_4=ruleSTAssignmentStatement
-			{
-				$current = $this_STAssignmentStatement_4.current;
-				afterParserOrEnumRuleCall();
-			}
-			otherlv_5=Semicolon
-			{
-				newLeafNode(otherlv_5, grammarAccess.getSTStatementAccess().getSemicolonKeyword_2_1());
+				newLeafNode(otherlv_12, grammarAccess.getSTStatementAccess().getSemicolonKeyword_0_1());
 			}
 		)
 		    |
@@ -581,67 +640,13 @@ ruleSTStatement returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTStatementAccess().getSTNopAction_3_0(),
+						grammarAccess.getSTStatementAccess().getSTNopAction_1_0(),
 						$current);
 				}
 			)
-			otherlv_7=Semicolon
+			otherlv_14=Semicolon
 			{
-				newLeafNode(otherlv_7, grammarAccess.getSTStatementAccess().getSemicolonKeyword_3_1());
-			}
-		)
-		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTStatementAccess().getSTReturnAction_4_0(),
-						$current);
-				}
-			)
-			otherlv_9=RETURN
-			{
-				newLeafNode(otherlv_9, grammarAccess.getSTStatementAccess().getRETURNKeyword_4_1());
-			}
-			otherlv_10=Semicolon
-			{
-				newLeafNode(otherlv_10, grammarAccess.getSTStatementAccess().getSemicolonKeyword_4_2());
-			}
-		)
-		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTStatementAccess().getSTContinueAction_5_0(),
-						$current);
-				}
-			)
-			otherlv_12=CONTINUE
-			{
-				newLeafNode(otherlv_12, grammarAccess.getSTStatementAccess().getCONTINUEKeyword_5_1());
-			}
-			otherlv_13=Semicolon
-			{
-				newLeafNode(otherlv_13, grammarAccess.getSTStatementAccess().getSemicolonKeyword_5_2());
-			}
-		)
-		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTStatementAccess().getSTExitAction_6_0(),
-						$current);
-				}
-			)
-			otherlv_15=EXIT
-			{
-				newLeafNode(otherlv_15, grammarAccess.getSTStatementAccess().getEXITKeyword_6_1());
-			}
-			otherlv_16=Semicolon
-			{
-				newLeafNode(otherlv_16, grammarAccess.getSTStatementAccess().getSemicolonKeyword_6_2());
+				newLeafNode(otherlv_14, grammarAccess.getSTStatementAccess().getSemicolonKeyword_1_1());
 			}
 		)
 	)
@@ -699,42 +704,6 @@ ruleSTAssignmentStatement returns [EObject current=null]
 				}
 			)
 		)
-	)
-;
-
-// Entry rule entryRuleSTBranchStatement
-entryRuleSTBranchStatement returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getSTBranchStatementRule()); }
-	iv_ruleSTBranchStatement=ruleSTBranchStatement
-	{ $current=$iv_ruleSTBranchStatement.current; }
-	EOF;
-
-// Rule STBranchStatement
-ruleSTBranchStatement returns [EObject current=null]
-@init {
-	enterRule();
-}
-@after {
-	leaveRule();
-}:
-	(
-		{
-			newCompositeNode(grammarAccess.getSTBranchStatementAccess().getSTIfStatmentParserRuleCall_0());
-		}
-		this_STIfStatment_0=ruleSTIfStatment
-		{
-			$current = $this_STIfStatment_0.current;
-			afterParserOrEnumRuleCall();
-		}
-		    |
-		{
-			newCompositeNode(grammarAccess.getSTBranchStatementAccess().getSTCaseStatementParserRuleCall_1());
-		}
-		this_STCaseStatement_1=ruleSTCaseStatement
-		{
-			$current = $this_STCaseStatement_1.current;
-			afterParserOrEnumRuleCall();
-		}
 	)
 ;
 
@@ -1134,51 +1103,6 @@ ruleSTElsePart returns [EObject current=null]
 				}
 			)
 		)*
-	)
-;
-
-// Entry rule entryRuleSTLoopStatement
-entryRuleSTLoopStatement returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getSTLoopStatementRule()); }
-	iv_ruleSTLoopStatement=ruleSTLoopStatement
-	{ $current=$iv_ruleSTLoopStatement.current; }
-	EOF;
-
-// Rule STLoopStatement
-ruleSTLoopStatement returns [EObject current=null]
-@init {
-	enterRule();
-}
-@after {
-	leaveRule();
-}:
-	(
-		{
-			newCompositeNode(grammarAccess.getSTLoopStatementAccess().getSTForStatementParserRuleCall_0());
-		}
-		this_STForStatement_0=ruleSTForStatement
-		{
-			$current = $this_STForStatement_0.current;
-			afterParserOrEnumRuleCall();
-		}
-		    |
-		{
-			newCompositeNode(grammarAccess.getSTLoopStatementAccess().getSTWhileStatementParserRuleCall_1());
-		}
-		this_STWhileStatement_1=ruleSTWhileStatement
-		{
-			$current = $this_STWhileStatement_1.current;
-			afterParserOrEnumRuleCall();
-		}
-		    |
-		{
-			newCompositeNode(grammarAccess.getSTLoopStatementAccess().getSTRepeatStatementParserRuleCall_2());
-		}
-		this_STRepeatStatement_2=ruleSTRepeatStatement
-		{
-			$current = $this_STRepeatStatement_2.current;
-			afterParserOrEnumRuleCall();
-		}
 	)
 ;
 

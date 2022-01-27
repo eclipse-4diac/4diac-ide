@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue;
@@ -41,7 +40,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
@@ -127,13 +125,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass stBranchStatementEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   private EClass stIfStatmentEClass = null;
 
   /**
@@ -163,13 +154,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   private EClass stElsePartEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stLoopStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -260,13 +244,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass stNopEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   private EClass stReturnEClass = null;
 
   /**
@@ -282,6 +259,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   private EClass stExitEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stNopEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -719,28 +703,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getSTBranchStatement()
-  {
-    return stBranchStatementEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTBranchStatement_Else()
-  {
-    return (EReference)stBranchStatementEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EClass getSTIfStatment()
   {
     return stIfStatmentEClass;
@@ -777,6 +739,17 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
   public EReference getSTIfStatment_Elseifs()
   {
     return (EReference)stIfStatmentEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTIfStatment_Else()
+  {
+    return (EReference)stIfStatmentEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -851,6 +824,17 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
+  public EReference getSTCaseStatement_Else()
+  {
+    return (EReference)stCaseStatementEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getSTCaseCases()
   {
     return stCaseCasesEClass;
@@ -906,28 +890,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getSTLoopStatement()
-  {
-    return stLoopStatementEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTLoopStatement_Statements()
-  {
-    return (EReference)stLoopStatementEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EClass getSTForStatement()
   {
     return stForStatementEClass;
@@ -972,6 +934,17 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
+  public EReference getSTForStatement_Statements()
+  {
+    return (EReference)stForStatementEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getSTWhileStatement()
   {
     return stWhileStatementEClass;
@@ -994,6 +967,17 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
+  public EReference getSTWhileStatement_Statements()
+  {
+    return (EReference)stWhileStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getSTRepeatStatement()
   {
     return stRepeatStatementEClass;
@@ -1005,9 +989,20 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTRepeatStatement_Condition()
+  public EReference getSTRepeatStatement_Statements()
   {
     return (EReference)stRepeatStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTRepeatStatement_Condition()
+  {
+    return (EReference)stRepeatStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1335,17 +1330,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getSTNop()
-  {
-    return stNopEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EClass getSTReturn()
   {
     return stReturnEClass;
@@ -1371,6 +1355,17 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
   public EClass getSTExit()
   {
     return stExitEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getSTNop()
+  {
+    return stNopEClass;
   }
 
   /**
@@ -1865,13 +1860,11 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__LHS);
     createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__RHS);
 
-    stBranchStatementEClass = createEClass(ST_BRANCH_STATEMENT);
-    createEReference(stBranchStatementEClass, ST_BRANCH_STATEMENT__ELSE);
-
     stIfStatmentEClass = createEClass(ST_IF_STATMENT);
     createEReference(stIfStatmentEClass, ST_IF_STATMENT__CONDITION);
     createEReference(stIfStatmentEClass, ST_IF_STATMENT__STATEMENTS);
     createEReference(stIfStatmentEClass, ST_IF_STATMENT__ELSEIFS);
+    createEReference(stIfStatmentEClass, ST_IF_STATMENT__ELSE);
 
     stElseIfPartEClass = createEClass(ST_ELSE_IF_PART);
     createEReference(stElseIfPartEClass, ST_ELSE_IF_PART__CONDITION);
@@ -1880,6 +1873,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stCaseStatementEClass = createEClass(ST_CASE_STATEMENT);
     createEReference(stCaseStatementEClass, ST_CASE_STATEMENT__SELECTOR);
     createEReference(stCaseStatementEClass, ST_CASE_STATEMENT__CASES);
+    createEReference(stCaseStatementEClass, ST_CASE_STATEMENT__ELSE);
 
     stCaseCasesEClass = createEClass(ST_CASE_CASES);
     createEReference(stCaseCasesEClass, ST_CASE_CASES__CONDITIONS);
@@ -1888,18 +1882,18 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stElsePartEClass = createEClass(ST_ELSE_PART);
     createEReference(stElsePartEClass, ST_ELSE_PART__STATEMENTS);
 
-    stLoopStatementEClass = createEClass(ST_LOOP_STATEMENT);
-    createEReference(stLoopStatementEClass, ST_LOOP_STATEMENT__STATEMENTS);
-
     stForStatementEClass = createEClass(ST_FOR_STATEMENT);
     createEReference(stForStatementEClass, ST_FOR_STATEMENT__FOR);
     createEReference(stForStatementEClass, ST_FOR_STATEMENT__TO);
     createEReference(stForStatementEClass, ST_FOR_STATEMENT__BY);
+    createEReference(stForStatementEClass, ST_FOR_STATEMENT__STATEMENTS);
 
     stWhileStatementEClass = createEClass(ST_WHILE_STATEMENT);
     createEReference(stWhileStatementEClass, ST_WHILE_STATEMENT__CONDITION);
+    createEReference(stWhileStatementEClass, ST_WHILE_STATEMENT__STATEMENTS);
 
     stRepeatStatementEClass = createEClass(ST_REPEAT_STATEMENT);
+    createEReference(stRepeatStatementEClass, ST_REPEAT_STATEMENT__STATEMENTS);
     createEReference(stRepeatStatementEClass, ST_REPEAT_STATEMENT__CONDITION);
 
     stExpressionEClass = createEClass(ST_EXPRESSION);
@@ -1940,13 +1934,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEAttribute(strinG_LITERALEClass, STRING_LITERAL__KEYWORD);
     createEAttribute(strinG_LITERALEClass, STRING_LITERAL__VALUE);
 
-    stNopEClass = createEClass(ST_NOP);
-
     stReturnEClass = createEClass(ST_RETURN);
 
     stContinueEClass = createEClass(ST_CONTINUE);
 
     stExitEClass = createEClass(ST_EXIT);
+
+    stNopEClass = createEClass(ST_NOP);
 
     stBinaryExpressionEClass = createEClass(ST_BINARY_EXPRESSION);
     createEReference(stBinaryExpressionEClass, ST_BINARY_EXPRESSION__LEFT);
@@ -2036,18 +2030,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     // Add supertypes to classes
     arrayInitializerExpressionEClass.getESuperTypes().add(this.getInitializerExpression());
     stAssignmentStatementEClass.getESuperTypes().add(this.getSTStatement());
-    stBranchStatementEClass.getESuperTypes().add(this.getSTStatement());
-    stIfStatmentEClass.getESuperTypes().add(this.getSTBranchStatement());
-    stCaseStatementEClass.getESuperTypes().add(this.getSTBranchStatement());
-    stLoopStatementEClass.getESuperTypes().add(this.getSTStatement());
-    stForStatementEClass.getESuperTypes().add(this.getSTLoopStatement());
-    stWhileStatementEClass.getESuperTypes().add(this.getSTLoopStatement());
-    stRepeatStatementEClass.getESuperTypes().add(this.getSTLoopStatement());
+    stIfStatmentEClass.getESuperTypes().add(this.getSTStatement());
+    stCaseStatementEClass.getESuperTypes().add(this.getSTStatement());
+    stForStatementEClass.getESuperTypes().add(this.getSTStatement());
+    stWhileStatementEClass.getESuperTypes().add(this.getSTStatement());
+    stRepeatStatementEClass.getESuperTypes().add(this.getSTStatement());
     stExpressionEClass.getESuperTypes().add(this.getInitializerExpression());
-    stNopEClass.getESuperTypes().add(this.getSTStatement());
     stReturnEClass.getESuperTypes().add(this.getSTStatement());
     stContinueEClass.getESuperTypes().add(this.getSTStatement());
     stExitEClass.getESuperTypes().add(this.getSTStatement());
+    stNopEClass.getESuperTypes().add(this.getSTStatement());
     stBinaryExpressionEClass.getESuperTypes().add(this.getSTExpression());
     stUnaryExpressionEClass.getESuperTypes().add(this.getSTExpression());
     stMemberSelectionEClass.getESuperTypes().add(this.getSTExpression());
@@ -2093,13 +2085,11 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEReference(getSTAssignmentStatement_Lhs(), this.getVarDeclaration(), null, "lhs", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTAssignmentStatement_Rhs(), this.getSTExpression(), null, "rhs", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(stBranchStatementEClass, STBranchStatement.class, "STBranchStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTBranchStatement_Else(), this.getSTElsePart(), null, "else", null, 0, 1, STBranchStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
     initEClass(stIfStatmentEClass, STIfStatment.class, "STIfStatment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTIfStatment_Condition(), this.getSTExpression(), null, "condition", null, 0, 1, STIfStatment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTIfStatment_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STIfStatment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTIfStatment_Elseifs(), this.getSTElseIfPart(), null, "elseifs", null, 0, -1, STIfStatment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTIfStatment_Else(), this.getSTElsePart(), null, "else", null, 0, 1, STIfStatment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stElseIfPartEClass, STElseIfPart.class, "STElseIfPart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTElseIfPart_Condition(), this.getSTExpression(), null, "condition", null, 0, 1, STElseIfPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2108,6 +2098,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEClass(stCaseStatementEClass, STCaseStatement.class, "STCaseStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTCaseStatement_Selector(), this.getSTExpression(), null, "selector", null, 0, 1, STCaseStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTCaseStatement_Cases(), this.getSTCaseCases(), null, "cases", null, 0, -1, STCaseStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTCaseStatement_Else(), this.getSTElsePart(), null, "else", null, 0, 1, STCaseStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stCaseCasesEClass, STCaseCases.class, "STCaseCases", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTCaseCases_Conditions(), this.getSTExpression(), null, "conditions", null, 0, -1, STCaseCases.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2116,18 +2107,18 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEClass(stElsePartEClass, STElsePart.class, "STElsePart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTElsePart_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STElsePart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(stLoopStatementEClass, STLoopStatement.class, "STLoopStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTLoopStatement_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STLoopStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
     initEClass(stForStatementEClass, STForStatement.class, "STForStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTForStatement_For(), this.getSTExpression(), null, "for", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTForStatement_To(), this.getSTExpression(), null, "to", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTForStatement_By(), this.getSTExpression(), null, "by", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTForStatement_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stWhileStatementEClass, STWhileStatement.class, "STWhileStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTWhileStatement_Condition(), this.getSTExpression(), null, "condition", null, 0, 1, STWhileStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTWhileStatement_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STWhileStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stRepeatStatementEClass, STRepeatStatement.class, "STRepeatStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTRepeatStatement_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STRepeatStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTRepeatStatement_Condition(), this.getSTExpression(), null, "condition", null, 0, 1, STRepeatStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stExpressionEClass, STExpression.class, "STExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2168,13 +2159,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEAttribute(getSTRING_LITERAL_Keyword(), ecorePackage.getEString(), "keyword", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSTRING_LITERAL_Value(), ecorePackage.getEString(), "value", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(stNopEClass, STNop.class, "STNop", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
     initEClass(stReturnEClass, STReturn.class, "STReturn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(stContinueEClass, STContinue.class, "STContinue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(stExitEClass, STExit.class, "STExit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(stNopEClass, STNop.class, "STNop", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(stBinaryExpressionEClass, STBinaryExpression.class, "STBinaryExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTBinaryExpression_Left(), this.getSTExpression(), null, "left", null, 0, 1, STBinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

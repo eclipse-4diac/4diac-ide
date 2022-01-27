@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
 
 /**
@@ -33,11 +34,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCaseStatementImpl#getSelector <em>Selector</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCaseStatementImpl#getCases <em>Cases</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCaseStatementImpl#getElse <em>Else</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STCaseStatementImpl extends STBranchStatementImpl implements STCaseStatement
+public class STCaseStatementImpl extends STStatementImpl implements STCaseStatement
 {
   /**
    * The cached value of the '{@link #getSelector() <em>Selector</em>}' containment reference.
@@ -58,6 +60,16 @@ public class STCaseStatementImpl extends STBranchStatementImpl implements STCase
    * @ordered
    */
   protected EList<STCaseCases> cases;
+
+  /**
+   * The cached value of the '{@link #getElse() <em>Else</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getElse()
+   * @generated
+   * @ordered
+   */
+  protected STElsePart else_;
 
   /**
    * <!-- begin-user-doc -->
@@ -151,6 +163,56 @@ public class STCaseStatementImpl extends STBranchStatementImpl implements STCase
    * @generated
    */
   @Override
+  public STElsePart getElse()
+  {
+    return else_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetElse(STElsePart newElse, NotificationChain msgs)
+  {
+    STElsePart oldElse = else_;
+    else_ = newElse;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CASE_STATEMENT__ELSE, oldElse, newElse);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setElse(STElsePart newElse)
+  {
+    if (newElse != else_)
+    {
+      NotificationChain msgs = null;
+      if (else_ != null)
+        msgs = ((InternalEObject)else_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CASE_STATEMENT__ELSE, null, msgs);
+      if (newElse != null)
+        msgs = ((InternalEObject)newElse).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CASE_STATEMENT__ELSE, null, msgs);
+      msgs = basicSetElse(newElse, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CASE_STATEMENT__ELSE, newElse, newElse));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
     switch (featureID)
@@ -159,6 +221,8 @@ public class STCaseStatementImpl extends STBranchStatementImpl implements STCase
         return basicSetSelector(null, msgs);
       case STCorePackage.ST_CASE_STATEMENT__CASES:
         return ((InternalEList<?>)getCases()).basicRemove(otherEnd, msgs);
+      case STCorePackage.ST_CASE_STATEMENT__ELSE:
+        return basicSetElse(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -177,6 +241,8 @@ public class STCaseStatementImpl extends STBranchStatementImpl implements STCase
         return getSelector();
       case STCorePackage.ST_CASE_STATEMENT__CASES:
         return getCases();
+      case STCorePackage.ST_CASE_STATEMENT__ELSE:
+        return getElse();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -199,6 +265,9 @@ public class STCaseStatementImpl extends STBranchStatementImpl implements STCase
         getCases().clear();
         getCases().addAll((Collection<? extends STCaseCases>)newValue);
         return;
+      case STCorePackage.ST_CASE_STATEMENT__ELSE:
+        setElse((STElsePart)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -219,6 +288,9 @@ public class STCaseStatementImpl extends STBranchStatementImpl implements STCase
       case STCorePackage.ST_CASE_STATEMENT__CASES:
         getCases().clear();
         return;
+      case STCorePackage.ST_CASE_STATEMENT__ELSE:
+        setElse((STElsePart)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -237,6 +309,8 @@ public class STCaseStatementImpl extends STBranchStatementImpl implements STCase
         return selector != null;
       case STCorePackage.ST_CASE_STATEMENT__CASES:
         return cases != null && !cases.isEmpty();
+      case STCorePackage.ST_CASE_STATEMENT__ELSE:
+        return else_ != null;
     }
     return super.eIsSet(featureID);
   }

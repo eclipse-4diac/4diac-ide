@@ -513,120 +513,130 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStatement");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final RuleCall cSTBranchStatementParserRuleCall_0_0 = (RuleCall)cGroup_0.eContents().get(0);
+		private final Alternatives cAlternatives_0_0 = (Alternatives)cGroup_0.eContents().get(0);
+		private final RuleCall cSTIfStatmentParserRuleCall_0_0_0 = (RuleCall)cAlternatives_0_0.eContents().get(0);
+		private final RuleCall cSTCaseStatementParserRuleCall_0_0_1 = (RuleCall)cAlternatives_0_0.eContents().get(1);
+		private final RuleCall cSTForStatementParserRuleCall_0_0_2 = (RuleCall)cAlternatives_0_0.eContents().get(2);
+		private final RuleCall cSTWhileStatementParserRuleCall_0_0_3 = (RuleCall)cAlternatives_0_0.eContents().get(3);
+		private final RuleCall cSTRepeatStatementParserRuleCall_0_0_4 = (RuleCall)cAlternatives_0_0.eContents().get(4);
+		private final RuleCall cSTAssignmentStatementParserRuleCall_0_0_5 = (RuleCall)cAlternatives_0_0.eContents().get(5);
+		private final Group cGroup_0_0_6 = (Group)cAlternatives_0_0.eContents().get(6);
+		private final Action cSTReturnAction_0_0_6_0 = (Action)cGroup_0_0_6.eContents().get(0);
+		private final Keyword cRETURNKeyword_0_0_6_1 = (Keyword)cGroup_0_0_6.eContents().get(1);
+		private final Group cGroup_0_0_7 = (Group)cAlternatives_0_0.eContents().get(7);
+		private final Action cSTContinueAction_0_0_7_0 = (Action)cGroup_0_0_7.eContents().get(0);
+		private final Keyword cCONTINUEKeyword_0_0_7_1 = (Keyword)cGroup_0_0_7.eContents().get(1);
+		private final Group cGroup_0_0_8 = (Group)cAlternatives_0_0.eContents().get(8);
+		private final Action cSTExitAction_0_0_8_0 = (Action)cGroup_0_0_8.eContents().get(0);
+		private final Keyword cEXITKeyword_0_0_8_1 = (Keyword)cGroup_0_0_8.eContents().get(1);
 		private final Keyword cSemicolonKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final RuleCall cSTLoopStatementParserRuleCall_1_0 = (RuleCall)cGroup_1.eContents().get(0);
+		private final Action cSTNopAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
-		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final RuleCall cSTAssignmentStatementParserRuleCall_2_0 = (RuleCall)cGroup_2.eContents().get(0);
-		private final Keyword cSemicolonKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
-		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
-		private final Action cSTNopAction_3_0 = (Action)cGroup_3.eContents().get(0);
-		private final Keyword cSemicolonKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
-		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
-		private final Action cSTReturnAction_4_0 = (Action)cGroup_4.eContents().get(0);
-		private final Keyword cRETURNKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
-		private final Keyword cSemicolonKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
-		private final Group cGroup_5 = (Group)cAlternatives.eContents().get(5);
-		private final Action cSTContinueAction_5_0 = (Action)cGroup_5.eContents().get(0);
-		private final Keyword cCONTINUEKeyword_5_1 = (Keyword)cGroup_5.eContents().get(1);
-		private final Keyword cSemicolonKeyword_5_2 = (Keyword)cGroup_5.eContents().get(2);
-		private final Group cGroup_6 = (Group)cAlternatives.eContents().get(6);
-		private final Action cSTExitAction_6_0 = (Action)cGroup_6.eContents().get(0);
-		private final Keyword cEXITKeyword_6_1 = (Keyword)cGroup_6.eContents().get(1);
-		private final Keyword cSemicolonKeyword_6_2 = (Keyword)cGroup_6.eContents().get(2);
 		
 		//STStatement:
-		//    STBranchStatement ';' |
-		//    STLoopStatement ';' |
-		//    STAssignmentStatement ';' |
-		//    {STNop} ';' |
-		//    {STReturn} 'RETURN' ';' |
-		//    {STContinue} 'CONTINUE' ';' |
-		//    {STExit} 'EXIT' ';';
+		//    (STIfStatment |
+		//    STCaseStatement |
+		//    STForStatement |
+		//    STWhileStatement |
+		//    STRepeatStatement |
+		//    STAssignmentStatement |
+		//    {STReturn} 'RETURN' |
+		//    {STContinue} 'CONTINUE' |
+		//    {STExit} 'EXIT') ';' |
+		//    {STNop} ';';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STBranchStatement ';' |
-		//STLoopStatement ';' |
-		//STAssignmentStatement ';' |
-		//{STNop} ';' |
-		//{STReturn} 'RETURN' ';' |
-		//{STContinue} 'CONTINUE' ';' |
-		//{STExit} 'EXIT' ';'
+		//(STIfStatment |
+		//STCaseStatement |
+		//STForStatement |
+		//STWhileStatement |
+		//STRepeatStatement |
+		//STAssignmentStatement |
+		//{STReturn} 'RETURN' |
+		//{STContinue} 'CONTINUE' |
+		//{STExit} 'EXIT') ';' |
+		//{STNop} ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//STBranchStatement ';'
+		//(STIfStatment |
+		//STCaseStatement |
+		//STForStatement |
+		//STWhileStatement |
+		//STRepeatStatement |
+		//STAssignmentStatement |
+		//{STReturn} 'RETURN' |
+		//{STContinue} 'CONTINUE' |
+		//{STExit} 'EXIT') ';'
 		public Group getGroup_0() { return cGroup_0; }
 		
-		//STBranchStatement
-		public RuleCall getSTBranchStatementParserRuleCall_0_0() { return cSTBranchStatementParserRuleCall_0_0; }
+		//(STIfStatment |
+		//STCaseStatement |
+		//STForStatement |
+		//STWhileStatement |
+		//STRepeatStatement |
+		//STAssignmentStatement |
+		//{STReturn} 'RETURN' |
+		//{STContinue} 'CONTINUE' |
+		//{STExit} 'EXIT')
+		public Alternatives getAlternatives_0_0() { return cAlternatives_0_0; }
+		
+		//STIfStatment
+		public RuleCall getSTIfStatmentParserRuleCall_0_0_0() { return cSTIfStatmentParserRuleCall_0_0_0; }
+		
+		//STCaseStatement
+		public RuleCall getSTCaseStatementParserRuleCall_0_0_1() { return cSTCaseStatementParserRuleCall_0_0_1; }
+		
+		//STForStatement
+		public RuleCall getSTForStatementParserRuleCall_0_0_2() { return cSTForStatementParserRuleCall_0_0_2; }
+		
+		//STWhileStatement
+		public RuleCall getSTWhileStatementParserRuleCall_0_0_3() { return cSTWhileStatementParserRuleCall_0_0_3; }
+		
+		//STRepeatStatement
+		public RuleCall getSTRepeatStatementParserRuleCall_0_0_4() { return cSTRepeatStatementParserRuleCall_0_0_4; }
+		
+		//STAssignmentStatement
+		public RuleCall getSTAssignmentStatementParserRuleCall_0_0_5() { return cSTAssignmentStatementParserRuleCall_0_0_5; }
+		
+		//{STReturn} 'RETURN'
+		public Group getGroup_0_0_6() { return cGroup_0_0_6; }
+		
+		//{STReturn}
+		public Action getSTReturnAction_0_0_6_0() { return cSTReturnAction_0_0_6_0; }
+		
+		//'RETURN'
+		public Keyword getRETURNKeyword_0_0_6_1() { return cRETURNKeyword_0_0_6_1; }
+		
+		//{STContinue} 'CONTINUE'
+		public Group getGroup_0_0_7() { return cGroup_0_0_7; }
+		
+		//{STContinue}
+		public Action getSTContinueAction_0_0_7_0() { return cSTContinueAction_0_0_7_0; }
+		
+		//'CONTINUE'
+		public Keyword getCONTINUEKeyword_0_0_7_1() { return cCONTINUEKeyword_0_0_7_1; }
+		
+		//{STExit} 'EXIT'
+		public Group getGroup_0_0_8() { return cGroup_0_0_8; }
+		
+		//{STExit}
+		public Action getSTExitAction_0_0_8_0() { return cSTExitAction_0_0_8_0; }
+		
+		//'EXIT'
+		public Keyword getEXITKeyword_0_0_8_1() { return cEXITKeyword_0_0_8_1; }
 		
 		//';'
 		public Keyword getSemicolonKeyword_0_1() { return cSemicolonKeyword_0_1; }
 		
-		//STLoopStatement ';'
+		//{STNop} ';'
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//STLoopStatement
-		public RuleCall getSTLoopStatementParserRuleCall_1_0() { return cSTLoopStatementParserRuleCall_1_0; }
+		//{STNop}
+		public Action getSTNopAction_1_0() { return cSTNopAction_1_0; }
 		
 		//';'
 		public Keyword getSemicolonKeyword_1_1() { return cSemicolonKeyword_1_1; }
-		
-		//STAssignmentStatement ';'
-		public Group getGroup_2() { return cGroup_2; }
-		
-		//STAssignmentStatement
-		public RuleCall getSTAssignmentStatementParserRuleCall_2_0() { return cSTAssignmentStatementParserRuleCall_2_0; }
-		
-		//';'
-		public Keyword getSemicolonKeyword_2_1() { return cSemicolonKeyword_2_1; }
-		
-		//{STNop} ';'
-		public Group getGroup_3() { return cGroup_3; }
-		
-		//{STNop}
-		public Action getSTNopAction_3_0() { return cSTNopAction_3_0; }
-		
-		//';'
-		public Keyword getSemicolonKeyword_3_1() { return cSemicolonKeyword_3_1; }
-		
-		//{STReturn} 'RETURN' ';'
-		public Group getGroup_4() { return cGroup_4; }
-		
-		//{STReturn}
-		public Action getSTReturnAction_4_0() { return cSTReturnAction_4_0; }
-		
-		//'RETURN'
-		public Keyword getRETURNKeyword_4_1() { return cRETURNKeyword_4_1; }
-		
-		//';'
-		public Keyword getSemicolonKeyword_4_2() { return cSemicolonKeyword_4_2; }
-		
-		//{STContinue} 'CONTINUE' ';'
-		public Group getGroup_5() { return cGroup_5; }
-		
-		//{STContinue}
-		public Action getSTContinueAction_5_0() { return cSTContinueAction_5_0; }
-		
-		//'CONTINUE'
-		public Keyword getCONTINUEKeyword_5_1() { return cCONTINUEKeyword_5_1; }
-		
-		//';'
-		public Keyword getSemicolonKeyword_5_2() { return cSemicolonKeyword_5_2; }
-		
-		//{STExit} 'EXIT' ';'
-		public Group getGroup_6() { return cGroup_6; }
-		
-		//{STExit}
-		public Action getSTExitAction_6_0() { return cSTExitAction_6_0; }
-		
-		//'EXIT'
-		public Keyword getEXITKeyword_6_1() { return cEXITKeyword_6_1; }
-		
-		//';'
-		public Keyword getSemicolonKeyword_6_2() { return cSemicolonKeyword_6_2; }
 	}
 	public class STAssignmentStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STAssignmentStatement");
@@ -663,25 +673,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//STExpression
 		public RuleCall getRhsSTExpressionParserRuleCall_2_0() { return cRhsSTExpressionParserRuleCall_2_0; }
-	}
-	public class STBranchStatementElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STBranchStatement");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cSTIfStatmentParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final RuleCall cSTCaseStatementParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
-		
-		//STBranchStatement:
-		//    STIfStatment | STCaseStatement;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//STIfStatment | STCaseStatement
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//STIfStatment
-		public RuleCall getSTIfStatmentParserRuleCall_0() { return cSTIfStatmentParserRuleCall_0; }
-		
-		//STCaseStatement
-		public RuleCall getSTCaseStatementParserRuleCall_1() { return cSTCaseStatementParserRuleCall_1; }
 	}
 	public class STIfStatmentElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STIfStatment");
@@ -893,29 +884,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//STStatement
 		public RuleCall getStatementsSTStatementParserRuleCall_2_0() { return cStatementsSTStatementParserRuleCall_2_0; }
-	}
-	public class STLoopStatementElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STLoopStatement");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cSTForStatementParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final RuleCall cSTWhileStatementParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
-		private final RuleCall cSTRepeatStatementParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
-		
-		//STLoopStatement:
-		//    STForStatement | STWhileStatement | STRepeatStatement;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//STForStatement | STWhileStatement | STRepeatStatement
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//STForStatement
-		public RuleCall getSTForStatementParserRuleCall_0() { return cSTForStatementParserRuleCall_0; }
-		
-		//STWhileStatement
-		public RuleCall getSTWhileStatementParserRuleCall_1() { return cSTWhileStatementParserRuleCall_1; }
-		
-		//STRepeatStatement
-		public RuleCall getSTRepeatStatementParserRuleCall_2() { return cSTRepeatStatementParserRuleCall_2; }
 	}
 	public class STForStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STForStatement");
@@ -2814,13 +2782,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final ArrayInitElementElements pArrayInitElement;
 	private final STStatementElements pSTStatement;
 	private final STAssignmentStatementElements pSTAssignmentStatement;
-	private final STBranchStatementElements pSTBranchStatement;
 	private final STIfStatmentElements pSTIfStatment;
 	private final STElseIfPartElements pSTElseIfPart;
 	private final STCaseStatementElements pSTCaseStatement;
 	private final STCaseCasesElements pSTCaseCases;
 	private final STElsePartElements pSTElsePart;
-	private final STLoopStatementElements pSTLoopStatement;
 	private final STForStatementElements pSTForStatement;
 	private final STWhileStatementElements pSTWhileStatement;
 	private final STRepeatStatementElements pSTRepeatStatement;
@@ -2892,13 +2858,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pArrayInitElement = new ArrayInitElementElements();
 		this.pSTStatement = new STStatementElements();
 		this.pSTAssignmentStatement = new STAssignmentStatementElements();
-		this.pSTBranchStatement = new STBranchStatementElements();
 		this.pSTIfStatment = new STIfStatmentElements();
 		this.pSTElseIfPart = new STElseIfPartElements();
 		this.pSTCaseStatement = new STCaseStatementElements();
 		this.pSTCaseCases = new STCaseCasesElements();
 		this.pSTElsePart = new STElsePartElements();
-		this.pSTLoopStatement = new STLoopStatementElements();
 		this.pSTForStatement = new STForStatementElements();
 		this.pSTWhileStatement = new STWhileStatementElements();
 		this.pSTRepeatStatement = new STRepeatStatementElements();
@@ -3079,13 +3043,16 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STStatement:
-	//    STBranchStatement ';' |
-	//    STLoopStatement ';' |
-	//    STAssignmentStatement ';' |
-	//    {STNop} ';' |
-	//    {STReturn} 'RETURN' ';' |
-	//    {STContinue} 'CONTINUE' ';' |
-	//    {STExit} 'EXIT' ';';
+	//    (STIfStatment |
+	//    STCaseStatement |
+	//    STForStatement |
+	//    STWhileStatement |
+	//    STRepeatStatement |
+	//    STAssignmentStatement |
+	//    {STReturn} 'RETURN' |
+	//    {STContinue} 'CONTINUE' |
+	//    {STExit} 'EXIT') ';' |
+	//    {STNop} ';';
 	public STStatementElements getSTStatementAccess() {
 		return pSTStatement;
 	}
@@ -3103,16 +3070,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	public ParserRule getSTAssignmentStatementRule() {
 		return getSTAssignmentStatementAccess().getRule();
-	}
-	
-	//STBranchStatement:
-	//    STIfStatment | STCaseStatement;
-	public STBranchStatementElements getSTBranchStatementAccess() {
-		return pSTBranchStatement;
-	}
-	
-	public ParserRule getSTBranchStatementRule() {
-		return getSTBranchStatementAccess().getRule();
 	}
 	
 	//STIfStatment:
@@ -3163,16 +3120,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	public ParserRule getSTElsePartRule() {
 		return getSTElsePartAccess().getRule();
-	}
-	
-	//STLoopStatement:
-	//    STForStatement | STWhileStatement | STRepeatStatement;
-	public STLoopStatementElements getSTLoopStatementAccess() {
-		return pSTLoopStatement;
-	}
-	
-	public ParserRule getSTLoopStatementRule() {
-		return getSTLoopStatementAccess().getRule();
 	}
 	
 	//STForStatement:
@@ -3638,14 +3585,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return tEXT_INT;
 	}
 	
-	////DATA_TYPE_KEYWORDS:
-	////    ANY_TYPE_KEYWORDS | BOOL_KEYWORD | MULTIBITS_TYPE_KEYWORDS | SIGNED_INT_TYPE_KEYWORDS | UNSIGNED_INT_TYPE_KEYWORDS |
-	////    REAL_TYPE_KEYWORDS | DATE_TYPE_KEYWORDS | TIME_TYPE_KEYWORDS | DATE_AND_TIME_TYPE_KEYWORDS | TOD_TYPE_KEYWORDS |
-	////    STRING_TYPE_KEYWORDS;
-	////terminal ANY_TYPE_KEYWORDS:
-	////    'ANY' | 'ANY_DERIVED' | 'ANY_ELEMENTARY' | 'ANY_MAGNITUDE' | 'ANY_NUM' | 'ANY_REAL' | 'ANY_INT' | 'ANY_UNSIGNED' |
-	////    'ANY_SIGNED' | 'ANY_DURATION' | 'ANY_BIT' | 'ANY_CHARS' | 'ANY_STRING' | 'ANY_CHAR' | 'ANY_DATE';
-	////
 	//terminal ID:
 	//    '^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 	public TerminalRule getIDRule() {

@@ -3,16 +3,24 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
 
 /**
@@ -24,11 +32,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STWhileStatementImpl#getCondition <em>Condition</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STWhileStatementImpl#getStatements <em>Statements</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STWhileStatementImpl extends STLoopStatementImpl implements STWhileStatement
+public class STWhileStatementImpl extends STStatementImpl implements STWhileStatement
 {
   /**
    * The cached value of the '{@link #getCondition() <em>Condition</em>}' containment reference.
@@ -39,6 +48,16 @@ public class STWhileStatementImpl extends STLoopStatementImpl implements STWhile
    * @ordered
    */
   protected STExpression condition;
+
+  /**
+   * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getStatements()
+   * @generated
+   * @ordered
+   */
+  protected EList<STStatement> statements;
 
   /**
    * <!-- begin-user-doc -->
@@ -117,12 +136,29 @@ public class STWhileStatementImpl extends STLoopStatementImpl implements STWhile
    * @generated
    */
   @Override
+  public EList<STStatement> getStatements()
+  {
+    if (statements == null)
+    {
+      statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STCorePackage.ST_WHILE_STATEMENT__STATEMENTS);
+    }
+    return statements;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
     switch (featureID)
     {
       case STCorePackage.ST_WHILE_STATEMENT__CONDITION:
         return basicSetCondition(null, msgs);
+      case STCorePackage.ST_WHILE_STATEMENT__STATEMENTS:
+        return ((InternalEList<?>)getStatements()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -139,6 +175,8 @@ public class STWhileStatementImpl extends STLoopStatementImpl implements STWhile
     {
       case STCorePackage.ST_WHILE_STATEMENT__CONDITION:
         return getCondition();
+      case STCorePackage.ST_WHILE_STATEMENT__STATEMENTS:
+        return getStatements();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -148,6 +186,7 @@ public class STWhileStatementImpl extends STLoopStatementImpl implements STWhile
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
@@ -155,6 +194,10 @@ public class STWhileStatementImpl extends STLoopStatementImpl implements STWhile
     {
       case STCorePackage.ST_WHILE_STATEMENT__CONDITION:
         setCondition((STExpression)newValue);
+        return;
+      case STCorePackage.ST_WHILE_STATEMENT__STATEMENTS:
+        getStatements().clear();
+        getStatements().addAll((Collection<? extends STStatement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -173,6 +216,9 @@ public class STWhileStatementImpl extends STLoopStatementImpl implements STWhile
       case STCorePackage.ST_WHILE_STATEMENT__CONDITION:
         setCondition((STExpression)null);
         return;
+      case STCorePackage.ST_WHILE_STATEMENT__STATEMENTS:
+        getStatements().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -189,6 +235,8 @@ public class STWhileStatementImpl extends STLoopStatementImpl implements STWhile
     {
       case STCorePackage.ST_WHILE_STATEMENT__CONDITION:
         return condition != null;
+      case STCorePackage.ST_WHILE_STATEMENT__STATEMENTS:
+        return statements != null && !statements.isEmpty();
     }
     return super.eIsSet(featureID);
   }

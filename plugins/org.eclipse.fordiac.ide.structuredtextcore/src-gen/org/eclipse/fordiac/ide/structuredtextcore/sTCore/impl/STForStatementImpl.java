@@ -3,17 +3,25 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,11 +34,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getFor <em>For</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getTo <em>To</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getBy <em>By</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getStatements <em>Statements</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STForStatementImpl extends STLoopStatementImpl implements STForStatement
+public class STForStatementImpl extends STStatementImpl implements STForStatement
 {
   /**
    * The cached value of the '{@link #getFor() <em>For</em>}' containment reference.
@@ -61,6 +70,16 @@ public class STForStatementImpl extends STLoopStatementImpl implements STForStat
    * @ordered
    */
   protected STExpression by;
+
+  /**
+   * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getStatements()
+   * @generated
+   * @ordered
+   */
+  protected EList<STStatement> statements;
 
   /**
    * <!-- begin-user-doc -->
@@ -239,6 +258,21 @@ public class STForStatementImpl extends STLoopStatementImpl implements STForStat
    * @generated
    */
   @Override
+  public EList<STStatement> getStatements()
+  {
+    if (statements == null)
+    {
+      statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STCorePackage.ST_FOR_STATEMENT__STATEMENTS);
+    }
+    return statements;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
     switch (featureID)
@@ -249,6 +283,8 @@ public class STForStatementImpl extends STLoopStatementImpl implements STForStat
         return basicSetTo(null, msgs);
       case STCorePackage.ST_FOR_STATEMENT__BY:
         return basicSetBy(null, msgs);
+      case STCorePackage.ST_FOR_STATEMENT__STATEMENTS:
+        return ((InternalEList<?>)getStatements()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -269,6 +305,8 @@ public class STForStatementImpl extends STLoopStatementImpl implements STForStat
         return getTo();
       case STCorePackage.ST_FOR_STATEMENT__BY:
         return getBy();
+      case STCorePackage.ST_FOR_STATEMENT__STATEMENTS:
+        return getStatements();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -278,6 +316,7 @@ public class STForStatementImpl extends STLoopStatementImpl implements STForStat
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
@@ -291,6 +330,10 @@ public class STForStatementImpl extends STLoopStatementImpl implements STForStat
         return;
       case STCorePackage.ST_FOR_STATEMENT__BY:
         setBy((STExpression)newValue);
+        return;
+      case STCorePackage.ST_FOR_STATEMENT__STATEMENTS:
+        getStatements().clear();
+        getStatements().addAll((Collection<? extends STStatement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -315,6 +358,9 @@ public class STForStatementImpl extends STLoopStatementImpl implements STForStat
       case STCorePackage.ST_FOR_STATEMENT__BY:
         setBy((STExpression)null);
         return;
+      case STCorePackage.ST_FOR_STATEMENT__STATEMENTS:
+        getStatements().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -335,6 +381,8 @@ public class STForStatementImpl extends STLoopStatementImpl implements STForStat
         return to != null;
       case STCorePackage.ST_FOR_STATEMENT__BY:
         return by != null;
+      case STCorePackage.ST_FOR_STATEMENT__STATEMENTS:
+        return statements != null && !statements.isEmpty();
     }
     return super.eIsSet(featureID);
   }

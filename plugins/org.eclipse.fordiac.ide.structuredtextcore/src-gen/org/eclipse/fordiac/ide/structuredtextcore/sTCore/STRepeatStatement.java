@@ -3,6 +3,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,6 +14,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement#getStatements <em>Statements</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement#getCondition <em>Condition</em>}</li>
  * </ul>
  *
@@ -20,8 +22,20 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * @model
  * @generated
  */
-public interface STRepeatStatement extends STLoopStatement
+public interface STRepeatStatement extends STStatement
 {
+  /**
+   * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Statements</em>' containment reference list.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTRepeatStatement_Statements()
+   * @model containment="true"
+   * @generated
+   */
+  EList<STStatement> getStatements();
+
   /**
    * Returns the value of the '<em><b>Condition</b></em>' containment reference.
    * <!-- begin-user-doc -->

@@ -446,7 +446,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STCaseStatement
-	 *     STBranchStatement returns STCaseStatement
 	 *     STCaseStatement returns STCaseStatement
 	 *
 	 * Constraint:
@@ -484,7 +483,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STForStatement
-	 *     STLoopStatement returns STForStatement
 	 *     STForStatement returns STForStatement
 	 *
 	 * Constraint:
@@ -498,7 +496,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STIfStatment
-	 *     STBranchStatement returns STIfStatment
 	 *     STIfStatment returns STIfStatment
 	 *
 	 * Constraint:
@@ -818,7 +815,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STRepeatStatement
-	 *     STLoopStatement returns STRepeatStatement
 	 *     STRepeatStatement returns STRepeatStatement
 	 *
 	 * Constraint:
@@ -964,7 +960,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STWhileStatement
-	 *     STLoopStatement returns STWhileStatement
 	 *     STWhileStatement returns STWhileStatement
 	 *
 	 * Constraint:

@@ -68,13 +68,11 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/lhs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/rhs"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STBranchStatement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STBranchStatement/else"/>
-    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STIfStatment">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STIfStatment/condition"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STIfStatment/statements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STIfStatment/elseifs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STIfStatment/else"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STElseIfPart">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STElseIfPart/condition"/>
@@ -83,6 +81,7 @@
     <genClasses ecoreClass="STCore.ecore#//STCaseStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCaseStatement/selector"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCaseStatement/cases"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCaseStatement/else"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STCaseCases">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCaseCases/conditions"/>
@@ -91,18 +90,18 @@
     <genClasses ecoreClass="STCore.ecore#//STElsePart">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STElsePart/statements"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STLoopStatement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STLoopStatement/statements"/>
-    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STForStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STForStatement/for"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STForStatement/to"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STForStatement/by"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STForStatement/statements"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STWhileStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STWhileStatement/condition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STWhileStatement/statements"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STRepeatStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STRepeatStatement/statements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STRepeatStatement/condition"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STExpression"/>
@@ -142,10 +141,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRING_LITERAL/keyword"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRING_LITERAL/value"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STNop"/>
     <genClasses ecoreClass="STCore.ecore#//STReturn"/>
     <genClasses ecoreClass="STCore.ecore#//STContinue"/>
     <genClasses ecoreClass="STCore.ecore#//STExit"/>
+    <genClasses ecoreClass="STCore.ecore#//STNop"/>
     <genClasses ecoreClass="STCore.ecore#//STBinaryExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STBinaryExpression/left"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STBinaryExpression/op"/>

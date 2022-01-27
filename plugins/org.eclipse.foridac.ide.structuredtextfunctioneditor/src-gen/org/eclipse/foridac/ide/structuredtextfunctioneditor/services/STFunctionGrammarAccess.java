@@ -309,13 +309,16 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STStatement:
-	//    STBranchStatement ';' |
-	//    STLoopStatement ';' |
-	//    STAssignmentStatement ';' |
-	//    {STNop} ';' |
-	//    {STReturn} 'RETURN' ';' |
-	//    {STContinue} 'CONTINUE' ';' |
-	//    {STExit} 'EXIT' ';';
+	//    (STIfStatment |
+	//    STCaseStatement |
+	//    STForStatement |
+	//    STWhileStatement |
+	//    STRepeatStatement |
+	//    STAssignmentStatement |
+	//    {STReturn} 'RETURN' |
+	//    {STContinue} 'CONTINUE' |
+	//    {STExit} 'EXIT') ';' |
+	//    {STNop} ';';
 	public STCoreGrammarAccess.STStatementElements getSTStatementAccess() {
 		return gaSTCore.getSTStatementAccess();
 	}
@@ -333,16 +336,6 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	public ParserRule getSTAssignmentStatementRule() {
 		return getSTAssignmentStatementAccess().getRule();
-	}
-	
-	//STBranchStatement:
-	//    STIfStatment | STCaseStatement;
-	public STCoreGrammarAccess.STBranchStatementElements getSTBranchStatementAccess() {
-		return gaSTCore.getSTBranchStatementAccess();
-	}
-	
-	public ParserRule getSTBranchStatementRule() {
-		return getSTBranchStatementAccess().getRule();
 	}
 	
 	//STIfStatment:
@@ -393,16 +386,6 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	public ParserRule getSTElsePartRule() {
 		return getSTElsePartAccess().getRule();
-	}
-	
-	//STLoopStatement:
-	//    STForStatement | STWhileStatement | STRepeatStatement;
-	public STCoreGrammarAccess.STLoopStatementElements getSTLoopStatementAccess() {
-		return gaSTCore.getSTLoopStatementAccess();
-	}
-	
-	public ParserRule getSTLoopStatementRule() {
-		return getSTLoopStatementAccess().getRule();
 	}
 	
 	//STForStatement:
@@ -868,14 +851,6 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return gaSTCore.getEXT_INTRule();
 	}
 	
-	////DATA_TYPE_KEYWORDS:
-	////    ANY_TYPE_KEYWORDS | BOOL_KEYWORD | MULTIBITS_TYPE_KEYWORDS | SIGNED_INT_TYPE_KEYWORDS | UNSIGNED_INT_TYPE_KEYWORDS |
-	////    REAL_TYPE_KEYWORDS | DATE_TYPE_KEYWORDS | TIME_TYPE_KEYWORDS | DATE_AND_TIME_TYPE_KEYWORDS | TOD_TYPE_KEYWORDS |
-	////    STRING_TYPE_KEYWORDS;
-	////terminal ANY_TYPE_KEYWORDS:
-	////    'ANY' | 'ANY_DERIVED' | 'ANY_ELEMENTARY' | 'ANY_MAGNITUDE' | 'ANY_NUM' | 'ANY_REAL' | 'ANY_INT' | 'ANY_UNSIGNED' |
-	////    'ANY_SIGNED' | 'ANY_DURATION' | 'ANY_BIT' | 'ANY_CHARS' | 'ANY_STRING' | 'ANY_CHAR' | 'ANY_DATE';
-	////
 	//terminal ID:
 	//    '^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 	public TerminalRule getIDRule() {

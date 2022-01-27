@@ -57,20 +57,20 @@ ArrayInitElement:
 	indexOrInitExpression=STExpression ('(' initExpression=STExpression ')')?;
 	
 STStatement:
-	STBranchStatement ';' |
-	STLoopStatement ';' |
-	STAssignmentStatement ';' |
-	{STNop} ';' |
-	{STReturn} 'RETURN' ';' |
-	{STContinue} 'CONTINUE' ';' |
-	{STExit} 'EXIT' ';';
+	(STIfStatment |
+	STCaseStatement |
+	STForStatement |
+	STWhileStatement |
+	STRepeatStatement |
+	STAssignmentStatement |
+	{STReturn} 'RETURN' |
+	{STContinue} 'CONTINUE' |
+	{STExit} 'EXIT') ';' |
+	{STNop} ';';
 
 STAssignmentStatement:
 	lhs=[VarDeclaration] ':=' rhs=STExpression
 ;
-
-STBranchStatement:
-	STIfStatment | STCaseStatement;
 
 STIfStatment:
 	'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
@@ -86,9 +86,6 @@ STCaseCases:
 
 STElsePart:
 	{STElsePart} 'ELSE' statements+=STStatement*;
-
-STLoopStatement:
-	STForStatement | STWhileStatement | STRepeatStatement;
 
 STForStatement:
 	'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
@@ -236,16 +233,6 @@ TIME_OF_DAY:
 
 terminal EXT_INT:
 	INT ('e' | 'E') ('-' | '+')? INT;
-
-//DATA_TYPE_KEYWORDS:
-//	ANY_TYPE_KEYWORDS | BOOL_KEYWORD | MULTIBITS_TYPE_KEYWORDS | SIGNED_INT_TYPE_KEYWORDS | UNSIGNED_INT_TYPE_KEYWORDS |
-//	REAL_TYPE_KEYWORDS | DATE_TYPE_KEYWORDS | TIME_TYPE_KEYWORDS | DATE_AND_TIME_TYPE_KEYWORDS | TOD_TYPE_KEYWORDS |
-//	STRING_TYPE_KEYWORDS;
-
-//terminal ANY_TYPE_KEYWORDS:
-//	'ANY' | 'ANY_DERIVED' | 'ANY_ELEMENTARY' | 'ANY_MAGNITUDE' | 'ANY_NUM' | 'ANY_REAL' | 'ANY_INT' | 'ANY_UNSIGNED' |
-//	'ANY_SIGNED' | 'ANY_DURATION' | 'ANY_BIT' | 'ANY_CHARS' | 'ANY_STRING' | 'ANY_CHAR' | 'ANY_DATE';
-//
 
 terminal ID:
 	'^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;

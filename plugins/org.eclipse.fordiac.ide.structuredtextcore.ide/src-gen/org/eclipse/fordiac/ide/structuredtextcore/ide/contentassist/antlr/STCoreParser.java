@@ -34,8 +34,7 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getVarDeclarationAccess().getAlternatives_3_1(), "rule__VarDeclaration__Alternatives_3_1");
 			builder.put(grammarAccess.getInitializerExpressionAccess().getAlternatives(), "rule__InitializerExpression__Alternatives");
 			builder.put(grammarAccess.getSTStatementAccess().getAlternatives(), "rule__STStatement__Alternatives");
-			builder.put(grammarAccess.getSTBranchStatementAccess().getAlternatives(), "rule__STBranchStatement__Alternatives");
-			builder.put(grammarAccess.getSTLoopStatementAccess().getAlternatives(), "rule__STLoopStatement__Alternatives");
+			builder.put(grammarAccess.getSTStatementAccess().getAlternatives_0_0(), "rule__STStatement__Alternatives_0_0");
 			builder.put(grammarAccess.getSTSignumExpressionAccess().getAlternatives(), "rule__STSignumExpression__Alternatives");
 			builder.put(grammarAccess.getSTSelectionExpressionAccess().getAlternatives_1_1(), "rule__STSelectionExpression__Alternatives_1_1");
 			builder.put(grammarAccess.getSTAtomicExpressionAccess().getAlternatives(), "rule__STAtomicExpression__Alternatives");
@@ -74,12 +73,10 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getArrayInitElementAccess().getGroup(), "rule__ArrayInitElement__Group__0");
 			builder.put(grammarAccess.getArrayInitElementAccess().getGroup_1(), "rule__ArrayInitElement__Group_1__0");
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_0(), "rule__STStatement__Group_0__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_0_0_6(), "rule__STStatement__Group_0_0_6__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_0_0_7(), "rule__STStatement__Group_0_0_7__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_0_0_8(), "rule__STStatement__Group_0_0_8__0");
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_1(), "rule__STStatement__Group_1__0");
-			builder.put(grammarAccess.getSTStatementAccess().getGroup_2(), "rule__STStatement__Group_2__0");
-			builder.put(grammarAccess.getSTStatementAccess().getGroup_3(), "rule__STStatement__Group_3__0");
-			builder.put(grammarAccess.getSTStatementAccess().getGroup_4(), "rule__STStatement__Group_4__0");
-			builder.put(grammarAccess.getSTStatementAccess().getGroup_5(), "rule__STStatement__Group_5__0");
-			builder.put(grammarAccess.getSTStatementAccess().getGroup_6(), "rule__STStatement__Group_6__0");
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getGroup(), "rule__STAssignmentStatement__Group__0");
 			builder.put(grammarAccess.getSTIfStatmentAccess().getGroup(), "rule__STIfStatment__Group__0");
 			builder.put(grammarAccess.getSTElseIfPartAccess().getGroup(), "rule__STElseIfPart__Group__0");

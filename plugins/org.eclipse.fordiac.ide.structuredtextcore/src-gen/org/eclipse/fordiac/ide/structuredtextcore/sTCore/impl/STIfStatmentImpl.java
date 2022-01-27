@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
@@ -35,11 +36,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl#getCondition <em>Condition</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl#getStatements <em>Statements</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl#getElseifs <em>Elseifs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl#getElse <em>Else</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STIfStatmentImpl extends STBranchStatementImpl implements STIfStatment
+public class STIfStatmentImpl extends STStatementImpl implements STIfStatment
 {
   /**
    * The cached value of the '{@link #getCondition() <em>Condition</em>}' containment reference.
@@ -70,6 +72,16 @@ public class STIfStatmentImpl extends STBranchStatementImpl implements STIfStatm
    * @ordered
    */
   protected EList<STElseIfPart> elseifs;
+
+  /**
+   * The cached value of the '{@link #getElse() <em>Else</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getElse()
+   * @generated
+   * @ordered
+   */
+  protected STElsePart else_;
 
   /**
    * <!-- begin-user-doc -->
@@ -178,6 +190,56 @@ public class STIfStatmentImpl extends STBranchStatementImpl implements STIfStatm
    * @generated
    */
   @Override
+  public STElsePart getElse()
+  {
+    return else_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetElse(STElsePart newElse, NotificationChain msgs)
+  {
+    STElsePart oldElse = else_;
+    else_ = newElse;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_IF_STATMENT__ELSE, oldElse, newElse);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setElse(STElsePart newElse)
+  {
+    if (newElse != else_)
+    {
+      NotificationChain msgs = null;
+      if (else_ != null)
+        msgs = ((InternalEObject)else_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_IF_STATMENT__ELSE, null, msgs);
+      if (newElse != null)
+        msgs = ((InternalEObject)newElse).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_IF_STATMENT__ELSE, null, msgs);
+      msgs = basicSetElse(newElse, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_IF_STATMENT__ELSE, newElse, newElse));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
     switch (featureID)
@@ -188,6 +250,8 @@ public class STIfStatmentImpl extends STBranchStatementImpl implements STIfStatm
         return ((InternalEList<?>)getStatements()).basicRemove(otherEnd, msgs);
       case STCorePackage.ST_IF_STATMENT__ELSEIFS:
         return ((InternalEList<?>)getElseifs()).basicRemove(otherEnd, msgs);
+      case STCorePackage.ST_IF_STATMENT__ELSE:
+        return basicSetElse(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -208,6 +272,8 @@ public class STIfStatmentImpl extends STBranchStatementImpl implements STIfStatm
         return getStatements();
       case STCorePackage.ST_IF_STATMENT__ELSEIFS:
         return getElseifs();
+      case STCorePackage.ST_IF_STATMENT__ELSE:
+        return getElse();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -234,6 +300,9 @@ public class STIfStatmentImpl extends STBranchStatementImpl implements STIfStatm
         getElseifs().clear();
         getElseifs().addAll((Collection<? extends STElseIfPart>)newValue);
         return;
+      case STCorePackage.ST_IF_STATMENT__ELSE:
+        setElse((STElsePart)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -257,6 +326,9 @@ public class STIfStatmentImpl extends STBranchStatementImpl implements STIfStatm
       case STCorePackage.ST_IF_STATMENT__ELSEIFS:
         getElseifs().clear();
         return;
+      case STCorePackage.ST_IF_STATMENT__ELSE:
+        setElse((STElsePart)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -277,6 +349,8 @@ public class STIfStatmentImpl extends STBranchStatementImpl implements STIfStatm
         return statements != null && !statements.isEmpty();
       case STCorePackage.ST_IF_STATMENT__ELSEIFS:
         return elseifs != null && !elseifs.isEmpty();
+      case STCorePackage.ST_IF_STATMENT__ELSE:
+        return else_ != null;
     }
     return super.eIsSet(featureID);
   }

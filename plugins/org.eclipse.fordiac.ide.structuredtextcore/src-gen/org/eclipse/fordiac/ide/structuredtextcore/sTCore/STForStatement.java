@@ -3,6 +3,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,13 +17,14 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFor <em>For</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getTo <em>To</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getBy <em>By</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getStatements <em>Statements</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTForStatement()
  * @model
  * @generated
  */
-public interface STForStatement extends STLoopStatement
+public interface STForStatement extends STStatement
 {
   /**
    * Returns the value of the '<em><b>For</b></em>' containment reference.
@@ -89,5 +91,17 @@ public interface STForStatement extends STLoopStatement
    * @generated
    */
   void setBy(STExpression value);
+
+  /**
+   * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Statements</em>' containment reference list.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTForStatement_Statements()
+   * @model containment="true"
+   * @generated
+   */
+  EList<STStatement> getStatements();
 
 } // STForStatement
