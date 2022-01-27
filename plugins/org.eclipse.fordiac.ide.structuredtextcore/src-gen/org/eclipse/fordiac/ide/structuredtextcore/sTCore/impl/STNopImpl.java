@@ -6,23 +6,23 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Statements</b></em>'.
+ * An implementation of the model object '<em><b>ST Nop</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class STStatementsImpl extends STStatementImpl implements STStatements
+public class STNopImpl extends STStatementImpl implements STNop
 {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected STStatementsImpl()
+  protected STNopImpl()
   {
     super();
   }
@@ -35,7 +35,7 @@ public class STStatementsImpl extends STStatementImpl implements STStatements
   @Override
   protected EClass eStaticClass()
   {
-    return STCorePackage.Literals.ST_STATEMENTS;
+    return STCorePackage.Literals.ST_NOP;
   }
 
-} //STStatementsImpl
+} //STNopImpl

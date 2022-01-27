@@ -39,7 +39,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
  *
  * @generated
  */
-public class STIfStatmentImpl extends STBranchStatementsImpl implements STIfStatment
+public class STIfStatmentImpl extends STBranchStatementImpl implements STIfStatment
 {
   /**
    * The cached value of the '{@link #getCondition() <em>Condition</em>}' containment reference.

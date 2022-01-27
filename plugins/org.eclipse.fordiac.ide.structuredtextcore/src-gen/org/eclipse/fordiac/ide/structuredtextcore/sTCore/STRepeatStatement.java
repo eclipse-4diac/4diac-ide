@@ -20,7 +20,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * @model
  * @generated
  */
-public interface STRepeatStatement extends STLoopStatements
+public interface STRepeatStatement extends STLoopStatement
 {
   /**
    * Returns the value of the '<em><b>Condition</b></em>' containment reference.

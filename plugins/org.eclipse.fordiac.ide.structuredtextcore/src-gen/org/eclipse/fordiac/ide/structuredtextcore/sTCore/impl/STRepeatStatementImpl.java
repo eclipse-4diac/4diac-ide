@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
  *
  * @generated
  */
-public class STRepeatStatementImpl extends STLoopStatementsImpl implements STRepeatStatement
+public class STRepeatStatementImpl extends STLoopStatementImpl implements STRepeatStatement
 {
   /**
    * The cached value of the '{@link #getCondition() <em>Condition</em>}' containment reference.

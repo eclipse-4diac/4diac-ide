@@ -96,13 +96,13 @@ public interface STCoreFactory extends EFactory
   STAssignmentStatement createSTAssignmentStatement();
 
   /**
-   * Returns a new object of class '<em>ST Branch Statements</em>'.
+   * Returns a new object of class '<em>ST Branch Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Branch Statements</em>'.
+   * @return a new object of class '<em>ST Branch Statement</em>'.
    * @generated
    */
-  STBranchStatements createSTBranchStatements();
+  STBranchStatement createSTBranchStatement();
 
   /**
    * Returns a new object of class '<em>ST If Statment</em>'.
@@ -150,13 +150,13 @@ public interface STCoreFactory extends EFactory
   STElsePart createSTElsePart();
 
   /**
-   * Returns a new object of class '<em>ST Loop Statements</em>'.
+   * Returns a new object of class '<em>ST Loop Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Loop Statements</em>'.
+   * @return a new object of class '<em>ST Loop Statement</em>'.
    * @generated
    */
-  STLoopStatements createSTLoopStatements();
+  STLoopStatement createSTLoopStatement();
 
   /**
    * Returns a new object of class '<em>ST For Statement</em>'.
@@ -267,13 +267,13 @@ public interface STCoreFactory extends EFactory
   STRING_LITERAL createSTRING_LITERAL();
 
   /**
-   * Returns a new object of class '<em>ST Statements</em>'.
+   * Returns a new object of class '<em>ST Nop</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Statements</em>'.
+   * @return a new object of class '<em>ST Nop</em>'.
    * @generated
    */
-  STStatements createSTStatements();
+  STNop createSTNop();
 
   /**
    * Returns a new object of class '<em>ST Return</em>'.

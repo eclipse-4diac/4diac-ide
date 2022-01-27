@@ -6,21 +6,21 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>ST Branch Statements</b></em>'.
+ * A representation of the model object '<em><b>ST Branch Statement</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements#getElse <em>Else</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement#getElse <em>Else</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTBranchStatements()
+ * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTBranchStatement()
  * @model
  * @generated
  */
-public interface STBranchStatements extends STStatement
+public interface STBranchStatement extends STStatement
 {
   /**
    * Returns the value of the '<em><b>Else</b></em>' containment reference.
@@ -28,14 +28,14 @@ public interface STBranchStatements extends STStatement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Else</em>' containment reference.
    * @see #setElse(STElsePart)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTBranchStatements_Else()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTBranchStatement_Else()
    * @model containment="true"
    * @generated
    */
   STElsePart getElse();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements#getElse <em>Else</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement#getElse <em>Else</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Else</em>' containment reference.
@@ -44,4 +44,4 @@ public interface STBranchStatements extends STStatement
    */
   void setElse(STElsePart value);
 
-} // STBranchStatements
+} // STBranchStatement

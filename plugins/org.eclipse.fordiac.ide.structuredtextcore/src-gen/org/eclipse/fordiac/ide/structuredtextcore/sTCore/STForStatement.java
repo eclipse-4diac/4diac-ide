@@ -22,7 +22,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * @model
  * @generated
  */
-public interface STForStatement extends STLoopStatements
+public interface STForStatement extends STLoopStatement
 {
   /**
    * Returns the value of the '<em><b>For</b></em>' containment reference.

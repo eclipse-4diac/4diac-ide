@@ -11,24 +11,24 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Branch Statements</b></em>'.
+ * An implementation of the model object '<em><b>ST Branch Statement</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementsImpl#getElse <em>Else</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementImpl#getElse <em>Else</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STBranchStatementsImpl extends STStatementImpl implements STBranchStatements
+public class STBranchStatementImpl extends STStatementImpl implements STBranchStatement
 {
   /**
    * The cached value of the '{@link #getElse() <em>Else</em>}' containment reference.
@@ -45,7 +45,7 @@ public class STBranchStatementsImpl extends STStatementImpl implements STBranchS
    * <!-- end-user-doc -->
    * @generated
    */
-  protected STBranchStatementsImpl()
+  protected STBranchStatementImpl()
   {
     super();
   }
@@ -58,7 +58,7 @@ public class STBranchStatementsImpl extends STStatementImpl implements STBranchS
   @Override
   protected EClass eStaticClass()
   {
-    return STCorePackage.Literals.ST_BRANCH_STATEMENTS;
+    return STCorePackage.Literals.ST_BRANCH_STATEMENT;
   }
 
   /**
@@ -83,7 +83,7 @@ public class STBranchStatementsImpl extends STStatementImpl implements STBranchS
     else_ = newElse;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_BRANCH_STATEMENTS__ELSE, oldElse, newElse);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_BRANCH_STATEMENT__ELSE, oldElse, newElse);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -101,14 +101,14 @@ public class STBranchStatementsImpl extends STStatementImpl implements STBranchS
     {
       NotificationChain msgs = null;
       if (else_ != null)
-        msgs = ((InternalEObject)else_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_BRANCH_STATEMENTS__ELSE, null, msgs);
+        msgs = ((InternalEObject)else_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_BRANCH_STATEMENT__ELSE, null, msgs);
       if (newElse != null)
-        msgs = ((InternalEObject)newElse).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_BRANCH_STATEMENTS__ELSE, null, msgs);
+        msgs = ((InternalEObject)newElse).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_BRANCH_STATEMENT__ELSE, null, msgs);
       msgs = basicSetElse(newElse, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_BRANCH_STATEMENTS__ELSE, newElse, newElse));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_BRANCH_STATEMENT__ELSE, newElse, newElse));
   }
 
   /**
@@ -121,7 +121,7 @@ public class STBranchStatementsImpl extends STStatementImpl implements STBranchS
   {
     switch (featureID)
     {
-      case STCorePackage.ST_BRANCH_STATEMENTS__ELSE:
+      case STCorePackage.ST_BRANCH_STATEMENT__ELSE:
         return basicSetElse(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -137,7 +137,7 @@ public class STBranchStatementsImpl extends STStatementImpl implements STBranchS
   {
     switch (featureID)
     {
-      case STCorePackage.ST_BRANCH_STATEMENTS__ELSE:
+      case STCorePackage.ST_BRANCH_STATEMENT__ELSE:
         return getElse();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -153,7 +153,7 @@ public class STBranchStatementsImpl extends STStatementImpl implements STBranchS
   {
     switch (featureID)
     {
-      case STCorePackage.ST_BRANCH_STATEMENTS__ELSE:
+      case STCorePackage.ST_BRANCH_STATEMENT__ELSE:
         setElse((STElsePart)newValue);
         return;
     }
@@ -170,7 +170,7 @@ public class STBranchStatementsImpl extends STStatementImpl implements STBranchS
   {
     switch (featureID)
     {
-      case STCorePackage.ST_BRANCH_STATEMENTS__ELSE:
+      case STCorePackage.ST_BRANCH_STATEMENT__ELSE:
         setElse((STElsePart)null);
         return;
     }
@@ -187,10 +187,10 @@ public class STBranchStatementsImpl extends STStatementImpl implements STBranchS
   {
     switch (featureID)
     {
-      case STCorePackage.ST_BRANCH_STATEMENTS__ELSE:
+      case STCorePackage.ST_BRANCH_STATEMENT__ELSE:
         return else_ != null;
     }
     return super.eIsSet(featureID);
   }
 
-} //STBranchStatementsImpl
+} //STBranchStatementImpl

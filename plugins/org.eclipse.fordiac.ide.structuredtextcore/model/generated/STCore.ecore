@@ -43,11 +43,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STBranchStatements" eSuperTypes="#//STStatement">
+  <eClassifiers xsi:type="ecore:EClass" name="STBranchStatement" eSuperTypes="#//STStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//STElsePart"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STIfStatment" eSuperTypes="#//STBranchStatements">
+  <eClassifiers xsi:type="ecore:EClass" name="STIfStatment" eSuperTypes="#//STBranchStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//STExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
@@ -61,7 +61,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//STStatement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STCaseStatement" eSuperTypes="#//STBranchStatements">
+  <eClassifiers xsi:type="ecore:EClass" name="STCaseStatement" eSuperTypes="#//STBranchStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="selector" eType="#//STExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cases" upperBound="-1"
@@ -77,11 +77,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//STStatement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STLoopStatements" eSuperTypes="#//STStatement">
+  <eClassifiers xsi:type="ecore:EClass" name="STLoopStatement" eSuperTypes="#//STStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//STStatement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STForStatement" eSuperTypes="#//STLoopStatements">
+  <eClassifiers xsi:type="ecore:EClass" name="STForStatement" eSuperTypes="#//STLoopStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="for" eType="#//STExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//STExpression"
@@ -89,11 +89,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="by" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STWhileStatement" eSuperTypes="#//STLoopStatements">
+  <eClassifiers xsi:type="ecore:EClass" name="STWhileStatement" eSuperTypes="#//STLoopStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STRepeatStatement" eSuperTypes="#//STLoopStatements">
+  <eClassifiers xsi:type="ecore:EClass" name="STRepeatStatement" eSuperTypes="#//STLoopStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
@@ -142,7 +142,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STStatements" eSuperTypes="#//STStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STNop" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STReturn" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STContinue" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STExit" eSuperTypes="#//STStatement"/>

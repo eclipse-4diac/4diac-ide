@@ -116,9 +116,9 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTAssignmentStatementAdapter();
       }
       @Override
-      public Adapter caseSTBranchStatements(STBranchStatements object)
+      public Adapter caseSTBranchStatement(STBranchStatement object)
       {
-        return createSTBranchStatementsAdapter();
+        return createSTBranchStatementAdapter();
       }
       @Override
       public Adapter caseSTIfStatment(STIfStatment object)
@@ -146,9 +146,9 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTElsePartAdapter();
       }
       @Override
-      public Adapter caseSTLoopStatements(STLoopStatements object)
+      public Adapter caseSTLoopStatement(STLoopStatement object)
       {
-        return createSTLoopStatementsAdapter();
+        return createSTLoopStatementAdapter();
       }
       @Override
       public Adapter caseSTForStatement(STForStatement object)
@@ -211,9 +211,9 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTRING_LITERALAdapter();
       }
       @Override
-      public Adapter caseSTStatements(STStatements object)
+      public Adapter caseSTNop(STNop object)
       {
-        return createSTStatementsAdapter();
+        return createSTNopAdapter();
       }
       @Override
       public Adapter caseSTReturn(STReturn object)
@@ -468,16 +468,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements <em>ST Branch Statements</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement <em>ST Branch Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement
    * @generated
    */
-  public Adapter createSTBranchStatementsAdapter()
+  public Adapter createSTBranchStatementAdapter()
   {
     return null;
   }
@@ -558,16 +558,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatements <em>ST Loop Statements</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement <em>ST Loop Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatements
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement
    * @generated
    */
-  public Adapter createSTLoopStatementsAdapter()
+  public Adapter createSTLoopStatementAdapter()
   {
     return null;
   }
@@ -753,16 +753,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements <em>ST Statements</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop <em>ST Nop</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop
    * @generated
    */
-  public Adapter createSTStatementsAdapter()
+  public Adapter createSTNopAdapter()
   {
     return null;
   }

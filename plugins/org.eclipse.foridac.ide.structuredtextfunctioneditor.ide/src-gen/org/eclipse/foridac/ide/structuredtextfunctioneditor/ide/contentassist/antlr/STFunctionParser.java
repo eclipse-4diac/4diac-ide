@@ -35,10 +35,9 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getVarDeclarationAccess().getAlternatives_3_1(), "rule__VarDeclaration__Alternatives_3_1");
 			builder.put(grammarAccess.getInitializerExpressionAccess().getAlternatives(), "rule__InitializerExpression__Alternatives");
 			builder.put(grammarAccess.getSTStatementAccess().getAlternatives(), "rule__STStatement__Alternatives");
-			builder.put(grammarAccess.getSTStatementAccess().getAlternatives_0_0(), "rule__STStatement__Alternatives_0_0");
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getOpAlternatives_1_0(), "rule__STAssignmentStatement__OpAlternatives_1_0");
-			builder.put(grammarAccess.getSTBranchStatementsAccess().getAlternatives(), "rule__STBranchStatements__Alternatives");
-			builder.put(grammarAccess.getSTLoopStatementsAccess().getAlternatives(), "rule__STLoopStatements__Alternatives");
+			builder.put(grammarAccess.getSTBranchStatementAccess().getAlternatives(), "rule__STBranchStatement__Alternatives");
+			builder.put(grammarAccess.getSTLoopStatementAccess().getAlternatives(), "rule__STLoopStatement__Alternatives");
 			builder.put(grammarAccess.getSTAndExpressionAccess().getOpAlternatives_1_0_1_0(), "rule__STAndExpression__OpAlternatives_1_0_1_0");
 			builder.put(grammarAccess.getSTEqualityExpressionAccess().getOpAlternatives_1_0_1_0(), "rule__STEqualityExpression__OpAlternatives_1_0_1_0");
 			builder.put(grammarAccess.getSTComparisonExpressionAccess().getOpAlternatives_1_0_1_0(), "rule__STComparisonExpression__OpAlternatives_1_0_1_0");
@@ -83,6 +82,8 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_2(), "rule__STStatement__Group_2__0");
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_3(), "rule__STStatement__Group_3__0");
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_4(), "rule__STStatement__Group_4__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_5(), "rule__STStatement__Group_5__0");
+			builder.put(grammarAccess.getSTStatementAccess().getGroup_6(), "rule__STStatement__Group_6__0");
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getGroup(), "rule__STAssignmentStatement__Group__0");
 			builder.put(grammarAccess.getSTIfStatmentAccess().getGroup(), "rule__STIfStatment__Group__0");
 			builder.put(grammarAccess.getSTElseIfPartAccess().getGroup(), "rule__STElseIfPart__Group__0");

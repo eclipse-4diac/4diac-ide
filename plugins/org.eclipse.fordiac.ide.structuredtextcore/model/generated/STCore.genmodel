@@ -45,8 +45,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STAssignmentStatement/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/rhs"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STBranchStatements">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STBranchStatements/else"/>
+    <genClasses ecoreClass="STCore.ecore#//STBranchStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STBranchStatement/else"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STIfStatment">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STIfStatment/condition"/>
@@ -68,8 +68,8 @@
     <genClasses ecoreClass="STCore.ecore#//STElsePart">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STElsePart/statements"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STLoopStatements">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STLoopStatements/statements"/>
+    <genClasses ecoreClass="STCore.ecore#//STLoopStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STLoopStatement/statements"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STForStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STForStatement/for"/>
@@ -119,7 +119,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRING_LITERAL/keyword"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRING_LITERAL/value"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STStatements"/>
+    <genClasses ecoreClass="STCore.ecore#//STNop"/>
     <genClasses ecoreClass="STCore.ecore#//STReturn"/>
     <genClasses ecoreClass="STCore.ecore#//STContinue"/>
     <genClasses ecoreClass="STCore.ecore#//STExit"/>

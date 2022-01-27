@@ -23,7 +23,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface STIfStatment extends STBranchStatements
+public interface STIfStatment extends STBranchStatement
 {
   /**
    * Returns the value of the '<em><b>Condition</b></em>' containment reference.

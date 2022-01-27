@@ -364,14 +364,14 @@ public interface STCorePackage extends EPackage
   int ST_ASSIGNMENT_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 3;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementsImpl <em>ST Branch Statements</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementImpl <em>ST Branch Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementsImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBranchStatements()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBranchStatement()
    * @generated
    */
-  int ST_BRANCH_STATEMENTS = 8;
+  int ST_BRANCH_STATEMENT = 8;
 
   /**
    * The feature id for the '<em><b>Else</b></em>' containment reference.
@@ -380,16 +380,16 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_BRANCH_STATEMENTS__ELSE = ST_STATEMENT_FEATURE_COUNT + 0;
+  int ST_BRANCH_STATEMENT__ELSE = ST_STATEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The number of structural features of the '<em>ST Branch Statements</em>' class.
+   * The number of structural features of the '<em>ST Branch Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_BRANCH_STATEMENTS_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 1;
+  int ST_BRANCH_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl <em>ST If Statment</em>}' class.
@@ -408,7 +408,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__ELSE = ST_BRANCH_STATEMENTS__ELSE;
+  int ST_IF_STATMENT__ELSE = ST_BRANCH_STATEMENT__ELSE;
 
   /**
    * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -417,7 +417,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__CONDITION = ST_BRANCH_STATEMENTS_FEATURE_COUNT + 0;
+  int ST_IF_STATMENT__CONDITION = ST_BRANCH_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -426,7 +426,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__STATEMENTS = ST_BRANCH_STATEMENTS_FEATURE_COUNT + 1;
+  int ST_IF_STATMENT__STATEMENTS = ST_BRANCH_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Elseifs</b></em>' containment reference list.
@@ -435,7 +435,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__ELSEIFS = ST_BRANCH_STATEMENTS_FEATURE_COUNT + 2;
+  int ST_IF_STATMENT__ELSEIFS = ST_BRANCH_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>ST If Statment</em>' class.
@@ -444,7 +444,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT_FEATURE_COUNT = ST_BRANCH_STATEMENTS_FEATURE_COUNT + 3;
+  int ST_IF_STATMENT_FEATURE_COUNT = ST_BRANCH_STATEMENT_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STElseIfPartImpl <em>ST Else If Part</em>}' class.
@@ -500,7 +500,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_CASE_STATEMENT__ELSE = ST_BRANCH_STATEMENTS__ELSE;
+  int ST_CASE_STATEMENT__ELSE = ST_BRANCH_STATEMENT__ELSE;
 
   /**
    * The feature id for the '<em><b>Selector</b></em>' containment reference.
@@ -509,7 +509,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_CASE_STATEMENT__SELECTOR = ST_BRANCH_STATEMENTS_FEATURE_COUNT + 0;
+  int ST_CASE_STATEMENT__SELECTOR = ST_BRANCH_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Cases</b></em>' containment reference list.
@@ -518,7 +518,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_CASE_STATEMENT__CASES = ST_BRANCH_STATEMENTS_FEATURE_COUNT + 1;
+  int ST_CASE_STATEMENT__CASES = ST_BRANCH_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>ST Case Statement</em>' class.
@@ -527,7 +527,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_CASE_STATEMENT_FEATURE_COUNT = ST_BRANCH_STATEMENTS_FEATURE_COUNT + 2;
+  int ST_CASE_STATEMENT_FEATURE_COUNT = ST_BRANCH_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCaseCasesImpl <em>ST Case Cases</em>}' class.
@@ -595,14 +595,14 @@ public interface STCorePackage extends EPackage
   int ST_ELSE_PART_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementsImpl <em>ST Loop Statements</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementImpl <em>ST Loop Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementsImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTLoopStatements()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTLoopStatement()
    * @generated
    */
-  int ST_LOOP_STATEMENTS = 14;
+  int ST_LOOP_STATEMENT = 14;
 
   /**
    * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -611,16 +611,16 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_LOOP_STATEMENTS__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 0;
+  int ST_LOOP_STATEMENT__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The number of structural features of the '<em>ST Loop Statements</em>' class.
+   * The number of structural features of the '<em>ST Loop Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_LOOP_STATEMENTS_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 1;
+  int ST_LOOP_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl <em>ST For Statement</em>}' class.
@@ -639,7 +639,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__STATEMENTS = ST_LOOP_STATEMENTS__STATEMENTS;
+  int ST_FOR_STATEMENT__STATEMENTS = ST_LOOP_STATEMENT__STATEMENTS;
 
   /**
    * The feature id for the '<em><b>For</b></em>' containment reference.
@@ -648,7 +648,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__FOR = ST_LOOP_STATEMENTS_FEATURE_COUNT + 0;
+  int ST_FOR_STATEMENT__FOR = ST_LOOP_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>To</b></em>' containment reference.
@@ -657,7 +657,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__TO = ST_LOOP_STATEMENTS_FEATURE_COUNT + 1;
+  int ST_FOR_STATEMENT__TO = ST_LOOP_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>By</b></em>' containment reference.
@@ -666,7 +666,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__BY = ST_LOOP_STATEMENTS_FEATURE_COUNT + 2;
+  int ST_FOR_STATEMENT__BY = ST_LOOP_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>ST For Statement</em>' class.
@@ -675,7 +675,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT_FEATURE_COUNT = ST_LOOP_STATEMENTS_FEATURE_COUNT + 3;
+  int ST_FOR_STATEMENT_FEATURE_COUNT = ST_LOOP_STATEMENT_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STWhileStatementImpl <em>ST While Statement</em>}' class.
@@ -694,7 +694,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_WHILE_STATEMENT__STATEMENTS = ST_LOOP_STATEMENTS__STATEMENTS;
+  int ST_WHILE_STATEMENT__STATEMENTS = ST_LOOP_STATEMENT__STATEMENTS;
 
   /**
    * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -703,7 +703,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_WHILE_STATEMENT__CONDITION = ST_LOOP_STATEMENTS_FEATURE_COUNT + 0;
+  int ST_WHILE_STATEMENT__CONDITION = ST_LOOP_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>ST While Statement</em>' class.
@@ -712,7 +712,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_WHILE_STATEMENT_FEATURE_COUNT = ST_LOOP_STATEMENTS_FEATURE_COUNT + 1;
+  int ST_WHILE_STATEMENT_FEATURE_COUNT = ST_LOOP_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STRepeatStatementImpl <em>ST Repeat Statement</em>}' class.
@@ -731,7 +731,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_REPEAT_STATEMENT__STATEMENTS = ST_LOOP_STATEMENTS__STATEMENTS;
+  int ST_REPEAT_STATEMENT__STATEMENTS = ST_LOOP_STATEMENT__STATEMENTS;
 
   /**
    * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -740,7 +740,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_REPEAT_STATEMENT__CONDITION = ST_LOOP_STATEMENTS_FEATURE_COUNT + 0;
+  int ST_REPEAT_STATEMENT__CONDITION = ST_LOOP_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>ST Repeat Statement</em>' class.
@@ -749,7 +749,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_REPEAT_STATEMENT_FEATURE_COUNT = ST_LOOP_STATEMENTS_FEATURE_COUNT + 1;
+  int ST_REPEAT_STATEMENT_FEATURE_COUNT = ST_LOOP_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STExpressionImpl <em>ST Expression</em>}' class.
@@ -1103,23 +1103,23 @@ public interface STCorePackage extends EPackage
   int STRING_LITERAL_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStatementsImpl <em>ST Statements</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNopImpl <em>ST Nop</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStatementsImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTStatements()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNopImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTNop()
    * @generated
    */
-  int ST_STATEMENTS = 27;
+  int ST_NOP = 27;
 
   /**
-   * The number of structural features of the '<em>ST Statements</em>' class.
+   * The number of structural features of the '<em>ST Nop</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_STATEMENTS_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 0;
+  int ST_NOP_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.
@@ -2250,25 +2250,25 @@ public interface STCorePackage extends EPackage
   EReference getSTAssignmentStatement_Rhs();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements <em>ST Branch Statements</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement <em>ST Branch Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Branch Statements</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements
+   * @return the meta object for class '<em>ST Branch Statement</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement
    * @generated
    */
-  EClass getSTBranchStatements();
+  EClass getSTBranchStatement();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements#getElse <em>Else</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement#getElse <em>Else</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Else</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatements#getElse()
-   * @see #getSTBranchStatements()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBranchStatement#getElse()
+   * @see #getSTBranchStatement()
    * @generated
    */
-  EReference getSTBranchStatements_Else();
+  EReference getSTBranchStatement_Else();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment <em>ST If Statment</em>}'.
@@ -2431,25 +2431,25 @@ public interface STCorePackage extends EPackage
   EReference getSTElsePart_Statements();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatements <em>ST Loop Statements</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement <em>ST Loop Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Loop Statements</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatements
+   * @return the meta object for class '<em>ST Loop Statement</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement
    * @generated
    */
-  EClass getSTLoopStatements();
+  EClass getSTLoopStatement();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatements#getStatements <em>Statements</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Statements</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatements#getStatements()
-   * @see #getSTLoopStatements()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement#getStatements()
+   * @see #getSTLoopStatement()
    * @generated
    */
-  EReference getSTLoopStatements_Statements();
+  EReference getSTLoopStatement_Statements();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement <em>ST For Statement</em>}'.
@@ -2847,14 +2847,14 @@ public interface STCorePackage extends EPackage
   EAttribute getSTRING_LITERAL_Value();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements <em>ST Statements</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop <em>ST Nop</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Statements</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements
+   * @return the meta object for class '<em>ST Nop</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop
    * @generated
    */
-  EClass getSTStatements();
+  EClass getSTNop();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn <em>ST Return</em>}'.
@@ -3854,14 +3854,14 @@ public interface STCorePackage extends EPackage
     EReference ST_ASSIGNMENT_STATEMENT__RHS = eINSTANCE.getSTAssignmentStatement_Rhs();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementsImpl <em>ST Branch Statements</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementImpl <em>ST Branch Statement</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementsImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBranchStatements()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBranchStatementImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBranchStatement()
      * @generated
      */
-    EClass ST_BRANCH_STATEMENTS = eINSTANCE.getSTBranchStatements();
+    EClass ST_BRANCH_STATEMENT = eINSTANCE.getSTBranchStatement();
 
     /**
      * The meta object literal for the '<em><b>Else</b></em>' containment reference feature.
@@ -3869,7 +3869,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_BRANCH_STATEMENTS__ELSE = eINSTANCE.getSTBranchStatements_Else();
+    EReference ST_BRANCH_STATEMENT__ELSE = eINSTANCE.getSTBranchStatement_Else();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl <em>ST If Statment</em>}' class.
@@ -4002,14 +4002,14 @@ public interface STCorePackage extends EPackage
     EReference ST_ELSE_PART__STATEMENTS = eINSTANCE.getSTElsePart_Statements();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementsImpl <em>ST Loop Statements</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementImpl <em>ST Loop Statement</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementsImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTLoopStatements()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTLoopStatement()
      * @generated
      */
-    EClass ST_LOOP_STATEMENTS = eINSTANCE.getSTLoopStatements();
+    EClass ST_LOOP_STATEMENT = eINSTANCE.getSTLoopStatement();
 
     /**
      * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
@@ -4017,7 +4017,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_LOOP_STATEMENTS__STATEMENTS = eINSTANCE.getSTLoopStatements_Statements();
+    EReference ST_LOOP_STATEMENT__STATEMENTS = eINSTANCE.getSTLoopStatement_Statements();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl <em>ST For Statement</em>}' class.
@@ -4340,14 +4340,14 @@ public interface STCorePackage extends EPackage
     EAttribute STRING_LITERAL__VALUE = eINSTANCE.getSTRING_LITERAL_Value();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStatementsImpl <em>ST Statements</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNopImpl <em>ST Nop</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStatementsImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTStatements()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNopImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTNop()
      * @generated
      */
-    EClass ST_STATEMENTS = eINSTANCE.getSTStatements();
+    EClass ST_NOP = eINSTANCE.getSTNop();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.

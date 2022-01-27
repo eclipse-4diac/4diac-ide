@@ -22,7 +22,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface STCaseStatement extends STBranchStatements
+public interface STCaseStatement extends STBranchStatement
 {
   /**
    * Returns the value of the '<em><b>Selector</b></em>' containment reference.

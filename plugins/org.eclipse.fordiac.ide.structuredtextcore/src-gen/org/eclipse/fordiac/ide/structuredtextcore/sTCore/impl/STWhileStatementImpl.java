@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
  *
  * @generated
  */
-public class STWhileStatementImpl extends STLoopStatementsImpl implements STWhileStatement
+public class STWhileStatementImpl extends STLoopStatementImpl implements STWhileStatement
 {
   /**
    * The cached value of the '{@link #getCondition() <em>Condition</em>}' containment reference.

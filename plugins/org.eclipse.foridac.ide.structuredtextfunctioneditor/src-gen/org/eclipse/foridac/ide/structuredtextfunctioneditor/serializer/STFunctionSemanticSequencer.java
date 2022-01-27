@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression;
@@ -41,7 +42,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSymbol;
@@ -155,6 +155,9 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_MUL_DIV_MOD_EXPRESSION:
 				sequence_STMulDivModExpression(context, (STMulDivModExpression) semanticObject); 
 				return; 
+			case STCorePackage.ST_NOP:
+				sequence_STStatement(context, (STNop) semanticObject); 
+				return; 
 			case STCorePackage.ST_NUMERIC_LITERAL:
 				sequence_STLiteralExpressions(context, (STNumericLiteral) semanticObject); 
 				return; 
@@ -175,9 +178,6 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				return; 
 			case STCorePackage.ST_SIGNUM_EXPRESSION:
 				sequence_STSignumExpression(context, (STSignumExpression) semanticObject); 
-				return; 
-			case STCorePackage.ST_STATEMENTS:
-				sequence_STStatement(context, (STStatements) semanticObject); 
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STLiteralExpressions(context, (STStringLiteral) semanticObject); 

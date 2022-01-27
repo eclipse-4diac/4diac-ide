@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMulDivModExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STOrExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STPowerExpression;
@@ -41,7 +42,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSignumExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatements;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSubrangeExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSymbol;
@@ -154,6 +154,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ST_MUL_DIV_MOD_EXPRESSION:
 				sequence_STMulDivModExpression(context, (STMulDivModExpression) semanticObject); 
 				return; 
+			case STCorePackage.ST_NOP:
+				sequence_STStatement(context, (STNop) semanticObject); 
+				return; 
 			case STCorePackage.ST_NUMERIC_LITERAL:
 				sequence_STLiteralExpressions(context, (STNumericLiteral) semanticObject); 
 				return; 
@@ -174,9 +177,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_SIGNUM_EXPRESSION:
 				sequence_STSignumExpression(context, (STSignumExpression) semanticObject); 
-				return; 
-			case STCorePackage.ST_STATEMENTS:
-				sequence_STStatement(context, (STStatements) semanticObject); 
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STLiteralExpressions(context, (STStringLiteral) semanticObject); 
@@ -494,7 +494,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STCaseStatement
-	 *     STBranchStatements returns STCaseStatement
+	 *     STBranchStatement returns STCaseStatement
 	 *     STCaseStatement returns STCaseStatement
 	 *
 	 * Constraint:
@@ -602,7 +602,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STForStatement
-	 *     STLoopStatements returns STForStatement
+	 *     STLoopStatement returns STForStatement
 	 *     STForStatement returns STForStatement
 	 *
 	 * Constraint:
@@ -616,7 +616,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STIfStatment
-	 *     STBranchStatements returns STIfStatment
+	 *     STBranchStatement returns STIfStatment
 	 *     STIfStatment returns STIfStatment
 	 *
 	 * Constraint:
@@ -1065,7 +1065,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STRepeatStatement
-	 *     STLoopStatements returns STRepeatStatement
+	 *     STLoopStatement returns STRepeatStatement
 	 *     STRepeatStatement returns STRepeatStatement
 	 *
 	 * Constraint:
@@ -1177,24 +1177,24 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatement returns STReturn
+	 *     STStatement returns STNop
 	 *
 	 * Constraint:
-	 *     {STReturn}
+	 *     {STNop}
 	 */
-	protected void sequence_STStatement(ISerializationContext context, STReturn semanticObject) {
+	protected void sequence_STStatement(ISerializationContext context, STNop semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
-	 *     STStatement returns STStatements
+	 *     STStatement returns STReturn
 	 *
 	 * Constraint:
-	 *     {STStatements}
+	 *     {STReturn}
 	 */
-	protected void sequence_STStatement(ISerializationContext context, STStatements semanticObject) {
+	protected void sequence_STStatement(ISerializationContext context, STReturn semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -1246,7 +1246,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * Contexts:
 	 *     STStatement returns STWhileStatement
-	 *     STLoopStatements returns STWhileStatement
+	 *     STLoopStatement returns STWhileStatement
 	 *     STWhileStatement returns STWhileStatement
 	 *
 	 * Constraint:

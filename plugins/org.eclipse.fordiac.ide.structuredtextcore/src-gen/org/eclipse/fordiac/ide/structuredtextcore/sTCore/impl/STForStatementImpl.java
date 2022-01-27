@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
  *
  * @generated
  */
-public class STForStatementImpl extends STLoopStatementsImpl implements STForStatement
+public class STForStatementImpl extends STLoopStatementImpl implements STForStatement
 {
   /**
    * The cached value of the '{@link #getFor() <em>For</em>}' containment reference.

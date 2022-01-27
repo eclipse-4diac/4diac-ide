@@ -898,51 +898,47 @@ ruleSTStatement returns [EObject current=null]
 }:
 	(
 		(
-			(
-				{
-					newCompositeNode(grammarAccess.getSTStatementAccess().getSTBranchStatementsParserRuleCall_0_0_0());
-				}
-				this_STBranchStatements_0=ruleSTBranchStatements
-				{
-					$current = $this_STBranchStatements_0.current;
-					afterParserOrEnumRuleCall();
-				}
-				    |
-				{
-					newCompositeNode(grammarAccess.getSTStatementAccess().getSTLoopStatementsParserRuleCall_0_0_1());
-				}
-				this_STLoopStatements_1=ruleSTLoopStatements
-				{
-					$current = $this_STLoopStatements_1.current;
-					afterParserOrEnumRuleCall();
-				}
-				    |
-				{
-					newCompositeNode(grammarAccess.getSTStatementAccess().getSTAssignmentStatementParserRuleCall_0_0_2());
-				}
-				this_STAssignmentStatement_2=ruleSTAssignmentStatement
-				{
-					$current = $this_STAssignmentStatement_2.current;
-					afterParserOrEnumRuleCall();
-				}
-			)
+			{
+				newCompositeNode(grammarAccess.getSTStatementAccess().getSTBranchStatementParserRuleCall_0_0());
+			}
+			this_STBranchStatement_0=ruleSTBranchStatement
+			{
+				$current = $this_STBranchStatement_0.current;
+				afterParserOrEnumRuleCall();
+			}
+			otherlv_1=Semicolon
+			{
+				newLeafNode(otherlv_1, grammarAccess.getSTStatementAccess().getSemicolonKeyword_0_1());
+			}
+		)
+		    |
+		(
+			{
+				newCompositeNode(grammarAccess.getSTStatementAccess().getSTLoopStatementParserRuleCall_1_0());
+			}
+			this_STLoopStatement_2=ruleSTLoopStatement
+			{
+				$current = $this_STLoopStatement_2.current;
+				afterParserOrEnumRuleCall();
+			}
 			otherlv_3=Semicolon
 			{
-				newLeafNode(otherlv_3, grammarAccess.getSTStatementAccess().getSemicolonKeyword_0_1());
+				newLeafNode(otherlv_3, grammarAccess.getSTStatementAccess().getSemicolonKeyword_1_1());
 			}
 		)
 		    |
 		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTStatementAccess().getSTStatementsAction_1_0(),
-						$current);
-				}
-			)
+			{
+				newCompositeNode(grammarAccess.getSTStatementAccess().getSTAssignmentStatementParserRuleCall_2_0());
+			}
+			this_STAssignmentStatement_4=ruleSTAssignmentStatement
+			{
+				$current = $this_STAssignmentStatement_4.current;
+				afterParserOrEnumRuleCall();
+			}
 			otherlv_5=Semicolon
 			{
-				newLeafNode(otherlv_5, grammarAccess.getSTStatementAccess().getSemicolonKeyword_1_1());
+				newLeafNode(otherlv_5, grammarAccess.getSTStatementAccess().getSemicolonKeyword_2_1());
 			}
 		)
 		    |
@@ -950,17 +946,13 @@ ruleSTStatement returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTStatementAccess().getSTReturnAction_2_0(),
+						grammarAccess.getSTStatementAccess().getSTNopAction_3_0(),
 						$current);
 				}
 			)
-			otherlv_7=RETURN
+			otherlv_7=Semicolon
 			{
-				newLeafNode(otherlv_7, grammarAccess.getSTStatementAccess().getRETURNKeyword_2_1());
-			}
-			otherlv_8=Semicolon
-			{
-				newLeafNode(otherlv_8, grammarAccess.getSTStatementAccess().getSemicolonKeyword_2_2());
+				newLeafNode(otherlv_7, grammarAccess.getSTStatementAccess().getSemicolonKeyword_3_1());
 			}
 		)
 		    |
@@ -968,17 +960,17 @@ ruleSTStatement returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTStatementAccess().getSTContinueAction_3_0(),
+						grammarAccess.getSTStatementAccess().getSTReturnAction_4_0(),
 						$current);
 				}
 			)
-			otherlv_10=CONTINUE
+			otherlv_9=RETURN
 			{
-				newLeafNode(otherlv_10, grammarAccess.getSTStatementAccess().getCONTINUEKeyword_3_1());
+				newLeafNode(otherlv_9, grammarAccess.getSTStatementAccess().getRETURNKeyword_4_1());
 			}
-			otherlv_11=Semicolon
+			otherlv_10=Semicolon
 			{
-				newLeafNode(otherlv_11, grammarAccess.getSTStatementAccess().getSemicolonKeyword_3_2());
+				newLeafNode(otherlv_10, grammarAccess.getSTStatementAccess().getSemicolonKeyword_4_2());
 			}
 		)
 		    |
@@ -986,17 +978,35 @@ ruleSTStatement returns [EObject current=null]
 			(
 				{
 					$current = forceCreateModelElement(
-						grammarAccess.getSTStatementAccess().getSTExitAction_4_0(),
+						grammarAccess.getSTStatementAccess().getSTContinueAction_5_0(),
 						$current);
 				}
 			)
-			otherlv_13=EXIT
+			otherlv_12=CONTINUE
 			{
-				newLeafNode(otherlv_13, grammarAccess.getSTStatementAccess().getEXITKeyword_4_1());
+				newLeafNode(otherlv_12, grammarAccess.getSTStatementAccess().getCONTINUEKeyword_5_1());
 			}
-			otherlv_14=Semicolon
+			otherlv_13=Semicolon
 			{
-				newLeafNode(otherlv_14, grammarAccess.getSTStatementAccess().getSemicolonKeyword_4_2());
+				newLeafNode(otherlv_13, grammarAccess.getSTStatementAccess().getSemicolonKeyword_5_2());
+			}
+		)
+		    |
+		(
+			(
+				{
+					$current = forceCreateModelElement(
+						grammarAccess.getSTStatementAccess().getSTExitAction_6_0(),
+						$current);
+				}
+			)
+			otherlv_15=EXIT
+			{
+				newLeafNode(otherlv_15, grammarAccess.getSTStatementAccess().getEXITKeyword_6_1());
+			}
+			otherlv_16=Semicolon
+			{
+				newLeafNode(otherlv_16, grammarAccess.getSTStatementAccess().getSemicolonKeyword_6_2());
 			}
 		)
 	)
@@ -1080,15 +1090,15 @@ ruleSTAssignmentStatement returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleSTBranchStatements
-entryRuleSTBranchStatements returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getSTBranchStatementsRule()); }
-	iv_ruleSTBranchStatements=ruleSTBranchStatements
-	{ $current=$iv_ruleSTBranchStatements.current; }
+// Entry rule entryRuleSTBranchStatement
+entryRuleSTBranchStatement returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTBranchStatementRule()); }
+	iv_ruleSTBranchStatement=ruleSTBranchStatement
+	{ $current=$iv_ruleSTBranchStatement.current; }
 	EOF;
 
-// Rule STBranchStatements
-ruleSTBranchStatements returns [EObject current=null]
+// Rule STBranchStatement
+ruleSTBranchStatement returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -1097,7 +1107,7 @@ ruleSTBranchStatements returns [EObject current=null]
 }:
 	(
 		{
-			newCompositeNode(grammarAccess.getSTBranchStatementsAccess().getSTIfStatmentParserRuleCall_0());
+			newCompositeNode(grammarAccess.getSTBranchStatementAccess().getSTIfStatmentParserRuleCall_0());
 		}
 		this_STIfStatment_0=ruleSTIfStatment
 		{
@@ -1106,7 +1116,7 @@ ruleSTBranchStatements returns [EObject current=null]
 		}
 		    |
 		{
-			newCompositeNode(grammarAccess.getSTBranchStatementsAccess().getSTCaseStatementParserRuleCall_1());
+			newCompositeNode(grammarAccess.getSTBranchStatementAccess().getSTCaseStatementParserRuleCall_1());
 		}
 		this_STCaseStatement_1=ruleSTCaseStatement
 		{
@@ -1515,15 +1525,15 @@ ruleSTElsePart returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleSTLoopStatements
-entryRuleSTLoopStatements returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getSTLoopStatementsRule()); }
-	iv_ruleSTLoopStatements=ruleSTLoopStatements
-	{ $current=$iv_ruleSTLoopStatements.current; }
+// Entry rule entryRuleSTLoopStatement
+entryRuleSTLoopStatement returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTLoopStatementRule()); }
+	iv_ruleSTLoopStatement=ruleSTLoopStatement
+	{ $current=$iv_ruleSTLoopStatement.current; }
 	EOF;
 
-// Rule STLoopStatements
-ruleSTLoopStatements returns [EObject current=null]
+// Rule STLoopStatement
+ruleSTLoopStatement returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -1532,7 +1542,7 @@ ruleSTLoopStatements returns [EObject current=null]
 }:
 	(
 		{
-			newCompositeNode(grammarAccess.getSTLoopStatementsAccess().getSTForStatementParserRuleCall_0());
+			newCompositeNode(grammarAccess.getSTLoopStatementAccess().getSTForStatementParserRuleCall_0());
 		}
 		this_STForStatement_0=ruleSTForStatement
 		{
@@ -1541,7 +1551,7 @@ ruleSTLoopStatements returns [EObject current=null]
 		}
 		    |
 		{
-			newCompositeNode(grammarAccess.getSTLoopStatementsAccess().getSTWhileStatementParserRuleCall_1());
+			newCompositeNode(grammarAccess.getSTLoopStatementAccess().getSTWhileStatementParserRuleCall_1());
 		}
 		this_STWhileStatement_1=ruleSTWhileStatement
 		{
@@ -1550,7 +1560,7 @@ ruleSTLoopStatements returns [EObject current=null]
 		}
 		    |
 		{
-			newCompositeNode(grammarAccess.getSTLoopStatementsAccess().getSTRepeatStatementParserRuleCall_2());
+			newCompositeNode(grammarAccess.getSTLoopStatementAccess().getSTRepeatStatementParserRuleCall_2());
 		}
 		this_STRepeatStatement_2=ruleSTRepeatStatement
 		{

@@ -16,23 +16,23 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatements;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STLoopStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Loop Statements</b></em>'.
+ * An implementation of the model object '<em><b>ST Loop Statement</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementsImpl#getStatements <em>Statements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STLoopStatementImpl#getStatements <em>Statements</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STLoopStatementsImpl extends STStatementImpl implements STLoopStatements
+public class STLoopStatementImpl extends STStatementImpl implements STLoopStatement
 {
   /**
    * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference list.
@@ -49,7 +49,7 @@ public class STLoopStatementsImpl extends STStatementImpl implements STLoopState
    * <!-- end-user-doc -->
    * @generated
    */
-  protected STLoopStatementsImpl()
+  protected STLoopStatementImpl()
   {
     super();
   }
@@ -62,7 +62,7 @@ public class STLoopStatementsImpl extends STStatementImpl implements STLoopState
   @Override
   protected EClass eStaticClass()
   {
-    return STCorePackage.Literals.ST_LOOP_STATEMENTS;
+    return STCorePackage.Literals.ST_LOOP_STATEMENT;
   }
 
   /**
@@ -75,7 +75,7 @@ public class STLoopStatementsImpl extends STStatementImpl implements STLoopState
   {
     if (statements == null)
     {
-      statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STCorePackage.ST_LOOP_STATEMENTS__STATEMENTS);
+      statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STCorePackage.ST_LOOP_STATEMENT__STATEMENTS);
     }
     return statements;
   }
@@ -90,7 +90,7 @@ public class STLoopStatementsImpl extends STStatementImpl implements STLoopState
   {
     switch (featureID)
     {
-      case STCorePackage.ST_LOOP_STATEMENTS__STATEMENTS:
+      case STCorePackage.ST_LOOP_STATEMENT__STATEMENTS:
         return ((InternalEList<?>)getStatements()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -106,7 +106,7 @@ public class STLoopStatementsImpl extends STStatementImpl implements STLoopState
   {
     switch (featureID)
     {
-      case STCorePackage.ST_LOOP_STATEMENTS__STATEMENTS:
+      case STCorePackage.ST_LOOP_STATEMENT__STATEMENTS:
         return getStatements();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -123,7 +123,7 @@ public class STLoopStatementsImpl extends STStatementImpl implements STLoopState
   {
     switch (featureID)
     {
-      case STCorePackage.ST_LOOP_STATEMENTS__STATEMENTS:
+      case STCorePackage.ST_LOOP_STATEMENT__STATEMENTS:
         getStatements().clear();
         getStatements().addAll((Collection<? extends STStatement>)newValue);
         return;
@@ -141,7 +141,7 @@ public class STLoopStatementsImpl extends STStatementImpl implements STLoopState
   {
     switch (featureID)
     {
-      case STCorePackage.ST_LOOP_STATEMENTS__STATEMENTS:
+      case STCorePackage.ST_LOOP_STATEMENT__STATEMENTS:
         getStatements().clear();
         return;
     }
@@ -158,10 +158,10 @@ public class STLoopStatementsImpl extends STStatementImpl implements STLoopState
   {
     switch (featureID)
     {
-      case STCorePackage.ST_LOOP_STATEMENTS__STATEMENTS:
+      case STCorePackage.ST_LOOP_STATEMENT__STATEMENTS:
         return statements != null && !statements.isEmpty();
     }
     return super.eIsSet(featureID);
   }
 
-} //STLoopStatementsImpl
+} //STLoopStatementImpl

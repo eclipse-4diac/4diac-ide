@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
  *
  * @generated
  */
-public class STCaseStatementImpl extends STBranchStatementsImpl implements STCaseStatement
+public class STCaseStatementImpl extends STBranchStatementImpl implements STCaseStatement
 {
   /**
    * The cached value of the '{@link #getSelector() <em>Selector</em>}' containment reference.

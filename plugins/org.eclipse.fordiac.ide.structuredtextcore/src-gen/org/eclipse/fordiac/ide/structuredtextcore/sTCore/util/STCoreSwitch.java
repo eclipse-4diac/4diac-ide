@@ -131,11 +131,11 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.ST_BRANCH_STATEMENTS:
+      case STCorePackage.ST_BRANCH_STATEMENT:
       {
-        STBranchStatements stBranchStatements = (STBranchStatements)theEObject;
-        T result = caseSTBranchStatements(stBranchStatements);
-        if (result == null) result = caseSTStatement(stBranchStatements);
+        STBranchStatement stBranchStatement = (STBranchStatement)theEObject;
+        T result = caseSTBranchStatement(stBranchStatement);
+        if (result == null) result = caseSTStatement(stBranchStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -143,7 +143,7 @@ public class STCoreSwitch<T> extends Switch<T>
       {
         STIfStatment stIfStatment = (STIfStatment)theEObject;
         T result = caseSTIfStatment(stIfStatment);
-        if (result == null) result = caseSTBranchStatements(stIfStatment);
+        if (result == null) result = caseSTBranchStatement(stIfStatment);
         if (result == null) result = caseSTStatement(stIfStatment);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -159,7 +159,7 @@ public class STCoreSwitch<T> extends Switch<T>
       {
         STCaseStatement stCaseStatement = (STCaseStatement)theEObject;
         T result = caseSTCaseStatement(stCaseStatement);
-        if (result == null) result = caseSTBranchStatements(stCaseStatement);
+        if (result == null) result = caseSTBranchStatement(stCaseStatement);
         if (result == null) result = caseSTStatement(stCaseStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -178,11 +178,11 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.ST_LOOP_STATEMENTS:
+      case STCorePackage.ST_LOOP_STATEMENT:
       {
-        STLoopStatements stLoopStatements = (STLoopStatements)theEObject;
-        T result = caseSTLoopStatements(stLoopStatements);
-        if (result == null) result = caseSTStatement(stLoopStatements);
+        STLoopStatement stLoopStatement = (STLoopStatement)theEObject;
+        T result = caseSTLoopStatement(stLoopStatement);
+        if (result == null) result = caseSTStatement(stLoopStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -190,7 +190,7 @@ public class STCoreSwitch<T> extends Switch<T>
       {
         STForStatement stForStatement = (STForStatement)theEObject;
         T result = caseSTForStatement(stForStatement);
-        if (result == null) result = caseSTLoopStatements(stForStatement);
+        if (result == null) result = caseSTLoopStatement(stForStatement);
         if (result == null) result = caseSTStatement(stForStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -199,7 +199,7 @@ public class STCoreSwitch<T> extends Switch<T>
       {
         STWhileStatement stWhileStatement = (STWhileStatement)theEObject;
         T result = caseSTWhileStatement(stWhileStatement);
-        if (result == null) result = caseSTLoopStatements(stWhileStatement);
+        if (result == null) result = caseSTLoopStatement(stWhileStatement);
         if (result == null) result = caseSTStatement(stWhileStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -208,7 +208,7 @@ public class STCoreSwitch<T> extends Switch<T>
       {
         STRepeatStatement stRepeatStatement = (STRepeatStatement)theEObject;
         T result = caseSTRepeatStatement(stRepeatStatement);
-        if (result == null) result = caseSTLoopStatements(stRepeatStatement);
+        if (result == null) result = caseSTLoopStatement(stRepeatStatement);
         if (result == null) result = caseSTStatement(stRepeatStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -277,11 +277,11 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.ST_STATEMENTS:
+      case STCorePackage.ST_NOP:
       {
-        STStatements stStatements = (STStatements)theEObject;
-        T result = caseSTStatements(stStatements);
-        if (result == null) result = caseSTStatement(stStatements);
+        STNop stNop = (STNop)theEObject;
+        T result = caseSTNop(stNop);
+        if (result == null) result = caseSTStatement(stNop);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -613,17 +613,17 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Branch Statements</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Branch Statement</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Branch Statements</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Branch Statement</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSTBranchStatements(STBranchStatements object)
+  public T caseSTBranchStatement(STBranchStatement object)
   {
     return null;
   }
@@ -709,17 +709,17 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Loop Statements</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Loop Statement</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Loop Statements</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Loop Statement</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSTLoopStatements(STLoopStatements object)
+  public T caseSTLoopStatement(STLoopStatement object)
   {
     return null;
   }
@@ -917,17 +917,17 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Statements</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Nop</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Statements</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Nop</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSTStatements(STStatements object)
+  public T caseSTNop(STNop object)
   {
     return null;
   }

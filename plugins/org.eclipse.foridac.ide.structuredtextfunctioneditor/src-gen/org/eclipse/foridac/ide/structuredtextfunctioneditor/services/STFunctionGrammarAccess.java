@@ -309,8 +309,10 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STStatement:
-	//    ((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
-	//    {STStatements} ';' |
+	//    STBranchStatement ';' |
+	//    STLoopStatement ';' |
+	//    STAssignmentStatement ';' |
+	//    {STNop} ';' |
 	//    {STReturn} 'RETURN' ';' |
 	//    {STContinue} 'CONTINUE' ';' |
 	//    {STExit} 'EXIT' ';';
@@ -333,14 +335,14 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTAssignmentStatementAccess().getRule();
 	}
 	
-	//STBranchStatements:
+	//STBranchStatement:
 	//    STIfStatment | STCaseStatement;
-	public STCoreGrammarAccess.STBranchStatementsElements getSTBranchStatementsAccess() {
-		return gaSTCore.getSTBranchStatementsAccess();
+	public STCoreGrammarAccess.STBranchStatementElements getSTBranchStatementAccess() {
+		return gaSTCore.getSTBranchStatementAccess();
 	}
 	
-	public ParserRule getSTBranchStatementsRule() {
-		return getSTBranchStatementsAccess().getRule();
+	public ParserRule getSTBranchStatementRule() {
+		return getSTBranchStatementAccess().getRule();
 	}
 	
 	//STIfStatment:
@@ -393,14 +395,14 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTElsePartAccess().getRule();
 	}
 	
-	//STLoopStatements:
+	//STLoopStatement:
 	//    STForStatement | STWhileStatement | STRepeatStatement;
-	public STCoreGrammarAccess.STLoopStatementsElements getSTLoopStatementsAccess() {
-		return gaSTCore.getSTLoopStatementsAccess();
+	public STCoreGrammarAccess.STLoopStatementElements getSTLoopStatementAccess() {
+		return gaSTCore.getSTLoopStatementAccess();
 	}
 	
-	public ParserRule getSTLoopStatementsRule() {
-		return getSTLoopStatementsAccess().getRule();
+	public ParserRule getSTLoopStatementRule() {
+		return getSTLoopStatementAccess().getRule();
 	}
 	
 	//STForStatement:

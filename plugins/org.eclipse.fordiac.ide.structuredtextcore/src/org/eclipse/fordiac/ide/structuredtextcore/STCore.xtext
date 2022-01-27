@@ -57,8 +57,10 @@ ArrayInitElement:
 	indexOrInitExpression=STExpression ('(' initExpression=STExpression ')')?;
 	
 STStatement:
-	((STBranchStatements | STLoopStatements | STAssignmentStatement)) ';' |
-	{STStatements} ';' |
+	STBranchStatement ';' |
+	STLoopStatement ';' |
+	STAssignmentStatement ';' |
+	{STNop} ';' |
 	{STReturn} 'RETURN' ';' |
 	{STContinue} 'CONTINUE' ';' |
 	{STExit} 'EXIT' ';';
@@ -67,7 +69,7 @@ STAssignmentStatement:
 	lhs=[VarDeclaration] op=(':=' | '=>') rhs=STExpression
 ;
 
-STBranchStatements:
+STBranchStatement:
 	STIfStatment | STCaseStatement;
 
 STIfStatment:
@@ -85,7 +87,7 @@ STCaseCases:
 STElsePart:
 	{STElsePart} 'ELSE' statements+=STStatement*;
 
-STLoopStatements:
+STLoopStatement:
 	STForStatement | STWhileStatement | STRepeatStatement;
 
 STForStatement:
