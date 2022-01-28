@@ -41,6 +41,7 @@ import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
@@ -48,7 +49,6 @@ import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
-import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -137,27 +137,30 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-
-			Display.getDefault().asyncExec(() -> {
-				viewer.flush();
-				// if an editpart is selected then the viewer has bee created with something to be shown centered
-				// therefore we will not show the initial position
-				// do not use getSelection() here because it will return always at least one element
-				if (viewer.getSelectedEditParts().isEmpty()) {
-					final Point scrollPos = getInitialScrollPos();
-					canvas.scrollTo(scrollPos.x, scrollPos.y);
-				} else {
-					// if we have a selected edit part we want to show it in the middle
-					viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
-				}
-			});
+			Display.getDefault().asyncExec(() -> performInitialsationScroll(viewer));
 		}
 	}
 
-	protected Point getInitialScrollPos() {
-		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
-				.getRootEditPart();
+	public void performInitialsationScroll(final AdvancedScrollingGraphicalViewer viewer) {
+		final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+		if (canvas != null && !canvas.isDisposed()) {
+			viewer.flush();
+			// if an editpart is selected then the viewer has bee created with something to be shown centered
+			// therefore we will not show the initial position
+			// do not use getSelection() here because it will return always at least one element
+			if (viewer.getSelectedEditParts().isEmpty()) {
+				final GraphicalEditPart rootEditPart = (GraphicalEditPart) viewer.getRootEditPart();
+				final Point scrollPos = getInitialScrollPos(rootEditPart);
+				canvas.scrollTo(scrollPos.x, scrollPos.y);
+			} else {
+				// if we have a selected edit part we want to show it in the middle
+				viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
+			}
+		}
+	}
+
+	@SuppressWarnings("static-method")  // allow subclasses to override this method
+	protected Point getInitialScrollPos(final GraphicalEditPart rootEditPart) {
 		final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
 		return new Point(drawingAreaBounds.x - DiagramEditor.INITIAL_SCROLL_OFFSET,
 				drawingAreaBounds.y - DiagramEditor.INITIAL_SCROLL_OFFSET);

@@ -324,7 +324,11 @@ INavigationLocationProvider, IPersistableEditor {
 			final Integer yLocation = memento.getInteger(TAG_GRAPHICAL_VIEWER_VER_SCROLL);
 			if ((null != xLocation) && (yLocation != null)) {
 				// we have to wait to set the scroll position until the editor is drawn and the canvas is setup
-				Display.getDefault().asyncExec(() -> canvas.scrollTo(xLocation.intValue(), yLocation.intValue()));
+				Display.getDefault().asyncExec(() -> {
+					if (!canvas.isDisposed()) {
+						canvas.scrollTo(xLocation.intValue(), yLocation.intValue());
+					}
+				});
 			}
 		}
 
