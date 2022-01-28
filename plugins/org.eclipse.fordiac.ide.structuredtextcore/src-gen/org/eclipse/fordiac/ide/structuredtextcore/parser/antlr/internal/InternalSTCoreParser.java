@@ -23,118 +23,119 @@ import java.util.HashMap;
 @SuppressWarnings("all")
 public class InternalSTCoreParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "LDATE_AND_TIME", "DATE_AND_TIME", "TIME_OF_DAY", "END_REPEAT", "VAR_OUTPUT", "END_WHILE", "VAR_INPUT", "CONSTANT", "CONTINUE", "END_CASE", "VAR_TEMP", "WSTRING", "END_FOR", "END_VAR", "STRING", "DWORD", "END_IF", "LDATE", "LREAL", "LTIME", "LWORD", "REPEAT", "RETURN", "UDINT", "ULINT", "USINT", "WCHAR", "ARRAY", "BOOL", "BYTE", "CHAR", "DATE", "DINT", "ELSIF", "LINT", "LTOD", "REAL", "SINT", "TIME", "UINT", "UNTIL", "WHILE", "WORD", "CASE", "ELSE", "EXIT", "INT", "LDT", "THEN", "TOD", "B", "D_1", "L", "W", "X", "AND", "DT", "FOR", "LD", "LT", "MOD", "NOT", "VAR", "XOR", "AsteriskAsterisk", "FullStopFullStop", "ColonEqualsSign", "LessThanSignEqualsSign", "LessThanSignGreaterThanSign", "GreaterThanSignEqualsSign", "AT", "BY", "D", "DO", "IF", "OF", "OR", "T", "TO", "NumberSign", "Ampersand", "LeftParenthesis", "RightParenthesis", "Asterisk", "PlusSign", "Comma", "HyphenMinus", "FullStop", "Solidus", "Colon", "Semicolon", "LessThanSign", "EqualsSign", "GreaterThanSign", "LeftSquareBracket", "RightSquareBracket", "RULE_BOOL_VALUES", "RULE_HEX_DIGIT", "RULE_NON_DECIMAL", "RULE_INT", "RULE_TIME", "RULE_EXT_INT", "RULE_ID", "RULE_STRING", "RULE_WSTRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "LDATE_AND_TIME", "DATE_AND_TIME", "TIME_OF_DAY", "END_REPEAT", "VAR_OUTPUT", "END_WHILE", "VAR_INPUT", "CONSTANT", "CONTINUE", "END_CASE", "VAR_TEMP", "WSTRING", "END_FOR", "END_VAR", "STRING", "DWORD", "END_IF", "LDATE", "LREAL", "LTIME", "LWORD", "REPEAT", "RETURN", "UDINT", "ULINT", "USINT", "WCHAR", "ARRAY", "BOOL", "BYTE", "CHAR", "DATE", "DINT", "ELSIF", "FALSE", "LINT", "LTOD", "REAL", "SINT", "TIME", "UINT", "UNTIL", "WHILE", "WORD", "CASE", "ELSE", "EXIT", "INT", "LDT", "THEN", "TOD", "TRUE", "B", "D_1", "L", "W", "X", "AND", "DT", "FOR", "LD", "LT", "MOD", "NOT", "VAR", "XOR", "AsteriskAsterisk", "FullStopFullStop", "ColonEqualsSign", "LessThanSignEqualsSign", "LessThanSignGreaterThanSign", "GreaterThanSignEqualsSign", "AT", "BY", "D", "DO", "IF", "OF", "OR", "T", "TO", "NumberSign", "Ampersand", "LeftParenthesis", "RightParenthesis", "Asterisk", "PlusSign", "Comma", "HyphenMinus", "FullStop", "Solidus", "Colon", "Semicolon", "LessThanSign", "EqualsSign", "GreaterThanSign", "LeftSquareBracket", "RightSquareBracket", "RULE_HEX_DIGIT", "RULE_NON_DECIMAL", "RULE_INT", "RULE_TIME", "RULE_EXT_INT", "RULE_ID", "RULE_STRING", "RULE_WSTRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
     };
     public static final int LWORD=24;
-    public static final int LessThanSignGreaterThanSign=72;
-    public static final int VAR=66;
+    public static final int LessThanSignGreaterThanSign=74;
+    public static final int VAR=68;
     public static final int END_IF=20;
     public static final int ULINT=28;
     public static final int END_CASE=13;
-    public static final int LessThanSign=95;
-    public static final int LeftParenthesis=85;
+    public static final int LessThanSign=97;
+    public static final int LeftParenthesis=87;
     public static final int BYTE=33;
-    public static final int ELSE=48;
-    public static final int RULE_TIME=104;
-    public static final int IF=78;
-    public static final int LINT=38;
-    public static final int GreaterThanSign=97;
-    public static final int WORD=46;
+    public static final int ELSE=49;
+    public static final int RULE_TIME=105;
+    public static final int IF=80;
+    public static final int LINT=39;
+    public static final int GreaterThanSign=99;
+    public static final int WORD=47;
     public static final int DATE_AND_TIME=5;
-    public static final int RULE_ID=106;
-    public static final int TOD=53;
+    public static final int RULE_ID=107;
+    public static final int TOD=54;
     public static final int DINT=36;
     public static final int UDINT=27;
-    public static final int CASE=47;
-    public static final int GreaterThanSignEqualsSign=73;
-    public static final int AT=74;
-    public static final int PlusSign=88;
-    public static final int RULE_INT=103;
+    public static final int CASE=48;
+    public static final int GreaterThanSignEqualsSign=75;
+    public static final int AT=76;
+    public static final int PlusSign=90;
+    public static final int RULE_INT=104;
     public static final int END_FOR=16;
-    public static final int RULE_ML_COMMENT=109;
-    public static final int THEN=52;
-    public static final int XOR=67;
-    public static final int LeftSquareBracket=98;
-    public static final int EXIT=49;
+    public static final int RULE_ML_COMMENT=110;
+    public static final int THEN=53;
+    public static final int XOR=69;
+    public static final int LeftSquareBracket=100;
+    public static final int EXIT=50;
     public static final int TIME_OF_DAY=6;
-    public static final int B=54;
+    public static final int B=56;
     public static final int LDATE_AND_TIME=4;
     public static final int REPEAT=25;
-    public static final int D=76;
+    public static final int D=78;
     public static final int CHAR=34;
-    public static final int L=56;
+    public static final int L=58;
     public static final int LTIME=23;
-    public static final int Comma=89;
-    public static final int HyphenMinus=90;
-    public static final int T=81;
-    public static final int W=57;
-    public static final int BY=75;
-    public static final int X=58;
+    public static final int Comma=91;
+    public static final int HyphenMinus=92;
+    public static final int T=83;
+    public static final int W=59;
+    public static final int BY=77;
+    public static final int X=60;
     public static final int ELSIF=37;
     public static final int END_REPEAT=7;
-    public static final int LessThanSignEqualsSign=71;
-    public static final int Solidus=92;
+    public static final int LessThanSignEqualsSign=73;
+    public static final int Solidus=94;
     public static final int VAR_INPUT=10;
-    public static final int FullStop=91;
+    public static final int FullStop=93;
     public static final int VAR_TEMP=14;
     public static final int CONSTANT=11;
     public static final int CONTINUE=12;
-    public static final int Semicolon=94;
-    public static final int LD=62;
+    public static final int Semicolon=96;
+    public static final int LD=64;
     public static final int VAR_OUTPUT=8;
     public static final int STRING=18;
-    public static final int RULE_HEX_DIGIT=101;
-    public static final int TO=82;
-    public static final int RULE_BOOL_VALUES=100;
-    public static final int UINT=43;
-    public static final int LTOD=39;
+    public static final int RULE_HEX_DIGIT=102;
+    public static final int TO=84;
+    public static final int UINT=44;
+    public static final int LTOD=40;
     public static final int ARRAY=31;
-    public static final int LT=63;
-    public static final int DO=77;
+    public static final int LT=65;
+    public static final int DO=79;
     public static final int WSTRING=15;
-    public static final int DT=60;
+    public static final int DT=62;
     public static final int END_VAR=17;
-    public static final int FullStopFullStop=69;
-    public static final int Ampersand=84;
-    public static final int RightSquareBracket=99;
+    public static final int FullStopFullStop=71;
+    public static final int Ampersand=86;
+    public static final int RightSquareBracket=101;
     public static final int USINT=29;
     public static final int DWORD=19;
-    public static final int FOR=61;
-    public static final int RightParenthesis=86;
-    public static final int ColonEqualsSign=70;
-    public static final int RULE_WSTRING=108;
+    public static final int FOR=63;
+    public static final int RightParenthesis=88;
+    public static final int TRUE=55;
+    public static final int ColonEqualsSign=72;
+    public static final int RULE_WSTRING=109;
     public static final int END_WHILE=9;
     public static final int DATE=35;
-    public static final int NOT=65;
+    public static final int NOT=67;
     public static final int LDATE=21;
-    public static final int AND=59;
-    public static final int NumberSign=83;
-    public static final int REAL=40;
-    public static final int AsteriskAsterisk=68;
-    public static final int SINT=41;
+    public static final int AND=61;
+    public static final int NumberSign=85;
+    public static final int REAL=41;
+    public static final int AsteriskAsterisk=70;
+    public static final int SINT=42;
     public static final int LREAL=22;
     public static final int WCHAR=30;
-    public static final int RULE_STRING=107;
-    public static final int INT=50;
-    public static final int RULE_SL_COMMENT=110;
+    public static final int RULE_STRING=108;
+    public static final int INT=51;
+    public static final int RULE_SL_COMMENT=111;
     public static final int RETURN=26;
-    public static final int EqualsSign=96;
-    public static final int OF=79;
-    public static final int Colon=93;
+    public static final int EqualsSign=98;
+    public static final int OF=81;
+    public static final int Colon=95;
     public static final int EOF=-1;
-    public static final int LDT=51;
-    public static final int Asterisk=87;
-    public static final int MOD=64;
-    public static final int OR=80;
-    public static final int RULE_WS=111;
-    public static final int RULE_EXT_INT=105;
-    public static final int TIME=42;
-    public static final int RULE_ANY_OTHER=112;
-    public static final int UNTIL=44;
+    public static final int LDT=52;
+    public static final int Asterisk=89;
+    public static final int MOD=66;
+    public static final int OR=82;
+    public static final int RULE_WS=112;
+    public static final int RULE_EXT_INT=106;
+    public static final int TIME=43;
+    public static final int RULE_ANY_OTHER=113;
+    public static final int UNTIL=45;
     public static final int BOOL=32;
-    public static final int D_1=55;
-    public static final int WHILE=45;
-    public static final int RULE_NON_DECIMAL=102;
+    public static final int D_1=57;
+    public static final int FALSE=38;
+    public static final int WHILE=46;
+    public static final int RULE_NON_DECIMAL=103;
 
     // delegates
     // delegators
@@ -515,7 +516,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     if ( (LA5_0==LeftSquareBracket) ) {
                         int LA5_1 = input.LA(2);
 
-                        if ( ((LA5_1>=LDATE_AND_TIME && LA5_1<=TIME_OF_DAY)||LA5_1==WSTRING||(LA5_1>=STRING && LA5_1<=DWORD)||(LA5_1>=LDATE && LA5_1<=LWORD)||(LA5_1>=UDINT && LA5_1<=WCHAR)||(LA5_1>=BOOL && LA5_1<=DINT)||(LA5_1>=LINT && LA5_1<=UINT)||LA5_1==WORD||(LA5_1>=INT && LA5_1<=LDT)||LA5_1==TOD||LA5_1==DT||(LA5_1>=LD && LA5_1<=LT)||LA5_1==NOT||LA5_1==D||LA5_1==T||LA5_1==LeftParenthesis||LA5_1==PlusSign||LA5_1==HyphenMinus||LA5_1==RULE_BOOL_VALUES||(LA5_1>=RULE_NON_DECIMAL && LA5_1<=RULE_INT)||(LA5_1>=RULE_ID && LA5_1<=RULE_STRING)) ) {
+                        if ( ((LA5_1>=LDATE_AND_TIME && LA5_1<=TIME_OF_DAY)||LA5_1==WSTRING||(LA5_1>=STRING && LA5_1<=DWORD)||(LA5_1>=LDATE && LA5_1<=LWORD)||(LA5_1>=UDINT && LA5_1<=WCHAR)||(LA5_1>=BOOL && LA5_1<=DINT)||(LA5_1>=FALSE && LA5_1<=UINT)||LA5_1==WORD||(LA5_1>=INT && LA5_1<=LDT)||(LA5_1>=TOD && LA5_1<=TRUE)||LA5_1==DT||(LA5_1>=LD && LA5_1<=LT)||LA5_1==NOT||LA5_1==D||LA5_1==T||LA5_1==LeftParenthesis||LA5_1==PlusSign||LA5_1==HyphenMinus||(LA5_1>=RULE_NON_DECIMAL && LA5_1<=RULE_INT)||(LA5_1>=RULE_ID && LA5_1<=RULE_STRING)) ) {
                             alt5=1;
                         }
                         else if ( (LA5_1==Asterisk) ) {
@@ -1020,7 +1021,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             int alt9=2;
             int LA9_0 = input.LA(1);
 
-            if ( ((LA9_0>=LDATE_AND_TIME && LA9_0<=TIME_OF_DAY)||LA9_0==WSTRING||(LA9_0>=STRING && LA9_0<=DWORD)||(LA9_0>=LDATE && LA9_0<=LWORD)||(LA9_0>=UDINT && LA9_0<=WCHAR)||(LA9_0>=BOOL && LA9_0<=DINT)||(LA9_0>=LINT && LA9_0<=UINT)||LA9_0==WORD||(LA9_0>=INT && LA9_0<=LDT)||LA9_0==TOD||LA9_0==DT||(LA9_0>=LD && LA9_0<=LT)||LA9_0==NOT||LA9_0==D||LA9_0==T||LA9_0==LeftParenthesis||LA9_0==PlusSign||LA9_0==HyphenMinus||LA9_0==RULE_BOOL_VALUES||(LA9_0>=RULE_NON_DECIMAL && LA9_0<=RULE_INT)||(LA9_0>=RULE_ID && LA9_0<=RULE_STRING)) ) {
+            if ( ((LA9_0>=LDATE_AND_TIME && LA9_0<=TIME_OF_DAY)||LA9_0==WSTRING||(LA9_0>=STRING && LA9_0<=DWORD)||(LA9_0>=LDATE && LA9_0<=LWORD)||(LA9_0>=UDINT && LA9_0<=WCHAR)||(LA9_0>=BOOL && LA9_0<=DINT)||(LA9_0>=FALSE && LA9_0<=UINT)||LA9_0==WORD||(LA9_0>=INT && LA9_0<=LDT)||(LA9_0>=TOD && LA9_0<=TRUE)||LA9_0==DT||(LA9_0>=LD && LA9_0<=LT)||LA9_0==NOT||LA9_0==D||LA9_0==T||LA9_0==LeftParenthesis||LA9_0==PlusSign||LA9_0==HyphenMinus||(LA9_0>=RULE_NON_DECIMAL && LA9_0<=RULE_INT)||(LA9_0>=RULE_ID && LA9_0<=RULE_STRING)) ) {
                 alt9=1;
             }
             else if ( (LA9_0==LeftSquareBracket) ) {
@@ -2683,7 +2684,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                 int alt18=2;
                 int LA18_0 = input.LA(1);
 
-                if ( ((LA18_0>=LDATE_AND_TIME && LA18_0<=TIME_OF_DAY)||LA18_0==WSTRING||(LA18_0>=STRING && LA18_0<=DWORD)||(LA18_0>=LDATE && LA18_0<=LWORD)||(LA18_0>=UDINT && LA18_0<=WCHAR)||(LA18_0>=BOOL && LA18_0<=DINT)||(LA18_0>=LINT && LA18_0<=UINT)||LA18_0==WORD||(LA18_0>=INT && LA18_0<=LDT)||LA18_0==TOD||LA18_0==DT||(LA18_0>=LD && LA18_0<=LT)||LA18_0==NOT||LA18_0==D||LA18_0==T||LA18_0==LeftParenthesis||LA18_0==PlusSign||LA18_0==HyphenMinus||LA18_0==RULE_BOOL_VALUES||(LA18_0>=RULE_NON_DECIMAL && LA18_0<=RULE_INT)||(LA18_0>=RULE_ID && LA18_0<=RULE_STRING)) ) {
+                if ( ((LA18_0>=LDATE_AND_TIME && LA18_0<=TIME_OF_DAY)||LA18_0==WSTRING||(LA18_0>=STRING && LA18_0<=DWORD)||(LA18_0>=LDATE && LA18_0<=LWORD)||(LA18_0>=UDINT && LA18_0<=WCHAR)||(LA18_0>=BOOL && LA18_0<=DINT)||(LA18_0>=FALSE && LA18_0<=UINT)||LA18_0==WORD||(LA18_0>=INT && LA18_0<=LDT)||(LA18_0>=TOD && LA18_0<=TRUE)||LA18_0==DT||(LA18_0>=LD && LA18_0<=LT)||LA18_0==NOT||LA18_0==D||LA18_0==T||LA18_0==LeftParenthesis||LA18_0==PlusSign||LA18_0==HyphenMinus||(LA18_0>=RULE_NON_DECIMAL && LA18_0<=RULE_INT)||(LA18_0>=RULE_ID && LA18_0<=RULE_STRING)) ) {
                     alt18=1;
                 }
 
@@ -5982,25 +5983,6 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             // InternalSTCoreParser.g:2088:2: (this_STLiteralExpressions_0= ruleSTLiteralExpressions | this_STSelectionExpression_1= ruleSTSelectionExpression | ( () ( (lv_op_3_0= ruleUnaryOperator ) ) ( (lv_expression_4_0= ruleSTSelectionExpression ) ) ) )
             int alt36=3;
             switch ( input.LA(1) ) {
-            case NOT:
-                {
-                int LA36_1 = input.LA(2);
-
-                if ( (LA36_1==DWORD||LA36_1==LREAL||LA36_1==LWORD||(LA36_1>=UDINT && LA36_1<=USINT)||(LA36_1>=BOOL && LA36_1<=BYTE)||LA36_1==DINT||LA36_1==LINT||(LA36_1>=REAL && LA36_1<=SINT)||LA36_1==UINT||LA36_1==WORD||LA36_1==INT||LA36_1==PlusSign||LA36_1==HyphenMinus||LA36_1==RULE_BOOL_VALUES||(LA36_1>=RULE_NON_DECIMAL && LA36_1<=RULE_INT)) ) {
-                    alt36=1;
-                }
-                else if ( (LA36_1==LeftParenthesis||LA36_1==RULE_ID) ) {
-                    alt36=3;
-                }
-                else {
-                    if (state.backtracking>0) {state.failed=true; return current;}
-                    NoViableAltException nvae =
-                        new NoViableAltException("", 36, 1, input);
-
-                    throw nvae;
-                }
-                }
-                break;
             case LDATE_AND_TIME:
             case DATE_AND_TIME:
             case TIME_OF_DAY:
@@ -6020,6 +6002,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             case CHAR:
             case DATE:
             case DINT:
+            case FALSE:
             case LINT:
             case LTOD:
             case REAL:
@@ -6030,12 +6013,12 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             case INT:
             case LDT:
             case TOD:
+            case TRUE:
             case DT:
             case LD:
             case LT:
             case D:
             case T:
-            case RULE_BOOL_VALUES:
             case RULE_NON_DECIMAL:
             case RULE_INT:
             case RULE_STRING:
@@ -6044,6 +6027,25 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                 }
                 break;
             case PlusSign:
+                {
+                int LA36_2 = input.LA(2);
+
+                if ( (LA36_2==RULE_INT) ) {
+                    alt36=1;
+                }
+                else if ( (LA36_2==LeftParenthesis||LA36_2==RULE_ID) ) {
+                    alt36=3;
+                }
+                else {
+                    if (state.backtracking>0) {state.failed=true; return current;}
+                    NoViableAltException nvae =
+                        new NoViableAltException("", 36, 2, input);
+
+                    throw nvae;
+                }
+                }
+                break;
+            case HyphenMinus:
                 {
                 int LA36_3 = input.LA(2);
 
@@ -6062,29 +6064,15 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                 }
                 }
                 break;
-            case HyphenMinus:
-                {
-                int LA36_4 = input.LA(2);
-
-                if ( (LA36_4==RULE_INT) ) {
-                    alt36=1;
-                }
-                else if ( (LA36_4==LeftParenthesis||LA36_4==RULE_ID) ) {
-                    alt36=3;
-                }
-                else {
-                    if (state.backtracking>0) {state.failed=true; return current;}
-                    NoViableAltException nvae =
-                        new NoViableAltException("", 36, 4, input);
-
-                    throw nvae;
-                }
-                }
-                break;
             case LeftParenthesis:
             case RULE_ID:
                 {
                 alt36=2;
+                }
+                break;
+            case NOT:
+                {
+                alt36=3;
                 }
                 break;
             default:
@@ -6644,7 +6632,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             	            int alt40=2;
             	            int LA40_0 = input.LA(1);
 
-            	            if ( ((LA40_0>=LDATE_AND_TIME && LA40_0<=TIME_OF_DAY)||LA40_0==WSTRING||(LA40_0>=STRING && LA40_0<=DWORD)||(LA40_0>=LDATE && LA40_0<=LWORD)||(LA40_0>=UDINT && LA40_0<=WCHAR)||(LA40_0>=BOOL && LA40_0<=DINT)||(LA40_0>=LINT && LA40_0<=UINT)||LA40_0==WORD||(LA40_0>=INT && LA40_0<=LDT)||LA40_0==TOD||LA40_0==DT||(LA40_0>=LD && LA40_0<=LT)||LA40_0==NOT||LA40_0==D||LA40_0==T||LA40_0==LeftParenthesis||LA40_0==PlusSign||LA40_0==HyphenMinus||LA40_0==RULE_BOOL_VALUES||(LA40_0>=RULE_NON_DECIMAL && LA40_0<=RULE_INT)||(LA40_0>=RULE_ID && LA40_0<=RULE_STRING)) ) {
+            	            if ( ((LA40_0>=LDATE_AND_TIME && LA40_0<=TIME_OF_DAY)||LA40_0==WSTRING||(LA40_0>=STRING && LA40_0<=DWORD)||(LA40_0>=LDATE && LA40_0<=LWORD)||(LA40_0>=UDINT && LA40_0<=WCHAR)||(LA40_0>=BOOL && LA40_0<=DINT)||(LA40_0>=FALSE && LA40_0<=UINT)||LA40_0==WORD||(LA40_0>=INT && LA40_0<=LDT)||(LA40_0>=TOD && LA40_0<=TRUE)||LA40_0==DT||(LA40_0>=LD && LA40_0<=LT)||LA40_0==NOT||LA40_0==D||LA40_0==T||LA40_0==LeftParenthesis||LA40_0==PlusSign||LA40_0==HyphenMinus||(LA40_0>=RULE_NON_DECIMAL && LA40_0<=RULE_INT)||(LA40_0>=RULE_ID && LA40_0<=RULE_STRING)) ) {
             	                alt40=1;
             	            }
             	            switch (alt40) {
@@ -7328,7 +7316,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                             int alt47=2;
                             int LA47_0 = input.LA(1);
 
-                            if ( ((LA47_0>=LDATE_AND_TIME && LA47_0<=TIME_OF_DAY)||LA47_0==WSTRING||(LA47_0>=STRING && LA47_0<=DWORD)||(LA47_0>=LDATE && LA47_0<=LWORD)||(LA47_0>=UDINT && LA47_0<=WCHAR)||(LA47_0>=BOOL && LA47_0<=DINT)||(LA47_0>=LINT && LA47_0<=UINT)||LA47_0==WORD||(LA47_0>=INT && LA47_0<=LDT)||LA47_0==TOD||LA47_0==DT||(LA47_0>=LD && LA47_0<=LT)||LA47_0==NOT||LA47_0==D||LA47_0==T||LA47_0==LeftParenthesis||LA47_0==PlusSign||LA47_0==HyphenMinus||LA47_0==RULE_BOOL_VALUES||(LA47_0>=RULE_NON_DECIMAL && LA47_0<=RULE_INT)||(LA47_0>=RULE_ID && LA47_0<=RULE_STRING)) ) {
+                            if ( ((LA47_0>=LDATE_AND_TIME && LA47_0<=TIME_OF_DAY)||LA47_0==WSTRING||(LA47_0>=STRING && LA47_0<=DWORD)||(LA47_0>=LDATE && LA47_0<=LWORD)||(LA47_0>=UDINT && LA47_0<=WCHAR)||(LA47_0>=BOOL && LA47_0<=DINT)||(LA47_0>=FALSE && LA47_0<=UINT)||LA47_0==WORD||(LA47_0>=INT && LA47_0<=LDT)||(LA47_0>=TOD && LA47_0<=TRUE)||LA47_0==DT||(LA47_0>=LD && LA47_0<=LT)||LA47_0==NOT||LA47_0==D||LA47_0==T||LA47_0==LeftParenthesis||LA47_0==PlusSign||LA47_0==HyphenMinus||(LA47_0>=RULE_NON_DECIMAL && LA47_0<=RULE_INT)||(LA47_0>=RULE_ID && LA47_0<=RULE_STRING)) ) {
                                 alt47=1;
                             }
                             switch (alt47) {
@@ -7528,7 +7516,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
     public final EObject ruleSTLiteralExpressions() throws RecognitionException {
         EObject current = null;
 
-        EObject lv_boolLiteral_1_0 = null;
+        AntlrDatatypeRuleToken lv_boolLiteral_1_0 = null;
 
         EObject lv_numericLiteral_3_0 = null;
 
@@ -7553,14 +7541,14 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             // InternalSTCoreParser.g:2621:2: ( ( () ( (lv_boolLiteral_1_0= ruleBOOL_LITERAL ) ) ) | ( () ( (lv_numericLiteral_3_0= ruleNUMERIC_LITERAL ) ) ) | ( () ( (lv_dateLiteral_5_0= ruleDATE_LITERAL ) ) ) | ( () ( (lv_timeLiteral_7_0= ruleTIME_LITERAL ) ) ) | ( () ( (lv_timeOfDayLiteral_9_0= ruleTIME_OF_DAY_LITERAL ) ) ) | ( () ( (lv_timeLiteral_11_0= ruleDATE_AND_TIME_LITERAL ) ) ) | ( () ( (lv_stringLiteral_13_0= ruleSTRING_LITERAL ) ) ) )
             int alt50=7;
             switch ( input.LA(1) ) {
-            case NOT:
+            case BOOL:
                 {
                 int LA50_1 = input.LA(2);
 
-                if ( (LA50_1==BOOL||LA50_1==RULE_BOOL_VALUES) ) {
+                if ( (LA50_1==FALSE||LA50_1==TRUE) ) {
                     alt50=1;
                 }
-                else if ( (LA50_1==DWORD||LA50_1==LREAL||LA50_1==LWORD||(LA50_1>=UDINT && LA50_1<=USINT)||LA50_1==BYTE||LA50_1==DINT||LA50_1==LINT||(LA50_1>=REAL && LA50_1<=SINT)||LA50_1==UINT||LA50_1==WORD||LA50_1==INT||LA50_1==PlusSign||LA50_1==HyphenMinus||(LA50_1>=RULE_NON_DECIMAL && LA50_1<=RULE_INT)) ) {
+                else if ( (LA50_1==PlusSign||LA50_1==HyphenMinus||(LA50_1>=RULE_NON_DECIMAL && LA50_1<=RULE_INT)) ) {
                     alt50=2;
                 }
                 else {
@@ -7572,8 +7560,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                 }
                 }
                 break;
-            case BOOL:
-            case RULE_BOOL_VALUES:
+            case FALSE:
+            case TRUE:
                 {
                 alt50=1;
                 }
@@ -8094,15 +8082,15 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleBOOL_LITERAL"
-    // InternalSTCoreParser.g:2828:1: entryRuleBOOL_LITERAL returns [EObject current=null] : iv_ruleBOOL_LITERAL= ruleBOOL_LITERAL EOF ;
-    public final EObject entryRuleBOOL_LITERAL() throws RecognitionException {
-        EObject current = null;
+    // InternalSTCoreParser.g:2828:1: entryRuleBOOL_LITERAL returns [String current=null] : iv_ruleBOOL_LITERAL= ruleBOOL_LITERAL EOF ;
+    public final String entryRuleBOOL_LITERAL() throws RecognitionException {
+        String current = null;
 
-        EObject iv_ruleBOOL_LITERAL = null;
+        AntlrDatatypeRuleToken iv_ruleBOOL_LITERAL = null;
 
 
         try {
-            // InternalSTCoreParser.g:2828:53: (iv_ruleBOOL_LITERAL= ruleBOOL_LITERAL EOF )
+            // InternalSTCoreParser.g:2828:52: (iv_ruleBOOL_LITERAL= ruleBOOL_LITERAL EOF )
             // InternalSTCoreParser.g:2829:2: iv_ruleBOOL_LITERAL= ruleBOOL_LITERAL EOF
             {
             if ( state.backtracking==0 ) {
@@ -8114,7 +8102,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             state._fsp--;
             if (state.failed) return current;
             if ( state.backtracking==0 ) {
-               current =iv_ruleBOOL_LITERAL; 
+               current =iv_ruleBOOL_LITERAL.getText(); 
             }
             match(input,EOF,FOLLOW_2); if (state.failed) return current;
 
@@ -8134,76 +8122,38 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleBOOL_LITERAL"
-    // InternalSTCoreParser.g:2835:1: ruleBOOL_LITERAL returns [EObject current=null] : ( ( (lv_not_0_0= NOT ) )? (otherlv_1= BOOL )? ( (lv_keyWordValue_2_0= RULE_BOOL_VALUES ) ) ) ;
-    public final EObject ruleBOOL_LITERAL() throws RecognitionException {
-        EObject current = null;
+    // InternalSTCoreParser.g:2835:1: ruleBOOL_LITERAL returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= BOOL )? (kw= TRUE | kw= FALSE ) ) ;
+    public final AntlrDatatypeRuleToken ruleBOOL_LITERAL() throws RecognitionException {
+        AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
-        Token lv_not_0_0=null;
-        Token otherlv_1=null;
-        Token lv_keyWordValue_2_0=null;
+        Token kw=null;
 
 
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:2841:2: ( ( ( (lv_not_0_0= NOT ) )? (otherlv_1= BOOL )? ( (lv_keyWordValue_2_0= RULE_BOOL_VALUES ) ) ) )
-            // InternalSTCoreParser.g:2842:2: ( ( (lv_not_0_0= NOT ) )? (otherlv_1= BOOL )? ( (lv_keyWordValue_2_0= RULE_BOOL_VALUES ) ) )
+            // InternalSTCoreParser.g:2841:2: ( ( (kw= BOOL )? (kw= TRUE | kw= FALSE ) ) )
+            // InternalSTCoreParser.g:2842:2: ( (kw= BOOL )? (kw= TRUE | kw= FALSE ) )
             {
-            // InternalSTCoreParser.g:2842:2: ( ( (lv_not_0_0= NOT ) )? (otherlv_1= BOOL )? ( (lv_keyWordValue_2_0= RULE_BOOL_VALUES ) ) )
-            // InternalSTCoreParser.g:2843:3: ( (lv_not_0_0= NOT ) )? (otherlv_1= BOOL )? ( (lv_keyWordValue_2_0= RULE_BOOL_VALUES ) )
+            // InternalSTCoreParser.g:2842:2: ( (kw= BOOL )? (kw= TRUE | kw= FALSE ) )
+            // InternalSTCoreParser.g:2843:3: (kw= BOOL )? (kw= TRUE | kw= FALSE )
             {
-            // InternalSTCoreParser.g:2843:3: ( (lv_not_0_0= NOT ) )?
+            // InternalSTCoreParser.g:2843:3: (kw= BOOL )?
             int alt51=2;
             int LA51_0 = input.LA(1);
 
-            if ( (LA51_0==NOT) ) {
+            if ( (LA51_0==BOOL) ) {
                 alt51=1;
             }
             switch (alt51) {
                 case 1 :
-                    // InternalSTCoreParser.g:2844:4: (lv_not_0_0= NOT )
+                    // InternalSTCoreParser.g:2844:4: kw= BOOL
                     {
-                    // InternalSTCoreParser.g:2844:4: (lv_not_0_0= NOT )
-                    // InternalSTCoreParser.g:2845:5: lv_not_0_0= NOT
-                    {
-                    lv_not_0_0=(Token)match(input,NOT,FOLLOW_54); if (state.failed) return current;
+                    kw=(Token)match(input,BOOL,FOLLOW_54); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
-                      					newLeafNode(lv_not_0_0, grammarAccess.getBOOL_LITERALAccess().getNotNOTKeyword_0_0());
-                      				
-                    }
-                    if ( state.backtracking==0 ) {
-
-                      					if (current==null) {
-                      						current = createModelElement(grammarAccess.getBOOL_LITERALRule());
-                      					}
-                      					setWithLastConsumed(current, "not", lv_not_0_0, "NOT");
-                      				
-                    }
-
-                    }
-
-
-                    }
-                    break;
-
-            }
-
-            // InternalSTCoreParser.g:2857:3: (otherlv_1= BOOL )?
-            int alt52=2;
-            int LA52_0 = input.LA(1);
-
-            if ( (LA52_0==BOOL) ) {
-                alt52=1;
-            }
-            switch (alt52) {
-                case 1 :
-                    // InternalSTCoreParser.g:2858:4: otherlv_1= BOOL
-                    {
-                    otherlv_1=(Token)match(input,BOOL,FOLLOW_55); if (state.failed) return current;
-                    if ( state.backtracking==0 ) {
-
-                      				newLeafNode(otherlv_1, grammarAccess.getBOOL_LITERALAccess().getBOOLKeyword_1());
+                      				current.merge(kw);
+                      				newLeafNode(kw, grammarAccess.getBOOL_LITERALAccess().getBOOLKeyword_0());
                       			
                     }
 
@@ -8212,33 +8162,50 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalSTCoreParser.g:2863:3: ( (lv_keyWordValue_2_0= RULE_BOOL_VALUES ) )
-            // InternalSTCoreParser.g:2864:4: (lv_keyWordValue_2_0= RULE_BOOL_VALUES )
-            {
-            // InternalSTCoreParser.g:2864:4: (lv_keyWordValue_2_0= RULE_BOOL_VALUES )
-            // InternalSTCoreParser.g:2865:5: lv_keyWordValue_2_0= RULE_BOOL_VALUES
-            {
-            lv_keyWordValue_2_0=(Token)match(input,RULE_BOOL_VALUES,FOLLOW_2); if (state.failed) return current;
-            if ( state.backtracking==0 ) {
+            // InternalSTCoreParser.g:2850:3: (kw= TRUE | kw= FALSE )
+            int alt52=2;
+            int LA52_0 = input.LA(1);
 
-              					newLeafNode(lv_keyWordValue_2_0, grammarAccess.getBOOL_LITERALAccess().getKeyWordValueBOOL_VALUESTerminalRuleCall_2_0());
-              				
+            if ( (LA52_0==TRUE) ) {
+                alt52=1;
             }
-            if ( state.backtracking==0 ) {
-
-              					if (current==null) {
-              						current = createModelElement(grammarAccess.getBOOL_LITERALRule());
-              					}
-              					setWithLastConsumed(
-              						current,
-              						"keyWordValue",
-              						lv_keyWordValue_2_0,
-              						"org.eclipse.fordiac.ide.structuredtextcore.STCore.BOOL_VALUES");
-              				
+            else if ( (LA52_0==FALSE) ) {
+                alt52=2;
             }
+            else {
+                if (state.backtracking>0) {state.failed=true; return current;}
+                NoViableAltException nvae =
+                    new NoViableAltException("", 52, 0, input);
 
+                throw nvae;
             }
+            switch (alt52) {
+                case 1 :
+                    // InternalSTCoreParser.g:2851:4: kw= TRUE
+                    {
+                    kw=(Token)match(input,TRUE,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
 
+                      				current.merge(kw);
+                      				newLeafNode(kw, grammarAccess.getBOOL_LITERALAccess().getTRUEKeyword_1_0());
+                      			
+                    }
+
+                    }
+                    break;
+                case 2 :
+                    // InternalSTCoreParser.g:2857:4: kw= FALSE
+                    {
+                    kw=(Token)match(input,FALSE,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      				current.merge(kw);
+                      				newLeafNode(kw, grammarAccess.getBOOL_LITERALAccess().getFALSEKeyword_1_1());
+                      			
+                    }
+
+                    }
+                    break;
 
             }
 
@@ -8267,7 +8234,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleNUMERIC_LITERAL"
-    // InternalSTCoreParser.g:2885:1: entryRuleNUMERIC_LITERAL returns [EObject current=null] : iv_ruleNUMERIC_LITERAL= ruleNUMERIC_LITERAL EOF ;
+    // InternalSTCoreParser.g:2867:1: entryRuleNUMERIC_LITERAL returns [EObject current=null] : iv_ruleNUMERIC_LITERAL= ruleNUMERIC_LITERAL EOF ;
     public final EObject entryRuleNUMERIC_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -8275,8 +8242,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:2885:56: (iv_ruleNUMERIC_LITERAL= ruleNUMERIC_LITERAL EOF )
-            // InternalSTCoreParser.g:2886:2: iv_ruleNUMERIC_LITERAL= ruleNUMERIC_LITERAL EOF
+            // InternalSTCoreParser.g:2867:56: (iv_ruleNUMERIC_LITERAL= ruleNUMERIC_LITERAL EOF )
+            // InternalSTCoreParser.g:2868:2: iv_ruleNUMERIC_LITERAL= ruleNUMERIC_LITERAL EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getNUMERIC_LITERALRule()); 
@@ -8307,181 +8274,149 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleNUMERIC_LITERAL"
-    // InternalSTCoreParser.g:2892:1: ruleNUMERIC_LITERAL returns [EObject current=null] : ( ( (lv_not_0_0= NOT ) )? ( ( (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL ) ) )? ( ( (lv_intValue_2_0= ruleINTEGER ) ) | ( (lv_realValue_3_0= ruleREAL ) ) | ( (lv_hexValue_4_0= RULE_NON_DECIMAL ) ) ) ) ;
+    // InternalSTCoreParser.g:2874:1: ruleNUMERIC_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL ) ) )? ( ( (lv_intValue_1_0= ruleINTEGER ) ) | ( (lv_realValue_2_0= ruleREAL ) ) | ( (lv_hexValue_3_0= RULE_NON_DECIMAL ) ) ) ) ;
     public final EObject ruleNUMERIC_LITERAL() throws RecognitionException {
         EObject current = null;
 
-        Token lv_not_0_0=null;
-        Token lv_keyword_1_1=null;
-        Token lv_keyword_1_2=null;
-        Token lv_keyword_1_3=null;
-        Token lv_keyword_1_4=null;
-        Token lv_keyword_1_5=null;
-        Token lv_keyword_1_6=null;
-        Token lv_keyword_1_7=null;
-        Token lv_keyword_1_8=null;
-        Token lv_keyword_1_9=null;
-        Token lv_keyword_1_10=null;
-        Token lv_keyword_1_11=null;
-        Token lv_keyword_1_12=null;
-        Token lv_keyword_1_13=null;
-        Token lv_keyword_1_14=null;
-        Token lv_hexValue_4_0=null;
-        AntlrDatatypeRuleToken lv_intValue_2_0 = null;
+        Token lv_keyword_0_1=null;
+        Token lv_keyword_0_2=null;
+        Token lv_keyword_0_3=null;
+        Token lv_keyword_0_4=null;
+        Token lv_keyword_0_5=null;
+        Token lv_keyword_0_6=null;
+        Token lv_keyword_0_7=null;
+        Token lv_keyword_0_8=null;
+        Token lv_keyword_0_9=null;
+        Token lv_keyword_0_10=null;
+        Token lv_keyword_0_11=null;
+        Token lv_keyword_0_12=null;
+        Token lv_keyword_0_13=null;
+        Token lv_keyword_0_14=null;
+        Token lv_keyword_0_15=null;
+        Token lv_hexValue_3_0=null;
+        AntlrDatatypeRuleToken lv_intValue_1_0 = null;
 
-        AntlrDatatypeRuleToken lv_realValue_3_0 = null;
+        AntlrDatatypeRuleToken lv_realValue_2_0 = null;
 
 
 
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:2898:2: ( ( ( (lv_not_0_0= NOT ) )? ( ( (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL ) ) )? ( ( (lv_intValue_2_0= ruleINTEGER ) ) | ( (lv_realValue_3_0= ruleREAL ) ) | ( (lv_hexValue_4_0= RULE_NON_DECIMAL ) ) ) ) )
-            // InternalSTCoreParser.g:2899:2: ( ( (lv_not_0_0= NOT ) )? ( ( (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL ) ) )? ( ( (lv_intValue_2_0= ruleINTEGER ) ) | ( (lv_realValue_3_0= ruleREAL ) ) | ( (lv_hexValue_4_0= RULE_NON_DECIMAL ) ) ) )
+            // InternalSTCoreParser.g:2880:2: ( ( ( ( (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL ) ) )? ( ( (lv_intValue_1_0= ruleINTEGER ) ) | ( (lv_realValue_2_0= ruleREAL ) ) | ( (lv_hexValue_3_0= RULE_NON_DECIMAL ) ) ) ) )
+            // InternalSTCoreParser.g:2881:2: ( ( ( (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL ) ) )? ( ( (lv_intValue_1_0= ruleINTEGER ) ) | ( (lv_realValue_2_0= ruleREAL ) ) | ( (lv_hexValue_3_0= RULE_NON_DECIMAL ) ) ) )
             {
-            // InternalSTCoreParser.g:2899:2: ( ( (lv_not_0_0= NOT ) )? ( ( (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL ) ) )? ( ( (lv_intValue_2_0= ruleINTEGER ) ) | ( (lv_realValue_3_0= ruleREAL ) ) | ( (lv_hexValue_4_0= RULE_NON_DECIMAL ) ) ) )
-            // InternalSTCoreParser.g:2900:3: ( (lv_not_0_0= NOT ) )? ( ( (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL ) ) )? ( ( (lv_intValue_2_0= ruleINTEGER ) ) | ( (lv_realValue_3_0= ruleREAL ) ) | ( (lv_hexValue_4_0= RULE_NON_DECIMAL ) ) )
+            // InternalSTCoreParser.g:2881:2: ( ( ( (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL ) ) )? ( ( (lv_intValue_1_0= ruleINTEGER ) ) | ( (lv_realValue_2_0= ruleREAL ) ) | ( (lv_hexValue_3_0= RULE_NON_DECIMAL ) ) ) )
+            // InternalSTCoreParser.g:2882:3: ( ( (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL ) ) )? ( ( (lv_intValue_1_0= ruleINTEGER ) ) | ( (lv_realValue_2_0= ruleREAL ) ) | ( (lv_hexValue_3_0= RULE_NON_DECIMAL ) ) )
             {
-            // InternalSTCoreParser.g:2900:3: ( (lv_not_0_0= NOT ) )?
-            int alt53=2;
-            int LA53_0 = input.LA(1);
+            // InternalSTCoreParser.g:2882:3: ( ( (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL ) ) )?
+            int alt54=2;
+            int LA54_0 = input.LA(1);
 
-            if ( (LA53_0==NOT) ) {
-                alt53=1;
+            if ( (LA54_0==DWORD||LA54_0==LREAL||LA54_0==LWORD||(LA54_0>=UDINT && LA54_0<=USINT)||(LA54_0>=BOOL && LA54_0<=BYTE)||LA54_0==DINT||LA54_0==LINT||(LA54_0>=REAL && LA54_0<=SINT)||LA54_0==UINT||LA54_0==WORD||LA54_0==INT) ) {
+                alt54=1;
             }
-            switch (alt53) {
+            switch (alt54) {
                 case 1 :
-                    // InternalSTCoreParser.g:2901:4: (lv_not_0_0= NOT )
+                    // InternalSTCoreParser.g:2883:4: ( (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL ) )
                     {
-                    // InternalSTCoreParser.g:2901:4: (lv_not_0_0= NOT )
-                    // InternalSTCoreParser.g:2902:5: lv_not_0_0= NOT
+                    // InternalSTCoreParser.g:2883:4: ( (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL ) )
+                    // InternalSTCoreParser.g:2884:5: (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL )
                     {
-                    lv_not_0_0=(Token)match(input,NOT,FOLLOW_56); if (state.failed) return current;
-                    if ( state.backtracking==0 ) {
-
-                      					newLeafNode(lv_not_0_0, grammarAccess.getNUMERIC_LITERALAccess().getNotNOTKeyword_0_0());
-                      				
-                    }
-                    if ( state.backtracking==0 ) {
-
-                      					if (current==null) {
-                      						current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-                      					}
-                      					setWithLastConsumed(current, "not", lv_not_0_0, "NOT");
-                      				
-                    }
-
-                    }
-
-
-                    }
-                    break;
-
-            }
-
-            // InternalSTCoreParser.g:2914:3: ( ( (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL ) ) )?
-            int alt55=2;
-            int LA55_0 = input.LA(1);
-
-            if ( (LA55_0==DWORD||LA55_0==LREAL||LA55_0==LWORD||(LA55_0>=UDINT && LA55_0<=USINT)||LA55_0==BYTE||LA55_0==DINT||LA55_0==LINT||(LA55_0>=REAL && LA55_0<=SINT)||LA55_0==UINT||LA55_0==WORD||LA55_0==INT) ) {
-                alt55=1;
-            }
-            switch (alt55) {
-                case 1 :
-                    // InternalSTCoreParser.g:2915:4: ( (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL ) )
-                    {
-                    // InternalSTCoreParser.g:2915:4: ( (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL ) )
-                    // InternalSTCoreParser.g:2916:5: (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL )
-                    {
-                    // InternalSTCoreParser.g:2916:5: (lv_keyword_1_1= BYTE | lv_keyword_1_2= WORD | lv_keyword_1_3= DWORD | lv_keyword_1_4= LWORD | lv_keyword_1_5= SINT | lv_keyword_1_6= INT | lv_keyword_1_7= DINT | lv_keyword_1_8= LINT | lv_keyword_1_9= USINT | lv_keyword_1_10= UINT | lv_keyword_1_11= UDINT | lv_keyword_1_12= ULINT | lv_keyword_1_13= REAL | lv_keyword_1_14= LREAL )
-                    int alt54=14;
+                    // InternalSTCoreParser.g:2884:5: (lv_keyword_0_1= BOOL | lv_keyword_0_2= BYTE | lv_keyword_0_3= WORD | lv_keyword_0_4= DWORD | lv_keyword_0_5= LWORD | lv_keyword_0_6= SINT | lv_keyword_0_7= INT | lv_keyword_0_8= DINT | lv_keyword_0_9= LINT | lv_keyword_0_10= USINT | lv_keyword_0_11= UINT | lv_keyword_0_12= UDINT | lv_keyword_0_13= ULINT | lv_keyword_0_14= REAL | lv_keyword_0_15= LREAL )
+                    int alt53=15;
                     switch ( input.LA(1) ) {
+                    case BOOL:
+                        {
+                        alt53=1;
+                        }
+                        break;
                     case BYTE:
                         {
-                        alt54=1;
+                        alt53=2;
                         }
                         break;
                     case WORD:
                         {
-                        alt54=2;
+                        alt53=3;
                         }
                         break;
                     case DWORD:
                         {
-                        alt54=3;
+                        alt53=4;
                         }
                         break;
                     case LWORD:
                         {
-                        alt54=4;
+                        alt53=5;
                         }
                         break;
                     case SINT:
                         {
-                        alt54=5;
+                        alt53=6;
                         }
                         break;
                     case INT:
                         {
-                        alt54=6;
+                        alt53=7;
                         }
                         break;
                     case DINT:
                         {
-                        alt54=7;
+                        alt53=8;
                         }
                         break;
                     case LINT:
                         {
-                        alt54=8;
+                        alt53=9;
                         }
                         break;
                     case USINT:
                         {
-                        alt54=9;
+                        alt53=10;
                         }
                         break;
                     case UINT:
                         {
-                        alt54=10;
+                        alt53=11;
                         }
                         break;
                     case UDINT:
                         {
-                        alt54=11;
+                        alt53=12;
                         }
                         break;
                     case ULINT:
                         {
-                        alt54=12;
+                        alt53=13;
                         }
                         break;
                     case REAL:
                         {
-                        alt54=13;
+                        alt53=14;
                         }
                         break;
                     case LREAL:
                         {
-                        alt54=14;
+                        alt53=15;
                         }
                         break;
                     default:
                         if (state.backtracking>0) {state.failed=true; return current;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 54, 0, input);
+                            new NoViableAltException("", 53, 0, input);
 
                         throw nvae;
                     }
 
-                    switch (alt54) {
+                    switch (alt53) {
                         case 1 :
-                            // InternalSTCoreParser.g:2917:6: lv_keyword_1_1= BYTE
+                            // InternalSTCoreParser.g:2885:6: lv_keyword_0_1= BOOL
                             {
-                            lv_keyword_1_1=(Token)match(input,BYTE,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_1=(Token)match(input,BOOL,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_1, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBYTEKeyword_1_0_0());
+                              						newLeafNode(lv_keyword_0_1, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBOOLKeyword_0_0_0());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8489,19 +8424,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_1, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_1, null);
                               					
                             }
 
                             }
                             break;
                         case 2 :
-                            // InternalSTCoreParser.g:2928:6: lv_keyword_1_2= WORD
+                            // InternalSTCoreParser.g:2896:6: lv_keyword_0_2= BYTE
                             {
-                            lv_keyword_1_2=(Token)match(input,WORD,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_2=(Token)match(input,BYTE,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_2, grammarAccess.getNUMERIC_LITERALAccess().getKeywordWORDKeyword_1_0_1());
+                              						newLeafNode(lv_keyword_0_2, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBYTEKeyword_0_0_1());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8509,19 +8444,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_2, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_2, null);
                               					
                             }
 
                             }
                             break;
                         case 3 :
-                            // InternalSTCoreParser.g:2939:6: lv_keyword_1_3= DWORD
+                            // InternalSTCoreParser.g:2907:6: lv_keyword_0_3= WORD
                             {
-                            lv_keyword_1_3=(Token)match(input,DWORD,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_3=(Token)match(input,WORD,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_3, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDWORDKeyword_1_0_2());
+                              						newLeafNode(lv_keyword_0_3, grammarAccess.getNUMERIC_LITERALAccess().getKeywordWORDKeyword_0_0_2());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8529,19 +8464,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_3, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_3, null);
                               					
                             }
 
                             }
                             break;
                         case 4 :
-                            // InternalSTCoreParser.g:2950:6: lv_keyword_1_4= LWORD
+                            // InternalSTCoreParser.g:2918:6: lv_keyword_0_4= DWORD
                             {
-                            lv_keyword_1_4=(Token)match(input,LWORD,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_4=(Token)match(input,DWORD,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_4, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLWORDKeyword_1_0_3());
+                              						newLeafNode(lv_keyword_0_4, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDWORDKeyword_0_0_3());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8549,19 +8484,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_4, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_4, null);
                               					
                             }
 
                             }
                             break;
                         case 5 :
-                            // InternalSTCoreParser.g:2961:6: lv_keyword_1_5= SINT
+                            // InternalSTCoreParser.g:2929:6: lv_keyword_0_5= LWORD
                             {
-                            lv_keyword_1_5=(Token)match(input,SINT,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_5=(Token)match(input,LWORD,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_5, grammarAccess.getNUMERIC_LITERALAccess().getKeywordSINTKeyword_1_0_4());
+                              						newLeafNode(lv_keyword_0_5, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLWORDKeyword_0_0_4());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8569,19 +8504,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_5, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_5, null);
                               					
                             }
 
                             }
                             break;
                         case 6 :
-                            // InternalSTCoreParser.g:2972:6: lv_keyword_1_6= INT
+                            // InternalSTCoreParser.g:2940:6: lv_keyword_0_6= SINT
                             {
-                            lv_keyword_1_6=(Token)match(input,INT,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_6=(Token)match(input,SINT,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_6, grammarAccess.getNUMERIC_LITERALAccess().getKeywordINTKeyword_1_0_5());
+                              						newLeafNode(lv_keyword_0_6, grammarAccess.getNUMERIC_LITERALAccess().getKeywordSINTKeyword_0_0_5());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8589,19 +8524,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_6, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_6, null);
                               					
                             }
 
                             }
                             break;
                         case 7 :
-                            // InternalSTCoreParser.g:2983:6: lv_keyword_1_7= DINT
+                            // InternalSTCoreParser.g:2951:6: lv_keyword_0_7= INT
                             {
-                            lv_keyword_1_7=(Token)match(input,DINT,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_7=(Token)match(input,INT,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_7, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDINTKeyword_1_0_6());
+                              						newLeafNode(lv_keyword_0_7, grammarAccess.getNUMERIC_LITERALAccess().getKeywordINTKeyword_0_0_6());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8609,19 +8544,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_7, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_7, null);
                               					
                             }
 
                             }
                             break;
                         case 8 :
-                            // InternalSTCoreParser.g:2994:6: lv_keyword_1_8= LINT
+                            // InternalSTCoreParser.g:2962:6: lv_keyword_0_8= DINT
                             {
-                            lv_keyword_1_8=(Token)match(input,LINT,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_8=(Token)match(input,DINT,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_8, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLINTKeyword_1_0_7());
+                              						newLeafNode(lv_keyword_0_8, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDINTKeyword_0_0_7());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8629,19 +8564,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_8, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_8, null);
                               					
                             }
 
                             }
                             break;
                         case 9 :
-                            // InternalSTCoreParser.g:3005:6: lv_keyword_1_9= USINT
+                            // InternalSTCoreParser.g:2973:6: lv_keyword_0_9= LINT
                             {
-                            lv_keyword_1_9=(Token)match(input,USINT,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_9=(Token)match(input,LINT,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_9, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUSINTKeyword_1_0_8());
+                              						newLeafNode(lv_keyword_0_9, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLINTKeyword_0_0_8());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8649,19 +8584,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_9, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_9, null);
                               					
                             }
 
                             }
                             break;
                         case 10 :
-                            // InternalSTCoreParser.g:3016:6: lv_keyword_1_10= UINT
+                            // InternalSTCoreParser.g:2984:6: lv_keyword_0_10= USINT
                             {
-                            lv_keyword_1_10=(Token)match(input,UINT,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_10=(Token)match(input,USINT,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_10, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUINTKeyword_1_0_9());
+                              						newLeafNode(lv_keyword_0_10, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUSINTKeyword_0_0_9());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8669,19 +8604,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_10, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_10, null);
                               					
                             }
 
                             }
                             break;
                         case 11 :
-                            // InternalSTCoreParser.g:3027:6: lv_keyword_1_11= UDINT
+                            // InternalSTCoreParser.g:2995:6: lv_keyword_0_11= UINT
                             {
-                            lv_keyword_1_11=(Token)match(input,UDINT,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_11=(Token)match(input,UINT,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_11, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUDINTKeyword_1_0_10());
+                              						newLeafNode(lv_keyword_0_11, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUINTKeyword_0_0_10());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8689,19 +8624,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_11, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_11, null);
                               					
                             }
 
                             }
                             break;
                         case 12 :
-                            // InternalSTCoreParser.g:3038:6: lv_keyword_1_12= ULINT
+                            // InternalSTCoreParser.g:3006:6: lv_keyword_0_12= UDINT
                             {
-                            lv_keyword_1_12=(Token)match(input,ULINT,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_12=(Token)match(input,UDINT,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_12, grammarAccess.getNUMERIC_LITERALAccess().getKeywordULINTKeyword_1_0_11());
+                              						newLeafNode(lv_keyword_0_12, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUDINTKeyword_0_0_11());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8709,19 +8644,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_12, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_12, null);
                               					
                             }
 
                             }
                             break;
                         case 13 :
-                            // InternalSTCoreParser.g:3049:6: lv_keyword_1_13= REAL
+                            // InternalSTCoreParser.g:3017:6: lv_keyword_0_13= ULINT
                             {
-                            lv_keyword_1_13=(Token)match(input,REAL,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_13=(Token)match(input,ULINT,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_13, grammarAccess.getNUMERIC_LITERALAccess().getKeywordREALKeyword_1_0_12());
+                              						newLeafNode(lv_keyword_0_13, grammarAccess.getNUMERIC_LITERALAccess().getKeywordULINTKeyword_0_0_12());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8729,19 +8664,19 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_13, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_13, null);
                               					
                             }
 
                             }
                             break;
                         case 14 :
-                            // InternalSTCoreParser.g:3060:6: lv_keyword_1_14= LREAL
+                            // InternalSTCoreParser.g:3028:6: lv_keyword_0_14= REAL
                             {
-                            lv_keyword_1_14=(Token)match(input,LREAL,FOLLOW_57); if (state.failed) return current;
+                            lv_keyword_0_14=(Token)match(input,REAL,FOLLOW_55); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
-                              						newLeafNode(lv_keyword_1_14, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLREALKeyword_1_0_13());
+                              						newLeafNode(lv_keyword_0_14, grammarAccess.getNUMERIC_LITERALAccess().getKeywordREALKeyword_0_0_13());
                               					
                             }
                             if ( state.backtracking==0 ) {
@@ -8749,7 +8684,27 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                               						if (current==null) {
                               							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
                               						}
-                              						setWithLastConsumed(current, "keyword", lv_keyword_1_14, null);
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_14, null);
+                              					
+                            }
+
+                            }
+                            break;
+                        case 15 :
+                            // InternalSTCoreParser.g:3039:6: lv_keyword_0_15= LREAL
+                            {
+                            lv_keyword_0_15=(Token)match(input,LREAL,FOLLOW_55); if (state.failed) return current;
+                            if ( state.backtracking==0 ) {
+
+                              						newLeafNode(lv_keyword_0_15, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLREALKeyword_0_0_14());
+                              					
+                            }
+                            if ( state.backtracking==0 ) {
+
+                              						if (current==null) {
+                              							current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
+                              						}
+                              						setWithLastConsumed(current, "keyword", lv_keyword_0_15, null);
                               					
                             }
 
@@ -8767,26 +8722,26 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalSTCoreParser.g:3073:3: ( ( (lv_intValue_2_0= ruleINTEGER ) ) | ( (lv_realValue_3_0= ruleREAL ) ) | ( (lv_hexValue_4_0= RULE_NON_DECIMAL ) ) )
-            int alt56=3;
+            // InternalSTCoreParser.g:3052:3: ( ( (lv_intValue_1_0= ruleINTEGER ) ) | ( (lv_realValue_2_0= ruleREAL ) ) | ( (lv_hexValue_3_0= RULE_NON_DECIMAL ) ) )
+            int alt55=3;
             switch ( input.LA(1) ) {
             case PlusSign:
                 {
-                int LA56_1 = input.LA(2);
+                int LA55_1 = input.LA(2);
 
-                if ( (LA56_1==RULE_INT) ) {
-                    int LA56_3 = input.LA(3);
+                if ( (LA55_1==RULE_INT) ) {
+                    int LA55_3 = input.LA(3);
 
-                    if ( (LA56_3==FullStop) ) {
-                        alt56=2;
+                    if ( (LA55_3==FullStop) ) {
+                        alt55=2;
                     }
-                    else if ( (LA56_3==EOF||LA56_3==END_REPEAT||LA56_3==THEN||LA56_3==AND||LA56_3==MOD||(LA56_3>=XOR && LA56_3<=FullStopFullStop)||(LA56_3>=LessThanSignEqualsSign && LA56_3<=GreaterThanSignEqualsSign)||LA56_3==BY||LA56_3==DO||(LA56_3>=OF && LA56_3<=OR)||LA56_3==TO||(LA56_3>=Ampersand && LA56_3<=HyphenMinus)||(LA56_3>=Solidus && LA56_3<=GreaterThanSign)||LA56_3==RightSquareBracket) ) {
-                        alt56=1;
+                    else if ( (LA55_3==EOF||LA55_3==END_REPEAT||LA55_3==THEN||LA55_3==AND||LA55_3==MOD||(LA55_3>=XOR && LA55_3<=FullStopFullStop)||(LA55_3>=LessThanSignEqualsSign && LA55_3<=GreaterThanSignEqualsSign)||LA55_3==BY||LA55_3==DO||(LA55_3>=OF && LA55_3<=OR)||LA55_3==TO||(LA55_3>=Ampersand && LA55_3<=HyphenMinus)||(LA55_3>=Solidus && LA55_3<=GreaterThanSign)||LA55_3==RightSquareBracket) ) {
+                        alt55=1;
                     }
                     else {
                         if (state.backtracking>0) {state.failed=true; return current;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 56, 3, input);
+                            new NoViableAltException("", 55, 3, input);
 
                         throw nvae;
                     }
@@ -8794,7 +8749,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                 else {
                     if (state.backtracking>0) {state.failed=true; return current;}
                     NoViableAltException nvae =
-                        new NoViableAltException("", 56, 1, input);
+                        new NoViableAltException("", 55, 1, input);
 
                     throw nvae;
                 }
@@ -8802,21 +8757,21 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                 break;
             case HyphenMinus:
                 {
-                int LA56_2 = input.LA(2);
+                int LA55_2 = input.LA(2);
 
-                if ( (LA56_2==RULE_INT) ) {
-                    int LA56_3 = input.LA(3);
+                if ( (LA55_2==RULE_INT) ) {
+                    int LA55_3 = input.LA(3);
 
-                    if ( (LA56_3==FullStop) ) {
-                        alt56=2;
+                    if ( (LA55_3==FullStop) ) {
+                        alt55=2;
                     }
-                    else if ( (LA56_3==EOF||LA56_3==END_REPEAT||LA56_3==THEN||LA56_3==AND||LA56_3==MOD||(LA56_3>=XOR && LA56_3<=FullStopFullStop)||(LA56_3>=LessThanSignEqualsSign && LA56_3<=GreaterThanSignEqualsSign)||LA56_3==BY||LA56_3==DO||(LA56_3>=OF && LA56_3<=OR)||LA56_3==TO||(LA56_3>=Ampersand && LA56_3<=HyphenMinus)||(LA56_3>=Solidus && LA56_3<=GreaterThanSign)||LA56_3==RightSquareBracket) ) {
-                        alt56=1;
+                    else if ( (LA55_3==EOF||LA55_3==END_REPEAT||LA55_3==THEN||LA55_3==AND||LA55_3==MOD||(LA55_3>=XOR && LA55_3<=FullStopFullStop)||(LA55_3>=LessThanSignEqualsSign && LA55_3<=GreaterThanSignEqualsSign)||LA55_3==BY||LA55_3==DO||(LA55_3>=OF && LA55_3<=OR)||LA55_3==TO||(LA55_3>=Ampersand && LA55_3<=HyphenMinus)||(LA55_3>=Solidus && LA55_3<=GreaterThanSign)||LA55_3==RightSquareBracket) ) {
+                        alt55=1;
                     }
                     else {
                         if (state.backtracking>0) {state.failed=true; return current;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 56, 3, input);
+                            new NoViableAltException("", 55, 3, input);
 
                         throw nvae;
                     }
@@ -8824,7 +8779,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                 else {
                     if (state.backtracking>0) {state.failed=true; return current;}
                     NoViableAltException nvae =
-                        new NoViableAltException("", 56, 2, input);
+                        new NoViableAltException("", 55, 2, input);
 
                     throw nvae;
                 }
@@ -8832,18 +8787,18 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                 break;
             case RULE_INT:
                 {
-                int LA56_3 = input.LA(2);
+                int LA55_3 = input.LA(2);
 
-                if ( (LA56_3==FullStop) ) {
-                    alt56=2;
+                if ( (LA55_3==FullStop) ) {
+                    alt55=2;
                 }
-                else if ( (LA56_3==EOF||LA56_3==END_REPEAT||LA56_3==THEN||LA56_3==AND||LA56_3==MOD||(LA56_3>=XOR && LA56_3<=FullStopFullStop)||(LA56_3>=LessThanSignEqualsSign && LA56_3<=GreaterThanSignEqualsSign)||LA56_3==BY||LA56_3==DO||(LA56_3>=OF && LA56_3<=OR)||LA56_3==TO||(LA56_3>=Ampersand && LA56_3<=HyphenMinus)||(LA56_3>=Solidus && LA56_3<=GreaterThanSign)||LA56_3==RightSquareBracket) ) {
-                    alt56=1;
+                else if ( (LA55_3==EOF||LA55_3==END_REPEAT||LA55_3==THEN||LA55_3==AND||LA55_3==MOD||(LA55_3>=XOR && LA55_3<=FullStopFullStop)||(LA55_3>=LessThanSignEqualsSign && LA55_3<=GreaterThanSignEqualsSign)||LA55_3==BY||LA55_3==DO||(LA55_3>=OF && LA55_3<=OR)||LA55_3==TO||(LA55_3>=Ampersand && LA55_3<=HyphenMinus)||(LA55_3>=Solidus && LA55_3<=GreaterThanSign)||LA55_3==RightSquareBracket) ) {
+                    alt55=1;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return current;}
                     NoViableAltException nvae =
-                        new NoViableAltException("", 56, 3, input);
+                        new NoViableAltException("", 55, 3, input);
 
                     throw nvae;
                 }
@@ -8851,34 +8806,34 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                 break;
             case RULE_NON_DECIMAL:
                 {
-                alt56=3;
+                alt55=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 56, 0, input);
+                    new NoViableAltException("", 55, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt56) {
+            switch (alt55) {
                 case 1 :
-                    // InternalSTCoreParser.g:3074:4: ( (lv_intValue_2_0= ruleINTEGER ) )
+                    // InternalSTCoreParser.g:3053:4: ( (lv_intValue_1_0= ruleINTEGER ) )
                     {
-                    // InternalSTCoreParser.g:3074:4: ( (lv_intValue_2_0= ruleINTEGER ) )
-                    // InternalSTCoreParser.g:3075:5: (lv_intValue_2_0= ruleINTEGER )
+                    // InternalSTCoreParser.g:3053:4: ( (lv_intValue_1_0= ruleINTEGER ) )
+                    // InternalSTCoreParser.g:3054:5: (lv_intValue_1_0= ruleINTEGER )
                     {
-                    // InternalSTCoreParser.g:3075:5: (lv_intValue_2_0= ruleINTEGER )
-                    // InternalSTCoreParser.g:3076:6: lv_intValue_2_0= ruleINTEGER
+                    // InternalSTCoreParser.g:3054:5: (lv_intValue_1_0= ruleINTEGER )
+                    // InternalSTCoreParser.g:3055:6: lv_intValue_1_0= ruleINTEGER
                     {
                     if ( state.backtracking==0 ) {
 
-                      						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getIntValueINTEGERParserRuleCall_2_0_0());
+                      						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getIntValueINTEGERParserRuleCall_1_0_0());
                       					
                     }
                     pushFollow(FOLLOW_2);
-                    lv_intValue_2_0=ruleINTEGER();
+                    lv_intValue_1_0=ruleINTEGER();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -8890,7 +8845,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                       						set(
                       							current,
                       							"intValue",
-                      							lv_intValue_2_0,
+                      							lv_intValue_1_0,
                       							"org.eclipse.fordiac.ide.structuredtextcore.STCore.INTEGER");
                       						afterParserOrEnumRuleCall();
                       					
@@ -8905,21 +8860,21 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3094:4: ( (lv_realValue_3_0= ruleREAL ) )
+                    // InternalSTCoreParser.g:3073:4: ( (lv_realValue_2_0= ruleREAL ) )
                     {
-                    // InternalSTCoreParser.g:3094:4: ( (lv_realValue_3_0= ruleREAL ) )
-                    // InternalSTCoreParser.g:3095:5: (lv_realValue_3_0= ruleREAL )
+                    // InternalSTCoreParser.g:3073:4: ( (lv_realValue_2_0= ruleREAL ) )
+                    // InternalSTCoreParser.g:3074:5: (lv_realValue_2_0= ruleREAL )
                     {
-                    // InternalSTCoreParser.g:3095:5: (lv_realValue_3_0= ruleREAL )
-                    // InternalSTCoreParser.g:3096:6: lv_realValue_3_0= ruleREAL
+                    // InternalSTCoreParser.g:3074:5: (lv_realValue_2_0= ruleREAL )
+                    // InternalSTCoreParser.g:3075:6: lv_realValue_2_0= ruleREAL
                     {
                     if ( state.backtracking==0 ) {
 
-                      						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getRealValueREALParserRuleCall_2_1_0());
+                      						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getRealValueREALParserRuleCall_1_1_0());
                       					
                     }
                     pushFollow(FOLLOW_2);
-                    lv_realValue_3_0=ruleREAL();
+                    lv_realValue_2_0=ruleREAL();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -8931,7 +8886,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                       						set(
                       							current,
                       							"realValue",
-                      							lv_realValue_3_0,
+                      							lv_realValue_2_0,
                       							"org.eclipse.fordiac.ide.structuredtextcore.STCore.REAL");
                       						afterParserOrEnumRuleCall();
                       					
@@ -8946,18 +8901,18 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:3114:4: ( (lv_hexValue_4_0= RULE_NON_DECIMAL ) )
+                    // InternalSTCoreParser.g:3093:4: ( (lv_hexValue_3_0= RULE_NON_DECIMAL ) )
                     {
-                    // InternalSTCoreParser.g:3114:4: ( (lv_hexValue_4_0= RULE_NON_DECIMAL ) )
-                    // InternalSTCoreParser.g:3115:5: (lv_hexValue_4_0= RULE_NON_DECIMAL )
+                    // InternalSTCoreParser.g:3093:4: ( (lv_hexValue_3_0= RULE_NON_DECIMAL ) )
+                    // InternalSTCoreParser.g:3094:5: (lv_hexValue_3_0= RULE_NON_DECIMAL )
                     {
-                    // InternalSTCoreParser.g:3115:5: (lv_hexValue_4_0= RULE_NON_DECIMAL )
-                    // InternalSTCoreParser.g:3116:6: lv_hexValue_4_0= RULE_NON_DECIMAL
+                    // InternalSTCoreParser.g:3094:5: (lv_hexValue_3_0= RULE_NON_DECIMAL )
+                    // InternalSTCoreParser.g:3095:6: lv_hexValue_3_0= RULE_NON_DECIMAL
                     {
-                    lv_hexValue_4_0=(Token)match(input,RULE_NON_DECIMAL,FOLLOW_2); if (state.failed) return current;
+                    lv_hexValue_3_0=(Token)match(input,RULE_NON_DECIMAL,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
-                      						newLeafNode(lv_hexValue_4_0, grammarAccess.getNUMERIC_LITERALAccess().getHexValueNON_DECIMALTerminalRuleCall_2_2_0());
+                      						newLeafNode(lv_hexValue_3_0, grammarAccess.getNUMERIC_LITERALAccess().getHexValueNON_DECIMALTerminalRuleCall_1_2_0());
                       					
                     }
                     if ( state.backtracking==0 ) {
@@ -8968,7 +8923,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                       						setWithLastConsumed(
                       							current,
                       							"hexValue",
-                      							lv_hexValue_4_0,
+                      							lv_hexValue_3_0,
                       							"org.eclipse.fordiac.ide.structuredtextcore.STCore.NON_DECIMAL");
                       					
                     }
@@ -9009,7 +8964,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleDATE_LITERAL"
-    // InternalSTCoreParser.g:3137:1: entryRuleDATE_LITERAL returns [EObject current=null] : iv_ruleDATE_LITERAL= ruleDATE_LITERAL EOF ;
+    // InternalSTCoreParser.g:3116:1: entryRuleDATE_LITERAL returns [EObject current=null] : iv_ruleDATE_LITERAL= ruleDATE_LITERAL EOF ;
     public final EObject entryRuleDATE_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -9017,8 +8972,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:3137:53: (iv_ruleDATE_LITERAL= ruleDATE_LITERAL EOF )
-            // InternalSTCoreParser.g:3138:2: iv_ruleDATE_LITERAL= ruleDATE_LITERAL EOF
+            // InternalSTCoreParser.g:3116:53: (iv_ruleDATE_LITERAL= ruleDATE_LITERAL EOF )
+            // InternalSTCoreParser.g:3117:2: iv_ruleDATE_LITERAL= ruleDATE_LITERAL EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getDATE_LITERALRule()); 
@@ -9049,7 +9004,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleDATE_LITERAL"
-    // InternalSTCoreParser.g:3144:1: ruleDATE_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) ) ) ;
+    // InternalSTCoreParser.g:3123:1: ruleDATE_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) ) ) ;
     public final EObject ruleDATE_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -9064,52 +9019,52 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3150:2: ( ( ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) ) ) )
-            // InternalSTCoreParser.g:3151:2: ( ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) ) )
+            // InternalSTCoreParser.g:3129:2: ( ( ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) ) ) )
+            // InternalSTCoreParser.g:3130:2: ( ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) ) )
             {
-            // InternalSTCoreParser.g:3151:2: ( ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) ) )
-            // InternalSTCoreParser.g:3152:3: ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) )
+            // InternalSTCoreParser.g:3130:2: ( ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) ) )
+            // InternalSTCoreParser.g:3131:3: ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) ) ( (lv_value_1_0= ruleDATE ) )
             {
-            // InternalSTCoreParser.g:3152:3: ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) )
-            // InternalSTCoreParser.g:3153:4: ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) )
+            // InternalSTCoreParser.g:3131:3: ( ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) ) )
+            // InternalSTCoreParser.g:3132:4: ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) )
             {
-            // InternalSTCoreParser.g:3153:4: ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) )
-            // InternalSTCoreParser.g:3154:5: (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD )
+            // InternalSTCoreParser.g:3132:4: ( (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD ) )
+            // InternalSTCoreParser.g:3133:5: (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD )
             {
-            // InternalSTCoreParser.g:3154:5: (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD )
-            int alt57=4;
+            // InternalSTCoreParser.g:3133:5: (lv_keyword_0_1= DATE | lv_keyword_0_2= LDATE | lv_keyword_0_3= D | lv_keyword_0_4= LD )
+            int alt56=4;
             switch ( input.LA(1) ) {
             case DATE:
                 {
-                alt57=1;
+                alt56=1;
                 }
                 break;
             case LDATE:
                 {
-                alt57=2;
+                alt56=2;
                 }
                 break;
             case D:
                 {
-                alt57=3;
+                alt56=3;
                 }
                 break;
             case LD:
                 {
-                alt57=4;
+                alt56=4;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 57, 0, input);
+                    new NoViableAltException("", 56, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt57) {
+            switch (alt56) {
                 case 1 :
-                    // InternalSTCoreParser.g:3155:6: lv_keyword_0_1= DATE
+                    // InternalSTCoreParser.g:3134:6: lv_keyword_0_1= DATE
                     {
                     lv_keyword_0_1=(Token)match(input,DATE,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9129,7 +9084,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3166:6: lv_keyword_0_2= LDATE
+                    // InternalSTCoreParser.g:3145:6: lv_keyword_0_2= LDATE
                     {
                     lv_keyword_0_2=(Token)match(input,LDATE,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9149,7 +9104,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:3177:6: lv_keyword_0_3= D
+                    // InternalSTCoreParser.g:3156:6: lv_keyword_0_3= D
                     {
                     lv_keyword_0_3=(Token)match(input,D,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9169,7 +9124,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalSTCoreParser.g:3188:6: lv_keyword_0_4= LD
+                    // InternalSTCoreParser.g:3167:6: lv_keyword_0_4= LD
                     {
                     lv_keyword_0_4=(Token)match(input,LD,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9197,11 +9152,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalSTCoreParser.g:3201:3: ( (lv_value_1_0= ruleDATE ) )
-            // InternalSTCoreParser.g:3202:4: (lv_value_1_0= ruleDATE )
+            // InternalSTCoreParser.g:3180:3: ( (lv_value_1_0= ruleDATE ) )
+            // InternalSTCoreParser.g:3181:4: (lv_value_1_0= ruleDATE )
             {
-            // InternalSTCoreParser.g:3202:4: (lv_value_1_0= ruleDATE )
-            // InternalSTCoreParser.g:3203:5: lv_value_1_0= ruleDATE
+            // InternalSTCoreParser.g:3181:4: (lv_value_1_0= ruleDATE )
+            // InternalSTCoreParser.g:3182:5: lv_value_1_0= ruleDATE
             {
             if ( state.backtracking==0 ) {
 
@@ -9257,7 +9212,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleTIME_LITERAL"
-    // InternalSTCoreParser.g:3224:1: entryRuleTIME_LITERAL returns [EObject current=null] : iv_ruleTIME_LITERAL= ruleTIME_LITERAL EOF ;
+    // InternalSTCoreParser.g:3203:1: entryRuleTIME_LITERAL returns [EObject current=null] : iv_ruleTIME_LITERAL= ruleTIME_LITERAL EOF ;
     public final EObject entryRuleTIME_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -9265,8 +9220,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:3224:53: (iv_ruleTIME_LITERAL= ruleTIME_LITERAL EOF )
-            // InternalSTCoreParser.g:3225:2: iv_ruleTIME_LITERAL= ruleTIME_LITERAL EOF
+            // InternalSTCoreParser.g:3203:53: (iv_ruleTIME_LITERAL= ruleTIME_LITERAL EOF )
+            // InternalSTCoreParser.g:3204:2: iv_ruleTIME_LITERAL= ruleTIME_LITERAL EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTIME_LITERALRule()); 
@@ -9297,7 +9252,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleTIME_LITERAL"
-    // InternalSTCoreParser.g:3231:1: ruleTIME_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) ) ) ;
+    // InternalSTCoreParser.g:3210:1: ruleTIME_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) ) ) ;
     public final EObject ruleTIME_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -9311,54 +9266,54 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3237:2: ( ( ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) ) ) )
-            // InternalSTCoreParser.g:3238:2: ( ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) ) )
+            // InternalSTCoreParser.g:3216:2: ( ( ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) ) ) )
+            // InternalSTCoreParser.g:3217:2: ( ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) ) )
             {
-            // InternalSTCoreParser.g:3238:2: ( ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) ) )
-            // InternalSTCoreParser.g:3239:3: ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) )
+            // InternalSTCoreParser.g:3217:2: ( ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) ) )
+            // InternalSTCoreParser.g:3218:3: ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) ) ( (lv_value_1_0= RULE_TIME ) )
             {
-            // InternalSTCoreParser.g:3239:3: ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) )
-            // InternalSTCoreParser.g:3240:4: ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) )
+            // InternalSTCoreParser.g:3218:3: ( ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) ) )
+            // InternalSTCoreParser.g:3219:4: ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) )
             {
-            // InternalSTCoreParser.g:3240:4: ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) )
-            // InternalSTCoreParser.g:3241:5: (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT )
+            // InternalSTCoreParser.g:3219:4: ( (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT ) )
+            // InternalSTCoreParser.g:3220:5: (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT )
             {
-            // InternalSTCoreParser.g:3241:5: (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT )
-            int alt58=4;
+            // InternalSTCoreParser.g:3220:5: (lv_keyword_0_1= TIME | lv_keyword_0_2= LTIME | lv_keyword_0_3= T | lv_keyword_0_4= LT )
+            int alt57=4;
             switch ( input.LA(1) ) {
             case TIME:
                 {
-                alt58=1;
+                alt57=1;
                 }
                 break;
             case LTIME:
                 {
-                alt58=2;
+                alt57=2;
                 }
                 break;
             case T:
                 {
-                alt58=3;
+                alt57=3;
                 }
                 break;
             case LT:
                 {
-                alt58=4;
+                alt57=4;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 58, 0, input);
+                    new NoViableAltException("", 57, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt58) {
+            switch (alt57) {
                 case 1 :
-                    // InternalSTCoreParser.g:3242:6: lv_keyword_0_1= TIME
+                    // InternalSTCoreParser.g:3221:6: lv_keyword_0_1= TIME
                     {
-                    lv_keyword_0_1=(Token)match(input,TIME,FOLLOW_58); if (state.failed) return current;
+                    lv_keyword_0_1=(Token)match(input,TIME,FOLLOW_56); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_keyword_0_1, grammarAccess.getTIME_LITERALAccess().getKeywordTIMEKeyword_0_0_0());
@@ -9376,9 +9331,9 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3253:6: lv_keyword_0_2= LTIME
+                    // InternalSTCoreParser.g:3232:6: lv_keyword_0_2= LTIME
                     {
-                    lv_keyword_0_2=(Token)match(input,LTIME,FOLLOW_58); if (state.failed) return current;
+                    lv_keyword_0_2=(Token)match(input,LTIME,FOLLOW_56); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_keyword_0_2, grammarAccess.getTIME_LITERALAccess().getKeywordLTIMEKeyword_0_0_1());
@@ -9396,9 +9351,9 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:3264:6: lv_keyword_0_3= T
+                    // InternalSTCoreParser.g:3243:6: lv_keyword_0_3= T
                     {
-                    lv_keyword_0_3=(Token)match(input,T,FOLLOW_58); if (state.failed) return current;
+                    lv_keyword_0_3=(Token)match(input,T,FOLLOW_56); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_keyword_0_3, grammarAccess.getTIME_LITERALAccess().getKeywordTKeyword_0_0_2());
@@ -9416,9 +9371,9 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalSTCoreParser.g:3275:6: lv_keyword_0_4= LT
+                    // InternalSTCoreParser.g:3254:6: lv_keyword_0_4= LT
                     {
-                    lv_keyword_0_4=(Token)match(input,LT,FOLLOW_58); if (state.failed) return current;
+                    lv_keyword_0_4=(Token)match(input,LT,FOLLOW_56); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_keyword_0_4, grammarAccess.getTIME_LITERALAccess().getKeywordLTKeyword_0_0_3());
@@ -9444,11 +9399,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalSTCoreParser.g:3288:3: ( (lv_value_1_0= RULE_TIME ) )
-            // InternalSTCoreParser.g:3289:4: (lv_value_1_0= RULE_TIME )
+            // InternalSTCoreParser.g:3267:3: ( (lv_value_1_0= RULE_TIME ) )
+            // InternalSTCoreParser.g:3268:4: (lv_value_1_0= RULE_TIME )
             {
-            // InternalSTCoreParser.g:3289:4: (lv_value_1_0= RULE_TIME )
-            // InternalSTCoreParser.g:3290:5: lv_value_1_0= RULE_TIME
+            // InternalSTCoreParser.g:3268:4: (lv_value_1_0= RULE_TIME )
+            // InternalSTCoreParser.g:3269:5: lv_value_1_0= RULE_TIME
             {
             lv_value_1_0=(Token)match(input,RULE_TIME,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -9499,7 +9454,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleTIME_OF_DAY_LITERAL"
-    // InternalSTCoreParser.g:3310:1: entryRuleTIME_OF_DAY_LITERAL returns [EObject current=null] : iv_ruleTIME_OF_DAY_LITERAL= ruleTIME_OF_DAY_LITERAL EOF ;
+    // InternalSTCoreParser.g:3289:1: entryRuleTIME_OF_DAY_LITERAL returns [EObject current=null] : iv_ruleTIME_OF_DAY_LITERAL= ruleTIME_OF_DAY_LITERAL EOF ;
     public final EObject entryRuleTIME_OF_DAY_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -9507,8 +9462,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:3310:60: (iv_ruleTIME_OF_DAY_LITERAL= ruleTIME_OF_DAY_LITERAL EOF )
-            // InternalSTCoreParser.g:3311:2: iv_ruleTIME_OF_DAY_LITERAL= ruleTIME_OF_DAY_LITERAL EOF
+            // InternalSTCoreParser.g:3289:60: (iv_ruleTIME_OF_DAY_LITERAL= ruleTIME_OF_DAY_LITERAL EOF )
+            // InternalSTCoreParser.g:3290:2: iv_ruleTIME_OF_DAY_LITERAL= ruleTIME_OF_DAY_LITERAL EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTIME_OF_DAY_LITERALRule()); 
@@ -9539,7 +9494,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleTIME_OF_DAY_LITERAL"
-    // InternalSTCoreParser.g:3317:1: ruleTIME_OF_DAY_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) ) ) ;
+    // InternalSTCoreParser.g:3296:1: ruleTIME_OF_DAY_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) ) ) ;
     public final EObject ruleTIME_OF_DAY_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -9553,47 +9508,47 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3323:2: ( ( ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) ) ) )
-            // InternalSTCoreParser.g:3324:2: ( ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) ) )
+            // InternalSTCoreParser.g:3302:2: ( ( ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) ) ) )
+            // InternalSTCoreParser.g:3303:2: ( ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) ) )
             {
-            // InternalSTCoreParser.g:3324:2: ( ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) ) )
-            // InternalSTCoreParser.g:3325:3: ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) )
+            // InternalSTCoreParser.g:3303:2: ( ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) ) )
+            // InternalSTCoreParser.g:3304:3: ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) ) ( (lv_value_1_0= ruleTIME_OF_DAY ) )
             {
-            // InternalSTCoreParser.g:3325:3: ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) )
-            // InternalSTCoreParser.g:3326:4: ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) )
+            // InternalSTCoreParser.g:3304:3: ( ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) ) )
+            // InternalSTCoreParser.g:3305:4: ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) )
             {
-            // InternalSTCoreParser.g:3326:4: ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) )
-            // InternalSTCoreParser.g:3327:5: (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD )
+            // InternalSTCoreParser.g:3305:4: ( (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD ) )
+            // InternalSTCoreParser.g:3306:5: (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD )
             {
-            // InternalSTCoreParser.g:3327:5: (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD )
-            int alt59=3;
+            // InternalSTCoreParser.g:3306:5: (lv_keyword_0_1= TIME_OF_DAY | lv_keyword_0_2= TOD | lv_keyword_0_3= LTOD )
+            int alt58=3;
             switch ( input.LA(1) ) {
             case TIME_OF_DAY:
                 {
-                alt59=1;
+                alt58=1;
                 }
                 break;
             case TOD:
                 {
-                alt59=2;
+                alt58=2;
                 }
                 break;
             case LTOD:
                 {
-                alt59=3;
+                alt58=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 59, 0, input);
+                    new NoViableAltException("", 58, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt59) {
+            switch (alt58) {
                 case 1 :
-                    // InternalSTCoreParser.g:3328:6: lv_keyword_0_1= TIME_OF_DAY
+                    // InternalSTCoreParser.g:3307:6: lv_keyword_0_1= TIME_OF_DAY
                     {
                     lv_keyword_0_1=(Token)match(input,TIME_OF_DAY,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9613,7 +9568,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3339:6: lv_keyword_0_2= TOD
+                    // InternalSTCoreParser.g:3318:6: lv_keyword_0_2= TOD
                     {
                     lv_keyword_0_2=(Token)match(input,TOD,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9633,7 +9588,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:3350:6: lv_keyword_0_3= LTOD
+                    // InternalSTCoreParser.g:3329:6: lv_keyword_0_3= LTOD
                     {
                     lv_keyword_0_3=(Token)match(input,LTOD,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9661,11 +9616,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalSTCoreParser.g:3363:3: ( (lv_value_1_0= ruleTIME_OF_DAY ) )
-            // InternalSTCoreParser.g:3364:4: (lv_value_1_0= ruleTIME_OF_DAY )
+            // InternalSTCoreParser.g:3342:3: ( (lv_value_1_0= ruleTIME_OF_DAY ) )
+            // InternalSTCoreParser.g:3343:4: (lv_value_1_0= ruleTIME_OF_DAY )
             {
-            // InternalSTCoreParser.g:3364:4: (lv_value_1_0= ruleTIME_OF_DAY )
-            // InternalSTCoreParser.g:3365:5: lv_value_1_0= ruleTIME_OF_DAY
+            // InternalSTCoreParser.g:3343:4: (lv_value_1_0= ruleTIME_OF_DAY )
+            // InternalSTCoreParser.g:3344:5: lv_value_1_0= ruleTIME_OF_DAY
             {
             if ( state.backtracking==0 ) {
 
@@ -9721,7 +9676,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleDATE_AND_TIME_LITERAL"
-    // InternalSTCoreParser.g:3386:1: entryRuleDATE_AND_TIME_LITERAL returns [EObject current=null] : iv_ruleDATE_AND_TIME_LITERAL= ruleDATE_AND_TIME_LITERAL EOF ;
+    // InternalSTCoreParser.g:3365:1: entryRuleDATE_AND_TIME_LITERAL returns [EObject current=null] : iv_ruleDATE_AND_TIME_LITERAL= ruleDATE_AND_TIME_LITERAL EOF ;
     public final EObject entryRuleDATE_AND_TIME_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -9729,8 +9684,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:3386:62: (iv_ruleDATE_AND_TIME_LITERAL= ruleDATE_AND_TIME_LITERAL EOF )
-            // InternalSTCoreParser.g:3387:2: iv_ruleDATE_AND_TIME_LITERAL= ruleDATE_AND_TIME_LITERAL EOF
+            // InternalSTCoreParser.g:3365:62: (iv_ruleDATE_AND_TIME_LITERAL= ruleDATE_AND_TIME_LITERAL EOF )
+            // InternalSTCoreParser.g:3366:2: iv_ruleDATE_AND_TIME_LITERAL= ruleDATE_AND_TIME_LITERAL EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getDATE_AND_TIME_LITERALRule()); 
@@ -9761,7 +9716,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleDATE_AND_TIME_LITERAL"
-    // InternalSTCoreParser.g:3393:1: ruleDATE_AND_TIME_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) ) ) ;
+    // InternalSTCoreParser.g:3372:1: ruleDATE_AND_TIME_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) ) ) ;
     public final EObject ruleDATE_AND_TIME_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -9779,52 +9734,52 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3399:2: ( ( ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) ) ) )
-            // InternalSTCoreParser.g:3400:2: ( ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) ) )
+            // InternalSTCoreParser.g:3378:2: ( ( ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) ) ) )
+            // InternalSTCoreParser.g:3379:2: ( ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) ) )
             {
-            // InternalSTCoreParser.g:3400:2: ( ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) ) )
-            // InternalSTCoreParser.g:3401:3: ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) )
+            // InternalSTCoreParser.g:3379:2: ( ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) ) )
+            // InternalSTCoreParser.g:3380:3: ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) ) ( (lv_dateValue_1_0= ruleDATE ) ) otherlv_2= HyphenMinus ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) )
             {
-            // InternalSTCoreParser.g:3401:3: ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) )
-            // InternalSTCoreParser.g:3402:4: ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) )
+            // InternalSTCoreParser.g:3380:3: ( ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) ) )
+            // InternalSTCoreParser.g:3381:4: ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) )
             {
-            // InternalSTCoreParser.g:3402:4: ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) )
-            // InternalSTCoreParser.g:3403:5: (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT )
+            // InternalSTCoreParser.g:3381:4: ( (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT ) )
+            // InternalSTCoreParser.g:3382:5: (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT )
             {
-            // InternalSTCoreParser.g:3403:5: (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT )
-            int alt60=4;
+            // InternalSTCoreParser.g:3382:5: (lv_keyword_0_1= DATE_AND_TIME | lv_keyword_0_2= LDATE_AND_TIME | lv_keyword_0_3= DT | lv_keyword_0_4= LDT )
+            int alt59=4;
             switch ( input.LA(1) ) {
             case DATE_AND_TIME:
                 {
-                alt60=1;
+                alt59=1;
                 }
                 break;
             case LDATE_AND_TIME:
                 {
-                alt60=2;
+                alt59=2;
                 }
                 break;
             case DT:
                 {
-                alt60=3;
+                alt59=3;
                 }
                 break;
             case LDT:
                 {
-                alt60=4;
+                alt59=4;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 60, 0, input);
+                    new NoViableAltException("", 59, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt60) {
+            switch (alt59) {
                 case 1 :
-                    // InternalSTCoreParser.g:3404:6: lv_keyword_0_1= DATE_AND_TIME
+                    // InternalSTCoreParser.g:3383:6: lv_keyword_0_1= DATE_AND_TIME
                     {
                     lv_keyword_0_1=(Token)match(input,DATE_AND_TIME,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9844,7 +9799,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3415:6: lv_keyword_0_2= LDATE_AND_TIME
+                    // InternalSTCoreParser.g:3394:6: lv_keyword_0_2= LDATE_AND_TIME
                     {
                     lv_keyword_0_2=(Token)match(input,LDATE_AND_TIME,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9864,7 +9819,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:3426:6: lv_keyword_0_3= DT
+                    // InternalSTCoreParser.g:3405:6: lv_keyword_0_3= DT
                     {
                     lv_keyword_0_3=(Token)match(input,DT,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9884,7 +9839,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalSTCoreParser.g:3437:6: lv_keyword_0_4= LDT
+                    // InternalSTCoreParser.g:3416:6: lv_keyword_0_4= LDT
                     {
                     lv_keyword_0_4=(Token)match(input,LDT,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -9912,18 +9867,18 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalSTCoreParser.g:3450:3: ( (lv_dateValue_1_0= ruleDATE ) )
-            // InternalSTCoreParser.g:3451:4: (lv_dateValue_1_0= ruleDATE )
+            // InternalSTCoreParser.g:3429:3: ( (lv_dateValue_1_0= ruleDATE ) )
+            // InternalSTCoreParser.g:3430:4: (lv_dateValue_1_0= ruleDATE )
             {
-            // InternalSTCoreParser.g:3451:4: (lv_dateValue_1_0= ruleDATE )
-            // InternalSTCoreParser.g:3452:5: lv_dateValue_1_0= ruleDATE
+            // InternalSTCoreParser.g:3430:4: (lv_dateValue_1_0= ruleDATE )
+            // InternalSTCoreParser.g:3431:5: lv_dateValue_1_0= ruleDATE
             {
             if ( state.backtracking==0 ) {
 
               					newCompositeNode(grammarAccess.getDATE_AND_TIME_LITERALAccess().getDateValueDATEParserRuleCall_1_0());
               				
             }
-            pushFollow(FOLLOW_59);
+            pushFollow(FOLLOW_57);
             lv_dateValue_1_0=ruleDATE();
 
             state._fsp--;
@@ -9953,11 +9908,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
               			newLeafNode(otherlv_2, grammarAccess.getDATE_AND_TIME_LITERALAccess().getHyphenMinusKeyword_2());
               		
             }
-            // InternalSTCoreParser.g:3473:3: ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) )
-            // InternalSTCoreParser.g:3474:4: (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY )
+            // InternalSTCoreParser.g:3452:3: ( (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY ) )
+            // InternalSTCoreParser.g:3453:4: (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY )
             {
-            // InternalSTCoreParser.g:3474:4: (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY )
-            // InternalSTCoreParser.g:3475:5: lv_timeOfDayValue_3_0= ruleTIME_OF_DAY
+            // InternalSTCoreParser.g:3453:4: (lv_timeOfDayValue_3_0= ruleTIME_OF_DAY )
+            // InternalSTCoreParser.g:3454:5: lv_timeOfDayValue_3_0= ruleTIME_OF_DAY
             {
             if ( state.backtracking==0 ) {
 
@@ -10013,7 +9968,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleSTRING_LITERAL"
-    // InternalSTCoreParser.g:3496:1: entryRuleSTRING_LITERAL returns [EObject current=null] : iv_ruleSTRING_LITERAL= ruleSTRING_LITERAL EOF ;
+    // InternalSTCoreParser.g:3475:1: entryRuleSTRING_LITERAL returns [EObject current=null] : iv_ruleSTRING_LITERAL= ruleSTRING_LITERAL EOF ;
     public final EObject entryRuleSTRING_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -10021,8 +9976,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:3496:55: (iv_ruleSTRING_LITERAL= ruleSTRING_LITERAL EOF )
-            // InternalSTCoreParser.g:3497:2: iv_ruleSTRING_LITERAL= ruleSTRING_LITERAL EOF
+            // InternalSTCoreParser.g:3475:55: (iv_ruleSTRING_LITERAL= ruleSTRING_LITERAL EOF )
+            // InternalSTCoreParser.g:3476:2: iv_ruleSTRING_LITERAL= ruleSTRING_LITERAL EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getSTRING_LITERALRule()); 
@@ -10053,7 +10008,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSTRING_LITERAL"
-    // InternalSTCoreParser.g:3503:1: ruleSTRING_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) ) ) ;
+    // InternalSTCoreParser.g:3482:1: ruleSTRING_LITERAL returns [EObject current=null] : ( ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) ) ) ;
     public final EObject ruleSTRING_LITERAL() throws RecognitionException {
         EObject current = null;
 
@@ -10067,48 +10022,48 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3509:2: ( ( ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) ) ) )
-            // InternalSTCoreParser.g:3510:2: ( ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) ) )
+            // InternalSTCoreParser.g:3488:2: ( ( ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) ) ) )
+            // InternalSTCoreParser.g:3489:2: ( ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) ) )
             {
-            // InternalSTCoreParser.g:3510:2: ( ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) ) )
-            // InternalSTCoreParser.g:3511:3: ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) )
+            // InternalSTCoreParser.g:3489:2: ( ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) ) )
+            // InternalSTCoreParser.g:3490:3: ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )? ( (lv_value_4_0= RULE_STRING ) )
             {
-            // InternalSTCoreParser.g:3511:3: ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )?
-            int alt61=5;
+            // InternalSTCoreParser.g:3490:3: ( ( (lv_keyword_0_0= STRING ) ) | otherlv_1= WSTRING | otherlv_2= CHAR | otherlv_3= WCHAR )?
+            int alt60=5;
             switch ( input.LA(1) ) {
                 case STRING:
                     {
-                    alt61=1;
+                    alt60=1;
                     }
                     break;
                 case WSTRING:
                     {
-                    alt61=2;
+                    alt60=2;
                     }
                     break;
                 case CHAR:
                     {
-                    alt61=3;
+                    alt60=3;
                     }
                     break;
                 case WCHAR:
                     {
-                    alt61=4;
+                    alt60=4;
                     }
                     break;
             }
 
-            switch (alt61) {
+            switch (alt60) {
                 case 1 :
-                    // InternalSTCoreParser.g:3512:4: ( (lv_keyword_0_0= STRING ) )
+                    // InternalSTCoreParser.g:3491:4: ( (lv_keyword_0_0= STRING ) )
                     {
-                    // InternalSTCoreParser.g:3512:4: ( (lv_keyword_0_0= STRING ) )
-                    // InternalSTCoreParser.g:3513:5: (lv_keyword_0_0= STRING )
+                    // InternalSTCoreParser.g:3491:4: ( (lv_keyword_0_0= STRING ) )
+                    // InternalSTCoreParser.g:3492:5: (lv_keyword_0_0= STRING )
                     {
-                    // InternalSTCoreParser.g:3513:5: (lv_keyword_0_0= STRING )
-                    // InternalSTCoreParser.g:3514:6: lv_keyword_0_0= STRING
+                    // InternalSTCoreParser.g:3492:5: (lv_keyword_0_0= STRING )
+                    // InternalSTCoreParser.g:3493:6: lv_keyword_0_0= STRING
                     {
-                    lv_keyword_0_0=(Token)match(input,STRING,FOLLOW_60); if (state.failed) return current;
+                    lv_keyword_0_0=(Token)match(input,STRING,FOLLOW_58); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_keyword_0_0, grammarAccess.getSTRING_LITERALAccess().getKeywordSTRINGKeyword_0_0_0());
@@ -10132,9 +10087,9 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3527:4: otherlv_1= WSTRING
+                    // InternalSTCoreParser.g:3506:4: otherlv_1= WSTRING
                     {
-                    otherlv_1=(Token)match(input,WSTRING,FOLLOW_60); if (state.failed) return current;
+                    otherlv_1=(Token)match(input,WSTRING,FOLLOW_58); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_1, grammarAccess.getSTRING_LITERALAccess().getWSTRINGKeyword_0_1());
@@ -10144,9 +10099,9 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:3532:4: otherlv_2= CHAR
+                    // InternalSTCoreParser.g:3511:4: otherlv_2= CHAR
                     {
-                    otherlv_2=(Token)match(input,CHAR,FOLLOW_60); if (state.failed) return current;
+                    otherlv_2=(Token)match(input,CHAR,FOLLOW_58); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_2, grammarAccess.getSTRING_LITERALAccess().getCHARKeyword_0_2());
@@ -10156,9 +10111,9 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalSTCoreParser.g:3537:4: otherlv_3= WCHAR
+                    // InternalSTCoreParser.g:3516:4: otherlv_3= WCHAR
                     {
-                    otherlv_3=(Token)match(input,WCHAR,FOLLOW_60); if (state.failed) return current;
+                    otherlv_3=(Token)match(input,WCHAR,FOLLOW_58); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_3, grammarAccess.getSTRING_LITERALAccess().getWCHARKeyword_0_3());
@@ -10170,11 +10125,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalSTCoreParser.g:3542:3: ( (lv_value_4_0= RULE_STRING ) )
-            // InternalSTCoreParser.g:3543:4: (lv_value_4_0= RULE_STRING )
+            // InternalSTCoreParser.g:3521:3: ( (lv_value_4_0= RULE_STRING ) )
+            // InternalSTCoreParser.g:3522:4: (lv_value_4_0= RULE_STRING )
             {
-            // InternalSTCoreParser.g:3543:4: (lv_value_4_0= RULE_STRING )
-            // InternalSTCoreParser.g:3544:5: lv_value_4_0= RULE_STRING
+            // InternalSTCoreParser.g:3522:4: (lv_value_4_0= RULE_STRING )
+            // InternalSTCoreParser.g:3523:5: lv_value_4_0= RULE_STRING
             {
             lv_value_4_0=(Token)match(input,RULE_STRING,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -10225,7 +10180,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleINTEGER"
-    // InternalSTCoreParser.g:3564:1: entryRuleINTEGER returns [String current=null] : iv_ruleINTEGER= ruleINTEGER EOF ;
+    // InternalSTCoreParser.g:3543:1: entryRuleINTEGER returns [String current=null] : iv_ruleINTEGER= ruleINTEGER EOF ;
     public final String entryRuleINTEGER() throws RecognitionException {
         String current = null;
 
@@ -10233,8 +10188,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:3564:47: (iv_ruleINTEGER= ruleINTEGER EOF )
-            // InternalSTCoreParser.g:3565:2: iv_ruleINTEGER= ruleINTEGER EOF
+            // InternalSTCoreParser.g:3543:47: (iv_ruleINTEGER= ruleINTEGER EOF )
+            // InternalSTCoreParser.g:3544:2: iv_ruleINTEGER= ruleINTEGER EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getINTEGERRule()); 
@@ -10265,7 +10220,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleINTEGER"
-    // InternalSTCoreParser.g:3571:1: ruleINTEGER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT ) ;
+    // InternalSTCoreParser.g:3550:1: ruleINTEGER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT ) ;
     public final AntlrDatatypeRuleToken ruleINTEGER() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -10276,25 +10231,25 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3577:2: ( ( (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT ) )
-            // InternalSTCoreParser.g:3578:2: ( (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT )
+            // InternalSTCoreParser.g:3556:2: ( ( (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT ) )
+            // InternalSTCoreParser.g:3557:2: ( (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT )
             {
-            // InternalSTCoreParser.g:3578:2: ( (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT )
-            // InternalSTCoreParser.g:3579:3: (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT
+            // InternalSTCoreParser.g:3557:2: ( (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT )
+            // InternalSTCoreParser.g:3558:3: (kw= PlusSign | kw= HyphenMinus )? this_INT_2= RULE_INT
             {
-            // InternalSTCoreParser.g:3579:3: (kw= PlusSign | kw= HyphenMinus )?
-            int alt62=3;
-            int LA62_0 = input.LA(1);
+            // InternalSTCoreParser.g:3558:3: (kw= PlusSign | kw= HyphenMinus )?
+            int alt61=3;
+            int LA61_0 = input.LA(1);
 
-            if ( (LA62_0==PlusSign) ) {
-                alt62=1;
+            if ( (LA61_0==PlusSign) ) {
+                alt61=1;
             }
-            else if ( (LA62_0==HyphenMinus) ) {
-                alt62=2;
+            else if ( (LA61_0==HyphenMinus) ) {
+                alt61=2;
             }
-            switch (alt62) {
+            switch (alt61) {
                 case 1 :
-                    // InternalSTCoreParser.g:3580:4: kw= PlusSign
+                    // InternalSTCoreParser.g:3559:4: kw= PlusSign
                     {
                     kw=(Token)match(input,PlusSign,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -10307,7 +10262,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3586:4: kw= HyphenMinus
+                    // InternalSTCoreParser.g:3565:4: kw= HyphenMinus
                     {
                     kw=(Token)match(input,HyphenMinus,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -10358,7 +10313,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleREAL"
-    // InternalSTCoreParser.g:3603:1: entryRuleREAL returns [String current=null] : iv_ruleREAL= ruleREAL EOF ;
+    // InternalSTCoreParser.g:3582:1: entryRuleREAL returns [String current=null] : iv_ruleREAL= ruleREAL EOF ;
     public final String entryRuleREAL() throws RecognitionException {
         String current = null;
 
@@ -10366,8 +10321,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:3603:44: (iv_ruleREAL= ruleREAL EOF )
-            // InternalSTCoreParser.g:3604:2: iv_ruleREAL= ruleREAL EOF
+            // InternalSTCoreParser.g:3582:44: (iv_ruleREAL= ruleREAL EOF )
+            // InternalSTCoreParser.g:3583:2: iv_ruleREAL= ruleREAL EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getREALRule()); 
@@ -10398,7 +10353,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleREAL"
-    // InternalSTCoreParser.g:3610:1: ruleREAL returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT ) ) ;
+    // InternalSTCoreParser.g:3589:1: ruleREAL returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT ) ) ;
     public final AntlrDatatypeRuleToken ruleREAL() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -10412,18 +10367,18 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3616:2: ( (this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT ) ) )
-            // InternalSTCoreParser.g:3617:2: (this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT ) )
+            // InternalSTCoreParser.g:3595:2: ( (this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT ) ) )
+            // InternalSTCoreParser.g:3596:2: (this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT ) )
             {
-            // InternalSTCoreParser.g:3617:2: (this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT ) )
-            // InternalSTCoreParser.g:3618:3: this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT )
+            // InternalSTCoreParser.g:3596:2: (this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT ) )
+            // InternalSTCoreParser.g:3597:3: this_INTEGER_0= ruleINTEGER kw= FullStop (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT )
             {
             if ( state.backtracking==0 ) {
 
               			newCompositeNode(grammarAccess.getREALAccess().getINTEGERParserRuleCall_0());
               		
             }
-            pushFollow(FOLLOW_61);
+            pushFollow(FOLLOW_59);
             this_INTEGER_0=ruleINTEGER();
 
             state._fsp--;
@@ -10438,33 +10393,33 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
               			afterParserOrEnumRuleCall();
               		
             }
-            kw=(Token)match(input,FullStop,FOLLOW_62); if (state.failed) return current;
+            kw=(Token)match(input,FullStop,FOLLOW_60); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			current.merge(kw);
               			newLeafNode(kw, grammarAccess.getREALAccess().getFullStopKeyword_1());
               		
             }
-            // InternalSTCoreParser.g:3633:3: (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT )
-            int alt63=2;
-            int LA63_0 = input.LA(1);
+            // InternalSTCoreParser.g:3612:3: (this_EXT_INT_2= RULE_EXT_INT | this_INT_3= RULE_INT )
+            int alt62=2;
+            int LA62_0 = input.LA(1);
 
-            if ( (LA63_0==RULE_EXT_INT) ) {
-                alt63=1;
+            if ( (LA62_0==RULE_EXT_INT) ) {
+                alt62=1;
             }
-            else if ( (LA63_0==RULE_INT) ) {
-                alt63=2;
+            else if ( (LA62_0==RULE_INT) ) {
+                alt62=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 63, 0, input);
+                    new NoViableAltException("", 62, 0, input);
 
                 throw nvae;
             }
-            switch (alt63) {
+            switch (alt62) {
                 case 1 :
-                    // InternalSTCoreParser.g:3634:4: this_EXT_INT_2= RULE_EXT_INT
+                    // InternalSTCoreParser.g:3613:4: this_EXT_INT_2= RULE_EXT_INT
                     {
                     this_EXT_INT_2=(Token)match(input,RULE_EXT_INT,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -10481,7 +10436,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3642:4: this_INT_3= RULE_INT
+                    // InternalSTCoreParser.g:3621:4: this_INT_3= RULE_INT
                     {
                     this_INT_3=(Token)match(input,RULE_INT,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -10525,7 +10480,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleDATE"
-    // InternalSTCoreParser.g:3654:1: entryRuleDATE returns [String current=null] : iv_ruleDATE= ruleDATE EOF ;
+    // InternalSTCoreParser.g:3633:1: entryRuleDATE returns [String current=null] : iv_ruleDATE= ruleDATE EOF ;
     public final String entryRuleDATE() throws RecognitionException {
         String current = null;
 
@@ -10533,8 +10488,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:3654:44: (iv_ruleDATE= ruleDATE EOF )
-            // InternalSTCoreParser.g:3655:2: iv_ruleDATE= ruleDATE EOF
+            // InternalSTCoreParser.g:3633:44: (iv_ruleDATE= ruleDATE EOF )
+            // InternalSTCoreParser.g:3634:2: iv_ruleDATE= ruleDATE EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getDATERule()); 
@@ -10565,7 +10520,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleDATE"
-    // InternalSTCoreParser.g:3661:1: ruleDATE returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT ) ;
+    // InternalSTCoreParser.g:3640:1: ruleDATE returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT ) ;
     public final AntlrDatatypeRuleToken ruleDATE() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -10578,13 +10533,13 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3667:2: ( (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT ) )
-            // InternalSTCoreParser.g:3668:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT )
+            // InternalSTCoreParser.g:3646:2: ( (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT ) )
+            // InternalSTCoreParser.g:3647:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT )
             {
-            // InternalSTCoreParser.g:3668:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT )
-            // InternalSTCoreParser.g:3669:3: this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT
+            // InternalSTCoreParser.g:3647:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT )
+            // InternalSTCoreParser.g:3648:3: this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT
             {
-            this_INT_0=(Token)match(input,RULE_INT,FOLLOW_59); if (state.failed) return current;
+            this_INT_0=(Token)match(input,RULE_INT,FOLLOW_57); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			current.merge(this_INT_0);
@@ -10602,7 +10557,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
               			newLeafNode(kw, grammarAccess.getDATEAccess().getHyphenMinusKeyword_1());
               		
             }
-            this_INT_2=(Token)match(input,RULE_INT,FOLLOW_59); if (state.failed) return current;
+            this_INT_2=(Token)match(input,RULE_INT,FOLLOW_57); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			current.merge(this_INT_2);
@@ -10656,7 +10611,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleTIME_OF_DAY"
-    // InternalSTCoreParser.g:3704:1: entryRuleTIME_OF_DAY returns [String current=null] : iv_ruleTIME_OF_DAY= ruleTIME_OF_DAY EOF ;
+    // InternalSTCoreParser.g:3683:1: entryRuleTIME_OF_DAY returns [String current=null] : iv_ruleTIME_OF_DAY= ruleTIME_OF_DAY EOF ;
     public final String entryRuleTIME_OF_DAY() throws RecognitionException {
         String current = null;
 
@@ -10664,8 +10619,8 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalSTCoreParser.g:3704:51: (iv_ruleTIME_OF_DAY= ruleTIME_OF_DAY EOF )
-            // InternalSTCoreParser.g:3705:2: iv_ruleTIME_OF_DAY= ruleTIME_OF_DAY EOF
+            // InternalSTCoreParser.g:3683:51: (iv_ruleTIME_OF_DAY= ruleTIME_OF_DAY EOF )
+            // InternalSTCoreParser.g:3684:2: iv_ruleTIME_OF_DAY= ruleTIME_OF_DAY EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTIME_OF_DAYRule()); 
@@ -10696,7 +10651,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleTIME_OF_DAY"
-    // InternalSTCoreParser.g:3711:1: ruleTIME_OF_DAY returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? ) ;
+    // InternalSTCoreParser.g:3690:1: ruleTIME_OF_DAY returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? ) ;
     public final AntlrDatatypeRuleToken ruleTIME_OF_DAY() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -10710,11 +10665,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3717:2: ( (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? ) )
-            // InternalSTCoreParser.g:3718:2: (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? )
+            // InternalSTCoreParser.g:3696:2: ( (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? ) )
+            // InternalSTCoreParser.g:3697:2: (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? )
             {
-            // InternalSTCoreParser.g:3718:2: (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? )
-            // InternalSTCoreParser.g:3719:3: this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )?
+            // InternalSTCoreParser.g:3697:2: (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? )
+            // InternalSTCoreParser.g:3698:3: this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )?
             {
             this_INT_0=(Token)match(input,RULE_INT,FOLLOW_6); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -10752,7 +10707,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
               			newLeafNode(kw, grammarAccess.getTIME_OF_DAYAccess().getColonKeyword_3());
               		
             }
-            this_INT_4=(Token)match(input,RULE_INT,FOLLOW_63); if (state.failed) return current;
+            this_INT_4=(Token)match(input,RULE_INT,FOLLOW_61); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			current.merge(this_INT_4);
@@ -10763,16 +10718,16 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
               			newLeafNode(this_INT_4, grammarAccess.getTIME_OF_DAYAccess().getINTTerminalRuleCall_4());
               		
             }
-            // InternalSTCoreParser.g:3750:3: (kw= FullStop this_INT_6= RULE_INT )?
-            int alt64=2;
-            int LA64_0 = input.LA(1);
+            // InternalSTCoreParser.g:3729:3: (kw= FullStop this_INT_6= RULE_INT )?
+            int alt63=2;
+            int LA63_0 = input.LA(1);
 
-            if ( (LA64_0==FullStop) ) {
-                alt64=1;
+            if ( (LA63_0==FullStop) ) {
+                alt63=1;
             }
-            switch (alt64) {
+            switch (alt63) {
                 case 1 :
-                    // InternalSTCoreParser.g:3751:4: kw= FullStop this_INT_6= RULE_INT
+                    // InternalSTCoreParser.g:3730:4: kw= FullStop this_INT_6= RULE_INT
                     {
                     kw=(Token)match(input,FullStop,FOLLOW_51); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -10823,7 +10778,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSubrangeOperator"
-    // InternalSTCoreParser.g:3768:1: ruleSubrangeOperator returns [Enumerator current=null] : (enumLiteral_0= FullStopFullStop ) ;
+    // InternalSTCoreParser.g:3747:1: ruleSubrangeOperator returns [Enumerator current=null] : (enumLiteral_0= FullStopFullStop ) ;
     public final Enumerator ruleSubrangeOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10833,11 +10788,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3774:2: ( (enumLiteral_0= FullStopFullStop ) )
-            // InternalSTCoreParser.g:3775:2: (enumLiteral_0= FullStopFullStop )
+            // InternalSTCoreParser.g:3753:2: ( (enumLiteral_0= FullStopFullStop ) )
+            // InternalSTCoreParser.g:3754:2: (enumLiteral_0= FullStopFullStop )
             {
-            // InternalSTCoreParser.g:3775:2: (enumLiteral_0= FullStopFullStop )
-            // InternalSTCoreParser.g:3776:3: enumLiteral_0= FullStopFullStop
+            // InternalSTCoreParser.g:3754:2: (enumLiteral_0= FullStopFullStop )
+            // InternalSTCoreParser.g:3755:3: enumLiteral_0= FullStopFullStop
             {
             enumLiteral_0=(Token)match(input,FullStopFullStop,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -10871,7 +10826,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleOrOperator"
-    // InternalSTCoreParser.g:3785:1: ruleOrOperator returns [Enumerator current=null] : (enumLiteral_0= OR ) ;
+    // InternalSTCoreParser.g:3764:1: ruleOrOperator returns [Enumerator current=null] : (enumLiteral_0= OR ) ;
     public final Enumerator ruleOrOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10881,11 +10836,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3791:2: ( (enumLiteral_0= OR ) )
-            // InternalSTCoreParser.g:3792:2: (enumLiteral_0= OR )
+            // InternalSTCoreParser.g:3770:2: ( (enumLiteral_0= OR ) )
+            // InternalSTCoreParser.g:3771:2: (enumLiteral_0= OR )
             {
-            // InternalSTCoreParser.g:3792:2: (enumLiteral_0= OR )
-            // InternalSTCoreParser.g:3793:3: enumLiteral_0= OR
+            // InternalSTCoreParser.g:3771:2: (enumLiteral_0= OR )
+            // InternalSTCoreParser.g:3772:3: enumLiteral_0= OR
             {
             enumLiteral_0=(Token)match(input,OR,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -10919,7 +10874,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleXorOperator"
-    // InternalSTCoreParser.g:3802:1: ruleXorOperator returns [Enumerator current=null] : (enumLiteral_0= XOR ) ;
+    // InternalSTCoreParser.g:3781:1: ruleXorOperator returns [Enumerator current=null] : (enumLiteral_0= XOR ) ;
     public final Enumerator ruleXorOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10929,11 +10884,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3808:2: ( (enumLiteral_0= XOR ) )
-            // InternalSTCoreParser.g:3809:2: (enumLiteral_0= XOR )
+            // InternalSTCoreParser.g:3787:2: ( (enumLiteral_0= XOR ) )
+            // InternalSTCoreParser.g:3788:2: (enumLiteral_0= XOR )
             {
-            // InternalSTCoreParser.g:3809:2: (enumLiteral_0= XOR )
-            // InternalSTCoreParser.g:3810:3: enumLiteral_0= XOR
+            // InternalSTCoreParser.g:3788:2: (enumLiteral_0= XOR )
+            // InternalSTCoreParser.g:3789:3: enumLiteral_0= XOR
             {
             enumLiteral_0=(Token)match(input,XOR,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -10967,7 +10922,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleAndOperator"
-    // InternalSTCoreParser.g:3819:1: ruleAndOperator returns [Enumerator current=null] : ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) ;
+    // InternalSTCoreParser.g:3798:1: ruleAndOperator returns [Enumerator current=null] : ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) ;
     public final Enumerator ruleAndOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10978,32 +10933,32 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3825:2: ( ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) )
-            // InternalSTCoreParser.g:3826:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
+            // InternalSTCoreParser.g:3804:2: ( ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) )
+            // InternalSTCoreParser.g:3805:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
             {
-            // InternalSTCoreParser.g:3826:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
-            int alt65=2;
-            int LA65_0 = input.LA(1);
+            // InternalSTCoreParser.g:3805:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
+            int alt64=2;
+            int LA64_0 = input.LA(1);
 
-            if ( (LA65_0==AND) ) {
-                alt65=1;
+            if ( (LA64_0==AND) ) {
+                alt64=1;
             }
-            else if ( (LA65_0==Ampersand) ) {
-                alt65=2;
+            else if ( (LA64_0==Ampersand) ) {
+                alt64=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 65, 0, input);
+                    new NoViableAltException("", 64, 0, input);
 
                 throw nvae;
             }
-            switch (alt65) {
+            switch (alt64) {
                 case 1 :
-                    // InternalSTCoreParser.g:3827:3: (enumLiteral_0= AND )
+                    // InternalSTCoreParser.g:3806:3: (enumLiteral_0= AND )
                     {
-                    // InternalSTCoreParser.g:3827:3: (enumLiteral_0= AND )
-                    // InternalSTCoreParser.g:3828:4: enumLiteral_0= AND
+                    // InternalSTCoreParser.g:3806:3: (enumLiteral_0= AND )
+                    // InternalSTCoreParser.g:3807:4: enumLiteral_0= AND
                     {
                     enumLiteral_0=(Token)match(input,AND,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11019,10 +10974,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3835:3: (enumLiteral_1= Ampersand )
+                    // InternalSTCoreParser.g:3814:3: (enumLiteral_1= Ampersand )
                     {
-                    // InternalSTCoreParser.g:3835:3: (enumLiteral_1= Ampersand )
-                    // InternalSTCoreParser.g:3836:4: enumLiteral_1= Ampersand
+                    // InternalSTCoreParser.g:3814:3: (enumLiteral_1= Ampersand )
+                    // InternalSTCoreParser.g:3815:4: enumLiteral_1= Ampersand
                     {
                     enumLiteral_1=(Token)match(input,Ampersand,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11062,7 +11017,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleEqualityOperator"
-    // InternalSTCoreParser.g:3846:1: ruleEqualityOperator returns [Enumerator current=null] : ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) ;
+    // InternalSTCoreParser.g:3825:1: ruleEqualityOperator returns [Enumerator current=null] : ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) ;
     public final Enumerator ruleEqualityOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -11073,32 +11028,32 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3852:2: ( ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) )
-            // InternalSTCoreParser.g:3853:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
+            // InternalSTCoreParser.g:3831:2: ( ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) )
+            // InternalSTCoreParser.g:3832:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
             {
-            // InternalSTCoreParser.g:3853:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
-            int alt66=2;
-            int LA66_0 = input.LA(1);
+            // InternalSTCoreParser.g:3832:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
+            int alt65=2;
+            int LA65_0 = input.LA(1);
 
-            if ( (LA66_0==EqualsSign) ) {
-                alt66=1;
+            if ( (LA65_0==EqualsSign) ) {
+                alt65=1;
             }
-            else if ( (LA66_0==LessThanSignGreaterThanSign) ) {
-                alt66=2;
+            else if ( (LA65_0==LessThanSignGreaterThanSign) ) {
+                alt65=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 66, 0, input);
+                    new NoViableAltException("", 65, 0, input);
 
                 throw nvae;
             }
-            switch (alt66) {
+            switch (alt65) {
                 case 1 :
-                    // InternalSTCoreParser.g:3854:3: (enumLiteral_0= EqualsSign )
+                    // InternalSTCoreParser.g:3833:3: (enumLiteral_0= EqualsSign )
                     {
-                    // InternalSTCoreParser.g:3854:3: (enumLiteral_0= EqualsSign )
-                    // InternalSTCoreParser.g:3855:4: enumLiteral_0= EqualsSign
+                    // InternalSTCoreParser.g:3833:3: (enumLiteral_0= EqualsSign )
+                    // InternalSTCoreParser.g:3834:4: enumLiteral_0= EqualsSign
                     {
                     enumLiteral_0=(Token)match(input,EqualsSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11114,10 +11069,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3862:3: (enumLiteral_1= LessThanSignGreaterThanSign )
+                    // InternalSTCoreParser.g:3841:3: (enumLiteral_1= LessThanSignGreaterThanSign )
                     {
-                    // InternalSTCoreParser.g:3862:3: (enumLiteral_1= LessThanSignGreaterThanSign )
-                    // InternalSTCoreParser.g:3863:4: enumLiteral_1= LessThanSignGreaterThanSign
+                    // InternalSTCoreParser.g:3841:3: (enumLiteral_1= LessThanSignGreaterThanSign )
+                    // InternalSTCoreParser.g:3842:4: enumLiteral_1= LessThanSignGreaterThanSign
                     {
                     enumLiteral_1=(Token)match(input,LessThanSignGreaterThanSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11157,7 +11112,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleCompareOperator"
-    // InternalSTCoreParser.g:3873:1: ruleCompareOperator returns [Enumerator current=null] : ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) ;
+    // InternalSTCoreParser.g:3852:1: ruleCompareOperator returns [Enumerator current=null] : ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) ;
     public final Enumerator ruleCompareOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -11170,46 +11125,46 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3879:2: ( ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) )
-            // InternalSTCoreParser.g:3880:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
+            // InternalSTCoreParser.g:3858:2: ( ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) )
+            // InternalSTCoreParser.g:3859:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
             {
-            // InternalSTCoreParser.g:3880:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
-            int alt67=4;
+            // InternalSTCoreParser.g:3859:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
+            int alt66=4;
             switch ( input.LA(1) ) {
             case LessThanSign:
                 {
-                alt67=1;
+                alt66=1;
                 }
                 break;
             case LessThanSignEqualsSign:
                 {
-                alt67=2;
+                alt66=2;
                 }
                 break;
             case GreaterThanSign:
                 {
-                alt67=3;
+                alt66=3;
                 }
                 break;
             case GreaterThanSignEqualsSign:
                 {
-                alt67=4;
+                alt66=4;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 67, 0, input);
+                    new NoViableAltException("", 66, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt67) {
+            switch (alt66) {
                 case 1 :
-                    // InternalSTCoreParser.g:3881:3: (enumLiteral_0= LessThanSign )
+                    // InternalSTCoreParser.g:3860:3: (enumLiteral_0= LessThanSign )
                     {
-                    // InternalSTCoreParser.g:3881:3: (enumLiteral_0= LessThanSign )
-                    // InternalSTCoreParser.g:3882:4: enumLiteral_0= LessThanSign
+                    // InternalSTCoreParser.g:3860:3: (enumLiteral_0= LessThanSign )
+                    // InternalSTCoreParser.g:3861:4: enumLiteral_0= LessThanSign
                     {
                     enumLiteral_0=(Token)match(input,LessThanSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11225,10 +11180,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3889:3: (enumLiteral_1= LessThanSignEqualsSign )
+                    // InternalSTCoreParser.g:3868:3: (enumLiteral_1= LessThanSignEqualsSign )
                     {
-                    // InternalSTCoreParser.g:3889:3: (enumLiteral_1= LessThanSignEqualsSign )
-                    // InternalSTCoreParser.g:3890:4: enumLiteral_1= LessThanSignEqualsSign
+                    // InternalSTCoreParser.g:3868:3: (enumLiteral_1= LessThanSignEqualsSign )
+                    // InternalSTCoreParser.g:3869:4: enumLiteral_1= LessThanSignEqualsSign
                     {
                     enumLiteral_1=(Token)match(input,LessThanSignEqualsSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11244,10 +11199,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:3897:3: (enumLiteral_2= GreaterThanSign )
+                    // InternalSTCoreParser.g:3876:3: (enumLiteral_2= GreaterThanSign )
                     {
-                    // InternalSTCoreParser.g:3897:3: (enumLiteral_2= GreaterThanSign )
-                    // InternalSTCoreParser.g:3898:4: enumLiteral_2= GreaterThanSign
+                    // InternalSTCoreParser.g:3876:3: (enumLiteral_2= GreaterThanSign )
+                    // InternalSTCoreParser.g:3877:4: enumLiteral_2= GreaterThanSign
                     {
                     enumLiteral_2=(Token)match(input,GreaterThanSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11263,10 +11218,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalSTCoreParser.g:3905:3: (enumLiteral_3= GreaterThanSignEqualsSign )
+                    // InternalSTCoreParser.g:3884:3: (enumLiteral_3= GreaterThanSignEqualsSign )
                     {
-                    // InternalSTCoreParser.g:3905:3: (enumLiteral_3= GreaterThanSignEqualsSign )
-                    // InternalSTCoreParser.g:3906:4: enumLiteral_3= GreaterThanSignEqualsSign
+                    // InternalSTCoreParser.g:3884:3: (enumLiteral_3= GreaterThanSignEqualsSign )
+                    // InternalSTCoreParser.g:3885:4: enumLiteral_3= GreaterThanSignEqualsSign
                     {
                     enumLiteral_3=(Token)match(input,GreaterThanSignEqualsSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11306,7 +11261,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleAddSubOperator"
-    // InternalSTCoreParser.g:3916:1: ruleAddSubOperator returns [Enumerator current=null] : ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) ;
+    // InternalSTCoreParser.g:3895:1: ruleAddSubOperator returns [Enumerator current=null] : ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) ;
     public final Enumerator ruleAddSubOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -11317,32 +11272,32 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3922:2: ( ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) )
-            // InternalSTCoreParser.g:3923:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
+            // InternalSTCoreParser.g:3901:2: ( ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) )
+            // InternalSTCoreParser.g:3902:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
             {
-            // InternalSTCoreParser.g:3923:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
-            int alt68=2;
-            int LA68_0 = input.LA(1);
+            // InternalSTCoreParser.g:3902:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
+            int alt67=2;
+            int LA67_0 = input.LA(1);
 
-            if ( (LA68_0==PlusSign) ) {
-                alt68=1;
+            if ( (LA67_0==PlusSign) ) {
+                alt67=1;
             }
-            else if ( (LA68_0==HyphenMinus) ) {
-                alt68=2;
+            else if ( (LA67_0==HyphenMinus) ) {
+                alt67=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 68, 0, input);
+                    new NoViableAltException("", 67, 0, input);
 
                 throw nvae;
             }
-            switch (alt68) {
+            switch (alt67) {
                 case 1 :
-                    // InternalSTCoreParser.g:3924:3: (enumLiteral_0= PlusSign )
+                    // InternalSTCoreParser.g:3903:3: (enumLiteral_0= PlusSign )
                     {
-                    // InternalSTCoreParser.g:3924:3: (enumLiteral_0= PlusSign )
-                    // InternalSTCoreParser.g:3925:4: enumLiteral_0= PlusSign
+                    // InternalSTCoreParser.g:3903:3: (enumLiteral_0= PlusSign )
+                    // InternalSTCoreParser.g:3904:4: enumLiteral_0= PlusSign
                     {
                     enumLiteral_0=(Token)match(input,PlusSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11358,10 +11313,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3932:3: (enumLiteral_1= HyphenMinus )
+                    // InternalSTCoreParser.g:3911:3: (enumLiteral_1= HyphenMinus )
                     {
-                    // InternalSTCoreParser.g:3932:3: (enumLiteral_1= HyphenMinus )
-                    // InternalSTCoreParser.g:3933:4: enumLiteral_1= HyphenMinus
+                    // InternalSTCoreParser.g:3911:3: (enumLiteral_1= HyphenMinus )
+                    // InternalSTCoreParser.g:3912:4: enumLiteral_1= HyphenMinus
                     {
                     enumLiteral_1=(Token)match(input,HyphenMinus,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11401,7 +11356,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMulDivModOperator"
-    // InternalSTCoreParser.g:3943:1: ruleMulDivModOperator returns [Enumerator current=null] : ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) ;
+    // InternalSTCoreParser.g:3922:1: ruleMulDivModOperator returns [Enumerator current=null] : ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) ;
     public final Enumerator ruleMulDivModOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -11413,41 +11368,41 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3949:2: ( ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) )
-            // InternalSTCoreParser.g:3950:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
+            // InternalSTCoreParser.g:3928:2: ( ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) )
+            // InternalSTCoreParser.g:3929:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
             {
-            // InternalSTCoreParser.g:3950:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
-            int alt69=3;
+            // InternalSTCoreParser.g:3929:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
+            int alt68=3;
             switch ( input.LA(1) ) {
             case Asterisk:
                 {
-                alt69=1;
+                alt68=1;
                 }
                 break;
             case Solidus:
                 {
-                alt69=2;
+                alt68=2;
                 }
                 break;
             case MOD:
                 {
-                alt69=3;
+                alt68=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 69, 0, input);
+                    new NoViableAltException("", 68, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt69) {
+            switch (alt68) {
                 case 1 :
-                    // InternalSTCoreParser.g:3951:3: (enumLiteral_0= Asterisk )
+                    // InternalSTCoreParser.g:3930:3: (enumLiteral_0= Asterisk )
                     {
-                    // InternalSTCoreParser.g:3951:3: (enumLiteral_0= Asterisk )
-                    // InternalSTCoreParser.g:3952:4: enumLiteral_0= Asterisk
+                    // InternalSTCoreParser.g:3930:3: (enumLiteral_0= Asterisk )
+                    // InternalSTCoreParser.g:3931:4: enumLiteral_0= Asterisk
                     {
                     enumLiteral_0=(Token)match(input,Asterisk,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11463,10 +11418,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:3959:3: (enumLiteral_1= Solidus )
+                    // InternalSTCoreParser.g:3938:3: (enumLiteral_1= Solidus )
                     {
-                    // InternalSTCoreParser.g:3959:3: (enumLiteral_1= Solidus )
-                    // InternalSTCoreParser.g:3960:4: enumLiteral_1= Solidus
+                    // InternalSTCoreParser.g:3938:3: (enumLiteral_1= Solidus )
+                    // InternalSTCoreParser.g:3939:4: enumLiteral_1= Solidus
                     {
                     enumLiteral_1=(Token)match(input,Solidus,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11482,10 +11437,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:3967:3: (enumLiteral_2= MOD )
+                    // InternalSTCoreParser.g:3946:3: (enumLiteral_2= MOD )
                     {
-                    // InternalSTCoreParser.g:3967:3: (enumLiteral_2= MOD )
-                    // InternalSTCoreParser.g:3968:4: enumLiteral_2= MOD
+                    // InternalSTCoreParser.g:3946:3: (enumLiteral_2= MOD )
+                    // InternalSTCoreParser.g:3947:4: enumLiteral_2= MOD
                     {
                     enumLiteral_2=(Token)match(input,MOD,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11525,7 +11480,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePowerOperator"
-    // InternalSTCoreParser.g:3978:1: rulePowerOperator returns [Enumerator current=null] : (enumLiteral_0= AsteriskAsterisk ) ;
+    // InternalSTCoreParser.g:3957:1: rulePowerOperator returns [Enumerator current=null] : (enumLiteral_0= AsteriskAsterisk ) ;
     public final Enumerator rulePowerOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -11535,11 +11490,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:3984:2: ( (enumLiteral_0= AsteriskAsterisk ) )
-            // InternalSTCoreParser.g:3985:2: (enumLiteral_0= AsteriskAsterisk )
+            // InternalSTCoreParser.g:3963:2: ( (enumLiteral_0= AsteriskAsterisk ) )
+            // InternalSTCoreParser.g:3964:2: (enumLiteral_0= AsteriskAsterisk )
             {
-            // InternalSTCoreParser.g:3985:2: (enumLiteral_0= AsteriskAsterisk )
-            // InternalSTCoreParser.g:3986:3: enumLiteral_0= AsteriskAsterisk
+            // InternalSTCoreParser.g:3964:2: (enumLiteral_0= AsteriskAsterisk )
+            // InternalSTCoreParser.g:3965:3: enumLiteral_0= AsteriskAsterisk
             {
             enumLiteral_0=(Token)match(input,AsteriskAsterisk,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -11573,7 +11528,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleUnaryOperator"
-    // InternalSTCoreParser.g:3995:1: ruleUnaryOperator returns [Enumerator current=null] : ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) ;
+    // InternalSTCoreParser.g:3974:1: ruleUnaryOperator returns [Enumerator current=null] : ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) ;
     public final Enumerator ruleUnaryOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -11585,41 +11540,41 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:4001:2: ( ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) )
-            // InternalSTCoreParser.g:4002:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
+            // InternalSTCoreParser.g:3980:2: ( ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) )
+            // InternalSTCoreParser.g:3981:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
             {
-            // InternalSTCoreParser.g:4002:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
-            int alt70=3;
+            // InternalSTCoreParser.g:3981:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
+            int alt69=3;
             switch ( input.LA(1) ) {
             case HyphenMinus:
                 {
-                alt70=1;
+                alt69=1;
                 }
                 break;
             case PlusSign:
                 {
-                alt70=2;
+                alt69=2;
                 }
                 break;
             case NOT:
                 {
-                alt70=3;
+                alt69=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 70, 0, input);
+                    new NoViableAltException("", 69, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt70) {
+            switch (alt69) {
                 case 1 :
-                    // InternalSTCoreParser.g:4003:3: (enumLiteral_0= HyphenMinus )
+                    // InternalSTCoreParser.g:3982:3: (enumLiteral_0= HyphenMinus )
                     {
-                    // InternalSTCoreParser.g:4003:3: (enumLiteral_0= HyphenMinus )
-                    // InternalSTCoreParser.g:4004:4: enumLiteral_0= HyphenMinus
+                    // InternalSTCoreParser.g:3982:3: (enumLiteral_0= HyphenMinus )
+                    // InternalSTCoreParser.g:3983:4: enumLiteral_0= HyphenMinus
                     {
                     enumLiteral_0=(Token)match(input,HyphenMinus,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11635,10 +11590,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:4011:3: (enumLiteral_1= PlusSign )
+                    // InternalSTCoreParser.g:3990:3: (enumLiteral_1= PlusSign )
                     {
-                    // InternalSTCoreParser.g:4011:3: (enumLiteral_1= PlusSign )
-                    // InternalSTCoreParser.g:4012:4: enumLiteral_1= PlusSign
+                    // InternalSTCoreParser.g:3990:3: (enumLiteral_1= PlusSign )
+                    // InternalSTCoreParser.g:3991:4: enumLiteral_1= PlusSign
                     {
                     enumLiteral_1=(Token)match(input,PlusSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11654,10 +11609,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:4019:3: (enumLiteral_2= NOT )
+                    // InternalSTCoreParser.g:3998:3: (enumLiteral_2= NOT )
                     {
-                    // InternalSTCoreParser.g:4019:3: (enumLiteral_2= NOT )
-                    // InternalSTCoreParser.g:4020:4: enumLiteral_2= NOT
+                    // InternalSTCoreParser.g:3998:3: (enumLiteral_2= NOT )
+                    // InternalSTCoreParser.g:3999:4: enumLiteral_2= NOT
                     {
                     enumLiteral_2=(Token)match(input,NOT,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11697,7 +11652,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMultiBitAccessSpecifier"
-    // InternalSTCoreParser.g:4030:1: ruleMultiBitAccessSpecifier returns [Enumerator current=null] : ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) | (enumLiteral_5= FullStop ) ) ;
+    // InternalSTCoreParser.g:4009:1: ruleMultiBitAccessSpecifier returns [Enumerator current=null] : ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) | (enumLiteral_5= FullStop ) ) ;
     public final Enumerator ruleMultiBitAccessSpecifier() throws RecognitionException {
         Enumerator current = null;
 
@@ -11712,56 +11667,56 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:4036:2: ( ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) | (enumLiteral_5= FullStop ) ) )
-            // InternalSTCoreParser.g:4037:2: ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) | (enumLiteral_5= FullStop ) )
+            // InternalSTCoreParser.g:4015:2: ( ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) | (enumLiteral_5= FullStop ) ) )
+            // InternalSTCoreParser.g:4016:2: ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) | (enumLiteral_5= FullStop ) )
             {
-            // InternalSTCoreParser.g:4037:2: ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) | (enumLiteral_5= FullStop ) )
-            int alt71=6;
+            // InternalSTCoreParser.g:4016:2: ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) | (enumLiteral_5= FullStop ) )
+            int alt70=6;
             switch ( input.LA(1) ) {
             case L:
                 {
-                alt71=1;
+                alt70=1;
                 }
                 break;
             case D_1:
                 {
-                alt71=2;
+                alt70=2;
                 }
                 break;
             case W:
                 {
-                alt71=3;
+                alt70=3;
                 }
                 break;
             case B:
                 {
-                alt71=4;
+                alt70=4;
                 }
                 break;
             case X:
                 {
-                alt71=5;
+                alt70=5;
                 }
                 break;
             case FullStop:
                 {
-                alt71=6;
+                alt70=6;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 71, 0, input);
+                    new NoViableAltException("", 70, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt71) {
+            switch (alt70) {
                 case 1 :
-                    // InternalSTCoreParser.g:4038:3: (enumLiteral_0= L )
+                    // InternalSTCoreParser.g:4017:3: (enumLiteral_0= L )
                     {
-                    // InternalSTCoreParser.g:4038:3: (enumLiteral_0= L )
-                    // InternalSTCoreParser.g:4039:4: enumLiteral_0= L
+                    // InternalSTCoreParser.g:4017:3: (enumLiteral_0= L )
+                    // InternalSTCoreParser.g:4018:4: enumLiteral_0= L
                     {
                     enumLiteral_0=(Token)match(input,L,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11777,10 +11732,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSTCoreParser.g:4046:3: (enumLiteral_1= D_1 )
+                    // InternalSTCoreParser.g:4025:3: (enumLiteral_1= D_1 )
                     {
-                    // InternalSTCoreParser.g:4046:3: (enumLiteral_1= D_1 )
-                    // InternalSTCoreParser.g:4047:4: enumLiteral_1= D_1
+                    // InternalSTCoreParser.g:4025:3: (enumLiteral_1= D_1 )
+                    // InternalSTCoreParser.g:4026:4: enumLiteral_1= D_1
                     {
                     enumLiteral_1=(Token)match(input,D_1,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11796,10 +11751,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSTCoreParser.g:4054:3: (enumLiteral_2= W )
+                    // InternalSTCoreParser.g:4033:3: (enumLiteral_2= W )
                     {
-                    // InternalSTCoreParser.g:4054:3: (enumLiteral_2= W )
-                    // InternalSTCoreParser.g:4055:4: enumLiteral_2= W
+                    // InternalSTCoreParser.g:4033:3: (enumLiteral_2= W )
+                    // InternalSTCoreParser.g:4034:4: enumLiteral_2= W
                     {
                     enumLiteral_2=(Token)match(input,W,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11815,10 +11770,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalSTCoreParser.g:4062:3: (enumLiteral_3= B )
+                    // InternalSTCoreParser.g:4041:3: (enumLiteral_3= B )
                     {
-                    // InternalSTCoreParser.g:4062:3: (enumLiteral_3= B )
-                    // InternalSTCoreParser.g:4063:4: enumLiteral_3= B
+                    // InternalSTCoreParser.g:4041:3: (enumLiteral_3= B )
+                    // InternalSTCoreParser.g:4042:4: enumLiteral_3= B
                     {
                     enumLiteral_3=(Token)match(input,B,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11834,10 +11789,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // InternalSTCoreParser.g:4070:3: (enumLiteral_4= X )
+                    // InternalSTCoreParser.g:4049:3: (enumLiteral_4= X )
                     {
-                    // InternalSTCoreParser.g:4070:3: (enumLiteral_4= X )
-                    // InternalSTCoreParser.g:4071:4: enumLiteral_4= X
+                    // InternalSTCoreParser.g:4049:3: (enumLiteral_4= X )
+                    // InternalSTCoreParser.g:4050:4: enumLiteral_4= X
                     {
                     enumLiteral_4=(Token)match(input,X,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -11853,10 +11808,10 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 6 :
-                    // InternalSTCoreParser.g:4078:3: (enumLiteral_5= FullStop )
+                    // InternalSTCoreParser.g:4057:3: (enumLiteral_5= FullStop )
                     {
-                    // InternalSTCoreParser.g:4078:3: (enumLiteral_5= FullStop )
-                    // InternalSTCoreParser.g:4079:4: enumLiteral_5= FullStop
+                    // InternalSTCoreParser.g:4057:3: (enumLiteral_5= FullStop )
+                    // InternalSTCoreParser.g:4058:4: enumLiteral_5= FullStop
                     {
                     enumLiteral_5=(Token)match(input,FullStop,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -12035,12 +11990,12 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
     protected DFA48 dfa48 = new DFA48(this);
     static final String dfa_1s = "\15\uffff";
     static final String dfa_2s = "\1\1\14\uffff";
-    static final String dfa_3s = "\1\4\1\uffff\1\66\12\uffff";
-    static final String dfa_4s = "\1\153\1\uffff\1\142\12\uffff";
+    static final String dfa_3s = "\1\4\1\uffff\1\70\12\uffff";
+    static final String dfa_4s = "\1\154\1\uffff\1\144\12\uffff";
     static final String dfa_5s = "\1\uffff\1\2\1\uffff\12\1";
     static final String dfa_6s = "\1\0\1\uffff\1\1\12\uffff}>";
     static final String[] dfa_7s = {
-            "\3\1\5\uffff\1\11\1\1\1\uffff\1\1\2\uffff\2\1\1\uffff\4\1\1\7\1\10\4\1\1\uffff\5\1\1\uffff\6\1\1\uffff\1\6\1\1\1\4\1\1\1\12\2\1\1\uffff\1\1\6\uffff\1\1\1\5\2\1\1\uffff\1\1\12\uffff\1\1\1\uffff\1\3\2\uffff\1\1\3\uffff\1\1\2\uffff\1\1\1\uffff\1\1\3\uffff\1\13\5\uffff\1\1\1\uffff\2\1\2\uffff\1\2\1\1",
+            "\3\1\5\uffff\1\11\1\1\1\uffff\1\1\2\uffff\2\1\1\uffff\4\1\1\7\1\10\4\1\1\uffff\5\1\1\uffff\7\1\1\uffff\1\6\1\1\1\4\1\1\1\12\2\1\1\uffff\2\1\6\uffff\1\1\1\5\2\1\1\uffff\1\1\12\uffff\1\1\1\uffff\1\3\2\uffff\1\1\3\uffff\1\1\2\uffff\1\1\1\uffff\1\1\3\uffff\1\13\6\uffff\2\1\2\uffff\1\2\1\1",
             "",
             "\6\1\4\uffff\1\1\2\uffff\3\1\1\14\3\1\6\uffff\1\1\2\uffff\3\1\1\uffff\7\1\1\uffff\4\1",
             "",
@@ -12090,7 +12045,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                         int index21_0 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (LA21_0==EOF||(LA21_0>=LDATE_AND_TIME && LA21_0<=TIME_OF_DAY)||LA21_0==END_CASE||LA21_0==WSTRING||(LA21_0>=STRING && LA21_0<=DWORD)||(LA21_0>=LDATE && LA21_0<=LWORD)||(LA21_0>=UDINT && LA21_0<=WCHAR)||(LA21_0>=BOOL && LA21_0<=DINT)||(LA21_0>=LINT && LA21_0<=UINT)||LA21_0==WORD||LA21_0==ELSE||(LA21_0>=INT && LA21_0<=LDT)||LA21_0==TOD||LA21_0==DT||(LA21_0>=LD && LA21_0<=LT)||LA21_0==NOT||LA21_0==D||LA21_0==T||LA21_0==LeftParenthesis||LA21_0==PlusSign||LA21_0==HyphenMinus||LA21_0==RULE_BOOL_VALUES||(LA21_0>=RULE_NON_DECIMAL && LA21_0<=RULE_INT)||LA21_0==RULE_STRING) ) {s = 1;}
+                        if ( (LA21_0==EOF||(LA21_0>=LDATE_AND_TIME && LA21_0<=TIME_OF_DAY)||LA21_0==END_CASE||LA21_0==WSTRING||(LA21_0>=STRING && LA21_0<=DWORD)||(LA21_0>=LDATE && LA21_0<=LWORD)||(LA21_0>=UDINT && LA21_0<=WCHAR)||(LA21_0>=BOOL && LA21_0<=DINT)||(LA21_0>=FALSE && LA21_0<=UINT)||LA21_0==WORD||LA21_0==ELSE||(LA21_0>=INT && LA21_0<=LDT)||(LA21_0>=TOD && LA21_0<=TRUE)||LA21_0==DT||(LA21_0>=LD && LA21_0<=LT)||LA21_0==NOT||LA21_0==D||LA21_0==T||LA21_0==LeftParenthesis||LA21_0==PlusSign||LA21_0==HyphenMinus||(LA21_0>=RULE_NON_DECIMAL && LA21_0<=RULE_INT)||LA21_0==RULE_STRING) ) {s = 1;}
 
                         else if ( (LA21_0==RULE_ID) ) {s = 2;}
 
@@ -12142,11 +12097,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
     static final String dfa_8s = "\47\uffff";
     static final String dfa_9s = "\1\2\46\uffff";
     static final String dfa_10s = "\1\7\1\0\45\uffff";
-    static final String dfa_11s = "\1\143\1\0\45\uffff";
+    static final String dfa_11s = "\1\145\1\0\45\uffff";
     static final String dfa_12s = "\2\uffff\1\2\43\uffff\1\1";
     static final String dfa_13s = "\1\uffff\1\0\45\uffff}>";
     static final String[] dfa_14s = {
-            "\1\2\54\uffff\1\2\1\uffff\6\2\4\uffff\1\2\2\uffff\3\2\1\uffff\3\2\1\uffff\1\2\1\uffff\1\2\1\uffff\2\2\1\uffff\1\2\1\uffff\1\2\1\1\16\2",
+            "\1\2\55\uffff\1\2\2\uffff\6\2\4\uffff\1\2\2\uffff\3\2\1\uffff\3\2\1\uffff\1\2\1\uffff\1\2\1\uffff\2\2\1\uffff\1\2\1\uffff\1\2\1\1\16\2",
             "\1\uffff",
             "",
             "",
@@ -12241,11 +12196,11 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
     static final String dfa_15s = "\42\uffff";
     static final String dfa_16s = "\1\2\41\uffff";
     static final String dfa_17s = "\1\7\1\0\40\uffff";
-    static final String dfa_18s = "\1\143\1\0\40\uffff";
+    static final String dfa_18s = "\1\145\1\0\40\uffff";
     static final String dfa_19s = "\2\uffff\1\2\36\uffff\1\1";
     static final String dfa_20s = "\1\uffff\1\0\40\uffff}>";
     static final String[] dfa_21s = {
-            "\1\2\54\uffff\1\2\6\uffff\1\2\4\uffff\1\2\2\uffff\3\2\1\uffff\3\2\1\uffff\1\2\1\uffff\1\2\1\uffff\2\2\1\uffff\1\2\1\uffff\1\2\1\1\16\2",
+            "\1\2\55\uffff\1\2\7\uffff\1\2\4\uffff\1\2\2\uffff\3\2\1\uffff\3\2\1\uffff\1\2\1\uffff\1\2\1\uffff\2\2\1\uffff\1\2\1\uffff\1\2\1\1\16\2",
             "\1\uffff",
             "",
             "",
@@ -12336,66 +12291,64 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
     public static final BitSet FOLLOW_1 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_2 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_3 = new BitSet(new long[]{0x2002A00006001002L,0x0000040040004000L});
-    public static final BitSet FOLLOW_4 = new BitSet(new long[]{0x0000000000000000L,0x0000000020000400L});
-    public static final BitSet FOLLOW_5 = new BitSet(new long[]{0x0000000000000000L,0x0000040000000000L});
-    public static final BitSet FOLLOW_6 = new BitSet(new long[]{0x0000000000000000L,0x0000000020000000L});
-    public static final BitSet FOLLOW_7 = new BitSet(new long[]{0x0000000080000000L,0x0000040000000000L});
-    public static final BitSet FOLLOW_8 = new BitSet(new long[]{0x0000000000000000L,0x0000000400000000L});
-    public static final BitSet FOLLOW_9 = new BitSet(new long[]{0xD02C4FDF79EC8070L,0x00000CD005221002L});
-    public static final BitSet FOLLOW_10 = new BitSet(new long[]{0x0000000000000000L,0x0000000802000000L});
-    public static final BitSet FOLLOW_11 = new BitSet(new long[]{0x0000000000000000L,0x0000000000008000L});
-    public static final BitSet FOLLOW_12 = new BitSet(new long[]{0x0000000000000000L,0x0000000000800000L});
-    public static final BitSet FOLLOW_13 = new BitSet(new long[]{0x0000000000000000L,0x0000000440000040L});
-    public static final BitSet FOLLOW_14 = new BitSet(new long[]{0x0000000000000000L,0x0000000800000000L});
-    public static final BitSet FOLLOW_15 = new BitSet(new long[]{0x0000000000000000L,0x0000000040000040L});
-    public static final BitSet FOLLOW_16 = new BitSet(new long[]{0xD02C4FDF79EC8070L,0x00000CD405221002L});
-    public static final BitSet FOLLOW_17 = new BitSet(new long[]{0x0000000000000000L,0x0000000040000000L});
-    public static final BitSet FOLLOW_18 = new BitSet(new long[]{0x0000000000000002L,0x0000000000200000L});
-    public static final BitSet FOLLOW_19 = new BitSet(new long[]{0x0000000000000000L,0x0000000000400000L});
-    public static final BitSet FOLLOW_20 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000040L});
-    public static final BitSet FOLLOW_21 = new BitSet(new long[]{0x0010000000000000L});
-    public static final BitSet FOLLOW_22 = new BitSet(new long[]{0x2003A02006101000L,0x0000040040004000L});
-    public static final BitSet FOLLOW_23 = new BitSet(new long[]{0x0001002000100000L});
+    public static final BitSet FOLLOW_3 = new BitSet(new long[]{0x8005400006001002L,0x0000080100010000L});
+    public static final BitSet FOLLOW_4 = new BitSet(new long[]{0x0000000000000000L,0x0000000080001000L});
+    public static final BitSet FOLLOW_5 = new BitSet(new long[]{0x0000000000000000L,0x0000080000000000L});
+    public static final BitSet FOLLOW_6 = new BitSet(new long[]{0x0000000000000000L,0x0000000080000000L});
+    public static final BitSet FOLLOW_7 = new BitSet(new long[]{0x0000000080000000L,0x0000080000000000L});
+    public static final BitSet FOLLOW_8 = new BitSet(new long[]{0x0000000000000000L,0x0000001000000000L});
+    public static final BitSet FOLLOW_9 = new BitSet(new long[]{0x40D89FDF79EC8070L,0x000019801488400BL});
+    public static final BitSet FOLLOW_10 = new BitSet(new long[]{0x0000000000000000L,0x0000002008000000L});
+    public static final BitSet FOLLOW_11 = new BitSet(new long[]{0x0000000000000000L,0x0000000000020000L});
+    public static final BitSet FOLLOW_12 = new BitSet(new long[]{0x0000000000000000L,0x0000000002000000L});
+    public static final BitSet FOLLOW_13 = new BitSet(new long[]{0x0000000000000000L,0x0000001100000100L});
+    public static final BitSet FOLLOW_14 = new BitSet(new long[]{0x0000000000000000L,0x0000002000000000L});
+    public static final BitSet FOLLOW_15 = new BitSet(new long[]{0x0000000000000000L,0x0000000100000100L});
+    public static final BitSet FOLLOW_16 = new BitSet(new long[]{0x40D89FDF79EC8070L,0x000019901488400BL});
+    public static final BitSet FOLLOW_17 = new BitSet(new long[]{0x0000000000000000L,0x0000000100000000L});
+    public static final BitSet FOLLOW_18 = new BitSet(new long[]{0x0000000000000002L,0x0000000000800000L});
+    public static final BitSet FOLLOW_19 = new BitSet(new long[]{0x0000000000000000L,0x0000000001000000L});
+    public static final BitSet FOLLOW_20 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_21 = new BitSet(new long[]{0x0020000000000000L});
+    public static final BitSet FOLLOW_22 = new BitSet(new long[]{0x8007402006101000L,0x0000080100010000L});
+    public static final BitSet FOLLOW_23 = new BitSet(new long[]{0x0002002000100000L});
     public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0000000000100000L});
-    public static final BitSet FOLLOW_25 = new BitSet(new long[]{0x2002A00006001000L,0x0000040040004000L});
-    public static final BitSet FOLLOW_26 = new BitSet(new long[]{0xD02D4FDF79ECA070L,0x00000CD005221002L});
+    public static final BitSet FOLLOW_25 = new BitSet(new long[]{0x8005400006001000L,0x0000080100010000L});
+    public static final BitSet FOLLOW_26 = new BitSet(new long[]{0x40DA9FDF79ECA070L,0x000019801488400BL});
     public static final BitSet FOLLOW_27 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0x0000000000000000L,0x0000000022000000L});
-    public static final BitSet FOLLOW_29 = new BitSet(new long[]{0x0000000000000000L,0x0000000000040000L});
-    public static final BitSet FOLLOW_30 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002800L});
-    public static final BitSet FOLLOW_31 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_32 = new BitSet(new long[]{0x2002A00006011000L,0x0000040040004000L});
-    public static final BitSet FOLLOW_33 = new BitSet(new long[]{0x2002A00006001200L,0x0000040040004000L});
-    public static final BitSet FOLLOW_34 = new BitSet(new long[]{0x2002B00006001000L,0x0000040040004000L});
+    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0x0000000000000000L,0x0000000088000000L});
+    public static final BitSet FOLLOW_29 = new BitSet(new long[]{0x0000000000000000L,0x0000000000100000L});
+    public static final BitSet FOLLOW_30 = new BitSet(new long[]{0x0000000000000000L,0x000000000000A000L});
+    public static final BitSet FOLLOW_31 = new BitSet(new long[]{0x0000000000000000L,0x0000000000008000L});
+    public static final BitSet FOLLOW_32 = new BitSet(new long[]{0x8005400006011000L,0x0000080100010000L});
+    public static final BitSet FOLLOW_33 = new BitSet(new long[]{0x8005400006001200L,0x0000080100010000L});
+    public static final BitSet FOLLOW_34 = new BitSet(new long[]{0x8005600006001000L,0x0000080100010000L});
     public static final BitSet FOLLOW_35 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_36 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000020L});
-    public static final BitSet FOLLOW_37 = new BitSet(new long[]{0x0000000000000002L,0x0000000000010000L});
-    public static final BitSet FOLLOW_38 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
-    public static final BitSet FOLLOW_39 = new BitSet(new long[]{0x0800000000000002L,0x0000000000100000L});
-    public static final BitSet FOLLOW_40 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000100L});
-    public static final BitSet FOLLOW_41 = new BitSet(new long[]{0x0000000000000002L,0x0000000280000280L});
-    public static final BitSet FOLLOW_42 = new BitSet(new long[]{0x0000000000000002L,0x0000000005000000L});
-    public static final BitSet FOLLOW_43 = new BitSet(new long[]{0x0000000000000002L,0x0000000010800001L});
-    public static final BitSet FOLLOW_44 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
-    public static final BitSet FOLLOW_45 = new BitSet(new long[]{0x0000000000000000L,0x0000040000200000L});
-    public static final BitSet FOLLOW_46 = new BitSet(new long[]{0x0000000000000002L,0x0000000408000000L});
-    public static final BitSet FOLLOW_47 = new BitSet(new long[]{0x07C0000000000002L,0x0000000408200000L});
-    public static final BitSet FOLLOW_48 = new BitSet(new long[]{0xD02C4FDF79EC8070L,0x00000CD005621002L});
-    public static final BitSet FOLLOW_49 = new BitSet(new long[]{0x0000000000000000L,0x0000000002400000L});
-    public static final BitSet FOLLOW_50 = new BitSet(new long[]{0x07C0000000000002L,0x0000000408000000L});
-    public static final BitSet FOLLOW_51 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
-    public static final BitSet FOLLOW_52 = new BitSet(new long[]{0x0000000000000000L,0x0000000000080000L});
-    public static final BitSet FOLLOW_53 = new BitSet(new long[]{0x07C0000000000002L,0x0000000008200000L});
-    public static final BitSet FOLLOW_54 = new BitSet(new long[]{0x0000000100000000L,0x0000001000000000L});
-    public static final BitSet FOLLOW_55 = new BitSet(new long[]{0x0000000000000000L,0x0000001000000000L});
-    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0x00044B5239480000L,0x000000C005000000L});
-    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0000000000000000L,0x000000C005000000L});
-    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0x0000000000000000L,0x0000010000000000L});
-    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x0000000000000000L,0x0000000004000000L});
-    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0000000000000000L,0x0000080000000000L});
-    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x0000000000000000L,0x0000000008000000L});
-    public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000000000000L,0x0000028000000000L});
-    public static final BitSet FOLLOW_63 = new BitSet(new long[]{0x0000000000000002L,0x0000000008000000L});
+    public static final BitSet FOLLOW_36 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
+    public static final BitSet FOLLOW_37 = new BitSet(new long[]{0x0000000000000002L,0x0000000000040000L});
+    public static final BitSet FOLLOW_38 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000020L});
+    public static final BitSet FOLLOW_39 = new BitSet(new long[]{0x2000000000000002L,0x0000000000400000L});
+    public static final BitSet FOLLOW_40 = new BitSet(new long[]{0x0000000000000002L,0x0000000400000400L});
+    public static final BitSet FOLLOW_41 = new BitSet(new long[]{0x0000000000000002L,0x0000000A00000A00L});
+    public static final BitSet FOLLOW_42 = new BitSet(new long[]{0x0000000000000002L,0x0000000014000000L});
+    public static final BitSet FOLLOW_43 = new BitSet(new long[]{0x0000000000000002L,0x0000000042000004L});
+    public static final BitSet FOLLOW_44 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000040L});
+    public static final BitSet FOLLOW_45 = new BitSet(new long[]{0x0000000000000000L,0x0000080000800000L});
+    public static final BitSet FOLLOW_46 = new BitSet(new long[]{0x0000000000000002L,0x0000001020000000L});
+    public static final BitSet FOLLOW_47 = new BitSet(new long[]{0x1F00000000000002L,0x0000001020800000L});
+    public static final BitSet FOLLOW_48 = new BitSet(new long[]{0x40D89FDF79EC8070L,0x000019801588400BL});
+    public static final BitSet FOLLOW_49 = new BitSet(new long[]{0x0000000000000000L,0x0000000009000000L});
+    public static final BitSet FOLLOW_50 = new BitSet(new long[]{0x1F00000000000002L,0x0000001020000000L});
+    public static final BitSet FOLLOW_51 = new BitSet(new long[]{0x0000000000000000L,0x0000010000000000L});
+    public static final BitSet FOLLOW_52 = new BitSet(new long[]{0x0000000000000000L,0x0000000000200000L});
+    public static final BitSet FOLLOW_53 = new BitSet(new long[]{0x1F00000000000002L,0x0000000020800000L});
+    public static final BitSet FOLLOW_54 = new BitSet(new long[]{0x0080004000000000L});
+    public static final BitSet FOLLOW_55 = new BitSet(new long[]{0x0000000000000000L,0x0000018014000000L});
+    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0x0000000000000000L,0x0000020000000000L});
+    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0000000000000000L,0x0000000010000000L});
+    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0x0000000000000000L,0x0000100000000000L});
+    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x0000000000000000L,0x0000000020000000L});
+    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0000000000000000L,0x0000050000000000L});
+    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x0000000000000002L,0x0000000020000000L});
 
 }

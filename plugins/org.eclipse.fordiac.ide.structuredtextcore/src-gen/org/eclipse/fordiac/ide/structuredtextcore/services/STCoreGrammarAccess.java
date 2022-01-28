@@ -1938,153 +1938,143 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class BOOL_LITERALElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.BOOL_LITERAL");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cNotAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final Keyword cNotNOTKeyword_0_0 = (Keyword)cNotAssignment_0.eContents().get(0);
-		private final Keyword cBOOLKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cKeyWordValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cKeyWordValueBOOL_VALUESTerminalRuleCall_2_0 = (RuleCall)cKeyWordValueAssignment_2.eContents().get(0);
+		private final Keyword cBOOLKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
+		private final Keyword cTRUEKeyword_1_0 = (Keyword)cAlternatives_1.eContents().get(0);
+		private final Keyword cFALSEKeyword_1_1 = (Keyword)cAlternatives_1.eContents().get(1);
 		
 		//BOOL_LITERAL:
-		//    (not='NOT')? ('BOOL#')? keyWordValue=BOOL_VALUES
+		//    ('BOOL#')? ('TRUE' | 'FALSE')
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(not='NOT')? ('BOOL#')? keyWordValue=BOOL_VALUES
+		//('BOOL#')? ('TRUE' | 'FALSE')
 		public Group getGroup() { return cGroup; }
 		
-		//(not='NOT')?
-		public Assignment getNotAssignment_0() { return cNotAssignment_0; }
-		
-		//'NOT'
-		public Keyword getNotNOTKeyword_0_0() { return cNotNOTKeyword_0_0; }
-		
 		//('BOOL#')?
-		public Keyword getBOOLKeyword_1() { return cBOOLKeyword_1; }
+		public Keyword getBOOLKeyword_0() { return cBOOLKeyword_0; }
 		
-		//keyWordValue=BOOL_VALUES
-		public Assignment getKeyWordValueAssignment_2() { return cKeyWordValueAssignment_2; }
+		//('TRUE' | 'FALSE')
+		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 		
-		//BOOL_VALUES
-		public RuleCall getKeyWordValueBOOL_VALUESTerminalRuleCall_2_0() { return cKeyWordValueBOOL_VALUESTerminalRuleCall_2_0; }
+		//'TRUE'
+		public Keyword getTRUEKeyword_1_0() { return cTRUEKeyword_1_0; }
+		
+		//'FALSE'
+		public Keyword getFALSEKeyword_1_1() { return cFALSEKeyword_1_1; }
 	}
 	public class NUMERIC_LITERALElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.NUMERIC_LITERAL");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cNotAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final Keyword cNotNOTKeyword_0_0 = (Keyword)cNotAssignment_0.eContents().get(0);
-		private final Assignment cKeywordAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final Alternatives cKeywordAlternatives_1_0 = (Alternatives)cKeywordAssignment_1.eContents().get(0);
-		private final Keyword cKeywordBYTEKeyword_1_0_0 = (Keyword)cKeywordAlternatives_1_0.eContents().get(0);
-		private final Keyword cKeywordWORDKeyword_1_0_1 = (Keyword)cKeywordAlternatives_1_0.eContents().get(1);
-		private final Keyword cKeywordDWORDKeyword_1_0_2 = (Keyword)cKeywordAlternatives_1_0.eContents().get(2);
-		private final Keyword cKeywordLWORDKeyword_1_0_3 = (Keyword)cKeywordAlternatives_1_0.eContents().get(3);
-		private final Keyword cKeywordSINTKeyword_1_0_4 = (Keyword)cKeywordAlternatives_1_0.eContents().get(4);
-		private final Keyword cKeywordINTKeyword_1_0_5 = (Keyword)cKeywordAlternatives_1_0.eContents().get(5);
-		private final Keyword cKeywordDINTKeyword_1_0_6 = (Keyword)cKeywordAlternatives_1_0.eContents().get(6);
-		private final Keyword cKeywordLINTKeyword_1_0_7 = (Keyword)cKeywordAlternatives_1_0.eContents().get(7);
-		private final Keyword cKeywordUSINTKeyword_1_0_8 = (Keyword)cKeywordAlternatives_1_0.eContents().get(8);
-		private final Keyword cKeywordUINTKeyword_1_0_9 = (Keyword)cKeywordAlternatives_1_0.eContents().get(9);
-		private final Keyword cKeywordUDINTKeyword_1_0_10 = (Keyword)cKeywordAlternatives_1_0.eContents().get(10);
-		private final Keyword cKeywordULINTKeyword_1_0_11 = (Keyword)cKeywordAlternatives_1_0.eContents().get(11);
-		private final Keyword cKeywordREALKeyword_1_0_12 = (Keyword)cKeywordAlternatives_1_0.eContents().get(12);
-		private final Keyword cKeywordLREALKeyword_1_0_13 = (Keyword)cKeywordAlternatives_1_0.eContents().get(13);
-		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
-		private final Assignment cIntValueAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
-		private final RuleCall cIntValueINTEGERParserRuleCall_2_0_0 = (RuleCall)cIntValueAssignment_2_0.eContents().get(0);
-		private final Assignment cRealValueAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
-		private final RuleCall cRealValueREALParserRuleCall_2_1_0 = (RuleCall)cRealValueAssignment_2_1.eContents().get(0);
-		private final Assignment cHexValueAssignment_2_2 = (Assignment)cAlternatives_2.eContents().get(2);
-		private final RuleCall cHexValueNON_DECIMALTerminalRuleCall_2_2_0 = (RuleCall)cHexValueAssignment_2_2.eContents().get(0);
+		private final Assignment cKeywordAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Alternatives cKeywordAlternatives_0_0 = (Alternatives)cKeywordAssignment_0.eContents().get(0);
+		private final Keyword cKeywordBOOLKeyword_0_0_0 = (Keyword)cKeywordAlternatives_0_0.eContents().get(0);
+		private final Keyword cKeywordBYTEKeyword_0_0_1 = (Keyword)cKeywordAlternatives_0_0.eContents().get(1);
+		private final Keyword cKeywordWORDKeyword_0_0_2 = (Keyword)cKeywordAlternatives_0_0.eContents().get(2);
+		private final Keyword cKeywordDWORDKeyword_0_0_3 = (Keyword)cKeywordAlternatives_0_0.eContents().get(3);
+		private final Keyword cKeywordLWORDKeyword_0_0_4 = (Keyword)cKeywordAlternatives_0_0.eContents().get(4);
+		private final Keyword cKeywordSINTKeyword_0_0_5 = (Keyword)cKeywordAlternatives_0_0.eContents().get(5);
+		private final Keyword cKeywordINTKeyword_0_0_6 = (Keyword)cKeywordAlternatives_0_0.eContents().get(6);
+		private final Keyword cKeywordDINTKeyword_0_0_7 = (Keyword)cKeywordAlternatives_0_0.eContents().get(7);
+		private final Keyword cKeywordLINTKeyword_0_0_8 = (Keyword)cKeywordAlternatives_0_0.eContents().get(8);
+		private final Keyword cKeywordUSINTKeyword_0_0_9 = (Keyword)cKeywordAlternatives_0_0.eContents().get(9);
+		private final Keyword cKeywordUINTKeyword_0_0_10 = (Keyword)cKeywordAlternatives_0_0.eContents().get(10);
+		private final Keyword cKeywordUDINTKeyword_0_0_11 = (Keyword)cKeywordAlternatives_0_0.eContents().get(11);
+		private final Keyword cKeywordULINTKeyword_0_0_12 = (Keyword)cKeywordAlternatives_0_0.eContents().get(12);
+		private final Keyword cKeywordREALKeyword_0_0_13 = (Keyword)cKeywordAlternatives_0_0.eContents().get(13);
+		private final Keyword cKeywordLREALKeyword_0_0_14 = (Keyword)cKeywordAlternatives_0_0.eContents().get(14);
+		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
+		private final Assignment cIntValueAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
+		private final RuleCall cIntValueINTEGERParserRuleCall_1_0_0 = (RuleCall)cIntValueAssignment_1_0.eContents().get(0);
+		private final Assignment cRealValueAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
+		private final RuleCall cRealValueREALParserRuleCall_1_1_0 = (RuleCall)cRealValueAssignment_1_1.eContents().get(0);
+		private final Assignment cHexValueAssignment_1_2 = (Assignment)cAlternatives_1.eContents().get(2);
+		private final RuleCall cHexValueNON_DECIMALTerminalRuleCall_1_2_0 = (RuleCall)cHexValueAssignment_1_2.eContents().get(0);
 		
 		//NUMERIC_LITERAL:
-		//    (not='NOT')?
-		//    (keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+		//    (keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 		//    'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
 		//    (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL);
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(not='NOT')?
-		//(keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+		//(keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 		//'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
 		//(intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL)
 		public Group getGroup() { return cGroup; }
 		
-		//(not='NOT')?
-		public Assignment getNotAssignment_0() { return cNotAssignment_0; }
-		
-		//'NOT'
-		public Keyword getNotNOTKeyword_0_0() { return cNotNOTKeyword_0_0; }
-		
-		//(keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+		//(keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 		//'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
-		public Assignment getKeywordAssignment_1() { return cKeywordAssignment_1; }
+		public Assignment getKeywordAssignment_0() { return cKeywordAssignment_0; }
 		
-		//('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+		//('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 		//    'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#')
-		public Alternatives getKeywordAlternatives_1_0() { return cKeywordAlternatives_1_0; }
+		public Alternatives getKeywordAlternatives_0_0() { return cKeywordAlternatives_0_0; }
+		
+		//'BOOL#'
+		public Keyword getKeywordBOOLKeyword_0_0_0() { return cKeywordBOOLKeyword_0_0_0; }
 		
 		//'BYTE#'
-		public Keyword getKeywordBYTEKeyword_1_0_0() { return cKeywordBYTEKeyword_1_0_0; }
+		public Keyword getKeywordBYTEKeyword_0_0_1() { return cKeywordBYTEKeyword_0_0_1; }
 		
 		//'WORD#'
-		public Keyword getKeywordWORDKeyword_1_0_1() { return cKeywordWORDKeyword_1_0_1; }
+		public Keyword getKeywordWORDKeyword_0_0_2() { return cKeywordWORDKeyword_0_0_2; }
 		
 		//'DWORD#'
-		public Keyword getKeywordDWORDKeyword_1_0_2() { return cKeywordDWORDKeyword_1_0_2; }
+		public Keyword getKeywordDWORDKeyword_0_0_3() { return cKeywordDWORDKeyword_0_0_3; }
 		
 		//'LWORD#'
-		public Keyword getKeywordLWORDKeyword_1_0_3() { return cKeywordLWORDKeyword_1_0_3; }
+		public Keyword getKeywordLWORDKeyword_0_0_4() { return cKeywordLWORDKeyword_0_0_4; }
 		
 		//'SINT#'
-		public Keyword getKeywordSINTKeyword_1_0_4() { return cKeywordSINTKeyword_1_0_4; }
+		public Keyword getKeywordSINTKeyword_0_0_5() { return cKeywordSINTKeyword_0_0_5; }
 		
 		//'INT#'
-		public Keyword getKeywordINTKeyword_1_0_5() { return cKeywordINTKeyword_1_0_5; }
+		public Keyword getKeywordINTKeyword_0_0_6() { return cKeywordINTKeyword_0_0_6; }
 		
 		//'DINT#'
-		public Keyword getKeywordDINTKeyword_1_0_6() { return cKeywordDINTKeyword_1_0_6; }
+		public Keyword getKeywordDINTKeyword_0_0_7() { return cKeywordDINTKeyword_0_0_7; }
 		
 		//'LINT#'
-		public Keyword getKeywordLINTKeyword_1_0_7() { return cKeywordLINTKeyword_1_0_7; }
+		public Keyword getKeywordLINTKeyword_0_0_8() { return cKeywordLINTKeyword_0_0_8; }
 		
 		//'USINT#'
-		public Keyword getKeywordUSINTKeyword_1_0_8() { return cKeywordUSINTKeyword_1_0_8; }
+		public Keyword getKeywordUSINTKeyword_0_0_9() { return cKeywordUSINTKeyword_0_0_9; }
 		
 		//'UINT#'
-		public Keyword getKeywordUINTKeyword_1_0_9() { return cKeywordUINTKeyword_1_0_9; }
+		public Keyword getKeywordUINTKeyword_0_0_10() { return cKeywordUINTKeyword_0_0_10; }
 		
 		//'UDINT#'
-		public Keyword getKeywordUDINTKeyword_1_0_10() { return cKeywordUDINTKeyword_1_0_10; }
+		public Keyword getKeywordUDINTKeyword_0_0_11() { return cKeywordUDINTKeyword_0_0_11; }
 		
 		//'ULINT#'
-		public Keyword getKeywordULINTKeyword_1_0_11() { return cKeywordULINTKeyword_1_0_11; }
+		public Keyword getKeywordULINTKeyword_0_0_12() { return cKeywordULINTKeyword_0_0_12; }
 		
 		//'REAL#'
-		public Keyword getKeywordREALKeyword_1_0_12() { return cKeywordREALKeyword_1_0_12; }
+		public Keyword getKeywordREALKeyword_0_0_13() { return cKeywordREALKeyword_0_0_13; }
 		
 		//'LREAL#'
-		public Keyword getKeywordLREALKeyword_1_0_13() { return cKeywordLREALKeyword_1_0_13; }
+		public Keyword getKeywordLREALKeyword_0_0_14() { return cKeywordLREALKeyword_0_0_14; }
 		
 		//(intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL)
-		public Alternatives getAlternatives_2() { return cAlternatives_2; }
+		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 		
 		//intValue=INTEGER
-		public Assignment getIntValueAssignment_2_0() { return cIntValueAssignment_2_0; }
+		public Assignment getIntValueAssignment_1_0() { return cIntValueAssignment_1_0; }
 		
 		//INTEGER
-		public RuleCall getIntValueINTEGERParserRuleCall_2_0_0() { return cIntValueINTEGERParserRuleCall_2_0_0; }
+		public RuleCall getIntValueINTEGERParserRuleCall_1_0_0() { return cIntValueINTEGERParserRuleCall_1_0_0; }
 		
 		//realValue=REAL
-		public Assignment getRealValueAssignment_2_1() { return cRealValueAssignment_2_1; }
+		public Assignment getRealValueAssignment_1_1() { return cRealValueAssignment_1_1; }
 		
 		//REAL
-		public RuleCall getRealValueREALParserRuleCall_2_1_0() { return cRealValueREALParserRuleCall_2_1_0; }
+		public RuleCall getRealValueREALParserRuleCall_1_1_0() { return cRealValueREALParserRuleCall_1_1_0; }
 		
 		//hexValue=NON_DECIMAL
-		public Assignment getHexValueAssignment_2_2() { return cHexValueAssignment_2_2; }
+		public Assignment getHexValueAssignment_1_2() { return cHexValueAssignment_1_2; }
 		
 		//NON_DECIMAL
-		public RuleCall getHexValueNON_DECIMALTerminalRuleCall_2_2_0() { return cHexValueNON_DECIMALTerminalRuleCall_2_2_0; }
+		public RuleCall getHexValueNON_DECIMALTerminalRuleCall_1_2_0() { return cHexValueNON_DECIMALTerminalRuleCall_1_2_0; }
 	}
 	public class DATE_LITERALElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.DATE_LITERAL");
@@ -2823,7 +2813,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final TIME_OF_DAY_LITERALElements pTIME_OF_DAY_LITERAL;
 	private final DATE_AND_TIME_LITERALElements pDATE_AND_TIME_LITERAL;
 	private final STRING_LITERALElements pSTRING_LITERAL;
-	private final TerminalRule tBOOL_VALUES;
 	private final TerminalRule tHEX_DIGIT;
 	private final TerminalRule tNON_DECIMAL;
 	private final TerminalRule tINT;
@@ -2899,7 +2888,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pTIME_OF_DAY_LITERAL = new TIME_OF_DAY_LITERALElements();
 		this.pDATE_AND_TIME_LITERAL = new DATE_AND_TIME_LITERALElements();
 		this.pSTRING_LITERAL = new STRING_LITERALElements();
-		this.tBOOL_VALUES = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.BOOL_VALUES");
 		this.tHEX_DIGIT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.HEX_DIGIT");
 		this.tNON_DECIMAL = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.NON_DECIMAL");
 		this.tINT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.INT");
@@ -3425,7 +3413,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//BOOL_LITERAL:
-	//    (not='NOT')? ('BOOL#')? keyWordValue=BOOL_VALUES
+	//    ('BOOL#')? ('TRUE' | 'FALSE')
 	//;
 	public BOOL_LITERALElements getBOOL_LITERALAccess() {
 		return pBOOL_LITERAL;
@@ -3436,8 +3424,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//NUMERIC_LITERAL:
-	//    (not='NOT')?
-	//    (keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+	//    (keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 	//    'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
 	//    (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL);
 	public NUMERIC_LITERALElements getNUMERIC_LITERALAccess() {
@@ -3496,12 +3483,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	public ParserRule getSTRING_LITERALRule() {
 		return getSTRING_LITERALAccess().getRule();
-	}
-	
-	//terminal BOOL_VALUES returns ecore::EBoolean:
-	//    'TRUE' | 'FALSE';
-	public TerminalRule getBOOL_VALUESRule() {
-		return tBOOL_VALUES;
 	}
 	
 	//terminal fragment HEX_DIGIT:

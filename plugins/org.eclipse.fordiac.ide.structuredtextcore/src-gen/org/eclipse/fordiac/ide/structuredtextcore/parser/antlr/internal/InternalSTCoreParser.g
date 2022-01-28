@@ -2825,14 +2825,14 @@ ruleSTLiteralExpressions returns [EObject current=null]
 ;
 
 // Entry rule entryRuleBOOL_LITERAL
-entryRuleBOOL_LITERAL returns [EObject current=null]:
+entryRuleBOOL_LITERAL returns [String current=null]:
 	{ newCompositeNode(grammarAccess.getBOOL_LITERALRule()); }
 	iv_ruleBOOL_LITERAL=ruleBOOL_LITERAL
-	{ $current=$iv_ruleBOOL_LITERAL.current; }
+	{ $current=$iv_ruleBOOL_LITERAL.current.getText(); }
 	EOF;
 
 // Rule BOOL_LITERAL
-ruleBOOL_LITERAL returns [EObject current=null]
+ruleBOOL_LITERAL returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 @init {
 	enterRule();
 }
@@ -2841,42 +2841,24 @@ ruleBOOL_LITERAL returns [EObject current=null]
 }:
 	(
 		(
-			(
-				lv_not_0_0=NOT
-				{
-					newLeafNode(lv_not_0_0, grammarAccess.getBOOL_LITERALAccess().getNotNOTKeyword_0_0());
-				}
-				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getBOOL_LITERALRule());
-					}
-					setWithLastConsumed($current, "not", lv_not_0_0, "NOT");
-				}
-			)
-		)?
-		(
-			otherlv_1=BOOL
+			kw=BOOL
 			{
-				newLeafNode(otherlv_1, grammarAccess.getBOOL_LITERALAccess().getBOOLKeyword_1());
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getBOOL_LITERALAccess().getBOOLKeyword_0());
 			}
 		)?
 		(
-			(
-				lv_keyWordValue_2_0=RULE_BOOL_VALUES
-				{
-					newLeafNode(lv_keyWordValue_2_0, grammarAccess.getBOOL_LITERALAccess().getKeyWordValueBOOL_VALUESTerminalRuleCall_2_0());
-				}
-				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getBOOL_LITERALRule());
-					}
-					setWithLastConsumed(
-						$current,
-						"keyWordValue",
-						lv_keyWordValue_2_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.BOOL_VALUES");
-				}
-			)
+			kw=TRUE
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getBOOL_LITERALAccess().getTRUEKeyword_1_0());
+			}
+			    |
+			kw=FALSE
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getBOOL_LITERALAccess().getFALSEKeyword_1_1());
+			}
 		)
 	)
 ;
@@ -2899,173 +2881,170 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 	(
 		(
 			(
-				lv_not_0_0=NOT
-				{
-					newLeafNode(lv_not_0_0, grammarAccess.getNUMERIC_LITERALAccess().getNotNOTKeyword_0_0());
-				}
-				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-					}
-					setWithLastConsumed($current, "not", lv_not_0_0, "NOT");
-				}
-			)
-		)?
-		(
-			(
 				(
-					lv_keyword_1_1=BYTE
+					lv_keyword_0_1=BOOL
 					{
-						newLeafNode(lv_keyword_1_1, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBYTEKeyword_1_0_0());
+						newLeafNode(lv_keyword_0_1, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBOOLKeyword_0_0_0());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_1, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_1, null);
 					}
 					    |
-					lv_keyword_1_2=WORD
+					lv_keyword_0_2=BYTE
 					{
-						newLeafNode(lv_keyword_1_2, grammarAccess.getNUMERIC_LITERALAccess().getKeywordWORDKeyword_1_0_1());
+						newLeafNode(lv_keyword_0_2, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBYTEKeyword_0_0_1());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_2, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_2, null);
 					}
 					    |
-					lv_keyword_1_3=DWORD
+					lv_keyword_0_3=WORD
 					{
-						newLeafNode(lv_keyword_1_3, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDWORDKeyword_1_0_2());
+						newLeafNode(lv_keyword_0_3, grammarAccess.getNUMERIC_LITERALAccess().getKeywordWORDKeyword_0_0_2());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_3, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_3, null);
 					}
 					    |
-					lv_keyword_1_4=LWORD
+					lv_keyword_0_4=DWORD
 					{
-						newLeafNode(lv_keyword_1_4, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLWORDKeyword_1_0_3());
+						newLeafNode(lv_keyword_0_4, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDWORDKeyword_0_0_3());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_4, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_4, null);
 					}
 					    |
-					lv_keyword_1_5=SINT
+					lv_keyword_0_5=LWORD
 					{
-						newLeafNode(lv_keyword_1_5, grammarAccess.getNUMERIC_LITERALAccess().getKeywordSINTKeyword_1_0_4());
+						newLeafNode(lv_keyword_0_5, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLWORDKeyword_0_0_4());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_5, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_5, null);
 					}
 					    |
-					lv_keyword_1_6=INT
+					lv_keyword_0_6=SINT
 					{
-						newLeafNode(lv_keyword_1_6, grammarAccess.getNUMERIC_LITERALAccess().getKeywordINTKeyword_1_0_5());
+						newLeafNode(lv_keyword_0_6, grammarAccess.getNUMERIC_LITERALAccess().getKeywordSINTKeyword_0_0_5());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_6, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_6, null);
 					}
 					    |
-					lv_keyword_1_7=DINT
+					lv_keyword_0_7=INT
 					{
-						newLeafNode(lv_keyword_1_7, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDINTKeyword_1_0_6());
+						newLeafNode(lv_keyword_0_7, grammarAccess.getNUMERIC_LITERALAccess().getKeywordINTKeyword_0_0_6());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_7, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_7, null);
 					}
 					    |
-					lv_keyword_1_8=LINT
+					lv_keyword_0_8=DINT
 					{
-						newLeafNode(lv_keyword_1_8, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLINTKeyword_1_0_7());
+						newLeafNode(lv_keyword_0_8, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDINTKeyword_0_0_7());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_8, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_8, null);
 					}
 					    |
-					lv_keyword_1_9=USINT
+					lv_keyword_0_9=LINT
 					{
-						newLeafNode(lv_keyword_1_9, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUSINTKeyword_1_0_8());
+						newLeafNode(lv_keyword_0_9, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLINTKeyword_0_0_8());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_9, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_9, null);
 					}
 					    |
-					lv_keyword_1_10=UINT
+					lv_keyword_0_10=USINT
 					{
-						newLeafNode(lv_keyword_1_10, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUINTKeyword_1_0_9());
+						newLeafNode(lv_keyword_0_10, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUSINTKeyword_0_0_9());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_10, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_10, null);
 					}
 					    |
-					lv_keyword_1_11=UDINT
+					lv_keyword_0_11=UINT
 					{
-						newLeafNode(lv_keyword_1_11, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUDINTKeyword_1_0_10());
+						newLeafNode(lv_keyword_0_11, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUINTKeyword_0_0_10());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_11, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_11, null);
 					}
 					    |
-					lv_keyword_1_12=ULINT
+					lv_keyword_0_12=UDINT
 					{
-						newLeafNode(lv_keyword_1_12, grammarAccess.getNUMERIC_LITERALAccess().getKeywordULINTKeyword_1_0_11());
+						newLeafNode(lv_keyword_0_12, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUDINTKeyword_0_0_11());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_12, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_12, null);
 					}
 					    |
-					lv_keyword_1_13=REAL
+					lv_keyword_0_13=ULINT
 					{
-						newLeafNode(lv_keyword_1_13, grammarAccess.getNUMERIC_LITERALAccess().getKeywordREALKeyword_1_0_12());
+						newLeafNode(lv_keyword_0_13, grammarAccess.getNUMERIC_LITERALAccess().getKeywordULINTKeyword_0_0_12());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_13, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_13, null);
 					}
 					    |
-					lv_keyword_1_14=LREAL
+					lv_keyword_0_14=REAL
 					{
-						newLeafNode(lv_keyword_1_14, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLREALKeyword_1_0_13());
+						newLeafNode(lv_keyword_0_14, grammarAccess.getNUMERIC_LITERALAccess().getKeywordREALKeyword_0_0_13());
 					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
 						}
-						setWithLastConsumed($current, "keyword", lv_keyword_1_14, null);
+						setWithLastConsumed($current, "keyword", lv_keyword_0_14, null);
+					}
+					    |
+					lv_keyword_0_15=LREAL
+					{
+						newLeafNode(lv_keyword_0_15, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLREALKeyword_0_0_14());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
+						}
+						setWithLastConsumed($current, "keyword", lv_keyword_0_15, null);
 					}
 				)
 			)
@@ -3074,9 +3053,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getIntValueINTEGERParserRuleCall_2_0_0());
+						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getIntValueINTEGERParserRuleCall_1_0_0());
 					}
-					lv_intValue_2_0=ruleINTEGER
+					lv_intValue_1_0=ruleINTEGER
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getNUMERIC_LITERALRule());
@@ -3084,7 +3063,7 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						set(
 							$current,
 							"intValue",
-							lv_intValue_2_0,
+							lv_intValue_1_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.INTEGER");
 						afterParserOrEnumRuleCall();
 					}
@@ -3094,9 +3073,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getRealValueREALParserRuleCall_2_1_0());
+						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getRealValueREALParserRuleCall_1_1_0());
 					}
-					lv_realValue_3_0=ruleREAL
+					lv_realValue_2_0=ruleREAL
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getNUMERIC_LITERALRule());
@@ -3104,7 +3083,7 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						set(
 							$current,
 							"realValue",
-							lv_realValue_3_0,
+							lv_realValue_2_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.REAL");
 						afterParserOrEnumRuleCall();
 					}
@@ -3113,9 +3092,9 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 			    |
 			(
 				(
-					lv_hexValue_4_0=RULE_NON_DECIMAL
+					lv_hexValue_3_0=RULE_NON_DECIMAL
 					{
-						newLeafNode(lv_hexValue_4_0, grammarAccess.getNUMERIC_LITERALAccess().getHexValueNON_DECIMALTerminalRuleCall_2_2_0());
+						newLeafNode(lv_hexValue_3_0, grammarAccess.getNUMERIC_LITERALAccess().getHexValueNON_DECIMALTerminalRuleCall_1_2_0());
 					}
 					{
 						if ($current==null) {
@@ -3124,7 +3103,7 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 						setWithLastConsumed(
 							$current,
 							"hexValue",
-							lv_hexValue_4_0,
+							lv_hexValue_3_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.NON_DECIMAL");
 					}
 				)

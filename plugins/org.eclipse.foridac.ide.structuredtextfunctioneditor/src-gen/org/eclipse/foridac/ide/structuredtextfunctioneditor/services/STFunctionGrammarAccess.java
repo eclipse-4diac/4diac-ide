@@ -691,7 +691,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//BOOL_LITERAL:
-	//    (not='NOT')? ('BOOL#')? keyWordValue=BOOL_VALUES
+	//    ('BOOL#')? ('TRUE' | 'FALSE')
 	//;
 	public STCoreGrammarAccess.BOOL_LITERALElements getBOOL_LITERALAccess() {
 		return gaSTCore.getBOOL_LITERALAccess();
@@ -702,8 +702,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//NUMERIC_LITERAL:
-	//    (not='NOT')?
-	//    (keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+	//    (keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 	//    'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
 	//    (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL);
 	public STCoreGrammarAccess.NUMERIC_LITERALElements getNUMERIC_LITERALAccess() {
@@ -762,12 +761,6 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	public ParserRule getSTRING_LITERALRule() {
 		return getSTRING_LITERALAccess().getRule();
-	}
-	
-	//terminal BOOL_VALUES returns ecore::EBoolean:
-	//    'TRUE' | 'FALSE';
-	public TerminalRule getBOOL_VALUESRule() {
-		return gaSTCore.getBOOL_VALUESRule();
 	}
 	
 	//terminal fragment HEX_DIGIT:

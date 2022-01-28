@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl#getNot <em>Not</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl#getKeyword <em>Keyword</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl#getIntValue <em>Int Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl#getRealValue <em>Real Value</em>}</li>
@@ -35,26 +34,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
  */
 public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements NUMERIC_LITERAL
 {
-  /**
-   * The default value of the '{@link #getNot() <em>Not</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getNot()
-   * @generated
-   * @ordered
-   */
-  protected static final String NOT_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getNot() <em>Not</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getNot()
-   * @generated
-   * @ordered
-   */
-  protected String not = NOT_EDEFAULT;
-
   /**
    * The default value of the '{@link #getKeyword() <em>Keyword</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -154,31 +133,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
   protected EClass eStaticClass()
   {
     return STCorePackage.Literals.NUMERIC_LITERAL;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String getNot()
-  {
-    return not;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void setNot(String newNot)
-  {
-    String oldNot = not;
-    not = newNot;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.NUMERIC_LITERAL__NOT, oldNot, not));
   }
 
   /**
@@ -291,8 +245,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
-      case STCorePackage.NUMERIC_LITERAL__NOT:
-        return getNot();
       case STCorePackage.NUMERIC_LITERAL__KEYWORD:
         return getKeyword();
       case STCorePackage.NUMERIC_LITERAL__INT_VALUE:
@@ -315,9 +267,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
-      case STCorePackage.NUMERIC_LITERAL__NOT:
-        setNot((String)newValue);
-        return;
       case STCorePackage.NUMERIC_LITERAL__KEYWORD:
         setKeyword((String)newValue);
         return;
@@ -344,9 +293,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
-      case STCorePackage.NUMERIC_LITERAL__NOT:
-        setNot(NOT_EDEFAULT);
-        return;
       case STCorePackage.NUMERIC_LITERAL__KEYWORD:
         setKeyword(KEYWORD_EDEFAULT);
         return;
@@ -373,8 +319,6 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
-      case STCorePackage.NUMERIC_LITERAL__NOT:
-        return NOT_EDEFAULT == null ? not != null : !NOT_EDEFAULT.equals(not);
       case STCorePackage.NUMERIC_LITERAL__KEYWORD:
         return KEYWORD_EDEFAULT == null ? keyword != null : !KEYWORD_EDEFAULT.equals(keyword);
       case STCorePackage.NUMERIC_LITERAL__INT_VALUE:
@@ -398,9 +342,7 @@ public class NUMERIC_LITERALImpl extends MinimalEObjectImpl.Container implements
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (not: ");
-    result.append(not);
-    result.append(", keyword: ");
+    result.append(" (keyword: ");
     result.append(keyword);
     result.append(", intValue: ");
     result.append(intValue);

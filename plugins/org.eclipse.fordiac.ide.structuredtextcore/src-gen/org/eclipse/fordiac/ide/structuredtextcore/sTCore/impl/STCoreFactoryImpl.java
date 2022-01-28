@@ -84,7 +84,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ST_REPEAT_STATEMENT: return createSTRepeatStatement();
       case STCorePackage.ST_EXPRESSION: return createSTExpression();
       case STCorePackage.MULTIBIT_PARTIAL_ACCESS: return createMultibitPartialAccess();
-      case STCorePackage.BOOL_LITERAL: return createBOOL_LITERAL();
       case STCorePackage.NUMERIC_LITERAL: return createNUMERIC_LITERAL();
       case STCorePackage.DATE_LITERAL: return createDATE_LITERAL();
       case STCorePackage.TIME_LITERAL: return createTIME_LITERAL();
@@ -367,18 +366,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     MultibitPartialAccessImpl multibitPartialAccess = new MultibitPartialAccessImpl();
     return multibitPartialAccess;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public BOOL_LITERAL createBOOL_LITERAL()
-  {
-    BOOL_LITERALImpl booL_LITERAL = new BOOL_LITERALImpl();
-    return booL_LITERAL;
   }
 
   /**

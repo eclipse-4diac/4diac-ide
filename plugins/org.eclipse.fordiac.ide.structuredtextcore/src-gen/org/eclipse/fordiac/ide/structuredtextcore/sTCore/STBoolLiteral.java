@@ -23,25 +23,25 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 public interface STBoolLiteral extends STExpression
 {
   /**
-   * Returns the value of the '<em><b>Bool Literal</b></em>' containment reference.
+   * Returns the value of the '<em><b>Bool Literal</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Bool Literal</em>' containment reference.
-   * @see #setBoolLiteral(BOOL_LITERAL)
+   * @return the value of the '<em>Bool Literal</em>' attribute.
+   * @see #setBoolLiteral(String)
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTBoolLiteral_BoolLiteral()
-   * @model containment="true"
+   * @model
    * @generated
    */
-  BOOL_LITERAL getBoolLiteral();
+  String getBoolLiteral();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral#getBoolLiteral <em>Bool Literal</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral#getBoolLiteral <em>Bool Literal</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Bool Literal</em>' containment reference.
+   * @param value the new value of the '<em>Bool Literal</em>' attribute.
    * @see #getBoolLiteral()
    * @generated
    */
-  void setBoolLiteral(BOOL_LITERAL value);
+  void setBoolLiteral(String value);
 
 } // STBoolLiteral

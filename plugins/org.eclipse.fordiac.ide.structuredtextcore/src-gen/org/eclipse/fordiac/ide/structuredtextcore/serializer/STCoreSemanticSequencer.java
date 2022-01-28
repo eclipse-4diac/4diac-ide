@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL;
@@ -73,9 +72,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ARRAY_INITIALIZER_EXPRESSION:
 				sequence_ArrayInitializerExpression(context, (ArrayInitializerExpression) semanticObject); 
-				return; 
-			case STCorePackage.BOOL_LITERAL:
-				sequence_BOOL_LITERAL(context, (BOOL_LITERAL) semanticObject); 
 				return; 
 			case STCorePackage.CODE:
 				sequence_Code(context, (Code) semanticObject); 
@@ -226,18 +222,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     BOOL_LITERAL returns BOOL_LITERAL
-	 *
-	 * Constraint:
-	 *     (not='NOT'? keyWordValue=BOOL_VALUES)
-	 */
-	protected void sequence_BOOL_LITERAL(ISerializationContext context, BOOL_LITERAL semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
 	 *     Code returns Code
 	 *
 	 * Constraint:
@@ -299,8 +283,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *
 	 * Constraint:
 	 *     (
-	 *         not='NOT'? 
 	 *         (
+	 *             keyword='BOOL#' | 
 	 *             keyword='BYTE#' | 
 	 *             keyword='WORD#' | 
 	 *             keyword='DWORD#' | 

@@ -186,15 +186,6 @@ public interface STCoreFactory extends EFactory
   MultibitPartialAccess createMultibitPartialAccess();
 
   /**
-   * Returns a new object of class '<em>BOOL LITERAL</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>BOOL LITERAL</em>'.
-   * @generated
-   */
-  BOOL_LITERAL createBOOL_LITERAL();
-
-  /**
    * Returns a new object of class '<em>NUMERIC LITERAL</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

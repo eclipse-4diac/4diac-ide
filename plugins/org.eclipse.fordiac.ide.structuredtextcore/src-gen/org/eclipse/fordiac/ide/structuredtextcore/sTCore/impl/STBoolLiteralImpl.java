@@ -4,14 +4,11 @@
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 
@@ -31,14 +28,24 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 public class STBoolLiteralImpl extends STExpressionImpl implements STBoolLiteral
 {
   /**
-   * The cached value of the '{@link #getBoolLiteral() <em>Bool Literal</em>}' containment reference.
+   * The default value of the '{@link #getBoolLiteral() <em>Bool Literal</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getBoolLiteral()
    * @generated
    * @ordered
    */
-  protected BOOL_LITERAL boolLiteral;
+  protected static final String BOOL_LITERAL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getBoolLiteral() <em>Bool Literal</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getBoolLiteral()
+   * @generated
+   * @ordered
+   */
+  protected String boolLiteral = BOOL_LITERAL_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -67,7 +74,7 @@ public class STBoolLiteralImpl extends STExpressionImpl implements STBoolLiteral
    * @generated
    */
   @Override
-  public BOOL_LITERAL getBoolLiteral()
+  public String getBoolLiteral()
   {
     return boolLiteral;
   }
@@ -77,54 +84,13 @@ public class STBoolLiteralImpl extends STExpressionImpl implements STBoolLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetBoolLiteral(BOOL_LITERAL newBoolLiteral, NotificationChain msgs)
+  @Override
+  public void setBoolLiteral(String newBoolLiteral)
   {
-    BOOL_LITERAL oldBoolLiteral = boolLiteral;
+    String oldBoolLiteral = boolLiteral;
     boolLiteral = newBoolLiteral;
     if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_BOOL_LITERAL__BOOL_LITERAL, oldBoolLiteral, newBoolLiteral);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void setBoolLiteral(BOOL_LITERAL newBoolLiteral)
-  {
-    if (newBoolLiteral != boolLiteral)
-    {
-      NotificationChain msgs = null;
-      if (boolLiteral != null)
-        msgs = ((InternalEObject)boolLiteral).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_BOOL_LITERAL__BOOL_LITERAL, null, msgs);
-      if (newBoolLiteral != null)
-        msgs = ((InternalEObject)newBoolLiteral).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_BOOL_LITERAL__BOOL_LITERAL, null, msgs);
-      msgs = basicSetBoolLiteral(newBoolLiteral, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_BOOL_LITERAL__BOOL_LITERAL, newBoolLiteral, newBoolLiteral));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
-    switch (featureID)
-    {
-      case STCorePackage.ST_BOOL_LITERAL__BOOL_LITERAL:
-        return basicSetBoolLiteral(null, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_BOOL_LITERAL__BOOL_LITERAL, oldBoolLiteral, boolLiteral));
   }
 
   /**
@@ -154,7 +120,7 @@ public class STBoolLiteralImpl extends STExpressionImpl implements STBoolLiteral
     switch (featureID)
     {
       case STCorePackage.ST_BOOL_LITERAL__BOOL_LITERAL:
-        setBoolLiteral((BOOL_LITERAL)newValue);
+        setBoolLiteral((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -171,7 +137,7 @@ public class STBoolLiteralImpl extends STExpressionImpl implements STBoolLiteral
     switch (featureID)
     {
       case STCorePackage.ST_BOOL_LITERAL__BOOL_LITERAL:
-        setBoolLiteral((BOOL_LITERAL)null);
+        setBoolLiteral(BOOL_LITERAL_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -188,9 +154,26 @@ public class STBoolLiteralImpl extends STExpressionImpl implements STBoolLiteral
     switch (featureID)
     {
       case STCorePackage.ST_BOOL_LITERAL__BOOL_LITERAL:
-        return boolLiteral != null;
+        return BOOL_LITERAL_EDEFAULT == null ? boolLiteral != null : !BOOL_LITERAL_EDEFAULT.equals(boolLiteral);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (boolLiteral: ");
+    result.append(boolLiteral);
+    result.append(')');
+    return result.toString();
   }
 
 } //STBoolLiteralImpl

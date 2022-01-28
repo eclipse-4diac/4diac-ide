@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getNot <em>Not</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getKeyword <em>Keyword</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getIntValue <em>Int Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getRealValue <em>Real Value</em>}</li>
@@ -30,28 +29,6 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface NUMERIC_LITERAL extends EObject
 {
-  /**
-   * Returns the value of the '<em><b>Not</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Not</em>' attribute.
-   * @see #setNot(String)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getNUMERIC_LITERAL_Not()
-   * @model
-   * @generated
-   */
-  String getNot();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getNot <em>Not</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Not</em>' attribute.
-   * @see #getNot()
-   * @generated
-   */
-  void setNot(String value);
-
   /**
    * Returns the value of the '<em><b>Keyword</b></em>' attribute.
    * <!-- begin-user-doc -->

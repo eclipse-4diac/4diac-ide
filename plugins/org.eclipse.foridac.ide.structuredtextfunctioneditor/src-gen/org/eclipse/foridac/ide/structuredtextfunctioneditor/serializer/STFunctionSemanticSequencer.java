@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.BOOL_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL;
@@ -74,9 +73,6 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				return; 
 			case STCorePackage.ARRAY_INITIALIZER_EXPRESSION:
 				sequence_ArrayInitializerExpression(context, (ArrayInitializerExpression) semanticObject); 
-				return; 
-			case STCorePackage.BOOL_LITERAL:
-				sequence_BOOL_LITERAL(context, (BOOL_LITERAL) semanticObject); 
 				return; 
 			case STCorePackage.CODE:
 				sequence_Code(context, (Code) semanticObject); 

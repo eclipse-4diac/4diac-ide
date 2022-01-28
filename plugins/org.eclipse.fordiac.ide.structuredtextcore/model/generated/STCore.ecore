@@ -135,12 +135,7 @@
     <eLiterals name="bitAccess" value="4" literal=".%X"/>
     <eLiterals name="bitAccessShortcut" value="5" literal="."/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BOOL_LITERAL">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="not" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyWordValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NUMERIC_LITERAL">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="not" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="intValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="realValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
@@ -207,8 +202,7 @@
         eType="#//STExpression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STBoolLiteral" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="boolLiteral" eType="#//BOOL_LITERAL"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="boolLiteral" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STNumericLiteral" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="numericLiteral" eType="#//NUMERIC_LITERAL"

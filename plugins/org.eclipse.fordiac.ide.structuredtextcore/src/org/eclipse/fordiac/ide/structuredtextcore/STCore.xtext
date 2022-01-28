@@ -177,12 +177,11 @@ STLiteralExpressions returns STExpression:
 	{STStringLiteral} stringLiteral=STRING_LITERAL;
 
 BOOL_LITERAL:
-	(not='NOT')? ('BOOL#')? keyWordValue=BOOL_VALUES
+	('BOOL#')? ('TRUE' | 'FALSE')
 ;
 
 NUMERIC_LITERAL:
-	(not='NOT')?
-	(keyword=('BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
+	(keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
 	'UINT#' | 'UDINT#' | 'ULINT#' |	'REAL#' | 'LREAL#'))?
 	(intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL);
 
@@ -200,9 +199,6 @@ DATE_AND_TIME_LITERAL:
 
 STRING_LITERAL:
 	(keyword='STRING#' | 'WSTRING#' | 'CHAR#' | 'WCHAR#')? value=STRING;
-
-terminal BOOL_VALUES returns ecore::EBoolean:
-	'TRUE' | 'FALSE';
 
 terminal fragment HEX_DIGIT:
 	'0'..'9' | 'a'..'f' | 'A'..'F' | '_';

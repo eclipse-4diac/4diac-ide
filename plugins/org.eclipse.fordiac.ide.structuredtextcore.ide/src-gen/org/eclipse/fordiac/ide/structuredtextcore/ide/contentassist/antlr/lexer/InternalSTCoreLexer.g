@@ -79,6 +79,8 @@ DINT : ('D'|'d')('I'|'i')('N'|'n')('T'|'t')'#';
 
 ELSIF : ('E'|'e')('L'|'l')('S'|'s')('I'|'i')('F'|'f');
 
+FALSE : ('F'|'f')('A'|'a')('L'|'l')('S'|'s')('E'|'e');
+
 LINT : ('L'|'l')('I'|'i')('N'|'n')('T'|'t')'#';
 
 LTOD : ('L'|'l')('T'|'t')('O'|'o')('D'|'d')'#';
@@ -110,6 +112,8 @@ LDT : ('L'|'l')('D'|'d')('T'|'t')'#';
 THEN : ('T'|'t')('H'|'h')('E'|'e')('N'|'n');
 
 TOD : ('T'|'t')('O'|'o')('D'|'d')'#';
+
+TRUE : ('T'|'t')('R'|'r')('U'|'u')('E'|'e');
 
 B : '.''%'('B'|'b');
 
@@ -202,8 +206,6 @@ GreaterThanSign : '>';
 LeftSquareBracket : '[';
 
 RightSquareBracket : ']';
-
-RULE_BOOL_VALUES : ('TRUE'|'FALSE');
 
 fragment RULE_HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F'|'_');
 
