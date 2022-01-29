@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.impl.SubApplicationTypePaletteEntryImpl;
@@ -90,6 +91,7 @@ class FBNetworkExporter extends CommonElementExporter {
 				if (!isUntypedSubapp(fbnElement)) {
 					// for untyped subapp initial values are stored in the vardeclarations
 					addParamsConfig(fbnElement.getInterface().getInputVars());
+					addPinComments(fbnElement.getInterface().getAllInterfaceElements());
 				}
 
 				if (fbnElement.isInGroup()) {
@@ -216,6 +218,16 @@ class FBNetworkExporter extends CommonElementExporter {
 	private void addGroupAttribute(final Group group) throws XMLStreamException {
 		addAttributeElement(LibraryElementTags.GROUP_NAME, IecTypes.ElementaryTypes.STRING.getName(), group.getName(),
 				null);
+	}
+
+	private void addPinComments(final EList<IInterfaceElement> allInterfaceElements) throws XMLStreamException {
+		for (final IInterfaceElement ie : allInterfaceElements) {
+			if (!ie.getComment().isBlank()) {
+				addAttributeElement(LibraryElementTags.PIN_COMMENT, IecTypes.ElementaryTypes.STRING.getName(),
+						ie.getName() + ":" + ie.getComment(), null); //$NON-NLS-1$
+			}
+
+		}
 	}
 
 }

@@ -90,6 +90,7 @@ public interface LibraryElementTags {
 	String FB_ELEMENT = "FB"; //$NON-NLS-1$
 	String GROUP_ELEMENT = "Group"; //$NON-NLS-1$
 	String GROUP_NAME = "GroupName"; ////$NON-NLS-1$
+	String PIN_COMMENT = "PinComment"; ////$NON-NLS-1$
 	String FBNETWORK_ELEMENT = "FBNetwork"; //$NON-NLS-1$
 	String BASIC_F_B_ELEMENT = "BasicFB"; //$NON-NLS-1$
 	String SIMPLE_F_B_ELEMENT = "SimpleFB"; //$NON-NLS-1$

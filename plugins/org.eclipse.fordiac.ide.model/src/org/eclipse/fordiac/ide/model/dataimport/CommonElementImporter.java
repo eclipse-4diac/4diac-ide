@@ -59,6 +59,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -571,13 +572,41 @@ public abstract class CommonElementImporter {
 				parseParameter(block);
 				return true;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
-				parseGenericAttributeNode(block);
-				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				handleFBAttributeChild(block);
 				return true;
 			default:
 				return false;
 			}
 		});
+	}
+
+	public void handleFBAttributeChild(final FBNetworkElement block) throws XMLStreamException {
+		if (isPinCommentAttribute()) {
+			parsePinComment(block);
+		} else {
+			parseGenericAttributeNode(block);
+		}
+		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+	}
+
+	private boolean isPinCommentAttribute() {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		return (name != null) && LibraryElementTags.PIN_COMMENT.equals(name);
+	}
+
+	private void parsePinComment(final FBNetworkElement block) {
+		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		if (value != null) {
+			final int splitPos = value.indexOf(':');
+			if (splitPos != -1) {
+				final String name = value.substring(0, splitPos);
+				final IInterfaceElement ie = block.getInterfaceElement(name);
+				if (ie != null) {
+					final String comment = value.substring(splitPos + 1);
+					ie.setComment(comment);
+				}
+			}
+		}
 	}
 
 	protected void parseParameter(final FBNetworkElement block) throws TypeImportException, XMLStreamException {
