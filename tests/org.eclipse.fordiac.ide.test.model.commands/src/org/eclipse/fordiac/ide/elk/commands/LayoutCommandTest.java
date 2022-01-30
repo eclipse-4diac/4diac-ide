@@ -15,18 +15,15 @@ package org.eclipse.fordiac.ide.elk.commands;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommandTest;
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommandTest;
+import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
 import org.eclipse.fordiac.ide.model.commands.create.ConnectionCommandsTest;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -91,8 +88,7 @@ public class LayoutCommandTest extends FBNetworkTestBase {
 	}
 
 	private static State createLayoutCommand(final State s, final FBNetwork network) {
-		final Map<FBNetworkElement, Position> positions = new HashMap<>();
-		final Map<Connection, PointList> connPoints = new HashMap<>();
+		final FordiacLayoutData data = new FordiacLayoutData();
 
 		final FBNetworkElement elem1 = network.getNetworkElements().get(0);
 		final FBNetworkElement elem2 = network.getNetworkElements().get(1);
@@ -102,17 +98,17 @@ public class LayoutCommandTest extends FBNetworkTestBase {
 		pos1.setY(100);
 		pos2.setX(200);
 		pos2.setY(200);
-		positions.put(elem1, pos1);
-		positions.put(elem2, pos2);
+		data.addPosition(elem1, pos1);
+		data.addPosition(elem2, pos2);
 
 		final PointList pList = new PointList();
 		pList.addPoint(100, 100);
 		pList.addPoint(150, 150);
 		pList.addPoint(200, 200);
-		connPoints.put(network.getEventConnections().get(0), pList);
-		connPoints.put(network.getDataConnections().get(0), pList.getCopy());
+		data.addConnectionPoints(network.getEventConnections().get(0), pList);
+		data.addConnectionPoints(network.getDataConnections().get(0), pList.getCopy());
 
-		s.setCommand(new LayoutCommand(positions, connPoints, Collections.emptyMap()));
+		s.setCommand(new LayoutCommand(data));
 		return s;
 	}
 

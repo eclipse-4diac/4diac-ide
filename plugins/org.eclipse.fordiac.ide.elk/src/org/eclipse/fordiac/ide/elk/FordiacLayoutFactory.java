@@ -58,7 +58,8 @@ public class FordiacLayoutFactory {
 		final ElkNode node = ElkGraphUtil.createNode(parent);
 		configureNode(node);
 		if (editPart instanceof GroupEditPart) {
-			// TODO configure group
+			node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FREE); // dummy ports can move freely
+			node.setProperty(CoreOptions.PADDING, new ElkPadding(50.0, 50.0));
 		}
 		if (editPart instanceof SubAppForFBNetworkEditPart) {
 			if (((SubAppForFBNetworkEditPart) editPart).getModel().isUnfolded()) {

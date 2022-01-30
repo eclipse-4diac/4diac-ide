@@ -27,8 +27,6 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.elk.core.options.CoreOptions;
-import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.service.IDiagramLayoutConnector;
 import org.eclipse.elk.core.service.LayoutMapping;
 import org.eclipse.elk.graph.ElkBendPoint;
@@ -51,8 +49,8 @@ import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -71,20 +69,12 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 	private static final IProperty<CommandStack> COMMAND_STACK = new Property<>("gef.commandStack"); //$NON-NLS-1$
 	private static final IProperty<List<ConnectionEditPart>> CONNECTIONS = new Property<>("gef.connections"); //$NON-NLS-1$
 	private static final IProperty<List<ConnectionEditPart>> HIERARCHY_CROSSING_CONNECTIONS = new Property<>("gef.hierarchyCrossingConnections"); //$NON-NLS-1$
-	private static final IProperty<Map<GraphicalEditPart, ElkGraphElement>> REVERSE_MAPPING = new Property<>(
-			"gef.reverseMapping"); //$NON-NLS-1$
+	private static final IProperty<Map<GraphicalEditPart, ElkGraphElement>> REVERSE_MAPPING = new Property<>("gef.reverseMapping"); //$NON-NLS-1$
+	// will contain all the data for the layout command
+	private static final IProperty<FordiacLayoutData> LAYOUT_DATA = new Property<>("gef.layoutData"); //$NON-NLS-1$
 
 	private static final PrecisionPoint START_POINT = new PrecisionPoint();
 	private static final PrecisionPoint END_POINT = new PrecisionPoint();
-
-	/* used for applying the layout */
-	private final Map<FBNetworkElement, Position> positions = new HashMap<>();
-	private final Map<Connection, PointList> connPoints = new HashMap<>();
-
-	private void clear() {
-		positions.clear();
-		connPoints.clear();
-	}
 
 	@Override
 	public LayoutMapping buildLayoutGraph(final IWorkbenchPart workbenchPart, final Object diagramPart) {
@@ -107,6 +97,7 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 		mapping.setProperty(CONNECTIONS, new ArrayList<>());
 		mapping.setProperty(HIERARCHY_CROSSING_CONNECTIONS, new ArrayList<>());
 		mapping.setProperty(REVERSE_MAPPING, new HashMap<>());
+		mapping.setProperty(LAYOUT_DATA, new FordiacLayoutData());
 		return mapping;
 	}
 
@@ -199,7 +190,6 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 	
 	private static ElkNode createGroupNode(final LayoutMapping mapping, final GroupEditPart editPart, final ElkNode parent) {
 		final ElkNode node = FordiacLayoutFactory.createFordiacLayoutNode(editPart, parent);
-		node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FREE); // dummy ports can move freely
 		
 		final Rectangle bounds = editPart.getFigure().getBounds();
 		node.setLocation(bounds.x, bounds.y);
@@ -315,18 +305,14 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
 	@Override
 	public void applyLayout(final LayoutMapping mapping, final IPropertyHolder settings) {
-		clear();
 		final int INSTANCE_COMMENT_OFFSET = 8;
 		calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, INSTANCE_COMMENT_OFFSET);
-
-		final Map<IInterfaceElement, Integer> pins = createPinOffsetData(mapping);
-		final Command layoutCommand = new LayoutCommand(positions, connPoints, pins);
+		createPinOffsetData(mapping);
+		final Command layoutCommand = new LayoutCommand(mapping.getProperty(LAYOUT_DATA));
 		mapping.getProperty(COMMAND_STACK).execute(layoutCommand);
 	}
 
-	private static Map<IInterfaceElement, Integer> createPinOffsetData(final LayoutMapping mapping) {
-		final Map<IInterfaceElement, Integer> pins = new HashMap<>();
-
+	private static void createPinOffsetData(final LayoutMapping mapping) {
 		if (!mapping.getLayoutGraph().getPorts().isEmpty()) {
 			final InterfaceList interfaceList = (InterfaceList) ((IInterfaceElement) mapping.getGraphMap()
 					.get(mapping.getLayoutGraph().getPorts().get(0))).eContainer();
@@ -348,11 +334,9 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 				if (isFirstInputVar(interfaceList, pin)) {
 					padding += 8;
 				}
-				pins.put(pin, Integer.valueOf(padding));
+				mapping.getProperty(LAYOUT_DATA).addPin(pin, Integer.valueOf(padding));
 			});
 		}
-
-		return pins;
 	}
 
 	private static boolean isFirstInputVar(final InterfaceList interfaceList, final IInterfaceElement pin) {
@@ -363,13 +347,17 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 		final GraphicalEditPart ep = (GraphicalEditPart) mapping.getGraphMap().get(node);
 		final int calculatedX = (int) (node.getX() + parentX);
 		final int calculatedY = (int) (node.getY() + parentY);
+		// TODO rewrite condition
 		if (!(ep instanceof AbstractFBNetworkEditPart 
 				&& !(ep instanceof UnfoldedSubappContentEditPart)
 				&& !(ep instanceof GroupEditPart))) {
 			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 			pos.setX(calculatedX);
 			pos.setY(calculatedY);
-			positions.put((FBNetworkElement) ep.getModel(), pos);
+			mapping.getProperty(LAYOUT_DATA).addPosition((FBNetworkElement) ep.getModel(), pos);
+			if (ep instanceof GroupEditPart) {
+				mapping.getProperty(LAYOUT_DATA).addGroup((Group) ep.getModel(), (int) node.getHeight(), (int) node.getWidth());
+			}
 		}
 		for (final ElkEdge edge : node.getContainedEdges()) {
 			final ConnectionEditPart connEp = (ConnectionEditPart) mapping.getGraphMap().get(edge);
@@ -380,7 +368,7 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 			final ElkPort endPort = (ElkPort) edge.getTargets().get(0);
 			final List<ElkBendPoint> bendPoints = edge.getSections().get(0).getBendPoints();
 
-			connPoints.put(connEp.getModel(), createPointList(node, startPort, endPort, bendPoints, calculatedX, calculatedY));
+			mapping.getProperty(LAYOUT_DATA).addConnectionPoints(connEp.getModel(), createPointList(node, startPort, endPort, bendPoints, calculatedX, calculatedY));
 		}
 		node.getChildren().forEach(child -> calculateNodePositionsRecursively(mapping, child, calculatedX, calculatedY));
 	}
