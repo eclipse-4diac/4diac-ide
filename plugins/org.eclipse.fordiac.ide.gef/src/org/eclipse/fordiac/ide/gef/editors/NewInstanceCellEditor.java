@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019 Johannes Kepler University Linz
+ * 				 2022 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,12 +10,13 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - insideCell parameter to use the CellEditor inside TableViewer cells
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.editors;
+package org.eclipse.fordiac.ide.gef.editors;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
@@ -40,19 +42,22 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 public class NewInstanceCellEditor extends TextCellEditor {
 
+	// if NewInstanceCellEditor is used inside a TableCell = true
+	// if not for example like in main editor for creating new FBs = false(default)
+	private boolean insideCell;
+
 	private Composite container;
 	private Button menuButton;
-	private Shell popupShell;
-	private TableViewer tableViewer;
+	protected Shell popupShell;
+	protected TableViewer tableViewer;
 	private PaletteFilter paletteFilter;
 	private boolean blockTableSelection = false;
 	private PaletteEntry selectedEntry = null;
-	private Text textControl;
+	protected Text textControl;
 
 	private ResultListLabelProvider resultListLabelProvider;
 
@@ -65,8 +70,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	}
 
 	public NewInstanceCellEditor(final Composite parent, final int style) {
-		super(parent, style | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
+		this(parent, style, false);
 	}
+
+	public NewInstanceCellEditor(final Composite parent, final int style, final boolean insideCell) {
+		super(parent, style | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
+		this.insideCell = insideCell;
+	}
+
 
 	public Button getMenuButton() {
 		return menuButton;
@@ -93,7 +104,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	}
 
 	@Override
-	protected void focusLost() {
+	public void focusLost() {
 
 		if (!insideAnyEditorArea()) {
 			// when we loose focus we want to fire cancel so that have entered text is not
@@ -124,26 +135,33 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	}
 
 	@Override
-	protected Object doGetValue() {
+	public Object doGetValue() {
 		if (null != selectedEntry) {
 			return selectedEntry;
 		}
 		return super.doGetValue();
 	}
 
-	private boolean insideAnyEditorArea() {
+	public boolean insideAnyEditorArea() {
 		final Point cursorLocation = popupShell.getDisplay().getCursorLocation();
 		final Point containerRelativeCursor = container.getParent().toControl(cursorLocation);
 		return container.getBounds().contains(containerRelativeCursor)
 				|| popupShell.getBounds().contains(cursorLocation);
 	}
 
-	private Composite createContainer(final Composite parent) {
+	protected Composite createContainer(final Composite parent) {
 		final Composite newContainer = new Composite(parent, SWT.NONE) {
+
 			@Override
 			public void setBounds(final int x, final int y, final int width, final int height) {
 				super.setBounds(x, y, width, height);
-				final Point screenPos = getParent().toDisplay(getLocation());
+
+				final Point screenPos;
+				if(insideCell) {
+					screenPos = new Point(x, y);
+				} else {
+					screenPos = getParent().toDisplay(getLocation());
+				}
 				final Rectangle compositeBounds = getBounds();
 				popupShell.setBounds(screenPos.x, screenPos.y + compositeBounds.height, compositeBounds.width, 150);
 				if (!popupShell.isVisible()) {
@@ -167,14 +185,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		return newContainer;
 	}
 
-	private void configureTextControl() {
-		textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+	public void configureTextControl() {
+		textControl.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 		textControl.setMessage(Messages.NewInstanceCellEditor_SearchForType);
 		textControl.addListener(SWT.Modify, event -> updateSelectionList());
 		textControl.addListener(SWT.KeyDown, event -> handleKeyPress(event, textControl));
 	}
 
-	private void updateSelectionList() {
+	protected void updateSelectionList() {
 		blockTableSelection = true;
 		if (textControl.getText().length() >= 2) {
 			final List<PaletteEntry> entries = paletteFilter.findFBAndSubappTypes((textControl.getText()));
@@ -241,7 +259,6 @@ public class NewInstanceCellEditor extends TextCellEditor {
 				resultListLabelProvider);
 		tableViewer.setLabelProvider(delegatingStyledCellLabelProvider);
 
-		new TableColumn(tableViewer.getTable(), SWT.NONE);
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(100));
 		tableViewer.getTable().setLayout(layout);

@@ -104,8 +104,6 @@ public final class Messages extends NLS {
 
 	public static String MonitoringEditPart_Forced_ValueDisplay;
 
-	public static String NewInstanceCellEditor_SearchForType;
-
 	/** The New sub application action_ new subapplication text. */
 	public static String NewSubApplicationAction_NewSubapplicationText;
 
