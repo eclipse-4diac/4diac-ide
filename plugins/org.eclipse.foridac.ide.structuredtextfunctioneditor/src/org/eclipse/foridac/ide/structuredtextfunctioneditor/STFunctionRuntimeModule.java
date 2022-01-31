@@ -13,9 +13,17 @@
  *******************************************************************************/
 package org.eclipse.foridac.ide.structuredtextfunctioneditor;
 
+import org.eclipse.foridac.ide.structuredtextfunctioneditor.converter.STFunctionValueConverters;
+import org.eclipse.xtext.conversion.IValueConverterService;
+
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
+
+	@Override
+	public Class<? extends IValueConverterService> bindIValueConverterService() {
+		return STFunctionValueConverters.class;
+	}
 
 }

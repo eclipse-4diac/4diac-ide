@@ -3,6 +3,9 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
+import java.util.Date;
+
+import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,7 +16,8 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getDateLiteral <em>Date Literal</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateLiteral()
@@ -23,25 +27,47 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 public interface STDateLiteral extends STExpression
 {
   /**
-   * Returns the value of the '<em><b>Date Literal</b></em>' containment reference.
+   * Returns the value of the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Date Literal</em>' containment reference.
-   * @see #setDateLiteral(DATE_LITERAL)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateLiteral_DateLiteral()
+   * @return the value of the '<em>Type</em>' containment reference.
+   * @see #setType(DataType)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateLiteral_Type()
    * @model containment="true"
    * @generated
    */
-  DATE_LITERAL getDateLiteral();
+  DataType getType();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getDateLiteral <em>Date Literal</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Date Literal</em>' containment reference.
-   * @see #getDateLiteral()
+   * @param value the new value of the '<em>Type</em>' containment reference.
+   * @see #getType()
    * @generated
    */
-  void setDateLiteral(DATE_LITERAL value);
+  void setType(DataType value);
+
+  /**
+   * Returns the value of the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Value</em>' attribute.
+   * @see #setValue(Date)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateLiteral_Value()
+   * @model
+   * @generated
+   */
+  Date getValue();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getValue <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Value</em>' attribute.
+   * @see #getValue()
+   * @generated
+   */
+  void setValue(Date value);
 
 } // STDateLiteral

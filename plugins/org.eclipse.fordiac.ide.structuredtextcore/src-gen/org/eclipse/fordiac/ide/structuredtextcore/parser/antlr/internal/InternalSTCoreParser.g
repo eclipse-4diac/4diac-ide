@@ -2619,220 +2619,71 @@ ruleSTLiteralExpressions returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTBoolLiteralAction_0_0(),
-						$current);
-				}
-			)
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getBoolLiteralBOOL_LITERALParserRuleCall_0_1_0());
-					}
-					lv_boolLiteral_1_0=ruleBOOL_LITERAL
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
-						}
-						set(
-							$current,
-							"boolLiteral",
-							lv_boolLiteral_1_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.BOOL_LITERAL");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-		)
+		{
+			newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getSTNumericLiteralParserRuleCall_0());
+		}
+		this_STNumericLiteral_0=ruleSTNumericLiteral
+		{
+			$current = $this_STNumericLiteral_0.current;
+			afterParserOrEnumRuleCall();
+		}
 		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTNumericLiteralAction_1_0(),
-						$current);
-				}
-			)
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getNumericLiteralNUMERIC_LITERALParserRuleCall_1_1_0());
-					}
-					lv_numericLiteral_3_0=ruleNUMERIC_LITERAL
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
-						}
-						set(
-							$current,
-							"numericLiteral",
-							lv_numericLiteral_3_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.NUMERIC_LITERAL");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-		)
+		{
+			newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getSTDateLiteralParserRuleCall_1());
+		}
+		this_STDateLiteral_1=ruleSTDateLiteral
+		{
+			$current = $this_STDateLiteral_1.current;
+			afterParserOrEnumRuleCall();
+		}
 		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTDateLiteralAction_2_0(),
-						$current);
-				}
-			)
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getDateLiteralDATE_LITERALParserRuleCall_2_1_0());
-					}
-					lv_dateLiteral_5_0=ruleDATE_LITERAL
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
-						}
-						set(
-							$current,
-							"dateLiteral",
-							lv_dateLiteral_5_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.DATE_LITERAL");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-		)
+		{
+			newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getSTTimeLiteralParserRuleCall_2());
+		}
+		this_STTimeLiteral_2=ruleSTTimeLiteral
+		{
+			$current = $this_STTimeLiteral_2.current;
+			afterParserOrEnumRuleCall();
+		}
 		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTTimeLiteralAction_3_0(),
-						$current);
-				}
-			)
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralTIME_LITERALParserRuleCall_3_1_0());
-					}
-					lv_timeLiteral_7_0=ruleTIME_LITERAL
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
-						}
-						set(
-							$current,
-							"timeLiteral",
-							lv_timeLiteral_7_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_LITERAL");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-		)
+		{
+			newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getSTTimeOfDayLiteralParserRuleCall_3());
+		}
+		this_STTimeOfDayLiteral_3=ruleSTTimeOfDayLiteral
+		{
+			$current = $this_STTimeOfDayLiteral_3.current;
+			afterParserOrEnumRuleCall();
+		}
 		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTTimeOfDayLiteralAction_4_0(),
-						$current);
-				}
-			)
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_4_1_0());
-					}
-					lv_timeOfDayLiteral_9_0=ruleTIME_OF_DAY_LITERAL
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
-						}
-						set(
-							$current,
-							"timeOfDayLiteral",
-							lv_timeOfDayLiteral_9_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_OF_DAY_LITERAL");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-		)
+		{
+			newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getSTDateAndTimeLiteralParserRuleCall_4());
+		}
+		this_STDateAndTimeLiteral_4=ruleSTDateAndTimeLiteral
+		{
+			$current = $this_STDateAndTimeLiteral_4.current;
+			afterParserOrEnumRuleCall();
+		}
 		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTDateAndTimeLiteralAction_5_0(),
-						$current);
-				}
-			)
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_5_1_0());
-					}
-					lv_timeLiteral_11_0=ruleDATE_AND_TIME_LITERAL
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
-						}
-						set(
-							$current,
-							"timeLiteral",
-							lv_timeLiteral_11_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.DATE_AND_TIME_LITERAL");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-		)
-		    |
-		(
-			(
-				{
-					$current = forceCreateModelElement(
-						grammarAccess.getSTLiteralExpressionsAccess().getSTStringLiteralAction_6_0(),
-						$current);
-				}
-			)
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getStringLiteralSTRING_LITERALParserRuleCall_6_1_0());
-					}
-					lv_stringLiteral_13_0=ruleSTRING_LITERAL
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSTLiteralExpressionsRule());
-						}
-						set(
-							$current,
-							"stringLiteral",
-							lv_stringLiteral_13_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STRING_LITERAL");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-		)
+		{
+			newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getSTStringLiteralParserRuleCall_5());
+		}
+		this_STStringLiteral_5=ruleSTStringLiteral
+		{
+			$current = $this_STStringLiteral_5.current;
+			afterParserOrEnumRuleCall();
+		}
 	)
 ;
 
-// Entry rule entryRuleBOOL_LITERAL
-entryRuleBOOL_LITERAL returns [String current=null]:
-	{ newCompositeNode(grammarAccess.getBOOL_LITERALRule()); }
-	iv_ruleBOOL_LITERAL=ruleBOOL_LITERAL
-	{ $current=$iv_ruleBOOL_LITERAL.current.getText(); }
+// Entry rule entryRuleSTNumericLiteralType
+entryRuleSTNumericLiteralType returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTNumericLiteralTypeRule()); }
+	iv_ruleSTNumericLiteralType=ruleSTNumericLiteralType
+	{ $current=$iv_ruleSTNumericLiteralType.current; }
 	EOF;
 
-// Rule BOOL_LITERAL
-ruleBOOL_LITERAL returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+// Rule STNumericLiteralType
+ruleSTNumericLiteralType returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -2840,38 +2691,92 @@ ruleBOOL_LITERAL returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleTo
 	leaveRule();
 }:
 	(
-		(
-			kw=BOOL
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getBOOL_LITERALAccess().getBOOLKeyword_0());
-			}
-		)?
-		(
-			kw=TRUE
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getBOOL_LITERALAccess().getTRUEKeyword_1_0());
-			}
-			    |
-			kw=FALSE
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getBOOL_LITERALAccess().getFALSEKeyword_1_1());
-			}
-		)
+		otherlv_0=BOOL
+		{
+			newLeafNode(otherlv_0, grammarAccess.getSTNumericLiteralTypeAccess().getBOOLKeyword_0());
+		}
+		    |
+		otherlv_1=BYTE
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTNumericLiteralTypeAccess().getBYTEKeyword_1());
+		}
+		    |
+		otherlv_2=WORD
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSTNumericLiteralTypeAccess().getWORDKeyword_2());
+		}
+		    |
+		otherlv_3=DWORD
+		{
+			newLeafNode(otherlv_3, grammarAccess.getSTNumericLiteralTypeAccess().getDWORDKeyword_3());
+		}
+		    |
+		otherlv_4=LWORD
+		{
+			newLeafNode(otherlv_4, grammarAccess.getSTNumericLiteralTypeAccess().getLWORDKeyword_4());
+		}
+		    |
+		otherlv_5=SINT
+		{
+			newLeafNode(otherlv_5, grammarAccess.getSTNumericLiteralTypeAccess().getSINTKeyword_5());
+		}
+		    |
+		otherlv_6=INT
+		{
+			newLeafNode(otherlv_6, grammarAccess.getSTNumericLiteralTypeAccess().getINTKeyword_6());
+		}
+		    |
+		otherlv_7=DINT
+		{
+			newLeafNode(otherlv_7, grammarAccess.getSTNumericLiteralTypeAccess().getDINTKeyword_7());
+		}
+		    |
+		otherlv_8=LINT
+		{
+			newLeafNode(otherlv_8, grammarAccess.getSTNumericLiteralTypeAccess().getLINTKeyword_8());
+		}
+		    |
+		otherlv_9=USINT
+		{
+			newLeafNode(otherlv_9, grammarAccess.getSTNumericLiteralTypeAccess().getUSINTKeyword_9());
+		}
+		    |
+		otherlv_10=UINT
+		{
+			newLeafNode(otherlv_10, grammarAccess.getSTNumericLiteralTypeAccess().getUINTKeyword_10());
+		}
+		    |
+		otherlv_11=UDINT
+		{
+			newLeafNode(otherlv_11, grammarAccess.getSTNumericLiteralTypeAccess().getUDINTKeyword_11());
+		}
+		    |
+		otherlv_12=ULINT
+		{
+			newLeafNode(otherlv_12, grammarAccess.getSTNumericLiteralTypeAccess().getULINTKeyword_12());
+		}
+		    |
+		otherlv_13=REAL
+		{
+			newLeafNode(otherlv_13, grammarAccess.getSTNumericLiteralTypeAccess().getREALKeyword_13());
+		}
+		    |
+		otherlv_14=LREAL
+		{
+			newLeafNode(otherlv_14, grammarAccess.getSTNumericLiteralTypeAccess().getLREALKeyword_14());
+		}
 	)
 ;
 
-// Entry rule entryRuleNUMERIC_LITERAL
-entryRuleNUMERIC_LITERAL returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getNUMERIC_LITERALRule()); }
-	iv_ruleNUMERIC_LITERAL=ruleNUMERIC_LITERAL
-	{ $current=$iv_ruleNUMERIC_LITERAL.current; }
+// Entry rule entryRuleSTNumericLiteral
+entryRuleSTNumericLiteral returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTNumericLiteralRule()); }
+	iv_ruleSTNumericLiteral=ruleSTNumericLiteral
+	{ $current=$iv_ruleSTNumericLiteral.current; }
 	EOF;
 
-// Rule NUMERIC_LITERAL
-ruleNUMERIC_LITERAL returns [EObject current=null]
+// Rule STNumericLiteral
+ruleSTNumericLiteral returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -2881,229 +2786,70 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 	(
 		(
 			(
-				(
-					lv_keyword_0_1=BOOL
-					{
-						newLeafNode(lv_keyword_0_1, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBOOLKeyword_0_0_0());
+				{
+					newCompositeNode(grammarAccess.getSTNumericLiteralAccess().getTypeSTNumericLiteralTypeParserRuleCall_0_0());
+				}
+				lv_type_0_0=ruleSTNumericLiteralType
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTNumericLiteralRule());
 					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_1, null);
-					}
-					    |
-					lv_keyword_0_2=BYTE
-					{
-						newLeafNode(lv_keyword_0_2, grammarAccess.getNUMERIC_LITERALAccess().getKeywordBYTEKeyword_0_0_1());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_2, null);
-					}
-					    |
-					lv_keyword_0_3=WORD
-					{
-						newLeafNode(lv_keyword_0_3, grammarAccess.getNUMERIC_LITERALAccess().getKeywordWORDKeyword_0_0_2());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_3, null);
-					}
-					    |
-					lv_keyword_0_4=DWORD
-					{
-						newLeafNode(lv_keyword_0_4, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDWORDKeyword_0_0_3());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_4, null);
-					}
-					    |
-					lv_keyword_0_5=LWORD
-					{
-						newLeafNode(lv_keyword_0_5, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLWORDKeyword_0_0_4());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_5, null);
-					}
-					    |
-					lv_keyword_0_6=SINT
-					{
-						newLeafNode(lv_keyword_0_6, grammarAccess.getNUMERIC_LITERALAccess().getKeywordSINTKeyword_0_0_5());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_6, null);
-					}
-					    |
-					lv_keyword_0_7=INT
-					{
-						newLeafNode(lv_keyword_0_7, grammarAccess.getNUMERIC_LITERALAccess().getKeywordINTKeyword_0_0_6());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_7, null);
-					}
-					    |
-					lv_keyword_0_8=DINT
-					{
-						newLeafNode(lv_keyword_0_8, grammarAccess.getNUMERIC_LITERALAccess().getKeywordDINTKeyword_0_0_7());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_8, null);
-					}
-					    |
-					lv_keyword_0_9=LINT
-					{
-						newLeafNode(lv_keyword_0_9, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLINTKeyword_0_0_8());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_9, null);
-					}
-					    |
-					lv_keyword_0_10=USINT
-					{
-						newLeafNode(lv_keyword_0_10, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUSINTKeyword_0_0_9());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_10, null);
-					}
-					    |
-					lv_keyword_0_11=UINT
-					{
-						newLeafNode(lv_keyword_0_11, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUINTKeyword_0_0_10());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_11, null);
-					}
-					    |
-					lv_keyword_0_12=UDINT
-					{
-						newLeafNode(lv_keyword_0_12, grammarAccess.getNUMERIC_LITERALAccess().getKeywordUDINTKeyword_0_0_11());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_12, null);
-					}
-					    |
-					lv_keyword_0_13=ULINT
-					{
-						newLeafNode(lv_keyword_0_13, grammarAccess.getNUMERIC_LITERALAccess().getKeywordULINTKeyword_0_0_12());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_13, null);
-					}
-					    |
-					lv_keyword_0_14=REAL
-					{
-						newLeafNode(lv_keyword_0_14, grammarAccess.getNUMERIC_LITERALAccess().getKeywordREALKeyword_0_0_13());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_14, null);
-					}
-					    |
-					lv_keyword_0_15=LREAL
-					{
-						newLeafNode(lv_keyword_0_15, grammarAccess.getNUMERIC_LITERALAccess().getKeywordLREALKeyword_0_0_14());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_15, null);
-					}
-				)
+					set(
+						$current,
+						"type",
+						lv_type_0_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STNumericLiteralType");
+					afterParserOrEnumRuleCall();
+				}
 			)
 		)?
 		(
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getIntValueINTEGERParserRuleCall_1_0_0());
+						newCompositeNode(grammarAccess.getSTNumericLiteralAccess().getValueBoolLiteralParserRuleCall_1_0_0());
 					}
-					lv_intValue_1_0=ruleINTEGER
+					lv_value_1_1=ruleBoolLiteral
 					{
 						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getNUMERIC_LITERALRule());
+							$current = createModelElementForParent(grammarAccess.getSTNumericLiteralRule());
 						}
 						set(
 							$current,
-							"intValue",
-							lv_intValue_1_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.INTEGER");
+							"value",
+							lv_value_1_1,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.BoolLiteral");
 						afterParserOrEnumRuleCall();
 					}
-				)
-			)
-			    |
-			(
-				(
+					    |
 					{
-						newCompositeNode(grammarAccess.getNUMERIC_LITERALAccess().getRealValueREALParserRuleCall_1_1_0());
+						newCompositeNode(grammarAccess.getSTNumericLiteralAccess().getValueNumberParserRuleCall_1_0_1());
 					}
-					lv_realValue_2_0=ruleREAL
+					lv_value_1_2=ruleNumber
 					{
 						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getNUMERIC_LITERALRule());
+							$current = createModelElementForParent(grammarAccess.getSTNumericLiteralRule());
 						}
 						set(
 							$current,
-							"realValue",
-							lv_realValue_2_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.REAL");
+							"value",
+							lv_value_1_2,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.Number");
 						afterParserOrEnumRuleCall();
 					}
-				)
-			)
-			    |
-			(
-				(
-					lv_hexValue_3_0=RULE_NON_DECIMAL
+					    |
+					lv_value_1_3=RULE_NON_DECIMAL
 					{
-						newLeafNode(lv_hexValue_3_0, grammarAccess.getNUMERIC_LITERALAccess().getHexValueNON_DECIMALTerminalRuleCall_1_2_0());
+						newLeafNode(lv_value_1_3, grammarAccess.getSTNumericLiteralAccess().getValueNON_DECIMALTerminalRuleCall_1_0_2());
 					}
 					{
 						if ($current==null) {
-							$current = createModelElement(grammarAccess.getNUMERIC_LITERALRule());
+							$current = createModelElement(grammarAccess.getSTNumericLiteralRule());
 						}
 						setWithLastConsumed(
 							$current,
-							"hexValue",
-							lv_hexValue_3_0,
+							"value",
+							lv_value_1_3,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.NON_DECIMAL");
 					}
 				)
@@ -3112,15 +2858,53 @@ ruleNUMERIC_LITERAL returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleDATE_LITERAL
-entryRuleDATE_LITERAL returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getDATE_LITERALRule()); }
-	iv_ruleDATE_LITERAL=ruleDATE_LITERAL
-	{ $current=$iv_ruleDATE_LITERAL.current; }
+// Entry rule entryRuleSTDateLiteralType
+entryRuleSTDateLiteralType returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTDateLiteralTypeRule()); }
+	iv_ruleSTDateLiteralType=ruleSTDateLiteralType
+	{ $current=$iv_ruleSTDateLiteralType.current; }
 	EOF;
 
-// Rule DATE_LITERAL
-ruleDATE_LITERAL returns [EObject current=null]
+// Rule STDateLiteralType
+ruleSTDateLiteralType returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		otherlv_0=DATE
+		{
+			newLeafNode(otherlv_0, grammarAccess.getSTDateLiteralTypeAccess().getDATEKeyword_0());
+		}
+		    |
+		otherlv_1=LDATE
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTDateLiteralTypeAccess().getLDATEKeyword_1());
+		}
+		    |
+		otherlv_2=D_1
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSTDateLiteralTypeAccess().getDKeyword_2());
+		}
+		    |
+		otherlv_3=LD
+		{
+			newLeafNode(otherlv_3, grammarAccess.getSTDateLiteralTypeAccess().getLDKeyword_3());
+		}
+	)
+;
+
+// Entry rule entryRuleSTDateLiteral
+entryRuleSTDateLiteral returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTDateLiteralRule()); }
+	iv_ruleSTDateLiteral=ruleSTDateLiteral
+	{ $current=$iv_ruleSTDateLiteral.current; }
+	EOF;
+
+// Rule STDateLiteral
+ruleSTDateLiteral returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -3130,68 +2914,38 @@ ruleDATE_LITERAL returns [EObject current=null]
 	(
 		(
 			(
-				(
-					lv_keyword_0_1=DATE
-					{
-						newLeafNode(lv_keyword_0_1, grammarAccess.getDATE_LITERALAccess().getKeywordDATEKeyword_0_0_0());
+				{
+					newCompositeNode(grammarAccess.getSTDateLiteralAccess().getTypeSTDateLiteralTypeParserRuleCall_0_0());
+				}
+				lv_type_0_0=ruleSTDateLiteralType
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTDateLiteralRule());
 					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getDATE_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_1, null);
-					}
-					    |
-					lv_keyword_0_2=LDATE
-					{
-						newLeafNode(lv_keyword_0_2, grammarAccess.getDATE_LITERALAccess().getKeywordLDATEKeyword_0_0_1());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getDATE_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_2, null);
-					}
-					    |
-					lv_keyword_0_3=D
-					{
-						newLeafNode(lv_keyword_0_3, grammarAccess.getDATE_LITERALAccess().getKeywordDKeyword_0_0_2());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getDATE_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_3, null);
-					}
-					    |
-					lv_keyword_0_4=LD
-					{
-						newLeafNode(lv_keyword_0_4, grammarAccess.getDATE_LITERALAccess().getKeywordLDKeyword_0_0_3());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getDATE_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_4, null);
-					}
-				)
+					set(
+						$current,
+						"type",
+						lv_type_0_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STDateLiteralType");
+					afterParserOrEnumRuleCall();
+				}
 			)
 		)
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getDATE_LITERALAccess().getValueDATEParserRuleCall_1_0());
+					newCompositeNode(grammarAccess.getSTDateLiteralAccess().getValueDateParserRuleCall_1_0());
 				}
-				lv_value_1_0=ruleDATE
+				lv_value_1_0=ruleDate
 				{
 					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getDATE_LITERALRule());
+						$current = createModelElementForParent(grammarAccess.getSTDateLiteralRule());
 					}
 					set(
 						$current,
 						"value",
 						lv_value_1_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.DATE");
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.Date");
 					afterParserOrEnumRuleCall();
 				}
 			)
@@ -3199,15 +2953,15 @@ ruleDATE_LITERAL returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleTIME_LITERAL
-entryRuleTIME_LITERAL returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getTIME_LITERALRule()); }
-	iv_ruleTIME_LITERAL=ruleTIME_LITERAL
-	{ $current=$iv_ruleTIME_LITERAL.current; }
+// Entry rule entryRuleSTTimeLiteralType
+entryRuleSTTimeLiteralType returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTTimeLiteralTypeRule()); }
+	iv_ruleSTTimeLiteralType=ruleSTTimeLiteralType
+	{ $current=$iv_ruleSTTimeLiteralType.current; }
 	EOF;
 
-// Rule TIME_LITERAL
-ruleTIME_LITERAL returns [EObject current=null]
+// Rule STTimeLiteralType
+ruleSTTimeLiteralType returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -3215,85 +2969,37 @@ ruleTIME_LITERAL returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		(
-			(
-				(
-					lv_keyword_0_1=TIME
-					{
-						newLeafNode(lv_keyword_0_1, grammarAccess.getTIME_LITERALAccess().getKeywordTIMEKeyword_0_0_0());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getTIME_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_1, null);
-					}
-					    |
-					lv_keyword_0_2=LTIME
-					{
-						newLeafNode(lv_keyword_0_2, grammarAccess.getTIME_LITERALAccess().getKeywordLTIMEKeyword_0_0_1());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getTIME_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_2, null);
-					}
-					    |
-					lv_keyword_0_3=T
-					{
-						newLeafNode(lv_keyword_0_3, grammarAccess.getTIME_LITERALAccess().getKeywordTKeyword_0_0_2());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getTIME_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_3, null);
-					}
-					    |
-					lv_keyword_0_4=LT
-					{
-						newLeafNode(lv_keyword_0_4, grammarAccess.getTIME_LITERALAccess().getKeywordLTKeyword_0_0_3());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getTIME_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_4, null);
-					}
-				)
-			)
-		)
-		(
-			(
-				lv_value_1_0=RULE_TIME
-				{
-					newLeafNode(lv_value_1_0, grammarAccess.getTIME_LITERALAccess().getValueTIMETerminalRuleCall_1_0());
-				}
-				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getTIME_LITERALRule());
-					}
-					setWithLastConsumed(
-						$current,
-						"value",
-						lv_value_1_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME");
-				}
-			)
-		)
+		otherlv_0=TIME
+		{
+			newLeafNode(otherlv_0, grammarAccess.getSTTimeLiteralTypeAccess().getTIMEKeyword_0());
+		}
+		    |
+		otherlv_1=LTIME
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTTimeLiteralTypeAccess().getLTIMEKeyword_1());
+		}
+		    |
+		otherlv_2=T
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSTTimeLiteralTypeAccess().getTKeyword_2());
+		}
+		    |
+		otherlv_3=LT
+		{
+			newLeafNode(otherlv_3, grammarAccess.getSTTimeLiteralTypeAccess().getLTKeyword_3());
+		}
 	)
 ;
 
-// Entry rule entryRuleTIME_OF_DAY_LITERAL
-entryRuleTIME_OF_DAY_LITERAL returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getTIME_OF_DAY_LITERALRule()); }
-	iv_ruleTIME_OF_DAY_LITERAL=ruleTIME_OF_DAY_LITERAL
-	{ $current=$iv_ruleTIME_OF_DAY_LITERAL.current; }
+// Entry rule entryRuleSTTimeLiteral
+entryRuleSTTimeLiteral returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTTimeLiteralRule()); }
+	iv_ruleSTTimeLiteral=ruleSTTimeLiteral
+	{ $current=$iv_ruleSTTimeLiteral.current; }
 	EOF;
 
-// Rule TIME_OF_DAY_LITERAL
-ruleTIME_OF_DAY_LITERAL returns [EObject current=null]
+// Rule STTimeLiteral
+ruleSTTimeLiteral returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -3303,57 +3009,38 @@ ruleTIME_OF_DAY_LITERAL returns [EObject current=null]
 	(
 		(
 			(
-				(
-					lv_keyword_0_1=TIME_OF_DAY
-					{
-						newLeafNode(lv_keyword_0_1, grammarAccess.getTIME_OF_DAY_LITERALAccess().getKeywordTIME_OF_DAYKeyword_0_0_0());
+				{
+					newCompositeNode(grammarAccess.getSTTimeLiteralAccess().getTypeSTTimeLiteralTypeParserRuleCall_0_0());
+				}
+				lv_type_0_0=ruleSTTimeLiteralType
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTTimeLiteralRule());
 					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getTIME_OF_DAY_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_1, null);
-					}
-					    |
-					lv_keyword_0_2=TOD
-					{
-						newLeafNode(lv_keyword_0_2, grammarAccess.getTIME_OF_DAY_LITERALAccess().getKeywordTODKeyword_0_0_1());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getTIME_OF_DAY_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_2, null);
-					}
-					    |
-					lv_keyword_0_3=LTOD
-					{
-						newLeafNode(lv_keyword_0_3, grammarAccess.getTIME_OF_DAY_LITERALAccess().getKeywordLTODKeyword_0_0_2());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getTIME_OF_DAY_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_3, null);
-					}
-				)
+					set(
+						$current,
+						"type",
+						lv_type_0_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STTimeLiteralType");
+					afterParserOrEnumRuleCall();
+				}
 			)
 		)
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getTIME_OF_DAY_LITERALAccess().getValueTIME_OF_DAYParserRuleCall_1_0());
+					newCompositeNode(grammarAccess.getSTTimeLiteralAccess().getValueTimeParserRuleCall_1_0());
 				}
-				lv_value_1_0=ruleTIME_OF_DAY
+				lv_value_1_0=ruleTime
 				{
 					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getTIME_OF_DAY_LITERALRule());
+						$current = createModelElementForParent(grammarAccess.getSTTimeLiteralRule());
 					}
 					set(
 						$current,
 						"value",
 						lv_value_1_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_OF_DAY");
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.Time");
 					afterParserOrEnumRuleCall();
 				}
 			)
@@ -3361,15 +3048,48 @@ ruleTIME_OF_DAY_LITERAL returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleDATE_AND_TIME_LITERAL
-entryRuleDATE_AND_TIME_LITERAL returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getDATE_AND_TIME_LITERALRule()); }
-	iv_ruleDATE_AND_TIME_LITERAL=ruleDATE_AND_TIME_LITERAL
-	{ $current=$iv_ruleDATE_AND_TIME_LITERAL.current; }
+// Entry rule entryRuleSTTimeOfDayLiteralType
+entryRuleSTTimeOfDayLiteralType returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTTimeOfDayLiteralTypeRule()); }
+	iv_ruleSTTimeOfDayLiteralType=ruleSTTimeOfDayLiteralType
+	{ $current=$iv_ruleSTTimeOfDayLiteralType.current; }
 	EOF;
 
-// Rule DATE_AND_TIME_LITERAL
-ruleDATE_AND_TIME_LITERAL returns [EObject current=null]
+// Rule STTimeOfDayLiteralType
+ruleSTTimeOfDayLiteralType returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		otherlv_0=TIME_OF_DAY
+		{
+			newLeafNode(otherlv_0, grammarAccess.getSTTimeOfDayLiteralTypeAccess().getTIME_OF_DAYKeyword_0());
+		}
+		    |
+		otherlv_1=TOD
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTTimeOfDayLiteralTypeAccess().getTODKeyword_1());
+		}
+		    |
+		otherlv_2=LTOD
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSTTimeOfDayLiteralTypeAccess().getLTODKeyword_2());
+		}
+	)
+;
+
+// Entry rule entryRuleSTTimeOfDayLiteral
+entryRuleSTTimeOfDayLiteral returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTTimeOfDayLiteralRule()); }
+	iv_ruleSTTimeOfDayLiteral=ruleSTTimeOfDayLiteral
+	{ $current=$iv_ruleSTTimeOfDayLiteral.current; }
+	EOF;
+
+// Rule STTimeOfDayLiteral
+ruleSTTimeOfDayLiteral returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -3379,91 +3099,156 @@ ruleDATE_AND_TIME_LITERAL returns [EObject current=null]
 	(
 		(
 			(
-				(
-					lv_keyword_0_1=DATE_AND_TIME
-					{
-						newLeafNode(lv_keyword_0_1, grammarAccess.getDATE_AND_TIME_LITERALAccess().getKeywordDATE_AND_TIMEKeyword_0_0_0());
+				{
+					newCompositeNode(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeSTTimeOfDayLiteralTypeParserRuleCall_0_0());
+				}
+				lv_type_0_0=ruleSTTimeOfDayLiteralType
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTTimeOfDayLiteralRule());
 					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getDATE_AND_TIME_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_1, null);
-					}
-					    |
-					lv_keyword_0_2=LDATE_AND_TIME
-					{
-						newLeafNode(lv_keyword_0_2, grammarAccess.getDATE_AND_TIME_LITERALAccess().getKeywordLDATE_AND_TIMEKeyword_0_0_1());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getDATE_AND_TIME_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_2, null);
-					}
-					    |
-					lv_keyword_0_3=DT
-					{
-						newLeafNode(lv_keyword_0_3, grammarAccess.getDATE_AND_TIME_LITERALAccess().getKeywordDTKeyword_0_0_2());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getDATE_AND_TIME_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_3, null);
-					}
-					    |
-					lv_keyword_0_4=LDT
-					{
-						newLeafNode(lv_keyword_0_4, grammarAccess.getDATE_AND_TIME_LITERALAccess().getKeywordLDTKeyword_0_0_3());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getDATE_AND_TIME_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_4, null);
-					}
-				)
+					set(
+						$current,
+						"type",
+						lv_type_0_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STTimeOfDayLiteralType");
+					afterParserOrEnumRuleCall();
+				}
 			)
 		)
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getDATE_AND_TIME_LITERALAccess().getDateValueDATEParserRuleCall_1_0());
+					newCompositeNode(grammarAccess.getSTTimeOfDayLiteralAccess().getValueTimeOfDayParserRuleCall_1_0());
 				}
-				lv_dateValue_1_0=ruleDATE
+				lv_value_1_0=ruleTimeOfDay
 				{
 					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getDATE_AND_TIME_LITERALRule());
+						$current = createModelElementForParent(grammarAccess.getSTTimeOfDayLiteralRule());
+					}
+					set(
+						$current,
+						"value",
+						lv_value_1_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.TimeOfDay");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+	)
+;
+
+// Entry rule entryRuleSTDateAndTimeLiteralType
+entryRuleSTDateAndTimeLiteralType returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTDateAndTimeLiteralTypeRule()); }
+	iv_ruleSTDateAndTimeLiteralType=ruleSTDateAndTimeLiteralType
+	{ $current=$iv_ruleSTDateAndTimeLiteralType.current; }
+	EOF;
+
+// Rule STDateAndTimeLiteralType
+ruleSTDateAndTimeLiteralType returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		otherlv_0=DATE_AND_TIME
+		{
+			newLeafNode(otherlv_0, grammarAccess.getSTDateAndTimeLiteralTypeAccess().getDATE_AND_TIMEKeyword_0());
+		}
+		    |
+		otherlv_1=LDATE_AND_TIME
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTDateAndTimeLiteralTypeAccess().getLDATE_AND_TIMEKeyword_1());
+		}
+		    |
+		otherlv_2=DT
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSTDateAndTimeLiteralTypeAccess().getDTKeyword_2());
+		}
+		    |
+		otherlv_3=LDT
+		{
+			newLeafNode(otherlv_3, grammarAccess.getSTDateAndTimeLiteralTypeAccess().getLDTKeyword_3());
+		}
+	)
+;
+
+// Entry rule entryRuleSTDateAndTimeLiteral
+entryRuleSTDateAndTimeLiteral returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTDateAndTimeLiteralRule()); }
+	iv_ruleSTDateAndTimeLiteral=ruleSTDateAndTimeLiteral
+	{ $current=$iv_ruleSTDateAndTimeLiteral.current; }
+	EOF;
+
+// Rule STDateAndTimeLiteral
+ruleSTDateAndTimeLiteral returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeSTDateAndTimeLiteralTypeParserRuleCall_0_0());
+				}
+				lv_type_0_0=ruleSTDateAndTimeLiteralType
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTDateAndTimeLiteralRule());
+					}
+					set(
+						$current,
+						"type",
+						lv_type_0_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STDateAndTimeLiteralType");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTDateAndTimeLiteralAccess().getDateValueDateParserRuleCall_1_0());
+				}
+				lv_dateValue_1_0=ruleDate
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTDateAndTimeLiteralRule());
 					}
 					set(
 						$current,
 						"dateValue",
 						lv_dateValue_1_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.DATE");
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.Date");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)
 		otherlv_2=HyphenMinus
 		{
-			newLeafNode(otherlv_2, grammarAccess.getDATE_AND_TIME_LITERALAccess().getHyphenMinusKeyword_2());
+			newLeafNode(otherlv_2, grammarAccess.getSTDateAndTimeLiteralAccess().getHyphenMinusKeyword_2());
 		}
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getDATE_AND_TIME_LITERALAccess().getTimeOfDayValueTIME_OF_DAYParserRuleCall_3_0());
+					newCompositeNode(grammarAccess.getSTDateAndTimeLiteralAccess().getTimeOfDayValueTimeOfDayParserRuleCall_3_0());
 				}
-				lv_timeOfDayValue_3_0=ruleTIME_OF_DAY
+				lv_timeOfDayValue_3_0=ruleTimeOfDay
 				{
 					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getDATE_AND_TIME_LITERALRule());
+						$current = createModelElementForParent(grammarAccess.getSTDateAndTimeLiteralRule());
 					}
 					set(
 						$current,
 						"timeOfDayValue",
 						lv_timeOfDayValue_3_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_OF_DAY");
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.TimeOfDay");
 					afterParserOrEnumRuleCall();
 				}
 			)
@@ -3471,15 +3256,53 @@ ruleDATE_AND_TIME_LITERAL returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleSTRING_LITERAL
-entryRuleSTRING_LITERAL returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getSTRING_LITERALRule()); }
-	iv_ruleSTRING_LITERAL=ruleSTRING_LITERAL
-	{ $current=$iv_ruleSTRING_LITERAL.current; }
+// Entry rule entryRuleSTStringLiteralType
+entryRuleSTStringLiteralType returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTStringLiteralTypeRule()); }
+	iv_ruleSTStringLiteralType=ruleSTStringLiteralType
+	{ $current=$iv_ruleSTStringLiteralType.current; }
 	EOF;
 
-// Rule STRING_LITERAL
-ruleSTRING_LITERAL returns [EObject current=null]
+// Rule STStringLiteralType
+ruleSTStringLiteralType returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		otherlv_0=STRING
+		{
+			newLeafNode(otherlv_0, grammarAccess.getSTStringLiteralTypeAccess().getSTRINGKeyword_0());
+		}
+		    |
+		otherlv_1=WSTRING
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTStringLiteralTypeAccess().getWSTRINGKeyword_1());
+		}
+		    |
+		otherlv_2=CHAR
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSTStringLiteralTypeAccess().getCHARKeyword_2());
+		}
+		    |
+		otherlv_3=WCHAR
+		{
+			newLeafNode(otherlv_3, grammarAccess.getSTStringLiteralTypeAccess().getWCHARKeyword_3());
+		}
+	)
+;
+
+// Entry rule entryRuleSTStringLiteral
+entryRuleSTStringLiteral returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTStringLiteralRule()); }
+	iv_ruleSTStringLiteral=ruleSTStringLiteral
+	{ $current=$iv_ruleSTStringLiteral.current; }
+	EOF;
+
+// Rule STStringLiteral
+ruleSTStringLiteral returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -3489,65 +3312,100 @@ ruleSTRING_LITERAL returns [EObject current=null]
 	(
 		(
 			(
-				(
-					lv_keyword_0_0=STRING
-					{
-						newLeafNode(lv_keyword_0_0, grammarAccess.getSTRING_LITERALAccess().getKeywordSTRINGKeyword_0_0_0());
+				{
+					newCompositeNode(grammarAccess.getSTStringLiteralAccess().getTypeSTStringLiteralTypeParserRuleCall_0_0());
+				}
+				lv_type_0_0=ruleSTStringLiteralType
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTStringLiteralRule());
 					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getSTRING_LITERALRule());
-						}
-						setWithLastConsumed($current, "keyword", lv_keyword_0_0, "STRING#");
-					}
-				)
+					set(
+						$current,
+						"type",
+						lv_type_0_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STStringLiteralType");
+					afterParserOrEnumRuleCall();
+				}
 			)
-			    |
-			otherlv_1=WSTRING
-			{
-				newLeafNode(otherlv_1, grammarAccess.getSTRING_LITERALAccess().getWSTRINGKeyword_0_1());
-			}
-			    |
-			otherlv_2=CHAR
-			{
-				newLeafNode(otherlv_2, grammarAccess.getSTRING_LITERALAccess().getCHARKeyword_0_2());
-			}
-			    |
-			otherlv_3=WCHAR
-			{
-				newLeafNode(otherlv_3, grammarAccess.getSTRING_LITERALAccess().getWCHARKeyword_0_3());
-			}
 		)?
 		(
 			(
-				lv_value_4_0=RULE_STRING
-				{
-					newLeafNode(lv_value_4_0, grammarAccess.getSTRING_LITERALAccess().getValueSTRINGTerminalRuleCall_1_0());
-				}
-				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getSTRING_LITERALRule());
+				(
+					lv_value_1_1=RULE_STRING
+					{
+						newLeafNode(lv_value_1_1, grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0_0());
 					}
-					setWithLastConsumed(
-						$current,
-						"value",
-						lv_value_4_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STRING");
-				}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getSTStringLiteralRule());
+						}
+						setWithLastConsumed(
+							$current,
+							"value",
+							lv_value_1_1,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STRING");
+					}
+					    |
+					lv_value_1_2=RULE_WSTRING
+					{
+						newLeafNode(lv_value_1_2, grammarAccess.getSTStringLiteralAccess().getValueWSTRINGTerminalRuleCall_1_0_1());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getSTStringLiteralRule());
+						}
+						setWithLastConsumed(
+							$current,
+							"value",
+							lv_value_1_2,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.WSTRING");
+					}
+				)
 			)
 		)
 	)
 ;
 
-// Entry rule entryRuleINTEGER
-entryRuleINTEGER returns [String current=null]:
-	{ newCompositeNode(grammarAccess.getINTEGERRule()); }
-	iv_ruleINTEGER=ruleINTEGER
-	{ $current=$iv_ruleINTEGER.current.getText(); }
+// Entry rule entryRuleBoolLiteral
+entryRuleBoolLiteral returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getBoolLiteralRule()); }
+	iv_ruleBoolLiteral=ruleBoolLiteral
+	{ $current=$iv_ruleBoolLiteral.current.getText(); }
 	EOF;
 
-// Rule INTEGER
-ruleINTEGER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+// Rule BoolLiteral
+ruleBoolLiteral returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		kw=TRUE
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getBoolLiteralAccess().getTRUEKeyword_0());
+		}
+		    |
+		kw=FALSE
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getBoolLiteralAccess().getFALSEKeyword_1());
+		}
+	)
+;
+
+// Entry rule entryRuleNumber
+entryRuleNumber returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getNumberRule()); }
+	iv_ruleNumber=ruleNumber
+	{ $current=$iv_ruleNumber.current.getText(); }
+	EOF;
+
+// Rule Number
+ruleNumber returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 @init {
 	enterRule();
 }
@@ -3559,13 +3417,13 @@ ruleINTEGER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()
 			kw=PlusSign
 			{
 				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getINTEGERAccess().getPlusSignKeyword_0_0());
+				newLeafNode(kw, grammarAccess.getNumberAccess().getPlusSignKeyword_0_0());
 			}
 			    |
 			kw=HyphenMinus
 			{
 				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getINTEGERAccess().getHyphenMinusKeyword_0_1());
+				newLeafNode(kw, grammarAccess.getNumberAccess().getHyphenMinusKeyword_0_1());
 			}
 		)?
 		this_INT_2=RULE_INT
@@ -3573,174 +3431,226 @@ ruleINTEGER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()
 			$current.merge(this_INT_2);
 		}
 		{
-			newLeafNode(this_INT_2, grammarAccess.getINTEGERAccess().getINTTerminalRuleCall_1());
-		}
-	)
-;
-
-// Entry rule entryRuleREAL
-entryRuleREAL returns [String current=null]:
-	{ newCompositeNode(grammarAccess.getREALRule()); }
-	iv_ruleREAL=ruleREAL
-	{ $current=$iv_ruleREAL.current.getText(); }
-	EOF;
-
-// Rule REAL
-ruleREAL returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
-@init {
-	enterRule();
-}
-@after {
-	leaveRule();
-}:
-	(
-		{
-			newCompositeNode(grammarAccess.getREALAccess().getINTEGERParserRuleCall_0());
-		}
-		this_INTEGER_0=ruleINTEGER
-		{
-			$current.merge(this_INTEGER_0);
-		}
-		{
-			afterParserOrEnumRuleCall();
-		}
-		kw=FullStop
-		{
-			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getREALAccess().getFullStopKeyword_1());
-		}
-		(
-			this_EXT_INT_2=RULE_EXT_INT
-			{
-				$current.merge(this_EXT_INT_2);
-			}
-			{
-				newLeafNode(this_EXT_INT_2, grammarAccess.getREALAccess().getEXT_INTTerminalRuleCall_2_0());
-			}
-			    |
-			this_INT_3=RULE_INT
-			{
-				$current.merge(this_INT_3);
-			}
-			{
-				newLeafNode(this_INT_3, grammarAccess.getREALAccess().getINTTerminalRuleCall_2_1());
-			}
-		)
-	)
-;
-
-// Entry rule entryRuleDATE
-entryRuleDATE returns [String current=null]:
-	{ newCompositeNode(grammarAccess.getDATERule()); }
-	iv_ruleDATE=ruleDATE
-	{ $current=$iv_ruleDATE.current.getText(); }
-	EOF;
-
-// Rule DATE
-ruleDATE returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
-@init {
-	enterRule();
-}
-@after {
-	leaveRule();
-}:
-	(
-		this_INT_0=RULE_INT
-		{
-			$current.merge(this_INT_0);
-		}
-		{
-			newLeafNode(this_INT_0, grammarAccess.getDATEAccess().getINTTerminalRuleCall_0());
-		}
-		kw=HyphenMinus
-		{
-			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getDATEAccess().getHyphenMinusKeyword_1());
-		}
-		this_INT_2=RULE_INT
-		{
-			$current.merge(this_INT_2);
-		}
-		{
-			newLeafNode(this_INT_2, grammarAccess.getDATEAccess().getINTTerminalRuleCall_2());
-		}
-		kw=HyphenMinus
-		{
-			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getDATEAccess().getHyphenMinusKeyword_3());
-		}
-		this_INT_4=RULE_INT
-		{
-			$current.merge(this_INT_4);
-		}
-		{
-			newLeafNode(this_INT_4, grammarAccess.getDATEAccess().getINTTerminalRuleCall_4());
-		}
-	)
-;
-
-// Entry rule entryRuleTIME_OF_DAY
-entryRuleTIME_OF_DAY returns [String current=null]:
-	{ newCompositeNode(grammarAccess.getTIME_OF_DAYRule()); }
-	iv_ruleTIME_OF_DAY=ruleTIME_OF_DAY
-	{ $current=$iv_ruleTIME_OF_DAY.current.getText(); }
-	EOF;
-
-// Rule TIME_OF_DAY
-ruleTIME_OF_DAY returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
-@init {
-	enterRule();
-}
-@after {
-	leaveRule();
-}:
-	(
-		this_INT_0=RULE_INT
-		{
-			$current.merge(this_INT_0);
-		}
-		{
-			newLeafNode(this_INT_0, grammarAccess.getTIME_OF_DAYAccess().getINTTerminalRuleCall_0());
-		}
-		kw=Colon
-		{
-			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getTIME_OF_DAYAccess().getColonKeyword_1());
-		}
-		this_INT_2=RULE_INT
-		{
-			$current.merge(this_INT_2);
-		}
-		{
-			newLeafNode(this_INT_2, grammarAccess.getTIME_OF_DAYAccess().getINTTerminalRuleCall_2());
-		}
-		kw=Colon
-		{
-			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getTIME_OF_DAYAccess().getColonKeyword_3());
-		}
-		this_INT_4=RULE_INT
-		{
-			$current.merge(this_INT_4);
-		}
-		{
-			newLeafNode(this_INT_4, grammarAccess.getTIME_OF_DAYAccess().getINTTerminalRuleCall_4());
+			newLeafNode(this_INT_2, grammarAccess.getNumberAccess().getINTTerminalRuleCall_1());
 		}
 		(
 			kw=FullStop
 			{
 				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getTIME_OF_DAYAccess().getFullStopKeyword_5_0());
+				newLeafNode(kw, grammarAccess.getNumberAccess().getFullStopKeyword_2_0());
+			}
+			(
+				this_EXT_INT_4=RULE_EXT_INT
+				{
+					$current.merge(this_EXT_INT_4);
+				}
+				{
+					newLeafNode(this_EXT_INT_4, grammarAccess.getNumberAccess().getEXT_INTTerminalRuleCall_2_1_0());
+				}
+				    |
+				this_INT_5=RULE_INT
+				{
+					$current.merge(this_INT_5);
+				}
+				{
+					newLeafNode(this_INT_5, grammarAccess.getNumberAccess().getINTTerminalRuleCall_2_1_1());
+				}
+			)
+		)?
+	)
+;
+
+// Entry rule entryRuleDate
+entryRuleDate returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getDateRule()); }
+	iv_ruleDate=ruleDate
+	{ $current=$iv_ruleDate.current.getText(); }
+	EOF;
+
+// Rule Date
+ruleDate returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		this_INT_0=RULE_INT
+		{
+			$current.merge(this_INT_0);
+		}
+		{
+			newLeafNode(this_INT_0, grammarAccess.getDateAccess().getINTTerminalRuleCall_0());
+		}
+		kw=HyphenMinus
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getDateAccess().getHyphenMinusKeyword_1());
+		}
+		this_INT_2=RULE_INT
+		{
+			$current.merge(this_INT_2);
+		}
+		{
+			newLeafNode(this_INT_2, grammarAccess.getDateAccess().getINTTerminalRuleCall_2());
+		}
+		kw=HyphenMinus
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getDateAccess().getHyphenMinusKeyword_3());
+		}
+		this_INT_4=RULE_INT
+		{
+			$current.merge(this_INT_4);
+		}
+		{
+			newLeafNode(this_INT_4, grammarAccess.getDateAccess().getINTTerminalRuleCall_4());
+		}
+	)
+;
+
+// Entry rule entryRuleTimeOfDay
+entryRuleTimeOfDay returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getTimeOfDayRule()); }
+	iv_ruleTimeOfDay=ruleTimeOfDay
+	{ $current=$iv_ruleTimeOfDay.current.getText(); }
+	EOF;
+
+// Rule TimeOfDay
+ruleTimeOfDay returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		this_INT_0=RULE_INT
+		{
+			$current.merge(this_INT_0);
+		}
+		{
+			newLeafNode(this_INT_0, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_0());
+		}
+		kw=Colon
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getTimeOfDayAccess().getColonKeyword_1());
+		}
+		this_INT_2=RULE_INT
+		{
+			$current.merge(this_INT_2);
+		}
+		{
+			newLeafNode(this_INT_2, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_2());
+		}
+		kw=Colon
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getTimeOfDayAccess().getColonKeyword_3());
+		}
+		this_INT_4=RULE_INT
+		{
+			$current.merge(this_INT_4);
+		}
+		{
+			newLeafNode(this_INT_4, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_4());
+		}
+		(
+			kw=FullStop
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeOfDayAccess().getFullStopKeyword_5_0());
 			}
 			this_INT_6=RULE_INT
 			{
 				$current.merge(this_INT_6);
 			}
 			{
-				newLeafNode(this_INT_6, grammarAccess.getTIME_OF_DAYAccess().getINTTerminalRuleCall_5_1());
+				newLeafNode(this_INT_6, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_5_1());
 			}
 		)?
 	)
+;
+
+// Entry rule entryRuleTime
+entryRuleTime returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getTimeRule()); }
+	iv_ruleTime=ruleTime
+	{ $current=$iv_ruleTime.current.getText(); }
+	EOF;
+
+// Rule Time
+ruleTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		{
+			newCompositeNode(grammarAccess.getTimeAccess().getNumberParserRuleCall_0());
+		}
+		this_Number_0=ruleNumber
+		{
+			$current.merge(this_Number_0);
+		}
+		{
+			afterParserOrEnumRuleCall();
+		}
+		(
+			kw=D
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeAccess().getDKeyword_1_0());
+			}
+			    |
+			kw=H
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeAccess().getHKeyword_1_1());
+			}
+			    |
+			kw=M
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeAccess().getMKeyword_1_2());
+			}
+			    |
+			kw=S
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeAccess().getSKeyword_1_3());
+			}
+			    |
+			kw=MS
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeAccess().getMSKeyword_1_4());
+			}
+			    |
+			kw=US
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeAccess().getUSKeyword_1_5());
+			}
+			    |
+			kw=NS
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeAccess().getNSKeyword_1_6());
+			}
+		)
+		(
+			kw=KW__
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeAccess().get_Keyword_2());
+			}
+		)?
+	)+
 ;
 
 // Rule SubrangeOperator
@@ -4023,7 +3933,7 @@ ruleMultiBitAccessSpecifier returns [Enumerator current=null]
 		)
 		    |
 		(
-			enumLiteral_1=D_1
+			enumLiteral_1=D_2
 			{
 				$current = grammarAccess.getMultiBitAccessSpecifierAccess().getDwordAccessEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
 				newLeafNode(enumLiteral_1, grammarAccess.getMultiBitAccessSpecifierAccess().getDwordAccessEnumLiteralDeclaration_1());

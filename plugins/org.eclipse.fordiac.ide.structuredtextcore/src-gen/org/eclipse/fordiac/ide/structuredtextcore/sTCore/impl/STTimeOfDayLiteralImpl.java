@@ -11,9 +11,10 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,7 +24,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl#getTimeOfDayLiteral <em>Time Of Day Literal</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -31,14 +33,34 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL;
 public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOfDayLiteral
 {
   /**
-   * The cached value of the '{@link #getTimeOfDayLiteral() <em>Time Of Day Literal</em>}' containment reference.
+   * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getTimeOfDayLiteral()
+   * @see #getType()
    * @generated
    * @ordered
    */
-  protected TIME_OF_DAY_LITERAL timeOfDayLiteral;
+  protected DataType type;
+
+  /**
+   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected static final String VALUE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected String value = VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -67,9 +89,9 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
    * @generated
    */
   @Override
-  public TIME_OF_DAY_LITERAL getTimeOfDayLiteral()
+  public DataType getType()
   {
-    return timeOfDayLiteral;
+    return type;
   }
 
   /**
@@ -77,13 +99,13 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetTimeOfDayLiteral(TIME_OF_DAY_LITERAL newTimeOfDayLiteral, NotificationChain msgs)
+  public NotificationChain basicSetType(DataType newType, NotificationChain msgs)
   {
-    TIME_OF_DAY_LITERAL oldTimeOfDayLiteral = timeOfDayLiteral;
-    timeOfDayLiteral = newTimeOfDayLiteral;
+    DataType oldType = type;
+    type = newType;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL, oldTimeOfDayLiteral, newTimeOfDayLiteral);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE, oldType, newType);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -95,20 +117,45 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
    * @generated
    */
   @Override
-  public void setTimeOfDayLiteral(TIME_OF_DAY_LITERAL newTimeOfDayLiteral)
+  public void setType(DataType newType)
   {
-    if (newTimeOfDayLiteral != timeOfDayLiteral)
+    if (newType != type)
     {
       NotificationChain msgs = null;
-      if (timeOfDayLiteral != null)
-        msgs = ((InternalEObject)timeOfDayLiteral).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL, null, msgs);
-      if (newTimeOfDayLiteral != null)
-        msgs = ((InternalEObject)newTimeOfDayLiteral).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL, null, msgs);
-      msgs = basicSetTimeOfDayLiteral(newTimeOfDayLiteral, msgs);
+      if (type != null)
+        msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE, null, msgs);
+      if (newType != null)
+        msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE, null, msgs);
+      msgs = basicSetType(newType, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL, newTimeOfDayLiteral, newTimeOfDayLiteral));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE, newType, newType));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getValue()
+  {
+    return value;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setValue(String newValue)
+  {
+    String oldValue = value;
+    value = newValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_OF_DAY_LITERAL__VALUE, oldValue, value));
   }
 
   /**
@@ -121,8 +168,8 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL:
-        return basicSetTimeOfDayLiteral(null, msgs);
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE:
+        return basicSetType(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -137,8 +184,10 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL:
-        return getTimeOfDayLiteral();
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE:
+        return getType();
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL__VALUE:
+        return getValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -153,8 +202,11 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL:
-        setTimeOfDayLiteral((TIME_OF_DAY_LITERAL)newValue);
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE:
+        setType((DataType)newValue);
+        return;
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL__VALUE:
+        setValue((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -170,8 +222,11 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL:
-        setTimeOfDayLiteral((TIME_OF_DAY_LITERAL)null);
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE:
+        setType((DataType)null);
+        return;
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL__VALUE:
+        setValue(VALUE_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -187,10 +242,29 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL:
-        return timeOfDayLiteral != null;
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE:
+        return type != null;
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL__VALUE:
+        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (value: ");
+    result.append(value);
+    result.append(')');
+    return result.toString();
   }
 
 } //STTimeOfDayLiteralImpl

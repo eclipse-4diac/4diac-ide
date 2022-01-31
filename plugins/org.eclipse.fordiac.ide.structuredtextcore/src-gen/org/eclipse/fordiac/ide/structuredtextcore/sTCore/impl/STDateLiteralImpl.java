@@ -3,6 +3,8 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl;
 
+import java.util.Date;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -11,7 +13,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL;
+import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral;
 
@@ -23,7 +26,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl#getDateLiteral <em>Date Literal</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -31,14 +35,34 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral;
 public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
 {
   /**
-   * The cached value of the '{@link #getDateLiteral() <em>Date Literal</em>}' containment reference.
+   * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDateLiteral()
+   * @see #getType()
    * @generated
    * @ordered
    */
-  protected DATE_LITERAL dateLiteral;
+  protected DataType type;
+
+  /**
+   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected static final Date VALUE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected Date value = VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -67,9 +91,9 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
    * @generated
    */
   @Override
-  public DATE_LITERAL getDateLiteral()
+  public DataType getType()
   {
-    return dateLiteral;
+    return type;
   }
 
   /**
@@ -77,13 +101,13 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetDateLiteral(DATE_LITERAL newDateLiteral, NotificationChain msgs)
+  public NotificationChain basicSetType(DataType newType, NotificationChain msgs)
   {
-    DATE_LITERAL oldDateLiteral = dateLiteral;
-    dateLiteral = newDateLiteral;
+    DataType oldType = type;
+    type = newType;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_DATE_LITERAL__DATE_LITERAL, oldDateLiteral, newDateLiteral);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_DATE_LITERAL__TYPE, oldType, newType);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -95,20 +119,45 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
    * @generated
    */
   @Override
-  public void setDateLiteral(DATE_LITERAL newDateLiteral)
+  public void setType(DataType newType)
   {
-    if (newDateLiteral != dateLiteral)
+    if (newType != type)
     {
       NotificationChain msgs = null;
-      if (dateLiteral != null)
-        msgs = ((InternalEObject)dateLiteral).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_DATE_LITERAL__DATE_LITERAL, null, msgs);
-      if (newDateLiteral != null)
-        msgs = ((InternalEObject)newDateLiteral).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_DATE_LITERAL__DATE_LITERAL, null, msgs);
-      msgs = basicSetDateLiteral(newDateLiteral, msgs);
+      if (type != null)
+        msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_DATE_LITERAL__TYPE, null, msgs);
+      if (newType != null)
+        msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_DATE_LITERAL__TYPE, null, msgs);
+      msgs = basicSetType(newType, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_DATE_LITERAL__DATE_LITERAL, newDateLiteral, newDateLiteral));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_DATE_LITERAL__TYPE, newType, newType));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Date getValue()
+  {
+    return value;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setValue(Date newValue)
+  {
+    Date oldValue = value;
+    value = newValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_DATE_LITERAL__VALUE, oldValue, value));
   }
 
   /**
@@ -121,8 +170,8 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_DATE_LITERAL__DATE_LITERAL:
-        return basicSetDateLiteral(null, msgs);
+      case STCorePackage.ST_DATE_LITERAL__TYPE:
+        return basicSetType(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -137,8 +186,10 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_DATE_LITERAL__DATE_LITERAL:
-        return getDateLiteral();
+      case STCorePackage.ST_DATE_LITERAL__TYPE:
+        return getType();
+      case STCorePackage.ST_DATE_LITERAL__VALUE:
+        return getValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -153,8 +204,11 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_DATE_LITERAL__DATE_LITERAL:
-        setDateLiteral((DATE_LITERAL)newValue);
+      case STCorePackage.ST_DATE_LITERAL__TYPE:
+        setType((DataType)newValue);
+        return;
+      case STCorePackage.ST_DATE_LITERAL__VALUE:
+        setValue((Date)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -170,8 +224,11 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_DATE_LITERAL__DATE_LITERAL:
-        setDateLiteral((DATE_LITERAL)null);
+      case STCorePackage.ST_DATE_LITERAL__TYPE:
+        setType((DataType)null);
+        return;
+      case STCorePackage.ST_DATE_LITERAL__VALUE:
+        setValue(VALUE_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -187,10 +244,29 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_DATE_LITERAL__DATE_LITERAL:
-        return dateLiteral != null;
+      case STCorePackage.ST_DATE_LITERAL__TYPE:
+        return type != null;
+      case STCorePackage.ST_DATE_LITERAL__VALUE:
+        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (value: ");
+    result.append(value);
+    result.append(')');
+    return result.toString();
   }
 
 } //STDateLiteralImpl

@@ -3,6 +3,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,7 +14,8 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getTimeLiteral <em>Time Literal</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTTimeLiteral()
@@ -23,25 +25,47 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 public interface STTimeLiteral extends STExpression
 {
   /**
-   * Returns the value of the '<em><b>Time Literal</b></em>' containment reference.
+   * Returns the value of the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Time Literal</em>' containment reference.
-   * @see #setTimeLiteral(TIME_LITERAL)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTTimeLiteral_TimeLiteral()
+   * @return the value of the '<em>Type</em>' containment reference.
+   * @see #setType(DataType)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTTimeLiteral_Type()
    * @model containment="true"
    * @generated
    */
-  TIME_LITERAL getTimeLiteral();
+  DataType getType();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getTimeLiteral <em>Time Literal</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Time Literal</em>' containment reference.
-   * @see #getTimeLiteral()
+   * @param value the new value of the '<em>Type</em>' containment reference.
+   * @see #getType()
    * @generated
    */
-  void setTimeLiteral(TIME_LITERAL value);
+  void setType(DataType value);
+
+  /**
+   * Returns the value of the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Value</em>' attribute.
+   * @see #setValue(String)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTTimeLiteral_Value()
+   * @model
+   * @generated
+   */
+  String getValue();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getValue <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Value</em>' attribute.
+   * @see #getValue()
+   * @generated
+   */
+  void setValue(String value);
 
 } // STTimeLiteral

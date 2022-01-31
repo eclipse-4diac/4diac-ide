@@ -14,6 +14,7 @@ public abstract class AbstractSTFunctionValidator extends STCoreValidator {
 	protected List<EPackage> getEPackages() {
 		List<EPackage> result = new ArrayList<EPackage>(super.getEPackages());
 		result.add(org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.STFunctionPackage.eINSTANCE);
+		result.add(EPackage.Registry.INSTANCE.getEPackage("org.eclipse.fordiac.ide.model.datatype"));
 		return result;
 	}
 }

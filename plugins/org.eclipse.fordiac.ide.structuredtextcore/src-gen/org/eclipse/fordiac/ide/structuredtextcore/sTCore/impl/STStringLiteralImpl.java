@@ -11,8 +11,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
 
 /**
@@ -23,7 +24,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl#getStringLiteral <em>String Literal</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -31,14 +33,34 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
 public class STStringLiteralImpl extends STExpressionImpl implements STStringLiteral
 {
   /**
-   * The cached value of the '{@link #getStringLiteral() <em>String Literal</em>}' containment reference.
+   * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getStringLiteral()
+   * @see #getType()
    * @generated
    * @ordered
    */
-  protected STRING_LITERAL stringLiteral;
+  protected DataType type;
+
+  /**
+   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected static final String VALUE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected String value = VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -67,9 +89,9 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
    * @generated
    */
   @Override
-  public STRING_LITERAL getStringLiteral()
+  public DataType getType()
   {
-    return stringLiteral;
+    return type;
   }
 
   /**
@@ -77,13 +99,13 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetStringLiteral(STRING_LITERAL newStringLiteral, NotificationChain msgs)
+  public NotificationChain basicSetType(DataType newType, NotificationChain msgs)
   {
-    STRING_LITERAL oldStringLiteral = stringLiteral;
-    stringLiteral = newStringLiteral;
+    DataType oldType = type;
+    type = newType;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STRING_LITERAL__STRING_LITERAL, oldStringLiteral, newStringLiteral);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STRING_LITERAL__TYPE, oldType, newType);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -95,20 +117,45 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
    * @generated
    */
   @Override
-  public void setStringLiteral(STRING_LITERAL newStringLiteral)
+  public void setType(DataType newType)
   {
-    if (newStringLiteral != stringLiteral)
+    if (newType != type)
     {
       NotificationChain msgs = null;
-      if (stringLiteral != null)
-        msgs = ((InternalEObject)stringLiteral).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_STRING_LITERAL__STRING_LITERAL, null, msgs);
-      if (newStringLiteral != null)
-        msgs = ((InternalEObject)newStringLiteral).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_STRING_LITERAL__STRING_LITERAL, null, msgs);
-      msgs = basicSetStringLiteral(newStringLiteral, msgs);
+      if (type != null)
+        msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_STRING_LITERAL__TYPE, null, msgs);
+      if (newType != null)
+        msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_STRING_LITERAL__TYPE, null, msgs);
+      msgs = basicSetType(newType, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STRING_LITERAL__STRING_LITERAL, newStringLiteral, newStringLiteral));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STRING_LITERAL__TYPE, newType, newType));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getValue()
+  {
+    return value;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setValue(String newValue)
+  {
+    String oldValue = value;
+    value = newValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STRING_LITERAL__VALUE, oldValue, value));
   }
 
   /**
@@ -121,8 +168,8 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
   {
     switch (featureID)
     {
-      case STCorePackage.ST_STRING_LITERAL__STRING_LITERAL:
-        return basicSetStringLiteral(null, msgs);
+      case STCorePackage.ST_STRING_LITERAL__TYPE:
+        return basicSetType(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -137,8 +184,10 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
   {
     switch (featureID)
     {
-      case STCorePackage.ST_STRING_LITERAL__STRING_LITERAL:
-        return getStringLiteral();
+      case STCorePackage.ST_STRING_LITERAL__TYPE:
+        return getType();
+      case STCorePackage.ST_STRING_LITERAL__VALUE:
+        return getValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -153,8 +202,11 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
   {
     switch (featureID)
     {
-      case STCorePackage.ST_STRING_LITERAL__STRING_LITERAL:
-        setStringLiteral((STRING_LITERAL)newValue);
+      case STCorePackage.ST_STRING_LITERAL__TYPE:
+        setType((DataType)newValue);
+        return;
+      case STCorePackage.ST_STRING_LITERAL__VALUE:
+        setValue((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -170,8 +222,11 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
   {
     switch (featureID)
     {
-      case STCorePackage.ST_STRING_LITERAL__STRING_LITERAL:
-        setStringLiteral((STRING_LITERAL)null);
+      case STCorePackage.ST_STRING_LITERAL__TYPE:
+        setType((DataType)null);
+        return;
+      case STCorePackage.ST_STRING_LITERAL__VALUE:
+        setValue(VALUE_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -187,10 +242,29 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
   {
     switch (featureID)
     {
-      case STCorePackage.ST_STRING_LITERAL__STRING_LITERAL:
-        return stringLiteral != null;
+      case STCorePackage.ST_STRING_LITERAL__TYPE:
+        return type != null;
+      case STCorePackage.ST_STRING_LITERAL__VALUE:
+        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (value: ");
+    result.append(value);
+    result.append(')');
+    return result.toString();
   }
 
 } //STStringLiteralImpl

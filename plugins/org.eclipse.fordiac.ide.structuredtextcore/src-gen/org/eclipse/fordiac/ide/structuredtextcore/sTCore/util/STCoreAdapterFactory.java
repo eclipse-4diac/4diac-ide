@@ -166,34 +166,34 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createMultibitPartialAccessAdapter();
       }
       @Override
-      public Adapter caseNUMERIC_LITERAL(NUMERIC_LITERAL object)
+      public Adapter caseSTNumericLiteral(STNumericLiteral object)
       {
-        return createNUMERIC_LITERALAdapter();
+        return createSTNumericLiteralAdapter();
       }
       @Override
-      public Adapter caseDATE_LITERAL(DATE_LITERAL object)
+      public Adapter caseSTDateLiteral(STDateLiteral object)
       {
-        return createDATE_LITERALAdapter();
+        return createSTDateLiteralAdapter();
       }
       @Override
-      public Adapter caseTIME_LITERAL(TIME_LITERAL object)
+      public Adapter caseSTTimeLiteral(STTimeLiteral object)
       {
-        return createTIME_LITERALAdapter();
+        return createSTTimeLiteralAdapter();
       }
       @Override
-      public Adapter caseTIME_OF_DAY_LITERAL(TIME_OF_DAY_LITERAL object)
+      public Adapter caseSTTimeOfDayLiteral(STTimeOfDayLiteral object)
       {
-        return createTIME_OF_DAY_LITERALAdapter();
+        return createSTTimeOfDayLiteralAdapter();
       }
       @Override
-      public Adapter caseDATE_AND_TIME_LITERAL(DATE_AND_TIME_LITERAL object)
+      public Adapter caseSTDateAndTimeLiteral(STDateAndTimeLiteral object)
       {
-        return createDATE_AND_TIME_LITERALAdapter();
+        return createSTDateAndTimeLiteralAdapter();
       }
       @Override
-      public Adapter caseSTRING_LITERAL(STRING_LITERAL object)
+      public Adapter caseSTStringLiteral(STStringLiteral object)
       {
-        return createSTRING_LITERALAdapter();
+        return createSTStringLiteralAdapter();
       }
       @Override
       public Adapter caseSTReturn(STReturn object)
@@ -234,41 +234,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
       public Adapter caseSTSymbol(STSymbol object)
       {
         return createSTSymbolAdapter();
-      }
-      @Override
-      public Adapter caseSTBoolLiteral(STBoolLiteral object)
-      {
-        return createSTBoolLiteralAdapter();
-      }
-      @Override
-      public Adapter caseSTNumericLiteral(STNumericLiteral object)
-      {
-        return createSTNumericLiteralAdapter();
-      }
-      @Override
-      public Adapter caseSTDateLiteral(STDateLiteral object)
-      {
-        return createSTDateLiteralAdapter();
-      }
-      @Override
-      public Adapter caseSTTimeLiteral(STTimeLiteral object)
-      {
-        return createSTTimeLiteralAdapter();
-      }
-      @Override
-      public Adapter caseSTTimeOfDayLiteral(STTimeOfDayLiteral object)
-      {
-        return createSTTimeOfDayLiteralAdapter();
-      }
-      @Override
-      public Adapter caseSTDateAndTimeLiteral(STDateAndTimeLiteral object)
-      {
-        return createSTDateAndTimeLiteralAdapter();
-      }
-      @Override
-      public Adapter caseSTStringLiteral(STStringLiteral object)
-      {
-        return createSTStringLiteralAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -563,91 +528,91 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL <em>NUMERIC LITERAL</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral <em>ST Numeric Literal</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral
    * @generated
    */
-  public Adapter createNUMERIC_LITERALAdapter()
+  public Adapter createSTNumericLiteralAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL <em>DATE LITERAL</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral <em>ST Date Literal</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral
    * @generated
    */
-  public Adapter createDATE_LITERALAdapter()
+  public Adapter createSTDateLiteralAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL <em>TIME LITERAL</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral <em>ST Time Literal</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral
    * @generated
    */
-  public Adapter createTIME_LITERALAdapter()
+  public Adapter createSTTimeLiteralAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL <em>TIME OF DAY LITERAL</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral <em>ST Time Of Day Literal</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral
    * @generated
    */
-  public Adapter createTIME_OF_DAY_LITERALAdapter()
+  public Adapter createSTTimeOfDayLiteralAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL <em>DATE AND TIME LITERAL</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral <em>ST Date And Time Literal</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral
    * @generated
    */
-  public Adapter createDATE_AND_TIME_LITERALAdapter()
+  public Adapter createSTDateAndTimeLiteralAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL <em>STRING LITERAL</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral <em>ST String Literal</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral
    * @generated
    */
-  public Adapter createSTRING_LITERALAdapter()
+  public Adapter createSTStringLiteralAdapter()
   {
     return null;
   }
@@ -768,111 +733,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSTSymbolAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral <em>ST Bool Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral
-   * @generated
-   */
-  public Adapter createSTBoolLiteralAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral <em>ST Numeric Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral
-   * @generated
-   */
-  public Adapter createSTNumericLiteralAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral <em>ST Date Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral
-   * @generated
-   */
-  public Adapter createSTDateLiteralAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral <em>ST Time Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral
-   * @generated
-   */
-  public Adapter createSTTimeLiteralAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral <em>ST Time Of Day Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral
-   * @generated
-   */
-  public Adapter createSTTimeOfDayLiteralAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral <em>ST Date And Time Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral
-   * @generated
-   */
-  public Adapter createSTDateAndTimeLiteralAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral <em>ST String Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral
-   * @generated
-   */
-  public Adapter createSTStringLiteralAdapter()
   {
     return null;
   }

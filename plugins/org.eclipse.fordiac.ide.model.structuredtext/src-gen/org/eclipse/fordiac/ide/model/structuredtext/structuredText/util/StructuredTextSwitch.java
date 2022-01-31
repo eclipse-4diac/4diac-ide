@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -318,6 +319,7 @@ public class StructuredTextSwitch<T> extends Switch<T>
         if (result == null) result = caseLibraryElement_LocalVariable(localVariable);
         if (result == null) result = caseVarDeclaration(localVariable);
         if (result == null) result = caseIInterfaceElement(localVariable);
+        if (result == null) result = caseConfigurableObject(localVariable);
         if (result == null) result = caseINamedElement(localVariable);
         if (result == null) result = defaultCase(theEObject);
         return result;
@@ -1013,6 +1015,22 @@ public class StructuredTextSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseINamedElement(INamedElement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseConfigurableObject(ConfigurableObject object)
   {
     return null;
   }

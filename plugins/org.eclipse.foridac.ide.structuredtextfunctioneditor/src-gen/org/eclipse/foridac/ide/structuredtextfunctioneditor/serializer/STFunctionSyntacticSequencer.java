@@ -23,14 +23,24 @@ public class STFunctionSyntacticSequencer extends AbstractSyntacticSequencer {
 	protected STFunctionGrammarAccess grammarAccess;
 	protected AbstractElementAlias match_STAtomicExpression_LeftParenthesisKeyword_0_0_a;
 	protected AbstractElementAlias match_STAtomicExpression_LeftParenthesisKeyword_0_0_p;
-	protected AbstractElementAlias match_STRING_LITERAL___CHARKeyword_0_2_or_WCHARKeyword_0_3_or_WSTRINGKeyword_0_1__q;
+	protected AbstractElementAlias match_STDateAndTimeLiteralType_DATE_AND_TIMEKeyword_0_or_DTKeyword_2_or_LDATE_AND_TIMEKeyword_1_or_LDTKeyword_3;
+	protected AbstractElementAlias match_STDateLiteralType_DATEKeyword_0_or_DKeyword_2_or_LDATEKeyword_1_or_LDKeyword_3;
+	protected AbstractElementAlias match_STNumericLiteralType_BOOLKeyword_0_or_BYTEKeyword_1_or_DINTKeyword_7_or_DWORDKeyword_3_or_INTKeyword_6_or_LINTKeyword_8_or_LREALKeyword_14_or_LWORDKeyword_4_or_REALKeyword_13_or_SINTKeyword_5_or_UDINTKeyword_11_or_UINTKeyword_10_or_ULINTKeyword_12_or_USINTKeyword_9_or_WORDKeyword_2;
+	protected AbstractElementAlias match_STStringLiteralType_CHARKeyword_2_or_STRINGKeyword_0_or_WCHARKeyword_3_or_WSTRINGKeyword_1;
+	protected AbstractElementAlias match_STTimeLiteralType_LTIMEKeyword_1_or_LTKeyword_3_or_TIMEKeyword_0_or_TKeyword_2;
+	protected AbstractElementAlias match_STTimeOfDayLiteralType_LTODKeyword_2_or_TIME_OF_DAYKeyword_0_or_TODKeyword_1;
 	
 	@Inject
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (STFunctionGrammarAccess) access;
 		match_STAtomicExpression_LeftParenthesisKeyword_0_0_a = new TokenAlias(true, true, grammarAccess.getSTAtomicExpressionAccess().getLeftParenthesisKeyword_0_0());
 		match_STAtomicExpression_LeftParenthesisKeyword_0_0_p = new TokenAlias(true, false, grammarAccess.getSTAtomicExpressionAccess().getLeftParenthesisKeyword_0_0());
-		match_STRING_LITERAL___CHARKeyword_0_2_or_WCHARKeyword_0_3_or_WSTRINGKeyword_0_1__q = new AlternativeAlias(false, true, new TokenAlias(false, false, grammarAccess.getSTRING_LITERALAccess().getCHARKeyword_0_2()), new TokenAlias(false, false, grammarAccess.getSTRING_LITERALAccess().getWCHARKeyword_0_3()), new TokenAlias(false, false, grammarAccess.getSTRING_LITERALAccess().getWSTRINGKeyword_0_1()));
+		match_STDateAndTimeLiteralType_DATE_AND_TIMEKeyword_0_or_DTKeyword_2_or_LDATE_AND_TIMEKeyword_1_or_LDTKeyword_3 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getSTDateAndTimeLiteralTypeAccess().getDATE_AND_TIMEKeyword_0()), new TokenAlias(false, false, grammarAccess.getSTDateAndTimeLiteralTypeAccess().getDTKeyword_2()), new TokenAlias(false, false, grammarAccess.getSTDateAndTimeLiteralTypeAccess().getLDATE_AND_TIMEKeyword_1()), new TokenAlias(false, false, grammarAccess.getSTDateAndTimeLiteralTypeAccess().getLDTKeyword_3()));
+		match_STDateLiteralType_DATEKeyword_0_or_DKeyword_2_or_LDATEKeyword_1_or_LDKeyword_3 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getSTDateLiteralTypeAccess().getDATEKeyword_0()), new TokenAlias(false, false, grammarAccess.getSTDateLiteralTypeAccess().getDKeyword_2()), new TokenAlias(false, false, grammarAccess.getSTDateLiteralTypeAccess().getLDATEKeyword_1()), new TokenAlias(false, false, grammarAccess.getSTDateLiteralTypeAccess().getLDKeyword_3()));
+		match_STNumericLiteralType_BOOLKeyword_0_or_BYTEKeyword_1_or_DINTKeyword_7_or_DWORDKeyword_3_or_INTKeyword_6_or_LINTKeyword_8_or_LREALKeyword_14_or_LWORDKeyword_4_or_REALKeyword_13_or_SINTKeyword_5_or_UDINTKeyword_11_or_UINTKeyword_10_or_ULINTKeyword_12_or_USINTKeyword_9_or_WORDKeyword_2 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getBOOLKeyword_0()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getBYTEKeyword_1()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getDINTKeyword_7()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getDWORDKeyword_3()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getINTKeyword_6()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getLINTKeyword_8()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getLREALKeyword_14()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getLWORDKeyword_4()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getREALKeyword_13()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getSINTKeyword_5()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getUDINTKeyword_11()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getUINTKeyword_10()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getULINTKeyword_12()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getUSINTKeyword_9()), new TokenAlias(false, false, grammarAccess.getSTNumericLiteralTypeAccess().getWORDKeyword_2()));
+		match_STStringLiteralType_CHARKeyword_2_or_STRINGKeyword_0_or_WCHARKeyword_3_or_WSTRINGKeyword_1 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getSTStringLiteralTypeAccess().getCHARKeyword_2()), new TokenAlias(false, false, grammarAccess.getSTStringLiteralTypeAccess().getSTRINGKeyword_0()), new TokenAlias(false, false, grammarAccess.getSTStringLiteralTypeAccess().getWCHARKeyword_3()), new TokenAlias(false, false, grammarAccess.getSTStringLiteralTypeAccess().getWSTRINGKeyword_1()));
+		match_STTimeLiteralType_LTIMEKeyword_1_or_LTKeyword_3_or_TIMEKeyword_0_or_TKeyword_2 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getSTTimeLiteralTypeAccess().getLTIMEKeyword_1()), new TokenAlias(false, false, grammarAccess.getSTTimeLiteralTypeAccess().getLTKeyword_3()), new TokenAlias(false, false, grammarAccess.getSTTimeLiteralTypeAccess().getTIMEKeyword_0()), new TokenAlias(false, false, grammarAccess.getSTTimeLiteralTypeAccess().getTKeyword_2()));
+		match_STTimeOfDayLiteralType_LTODKeyword_2_or_TIME_OF_DAYKeyword_0_or_TODKeyword_1 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getSTTimeOfDayLiteralTypeAccess().getLTODKeyword_2()), new TokenAlias(false, false, grammarAccess.getSTTimeOfDayLiteralTypeAccess().getTIME_OF_DAYKeyword_0()), new TokenAlias(false, false, grammarAccess.getSTTimeOfDayLiteralTypeAccess().getTODKeyword_1()));
 	}
 	
 	@Override
@@ -49,8 +59,18 @@ public class STFunctionSyntacticSequencer extends AbstractSyntacticSequencer {
 				emit_STAtomicExpression_LeftParenthesisKeyword_0_0_a(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_STAtomicExpression_LeftParenthesisKeyword_0_0_p.equals(syntax))
 				emit_STAtomicExpression_LeftParenthesisKeyword_0_0_p(semanticObject, getLastNavigableState(), syntaxNodes);
-			else if (match_STRING_LITERAL___CHARKeyword_0_2_or_WCHARKeyword_0_3_or_WSTRINGKeyword_0_1__q.equals(syntax))
-				emit_STRING_LITERAL___CHARKeyword_0_2_or_WCHARKeyword_0_3_or_WSTRINGKeyword_0_1__q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_STDateAndTimeLiteralType_DATE_AND_TIMEKeyword_0_or_DTKeyword_2_or_LDATE_AND_TIMEKeyword_1_or_LDTKeyword_3.equals(syntax))
+				emit_STDateAndTimeLiteralType_DATE_AND_TIMEKeyword_0_or_DTKeyword_2_or_LDATE_AND_TIMEKeyword_1_or_LDTKeyword_3(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_STDateLiteralType_DATEKeyword_0_or_DKeyword_2_or_LDATEKeyword_1_or_LDKeyword_3.equals(syntax))
+				emit_STDateLiteralType_DATEKeyword_0_or_DKeyword_2_or_LDATEKeyword_1_or_LDKeyword_3(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_STNumericLiteralType_BOOLKeyword_0_or_BYTEKeyword_1_or_DINTKeyword_7_or_DWORDKeyword_3_or_INTKeyword_6_or_LINTKeyword_8_or_LREALKeyword_14_or_LWORDKeyword_4_or_REALKeyword_13_or_SINTKeyword_5_or_UDINTKeyword_11_or_UINTKeyword_10_or_ULINTKeyword_12_or_USINTKeyword_9_or_WORDKeyword_2.equals(syntax))
+				emit_STNumericLiteralType_BOOLKeyword_0_or_BYTEKeyword_1_or_DINTKeyword_7_or_DWORDKeyword_3_or_INTKeyword_6_or_LINTKeyword_8_or_LREALKeyword_14_or_LWORDKeyword_4_or_REALKeyword_13_or_SINTKeyword_5_or_UDINTKeyword_11_or_UINTKeyword_10_or_ULINTKeyword_12_or_USINTKeyword_9_or_WORDKeyword_2(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_STStringLiteralType_CHARKeyword_2_or_STRINGKeyword_0_or_WCHARKeyword_3_or_WSTRINGKeyword_1.equals(syntax))
+				emit_STStringLiteralType_CHARKeyword_2_or_STRINGKeyword_0_or_WCHARKeyword_3_or_WSTRINGKeyword_1(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_STTimeLiteralType_LTIMEKeyword_1_or_LTKeyword_3_or_TIMEKeyword_0_or_TKeyword_2.equals(syntax))
+				emit_STTimeLiteralType_LTIMEKeyword_1_or_LTKeyword_3_or_TIMEKeyword_0_or_TKeyword_2(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_STTimeOfDayLiteralType_LTODKeyword_2_or_TIME_OF_DAYKeyword_0_or_TODKeyword_1.equals(syntax))
+				emit_STTimeOfDayLiteralType_LTODKeyword_2_or_TIME_OF_DAYKeyword_0_or_TODKeyword_1(semanticObject, getLastNavigableState(), syntaxNodes);
 			else acceptNodes(getLastNavigableState(), syntaxNodes);
 		}
 	}
@@ -60,16 +80,20 @@ public class STFunctionSyntacticSequencer extends AbstractSyntacticSequencer {
 	 *     '('*
 	 *
 	 * This ambiguous syntax occurs at:
-	 *     (rule start) (ambiguity) boolLiteral=BOOL_LITERAL
-	 *     (rule start) (ambiguity) dateLiteral=DATE_LITERAL
-	 *     (rule start) (ambiguity) numericLiteral=NUMERIC_LITERAL
 	 *     (rule start) (ambiguity) op=UnaryOperator
-	 *     (rule start) (ambiguity) stringLiteral=STRING_LITERAL
 	 *     (rule start) (ambiguity) symbol=[VarDeclaration|ID]
-	 *     (rule start) (ambiguity) timeLiteral=DATE_AND_TIME_LITERAL
-	 *     (rule start) (ambiguity) timeLiteral=TIME_LITERAL
-	 *     (rule start) (ambiguity) timeOfDayLiteral=TIME_OF_DAY_LITERAL
+	 *     (rule start) (ambiguity) type=STDateAndTimeLiteralType
+	 *     (rule start) (ambiguity) type=STDateLiteralType
+	 *     (rule start) (ambiguity) type=STNumericLiteralType
+	 *     (rule start) (ambiguity) type=STStringLiteralType
+	 *     (rule start) (ambiguity) type=STTimeLiteralType
+	 *     (rule start) (ambiguity) type=STTimeOfDayLiteralType
 	 *     (rule start) (ambiguity) type=[DataType|ID]
+	 *     (rule start) (ambiguity) value=BoolLiteral
+	 *     (rule start) (ambiguity) value=NON_DECIMAL
+	 *     (rule start) (ambiguity) value=Number
+	 *     (rule start) (ambiguity) value=STRING
+	 *     (rule start) (ambiguity) value=WSTRING
 	 *     (rule start) (ambiguity) {STBinaryExpression.left=}
 	 *     (rule start) (ambiguity) {STMemberSelection.receiver=}
 	 */
@@ -82,14 +106,18 @@ public class STFunctionSyntacticSequencer extends AbstractSyntacticSequencer {
 	 *     '('+
 	 *
 	 * This ambiguous syntax occurs at:
-	 *     (rule start) (ambiguity) boolLiteral=BOOL_LITERAL
-	 *     (rule start) (ambiguity) dateLiteral=DATE_LITERAL
-	 *     (rule start) (ambiguity) numericLiteral=NUMERIC_LITERAL
 	 *     (rule start) (ambiguity) op=UnaryOperator
-	 *     (rule start) (ambiguity) stringLiteral=STRING_LITERAL
-	 *     (rule start) (ambiguity) timeLiteral=DATE_AND_TIME_LITERAL
-	 *     (rule start) (ambiguity) timeLiteral=TIME_LITERAL
-	 *     (rule start) (ambiguity) timeOfDayLiteral=TIME_OF_DAY_LITERAL
+	 *     (rule start) (ambiguity) type=STDateAndTimeLiteralType
+	 *     (rule start) (ambiguity) type=STDateLiteralType
+	 *     (rule start) (ambiguity) type=STNumericLiteralType
+	 *     (rule start) (ambiguity) type=STStringLiteralType
+	 *     (rule start) (ambiguity) type=STTimeLiteralType
+	 *     (rule start) (ambiguity) type=STTimeOfDayLiteralType
+	 *     (rule start) (ambiguity) value=BoolLiteral
+	 *     (rule start) (ambiguity) value=NON_DECIMAL
+	 *     (rule start) (ambiguity) value=Number
+	 *     (rule start) (ambiguity) value=STRING
+	 *     (rule start) (ambiguity) value=WSTRING
 	 *     (rule start) (ambiguity) {STBinaryExpression.left=}
 	 *     (rule start) (ambiguity) {STMemberSelection.receiver=}
 	 */
@@ -99,12 +127,83 @@ public class STFunctionSyntacticSequencer extends AbstractSyntacticSequencer {
 	
 	/**
 	 * Ambiguous syntax:
-	 *     ('WSTRING#' | 'CHAR#' | 'WCHAR#')?
+	 *     'DATE_AND_TIME#' | 'LDATE_AND_TIME#' | 'DT#' | 'LDT#'
 	 *
 	 * This ambiguous syntax occurs at:
-	 *     (rule start) (ambiguity) value=STRING
+	 *     (rule start) (ambiguity) (rule start)
 	 */
-	protected void emit_STRING_LITERAL___CHARKeyword_0_2_or_WCHARKeyword_0_3_or_WSTRINGKeyword_0_1__q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+	protected void emit_STDateAndTimeLiteralType_DATE_AND_TIMEKeyword_0_or_DTKeyword_2_or_LDATE_AND_TIMEKeyword_1_or_LDTKeyword_3(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
+	/**
+	 * Ambiguous syntax:
+	 *     'DATE#' | 'LDATE#' | 'D#' | 'LD#'
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     (rule start) (ambiguity) (rule start)
+	 */
+	protected void emit_STDateLiteralType_DATEKeyword_0_or_DKeyword_2_or_LDATEKeyword_1_or_LDKeyword_3(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
+	/**
+	 * Ambiguous syntax:
+	 *     (
+	  *         'BOOL#' | 
+	  *         'BYTE#' | 
+	  *         'WORD#' | 
+	  *         'DWORD#' | 
+	  *         'LWORD#' | 
+	  *         'SINT#' | 
+	  *         'INT#' | 
+	  *         'DINT#' | 
+	  *         'LINT#' | 
+	  *         'USINT#' | 
+	  *         'UINT#' | 
+	  *         'UDINT#' | 
+	  *         'ULINT#' | 
+	  *         'REAL#' | 
+	  *         'LREAL#'
+	  *     )
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     (rule start) (ambiguity) (rule start)
+	 */
+	protected void emit_STNumericLiteralType_BOOLKeyword_0_or_BYTEKeyword_1_or_DINTKeyword_7_or_DWORDKeyword_3_or_INTKeyword_6_or_LINTKeyword_8_or_LREALKeyword_14_or_LWORDKeyword_4_or_REALKeyword_13_or_SINTKeyword_5_or_UDINTKeyword_11_or_UINTKeyword_10_or_ULINTKeyword_12_or_USINTKeyword_9_or_WORDKeyword_2(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
+	/**
+	 * Ambiguous syntax:
+	 *     'STRING#' | 'WSTRING#' | 'CHAR#' | 'WCHAR#'
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     (rule start) (ambiguity) (rule start)
+	 */
+	protected void emit_STStringLiteralType_CHARKeyword_2_or_STRINGKeyword_0_or_WCHARKeyword_3_or_WSTRINGKeyword_1(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
+	/**
+	 * Ambiguous syntax:
+	 *     'TIME#' | 'LTIME#' | 'T#' | 'LT#'
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     (rule start) (ambiguity) (rule start)
+	 */
+	protected void emit_STTimeLiteralType_LTIMEKeyword_1_or_LTKeyword_3_or_TIMEKeyword_0_or_TKeyword_2(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
+	/**
+	 * Ambiguous syntax:
+	 *     'TIME_OF_DAY#' | 'TOD#' | 'LTOD#'
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     (rule start) (ambiguity) (rule start)
+	 */
+	protected void emit_STTimeOfDayLiteralType_LTODKeyword_2_or_TIME_OF_DAYKeyword_0_or_TODKeyword_1(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
 	}
 	

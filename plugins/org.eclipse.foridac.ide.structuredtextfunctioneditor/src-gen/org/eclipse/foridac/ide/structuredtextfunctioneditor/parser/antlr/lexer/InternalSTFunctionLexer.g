@@ -121,7 +121,7 @@ TRUE : ('T'|'t')('R'|'r')('U'|'u')('E'|'e');
 
 B : '.''%'('B'|'b');
 
-D_1 : '.''%'('D'|'d');
+D_2 : '.''%'('D'|'d');
 
 L : '.''%'('L'|'l');
 
@@ -163,11 +163,15 @@ AT : ('A'|'a')('T'|'t');
 
 BY : ('B'|'b')('Y'|'y');
 
-D : ('D'|'d')'#';
+D_1 : ('D'|'d')'#';
 
 DO : ('D'|'d')('O'|'o');
 
 IF : ('I'|'i')('F'|'f');
+
+MS : ('M'|'m')('S'|'s');
+
+NS : ('N'|'n')('S'|'s');
 
 OF : ('O'|'o')('F'|'f');
 
@@ -176,6 +180,8 @@ OR : ('O'|'o')('R'|'r');
 T : ('T'|'t')'#';
 
 TO : ('T'|'t')('O'|'o');
+
+US : ('U'|'u')('S'|'s');
 
 NumberSign : '#';
 
@@ -207,19 +213,27 @@ EqualsSign : '=';
 
 GreaterThanSign : '>';
 
+D : ('D'|'d');
+
+H : ('H'|'h');
+
+M : ('M'|'m');
+
+S : ('S'|'s');
+
 LeftSquareBracket : '[';
 
 RightSquareBracket : ']';
+
+KW__ : '_';
 
 fragment RULE_HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F'|'_');
 
 RULE_NON_DECIMAL : ('2#'|'8#'|'16#') RULE_HEX_DIGIT+;
 
-RULE_INT : '0'..'9' ('_'? '0'..'9')*;
-
-RULE_TIME : ('+'|'-')? (RULE_INT ('.' RULE_INT)? ('D'|'H'|'M'|'S'|'MS'|'US'|'NS') '_'?)+;
-
 RULE_EXT_INT : RULE_INT ('e'|'E') ('-'|'+')? RULE_INT;
+
+RULE_INT : '0'..'9' ('_'? '0'..'9')*;
 
 RULE_ID : '^'? ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
 

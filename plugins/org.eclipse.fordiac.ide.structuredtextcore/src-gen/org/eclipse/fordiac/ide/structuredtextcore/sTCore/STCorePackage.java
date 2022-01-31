@@ -743,78 +743,23 @@ public interface STCorePackage extends EPackage
   int MULTIBIT_PARTIAL_ACCESS_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl <em>NUMERIC LITERAL</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl <em>ST Numeric Literal</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getNUMERIC_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTNumericLiteral()
    * @generated
    */
-  int NUMERIC_LITERAL = 18;
+  int ST_NUMERIC_LITERAL = 18;
 
   /**
-   * The feature id for the '<em><b>Keyword</b></em>' attribute.
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int NUMERIC_LITERAL__KEYWORD = 0;
-
-  /**
-   * The feature id for the '<em><b>Int Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int NUMERIC_LITERAL__INT_VALUE = 1;
-
-  /**
-   * The feature id for the '<em><b>Real Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int NUMERIC_LITERAL__REAL_VALUE = 2;
-
-  /**
-   * The feature id for the '<em><b>Hex Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int NUMERIC_LITERAL__HEX_VALUE = 3;
-
-  /**
-   * The number of structural features of the '<em>NUMERIC LITERAL</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int NUMERIC_LITERAL_FEATURE_COUNT = 4;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_LITERALImpl <em>DATE LITERAL</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_LITERALImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getDATE_LITERAL()
-   * @generated
-   */
-  int DATE_LITERAL = 19;
-
-  /**
-   * The feature id for the '<em><b>Keyword</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DATE_LITERAL__KEYWORD = 0;
+  int ST_NUMERIC_LITERAL__TYPE = ST_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -823,35 +768,35 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int DATE_LITERAL__VALUE = 1;
+  int ST_NUMERIC_LITERAL__VALUE = ST_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>DATE LITERAL</em>' class.
+   * The number of structural features of the '<em>ST Numeric Literal</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATE_LITERAL_FEATURE_COUNT = 2;
+  int ST_NUMERIC_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.TIME_LITERALImpl <em>TIME LITERAL</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl <em>ST Date Literal</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.TIME_LITERALImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getTIME_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateLiteral()
    * @generated
    */
-  int TIME_LITERAL = 20;
+  int ST_DATE_LITERAL = 19;
 
   /**
-   * The feature id for the '<em><b>Keyword</b></em>' attribute.
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TIME_LITERAL__KEYWORD = 0;
+  int ST_DATE_LITERAL__TYPE = ST_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -860,35 +805,35 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int TIME_LITERAL__VALUE = 1;
+  int ST_DATE_LITERAL__VALUE = ST_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>TIME LITERAL</em>' class.
+   * The number of structural features of the '<em>ST Date Literal</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TIME_LITERAL_FEATURE_COUNT = 2;
+  int ST_DATE_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.TIME_OF_DAY_LITERALImpl <em>TIME OF DAY LITERAL</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl <em>ST Time Literal</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.TIME_OF_DAY_LITERALImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getTIME_OF_DAY_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeLiteral()
    * @generated
    */
-  int TIME_OF_DAY_LITERAL = 21;
+  int ST_TIME_LITERAL = 20;
 
   /**
-   * The feature id for the '<em><b>Keyword</b></em>' attribute.
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TIME_OF_DAY_LITERAL__KEYWORD = 0;
+  int ST_TIME_LITERAL__TYPE = ST_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -897,35 +842,72 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int TIME_OF_DAY_LITERAL__VALUE = 1;
+  int ST_TIME_LITERAL__VALUE = ST_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>TIME OF DAY LITERAL</em>' class.
+   * The number of structural features of the '<em>ST Time Literal</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TIME_OF_DAY_LITERAL_FEATURE_COUNT = 2;
+  int ST_TIME_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_AND_TIME_LITERALImpl <em>DATE AND TIME LITERAL</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl <em>ST Time Of Day Literal</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_AND_TIME_LITERALImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getDATE_AND_TIME_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeOfDayLiteral()
    * @generated
    */
-  int DATE_AND_TIME_LITERAL = 22;
+  int ST_TIME_OF_DAY_LITERAL = 21;
 
   /**
-   * The feature id for the '<em><b>Keyword</b></em>' attribute.
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATE_AND_TIME_LITERAL__KEYWORD = 0;
+  int ST_TIME_OF_DAY_LITERAL__TYPE = ST_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_TIME_OF_DAY_LITERAL__VALUE = ST_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>ST Time Of Day Literal</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_TIME_OF_DAY_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateAndTimeLiteralImpl <em>ST Date And Time Literal</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateAndTimeLiteralImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateAndTimeLiteral()
+   * @generated
+   */
+  int ST_DATE_AND_TIME_LITERAL = 22;
+
+  /**
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_DATE_AND_TIME_LITERAL__TYPE = ST_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Date Value</b></em>' attribute.
@@ -934,7 +916,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int DATE_AND_TIME_LITERAL__DATE_VALUE = 1;
+  int ST_DATE_AND_TIME_LITERAL__DATE_VALUE = ST_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Time Of Day Value</b></em>' attribute.
@@ -943,35 +925,35 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE = 2;
+  int ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE = ST_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The number of structural features of the '<em>DATE AND TIME LITERAL</em>' class.
+   * The number of structural features of the '<em>ST Date And Time Literal</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATE_AND_TIME_LITERAL_FEATURE_COUNT = 3;
+  int ST_DATE_AND_TIME_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STRING_LITERALImpl <em>STRING LITERAL</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl <em>ST String Literal</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STRING_LITERALImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTRING_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTStringLiteral()
    * @generated
    */
-  int STRING_LITERAL = 23;
+  int ST_STRING_LITERAL = 23;
 
   /**
-   * The feature id for the '<em><b>Keyword</b></em>' attribute.
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STRING_LITERAL__KEYWORD = 0;
+  int ST_STRING_LITERAL__TYPE = ST_EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -980,16 +962,16 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int STRING_LITERAL__VALUE = 1;
+  int ST_STRING_LITERAL__VALUE = ST_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>STRING LITERAL</em>' class.
+   * The number of structural features of the '<em>ST String Literal</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STRING_LITERAL_FEATURE_COUNT = 2;
+  int ST_STRING_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.
@@ -1306,202 +1288,6 @@ public interface STCorePackage extends EPackage
   int ST_SYMBOL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 5;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl <em>ST Bool Literal</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBoolLiteral()
-   * @generated
-   */
-  int ST_BOOL_LITERAL = 32;
-
-  /**
-   * The feature id for the '<em><b>Bool Literal</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_BOOL_LITERAL__BOOL_LITERAL = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>ST Bool Literal</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_BOOL_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl <em>ST Numeric Literal</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTNumericLiteral()
-   * @generated
-   */
-  int ST_NUMERIC_LITERAL = 33;
-
-  /**
-   * The feature id for the '<em><b>Numeric Literal</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_NUMERIC_LITERAL__NUMERIC_LITERAL = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>ST Numeric Literal</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_NUMERIC_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl <em>ST Date Literal</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateLiteral()
-   * @generated
-   */
-  int ST_DATE_LITERAL = 34;
-
-  /**
-   * The feature id for the '<em><b>Date Literal</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_DATE_LITERAL__DATE_LITERAL = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>ST Date Literal</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_DATE_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl <em>ST Time Literal</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeLiteral()
-   * @generated
-   */
-  int ST_TIME_LITERAL = 35;
-
-  /**
-   * The feature id for the '<em><b>Time Literal</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_TIME_LITERAL__TIME_LITERAL = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>ST Time Literal</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_TIME_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl <em>ST Time Of Day Literal</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeOfDayLiteral()
-   * @generated
-   */
-  int ST_TIME_OF_DAY_LITERAL = 36;
-
-  /**
-   * The feature id for the '<em><b>Time Of Day Literal</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>ST Time Of Day Literal</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_TIME_OF_DAY_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateAndTimeLiteralImpl <em>ST Date And Time Literal</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateAndTimeLiteralImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateAndTimeLiteral()
-   * @generated
-   */
-  int ST_DATE_AND_TIME_LITERAL = 37;
-
-  /**
-   * The feature id for the '<em><b>Time Literal</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_DATE_AND_TIME_LITERAL__TIME_LITERAL = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>ST Date And Time Literal</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_DATE_AND_TIME_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl <em>ST String Literal</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTStringLiteral()
-   * @generated
-   */
-  int ST_STRING_LITERAL = 38;
-
-  /**
-   * The feature id for the '<em><b>String Literal</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_STRING_LITERAL__STRING_LITERAL = ST_EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>ST String Literal</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ST_STRING_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator <em>Binary Operator</em>}' enum.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1509,7 +1295,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getBinaryOperator()
    * @generated
    */
-  int BINARY_OPERATOR = 39;
+  int BINARY_OPERATOR = 32;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator <em>Unary Operator</em>}' enum.
@@ -1519,7 +1305,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getUnaryOperator()
    * @generated
    */
-  int UNARY_OPERATOR = 40;
+  int UNARY_OPERATOR = 33;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultiBitAccessSpecifier <em>Multi Bit Access Specifier</em>}' enum.
@@ -1529,7 +1315,7 @@ public interface STCorePackage extends EPackage
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getMultiBitAccessSpecifier()
    * @generated
    */
-  int MULTI_BIT_ACCESS_SPECIFIER = 41;
+  int MULTI_BIT_ACCESS_SPECIFIER = 34;
 
 
   /**
@@ -2131,229 +1917,207 @@ public interface STCorePackage extends EPackage
   EAttribute getMultibitPartialAccess_Index();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL <em>NUMERIC LITERAL</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral <em>ST Numeric Literal</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>NUMERIC LITERAL</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL
+   * @return the meta object for class '<em>ST Numeric Literal</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral
    * @generated
    */
-  EClass getNUMERIC_LITERAL();
+  EClass getSTNumericLiteral();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getKeyword <em>Keyword</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Keyword</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getKeyword()
-   * @see #getNUMERIC_LITERAL()
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getType()
+   * @see #getSTNumericLiteral()
    * @generated
    */
-  EAttribute getNUMERIC_LITERAL_Keyword();
+  EReference getSTNumericLiteral_Type();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getIntValue <em>Int Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Int Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getIntValue()
-   * @see #getNUMERIC_LITERAL()
-   * @generated
-   */
-  EAttribute getNUMERIC_LITERAL_IntValue();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getRealValue <em>Real Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Real Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getRealValue()
-   * @see #getNUMERIC_LITERAL()
-   * @generated
-   */
-  EAttribute getNUMERIC_LITERAL_RealValue();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getHexValue <em>Hex Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Hex Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL#getHexValue()
-   * @see #getNUMERIC_LITERAL()
-   * @generated
-   */
-  EAttribute getNUMERIC_LITERAL_HexValue();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL <em>DATE LITERAL</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>DATE LITERAL</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL
-   * @generated
-   */
-  EClass getDATE_LITERAL();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL#getKeyword <em>Keyword</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Keyword</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL#getKeyword()
-   * @see #getDATE_LITERAL()
-   * @generated
-   */
-  EAttribute getDATE_LITERAL_Keyword();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL#getValue <em>Value</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getValue <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL#getValue()
-   * @see #getDATE_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getValue()
+   * @see #getSTNumericLiteral()
    * @generated
    */
-  EAttribute getDATE_LITERAL_Value();
+  EAttribute getSTNumericLiteral_Value();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL <em>TIME LITERAL</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral <em>ST Date Literal</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>TIME LITERAL</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL
+   * @return the meta object for class '<em>ST Date Literal</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral
    * @generated
    */
-  EClass getTIME_LITERAL();
+  EClass getSTDateLiteral();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL#getKeyword <em>Keyword</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Keyword</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL#getKeyword()
-   * @see #getTIME_LITERAL()
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType()
+   * @see #getSTDateLiteral()
    * @generated
    */
-  EAttribute getTIME_LITERAL_Keyword();
+  EReference getSTDateLiteral_Type();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL#getValue <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL#getValue()
-   * @see #getTIME_LITERAL()
-   * @generated
-   */
-  EAttribute getTIME_LITERAL_Value();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL <em>TIME OF DAY LITERAL</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>TIME OF DAY LITERAL</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL
-   * @generated
-   */
-  EClass getTIME_OF_DAY_LITERAL();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL#getKeyword <em>Keyword</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Keyword</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL#getKeyword()
-   * @see #getTIME_OF_DAY_LITERAL()
-   * @generated
-   */
-  EAttribute getTIME_OF_DAY_LITERAL_Keyword();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL#getValue <em>Value</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getValue <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL#getValue()
-   * @see #getTIME_OF_DAY_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getValue()
+   * @see #getSTDateLiteral()
    * @generated
    */
-  EAttribute getTIME_OF_DAY_LITERAL_Value();
+  EAttribute getSTDateLiteral_Value();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL <em>DATE AND TIME LITERAL</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral <em>ST Time Literal</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>DATE AND TIME LITERAL</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL
+   * @return the meta object for class '<em>ST Time Literal</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral
    * @generated
    */
-  EClass getDATE_AND_TIME_LITERAL();
+  EClass getSTTimeLiteral();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL#getKeyword <em>Keyword</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Keyword</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL#getKeyword()
-   * @see #getDATE_AND_TIME_LITERAL()
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType()
+   * @see #getSTTimeLiteral()
    * @generated
    */
-  EAttribute getDATE_AND_TIME_LITERAL_Keyword();
+  EReference getSTTimeLiteral_Type();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL#getDateValue <em>Date Value</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getValue()
+   * @see #getSTTimeLiteral()
+   * @generated
+   */
+  EAttribute getSTTimeLiteral_Value();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral <em>ST Time Of Day Literal</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>ST Time Of Day Literal</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral
+   * @generated
+   */
+  EClass getSTTimeOfDayLiteral();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType()
+   * @see #getSTTimeOfDayLiteral()
+   * @generated
+   */
+  EReference getSTTimeOfDayLiteral_Type();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getValue()
+   * @see #getSTTimeOfDayLiteral()
+   * @generated
+   */
+  EAttribute getSTTimeOfDayLiteral_Value();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral <em>ST Date And Time Literal</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>ST Date And Time Literal</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral
+   * @generated
+   */
+  EClass getSTDateAndTimeLiteral();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType()
+   * @see #getSTDateAndTimeLiteral()
+   * @generated
+   */
+  EReference getSTDateAndTimeLiteral_Type();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getDateValue <em>Date Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Date Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL#getDateValue()
-   * @see #getDATE_AND_TIME_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getDateValue()
+   * @see #getSTDateAndTimeLiteral()
    * @generated
    */
-  EAttribute getDATE_AND_TIME_LITERAL_DateValue();
+  EAttribute getSTDateAndTimeLiteral_DateValue();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL#getTimeOfDayValue <em>Time Of Day Value</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getTimeOfDayValue <em>Time Of Day Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Time Of Day Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL#getTimeOfDayValue()
-   * @see #getDATE_AND_TIME_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getTimeOfDayValue()
+   * @see #getSTDateAndTimeLiteral()
    * @generated
    */
-  EAttribute getDATE_AND_TIME_LITERAL_TimeOfDayValue();
+  EAttribute getSTDateAndTimeLiteral_TimeOfDayValue();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL <em>STRING LITERAL</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral <em>ST String Literal</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>STRING LITERAL</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL
+   * @return the meta object for class '<em>ST String Literal</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral
    * @generated
    */
-  EClass getSTRING_LITERAL();
+  EClass getSTStringLiteral();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL#getKeyword <em>Keyword</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Keyword</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL#getKeyword()
-   * @see #getSTRING_LITERAL()
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getType()
+   * @see #getSTStringLiteral()
    * @generated
    */
-  EAttribute getSTRING_LITERAL_Keyword();
+  EReference getSTStringLiteral_Type();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL#getValue <em>Value</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getValue <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL#getValue()
-   * @see #getSTRING_LITERAL()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getValue()
+   * @see #getSTStringLiteral()
    * @generated
    */
-  EAttribute getSTRING_LITERAL_Value();
+  EAttribute getSTStringLiteral_Value();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn <em>ST Return</em>}'.
@@ -2632,153 +2396,6 @@ public interface STCorePackage extends EPackage
    * @generated
    */
   EReference getSTSymbol_Parameters();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral <em>ST Bool Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Bool Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral
-   * @generated
-   */
-  EClass getSTBoolLiteral();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral#getBoolLiteral <em>Bool Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Bool Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral#getBoolLiteral()
-   * @see #getSTBoolLiteral()
-   * @generated
-   */
-  EAttribute getSTBoolLiteral_BoolLiteral();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral <em>ST Numeric Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Numeric Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral
-   * @generated
-   */
-  EClass getSTNumericLiteral();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getNumericLiteral <em>Numeric Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Numeric Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getNumericLiteral()
-   * @see #getSTNumericLiteral()
-   * @generated
-   */
-  EReference getSTNumericLiteral_NumericLiteral();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral <em>ST Date Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Date Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral
-   * @generated
-   */
-  EClass getSTDateLiteral();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getDateLiteral <em>Date Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Date Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getDateLiteral()
-   * @see #getSTDateLiteral()
-   * @generated
-   */
-  EReference getSTDateLiteral_DateLiteral();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral <em>ST Time Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Time Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral
-   * @generated
-   */
-  EClass getSTTimeLiteral();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getTimeLiteral <em>Time Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Time Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getTimeLiteral()
-   * @see #getSTTimeLiteral()
-   * @generated
-   */
-  EReference getSTTimeLiteral_TimeLiteral();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral <em>ST Time Of Day Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Time Of Day Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral
-   * @generated
-   */
-  EClass getSTTimeOfDayLiteral();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getTimeOfDayLiteral <em>Time Of Day Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Time Of Day Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getTimeOfDayLiteral()
-   * @see #getSTTimeOfDayLiteral()
-   * @generated
-   */
-  EReference getSTTimeOfDayLiteral_TimeOfDayLiteral();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral <em>ST Date And Time Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST Date And Time Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral
-   * @generated
-   */
-  EClass getSTDateAndTimeLiteral();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getTimeLiteral <em>Time Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Time Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getTimeLiteral()
-   * @see #getSTDateAndTimeLiteral()
-   * @generated
-   */
-  EReference getSTDateAndTimeLiteral_TimeLiteral();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral <em>ST String Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST String Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral
-   * @generated
-   */
-  EClass getSTStringLiteral();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getStringLiteral <em>String Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>String Literal</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getStringLiteral()
-   * @see #getSTStringLiteral()
-   * @generated
-   */
-  EReference getSTStringLiteral_StringLiteral();
 
   /**
    * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator <em>Binary Operator</em>}'.
@@ -3318,64 +2935,22 @@ public interface STCorePackage extends EPackage
     EAttribute MULTIBIT_PARTIAL_ACCESS__INDEX = eINSTANCE.getMultibitPartialAccess_Index();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl <em>NUMERIC LITERAL</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl <em>ST Numeric Literal</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.NUMERIC_LITERALImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getNUMERIC_LITERAL()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTNumericLiteral()
      * @generated
      */
-    EClass NUMERIC_LITERAL = eINSTANCE.getNUMERIC_LITERAL();
+    EClass ST_NUMERIC_LITERAL = eINSTANCE.getSTNumericLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Keyword</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute NUMERIC_LITERAL__KEYWORD = eINSTANCE.getNUMERIC_LITERAL_Keyword();
-
-    /**
-     * The meta object literal for the '<em><b>Int Value</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute NUMERIC_LITERAL__INT_VALUE = eINSTANCE.getNUMERIC_LITERAL_IntValue();
-
-    /**
-     * The meta object literal for the '<em><b>Real Value</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute NUMERIC_LITERAL__REAL_VALUE = eINSTANCE.getNUMERIC_LITERAL_RealValue();
-
-    /**
-     * The meta object literal for the '<em><b>Hex Value</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute NUMERIC_LITERAL__HEX_VALUE = eINSTANCE.getNUMERIC_LITERAL_HexValue();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_LITERALImpl <em>DATE LITERAL</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_LITERALImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getDATE_LITERAL()
-     * @generated
-     */
-    EClass DATE_LITERAL = eINSTANCE.getDATE_LITERAL();
-
-    /**
-     * The meta object literal for the '<em><b>Keyword</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DATE_LITERAL__KEYWORD = eINSTANCE.getDATE_LITERAL_Keyword();
+    EReference ST_NUMERIC_LITERAL__TYPE = eINSTANCE.getSTNumericLiteral_Type();
 
     /**
      * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
@@ -3383,51 +2958,25 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute DATE_LITERAL__VALUE = eINSTANCE.getDATE_LITERAL_Value();
+    EAttribute ST_NUMERIC_LITERAL__VALUE = eINSTANCE.getSTNumericLiteral_Value();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.TIME_LITERALImpl <em>TIME LITERAL</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl <em>ST Date Literal</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.TIME_LITERALImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getTIME_LITERAL()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateLiteral()
      * @generated
      */
-    EClass TIME_LITERAL = eINSTANCE.getTIME_LITERAL();
+    EClass ST_DATE_LITERAL = eINSTANCE.getSTDateLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Keyword</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute TIME_LITERAL__KEYWORD = eINSTANCE.getTIME_LITERAL_Keyword();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TIME_LITERAL__VALUE = eINSTANCE.getTIME_LITERAL_Value();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.TIME_OF_DAY_LITERALImpl <em>TIME OF DAY LITERAL</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.TIME_OF_DAY_LITERALImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getTIME_OF_DAY_LITERAL()
-     * @generated
-     */
-    EClass TIME_OF_DAY_LITERAL = eINSTANCE.getTIME_OF_DAY_LITERAL();
-
-    /**
-     * The meta object literal for the '<em><b>Keyword</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute TIME_OF_DAY_LITERAL__KEYWORD = eINSTANCE.getTIME_OF_DAY_LITERAL_Keyword();
+    EReference ST_DATE_LITERAL__TYPE = eINSTANCE.getSTDateLiteral_Type();
 
     /**
      * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
@@ -3435,25 +2984,77 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TIME_OF_DAY_LITERAL__VALUE = eINSTANCE.getTIME_OF_DAY_LITERAL_Value();
+    EAttribute ST_DATE_LITERAL__VALUE = eINSTANCE.getSTDateLiteral_Value();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_AND_TIME_LITERALImpl <em>DATE AND TIME LITERAL</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl <em>ST Time Literal</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.DATE_AND_TIME_LITERALImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getDATE_AND_TIME_LITERAL()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeLiteral()
      * @generated
      */
-    EClass DATE_AND_TIME_LITERAL = eINSTANCE.getDATE_AND_TIME_LITERAL();
+    EClass ST_TIME_LITERAL = eINSTANCE.getSTTimeLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Keyword</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute DATE_AND_TIME_LITERAL__KEYWORD = eINSTANCE.getDATE_AND_TIME_LITERAL_Keyword();
+    EReference ST_TIME_LITERAL__TYPE = eINSTANCE.getSTTimeLiteral_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ST_TIME_LITERAL__VALUE = eINSTANCE.getSTTimeLiteral_Value();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl <em>ST Time Of Day Literal</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeOfDayLiteral()
+     * @generated
+     */
+    EClass ST_TIME_OF_DAY_LITERAL = eINSTANCE.getSTTimeOfDayLiteral();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ST_TIME_OF_DAY_LITERAL__TYPE = eINSTANCE.getSTTimeOfDayLiteral_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ST_TIME_OF_DAY_LITERAL__VALUE = eINSTANCE.getSTTimeOfDayLiteral_Value();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateAndTimeLiteralImpl <em>ST Date And Time Literal</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateAndTimeLiteralImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateAndTimeLiteral()
+     * @generated
+     */
+    EClass ST_DATE_AND_TIME_LITERAL = eINSTANCE.getSTDateAndTimeLiteral();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ST_DATE_AND_TIME_LITERAL__TYPE = eINSTANCE.getSTDateAndTimeLiteral_Type();
 
     /**
      * The meta object literal for the '<em><b>Date Value</b></em>' attribute feature.
@@ -3461,7 +3062,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute DATE_AND_TIME_LITERAL__DATE_VALUE = eINSTANCE.getDATE_AND_TIME_LITERAL_DateValue();
+    EAttribute ST_DATE_AND_TIME_LITERAL__DATE_VALUE = eINSTANCE.getSTDateAndTimeLiteral_DateValue();
 
     /**
      * The meta object literal for the '<em><b>Time Of Day Value</b></em>' attribute feature.
@@ -3469,25 +3070,25 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE = eINSTANCE.getDATE_AND_TIME_LITERAL_TimeOfDayValue();
+    EAttribute ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE = eINSTANCE.getSTDateAndTimeLiteral_TimeOfDayValue();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STRING_LITERALImpl <em>STRING LITERAL</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl <em>ST String Literal</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STRING_LITERALImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTRING_LITERAL()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTStringLiteral()
      * @generated
      */
-    EClass STRING_LITERAL = eINSTANCE.getSTRING_LITERAL();
+    EClass ST_STRING_LITERAL = eINSTANCE.getSTStringLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Keyword</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute STRING_LITERAL__KEYWORD = eINSTANCE.getSTRING_LITERAL_Keyword();
+    EReference ST_STRING_LITERAL__TYPE = eINSTANCE.getSTStringLiteral_Type();
 
     /**
      * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
@@ -3495,7 +3096,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute STRING_LITERAL__VALUE = eINSTANCE.getSTRING_LITERAL_Value();
+    EAttribute ST_STRING_LITERAL__VALUE = eINSTANCE.getSTStringLiteral_Value();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.
@@ -3720,132 +3321,6 @@ public interface STCorePackage extends EPackage
      * @generated
      */
     EReference ST_SYMBOL__PARAMETERS = eINSTANCE.getSTSymbol_Parameters();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl <em>ST Bool Literal</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STBoolLiteralImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTBoolLiteral()
-     * @generated
-     */
-    EClass ST_BOOL_LITERAL = eINSTANCE.getSTBoolLiteral();
-
-    /**
-     * The meta object literal for the '<em><b>Bool Literal</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ST_BOOL_LITERAL__BOOL_LITERAL = eINSTANCE.getSTBoolLiteral_BoolLiteral();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl <em>ST Numeric Literal</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTNumericLiteral()
-     * @generated
-     */
-    EClass ST_NUMERIC_LITERAL = eINSTANCE.getSTNumericLiteral();
-
-    /**
-     * The meta object literal for the '<em><b>Numeric Literal</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_NUMERIC_LITERAL__NUMERIC_LITERAL = eINSTANCE.getSTNumericLiteral_NumericLiteral();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl <em>ST Date Literal</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateLiteralImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateLiteral()
-     * @generated
-     */
-    EClass ST_DATE_LITERAL = eINSTANCE.getSTDateLiteral();
-
-    /**
-     * The meta object literal for the '<em><b>Date Literal</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_DATE_LITERAL__DATE_LITERAL = eINSTANCE.getSTDateLiteral_DateLiteral();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl <em>ST Time Literal</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeLiteral()
-     * @generated
-     */
-    EClass ST_TIME_LITERAL = eINSTANCE.getSTTimeLiteral();
-
-    /**
-     * The meta object literal for the '<em><b>Time Literal</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_TIME_LITERAL__TIME_LITERAL = eINSTANCE.getSTTimeLiteral_TimeLiteral();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl <em>ST Time Of Day Literal</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeOfDayLiteralImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTTimeOfDayLiteral()
-     * @generated
-     */
-    EClass ST_TIME_OF_DAY_LITERAL = eINSTANCE.getSTTimeOfDayLiteral();
-
-    /**
-     * The meta object literal for the '<em><b>Time Of Day Literal</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL = eINSTANCE.getSTTimeOfDayLiteral_TimeOfDayLiteral();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateAndTimeLiteralImpl <em>ST Date And Time Literal</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STDateAndTimeLiteralImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTDateAndTimeLiteral()
-     * @generated
-     */
-    EClass ST_DATE_AND_TIME_LITERAL = eINSTANCE.getSTDateAndTimeLiteral();
-
-    /**
-     * The meta object literal for the '<em><b>Time Literal</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_DATE_AND_TIME_LITERAL__TIME_LITERAL = eINSTANCE.getSTDateAndTimeLiteral_TimeLiteral();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl <em>ST String Literal</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STStringLiteralImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTStringLiteral()
-     * @generated
-     */
-    EClass ST_STRING_LITERAL = eINSTANCE.getSTStringLiteral();
-
-    /**
-     * The meta object literal for the '<em><b>String Literal</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ST_STRING_LITERAL__STRING_LITERAL = eINSTANCE.getSTStringLiteral_StringLiteral();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator <em>Binary Operator</em>}' enum.

@@ -207,45 +207,57 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.NUMERIC_LITERAL:
+      case STCorePackage.ST_NUMERIC_LITERAL:
       {
-        NUMERIC_LITERAL numeriC_LITERAL = (NUMERIC_LITERAL)theEObject;
-        T result = caseNUMERIC_LITERAL(numeriC_LITERAL);
+        STNumericLiteral stNumericLiteral = (STNumericLiteral)theEObject;
+        T result = caseSTNumericLiteral(stNumericLiteral);
+        if (result == null) result = caseSTExpression(stNumericLiteral);
+        if (result == null) result = caseInitializerExpression(stNumericLiteral);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.DATE_LITERAL:
+      case STCorePackage.ST_DATE_LITERAL:
       {
-        DATE_LITERAL datE_LITERAL = (DATE_LITERAL)theEObject;
-        T result = caseDATE_LITERAL(datE_LITERAL);
+        STDateLiteral stDateLiteral = (STDateLiteral)theEObject;
+        T result = caseSTDateLiteral(stDateLiteral);
+        if (result == null) result = caseSTExpression(stDateLiteral);
+        if (result == null) result = caseInitializerExpression(stDateLiteral);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.TIME_LITERAL:
+      case STCorePackage.ST_TIME_LITERAL:
       {
-        TIME_LITERAL timE_LITERAL = (TIME_LITERAL)theEObject;
-        T result = caseTIME_LITERAL(timE_LITERAL);
+        STTimeLiteral stTimeLiteral = (STTimeLiteral)theEObject;
+        T result = caseSTTimeLiteral(stTimeLiteral);
+        if (result == null) result = caseSTExpression(stTimeLiteral);
+        if (result == null) result = caseInitializerExpression(stTimeLiteral);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.TIME_OF_DAY_LITERAL:
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL:
       {
-        TIME_OF_DAY_LITERAL timE_OF_DAY_LITERAL = (TIME_OF_DAY_LITERAL)theEObject;
-        T result = caseTIME_OF_DAY_LITERAL(timE_OF_DAY_LITERAL);
+        STTimeOfDayLiteral stTimeOfDayLiteral = (STTimeOfDayLiteral)theEObject;
+        T result = caseSTTimeOfDayLiteral(stTimeOfDayLiteral);
+        if (result == null) result = caseSTExpression(stTimeOfDayLiteral);
+        if (result == null) result = caseInitializerExpression(stTimeOfDayLiteral);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.DATE_AND_TIME_LITERAL:
+      case STCorePackage.ST_DATE_AND_TIME_LITERAL:
       {
-        DATE_AND_TIME_LITERAL datE_AND_TIME_LITERAL = (DATE_AND_TIME_LITERAL)theEObject;
-        T result = caseDATE_AND_TIME_LITERAL(datE_AND_TIME_LITERAL);
+        STDateAndTimeLiteral stDateAndTimeLiteral = (STDateAndTimeLiteral)theEObject;
+        T result = caseSTDateAndTimeLiteral(stDateAndTimeLiteral);
+        if (result == null) result = caseSTExpression(stDateAndTimeLiteral);
+        if (result == null) result = caseInitializerExpression(stDateAndTimeLiteral);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.STRING_LITERAL:
+      case STCorePackage.ST_STRING_LITERAL:
       {
-        STRING_LITERAL strinG_LITERAL = (STRING_LITERAL)theEObject;
-        T result = caseSTRING_LITERAL(strinG_LITERAL);
+        STStringLiteral stStringLiteral = (STStringLiteral)theEObject;
+        T result = caseSTStringLiteral(stStringLiteral);
+        if (result == null) result = caseSTExpression(stStringLiteral);
+        if (result == null) result = caseInitializerExpression(stStringLiteral);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -314,69 +326,6 @@ public class STCoreSwitch<T> extends Switch<T>
         T result = caseSTSymbol(stSymbol);
         if (result == null) result = caseSTExpression(stSymbol);
         if (result == null) result = caseInitializerExpression(stSymbol);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_BOOL_LITERAL:
-      {
-        STBoolLiteral stBoolLiteral = (STBoolLiteral)theEObject;
-        T result = caseSTBoolLiteral(stBoolLiteral);
-        if (result == null) result = caseSTExpression(stBoolLiteral);
-        if (result == null) result = caseInitializerExpression(stBoolLiteral);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_NUMERIC_LITERAL:
-      {
-        STNumericLiteral stNumericLiteral = (STNumericLiteral)theEObject;
-        T result = caseSTNumericLiteral(stNumericLiteral);
-        if (result == null) result = caseSTExpression(stNumericLiteral);
-        if (result == null) result = caseInitializerExpression(stNumericLiteral);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_DATE_LITERAL:
-      {
-        STDateLiteral stDateLiteral = (STDateLiteral)theEObject;
-        T result = caseSTDateLiteral(stDateLiteral);
-        if (result == null) result = caseSTExpression(stDateLiteral);
-        if (result == null) result = caseInitializerExpression(stDateLiteral);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_TIME_LITERAL:
-      {
-        STTimeLiteral stTimeLiteral = (STTimeLiteral)theEObject;
-        T result = caseSTTimeLiteral(stTimeLiteral);
-        if (result == null) result = caseSTExpression(stTimeLiteral);
-        if (result == null) result = caseInitializerExpression(stTimeLiteral);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_TIME_OF_DAY_LITERAL:
-      {
-        STTimeOfDayLiteral stTimeOfDayLiteral = (STTimeOfDayLiteral)theEObject;
-        T result = caseSTTimeOfDayLiteral(stTimeOfDayLiteral);
-        if (result == null) result = caseSTExpression(stTimeOfDayLiteral);
-        if (result == null) result = caseInitializerExpression(stTimeOfDayLiteral);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_DATE_AND_TIME_LITERAL:
-      {
-        STDateAndTimeLiteral stDateAndTimeLiteral = (STDateAndTimeLiteral)theEObject;
-        T result = caseSTDateAndTimeLiteral(stDateAndTimeLiteral);
-        if (result == null) result = caseSTExpression(stDateAndTimeLiteral);
-        if (result == null) result = caseInitializerExpression(stDateAndTimeLiteral);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.ST_STRING_LITERAL:
-      {
-        STStringLiteral stStringLiteral = (STStringLiteral)theEObject;
-        T result = caseSTStringLiteral(stStringLiteral);
-        if (result == null) result = caseSTExpression(stStringLiteral);
-        if (result == null) result = caseInitializerExpression(stStringLiteral);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -673,97 +622,97 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>NUMERIC LITERAL</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Numeric Literal</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>NUMERIC LITERAL</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Numeric Literal</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseNUMERIC_LITERAL(NUMERIC_LITERAL object)
+  public T caseSTNumericLiteral(STNumericLiteral object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>DATE LITERAL</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Date Literal</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>DATE LITERAL</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Date Literal</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseDATE_LITERAL(DATE_LITERAL object)
+  public T caseSTDateLiteral(STDateLiteral object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>TIME LITERAL</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Time Literal</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>TIME LITERAL</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Time Literal</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseTIME_LITERAL(TIME_LITERAL object)
+  public T caseSTTimeLiteral(STTimeLiteral object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>TIME OF DAY LITERAL</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Time Of Day Literal</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>TIME OF DAY LITERAL</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Time Of Day Literal</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseTIME_OF_DAY_LITERAL(TIME_OF_DAY_LITERAL object)
+  public T caseSTTimeOfDayLiteral(STTimeOfDayLiteral object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>DATE AND TIME LITERAL</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Date And Time Literal</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>DATE AND TIME LITERAL</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Date And Time Literal</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseDATE_AND_TIME_LITERAL(DATE_AND_TIME_LITERAL object)
+  public T caseSTDateAndTimeLiteral(STDateAndTimeLiteral object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>STRING LITERAL</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST String Literal</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>STRING LITERAL</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST String Literal</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSTRING_LITERAL(STRING_LITERAL object)
+  public T caseSTStringLiteral(STStringLiteral object)
   {
     return null;
   }
@@ -892,118 +841,6 @@ public class STCoreSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSTSymbol(STSymbol object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Bool Literal</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Bool Literal</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTBoolLiteral(STBoolLiteral object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Numeric Literal</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Numeric Literal</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTNumericLiteral(STNumericLiteral object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Date Literal</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Date Literal</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTDateLiteral(STDateLiteral object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Time Literal</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Time Literal</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTTimeLiteral(STTimeLiteral object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Time Of Day Literal</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Time Of Day Literal</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTTimeOfDayLiteral(STTimeOfDayLiteral object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Date And Time Literal</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Date And Time Literal</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTDateAndTimeLiteral(STDateAndTimeLiteral object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>ST String Literal</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST String Literal</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseSTStringLiteral(STStringLiteral object)
   {
     return null;
   }

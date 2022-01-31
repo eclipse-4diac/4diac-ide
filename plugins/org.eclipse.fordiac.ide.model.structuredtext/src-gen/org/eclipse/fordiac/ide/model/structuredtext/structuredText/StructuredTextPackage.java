@@ -1171,6 +1171,15 @@ public interface StructuredTextPackage extends EPackage
   int LOCAL_VARIABLE__COMMENT = LibraryElementPackage.LOCAL_VARIABLE__COMMENT;
 
   /**
+   * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LOCAL_VARIABLE__ATTRIBUTES = LibraryElementPackage.LOCAL_VARIABLE__ATTRIBUTES;
+
+  /**
    * The feature id for the '<em><b>Is Input</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

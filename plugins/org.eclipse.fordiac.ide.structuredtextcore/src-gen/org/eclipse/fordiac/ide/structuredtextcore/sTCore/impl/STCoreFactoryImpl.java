@@ -84,12 +84,12 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ST_REPEAT_STATEMENT: return createSTRepeatStatement();
       case STCorePackage.ST_EXPRESSION: return createSTExpression();
       case STCorePackage.MULTIBIT_PARTIAL_ACCESS: return createMultibitPartialAccess();
-      case STCorePackage.NUMERIC_LITERAL: return createNUMERIC_LITERAL();
-      case STCorePackage.DATE_LITERAL: return createDATE_LITERAL();
-      case STCorePackage.TIME_LITERAL: return createTIME_LITERAL();
-      case STCorePackage.TIME_OF_DAY_LITERAL: return createTIME_OF_DAY_LITERAL();
-      case STCorePackage.DATE_AND_TIME_LITERAL: return createDATE_AND_TIME_LITERAL();
-      case STCorePackage.STRING_LITERAL: return createSTRING_LITERAL();
+      case STCorePackage.ST_NUMERIC_LITERAL: return createSTNumericLiteral();
+      case STCorePackage.ST_DATE_LITERAL: return createSTDateLiteral();
+      case STCorePackage.ST_TIME_LITERAL: return createSTTimeLiteral();
+      case STCorePackage.ST_TIME_OF_DAY_LITERAL: return createSTTimeOfDayLiteral();
+      case STCorePackage.ST_DATE_AND_TIME_LITERAL: return createSTDateAndTimeLiteral();
+      case STCorePackage.ST_STRING_LITERAL: return createSTStringLiteral();
       case STCorePackage.ST_RETURN: return createSTReturn();
       case STCorePackage.ST_CONTINUE: return createSTContinue();
       case STCorePackage.ST_EXIT: return createSTExit();
@@ -98,13 +98,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ST_UNARY_EXPRESSION: return createSTUnaryExpression();
       case STCorePackage.ST_MEMBER_SELECTION: return createSTMemberSelection();
       case STCorePackage.ST_SYMBOL: return createSTSymbol();
-      case STCorePackage.ST_BOOL_LITERAL: return createSTBoolLiteral();
-      case STCorePackage.ST_NUMERIC_LITERAL: return createSTNumericLiteral();
-      case STCorePackage.ST_DATE_LITERAL: return createSTDateLiteral();
-      case STCorePackage.ST_TIME_LITERAL: return createSTTimeLiteral();
-      case STCorePackage.ST_TIME_OF_DAY_LITERAL: return createSTTimeOfDayLiteral();
-      case STCorePackage.ST_DATE_AND_TIME_LITERAL: return createSTDateAndTimeLiteral();
-      case STCorePackage.ST_STRING_LITERAL: return createSTStringLiteral();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -374,10 +367,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public NUMERIC_LITERAL createNUMERIC_LITERAL()
+  public STNumericLiteral createSTNumericLiteral()
   {
-    NUMERIC_LITERALImpl numeriC_LITERAL = new NUMERIC_LITERALImpl();
-    return numeriC_LITERAL;
+    STNumericLiteralImpl stNumericLiteral = new STNumericLiteralImpl();
+    return stNumericLiteral;
   }
 
   /**
@@ -386,10 +379,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public DATE_LITERAL createDATE_LITERAL()
+  public STDateLiteral createSTDateLiteral()
   {
-    DATE_LITERALImpl datE_LITERAL = new DATE_LITERALImpl();
-    return datE_LITERAL;
+    STDateLiteralImpl stDateLiteral = new STDateLiteralImpl();
+    return stDateLiteral;
   }
 
   /**
@@ -398,10 +391,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public TIME_LITERAL createTIME_LITERAL()
+  public STTimeLiteral createSTTimeLiteral()
   {
-    TIME_LITERALImpl timE_LITERAL = new TIME_LITERALImpl();
-    return timE_LITERAL;
+    STTimeLiteralImpl stTimeLiteral = new STTimeLiteralImpl();
+    return stTimeLiteral;
   }
 
   /**
@@ -410,10 +403,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public TIME_OF_DAY_LITERAL createTIME_OF_DAY_LITERAL()
+  public STTimeOfDayLiteral createSTTimeOfDayLiteral()
   {
-    TIME_OF_DAY_LITERALImpl timE_OF_DAY_LITERAL = new TIME_OF_DAY_LITERALImpl();
-    return timE_OF_DAY_LITERAL;
+    STTimeOfDayLiteralImpl stTimeOfDayLiteral = new STTimeOfDayLiteralImpl();
+    return stTimeOfDayLiteral;
   }
 
   /**
@@ -422,10 +415,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public DATE_AND_TIME_LITERAL createDATE_AND_TIME_LITERAL()
+  public STDateAndTimeLiteral createSTDateAndTimeLiteral()
   {
-    DATE_AND_TIME_LITERALImpl datE_AND_TIME_LITERAL = new DATE_AND_TIME_LITERALImpl();
-    return datE_AND_TIME_LITERAL;
+    STDateAndTimeLiteralImpl stDateAndTimeLiteral = new STDateAndTimeLiteralImpl();
+    return stDateAndTimeLiteral;
   }
 
   /**
@@ -434,10 +427,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public STRING_LITERAL createSTRING_LITERAL()
+  public STStringLiteral createSTStringLiteral()
   {
-    STRING_LITERALImpl strinG_LITERAL = new STRING_LITERALImpl();
-    return strinG_LITERAL;
+    STStringLiteralImpl stStringLiteral = new STStringLiteralImpl();
+    return stStringLiteral;
   }
 
   /**
@@ -534,90 +527,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     STSymbolImpl stSymbol = new STSymbolImpl();
     return stSymbol;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STBoolLiteral createSTBoolLiteral()
-  {
-    STBoolLiteralImpl stBoolLiteral = new STBoolLiteralImpl();
-    return stBoolLiteral;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STNumericLiteral createSTNumericLiteral()
-  {
-    STNumericLiteralImpl stNumericLiteral = new STNumericLiteralImpl();
-    return stNumericLiteral;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STDateLiteral createSTDateLiteral()
-  {
-    STDateLiteralImpl stDateLiteral = new STDateLiteralImpl();
-    return stDateLiteral;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STTimeLiteral createSTTimeLiteral()
-  {
-    STTimeLiteralImpl stTimeLiteral = new STTimeLiteralImpl();
-    return stTimeLiteral;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STTimeOfDayLiteral createSTTimeOfDayLiteral()
-  {
-    STTimeOfDayLiteralImpl stTimeOfDayLiteral = new STTimeOfDayLiteralImpl();
-    return stTimeOfDayLiteral;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STDateAndTimeLiteral createSTDateAndTimeLiteral()
-  {
-    STDateAndTimeLiteralImpl stDateAndTimeLiteral = new STDateAndTimeLiteralImpl();
-    return stDateAndTimeLiteral;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STStringLiteral createSTStringLiteral()
-  {
-    STStringLiteralImpl stStringLiteral = new STStringLiteralImpl();
-    return stStringLiteral;
   }
 
   /**

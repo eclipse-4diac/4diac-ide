@@ -3,6 +3,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,7 +14,8 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getTimeOfDayLiteral <em>Time Of Day Literal</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTTimeOfDayLiteral()
@@ -23,25 +25,47 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 public interface STTimeOfDayLiteral extends STExpression
 {
   /**
-   * Returns the value of the '<em><b>Time Of Day Literal</b></em>' containment reference.
+   * Returns the value of the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Time Of Day Literal</em>' containment reference.
-   * @see #setTimeOfDayLiteral(TIME_OF_DAY_LITERAL)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTTimeOfDayLiteral_TimeOfDayLiteral()
+   * @return the value of the '<em>Type</em>' containment reference.
+   * @see #setType(DataType)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTTimeOfDayLiteral_Type()
    * @model containment="true"
    * @generated
    */
-  TIME_OF_DAY_LITERAL getTimeOfDayLiteral();
+  DataType getType();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getTimeOfDayLiteral <em>Time Of Day Literal</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Time Of Day Literal</em>' containment reference.
-   * @see #getTimeOfDayLiteral()
+   * @param value the new value of the '<em>Type</em>' containment reference.
+   * @see #getType()
    * @generated
    */
-  void setTimeOfDayLiteral(TIME_OF_DAY_LITERAL value);
+  void setType(DataType value);
+
+  /**
+   * Returns the value of the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Value</em>' attribute.
+   * @see #setValue(String)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTTimeOfDayLiteral_Value()
+   * @model
+   * @generated
+   */
+  String getValue();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getValue <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Value</em>' attribute.
+   * @see #getValue()
+   * @generated
+   */
+  void setValue(String value);
 
 } // STTimeOfDayLiteral

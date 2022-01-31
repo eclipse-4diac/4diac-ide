@@ -3,6 +3,9 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
+import java.util.Date;
+
+import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,7 +16,9 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getTimeLiteral <em>Time Literal</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getDateValue <em>Date Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getTimeOfDayValue <em>Time Of Day Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateAndTimeLiteral()
@@ -23,25 +28,69 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 public interface STDateAndTimeLiteral extends STExpression
 {
   /**
-   * Returns the value of the '<em><b>Time Literal</b></em>' containment reference.
+   * Returns the value of the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Time Literal</em>' containment reference.
-   * @see #setTimeLiteral(DATE_AND_TIME_LITERAL)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateAndTimeLiteral_TimeLiteral()
+   * @return the value of the '<em>Type</em>' containment reference.
+   * @see #setType(DataType)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateAndTimeLiteral_Type()
    * @model containment="true"
    * @generated
    */
-  DATE_AND_TIME_LITERAL getTimeLiteral();
+  DataType getType();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getTimeLiteral <em>Time Literal</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Time Literal</em>' containment reference.
-   * @see #getTimeLiteral()
+   * @param value the new value of the '<em>Type</em>' containment reference.
+   * @see #getType()
    * @generated
    */
-  void setTimeLiteral(DATE_AND_TIME_LITERAL value);
+  void setType(DataType value);
+
+  /**
+   * Returns the value of the '<em><b>Date Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Date Value</em>' attribute.
+   * @see #setDateValue(Date)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateAndTimeLiteral_DateValue()
+   * @model
+   * @generated
+   */
+  Date getDateValue();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getDateValue <em>Date Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Date Value</em>' attribute.
+   * @see #getDateValue()
+   * @generated
+   */
+  void setDateValue(Date value);
+
+  /**
+   * Returns the value of the '<em><b>Time Of Day Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Time Of Day Value</em>' attribute.
+   * @see #setTimeOfDayValue(String)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateAndTimeLiteral_TimeOfDayValue()
+   * @model
+   * @generated
+   */
+  String getTimeOfDayValue();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getTimeOfDayValue <em>Time Of Day Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Time Of Day Value</em>' attribute.
+   * @see #getTimeOfDayValue()
+   * @generated
+   */
+  void setTimeOfDayValue(String value);
 
 } // STDateAndTimeLiteral

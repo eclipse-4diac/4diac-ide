@@ -109,32 +109,30 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//MultibitPartialAccess/accessSpecifier"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//MultibitPartialAccess/index"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//NUMERIC_LITERAL">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/keyword"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/intValue"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/realValue"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//NUMERIC_LITERAL/hexValue"/>
+    <genClasses ecoreClass="STCore.ecore#//STNumericLiteral">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STNumericLiteral/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STNumericLiteral/value"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//DATE_LITERAL">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//DATE_LITERAL/keyword"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//DATE_LITERAL/value"/>
+    <genClasses ecoreClass="STCore.ecore#//STDateLiteral">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STDateLiteral/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STDateLiteral/value"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//TIME_LITERAL">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//TIME_LITERAL/keyword"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//TIME_LITERAL/value"/>
+    <genClasses ecoreClass="STCore.ecore#//STTimeLiteral">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STTimeLiteral/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STTimeLiteral/value"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//TIME_OF_DAY_LITERAL">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//TIME_OF_DAY_LITERAL/keyword"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//TIME_OF_DAY_LITERAL/value"/>
+    <genClasses ecoreClass="STCore.ecore#//STTimeOfDayLiteral">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STTimeOfDayLiteral/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STTimeOfDayLiteral/value"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//DATE_AND_TIME_LITERAL">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//DATE_AND_TIME_LITERAL/keyword"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//DATE_AND_TIME_LITERAL/dateValue"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//DATE_AND_TIME_LITERAL/timeOfDayValue"/>
+    <genClasses ecoreClass="STCore.ecore#//STDateAndTimeLiteral">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STDateAndTimeLiteral/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STDateAndTimeLiteral/dateValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STDateAndTimeLiteral/timeOfDayValue"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STRING_LITERAL">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRING_LITERAL/keyword"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRING_LITERAL/value"/>
+    <genClasses ecoreClass="STCore.ecore#//STStringLiteral">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStringLiteral/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STStringLiteral/value"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STReturn"/>
     <genClasses ecoreClass="STCore.ecore#//STContinue"/>
@@ -165,27 +163,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSymbol/bitaccessor"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STSymbol/poeInvocation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSymbol/parameters"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STBoolLiteral">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STBoolLiteral/boolLiteral"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STNumericLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STNumericLiteral/numericLiteral"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STDateLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STDateLiteral/dateLiteral"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STTimeLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STTimeLiteral/timeLiteral"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STTimeOfDayLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STTimeOfDayLiteral/timeOfDayLiteral"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STDateAndTimeLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STDateAndTimeLiteral/timeLiteral"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STStringLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStringLiteral/stringLiteral"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

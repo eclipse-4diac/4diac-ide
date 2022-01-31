@@ -11,9 +11,10 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,7 +24,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl#getTimeLiteral <em>Time Literal</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STTimeLiteralImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -31,14 +33,34 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL;
 public class STTimeLiteralImpl extends STExpressionImpl implements STTimeLiteral
 {
   /**
-   * The cached value of the '{@link #getTimeLiteral() <em>Time Literal</em>}' containment reference.
+   * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getTimeLiteral()
+   * @see #getType()
    * @generated
    * @ordered
    */
-  protected TIME_LITERAL timeLiteral;
+  protected DataType type;
+
+  /**
+   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected static final String VALUE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected String value = VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -67,9 +89,9 @@ public class STTimeLiteralImpl extends STExpressionImpl implements STTimeLiteral
    * @generated
    */
   @Override
-  public TIME_LITERAL getTimeLiteral()
+  public DataType getType()
   {
-    return timeLiteral;
+    return type;
   }
 
   /**
@@ -77,13 +99,13 @@ public class STTimeLiteralImpl extends STExpressionImpl implements STTimeLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetTimeLiteral(TIME_LITERAL newTimeLiteral, NotificationChain msgs)
+  public NotificationChain basicSetType(DataType newType, NotificationChain msgs)
   {
-    TIME_LITERAL oldTimeLiteral = timeLiteral;
-    timeLiteral = newTimeLiteral;
+    DataType oldType = type;
+    type = newType;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_LITERAL__TIME_LITERAL, oldTimeLiteral, newTimeLiteral);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_LITERAL__TYPE, oldType, newType);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -95,20 +117,45 @@ public class STTimeLiteralImpl extends STExpressionImpl implements STTimeLiteral
    * @generated
    */
   @Override
-  public void setTimeLiteral(TIME_LITERAL newTimeLiteral)
+  public void setType(DataType newType)
   {
-    if (newTimeLiteral != timeLiteral)
+    if (newType != type)
     {
       NotificationChain msgs = null;
-      if (timeLiteral != null)
-        msgs = ((InternalEObject)timeLiteral).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_TIME_LITERAL__TIME_LITERAL, null, msgs);
-      if (newTimeLiteral != null)
-        msgs = ((InternalEObject)newTimeLiteral).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_TIME_LITERAL__TIME_LITERAL, null, msgs);
-      msgs = basicSetTimeLiteral(newTimeLiteral, msgs);
+      if (type != null)
+        msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_TIME_LITERAL__TYPE, null, msgs);
+      if (newType != null)
+        msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_TIME_LITERAL__TYPE, null, msgs);
+      msgs = basicSetType(newType, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_LITERAL__TIME_LITERAL, newTimeLiteral, newTimeLiteral));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_LITERAL__TYPE, newType, newType));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getValue()
+  {
+    return value;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setValue(String newValue)
+  {
+    String oldValue = value;
+    value = newValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_LITERAL__VALUE, oldValue, value));
   }
 
   /**
@@ -121,8 +168,8 @@ public class STTimeLiteralImpl extends STExpressionImpl implements STTimeLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_LITERAL__TIME_LITERAL:
-        return basicSetTimeLiteral(null, msgs);
+      case STCorePackage.ST_TIME_LITERAL__TYPE:
+        return basicSetType(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -137,8 +184,10 @@ public class STTimeLiteralImpl extends STExpressionImpl implements STTimeLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_LITERAL__TIME_LITERAL:
-        return getTimeLiteral();
+      case STCorePackage.ST_TIME_LITERAL__TYPE:
+        return getType();
+      case STCorePackage.ST_TIME_LITERAL__VALUE:
+        return getValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -153,8 +202,11 @@ public class STTimeLiteralImpl extends STExpressionImpl implements STTimeLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_LITERAL__TIME_LITERAL:
-        setTimeLiteral((TIME_LITERAL)newValue);
+      case STCorePackage.ST_TIME_LITERAL__TYPE:
+        setType((DataType)newValue);
+        return;
+      case STCorePackage.ST_TIME_LITERAL__VALUE:
+        setValue((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -170,8 +222,11 @@ public class STTimeLiteralImpl extends STExpressionImpl implements STTimeLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_LITERAL__TIME_LITERAL:
-        setTimeLiteral((TIME_LITERAL)null);
+      case STCorePackage.ST_TIME_LITERAL__TYPE:
+        setType((DataType)null);
+        return;
+      case STCorePackage.ST_TIME_LITERAL__VALUE:
+        setValue(VALUE_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -187,10 +242,29 @@ public class STTimeLiteralImpl extends STExpressionImpl implements STTimeLiteral
   {
     switch (featureID)
     {
-      case STCorePackage.ST_TIME_LITERAL__TIME_LITERAL:
-        return timeLiteral != null;
+      case STCorePackage.ST_TIME_LITERAL__TYPE:
+        return type != null;
+      case STCorePackage.ST_TIME_LITERAL__VALUE:
+        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (value: ");
+    result.append(value);
+    result.append(')');
+    return result.toString();
   }
 
 } //STTimeLiteralImpl

@@ -10,13 +10,9 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue;
@@ -31,7 +27,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
@@ -40,8 +35,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
@@ -76,26 +69,14 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.CODE:
 				sequence_Code(context, (Code) semanticObject); 
 				return; 
-			case STCorePackage.DATE_AND_TIME_LITERAL:
-				sequence_DATE_AND_TIME_LITERAL(context, (DATE_AND_TIME_LITERAL) semanticObject); 
-				return; 
-			case STCorePackage.DATE_LITERAL:
-				sequence_DATE_LITERAL(context, (DATE_LITERAL) semanticObject); 
-				return; 
 			case STCorePackage.MULTIBIT_PARTIAL_ACCESS:
 				sequence_MultibitPartialAccess(context, (MultibitPartialAccess) semanticObject); 
-				return; 
-			case STCorePackage.NUMERIC_LITERAL:
-				sequence_NUMERIC_LITERAL(context, (NUMERIC_LITERAL) semanticObject); 
 				return; 
 			case STCorePackage.ST_ASSIGNMENT_STATEMENT:
 				sequence_STAssignmentStatement(context, (STAssignmentStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
-				return; 
-			case STCorePackage.ST_BOOL_LITERAL:
-				sequence_STLiteralExpressions(context, (STBoolLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_CASE_CASES:
 				sequence_STCaseCases(context, (STCaseCases) semanticObject); 
@@ -107,10 +88,10 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				sequence_STStatement(context, (STContinue) semanticObject); 
 				return; 
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL:
-				sequence_STLiteralExpressions(context, (STDateAndTimeLiteral) semanticObject); 
+				sequence_STDateAndTimeLiteral(context, (STDateAndTimeLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_DATE_LITERAL:
-				sequence_STLiteralExpressions(context, (STDateLiteral) semanticObject); 
+				sequence_STDateLiteral(context, (STDateLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_ELSE_IF_PART:
 				sequence_STElseIfPart(context, (STElseIfPart) semanticObject); 
@@ -134,10 +115,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				sequence_STStatement(context, (STNop) semanticObject); 
 				return; 
 			case STCorePackage.ST_NUMERIC_LITERAL:
-				sequence_STLiteralExpressions(context, (STNumericLiteral) semanticObject); 
-				return; 
-			case STCorePackage.STRING_LITERAL:
-				sequence_STRING_LITERAL(context, (STRING_LITERAL) semanticObject); 
+				sequence_STNumericLiteral(context, (STNumericLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_REPEAT_STATEMENT:
 				sequence_STRepeatStatement(context, (STRepeatStatement) semanticObject); 
@@ -146,28 +124,22 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				sequence_STStatement(context, (STReturn) semanticObject); 
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
-				sequence_STLiteralExpressions(context, (STStringLiteral) semanticObject); 
+				sequence_STStringLiteral(context, (STStringLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_SYMBOL:
 				sequence_STAtomicExpression(context, (STSymbol) semanticObject); 
 				return; 
 			case STCorePackage.ST_TIME_LITERAL:
-				sequence_STLiteralExpressions(context, (STTimeLiteral) semanticObject); 
+				sequence_STTimeLiteral(context, (STTimeLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_TIME_OF_DAY_LITERAL:
-				sequence_STLiteralExpressions(context, (STTimeOfDayLiteral) semanticObject); 
+				sequence_STTimeOfDayLiteral(context, (STTimeOfDayLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_UNARY_EXPRESSION:
 				sequence_STSignumExpression(context, (STUnaryExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_WHILE_STATEMENT:
 				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
-				return; 
-			case STCorePackage.TIME_LITERAL:
-				sequence_TIME_LITERAL(context, (TIME_LITERAL) semanticObject); 
-				return; 
-			case STCorePackage.TIME_OF_DAY_LITERAL:
-				sequence_TIME_OF_DAY_LITERAL(context, (TIME_OF_DAY_LITERAL) semanticObject); 
 				return; 
 			case STCorePackage.VAR_DECLARATION:
 				sequence_VarDeclaration(context, (VarDeclaration) semanticObject); 
@@ -234,30 +206,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     DATE_AND_TIME_LITERAL returns DATE_AND_TIME_LITERAL
-	 *
-	 * Constraint:
-	 *     ((keyword='DATE_AND_TIME#' | keyword='LDATE_AND_TIME#' | keyword='DT#' | keyword='LDT#') dateValue=DATE timeOfDayValue=TIME_OF_DAY)
-	 */
-	protected void sequence_DATE_AND_TIME_LITERAL(ISerializationContext context, DATE_AND_TIME_LITERAL semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     DATE_LITERAL returns DATE_LITERAL
-	 *
-	 * Constraint:
-	 *     ((keyword='DATE#' | keyword='LDATE#' | keyword='D#' | keyword='LD#') value=DATE)
-	 */
-	protected void sequence_DATE_LITERAL(ISerializationContext context, DATE_LITERAL semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
 	 *     MultibitPartialAccess returns MultibitPartialAccess
 	 *
 	 * Constraint:
@@ -274,37 +222,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 		feeder.accept(grammarAccess.getMultibitPartialAccessAccess().getAccessSpecifierMultiBitAccessSpecifierEnumRuleCall_0_0(), semanticObject.getAccessSpecifier());
 		feeder.accept(grammarAccess.getMultibitPartialAccessAccess().getIndexINTTerminalRuleCall_1_0(), semanticObject.getIndex());
 		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     NUMERIC_LITERAL returns NUMERIC_LITERAL
-	 *
-	 * Constraint:
-	 *     (
-	 *         (
-	 *             keyword='BOOL#' | 
-	 *             keyword='BYTE#' | 
-	 *             keyword='WORD#' | 
-	 *             keyword='DWORD#' | 
-	 *             keyword='LWORD#' | 
-	 *             keyword='SINT#' | 
-	 *             keyword='INT#' | 
-	 *             keyword='DINT#' | 
-	 *             keyword='LINT#' | 
-	 *             keyword='USINT#' | 
-	 *             keyword='UINT#' | 
-	 *             keyword='UDINT#' | 
-	 *             keyword='ULINT#' | 
-	 *             keyword='REAL#' | 
-	 *             keyword='LREAL#'
-	 *         )? 
-	 *         (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL)
-	 *     )
-	 */
-	protected void sequence_NUMERIC_LITERAL(ISerializationContext context, NUMERIC_LITERAL semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -442,6 +359,101 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
+	 *     InitializerExpression returns STDateAndTimeLiteral
+	 *     STExpression returns STDateAndTimeLiteral
+	 *     STSubrangeExpression returns STDateAndTimeLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STOrExpression returns STDateAndTimeLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STXorExpression returns STDateAndTimeLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STAndExpression returns STDateAndTimeLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STEqualityExpression returns STDateAndTimeLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STComparisonExpression returns STDateAndTimeLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STAddSubExpression returns STDateAndTimeLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STMulDivModExpression returns STDateAndTimeLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STPowerExpression returns STDateAndTimeLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
+	 *     STSignumExpression returns STDateAndTimeLiteral
+	 *     STSelectionExpression returns STDateAndTimeLiteral
+	 *     STSelectionExpression.STMemberSelection_1_0 returns STDateAndTimeLiteral
+	 *     STAtomicExpression returns STDateAndTimeLiteral
+	 *     STLiteralExpressions returns STDateAndTimeLiteral
+	 *     STDateAndTimeLiteral returns STDateAndTimeLiteral
+	 *
+	 * Constraint:
+	 *     (type=STDateAndTimeLiteralType dateValue=Date timeOfDayValue=TimeOfDay)
+	 */
+	protected void sequence_STDateAndTimeLiteral(ISerializationContext context, STDateAndTimeLiteral semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TYPE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TYPE));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__DATE_VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__DATE_VALUE));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeSTDateAndTimeLiteralTypeParserRuleCall_0_0(), semanticObject.getType());
+		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getDateValueDateParserRuleCall_1_0(), semanticObject.getDateValue());
+		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getTimeOfDayValueTimeOfDayParserRuleCall_3_0(), semanticObject.getTimeOfDayValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     InitializerExpression returns STDateLiteral
+	 *     STExpression returns STDateLiteral
+	 *     STSubrangeExpression returns STDateLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateLiteral
+	 *     STOrExpression returns STDateLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STDateLiteral
+	 *     STXorExpression returns STDateLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STDateLiteral
+	 *     STAndExpression returns STDateLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STDateLiteral
+	 *     STEqualityExpression returns STDateLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STDateLiteral
+	 *     STComparisonExpression returns STDateLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STDateLiteral
+	 *     STAddSubExpression returns STDateLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STDateLiteral
+	 *     STMulDivModExpression returns STDateLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STDateLiteral
+	 *     STPowerExpression returns STDateLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STDateLiteral
+	 *     STSignumExpression returns STDateLiteral
+	 *     STSelectionExpression returns STDateLiteral
+	 *     STSelectionExpression.STMemberSelection_1_0 returns STDateLiteral
+	 *     STAtomicExpression returns STDateLiteral
+	 *     STLiteralExpressions returns STDateLiteral
+	 *     STDateLiteral returns STDateLiteral
+	 *
+	 * Constraint:
+	 *     (type=STDateLiteralType value=Date)
+	 */
+	protected void sequence_STDateLiteral(ISerializationContext context, STDateLiteral semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_LITERAL__TYPE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_LITERAL__TYPE));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_LITERAL__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_LITERAL__VALUE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTDateLiteralAccess().getTypeSTDateLiteralTypeParserRuleCall_0_0(), semanticObject.getType());
+		feeder.accept(grammarAccess.getSTDateLiteralAccess().getValueDateParserRuleCall_1_0(), semanticObject.getValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     STElseIfPart returns STElseIfPart
 	 *
 	 * Constraint:
@@ -492,132 +504,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STBoolLiteral
-	 *     STExpression returns STBoolLiteral
-	 *     STSubrangeExpression returns STBoolLiteral
-	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
-	 *     STOrExpression returns STBoolLiteral
-	 *     STOrExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
-	 *     STXorExpression returns STBoolLiteral
-	 *     STXorExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
-	 *     STAndExpression returns STBoolLiteral
-	 *     STAndExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
-	 *     STEqualityExpression returns STBoolLiteral
-	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
-	 *     STComparisonExpression returns STBoolLiteral
-	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
-	 *     STAddSubExpression returns STBoolLiteral
-	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
-	 *     STMulDivModExpression returns STBoolLiteral
-	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
-	 *     STPowerExpression returns STBoolLiteral
-	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STBoolLiteral
-	 *     STSignumExpression returns STBoolLiteral
-	 *     STSelectionExpression returns STBoolLiteral
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STBoolLiteral
-	 *     STAtomicExpression returns STBoolLiteral
-	 *     STLiteralExpressions returns STBoolLiteral
-	 *
-	 * Constraint:
-	 *     boolLiteral=BOOL_LITERAL
-	 */
-	protected void sequence_STLiteralExpressions(ISerializationContext context, STBoolLiteral semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_BOOL_LITERAL__BOOL_LITERAL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_BOOL_LITERAL__BOOL_LITERAL));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getBoolLiteralBOOL_LITERALParserRuleCall_0_1_0(), semanticObject.getBoolLiteral());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STDateAndTimeLiteral
-	 *     STExpression returns STDateAndTimeLiteral
-	 *     STSubrangeExpression returns STDateAndTimeLiteral
-	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
-	 *     STOrExpression returns STDateAndTimeLiteral
-	 *     STOrExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
-	 *     STXorExpression returns STDateAndTimeLiteral
-	 *     STXorExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
-	 *     STAndExpression returns STDateAndTimeLiteral
-	 *     STAndExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
-	 *     STEqualityExpression returns STDateAndTimeLiteral
-	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
-	 *     STComparisonExpression returns STDateAndTimeLiteral
-	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
-	 *     STAddSubExpression returns STDateAndTimeLiteral
-	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
-	 *     STMulDivModExpression returns STDateAndTimeLiteral
-	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
-	 *     STPowerExpression returns STDateAndTimeLiteral
-	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
-	 *     STSignumExpression returns STDateAndTimeLiteral
-	 *     STSelectionExpression returns STDateAndTimeLiteral
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STDateAndTimeLiteral
-	 *     STAtomicExpression returns STDateAndTimeLiteral
-	 *     STLiteralExpressions returns STDateAndTimeLiteral
-	 *
-	 * Constraint:
-	 *     timeLiteral=DATE_AND_TIME_LITERAL
-	 */
-	protected void sequence_STLiteralExpressions(ISerializationContext context, STDateAndTimeLiteral semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TIME_LITERAL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TIME_LITERAL));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralDATE_AND_TIME_LITERALParserRuleCall_5_1_0(), semanticObject.getTimeLiteral());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STDateLiteral
-	 *     STExpression returns STDateLiteral
-	 *     STSubrangeExpression returns STDateLiteral
-	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateLiteral
-	 *     STOrExpression returns STDateLiteral
-	 *     STOrExpression.STBinaryExpression_1_0_0 returns STDateLiteral
-	 *     STXorExpression returns STDateLiteral
-	 *     STXorExpression.STBinaryExpression_1_0_0 returns STDateLiteral
-	 *     STAndExpression returns STDateLiteral
-	 *     STAndExpression.STBinaryExpression_1_0_0 returns STDateLiteral
-	 *     STEqualityExpression returns STDateLiteral
-	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STDateLiteral
-	 *     STComparisonExpression returns STDateLiteral
-	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STDateLiteral
-	 *     STAddSubExpression returns STDateLiteral
-	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STDateLiteral
-	 *     STMulDivModExpression returns STDateLiteral
-	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STDateLiteral
-	 *     STPowerExpression returns STDateLiteral
-	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STDateLiteral
-	 *     STSignumExpression returns STDateLiteral
-	 *     STSelectionExpression returns STDateLiteral
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STDateLiteral
-	 *     STAtomicExpression returns STDateLiteral
-	 *     STLiteralExpressions returns STDateLiteral
-	 *
-	 * Constraint:
-	 *     dateLiteral=DATE_LITERAL
-	 */
-	protected void sequence_STLiteralExpressions(ISerializationContext context, STDateLiteral semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_LITERAL__DATE_LITERAL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_LITERAL__DATE_LITERAL));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getDateLiteralDATE_LITERALParserRuleCall_2_1_0(), semanticObject.getDateLiteral());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
 	 *     InitializerExpression returns STNumericLiteral
 	 *     STExpression returns STNumericLiteral
 	 *     STSubrangeExpression returns STNumericLiteral
@@ -643,155 +529,12 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STSelectionExpression.STMemberSelection_1_0 returns STNumericLiteral
 	 *     STAtomicExpression returns STNumericLiteral
 	 *     STLiteralExpressions returns STNumericLiteral
+	 *     STNumericLiteral returns STNumericLiteral
 	 *
 	 * Constraint:
-	 *     numericLiteral=NUMERIC_LITERAL
+	 *     (type=STNumericLiteralType? (value=BoolLiteral | value=Number | value=NON_DECIMAL))
 	 */
-	protected void sequence_STLiteralExpressions(ISerializationContext context, STNumericLiteral semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_NUMERIC_LITERAL__NUMERIC_LITERAL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_NUMERIC_LITERAL__NUMERIC_LITERAL));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getNumericLiteralNUMERIC_LITERALParserRuleCall_1_1_0(), semanticObject.getNumericLiteral());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STStringLiteral
-	 *     STExpression returns STStringLiteral
-	 *     STSubrangeExpression returns STStringLiteral
-	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STStringLiteral
-	 *     STOrExpression returns STStringLiteral
-	 *     STOrExpression.STBinaryExpression_1_0_0 returns STStringLiteral
-	 *     STXorExpression returns STStringLiteral
-	 *     STXorExpression.STBinaryExpression_1_0_0 returns STStringLiteral
-	 *     STAndExpression returns STStringLiteral
-	 *     STAndExpression.STBinaryExpression_1_0_0 returns STStringLiteral
-	 *     STEqualityExpression returns STStringLiteral
-	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STStringLiteral
-	 *     STComparisonExpression returns STStringLiteral
-	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STStringLiteral
-	 *     STAddSubExpression returns STStringLiteral
-	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STStringLiteral
-	 *     STMulDivModExpression returns STStringLiteral
-	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STStringLiteral
-	 *     STPowerExpression returns STStringLiteral
-	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STStringLiteral
-	 *     STSignumExpression returns STStringLiteral
-	 *     STSelectionExpression returns STStringLiteral
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STStringLiteral
-	 *     STAtomicExpression returns STStringLiteral
-	 *     STLiteralExpressions returns STStringLiteral
-	 *
-	 * Constraint:
-	 *     stringLiteral=STRING_LITERAL
-	 */
-	protected void sequence_STLiteralExpressions(ISerializationContext context, STStringLiteral semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_STRING_LITERAL__STRING_LITERAL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_STRING_LITERAL__STRING_LITERAL));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getStringLiteralSTRING_LITERALParserRuleCall_6_1_0(), semanticObject.getStringLiteral());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STTimeLiteral
-	 *     STExpression returns STTimeLiteral
-	 *     STSubrangeExpression returns STTimeLiteral
-	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
-	 *     STOrExpression returns STTimeLiteral
-	 *     STOrExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
-	 *     STXorExpression returns STTimeLiteral
-	 *     STXorExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
-	 *     STAndExpression returns STTimeLiteral
-	 *     STAndExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
-	 *     STEqualityExpression returns STTimeLiteral
-	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
-	 *     STComparisonExpression returns STTimeLiteral
-	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
-	 *     STAddSubExpression returns STTimeLiteral
-	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
-	 *     STMulDivModExpression returns STTimeLiteral
-	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
-	 *     STPowerExpression returns STTimeLiteral
-	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
-	 *     STSignumExpression returns STTimeLiteral
-	 *     STSelectionExpression returns STTimeLiteral
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STTimeLiteral
-	 *     STAtomicExpression returns STTimeLiteral
-	 *     STLiteralExpressions returns STTimeLiteral
-	 *
-	 * Constraint:
-	 *     timeLiteral=TIME_LITERAL
-	 */
-	protected void sequence_STLiteralExpressions(ISerializationContext context, STTimeLiteral semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_TIME_LITERAL__TIME_LITERAL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_LITERAL__TIME_LITERAL));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeLiteralTIME_LITERALParserRuleCall_3_1_0(), semanticObject.getTimeLiteral());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STTimeOfDayLiteral
-	 *     STExpression returns STTimeOfDayLiteral
-	 *     STSubrangeExpression returns STTimeOfDayLiteral
-	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
-	 *     STOrExpression returns STTimeOfDayLiteral
-	 *     STOrExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
-	 *     STXorExpression returns STTimeOfDayLiteral
-	 *     STXorExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
-	 *     STAndExpression returns STTimeOfDayLiteral
-	 *     STAndExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
-	 *     STEqualityExpression returns STTimeOfDayLiteral
-	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
-	 *     STComparisonExpression returns STTimeOfDayLiteral
-	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
-	 *     STAddSubExpression returns STTimeOfDayLiteral
-	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
-	 *     STMulDivModExpression returns STTimeOfDayLiteral
-	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
-	 *     STPowerExpression returns STTimeOfDayLiteral
-	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
-	 *     STSignumExpression returns STTimeOfDayLiteral
-	 *     STSelectionExpression returns STTimeOfDayLiteral
-	 *     STSelectionExpression.STMemberSelection_1_0 returns STTimeOfDayLiteral
-	 *     STAtomicExpression returns STTimeOfDayLiteral
-	 *     STLiteralExpressions returns STTimeOfDayLiteral
-	 *
-	 * Constraint:
-	 *     timeOfDayLiteral=TIME_OF_DAY_LITERAL
-	 */
-	protected void sequence_STLiteralExpressions(ISerializationContext context, STTimeOfDayLiteral semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTLiteralExpressionsAccess().getTimeOfDayLiteralTIME_OF_DAY_LITERALParserRuleCall_4_1_0(), semanticObject.getTimeOfDayLiteral());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     STRING_LITERAL returns STRING_LITERAL
-	 *
-	 * Constraint:
-	 *     (keyword='STRING#'? value=STRING)
-	 */
-	protected void sequence_STRING_LITERAL(ISerializationContext context, STRING_LITERAL semanticObject) {
+	protected void sequence_STNumericLiteral(ISerializationContext context, STNumericLiteral semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -943,6 +686,135 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
+	 *     InitializerExpression returns STStringLiteral
+	 *     STExpression returns STStringLiteral
+	 *     STSubrangeExpression returns STStringLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STStringLiteral
+	 *     STOrExpression returns STStringLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STStringLiteral
+	 *     STXorExpression returns STStringLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STStringLiteral
+	 *     STAndExpression returns STStringLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STStringLiteral
+	 *     STEqualityExpression returns STStringLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STStringLiteral
+	 *     STComparisonExpression returns STStringLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STStringLiteral
+	 *     STAddSubExpression returns STStringLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STStringLiteral
+	 *     STMulDivModExpression returns STStringLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STStringLiteral
+	 *     STPowerExpression returns STStringLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STStringLiteral
+	 *     STSignumExpression returns STStringLiteral
+	 *     STSelectionExpression returns STStringLiteral
+	 *     STSelectionExpression.STMemberSelection_1_0 returns STStringLiteral
+	 *     STAtomicExpression returns STStringLiteral
+	 *     STLiteralExpressions returns STStringLiteral
+	 *     STStringLiteral returns STStringLiteral
+	 *
+	 * Constraint:
+	 *     (type=STStringLiteralType? (value=STRING | value=WSTRING))
+	 */
+	protected void sequence_STStringLiteral(ISerializationContext context, STStringLiteral semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     InitializerExpression returns STTimeLiteral
+	 *     STExpression returns STTimeLiteral
+	 *     STSubrangeExpression returns STTimeLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
+	 *     STOrExpression returns STTimeLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
+	 *     STXorExpression returns STTimeLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
+	 *     STAndExpression returns STTimeLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
+	 *     STEqualityExpression returns STTimeLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
+	 *     STComparisonExpression returns STTimeLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
+	 *     STAddSubExpression returns STTimeLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
+	 *     STMulDivModExpression returns STTimeLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
+	 *     STPowerExpression returns STTimeLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
+	 *     STSignumExpression returns STTimeLiteral
+	 *     STSelectionExpression returns STTimeLiteral
+	 *     STSelectionExpression.STMemberSelection_1_0 returns STTimeLiteral
+	 *     STAtomicExpression returns STTimeLiteral
+	 *     STLiteralExpressions returns STTimeLiteral
+	 *     STTimeLiteral returns STTimeLiteral
+	 *
+	 * Constraint:
+	 *     (type=STTimeLiteralType value=Time)
+	 */
+	protected void sequence_STTimeLiteral(ISerializationContext context, STTimeLiteral semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_TIME_LITERAL__TYPE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_LITERAL__TYPE));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_TIME_LITERAL__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_LITERAL__VALUE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTTimeLiteralAccess().getTypeSTTimeLiteralTypeParserRuleCall_0_0(), semanticObject.getType());
+		feeder.accept(grammarAccess.getSTTimeLiteralAccess().getValueTimeParserRuleCall_1_0(), semanticObject.getValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     InitializerExpression returns STTimeOfDayLiteral
+	 *     STExpression returns STTimeOfDayLiteral
+	 *     STSubrangeExpression returns STTimeOfDayLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STOrExpression returns STTimeOfDayLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STXorExpression returns STTimeOfDayLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STAndExpression returns STTimeOfDayLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STEqualityExpression returns STTimeOfDayLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STComparisonExpression returns STTimeOfDayLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STAddSubExpression returns STTimeOfDayLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STMulDivModExpression returns STTimeOfDayLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STPowerExpression returns STTimeOfDayLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
+	 *     STSignumExpression returns STTimeOfDayLiteral
+	 *     STSelectionExpression returns STTimeOfDayLiteral
+	 *     STSelectionExpression.STMemberSelection_1_0 returns STTimeOfDayLiteral
+	 *     STAtomicExpression returns STTimeOfDayLiteral
+	 *     STLiteralExpressions returns STTimeOfDayLiteral
+	 *     STTimeOfDayLiteral returns STTimeOfDayLiteral
+	 *
+	 * Constraint:
+	 *     (type=STTimeOfDayLiteralType value=TimeOfDay)
+	 */
+	protected void sequence_STTimeOfDayLiteral(ISerializationContext context, STTimeOfDayLiteral semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__TYPE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__TYPE));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__VALUE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeSTTimeOfDayLiteralTypeParserRuleCall_0_0(), semanticObject.getType());
+		feeder.accept(grammarAccess.getSTTimeOfDayLiteralAccess().getValueTimeOfDayParserRuleCall_1_0(), semanticObject.getValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     STStatement returns STWhileStatement
 	 *     STWhileStatement returns STWhileStatement
 	 *
@@ -950,30 +822,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     (condition=STExpression statements+=STStatement*)
 	 */
 	protected void sequence_STWhileStatement(ISerializationContext context, STWhileStatement semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     TIME_LITERAL returns TIME_LITERAL
-	 *
-	 * Constraint:
-	 *     ((keyword='TIME#' | keyword='LTIME#' | keyword='T#' | keyword='LT#') value=TIME)
-	 */
-	protected void sequence_TIME_LITERAL(ISerializationContext context, TIME_LITERAL semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     TIME_OF_DAY_LITERAL returns TIME_OF_DAY_LITERAL
-	 *
-	 * Constraint:
-	 *     ((keyword='TIME_OF_DAY#' | keyword='TOD#' | keyword='LTOD#') value=TIME_OF_DAY)
-	 */
-	protected void sequence_TIME_OF_DAY_LITERAL(ISerializationContext context, TIME_OF_DAY_LITERAL semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

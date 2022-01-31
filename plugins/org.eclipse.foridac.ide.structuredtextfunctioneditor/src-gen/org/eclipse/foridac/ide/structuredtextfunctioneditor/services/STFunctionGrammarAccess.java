@@ -675,13 +675,12 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STLiteralExpressions returns STExpression:
-	//    {STBoolLiteral} boolLiteral=BOOL_LITERAL |
-	//    {STNumericLiteral} numericLiteral=NUMERIC_LITERAL |
-	//    {STDateLiteral} dateLiteral=DATE_LITERAL |
-	//    {STTimeLiteral} timeLiteral=TIME_LITERAL |
-	//    {STTimeOfDayLiteral} timeOfDayLiteral=TIME_OF_DAY_LITERAL |
-	//    {STDateAndTimeLiteral} timeLiteral=DATE_AND_TIME_LITERAL |
-	//    {STStringLiteral} stringLiteral=STRING_LITERAL;
+	//    STNumericLiteral |
+	//    STDateLiteral |
+	//    STTimeLiteral |
+	//    STTimeOfDayLiteral |
+	//    STDateAndTimeLiteral |
+	//    STStringLiteral;
 	public STCoreGrammarAccess.STLiteralExpressionsElements getSTLiteralExpressionsAccess() {
 		return gaSTCore.getSTLiteralExpressionsAccess();
 	}
@@ -690,95 +689,165 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTLiteralExpressionsAccess().getRule();
 	}
 	
-	//BOOL_LITERAL:
-	//    ('BOOL#')? ('TRUE' | 'FALSE')
+	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+	//STNumericLiteralType returns datatype::DataType:
+	//    'BOOL#' |
+	//    'BYTE#' |
+	//    'WORD#' |
+	//    'DWORD#' |
+	//    'LWORD#' |
+	//    'SINT#' |
+	//    'INT#' |
+	//    'DINT#' |
+	//    'LINT#' |
+	//    'USINT#' |
+	//    'UINT#' |
+	//    'UDINT#' |
+	//    'ULINT#' |
+	//    'REAL#' |
+	//    'LREAL#'
 	//;
-	public STCoreGrammarAccess.BOOL_LITERALElements getBOOL_LITERALAccess() {
-		return gaSTCore.getBOOL_LITERALAccess();
+	public STCoreGrammarAccess.STNumericLiteralTypeElements getSTNumericLiteralTypeAccess() {
+		return gaSTCore.getSTNumericLiteralTypeAccess();
 	}
 	
-	public ParserRule getBOOL_LITERALRule() {
-		return getBOOL_LITERALAccess().getRule();
+	public ParserRule getSTNumericLiteralTypeRule() {
+		return getSTNumericLiteralTypeAccess().getRule();
 	}
 	
-	//NUMERIC_LITERAL:
-	//    (keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
-	//    'UINT#' | 'UDINT#' | 'ULINT#' |    'REAL#' | 'LREAL#'))?
-	//    (intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL);
-	public STCoreGrammarAccess.NUMERIC_LITERALElements getNUMERIC_LITERALAccess() {
-		return gaSTCore.getNUMERIC_LITERALAccess();
+	//STNumericLiteral:
+	//    (type=STNumericLiteralType)?
+	//    value=(BoolLiteral | Number | NON_DECIMAL);
+	public STCoreGrammarAccess.STNumericLiteralElements getSTNumericLiteralAccess() {
+		return gaSTCore.getSTNumericLiteralAccess();
 	}
 	
-	public ParserRule getNUMERIC_LITERALRule() {
-		return getNUMERIC_LITERALAccess().getRule();
+	public ParserRule getSTNumericLiteralRule() {
+		return getSTNumericLiteralAccess().getRule();
 	}
 	
-	//DATE_LITERAL:
-	//    keyword=('DATE#' | 'LDATE#' | 'D#' | 'LD#') value=DATE;
-	public STCoreGrammarAccess.DATE_LITERALElements getDATE_LITERALAccess() {
-		return gaSTCore.getDATE_LITERALAccess();
+	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+	//STDateLiteralType returns datatype::DataType:
+	//    'DATE#' |
+	//    'LDATE#' |
+	//    'D#' |
+	//    'LD#'
+	//;
+	public STCoreGrammarAccess.STDateLiteralTypeElements getSTDateLiteralTypeAccess() {
+		return gaSTCore.getSTDateLiteralTypeAccess();
 	}
 	
-	public ParserRule getDATE_LITERALRule() {
-		return getDATE_LITERALAccess().getRule();
+	public ParserRule getSTDateLiteralTypeRule() {
+		return getSTDateLiteralTypeAccess().getRule();
 	}
 	
-	//TIME_LITERAL:
-	//    keyword=('TIME#' | 'LTIME#' | 'T#' | 'LT#') value=TIME;
-	public STCoreGrammarAccess.TIME_LITERALElements getTIME_LITERALAccess() {
-		return gaSTCore.getTIME_LITERALAccess();
+	//STDateLiteral:
+	//    type=STDateLiteralType value=Date;
+	public STCoreGrammarAccess.STDateLiteralElements getSTDateLiteralAccess() {
+		return gaSTCore.getSTDateLiteralAccess();
 	}
 	
-	public ParserRule getTIME_LITERALRule() {
-		return getTIME_LITERALAccess().getRule();
+	public ParserRule getSTDateLiteralRule() {
+		return getSTDateLiteralAccess().getRule();
 	}
 	
-	//TIME_OF_DAY_LITERAL:
-	//    keyword=('TIME_OF_DAY#' | 'TOD#' | 'LTOD#') value=TIME_OF_DAY;
-	public STCoreGrammarAccess.TIME_OF_DAY_LITERALElements getTIME_OF_DAY_LITERALAccess() {
-		return gaSTCore.getTIME_OF_DAY_LITERALAccess();
+	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+	//STTimeLiteralType returns datatype::DataType:
+	//    'TIME#' |
+	//    'LTIME#' |
+	//    'T#' |
+	//    'LT#'
+	//;
+	public STCoreGrammarAccess.STTimeLiteralTypeElements getSTTimeLiteralTypeAccess() {
+		return gaSTCore.getSTTimeLiteralTypeAccess();
 	}
 	
-	public ParserRule getTIME_OF_DAY_LITERALRule() {
-		return getTIME_OF_DAY_LITERALAccess().getRule();
+	public ParserRule getSTTimeLiteralTypeRule() {
+		return getSTTimeLiteralTypeAccess().getRule();
 	}
 	
-	//DATE_AND_TIME_LITERAL:
-	//    keyword=('DATE_AND_TIME#' | 'LDATE_AND_TIME#' | 'DT#' | 'LDT#') dateValue=DATE '-' timeOfDayValue=TIME_OF_DAY;
-	public STCoreGrammarAccess.DATE_AND_TIME_LITERALElements getDATE_AND_TIME_LITERALAccess() {
-		return gaSTCore.getDATE_AND_TIME_LITERALAccess();
+	//STTimeLiteral:
+	//    type=STTimeLiteralType value=Time;
+	public STCoreGrammarAccess.STTimeLiteralElements getSTTimeLiteralAccess() {
+		return gaSTCore.getSTTimeLiteralAccess();
 	}
 	
-	public ParserRule getDATE_AND_TIME_LITERALRule() {
-		return getDATE_AND_TIME_LITERALAccess().getRule();
+	public ParserRule getSTTimeLiteralRule() {
+		return getSTTimeLiteralAccess().getRule();
 	}
 	
-	//STRING_LITERAL:
-	//    (keyword='STRING#' | 'WSTRING#' | 'CHAR#' | 'WCHAR#')? value=STRING;
-	public STCoreGrammarAccess.STRING_LITERALElements getSTRING_LITERALAccess() {
-		return gaSTCore.getSTRING_LITERALAccess();
+	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+	//STTimeOfDayLiteralType returns datatype::DataType:
+	//    'TIME_OF_DAY#' |
+	//    'TOD#' |
+	//    'LTOD#'
+	//;
+	public STCoreGrammarAccess.STTimeOfDayLiteralTypeElements getSTTimeOfDayLiteralTypeAccess() {
+		return gaSTCore.getSTTimeOfDayLiteralTypeAccess();
 	}
 	
-	public ParserRule getSTRING_LITERALRule() {
-		return getSTRING_LITERALAccess().getRule();
+	public ParserRule getSTTimeOfDayLiteralTypeRule() {
+		return getSTTimeOfDayLiteralTypeAccess().getRule();
 	}
 	
-	//terminal fragment HEX_DIGIT:
-	//    '0'..'9' | 'a'..'f' | 'A'..'F' | '_';
-	public TerminalRule getHEX_DIGITRule() {
-		return gaSTCore.getHEX_DIGITRule();
+	//STTimeOfDayLiteral:
+	//    type=STTimeOfDayLiteralType value=TimeOfDay;
+	public STCoreGrammarAccess.STTimeOfDayLiteralElements getSTTimeOfDayLiteralAccess() {
+		return gaSTCore.getSTTimeOfDayLiteralAccess();
 	}
 	
-	//terminal NON_DECIMAL returns ecore::EBigInteger:
-	//    ('2#' | '8#' | '16#') HEX_DIGIT+;
-	public TerminalRule getNON_DECIMALRule() {
-		return gaSTCore.getNON_DECIMALRule();
+	public ParserRule getSTTimeOfDayLiteralRule() {
+		return getSTTimeOfDayLiteralAccess().getRule();
 	}
 	
-	//terminal INT returns ecore::EBigInteger:
-	//    ('0'..'9') ('_'? '0'..'9')*;
-	public TerminalRule getINTRule() {
-		return gaSTCore.getINTRule();
+	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+	//STDateAndTimeLiteralType returns datatype::DataType:
+	//    'DATE_AND_TIME#' |
+	//    'LDATE_AND_TIME#' |
+	//    'DT#' |
+	//    'LDT#'
+	//;
+	public STCoreGrammarAccess.STDateAndTimeLiteralTypeElements getSTDateAndTimeLiteralTypeAccess() {
+		return gaSTCore.getSTDateAndTimeLiteralTypeAccess();
+	}
+	
+	public ParserRule getSTDateAndTimeLiteralTypeRule() {
+		return getSTDateAndTimeLiteralTypeAccess().getRule();
+	}
+	
+	//STDateAndTimeLiteral:
+	//    type=STDateAndTimeLiteralType dateValue=Date '-' timeOfDayValue=TimeOfDay;
+	public STCoreGrammarAccess.STDateAndTimeLiteralElements getSTDateAndTimeLiteralAccess() {
+		return gaSTCore.getSTDateAndTimeLiteralAccess();
+	}
+	
+	public ParserRule getSTDateAndTimeLiteralRule() {
+		return getSTDateAndTimeLiteralAccess().getRule();
+	}
+	
+	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+	//STStringLiteralType returns datatype::DataType:
+	//    'STRING#' |
+	//    'WSTRING#' |
+	//    'CHAR#' |
+	//    'WCHAR#'
+	//;
+	public STCoreGrammarAccess.STStringLiteralTypeElements getSTStringLiteralTypeAccess() {
+		return gaSTCore.getSTStringLiteralTypeAccess();
+	}
+	
+	public ParserRule getSTStringLiteralTypeRule() {
+		return getSTStringLiteralTypeAccess().getRule();
+	}
+	
+	//STStringLiteral:
+	//    (type=STStringLiteralType)? value=(STRING|WSTRING);
+	public STCoreGrammarAccess.STStringLiteralElements getSTStringLiteralAccess() {
+		return gaSTCore.getSTStringLiteralAccess();
+	}
+	
+	public ParserRule getSTStringLiteralRule() {
+		return getSTStringLiteralAccess().getRule();
 	}
 	
 	//QualifiedName:
@@ -791,57 +860,81 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getQualifiedNameAccess().getRule();
 	}
 	
-	//INTEGER returns ecore::EBigInteger:
-	//    ('+' | '-')? INT;
-	public STCoreGrammarAccess.INTEGERElements getINTEGERAccess() {
-		return gaSTCore.getINTEGERAccess();
+	//// BOOLs are internally always stored as numerical value. 0 = FALSE, 1 = TRUE
+	//BoolLiteral returns ecore::EBigDecimal:
+	//    'TRUE' | 'FALSE'
+	//;
+	public STCoreGrammarAccess.BoolLiteralElements getBoolLiteralAccess() {
+		return gaSTCore.getBoolLiteralAccess();
 	}
 	
-	public ParserRule getINTEGERRule() {
-		return getINTEGERAccess().getRule();
+	public ParserRule getBoolLiteralRule() {
+		return getBoolLiteralAccess().getRule();
 	}
 	
-	//REAL returns ecore::EBigDecimal:
-	//    INTEGER '.' (EXT_INT | INT);
-	public STCoreGrammarAccess.REALElements getREALAccess() {
-		return gaSTCore.getREALAccess();
+	//Number returns ecore::EBigDecimal:
+	//    ('+' | '-')? INT ('.' (EXT_INT | INT))?;
+	public STCoreGrammarAccess.NumberElements getNumberAccess() {
+		return gaSTCore.getNumberAccess();
 	}
 	
-	public ParserRule getREALRule() {
-		return getREALAccess().getRule();
+	public ParserRule getNumberRule() {
+		return getNumberAccess().getRule();
 	}
 	
 	// // INT ? '.' (EXT_INT | INT);
-	//DATE returns ecore::EDate:
+	//Date returns ecore::EDate:
 	//    INT '-' INT '-' INT;
-	public STCoreGrammarAccess.DATEElements getDATEAccess() {
-		return gaSTCore.getDATEAccess();
+	public STCoreGrammarAccess.DateElements getDateAccess() {
+		return gaSTCore.getDateAccess();
 	}
 	
-	public ParserRule getDATERule() {
-		return getDATEAccess().getRule();
+	public ParserRule getDateRule() {
+		return getDateAccess().getRule();
 	}
 	
-	//terminal TIME:
-	//    ('+' | '-')? (INT ('.' INT)? ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
-	public TerminalRule getTIMERule() {
-		return gaSTCore.getTIMERule();
-	}
-	
-	//TIME_OF_DAY:
+	//TimeOfDay:
 	//    INT ':' INT ':' INT ('.' INT)?;
-	public STCoreGrammarAccess.TIME_OF_DAYElements getTIME_OF_DAYAccess() {
-		return gaSTCore.getTIME_OF_DAYAccess();
+	public STCoreGrammarAccess.TimeOfDayElements getTimeOfDayAccess() {
+		return gaSTCore.getTimeOfDayAccess();
 	}
 	
-	public ParserRule getTIME_OF_DAYRule() {
-		return getTIME_OF_DAYAccess().getRule();
+	public ParserRule getTimeOfDayRule() {
+		return getTimeOfDayAccess().getRule();
+	}
+	
+	//Time:
+	//    (Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
+	public STCoreGrammarAccess.TimeElements getTimeAccess() {
+		return gaSTCore.getTimeAccess();
+	}
+	
+	public ParserRule getTimeRule() {
+		return getTimeAccess().getRule();
+	}
+	
+	//terminal fragment HEX_DIGIT:
+	//    '0'..'9' | 'a'..'f' | 'A'..'F' | '_';
+	public TerminalRule getHEX_DIGITRule() {
+		return gaSTCore.getHEX_DIGITRule();
+	}
+	
+	//terminal NON_DECIMAL returns ecore::EBigDecimal:
+	//    ('2#' | '8#' | '16#') HEX_DIGIT+;
+	public TerminalRule getNON_DECIMALRule() {
+		return gaSTCore.getNON_DECIMALRule();
 	}
 	
 	//terminal EXT_INT:
 	//    INT ('e' | 'E') ('-' | '+')? INT;
 	public TerminalRule getEXT_INTRule() {
 		return gaSTCore.getEXT_INTRule();
+	}
+	
+	//terminal INT returns ecore::EBigInteger:
+	//    ('0'..'9') ('_'? '0'..'9')*;
+	public TerminalRule getINTRule() {
+		return gaSTCore.getINTRule();
 	}
 	
 	//terminal ID:

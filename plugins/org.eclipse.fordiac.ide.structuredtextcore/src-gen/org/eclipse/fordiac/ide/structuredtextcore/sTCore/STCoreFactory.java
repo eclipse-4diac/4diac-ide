@@ -186,58 +186,58 @@ public interface STCoreFactory extends EFactory
   MultibitPartialAccess createMultibitPartialAccess();
 
   /**
-   * Returns a new object of class '<em>NUMERIC LITERAL</em>'.
+   * Returns a new object of class '<em>ST Numeric Literal</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>NUMERIC LITERAL</em>'.
+   * @return a new object of class '<em>ST Numeric Literal</em>'.
    * @generated
    */
-  NUMERIC_LITERAL createNUMERIC_LITERAL();
+  STNumericLiteral createSTNumericLiteral();
 
   /**
-   * Returns a new object of class '<em>DATE LITERAL</em>'.
+   * Returns a new object of class '<em>ST Date Literal</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>DATE LITERAL</em>'.
+   * @return a new object of class '<em>ST Date Literal</em>'.
    * @generated
    */
-  DATE_LITERAL createDATE_LITERAL();
+  STDateLiteral createSTDateLiteral();
 
   /**
-   * Returns a new object of class '<em>TIME LITERAL</em>'.
+   * Returns a new object of class '<em>ST Time Literal</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>TIME LITERAL</em>'.
+   * @return a new object of class '<em>ST Time Literal</em>'.
    * @generated
    */
-  TIME_LITERAL createTIME_LITERAL();
+  STTimeLiteral createSTTimeLiteral();
 
   /**
-   * Returns a new object of class '<em>TIME OF DAY LITERAL</em>'.
+   * Returns a new object of class '<em>ST Time Of Day Literal</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>TIME OF DAY LITERAL</em>'.
+   * @return a new object of class '<em>ST Time Of Day Literal</em>'.
    * @generated
    */
-  TIME_OF_DAY_LITERAL createTIME_OF_DAY_LITERAL();
+  STTimeOfDayLiteral createSTTimeOfDayLiteral();
 
   /**
-   * Returns a new object of class '<em>DATE AND TIME LITERAL</em>'.
+   * Returns a new object of class '<em>ST Date And Time Literal</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>DATE AND TIME LITERAL</em>'.
+   * @return a new object of class '<em>ST Date And Time Literal</em>'.
    * @generated
    */
-  DATE_AND_TIME_LITERAL createDATE_AND_TIME_LITERAL();
+  STDateAndTimeLiteral createSTDateAndTimeLiteral();
 
   /**
-   * Returns a new object of class '<em>STRING LITERAL</em>'.
+   * Returns a new object of class '<em>ST String Literal</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>STRING LITERAL</em>'.
+   * @return a new object of class '<em>ST String Literal</em>'.
    * @generated
    */
-  STRING_LITERAL createSTRING_LITERAL();
+  STStringLiteral createSTStringLiteral();
 
   /**
    * Returns a new object of class '<em>ST Return</em>'.
@@ -310,69 +310,6 @@ public interface STCoreFactory extends EFactory
    * @generated
    */
   STSymbol createSTSymbol();
-
-  /**
-   * Returns a new object of class '<em>ST Bool Literal</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Bool Literal</em>'.
-   * @generated
-   */
-  STBoolLiteral createSTBoolLiteral();
-
-  /**
-   * Returns a new object of class '<em>ST Numeric Literal</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Numeric Literal</em>'.
-   * @generated
-   */
-  STNumericLiteral createSTNumericLiteral();
-
-  /**
-   * Returns a new object of class '<em>ST Date Literal</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Date Literal</em>'.
-   * @generated
-   */
-  STDateLiteral createSTDateLiteral();
-
-  /**
-   * Returns a new object of class '<em>ST Time Literal</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Time Literal</em>'.
-   * @generated
-   */
-  STTimeLiteral createSTTimeLiteral();
-
-  /**
-   * Returns a new object of class '<em>ST Time Of Day Literal</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Time Of Day Literal</em>'.
-   * @generated
-   */
-  STTimeOfDayLiteral createSTTimeOfDayLiteral();
-
-  /**
-   * Returns a new object of class '<em>ST Date And Time Literal</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Date And Time Literal</em>'.
-   * @generated
-   */
-  STDateAndTimeLiteral createSTDateAndTimeLiteral();
-
-  /**
-   * Returns a new object of class '<em>ST String Literal</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST String Literal</em>'.
-   * @generated
-   */
-  STStringLiteral createSTStringLiteral();
 
   /**
    * Returns the package supported by this factory.

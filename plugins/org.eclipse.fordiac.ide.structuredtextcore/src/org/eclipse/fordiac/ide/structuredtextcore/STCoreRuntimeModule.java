@@ -13,9 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore;
 
+import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
+import org.eclipse.xtext.conversion.IValueConverterService;
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 public class STCoreRuntimeModule extends AbstractSTCoreRuntimeModule {
+	@Override
+	public Class<? extends IValueConverterService> bindIValueConverterService() {
+		return STCoreValueConverters.class;
+	}
 }

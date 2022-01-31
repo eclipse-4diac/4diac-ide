@@ -168,67 +168,120 @@ STAtomicExpression returns STExpression:
 	'(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? ;
 
 STLiteralExpressions returns STExpression:
-	{STBoolLiteral} boolLiteral=BOOL_LITERAL |
-	{STNumericLiteral} numericLiteral=NUMERIC_LITERAL |
-	{STDateLiteral} dateLiteral=DATE_LITERAL |
-	{STTimeLiteral} timeLiteral=TIME_LITERAL |
-	{STTimeOfDayLiteral} timeOfDayLiteral=TIME_OF_DAY_LITERAL |
-	{STDateAndTimeLiteral} timeLiteral=DATE_AND_TIME_LITERAL |
-	{STStringLiteral} stringLiteral=STRING_LITERAL;
+	STNumericLiteral |
+	STDateLiteral |
+	STTimeLiteral |
+	STTimeOfDayLiteral |
+	STDateAndTimeLiteral |
+	STStringLiteral;
 
-BOOL_LITERAL:
-	('BOOL#')? ('TRUE' | 'FALSE')
+// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+STNumericLiteralType returns datatype::DataType:
+	'BOOL#' |
+	'BYTE#' |
+	'WORD#' |
+	'DWORD#' |
+	'LWORD#' |
+	'SINT#' |
+	'INT#' |
+	'DINT#' |
+	'LINT#' |
+	'USINT#' |
+    'UINT#' |
+    'UDINT#' |
+    'ULINT#' |
+    'REAL#' |
+    'LREAL#'
+;
+    
+STNumericLiteral:
+	(type=STNumericLiteralType)?
+	value=(BoolLiteral | Number | NON_DECIMAL);
+
+// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+STDateLiteralType returns datatype::DataType:
+	'DATE#' |
+	'LDATE#' |
+	'D#' |
+	'LD#'
 ;
 
-NUMERIC_LITERAL:
-	(keyword=('BOOL#' | 'BYTE#' | 'WORD#' | 'DWORD#' | 'LWORD#' | 'SINT#' | 'INT#' | 'DINT#' | 'LINT#' | 'USINT#' |
-	'UINT#' | 'UDINT#' | 'ULINT#' |	'REAL#' | 'LREAL#'))?
-	(intValue=INTEGER | realValue=REAL | hexValue=NON_DECIMAL);
+STDateLiteral:
+	type=STDateLiteralType value=Date;
 
-DATE_LITERAL:
-	keyword=('DATE#' | 'LDATE#' | 'D#' | 'LD#') value=DATE;
+// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+STTimeLiteralType returns datatype::DataType:
+	'TIME#' |
+	'LTIME#' |
+	'T#' |
+	'LT#'
+;
 
-TIME_LITERAL:
-	keyword=('TIME#' | 'LTIME#' | 'T#' | 'LT#') value=TIME;
+STTimeLiteral:
+	type=STTimeLiteralType value=Time;
 
-TIME_OF_DAY_LITERAL:
-	keyword=('TIME_OF_DAY#' | 'TOD#' | 'LTOD#') value=TIME_OF_DAY;
+// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+STTimeOfDayLiteralType returns datatype::DataType:
+	'TIME_OF_DAY#' |
+	'TOD#' |
+	'LTOD#'
+;
 
-DATE_AND_TIME_LITERAL:
-	keyword=('DATE_AND_TIME#' | 'LDATE_AND_TIME#' | 'DT#' | 'LDT#') dateValue=DATE '-' timeOfDayValue=TIME_OF_DAY;
+STTimeOfDayLiteral:
+	type=STTimeOfDayLiteralType value=TimeOfDay;
 
-STRING_LITERAL:
-	(keyword='STRING#' | 'WSTRING#' | 'CHAR#' | 'WCHAR#')? value=STRING;
+// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+STDateAndTimeLiteralType returns datatype::DataType:
+	'DATE_AND_TIME#' |
+	'LDATE_AND_TIME#' |
+	'DT#' |
+	'LDT#'
+;
+STDateAndTimeLiteral:
+	type=STDateAndTimeLiteralType dateValue=Date '-' timeOfDayValue=TimeOfDay;
 
-terminal fragment HEX_DIGIT:
-	'0'..'9' | 'a'..'f' | 'A'..'F' | '_';
+// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
+STStringLiteralType returns datatype::DataType:
+	'STRING#' |
+	'WSTRING#' |
+	'CHAR#' |
+	'WCHAR#'
+;
 
-terminal NON_DECIMAL returns ecore::EBigInteger:
-	('2#' | '8#' | '16#') HEX_DIGIT+;
-
-terminal INT returns ecore::EBigInteger:
-	('0'..'9') ('_'? '0'..'9')*;
+STStringLiteral:
+	(type=STStringLiteralType)? value=(STRING|WSTRING);
 
 QualifiedName:
 	ID ('.' ID)*;
 
-INTEGER returns ecore::EBigInteger:
-	('+' | '-')? INT;
+// BOOLs are internally always stored as numerical value. 0 = FALSE, 1 = TRUE
+BoolLiteral returns ecore::EBigDecimal:
+	'TRUE' | 'FALSE'
+;
 
-REAL returns ecore::EBigDecimal:
-	INTEGER '.' (EXT_INT | INT); // INT ? '.' (EXT_INT | INT);
+Number returns ecore::EBigDecimal:
+	('+' | '-')? INT ('.' (EXT_INT | INT))?; // INT ? '.' (EXT_INT | INT);
 
-DATE returns ecore::EDate:
+Date returns ecore::EDate:
 	INT '-' INT '-' INT;
 
-terminal TIME:
-	('+' | '-')? (INT ('.' INT)? ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
-
-TIME_OF_DAY:
+TimeOfDay:
 	INT ':' INT ':' INT ('.' INT)?;
+
+Time:
+	(Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
+
+terminal fragment HEX_DIGIT:
+	'0'..'9' | 'a'..'f' | 'A'..'F' | '_';
+
+terminal NON_DECIMAL returns ecore::EBigDecimal:
+	('2#' | '8#' | '16#') HEX_DIGIT+;
 
 terminal EXT_INT:
 	INT ('e' | 'E') ('-' | '+')? INT;
+
+terminal INT returns ecore::EBigInteger:
+	('0'..'9') ('_'? '0'..'9')*;
 
 terminal ID:
 	'^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;

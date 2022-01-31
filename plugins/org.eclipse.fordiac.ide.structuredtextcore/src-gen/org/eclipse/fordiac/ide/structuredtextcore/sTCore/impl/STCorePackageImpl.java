@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultiBitAccessSpecifier
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBoolLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue;
@@ -195,42 +194,42 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass numeriC_LITERALEClass = null;
+  private EClass stNumericLiteralEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass datE_LITERALEClass = null;
+  private EClass stDateLiteralEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass timE_LITERALEClass = null;
+  private EClass stTimeLiteralEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass timE_OF_DAY_LITERALEClass = null;
+  private EClass stTimeOfDayLiteralEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass datE_AND_TIME_LITERALEClass = null;
+  private EClass stDateAndTimeLiteralEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass strinG_LITERALEClass = null;
+  private EClass stStringLiteralEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -287,55 +286,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   private EClass stSymbolEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stBoolLiteralEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stNumericLiteralEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stDateLiteralEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stTimeLiteralEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stTimeOfDayLiteralEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stDateAndTimeLiteralEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass stStringLiteralEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1048,9 +998,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getNUMERIC_LITERAL()
+  public EClass getSTNumericLiteral()
   {
-    return numeriC_LITERALEClass;
+    return stNumericLiteralEClass;
   }
 
   /**
@@ -1059,9 +1009,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getNUMERIC_LITERAL_Keyword()
+  public EReference getSTNumericLiteral_Type()
   {
-    return (EAttribute)numeriC_LITERALEClass.getEStructuralFeatures().get(0);
+    return (EReference)stNumericLiteralEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1070,9 +1020,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getNUMERIC_LITERAL_IntValue()
+  public EAttribute getSTNumericLiteral_Value()
   {
-    return (EAttribute)numeriC_LITERALEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)stNumericLiteralEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1081,9 +1031,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getNUMERIC_LITERAL_RealValue()
+  public EClass getSTDateLiteral()
   {
-    return (EAttribute)numeriC_LITERALEClass.getEStructuralFeatures().get(2);
+    return stDateLiteralEClass;
   }
 
   /**
@@ -1092,9 +1042,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getNUMERIC_LITERAL_HexValue()
+  public EReference getSTDateLiteral_Type()
   {
-    return (EAttribute)numeriC_LITERALEClass.getEStructuralFeatures().get(3);
+    return (EReference)stDateLiteralEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1103,9 +1053,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getDATE_LITERAL()
+  public EAttribute getSTDateLiteral_Value()
   {
-    return datE_LITERALEClass;
+    return (EAttribute)stDateLiteralEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1114,9 +1064,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getDATE_LITERAL_Keyword()
+  public EClass getSTTimeLiteral()
   {
-    return (EAttribute)datE_LITERALEClass.getEStructuralFeatures().get(0);
+    return stTimeLiteralEClass;
   }
 
   /**
@@ -1125,9 +1075,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getDATE_LITERAL_Value()
+  public EReference getSTTimeLiteral_Type()
   {
-    return (EAttribute)datE_LITERALEClass.getEStructuralFeatures().get(1);
+    return (EReference)stTimeLiteralEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1136,9 +1086,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getTIME_LITERAL()
+  public EAttribute getSTTimeLiteral_Value()
   {
-    return timE_LITERALEClass;
+    return (EAttribute)stTimeLiteralEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1147,9 +1097,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getTIME_LITERAL_Keyword()
+  public EClass getSTTimeOfDayLiteral()
   {
-    return (EAttribute)timE_LITERALEClass.getEStructuralFeatures().get(0);
+    return stTimeOfDayLiteralEClass;
   }
 
   /**
@@ -1158,9 +1108,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getTIME_LITERAL_Value()
+  public EReference getSTTimeOfDayLiteral_Type()
   {
-    return (EAttribute)timE_LITERALEClass.getEStructuralFeatures().get(1);
+    return (EReference)stTimeOfDayLiteralEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1169,9 +1119,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getTIME_OF_DAY_LITERAL()
+  public EAttribute getSTTimeOfDayLiteral_Value()
   {
-    return timE_OF_DAY_LITERALEClass;
+    return (EAttribute)stTimeOfDayLiteralEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1180,9 +1130,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getTIME_OF_DAY_LITERAL_Keyword()
+  public EClass getSTDateAndTimeLiteral()
   {
-    return (EAttribute)timE_OF_DAY_LITERALEClass.getEStructuralFeatures().get(0);
+    return stDateAndTimeLiteralEClass;
   }
 
   /**
@@ -1191,9 +1141,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getTIME_OF_DAY_LITERAL_Value()
+  public EReference getSTDateAndTimeLiteral_Type()
   {
-    return (EAttribute)timE_OF_DAY_LITERALEClass.getEStructuralFeatures().get(1);
+    return (EReference)stDateAndTimeLiteralEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1202,9 +1152,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getDATE_AND_TIME_LITERAL()
+  public EAttribute getSTDateAndTimeLiteral_DateValue()
   {
-    return datE_AND_TIME_LITERALEClass;
+    return (EAttribute)stDateAndTimeLiteralEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1213,9 +1163,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getDATE_AND_TIME_LITERAL_Keyword()
+  public EAttribute getSTDateAndTimeLiteral_TimeOfDayValue()
   {
-    return (EAttribute)datE_AND_TIME_LITERALEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)stDateAndTimeLiteralEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1224,9 +1174,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getDATE_AND_TIME_LITERAL_DateValue()
+  public EClass getSTStringLiteral()
   {
-    return (EAttribute)datE_AND_TIME_LITERALEClass.getEStructuralFeatures().get(1);
+    return stStringLiteralEClass;
   }
 
   /**
@@ -1235,9 +1185,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getDATE_AND_TIME_LITERAL_TimeOfDayValue()
+  public EReference getSTStringLiteral_Type()
   {
-    return (EAttribute)datE_AND_TIME_LITERALEClass.getEStructuralFeatures().get(2);
+    return (EReference)stStringLiteralEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1246,31 +1196,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getSTRING_LITERAL()
+  public EAttribute getSTStringLiteral_Value()
   {
-    return strinG_LITERALEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getSTRING_LITERAL_Keyword()
-  {
-    return (EAttribute)strinG_LITERALEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getSTRING_LITERAL_Value()
-  {
-    return (EAttribute)strinG_LITERALEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)stStringLiteralEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1565,160 +1493,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getSTBoolLiteral()
-  {
-    return stBoolLiteralEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getSTBoolLiteral_BoolLiteral()
-  {
-    return (EAttribute)stBoolLiteralEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getSTNumericLiteral()
-  {
-    return stNumericLiteralEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTNumericLiteral_NumericLiteral()
-  {
-    return (EReference)stNumericLiteralEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getSTDateLiteral()
-  {
-    return stDateLiteralEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTDateLiteral_DateLiteral()
-  {
-    return (EReference)stDateLiteralEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getSTTimeLiteral()
-  {
-    return stTimeLiteralEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTTimeLiteral_TimeLiteral()
-  {
-    return (EReference)stTimeLiteralEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getSTTimeOfDayLiteral()
-  {
-    return stTimeOfDayLiteralEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTTimeOfDayLiteral_TimeOfDayLiteral()
-  {
-    return (EReference)stTimeOfDayLiteralEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getSTDateAndTimeLiteral()
-  {
-    return stDateAndTimeLiteralEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTDateAndTimeLiteral_TimeLiteral()
-  {
-    return (EReference)stDateAndTimeLiteralEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getSTStringLiteral()
-  {
-    return stStringLiteralEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTStringLiteral_StringLiteral()
-  {
-    return (EReference)stStringLiteralEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EEnum getBinaryOperator()
   {
     return binaryOperatorEEnum;
@@ -1851,32 +1625,30 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEAttribute(multibitPartialAccessEClass, MULTIBIT_PARTIAL_ACCESS__ACCESS_SPECIFIER);
     createEAttribute(multibitPartialAccessEClass, MULTIBIT_PARTIAL_ACCESS__INDEX);
 
-    numeriC_LITERALEClass = createEClass(NUMERIC_LITERAL);
-    createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__KEYWORD);
-    createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__INT_VALUE);
-    createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__REAL_VALUE);
-    createEAttribute(numeriC_LITERALEClass, NUMERIC_LITERAL__HEX_VALUE);
+    stNumericLiteralEClass = createEClass(ST_NUMERIC_LITERAL);
+    createEReference(stNumericLiteralEClass, ST_NUMERIC_LITERAL__TYPE);
+    createEAttribute(stNumericLiteralEClass, ST_NUMERIC_LITERAL__VALUE);
 
-    datE_LITERALEClass = createEClass(DATE_LITERAL);
-    createEAttribute(datE_LITERALEClass, DATE_LITERAL__KEYWORD);
-    createEAttribute(datE_LITERALEClass, DATE_LITERAL__VALUE);
+    stDateLiteralEClass = createEClass(ST_DATE_LITERAL);
+    createEReference(stDateLiteralEClass, ST_DATE_LITERAL__TYPE);
+    createEAttribute(stDateLiteralEClass, ST_DATE_LITERAL__VALUE);
 
-    timE_LITERALEClass = createEClass(TIME_LITERAL);
-    createEAttribute(timE_LITERALEClass, TIME_LITERAL__KEYWORD);
-    createEAttribute(timE_LITERALEClass, TIME_LITERAL__VALUE);
+    stTimeLiteralEClass = createEClass(ST_TIME_LITERAL);
+    createEReference(stTimeLiteralEClass, ST_TIME_LITERAL__TYPE);
+    createEAttribute(stTimeLiteralEClass, ST_TIME_LITERAL__VALUE);
 
-    timE_OF_DAY_LITERALEClass = createEClass(TIME_OF_DAY_LITERAL);
-    createEAttribute(timE_OF_DAY_LITERALEClass, TIME_OF_DAY_LITERAL__KEYWORD);
-    createEAttribute(timE_OF_DAY_LITERALEClass, TIME_OF_DAY_LITERAL__VALUE);
+    stTimeOfDayLiteralEClass = createEClass(ST_TIME_OF_DAY_LITERAL);
+    createEReference(stTimeOfDayLiteralEClass, ST_TIME_OF_DAY_LITERAL__TYPE);
+    createEAttribute(stTimeOfDayLiteralEClass, ST_TIME_OF_DAY_LITERAL__VALUE);
 
-    datE_AND_TIME_LITERALEClass = createEClass(DATE_AND_TIME_LITERAL);
-    createEAttribute(datE_AND_TIME_LITERALEClass, DATE_AND_TIME_LITERAL__KEYWORD);
-    createEAttribute(datE_AND_TIME_LITERALEClass, DATE_AND_TIME_LITERAL__DATE_VALUE);
-    createEAttribute(datE_AND_TIME_LITERALEClass, DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE);
+    stDateAndTimeLiteralEClass = createEClass(ST_DATE_AND_TIME_LITERAL);
+    createEReference(stDateAndTimeLiteralEClass, ST_DATE_AND_TIME_LITERAL__TYPE);
+    createEAttribute(stDateAndTimeLiteralEClass, ST_DATE_AND_TIME_LITERAL__DATE_VALUE);
+    createEAttribute(stDateAndTimeLiteralEClass, ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE);
 
-    strinG_LITERALEClass = createEClass(STRING_LITERAL);
-    createEAttribute(strinG_LITERALEClass, STRING_LITERAL__KEYWORD);
-    createEAttribute(strinG_LITERALEClass, STRING_LITERAL__VALUE);
+    stStringLiteralEClass = createEClass(ST_STRING_LITERAL);
+    createEReference(stStringLiteralEClass, ST_STRING_LITERAL__TYPE);
+    createEAttribute(stStringLiteralEClass, ST_STRING_LITERAL__VALUE);
 
     stReturnEClass = createEClass(ST_RETURN);
 
@@ -1911,27 +1683,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEReference(stSymbolEClass, ST_SYMBOL__BITACCESSOR);
     createEAttribute(stSymbolEClass, ST_SYMBOL__POE_INVOCATION);
     createEReference(stSymbolEClass, ST_SYMBOL__PARAMETERS);
-
-    stBoolLiteralEClass = createEClass(ST_BOOL_LITERAL);
-    createEAttribute(stBoolLiteralEClass, ST_BOOL_LITERAL__BOOL_LITERAL);
-
-    stNumericLiteralEClass = createEClass(ST_NUMERIC_LITERAL);
-    createEReference(stNumericLiteralEClass, ST_NUMERIC_LITERAL__NUMERIC_LITERAL);
-
-    stDateLiteralEClass = createEClass(ST_DATE_LITERAL);
-    createEReference(stDateLiteralEClass, ST_DATE_LITERAL__DATE_LITERAL);
-
-    stTimeLiteralEClass = createEClass(ST_TIME_LITERAL);
-    createEReference(stTimeLiteralEClass, ST_TIME_LITERAL__TIME_LITERAL);
-
-    stTimeOfDayLiteralEClass = createEClass(ST_TIME_OF_DAY_LITERAL);
-    createEReference(stTimeOfDayLiteralEClass, ST_TIME_OF_DAY_LITERAL__TIME_OF_DAY_LITERAL);
-
-    stDateAndTimeLiteralEClass = createEClass(ST_DATE_AND_TIME_LITERAL);
-    createEReference(stDateAndTimeLiteralEClass, ST_DATE_AND_TIME_LITERAL__TIME_LITERAL);
-
-    stStringLiteralEClass = createEClass(ST_STRING_LITERAL);
-    createEReference(stStringLiteralEClass, ST_STRING_LITERAL__STRING_LITERAL);
 
     // Create enums
     binaryOperatorEEnum = createEEnum(BINARY_OPERATOR);
@@ -1980,6 +1731,12 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stWhileStatementEClass.getESuperTypes().add(this.getSTStatement());
     stRepeatStatementEClass.getESuperTypes().add(this.getSTStatement());
     stExpressionEClass.getESuperTypes().add(this.getInitializerExpression());
+    stNumericLiteralEClass.getESuperTypes().add(this.getSTExpression());
+    stDateLiteralEClass.getESuperTypes().add(this.getSTExpression());
+    stTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
+    stTimeOfDayLiteralEClass.getESuperTypes().add(this.getSTExpression());
+    stDateAndTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
+    stStringLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stReturnEClass.getESuperTypes().add(this.getSTStatement());
     stContinueEClass.getESuperTypes().add(this.getSTStatement());
     stExitEClass.getESuperTypes().add(this.getSTStatement());
@@ -1988,13 +1745,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stUnaryExpressionEClass.getESuperTypes().add(this.getSTExpression());
     stMemberSelectionEClass.getESuperTypes().add(this.getSTExpression());
     stSymbolEClass.getESuperTypes().add(this.getSTExpression());
-    stBoolLiteralEClass.getESuperTypes().add(this.getSTExpression());
-    stNumericLiteralEClass.getESuperTypes().add(this.getSTExpression());
-    stDateLiteralEClass.getESuperTypes().add(this.getSTExpression());
-    stTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
-    stTimeOfDayLiteralEClass.getESuperTypes().add(this.getSTExpression());
-    stDateAndTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
-    stStringLiteralEClass.getESuperTypes().add(this.getSTExpression());
 
     // Initialize classes and features; add operations and parameters
     initEClass(codeEClass, Code.class, "Code", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2071,32 +1821,30 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEAttribute(getMultibitPartialAccess_AccessSpecifier(), this.getMultiBitAccessSpecifier(), "accessSpecifier", null, 0, 1, MultibitPartialAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMultibitPartialAccess_Index(), ecorePackage.getEBigInteger(), "index", null, 0, 1, MultibitPartialAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(numeriC_LITERALEClass, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, "NUMERIC_LITERAL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getNUMERIC_LITERAL_Keyword(), ecorePackage.getEString(), "keyword", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getNUMERIC_LITERAL_IntValue(), ecorePackage.getEBigInteger(), "intValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getNUMERIC_LITERAL_RealValue(), ecorePackage.getEBigDecimal(), "realValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getNUMERIC_LITERAL_HexValue(), ecorePackage.getEBigInteger(), "hexValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(stNumericLiteralEClass, STNumericLiteral.class, "STNumericLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTNumericLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STNumericLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTNumericLiteral_Value(), ecorePackage.getEBigDecimal(), "value", null, 0, 1, STNumericLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(datE_LITERALEClass, org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL.class, "DATE_LITERAL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDATE_LITERAL_Keyword(), ecorePackage.getEString(), "keyword", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDATE_LITERAL_Value(), ecorePackage.getEDate(), "value", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(stDateLiteralEClass, STDateLiteral.class, "STDateLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTDateLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STDateLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTDateLiteral_Value(), ecorePackage.getEDate(), "value", null, 0, 1, STDateLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(timE_LITERALEClass, org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL.class, "TIME_LITERAL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTIME_LITERAL_Keyword(), ecorePackage.getEString(), "keyword", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTIME_LITERAL_Value(), ecorePackage.getEString(), "value", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(stTimeLiteralEClass, STTimeLiteral.class, "STTimeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTTimeLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTTimeLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, STTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(timE_OF_DAY_LITERALEClass, org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL.class, "TIME_OF_DAY_LITERAL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTIME_OF_DAY_LITERAL_Keyword(), ecorePackage.getEString(), "keyword", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTIME_OF_DAY_LITERAL_Value(), ecorePackage.getEString(), "value", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.TIME_OF_DAY_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(stTimeOfDayLiteralEClass, STTimeOfDayLiteral.class, "STTimeOfDayLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTTimeOfDayLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STTimeOfDayLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTTimeOfDayLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, STTimeOfDayLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(datE_AND_TIME_LITERALEClass, org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL.class, "DATE_AND_TIME_LITERAL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDATE_AND_TIME_LITERAL_Keyword(), ecorePackage.getEString(), "keyword", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDATE_AND_TIME_LITERAL_DateValue(), ecorePackage.getEDate(), "dateValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDATE_AND_TIME_LITERAL_TimeOfDayValue(), ecorePackage.getEString(), "timeOfDayValue", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.DATE_AND_TIME_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(stDateAndTimeLiteralEClass, STDateAndTimeLiteral.class, "STDateAndTimeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTDateAndTimeLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STDateAndTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTDateAndTimeLiteral_DateValue(), ecorePackage.getEDate(), "dateValue", null, 0, 1, STDateAndTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTDateAndTimeLiteral_TimeOfDayValue(), ecorePackage.getEString(), "timeOfDayValue", null, 0, 1, STDateAndTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(strinG_LITERALEClass, org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL.class, "STRING_LITERAL", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSTRING_LITERAL_Keyword(), ecorePackage.getEString(), "keyword", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSTRING_LITERAL_Value(), ecorePackage.getEString(), "value", null, 0, 1, org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRING_LITERAL.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(stStringLiteralEClass, STStringLiteral.class, "STStringLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTStringLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STStringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTStringLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, STStringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stReturnEClass, STReturn.class, "STReturn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -2131,27 +1879,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEReference(getSTSymbol_Bitaccessor(), this.getMultibitPartialAccess(), null, "bitaccessor", null, 0, 1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSTSymbol_PoeInvocation(), ecorePackage.getEBoolean(), "poeInvocation", null, 0, 1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTSymbol_Parameters(), this.getSTExpression(), null, "parameters", null, 0, -1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(stBoolLiteralEClass, STBoolLiteral.class, "STBoolLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSTBoolLiteral_BoolLiteral(), ecorePackage.getEString(), "boolLiteral", null, 0, 1, STBoolLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(stNumericLiteralEClass, STNumericLiteral.class, "STNumericLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTNumericLiteral_NumericLiteral(), this.getNUMERIC_LITERAL(), null, "numericLiteral", null, 0, 1, STNumericLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(stDateLiteralEClass, STDateLiteral.class, "STDateLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTDateLiteral_DateLiteral(), this.getDATE_LITERAL(), null, "dateLiteral", null, 0, 1, STDateLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(stTimeLiteralEClass, STTimeLiteral.class, "STTimeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTTimeLiteral_TimeLiteral(), this.getTIME_LITERAL(), null, "timeLiteral", null, 0, 1, STTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(stTimeOfDayLiteralEClass, STTimeOfDayLiteral.class, "STTimeOfDayLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTTimeOfDayLiteral_TimeOfDayLiteral(), this.getTIME_OF_DAY_LITERAL(), null, "timeOfDayLiteral", null, 0, 1, STTimeOfDayLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(stDateAndTimeLiteralEClass, STDateAndTimeLiteral.class, "STDateAndTimeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTDateAndTimeLiteral_TimeLiteral(), this.getDATE_AND_TIME_LITERAL(), null, "timeLiteral", null, 0, 1, STDateAndTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(stStringLiteralEClass, STStringLiteral.class, "STStringLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTStringLiteral_StringLiteral(), this.getSTRING_LITERAL(), null, "stringLiteral", null, 0, 1, STStringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
     initEEnum(binaryOperatorEEnum, BinaryOperator.class, "BinaryOperator");

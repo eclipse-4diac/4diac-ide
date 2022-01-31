@@ -3,6 +3,8 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl;
 
+import java.math.BigDecimal;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -11,7 +13,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.NUMERIC_LITERAL;
+import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
 
@@ -23,7 +26,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl#getNumericLiteral <em>Numeric Literal</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STNumericLiteralImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -31,14 +35,34 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
 public class STNumericLiteralImpl extends STExpressionImpl implements STNumericLiteral
 {
   /**
-   * The cached value of the '{@link #getNumericLiteral() <em>Numeric Literal</em>}' containment reference.
+   * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getNumericLiteral()
+   * @see #getType()
    * @generated
    * @ordered
    */
-  protected NUMERIC_LITERAL numericLiteral;
+  protected DataType type;
+
+  /**
+   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected static final BigDecimal VALUE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected BigDecimal value = VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -67,9 +91,9 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
    * @generated
    */
   @Override
-  public NUMERIC_LITERAL getNumericLiteral()
+  public DataType getType()
   {
-    return numericLiteral;
+    return type;
   }
 
   /**
@@ -77,13 +101,13 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetNumericLiteral(NUMERIC_LITERAL newNumericLiteral, NotificationChain msgs)
+  public NotificationChain basicSetType(DataType newType, NotificationChain msgs)
   {
-    NUMERIC_LITERAL oldNumericLiteral = numericLiteral;
-    numericLiteral = newNumericLiteral;
+    DataType oldType = type;
+    type = newType;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_NUMERIC_LITERAL__NUMERIC_LITERAL, oldNumericLiteral, newNumericLiteral);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_NUMERIC_LITERAL__TYPE, oldType, newType);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -95,20 +119,45 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
    * @generated
    */
   @Override
-  public void setNumericLiteral(NUMERIC_LITERAL newNumericLiteral)
+  public void setType(DataType newType)
   {
-    if (newNumericLiteral != numericLiteral)
+    if (newType != type)
     {
       NotificationChain msgs = null;
-      if (numericLiteral != null)
-        msgs = ((InternalEObject)numericLiteral).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_NUMERIC_LITERAL__NUMERIC_LITERAL, null, msgs);
-      if (newNumericLiteral != null)
-        msgs = ((InternalEObject)newNumericLiteral).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_NUMERIC_LITERAL__NUMERIC_LITERAL, null, msgs);
-      msgs = basicSetNumericLiteral(newNumericLiteral, msgs);
+      if (type != null)
+        msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_NUMERIC_LITERAL__TYPE, null, msgs);
+      if (newType != null)
+        msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_NUMERIC_LITERAL__TYPE, null, msgs);
+      msgs = basicSetType(newType, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_NUMERIC_LITERAL__NUMERIC_LITERAL, newNumericLiteral, newNumericLiteral));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_NUMERIC_LITERAL__TYPE, newType, newType));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public BigDecimal getValue()
+  {
+    return value;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setValue(BigDecimal newValue)
+  {
+    BigDecimal oldValue = value;
+    value = newValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_NUMERIC_LITERAL__VALUE, oldValue, value));
   }
 
   /**
@@ -121,8 +170,8 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
   {
     switch (featureID)
     {
-      case STCorePackage.ST_NUMERIC_LITERAL__NUMERIC_LITERAL:
-        return basicSetNumericLiteral(null, msgs);
+      case STCorePackage.ST_NUMERIC_LITERAL__TYPE:
+        return basicSetType(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -137,8 +186,10 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
   {
     switch (featureID)
     {
-      case STCorePackage.ST_NUMERIC_LITERAL__NUMERIC_LITERAL:
-        return getNumericLiteral();
+      case STCorePackage.ST_NUMERIC_LITERAL__TYPE:
+        return getType();
+      case STCorePackage.ST_NUMERIC_LITERAL__VALUE:
+        return getValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -153,8 +204,11 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
   {
     switch (featureID)
     {
-      case STCorePackage.ST_NUMERIC_LITERAL__NUMERIC_LITERAL:
-        setNumericLiteral((NUMERIC_LITERAL)newValue);
+      case STCorePackage.ST_NUMERIC_LITERAL__TYPE:
+        setType((DataType)newValue);
+        return;
+      case STCorePackage.ST_NUMERIC_LITERAL__VALUE:
+        setValue((BigDecimal)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -170,8 +224,11 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
   {
     switch (featureID)
     {
-      case STCorePackage.ST_NUMERIC_LITERAL__NUMERIC_LITERAL:
-        setNumericLiteral((NUMERIC_LITERAL)null);
+      case STCorePackage.ST_NUMERIC_LITERAL__TYPE:
+        setType((DataType)null);
+        return;
+      case STCorePackage.ST_NUMERIC_LITERAL__VALUE:
+        setValue(VALUE_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -187,10 +244,29 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
   {
     switch (featureID)
     {
-      case STCorePackage.ST_NUMERIC_LITERAL__NUMERIC_LITERAL:
-        return numericLiteral != null;
+      case STCorePackage.ST_NUMERIC_LITERAL__TYPE:
+        return type != null;
+      case STCorePackage.ST_NUMERIC_LITERAL__VALUE:
+        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (value: ");
+    result.append(value);
+    result.append(')');
+    return result.toString();
   }
 
 } //STNumericLiteralImpl
