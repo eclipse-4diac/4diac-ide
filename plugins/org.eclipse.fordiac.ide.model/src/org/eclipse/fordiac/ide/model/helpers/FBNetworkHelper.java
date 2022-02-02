@@ -16,6 +16,8 @@
 package org.eclipse.fordiac.ide.model.helpers;
 
 import java.text.MessageFormat;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -38,9 +40,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
@@ -296,5 +300,42 @@ public final class FBNetworkHelper {
 
 	private static boolean hasNetwork(final FBNetworkElement networkElement) {
 		return (networkElement instanceof SubApp || networkElement instanceof CFBInstance);
+	}
+
+	/** Got through the containment of the FB and generate a name for all containers the FB is contained in up to the
+	 * application or the device (e.g., app1.subapp2.fbname, dev1.res3.fb3name).
+	 *
+	 * @param fbNetworkElement the FBNetworkElement for which the name should be generated
+	 * @return dot separated full name */
+	public static String getFullHierarchicalName(final FBNetworkElement fbNetworkElement) {
+		final Deque<String> names = new ArrayDeque<>();
+
+		if (null != fbNetworkElement) {
+			names.addFirst(fbNetworkElement.getName());
+			EObject container = fbNetworkElement;
+			do {
+				final FBNetworkElement runner = (FBNetworkElement) container;
+				container = runner.getFbNetwork().eContainer();
+				if (container instanceof INamedElement) {
+					names.addFirst("."); //$NON-NLS-1$
+					names.addFirst(((INamedElement) container).getName());
+					if (container instanceof Resource) {
+						names.addFirst("."); //$NON-NLS-1$
+						names.addFirst(((Resource) container).getDevice().getName());
+						break;
+					}
+				} else {
+					break;
+				}
+			} while (container instanceof FBNetworkElement); // we are still in a subapp, try to find the resource or
+			// application as stop point
+
+			final StringBuilder fullName = new StringBuilder();
+			for (final String string : names) {
+				fullName.append(string);
+			}
+			return fullName.toString();
+		}
+		return null;
 	}
 }

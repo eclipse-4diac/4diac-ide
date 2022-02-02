@@ -47,6 +47,31 @@ public class WatchesContentProvider implements ITreeContentProvider {
 		init();
 	}
 
+	public void updateWithList(final Collection<MonitoringBaseElement> elementsToMonitor) {
+		Object[] expandedElements = null;
+		if (root != null) {
+			expandedElements = getTreeViewer().getExpandedElements().clone();
+		}
+		root = new WatchValueTreeNode(null);
+
+		for (final MonitoringBaseElement element : elementsToMonitor) {
+			if (element != null) {
+				hasValueOnForte = !((MonitoringElement) element).getCurrentValue().equals("N/A"); //$NON-NLS-1$
+				final WatchValueTreeNode node = root.addChild(element);
+
+				if (expandedElements != null) {
+					getTreeViewer().refresh(node);
+					updateExpandedState(Arrays.asList(expandedElements), node);
+				}
+
+				if (!element.eAdapters().contains(adapter)) {
+					element.eAdapters().add(adapter);
+				}
+			}
+		}
+		sortChildrenAsc();
+	}
+
 	private void init() {
 		Object[] expandedElements = null;
 		if (root != null) {

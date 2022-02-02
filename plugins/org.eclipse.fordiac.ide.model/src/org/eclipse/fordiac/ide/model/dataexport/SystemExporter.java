@@ -17,22 +17,17 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -111,8 +106,8 @@ public class SystemExporter extends CommonElementExporter {
 
 	private void addMapping() throws XMLStreamException {
 		for (final Mapping mappingEntry : system.getMapping()) {
-			final String fromString = getFullHierarchicalName(mappingEntry.getFrom());
-			final String toString = getFullHierarchicalName(mappingEntry.getTo());
+			final String fromString = FBNetworkHelper.getFullHierarchicalName(mappingEntry.getFrom());
+			final String toString = FBNetworkHelper.getFullHierarchicalName(mappingEntry.getTo());
 
 			if ((null != fromString) && (null != toString)) {
 				addEmptyStartElement(LibraryElementTags.MAPPING_ELEMENT);
@@ -120,47 +115,6 @@ public class SystemExporter extends CommonElementExporter {
 				getWriter().writeAttribute(LibraryElementTags.MAPPING_TO_ATTRIBUTE, toString);
 			}
 		}
-	}
-
-	/**
-	 * Got through the containment of the FB and generate a name for all containers
-	 * the FB is contained in up to the application or the device (e.g.,
-	 * app1.subapp2.fbname, dev1.res3.fb3name).
-	 *
-	 * @param fbNetworkElement the FBNetworkElement for which the name should be
-	 *                         generated
-	 * @return dot separated full name
-	 */
-	private static String getFullHierarchicalName(final FBNetworkElement fbNetworkElement) {
-		final Deque<String> names = new ArrayDeque<>();
-
-		if (null != fbNetworkElement) {
-			names.addFirst(fbNetworkElement.getName());
-			EObject container = fbNetworkElement;
-			do {
-				final FBNetworkElement runner = (FBNetworkElement) container;
-				container = runner.getFbNetwork().eContainer();
-				if (container instanceof INamedElement) {
-					names.addFirst("."); //$NON-NLS-1$
-					names.addFirst(((INamedElement) container).getName());
-					if (container instanceof Resource) {
-						names.addFirst("."); //$NON-NLS-1$
-						names.addFirst(((Resource) container).getDevice().getName());
-						break;
-					}
-				} else {
-					break;
-				}
-			} while (container instanceof FBNetworkElement); // we are still in a subapp, try to find the resource or
-			// application as stop point
-
-			final StringBuilder fullName = new StringBuilder();
-			for (final String string : names) {
-				fullName.append(string);
-			}
-			return fullName.toString();
-		}
-		return null;
 	}
 
 	private void addDevices(final EList<Device> deviceList) throws XMLStreamException {
