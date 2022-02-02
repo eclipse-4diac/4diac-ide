@@ -170,7 +170,7 @@ final class StructuredTextEvaluator extends AbstractEvaluator {
 				} catch (ContinueException e) {
 					// continue
 				}
-				stmt.by.trap
+				(stmt.by ?: stmt.from).trap
 				variable.value = variable.value + by
 			}
 		} else {
@@ -180,7 +180,7 @@ final class StructuredTextEvaluator extends AbstractEvaluator {
 				} catch (ContinueException e) {
 					// continue
 				}
-				stmt.by.trap
+				(stmt.by ?: stmt.from).trap
 				variable.value = variable.value + by
 			}
 		}
