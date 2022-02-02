@@ -16,7 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.gef.provider.CompilerContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.CompilerLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerInfoClassdefCommand;
@@ -56,10 +55,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-/**
- * Properties tab which shows the FB type information of the selected FB
- *
- */
+/** Properties tab which shows the FB type information of the selected FB */
 public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 
 	private static final String LANGUAGE_OTHER = "Other"; //$NON-NLS-1$
@@ -231,12 +227,13 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		commandStack = getCommandStack(part, null);
-		if (null == commandStack) { // disable all field
-			headerText.setEnabled(false);
-			classdefText.setEnabled(false);
-			compilerViewer.setCellModifier(null);
+		if (selection instanceof IStructuredSelection) {
+			commandStack = getCommandStack(part, null);
+			if (null == commandStack) { // disable all field
+				headerText.setEnabled(false);
+				classdefText.setEnabled(false);
+				compilerViewer.setCellModifier(null);
+			}
 		}
 	}
 

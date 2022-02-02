@@ -15,7 +15,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
@@ -100,14 +99,15 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		final Object input = ((IStructuredSelection) selection).getFirstElement();
-		commandStack = getCommandStack(part, input);
-		if (null == commandStack) { // disable all fields
-			setInputCode();
+		if (selection instanceof IStructuredSelection) {
+			final Object input = ((IStructuredSelection) selection).getFirstElement();
+			commandStack = getCommandStack(part, input);
+			if (null == commandStack) { // disable all fields
+				setInputCode();
+			}
+			setType(input);
+			setInputInit();
 		}
-		setType(input);
-		setInputInit();
 	}
 
 	private final Adapter contentAdapter = new EContentAdapter() {
