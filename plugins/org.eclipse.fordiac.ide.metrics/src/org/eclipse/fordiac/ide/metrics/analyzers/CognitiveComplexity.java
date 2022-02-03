@@ -16,7 +16,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -43,6 +42,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.util.StructuredTextParseUtil;
 
 public class CognitiveComplexity extends AbstractCodeMetricAnalyzer {
 
@@ -94,13 +94,8 @@ public class CognitiveComplexity extends AbstractCodeMetricAnalyzer {
 	}
 
 	public static double analyzeAlgorithm(final Algorithm algorithm) {
-		final STAlgorithmFilter filter = new STAlgorithmFilter();
-
-		final List<String> errors = new ArrayList<>();
-
-		final var ast = filter.parse((STAlgorithm) algorithm, errors);
-
-		return errors.isEmpty() ? parseStatements(ast.getStatements()) : -1.0;
+		final var ast = StructuredTextParseUtil.parse((STAlgorithm) algorithm, null);
+		return ast != null ? parseStatements(ast.getStatements()) : -1.0;
 	}
 
 	private static double parseStatements(final StatementList list) {

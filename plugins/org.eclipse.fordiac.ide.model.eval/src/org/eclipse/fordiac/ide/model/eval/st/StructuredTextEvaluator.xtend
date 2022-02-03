@@ -14,9 +14,6 @@ package org.eclipse.fordiac.ide.model.eval.st
 
 import java.util.Collection
 import java.util.Map
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorExitException
@@ -24,12 +21,9 @@ import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser
-import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.BinaryExpression
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.BoolLiteral
@@ -52,27 +46,15 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpressi
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.parser.IParseResult
-import org.eclipse.xtext.resource.IResourceServiceProvider
-import org.eclipse.xtext.resource.XtextResource
-import org.eclipse.xtext.resource.XtextResourceSet
-import org.eclipse.xtext.util.CancelIndicator
-import org.eclipse.xtext.util.LazyStringInputStream
-import org.eclipse.xtext.validation.CheckMode
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.model.eval.value.BoolValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LRealValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import static extension org.eclipse.fordiac.ide.model.structuredtext.util.StructuredTextParseUtil.*
 
 final class StructuredTextEvaluator extends AbstractEvaluator {
-
-	static final String SYNTHETIC_URI_NAME = "__synthetic" // $NON-NLS-1$
-	static final String URI_SEPERATOR = "." // $NON-NLS-1$
-	static final String FB_URI_EXTENSION = "xtextfbt" // $NON-NLS-1$
-	static final String ST_URI_EXTENSION = "st" // $NON-NLS-1$
-	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
-		getResourceServiceProvider(URI.createURI(SYNTHETIC_URI_NAME + URI_SEPERATOR + ST_URI_EXTENSION))
 
 	@Accessors final String name
 	final String text
@@ -122,59 +104,13 @@ final class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def private IParseResult parse() {
-		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
-		createFBResource(resourceSet, fbType)
-		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
-		val parser = resource.parser as StructuredTextParser
-		resource.load(new LazyStringInputStream(text), #{
-			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
-			StructuredTextResource.OPTION_PARSER_RULE ->
-				if(singleExpression) parser.grammarAccess.expressionRule else null
-		})
-		val stalg = resource.parseResult.rootASTElement as StructuredTextAlgorithm
-		stalg.localVariables.forEach[v|createStructResource(resourceSet, v)]
-		val parseResult = resource.parseResult
-		val validator = resource.resourceServiceProvider.resourceValidator
-		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		if (!issues.empty) {
-			issues.forEach[error('''Parse error: «IF !singleExpression»«name» at «lineNumber»: «ENDIF»«message»''')]
-			throw new Exception('''Parse error: «FOR issue : issues SEPARATOR '\n'»«IF !singleExpression»«name» at «issue.lineNumber»: «ENDIF»«issue.message»«ENDFOR»''')
+		val errors = newArrayList
+		val parseResult = text.parse(singleExpression, name, fbType, errors)
+		if (parseResult === null) {
+			errors.forEach[error("Parse error: " + it)]
+			throw new Exception("Parse error: " + errors.join(", "))
 		}
 		return parseResult
-	}
-
-	def private URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
-		for (i : 0 ..< Integer.MAX_VALUE) {
-			val syntheticUri = URI.createURI(SYNTHETIC_URI_NAME + i + URI_SEPERATOR + fileExtension) // $NON-NLS-1$
-			if (resourceSet.getResource(syntheticUri, false) === null) {
-				return syntheticUri
-			}
-		}
-		throw new IllegalStateException()
-	}
-
-	def private createFBResource(XtextResourceSet resourceSet, BaseFBType fbType) {
-		val fbResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION))
-		fbResource.contents.add(fbType)
-		fbType.interfaceList.sockets.forEach[adp|createAdapterResource(resourceSet, adp)];
-		fbType.interfaceList.plugs.forEach[adp|createAdapterResource(resourceSet, adp)];
-		fbType.interfaceList.inputVars.forEach[v|createStructResource(resourceSet, v)];
-		fbType.interfaceList.outputVars.forEach[v|createStructResource(resourceSet, v)];
-		fbType.internalVars.forEach[v|createStructResource(resourceSet, v)];
-	}
-
-	def private void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
-		val adapterResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
-		adapterResource.contents.add(adapter.type.adapterFBType);
-	}
-
-	def private void createStructResource(XtextResourceSet resourceSet, VarDeclaration variable) {
-		if (variable.type instanceof StructuredType) {
-			val structResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
-			val type = variable.type as StructuredType;
-			structResource.contents.add(type);
-			type.memberVariables.forEach[v|createStructResource(resourceSet, v)];
-		}
 	}
 
 	def private evaluateStructuredTextAlgorithm(StructuredTextAlgorithm alg) {
@@ -274,7 +210,9 @@ final class StructuredTextEvaluator extends AbstractEvaluator {
 
 	def private dispatch void evaluateStatement(ReturnStatement stmt) { throw new ReturnException(stmt.trap) }
 
-	def private dispatch void evaluateStatement(ExitStatement stmt) { throw new StructuredTextExitException(stmt.trap, this) }
+	def private dispatch void evaluateStatement(ExitStatement stmt) {
+		throw new StructuredTextExitException(stmt.trap, this)
+	}
 
 	def private dispatch Value evaluateExpression(Expression expr) {
 		error('''The expression «expr.eClass.name» is not supported''')

@@ -15,14 +15,10 @@ package org.eclipse.fordiac.ide.export.forte_lua.filter
 
 import java.util.ArrayList
 import java.util.List
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser
-import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable
@@ -53,41 +49,20 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.xtext.resource.IResourceServiceProvider
-import org.eclipse.xtext.resource.XtextResource
-import org.eclipse.xtext.util.LazyStringInputStream
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
+import static extension org.eclipse.fordiac.ide.model.structuredtext.util.StructuredTextParseUtil.*
 
 class STAlgorithmFilter {
-
-	static final URI SYNTHETIC_FB_URI = URI.createFileURI("__synthetic.xtextfbt")
-	static final URI SYNTHETIC_ST_URI = URI.createFileURI("__synthetic.st")
-
-	static final IResourceServiceProvider SERVICE_PRIVIDER = IResourceServiceProvider.Registry.INSTANCE.
-		getResourceServiceProvider(SYNTHETIC_ST_URI)
 
 	@Accessors(PUBLIC_GETTER)
 	var errors = new ArrayList<String>
 
 	def lua(STAlgorithm alg) {
-		val resourceSet = SERVICE_PRIVIDER.get(ResourceSet)
-		// create resource for function block and add copy
-		val fbResource = resourceSet.createResource(SYNTHETIC_FB_URI)
-		val fbCopy = alg.rootContainer.copy
-		fbResource.contents.add(fbCopy)
-		// create resource for algorithm
-		val resource = resourceSet.createResource(SYNTHETIC_ST_URI) as XtextResource
-		resource.load(new LazyStringInputStream(alg.text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
-		val parseResult = resource.parseResult
-		if (parseResult.hasSyntaxErrors) {
-			errors.addAll(parseResult.syntaxErrors.map[it.syntaxErrorMessage.message])
-			return null
-		}
-		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
+		val stalg = alg.parse(errors)
+		if(stalg === null) return null
 		val usedAdapterVariables = stalg.getAllProperContents(true).filter(AdapterVariable).filter [
 			getClass() == AdapterVariableImpl
 		].toSet
@@ -104,23 +79,8 @@ class STAlgorithmFilter {
 	}
 
 	def lua(BasicFBType fb, String expression) {
-		val resourceSet = SERVICE_PRIVIDER.get(ResourceSet)
-		// create resource for function block and add copy
-		val fbResource = resourceSet.createResource(SYNTHETIC_FB_URI)
-		val fbCopy = fb.copy
-		fbResource.contents.add(fbCopy)
-		// create resource for algorithm
-		val resource = resourceSet.createResource(SYNTHETIC_ST_URI) as XtextResource
-		val parser = resource.parser as StructuredTextParser
-		resource.load(new LazyStringInputStream(expression),
-			#{StructuredTextResource.OPTION_PARSER_RULE -> parser.grammarAccess.expressionRule})
-		val parseResult = resource.parseResult
-		if (parseResult.hasSyntaxErrors) {
-			errors.addAll(parseResult.syntaxErrors.map[it.syntaxErrorMessage.message])
-			return null
-		}
-		val expr = parseResult.rootASTElement as Expression
-		return expr.luaExpression
+		val expr = expression.parse(fb, errors)
+		return expr?.luaExpression
 	}
 
 	def private luaStructuredTextAlgorithm(StructuredTextAlgorithm alg) '''

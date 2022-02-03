@@ -18,19 +18,14 @@
 
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
-import java.text.MessageFormat
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.FordiacKeywords
 import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
@@ -41,8 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser
-import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable
@@ -55,7 +48,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseClause
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ContinueStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement
@@ -77,118 +69,29 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpressi
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement
 import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral
-import org.eclipse.xtext.resource.IResourceServiceProvider
-import org.eclipse.xtext.resource.XtextResource
-import org.eclipse.xtext.resource.XtextResourceSet
-import org.eclipse.xtext.util.CancelIndicator
-import org.eclipse.xtext.util.LazyStringInputStream
-import org.eclipse.xtext.validation.CheckMode
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
+import static extension org.eclipse.fordiac.ide.model.structuredtext.util.StructuredTextParseUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 class STAlgorithmFilter {
 
-	static final String SYNTHETIC_URI_NAME = "__synthetic" // $NON-NLS-1$
-	static final String URI_SEPERATOR = "." // $NON-NLS-1$
-	static final String FB_URI_EXTENSION = "xtextfbt" // $NON-NLS-1$
-	static final String ST_URI_EXTENSION = "st" // $NON-NLS-1$
 	static final CharSequence EXPORT_PREFIX = ForteLibraryElementTemplate.EXPORT_PREFIX
 
-	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
-		getResourceServiceProvider(URI.createURI(SYNTHETIC_URI_NAME + URI_SEPERATOR + ST_URI_EXTENSION))
-
-	def createFBResource(XtextResourceSet resourceSet, BaseFBType fbType) {
-		// create resource for function block and add copy
-		val fbResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION))
-		fbResource.contents.add(fbType)
-		fbType.interfaceList.sockets.forEach[adp|createAdapterResource(resourceSet, adp)];
-		fbType.interfaceList.plugs.forEach[adp|createAdapterResource(resourceSet, adp)];
-		fbType.interfaceList.inputVars.forEach[v|createStructResource(resourceSet, v)];
-		fbType.interfaceList.outputVars.forEach[v|createStructResource(resourceSet, v)];
-		fbType.internalVars.forEach[v|createStructResource(resourceSet, v)];
-	}
-
-	def void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
-		val adapterResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
-		adapterResource.contents.add(adapter.type.adapterFBType);
-	}
-
-	def void createStructResource(XtextResourceSet resourceSet, VarDeclaration variable) {
-		if (variable.type instanceof StructuredType) {
-			val structResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
-			val type = variable.type as StructuredType;
-			structResource.contents.add(type);
-			type.memberVariables.forEach[v|createStructResource(resourceSet, v)];
-		}
-	}
-
-	def protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
-		for (i : 0 ..< Integer.MAX_VALUE) {
-			val syntheticUri = URI.createURI(SYNTHETIC_URI_NAME + i + URI_SEPERATOR + fileExtension) // $NON-NLS-1$
-			if (resourceSet.getResource(syntheticUri, false) === null) {
-				return syntheticUri
-			}
-		}
-		throw new IllegalStateException()
-	}
-
-	def parseAlgorithm(STAlgorithm alg) {
-		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
-		createFBResource(resourceSet, alg.rootContainer as BaseFBType)
-		// create resource for algorithm
-		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
-		resource.load(new LazyStringInputStream(alg.text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
-		val stalg = resource.parseResult.rootASTElement as StructuredTextAlgorithm
-		stalg.localVariables.forEach[v|createStructResource(resourceSet, v)]
-		return resource
-	}
-
-	def generateLocalVariables(STAlgorithm alg) {
-		val parseResult = alg.parseAlgorithm.parseResult
-		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
-		stalg.localVariables.forEach[v|v.typeName = v.type.name]
-		return stalg.localVariables
-	}
-
-	def parse(STAlgorithm alg, List<String> errors) {
-		val resource = alg.parseAlgorithm
-		val parseResult = resource.parseResult
-		val validator = resource.resourceServiceProvider.resourceValidator
-		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		if (!issues.empty) {
-			errors.addAll(issues.map [
-				MessageFormat.format("{0}, Line {1}: {2}", alg.name, Long.toString(it.lineNumber), it.message)
-			])
-			return null
-		}
-		return parseResult.rootASTElement as StructuredTextAlgorithm
-	}
-
 	def generate(STAlgorithm alg, List<String> errors) {
-		val stalg = parse(alg, errors)
-		if (stalg === null) { return null }
-		stalg.generateStructuredTextAlgorithm
+		val stalg = alg.parse(errors)
+		stalg?.generateStructuredTextAlgorithm
 	}
 
 	def generate(String expression, BasicFBType fb, List<String> errors) {
-		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
-		createFBResource(resourceSet, fb.copy as BaseFBType)
-		// create resource for algorithm
-		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
-		val parser = resource.parser as StructuredTextParser
-		resource.load(new LazyStringInputStream(expression),
-			#{StructuredTextResource.OPTION_PARSER_RULE -> parser.grammarAccess.expressionRule})
-		val parseResult = resource.parseResult
-		val validator = resource.resourceServiceProvider.resourceValidator
-		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		if (!issues.empty) {
-			errors.addAll(issues.map[it.message])
-			return null
-		}
-		val expr = parseResult.rootASTElement as Expression
-		expr.generateExpression
+		val expr = expression.parse(fb, errors)
+		expr?.generateExpression
+	}
+
+	def generateLocalVariables(STAlgorithm alg) {
+		val stalg = alg.parse(null)
+		stalg?.localVariables?.forEach[typeName = type.name]
+		return stalg?.localVariables
 	}
 
 	def protected generateStructuredTextAlgorithm(StructuredTextAlgorithm alg) '''

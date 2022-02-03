@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -28,8 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.BinaryExpression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement;
@@ -41,6 +40,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.util.StructuredTextParseUtil;
 
 public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 
@@ -108,10 +108,8 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 		if (!(algorithm instanceof STAlgorithm)) {
 			return;
 		}
-		final STAlgorithmFilter filter = new STAlgorithmFilter();
-		final List<String> errors = new ArrayList<>();
-		final var ast = filter.parse((STAlgorithm) algorithm, errors);
-		if (errors.isEmpty()) {
+		final var ast = StructuredTextParseUtil.parse((STAlgorithm) algorithm, null);
+		if (ast != null) {
 			calculateHalstead(ast.getStatements(), data);
 		}
 

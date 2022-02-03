@@ -19,7 +19,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -29,8 +28,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
@@ -38,6 +37,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RepeatStateme
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.util.StructuredTextParseUtil;
 
 public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	static final String[] CONDITIONS = { FordiacKeywords.IF, FordiacKeywords.FOR, FordiacKeywords.WHILE,
@@ -88,10 +88,8 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 			return -1;
 		}
 
-		final STAlgorithmFilter filter = new STAlgorithmFilter();
-		final List<String> errors = new ArrayList<>();
-		final var ast = filter.parse((STAlgorithm) alg, errors);
-		return errors.isEmpty() ? //
+		final var ast = StructuredTextParseUtil.parse((STAlgorithm) alg, null);
+		return ast != null ? //
 				calculateCyclomaticComplexity(ast.getStatements())//
 				: -1;
 	}
