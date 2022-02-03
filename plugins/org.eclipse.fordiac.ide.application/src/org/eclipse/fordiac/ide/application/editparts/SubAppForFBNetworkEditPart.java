@@ -203,7 +203,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		getFigure().updateTypeLabel(getModel());
+		final SubAppForFbNetworkFigure figure = getFigure();
+		figure.updateTypeLabel(getModel());
 	}
 
 	@Override

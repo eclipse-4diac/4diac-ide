@@ -18,11 +18,15 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.Border;
+import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.application.figures.UntypedSubappConnectorBorder;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
+import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
@@ -30,6 +34,7 @@ import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -113,4 +118,30 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	private void refreshToolTip() {
 		getFigure().setToolTip(new ToolTipFigure(getModel()));
 	}
+
+	@Override
+	protected IFigure createFigure() {
+		final IFigure figure = super.createFigure();
+		figure.setBorder(new UntypedSubappConnectorBorder(getModel()));
+		return figure;
+	}
+
+	@Override
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
+		if (isInput()) {
+			// we are unfolded and this is an internal connection
+			return new FixedAnchor(getFigure(), !isInput());
+		}
+		return new FixedAnchor(getFigure(), isInput());
+	}
+
+	@Override
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
+		if (!isInput()) {
+			// we are unfolded and this is an internal connection
+			return new FixedAnchor(getFigure(), !isInput());
+		}
+		return new FixedAnchor(getFigure(), isInput());
+	}
+
 }
