@@ -335,9 +335,12 @@
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>
-            <instanceof 
-	                     value="org.eclipse.core.resources.IProject">
-	               </instanceof>   
+            <and>
+               <instanceof  value="org.eclipse.core.resources.IFile">
+               </instanceof>               
+               <test forcePluginActivation="true" property="org.eclipse.core.resources.extension" value="sys">
+               </test>
+            </and>
          </enablement>
       </renameParticipant>
    </extension>

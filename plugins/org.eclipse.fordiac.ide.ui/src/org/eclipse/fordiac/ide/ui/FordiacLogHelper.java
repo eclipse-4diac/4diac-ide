@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2022 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,37 +8,50 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *               - moved to the platform get log to have a logger also when there
+ *                 is no workbench
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui;
 
-import org.eclipse.e4.core.services.log.Logger;
-import org.eclipse.ui.PlatformUI;
+import java.lang.StackWalker.Option;
 
-@SuppressWarnings("restriction")
+import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.Platform;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+
 public final class FordiacLogHelper {
 
-	private static Logger logger = PlatformUI.getWorkbench().getService(org.eclipse.e4.core.services.log.Logger.class);
+	private static final StackWalker STACK_WALKER = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE);
+
 
 	public static void logError(final String msg, final Exception e) {
-		logger.error(msg, e);
+		getLogger(STACK_WALKER.getCallerClass()).error(msg, e);
 	}
 
 	public static void logError(final String msg) {
-		logger.error(msg);
+		getLogger(STACK_WALKER.getCallerClass()).error(msg);
 	}
 
 	public static void logWarning(final String msg, final Exception e) {
-		logger.warn(msg, e);
+		getLogger(STACK_WALKER.getCallerClass()).warn(msg, e);
 	}
 
 	public static void logWarning(final String msg) {
-		logger.warn(msg);
+		getLogger(STACK_WALKER.getCallerClass()).warn(msg);
 	}
 
 	public static void logInfo(final String msg) {
-		logger.info(msg);
+		getLogger(STACK_WALKER.getCallerClass()).info(msg);
+	}
+
+	private static ILog getLogger(final Class<?> classFromBundle) {
+		return Platform.getLog(getBundle(classFromBundle));
+	}
+
+	private static Bundle getBundle(final Class<?> classFromBundle) {
+		return FrameworkUtil.getBundle(classFromBundle);
 	}
 
 	private FordiacLogHelper() {

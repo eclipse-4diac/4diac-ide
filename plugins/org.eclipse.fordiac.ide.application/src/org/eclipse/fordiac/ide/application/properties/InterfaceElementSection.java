@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2016, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  *   Alois Zoitl - fixed issues in type changes for subapp interface elements
  *   Lisa Sonnleithner - new TypeAndCommentSection
  *   Alois Zoitl - Harmonized and improved connection section
+ *               - added instance comment editing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -79,7 +80,8 @@ public class InterfaceElementSection extends AbstractSection {
 	private static final int COMMENT_WIDTH = 200;
 
 	private Text typeText;
-	private Text commentText;
+	private Text typeCommentText;
+	private Text instanceCommentText;
 	private Text parameterText;
 	private Text currentParameterText;
 	private CLabel parameterTextCLabel;
@@ -164,8 +166,8 @@ public class InterfaceElementSection extends AbstractSection {
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
-		commentText = createGroupText(composite, false);
-		commentText.setLayoutData(new GridData(SWT.FILL, 0, true, false, 2, 1));
+		typeCommentText = createGroupText(composite, false);
+		typeCommentText.setLayoutData(new GridData(SWT.FILL, 0, true, false, 2, 1));
 
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Type + ":"); //$NON-NLS-1$
 
@@ -182,7 +184,6 @@ public class InterfaceElementSection extends AbstractSection {
 		parameterText.setLayoutData(new GridData(SWT.FILL, 0, true, false, 2, 1));
 
 		typeInfoSection.setClient(composite);
-
 	}
 
 	private void createInstanceInfoSection(final Composite parent) {
@@ -196,6 +197,15 @@ public class InterfaceElementSection extends AbstractSection {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 
+		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
+		instanceCommentText = createGroupText(composite, false);
+		instanceCommentText.setLayoutData(new GridData(SWT.FILL, SWT.None, true, false));
+		instanceCommentText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeCommentCommand(getType(), instanceCommentText.getText()));
+			addContentAdapter();
+		});
+
 		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		currentParameterText = createGroupText(composite, true);
 		currentParameterText.addModifyListener(e -> {
@@ -205,7 +215,6 @@ public class InterfaceElementSection extends AbstractSection {
 		});
 
 		infoSection.setClient(composite);
-
 	}
 
 	@Override
@@ -222,12 +231,14 @@ public class InterfaceElementSection extends AbstractSection {
 			} else { // e.g., IP address of device
 				infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
 			}
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			typeCommentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
 
 			openEditorButton.setEnabled(
 					(getType().getType() instanceof StructuredType && !"ANY_STRUCT".equals(getType().getType().getName()))
-							|| (getType().getType() instanceof AdapterType));
+					|| (getType().getType() instanceof AdapterType));
+
+			instanceCommentText.setText(getType().getComment());
 
 			if (getType() instanceof VarDeclaration) {
 				itype = setParameterAndType();
@@ -271,6 +282,8 @@ public class InterfaceElementSection extends AbstractSection {
 	private void setEditable(final boolean editable) {
 		currentParameterText.setEditable(editable);
 		currentParameterText.setEnabled(editable);
+		instanceCommentText.setEditable(editable);
+		instanceCommentText.setEnabled(editable);
 		deleteButton.setVisibleDeleteButton(editable);
 	}
 

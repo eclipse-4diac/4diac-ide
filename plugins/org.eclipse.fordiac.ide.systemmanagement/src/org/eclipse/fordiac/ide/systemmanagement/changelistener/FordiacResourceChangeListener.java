@@ -468,7 +468,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private static void handleTypeRename(final IResourceDelta delta, final IFile src, final IFile file) {
 		final TypeLibrary typeLibrary = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
 		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
-		if (src.equals(entry.getFile())) {
+		if (entry != null && src.equals(entry.getFile())) {
 			updatePaletteEntry(file, entry);
 		} else {
 			updatePaletteEntry(file, typeLibrary.createPaletteEntry(file));
