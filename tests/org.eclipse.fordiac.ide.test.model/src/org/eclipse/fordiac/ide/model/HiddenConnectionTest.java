@@ -13,17 +13,28 @@
 
 package org.eclipse.fordiac.ide.model;
 
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.systemmanagement.FordiacProjectLoader;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.osgi.framework.Bundle;
 
 class HiddenConnectionTest {
 
-	private static final String projectFilename = "TestHiddenConnections"; //$NON-NLS-1$
+	private static FordiacProjectLoader loader = null;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		// The project will be loaded here
-		// final FordiacProjectLoader loader = new FordiacProjectLoader(projectFilename);
-		// System.out.println(loader);
+		Path projectPath = new Path("data/HiddenConnectionTest");
+		Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.model");
+		loader = new FordiacProjectLoader(bundle, projectPath);
 	}
 
+	@Test
+	@SuppressWarnings("static-method")
+	void testLoader() {
+		Assert.isNotNull(loader.getAutomationSystem("HiddenConnectionTest"));
+	}
 }
