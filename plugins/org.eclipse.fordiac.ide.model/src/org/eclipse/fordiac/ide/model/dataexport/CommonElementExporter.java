@@ -32,11 +32,12 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -252,7 +253,7 @@ abstract class CommonElementExporter {
 		addNameAndCommentAttribute(namedElement);
 	}
 
-	protected void writeToFile(final IFile iFile) {
+	protected void writeToFile(final IFile iFile, final IProgressMonitor monitor) {
 		final long startTime = System.currentTimeMillis();
 		try {
 			writer.writeCharacters(LINE_END);
@@ -260,10 +261,10 @@ abstract class CommonElementExporter {
 			writer.close();
 			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.transferDataBuffers())) {
 				if (iFile.exists()) {
-					iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
+					iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
 				} else {
-					checkAndCreateFolderHierarchy(iFile);
-					iFile.create(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
+					checkAndCreateFolderHierarchy(iFile, monitor);
+					iFile.create(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
 				}
 			} finally {
 				outputStream.close();
@@ -280,18 +281,16 @@ abstract class CommonElementExporter {
 	 * Check if the folders in the file's path exist and if not create them
 	 * accordingly
 	 *
-	 * @param file for which the path should be checked
-	 * @throws CoreException
-	 */
-	private static void checkAndCreateFolderHierarchy(final IFile file) throws CoreException {
-		final IPath path = file.getProjectRelativePath().removeLastSegments(1);
-
-		if (!path.isEmpty()) {
-			final IFolder folder = file.getProject().getFolder(path);
-			if (!folder.exists()) {
-				folder.create(true, true, null);
-				folder.refreshLocal(IResource.DEPTH_ZERO, null);
-			}
+	 * @param file    for which the path should be checked
+	 * @param monitor
+	 * @throws CoreException */
+	private static void checkAndCreateFolderHierarchy(final IFile file, final IProgressMonitor monitor)
+			throws CoreException {
+		final IContainer container = file.getParent();
+		if (!container.exists() && container instanceof IFolder) {
+			final IFolder folder = ((IFolder) container);
+			folder.create(true, true, monitor);
+			folder.refreshLocal(IResource.DEPTH_ZERO, monitor);
 		}
 	}
 

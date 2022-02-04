@@ -22,6 +22,8 @@ package org.eclipse.fordiac.ide.model.dataexport;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -77,16 +79,31 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
 				@Override
 				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-					exporter.writeToFile(entry.getFile());
+					exporter.writeToFile(entry.getFile(), monitor);
 					// "reset" the modification timestamp in the PaletteEntry to avoid reload - as for this timestamp it
 					// is not necessary as the data is in memory
 					entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
 					return Status.OK_STATUS;
 				}
 			};
-			job.setRule(entry.getFile().getParent());
+			job.setRule(getRuleScope(entry));
 			job.schedule();
 		}
+	}
+
+	/** Search for the first directory parent which is existing. If none can be found we will return the workspace root.
+	 * This directory is then used as scheduling rule for locking the workspace. The direct parent of the entry's file
+	 * can not be used as it may need to be created.
+	 *
+	 *
+	 * @param entry the palette entry for which we need the scope
+	 * @return the current folder or workspace root */
+	private static IContainer getRuleScope(final PaletteEntry entry) {
+		IContainer parent = entry.getFile().getParent();
+		while(parent != null && !parent.exists()) {
+			parent = parent.getParent();
+		}
+		return (parent != null) ? parent : ResourcesPlugin.getWorkspace().getRoot();
 	}
 
 	private static AbstractTypeExporter getTypeExporter(final PaletteEntry entry) {
