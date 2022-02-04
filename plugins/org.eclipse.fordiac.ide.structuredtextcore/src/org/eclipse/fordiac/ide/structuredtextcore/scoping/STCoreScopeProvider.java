@@ -13,6 +13,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.scoping;
 
+import java.util.List;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
+import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.scoping.IScope;
+import org.eclipse.xtext.scoping.Scopes;
+import org.eclipse.xtext.scoping.impl.SimpleScope;
+import org.eclipse.xtext.util.SimpleAttributeResolver;
 
 /**
  * This class contains custom scoping description.
@@ -21,5 +34,15 @@ package org.eclipse.fordiac.ide.structuredtextcore.scoping;
  * on how and when to use it.
  */
 public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
-
+	@Override
+	public IScope getScope(final EObject context, final EReference reference) {
+		if (context instanceof VarDeclaration && reference == STCorePackage.Literals.VAR_DECLARATION__TYPE) {
+			final IScope globalScope = super.getScope(context, reference);
+			final List<DataType> candidates = DataTypeLibrary.getNonUserDefinedDataTypes();
+			return new SimpleScope(globalScope,
+					Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)),
+					false);
+		}
+		return super.getScope(context, reference);
+	}
 }
