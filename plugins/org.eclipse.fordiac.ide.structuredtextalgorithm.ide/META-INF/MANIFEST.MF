@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.ide
+Bundle-ManifestVersion: 2
+Bundle-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.ide
+Bundle-Vendor: Eclipse 4diac
+Bundle-Version: 2.0.1.qualifier
+Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextalgorithm.ide; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.fordiac.ide.structuredtextalgorithm,
+ org.eclipse.xtext.ide,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm.ide.contentassist.antlr.lexer,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ide.contentassist.antlr,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ide.contentassist.antlr.internal

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sTAlgorithm" nsURI="http://www.eclipse.org/foridac/ide/structuredtextalgorithm/STAlgorithm"
+    nsPrefix="sTAlgorithm">
+  <eClassifiers xsi:type="ecore:EClass" name="STAlgorithms">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="algorithms" upperBound="-1"
+        eType="#//STAlgorithm" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STAlgorithm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//STAlgorithmBody"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STAlgorithmBody">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varTempDeclarations" upperBound="-1"
+        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.ecore#//VarDeclarationBlock"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.ecore#//STStatement"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>
