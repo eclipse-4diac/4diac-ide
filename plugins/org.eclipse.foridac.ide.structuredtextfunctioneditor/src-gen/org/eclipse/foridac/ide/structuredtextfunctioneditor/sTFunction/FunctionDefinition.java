@@ -9,8 +9,9 @@ import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 
 /**
@@ -83,7 +84,7 @@ public interface FunctionDefinition extends EObject
 
   /**
    * Returns the value of the '<em><b>Var Declarations</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Declarations</em>' containment reference list.
@@ -91,7 +92,7 @@ public interface FunctionDefinition extends EObject
    * @model containment="true"
    * @generated
    */
-  EList<VarDeclaration> getVarDeclarations();
+  EList<INamedElement> getVarDeclarations();
 
   /**
    * Returns the value of the '<em><b>Var Temp Declarations</b></em>' containment reference list.

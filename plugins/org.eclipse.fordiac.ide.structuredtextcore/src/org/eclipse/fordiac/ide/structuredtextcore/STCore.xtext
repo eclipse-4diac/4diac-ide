@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies GmbH
+ * Copyright (c) 2021 Primetals Technologies GmbH, 
+ *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *       - access expressions and assignment lvalues
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
@@ -42,8 +45,9 @@ VarOutputDeclarationBlock returns VarDeclarationBlock:
 	varDeclarations+=VarDeclaration*
 	'END_VAR';
 
-VarDeclaration returns VarDeclaration:
-	name=ID ('AT' locatedAt=[VarDeclaration])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
+VarDeclaration returns libraryElement::INamedElement:
+	{VarDeclaration}
+	name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::LibraryElement]) ('[' maxLength=STExpression ']')? (':='
 	defaultValue=InitializerExpression)? ';';
 	
@@ -69,7 +73,7 @@ STStatement:
 	{STNop} ';';
 
 STAssignmentStatement:
-	lhs=[VarDeclaration] ':=' rhs=STExpression
+	left=STAccessExpression ':=' right=STExpression
 ;
 
 STIfStatment:
@@ -140,32 +144,28 @@ STMulDivModExpression returns STExpression:
 
 enum PowerOperator returns BinaryOperator: POWER='**';
 STPowerExpression returns STExpression:
-	STSignumExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STSignumExpression)*;
+	STUnaryExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STUnaryExpression)*;
 
 enum UnaryOperator returns UnaryOperator: MINUS='-' | PLUS='+' | NOT;
-STSignumExpression returns STExpression:
-	STLiteralExpressions | STSelectionExpression | ({STUnaryExpression} op=UnaryOperator
-	expression=STSelectionExpression);
+STUnaryExpression returns STExpression:
+	=> STAccessExpression | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
 
-STSelectionExpression returns STExpression:
-	STAtomicExpression 
-	({STMemberSelection.receiver=current} (structAccess?='.' member=[VarDeclaration] | arrayAccess?='['
-	index+=STExpression (',' index+=STExpression)* ']')
-	(=>poeInvocation?='(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')?
-	(=>bitaccessor=MultibitPartialAccess)?
-	)*;
+STAccessExpression returns STExpression:
+	STPrimaryExpression (({STMemberAccessExpression.receiver=current} '.' member=(STFeatureExpression |
+	STMultibitPartialExpression)) |
+	({STArrayAccessExpression.receiver=current} '[' index+=STExpression (',' index+=STExpression)* ']'))*;
 
-MultibitPartialAccess:
-	(accessSpecifier=MultiBitAccessSpecifier) index=INT;
+STPrimaryExpression returns STExpression:
+	'(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
 
-enum MultiBitAccessSpecifier:
-	lwordAccess='.%L' | dwordAccess='.%D' | wordAccess='.%W' | byteAccess='.%B' | bitAccess='.%X' |
-	bitAccessShortcut='.';
+STFeatureExpression returns STExpression:
+	{STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STExpression (',' parameters+=STExpression)* )? ')' )?;
 
-STAtomicExpression returns STExpression:
-	'(' STExpression ')' |
-	{STSymbol} (type=[datatype::DataType] '#')? symbol=[VarDeclaration] (bitaccessor=MultibitPartialAccess)? (=>poeInvocation?=
-	'(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? ;
+enum STMultiBitAccessSpecifier:
+	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';
+
+STMultibitPartialExpression returns STExpression:
+	{STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? index=INT;
 
 STLiteralExpressions returns STExpression:
 	STNumericLiteral |
@@ -260,13 +260,13 @@ BoolLiteral returns ecore::EBigDecimal:
 ;
 
 Number returns ecore::EBigDecimal:
-	('+' | '-')? INT ('.' (EXT_INT | INT))?; // INT ? '.' (EXT_INT | INT);
+	('+' | '-')? INT (=> '.' (EXT_INT | INT))?;
 
 Date returns ecore::EDate:
 	INT '-' INT '-' INT;
 
 TimeOfDay:
-	INT ':' INT ':' INT ('.' INT)?;
+	INT ':' INT ':' INT (=> '.' INT)?;
 
 Time:
 	(Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;

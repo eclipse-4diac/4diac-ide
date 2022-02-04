@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.InitializerExpression;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getLocatedAt <em>Located At</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#isArray <em>Array</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getRanges <em>Ranges</em>}</li>
@@ -57,7 +59,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
    * @generated
    * @ordered
    */
-  protected static final String NAME_EDEFAULT = null;
+  protected static final String NAME_EDEFAULT = "";
 
   /**
    * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -70,6 +72,26 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
   protected String name = NAME_EDEFAULT;
 
   /**
+   * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getComment()
+   * @generated
+   * @ordered
+   */
+  protected static final String COMMENT_EDEFAULT = "";
+
+  /**
+   * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getComment()
+   * @generated
+   * @ordered
+   */
+  protected String comment = COMMENT_EDEFAULT;
+
+  /**
    * The cached value of the '{@link #getLocatedAt() <em>Located At</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -77,7 +99,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
    * @generated
    * @ordered
    */
-  protected VarDeclaration locatedAt;
+  protected INamedElement locatedAt;
 
   /**
    * The default value of the '{@link #isArray() <em>Array</em>}' attribute.
@@ -201,12 +223,37 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
    * @generated
    */
   @Override
-  public VarDeclaration getLocatedAt()
+  public String getComment()
+  {
+    return comment;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setComment(String newComment)
+  {
+    String oldComment = comment;
+    comment = newComment;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__COMMENT, oldComment, comment));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public INamedElement getLocatedAt()
   {
     if (locatedAt != null && locatedAt.eIsProxy())
     {
       InternalEObject oldLocatedAt = (InternalEObject)locatedAt;
-      locatedAt = (VarDeclaration)eResolveProxy(oldLocatedAt);
+      locatedAt = (INamedElement)eResolveProxy(oldLocatedAt);
       if (locatedAt != oldLocatedAt)
       {
         if (eNotificationRequired())
@@ -221,7 +268,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public VarDeclaration basicGetLocatedAt()
+  public INamedElement basicGetLocatedAt()
   {
     return locatedAt;
   }
@@ -232,9 +279,9 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
    * @generated
    */
   @Override
-  public void setLocatedAt(VarDeclaration newLocatedAt)
+  public void setLocatedAt(INamedElement newLocatedAt)
   {
-    VarDeclaration oldLocatedAt = locatedAt;
+    INamedElement oldLocatedAt = locatedAt;
     locatedAt = newLocatedAt;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__LOCATED_AT, oldLocatedAt, locatedAt));
@@ -472,6 +519,8 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     {
       case STCorePackage.VAR_DECLARATION__NAME:
         return getName();
+      case STCorePackage.VAR_DECLARATION__COMMENT:
+        return getComment();
       case STCorePackage.VAR_DECLARATION__LOCATED_AT:
         if (resolve) return getLocatedAt();
         return basicGetLocatedAt();
@@ -506,8 +555,11 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
       case STCorePackage.VAR_DECLARATION__NAME:
         setName((String)newValue);
         return;
+      case STCorePackage.VAR_DECLARATION__COMMENT:
+        setComment((String)newValue);
+        return;
       case STCorePackage.VAR_DECLARATION__LOCATED_AT:
-        setLocatedAt((VarDeclaration)newValue);
+        setLocatedAt((INamedElement)newValue);
         return;
       case STCorePackage.VAR_DECLARATION__ARRAY:
         setArray((Boolean)newValue);
@@ -546,8 +598,11 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
       case STCorePackage.VAR_DECLARATION__NAME:
         setName(NAME_EDEFAULT);
         return;
+      case STCorePackage.VAR_DECLARATION__COMMENT:
+        setComment(COMMENT_EDEFAULT);
+        return;
       case STCorePackage.VAR_DECLARATION__LOCATED_AT:
-        setLocatedAt((VarDeclaration)null);
+        setLocatedAt((INamedElement)null);
         return;
       case STCorePackage.VAR_DECLARATION__ARRAY:
         setArray(ARRAY_EDEFAULT);
@@ -583,6 +638,8 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     {
       case STCorePackage.VAR_DECLARATION__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case STCorePackage.VAR_DECLARATION__COMMENT:
+        return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
       case STCorePackage.VAR_DECLARATION__LOCATED_AT:
         return locatedAt != null;
       case STCorePackage.VAR_DECLARATION__ARRAY:
@@ -614,6 +671,8 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
+    result.append(", comment: ");
+    result.append(comment);
     result.append(", array: ");
     result.append(array);
     result.append(", count: ");

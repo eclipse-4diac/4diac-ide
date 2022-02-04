@@ -6,5 +6,6 @@
 /.sonarlint/
 **/*.orig
 **/xtend-gen/*
+**/.antlr-*.jar
 !.gitignore
 !.gitkeep

@@ -13,8 +13,8 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getLhs <em>Lhs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getRhs <em>Rhs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getLeft <em>Left</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getRight <em>Right</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTAssignmentStatement()
@@ -24,47 +24,47 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 public interface STAssignmentStatement extends STStatement
 {
   /**
-   * Returns the value of the '<em><b>Lhs</b></em>' reference.
+   * Returns the value of the '<em><b>Left</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Lhs</em>' reference.
-   * @see #setLhs(VarDeclaration)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTAssignmentStatement_Lhs()
-   * @model
-   * @generated
-   */
-  VarDeclaration getLhs();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getLhs <em>Lhs</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Lhs</em>' reference.
-   * @see #getLhs()
-   * @generated
-   */
-  void setLhs(VarDeclaration value);
-
-  /**
-   * Returns the value of the '<em><b>Rhs</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Rhs</em>' containment reference.
-   * @see #setRhs(STExpression)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTAssignmentStatement_Rhs()
+   * @return the value of the '<em>Left</em>' containment reference.
+   * @see #setLeft(STExpression)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTAssignmentStatement_Left()
    * @model containment="true"
    * @generated
    */
-  STExpression getRhs();
+  STExpression getLeft();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getRhs <em>Rhs</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getLeft <em>Left</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Rhs</em>' containment reference.
-   * @see #getRhs()
+   * @param value the new value of the '<em>Left</em>' containment reference.
+   * @see #getLeft()
    * @generated
    */
-  void setRhs(STExpression value);
+  void setLeft(STExpression value);
+
+  /**
+   * Returns the value of the '<em><b>Right</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Right</em>' containment reference.
+   * @see #setRight(STExpression)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTAssignmentStatement_Right()
+   * @model containment="true"
+   * @generated
+   */
+  STExpression getRight();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement#getRight <em>Right</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Right</em>' containment reference.
+   * @see #getRight()
+   * @generated
+   */
+  void setRight(STExpression value);
 
 } // STAssignmentStatement

@@ -10,6 +10,8 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.*;
 
 /**
@@ -86,11 +88,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createVarDeclarationBlockAdapter();
       }
       @Override
-      public Adapter caseVarDeclaration(VarDeclaration object)
-      {
-        return createVarDeclarationAdapter();
-      }
-      @Override
       public Adapter caseInitializerExpression(InitializerExpression object)
       {
         return createInitializerExpressionAdapter();
@@ -161,11 +158,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTExpressionAdapter();
       }
       @Override
-      public Adapter caseMultibitPartialAccess(MultibitPartialAccess object)
-      {
-        return createMultibitPartialAccessAdapter();
-      }
-      @Override
       public Adapter caseSTNumericLiteral(STNumericLiteral object)
       {
         return createSTNumericLiteralAdapter();
@@ -194,6 +186,11 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
       public Adapter caseSTStringLiteral(STStringLiteral object)
       {
         return createSTStringLiteralAdapter();
+      }
+      @Override
+      public Adapter caseVarDeclaration(VarDeclaration object)
+      {
+        return createVarDeclarationAdapter();
       }
       @Override
       public Adapter caseSTReturn(STReturn object)
@@ -226,14 +223,29 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTUnaryExpressionAdapter();
       }
       @Override
-      public Adapter caseSTMemberSelection(STMemberSelection object)
+      public Adapter caseSTMemberAccessExpression(STMemberAccessExpression object)
       {
-        return createSTMemberSelectionAdapter();
+        return createSTMemberAccessExpressionAdapter();
       }
       @Override
-      public Adapter caseSTSymbol(STSymbol object)
+      public Adapter caseSTArrayAccessExpression(STArrayAccessExpression object)
       {
-        return createSTSymbolAdapter();
+        return createSTArrayAccessExpressionAdapter();
+      }
+      @Override
+      public Adapter caseSTFeatureExpression(STFeatureExpression object)
+      {
+        return createSTFeatureExpressionAdapter();
+      }
+      @Override
+      public Adapter caseSTMultibitPartialExpression(STMultibitPartialExpression object)
+      {
+        return createSTMultibitPartialExpressionAdapter();
+      }
+      @Override
+      public Adapter caseINamedElement(INamedElement object)
+      {
+        return createINamedElementAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -283,21 +295,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createVarDeclarationBlockAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration <em>Var Declaration</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration
-   * @generated
-   */
-  public Adapter createVarDeclarationAdapter()
   {
     return null;
   }
@@ -513,21 +510,6 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess <em>Multibit Partial Access</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess
-   * @generated
-   */
-  public Adapter createMultibitPartialAccessAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral <em>ST Numeric Literal</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -613,6 +595,21 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSTStringLiteralAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration <em>Var Declaration</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration
+   * @generated
+   */
+  public Adapter createVarDeclarationAdapter()
   {
     return null;
   }
@@ -708,31 +705,76 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection <em>ST Member Selection</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberAccessExpression <em>ST Member Access Expression</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberAccessExpression
    * @generated
    */
-  public Adapter createSTMemberSelectionAdapter()
+  public Adapter createSTMemberAccessExpressionAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSymbol <em>ST Symbol</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STArrayAccessExpression <em>ST Array Access Expression</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSymbol
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STArrayAccessExpression
    * @generated
    */
-  public Adapter createSTSymbolAdapter()
+  public Adapter createSTArrayAccessExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression <em>ST Feature Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression
+   * @generated
+   */
+  public Adapter createSTFeatureExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultibitPartialExpression <em>ST Multibit Partial Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultibitPartialExpression
+   * @generated
+   */
+  public Adapter createSTMultibitPartialExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+   * @generated
+   */
+  public Adapter createINamedElementAdapter()
   {
     return null;
   }

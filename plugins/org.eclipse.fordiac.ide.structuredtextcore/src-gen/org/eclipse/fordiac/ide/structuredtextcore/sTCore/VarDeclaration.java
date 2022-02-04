@@ -5,8 +5,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
-
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
@@ -18,7 +17,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getLocatedAt <em>Located At</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#isArray <em>Array</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getRanges <em>Ranges</em>}</li>
@@ -32,41 +30,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * @model
  * @generated
  */
-public interface VarDeclaration extends EObject
+public interface VarDeclaration extends INamedElement
 {
-  /**
-   * Returns the value of the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration_Name()
-   * @model
-   * @generated
-   */
-  String getName();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getName <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
-   * @generated
-   */
-  void setName(String value);
-
   /**
    * Returns the value of the '<em><b>Located At</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Located At</em>' reference.
-   * @see #setLocatedAt(VarDeclaration)
+   * @see #setLocatedAt(INamedElement)
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration_LocatedAt()
    * @model
    * @generated
    */
-  VarDeclaration getLocatedAt();
+  INamedElement getLocatedAt();
 
   /**
    * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getLocatedAt <em>Located At</em>}' reference.
@@ -76,7 +52,7 @@ public interface VarDeclaration extends EObject
    * @see #getLocatedAt()
    * @generated
    */
-  void setLocatedAt(VarDeclaration value);
+  void setLocatedAt(INamedElement value);
 
   /**
    * Returns the value of the '<em><b>Array</b></em>' attribute.

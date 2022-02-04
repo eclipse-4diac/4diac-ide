@@ -19,8 +19,9 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 
 /**
@@ -67,7 +68,7 @@ public class VarDeclarationBlockImpl extends MinimalEObjectImpl.Container implem
    * @generated
    * @ordered
    */
-  protected EList<VarDeclaration> varDeclarations;
+  protected EList<INamedElement> varDeclarations;
 
   /**
    * <!-- begin-user-doc -->
@@ -121,11 +122,11 @@ public class VarDeclarationBlockImpl extends MinimalEObjectImpl.Container implem
    * @generated
    */
   @Override
-  public EList<VarDeclaration> getVarDeclarations()
+  public EList<INamedElement> getVarDeclarations()
   {
     if (varDeclarations == null)
     {
-      varDeclarations = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, STCorePackage.VAR_DECLARATION_BLOCK__VAR_DECLARATIONS);
+      varDeclarations = new EObjectContainmentEList<INamedElement>(INamedElement.class, this, STCorePackage.VAR_DECLARATION_BLOCK__VAR_DECLARATIONS);
     }
     return varDeclarations;
   }
@@ -180,7 +181,7 @@ public class VarDeclarationBlockImpl extends MinimalEObjectImpl.Container implem
         return;
       case STCorePackage.VAR_DECLARATION_BLOCK__VAR_DECLARATIONS:
         getVarDeclarations().clear();
-        getVarDeclarations().addAll((Collection<? extends VarDeclaration>)newValue);
+        getVarDeclarations().addAll((Collection<? extends INamedElement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

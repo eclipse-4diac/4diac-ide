@@ -21,8 +21,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 
 import org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition;
@@ -87,7 +88,7 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * @generated
    * @ordered
    */
-  protected EList<VarDeclaration> varDeclarations;
+  protected EList<INamedElement> varDeclarations;
 
   /**
    * The cached value of the '{@link #getVarTempDeclarations() <em>Var Temp Declarations</em>}' containment reference list.
@@ -226,11 +227,11 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * @generated
    */
   @Override
-  public EList<VarDeclaration> getVarDeclarations()
+  public EList<INamedElement> getVarDeclarations()
   {
     if (varDeclarations == null)
     {
-      varDeclarations = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, STFunctionPackage.FUNCTION_DEFINITION__VAR_DECLARATIONS);
+      varDeclarations = new EObjectContainmentEList<INamedElement>(INamedElement.class, this, STFunctionPackage.FUNCTION_DEFINITION__VAR_DECLARATIONS);
     }
     return varDeclarations;
   }
@@ -367,7 +368,7 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
         return;
       case STFunctionPackage.FUNCTION_DEFINITION__VAR_DECLARATIONS:
         getVarDeclarations().clear();
-        getVarDeclarations().addAll((Collection<? extends VarDeclaration>)newValue);
+        getVarDeclarations().addAll((Collection<? extends INamedElement>)newValue);
         return;
       case STFunctionPackage.FUNCTION_DEFINITION__VAR_TEMP_DECLARATIONS:
         getVarTempDeclarations().clear();

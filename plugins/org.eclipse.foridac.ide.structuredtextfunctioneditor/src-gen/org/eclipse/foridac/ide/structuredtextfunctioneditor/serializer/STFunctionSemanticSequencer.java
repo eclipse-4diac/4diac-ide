@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
@@ -22,15 +22,16 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberAccessExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSymbol;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
@@ -70,8 +71,8 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.CODE:
 				sequence_Code(context, (Code) semanticObject); 
 				return; 
-			case STCorePackage.MULTIBIT_PARTIAL_ACCESS:
-				sequence_MultibitPartialAccess(context, (MultibitPartialAccess) semanticObject); 
+			case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION:
+				sequence_STAccessExpression(context, (STArrayAccessExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_ASSIGNMENT_STATEMENT:
 				sequence_STAssignmentStatement(context, (STAssignmentStatement) semanticObject); 
@@ -103,14 +104,20 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_EXIT:
 				sequence_STStatement(context, (STExit) semanticObject); 
 				return; 
+			case STCorePackage.ST_FEATURE_EXPRESSION:
+				sequence_STFeatureExpression(context, (STFeatureExpression) semanticObject); 
+				return; 
 			case STCorePackage.ST_FOR_STATEMENT:
 				sequence_STForStatement(context, (STForStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_IF_STATMENT:
 				sequence_STIfStatment(context, (STIfStatment) semanticObject); 
 				return; 
-			case STCorePackage.ST_MEMBER_SELECTION:
-				sequence_STSelectionExpression(context, (STMemberSelection) semanticObject); 
+			case STCorePackage.ST_MEMBER_ACCESS_EXPRESSION:
+				sequence_STAccessExpression(context, (STMemberAccessExpression) semanticObject); 
+				return; 
+			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION:
+				sequence_STMultibitPartialExpression(context, (STMultibitPartialExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_NOP:
 				sequence_STStatement(context, (STNop) semanticObject); 
@@ -127,9 +134,6 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STStringLiteral(context, (STStringLiteral) semanticObject); 
 				return; 
-			case STCorePackage.ST_SYMBOL:
-				sequence_STAtomicExpression(context, (STSymbol) semanticObject); 
-				return; 
 			case STCorePackage.ST_TIME_LITERAL:
 				sequence_STTimeLiteral(context, (STTimeLiteral) semanticObject); 
 				return; 
@@ -137,7 +141,7 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				sequence_STTimeOfDayLiteral(context, (STTimeOfDayLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_UNARY_EXPRESSION:
-				sequence_STSignumExpression(context, (STUnaryExpression) semanticObject); 
+				sequence_STUnaryExpression(context, (STUnaryExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_WHILE_STATEMENT:
 				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 

@@ -266,8 +266,9 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getVarOutputDeclarationBlockAccess().getRule();
 	}
 	
-	//VarDeclaration returns VarDeclaration:
-	//    name=ID ('AT' locatedAt=[VarDeclaration])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
+	//VarDeclaration returns libraryElement::INamedElement:
+	//    {VarDeclaration}
+	//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::LibraryElement]) ('[' maxLength=STExpression ']')? (':='
 	//    defaultValue=InitializerExpression)? ';';
 	public STCoreGrammarAccess.VarDeclarationElements getVarDeclarationAccess() {
@@ -328,7 +329,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STAssignmentStatement:
-	//    lhs=[VarDeclaration] ':=' rhs=STExpression
+	//    left=STAccessExpression ':=' right=STExpression
 	//;
 	public STCoreGrammarAccess.STAssignmentStatementElements getSTAssignmentStatementAccess() {
 		return gaSTCore.getSTAssignmentStatementAccess();
@@ -597,7 +598,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STPowerExpression returns STExpression:
-	//    STSignumExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STSignumExpression)*;
+	//    STUnaryExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STUnaryExpression)*;
 	public STCoreGrammarAccess.STPowerExpressionElements getSTPowerExpressionAccess() {
 		return gaSTCore.getSTPowerExpressionAccess();
 	}
@@ -615,63 +616,66 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getUnaryOperatorAccess().getRule();
 	}
 	
-	//STSignumExpression returns STExpression:
-	//    STLiteralExpressions | STSelectionExpression | ({STUnaryExpression} op=UnaryOperator
-	//    expression=STSelectionExpression);
-	public STCoreGrammarAccess.STSignumExpressionElements getSTSignumExpressionAccess() {
-		return gaSTCore.getSTSignumExpressionAccess();
+	//STUnaryExpression returns STExpression:
+	//    => STAccessExpression | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
+	public STCoreGrammarAccess.STUnaryExpressionElements getSTUnaryExpressionAccess() {
+		return gaSTCore.getSTUnaryExpressionAccess();
 	}
 	
-	public ParserRule getSTSignumExpressionRule() {
-		return getSTSignumExpressionAccess().getRule();
+	public ParserRule getSTUnaryExpressionRule() {
+		return getSTUnaryExpressionAccess().getRule();
 	}
 	
-	//STSelectionExpression returns STExpression:
-	//    STAtomicExpression
-	//    ({STMemberSelection.receiver=current} (structAccess?='.' member=[VarDeclaration] | arrayAccess?='['
-	//    index+=STExpression (',' index+=STExpression)* ']')
-	//    (=>poeInvocation?='(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')?
-	//    (=>bitaccessor=MultibitPartialAccess)?
-	//    )*;
-	public STCoreGrammarAccess.STSelectionExpressionElements getSTSelectionExpressionAccess() {
-		return gaSTCore.getSTSelectionExpressionAccess();
+	//STAccessExpression returns STExpression:
+	//    STPrimaryExpression (({STMemberAccessExpression.receiver=current} '.' member=(STFeatureExpression |
+	//    STMultibitPartialExpression)) |
+	//    ({STArrayAccessExpression.receiver=current} '[' index+=STExpression (',' index+=STExpression)* ']'))*;
+	public STCoreGrammarAccess.STAccessExpressionElements getSTAccessExpressionAccess() {
+		return gaSTCore.getSTAccessExpressionAccess();
 	}
 	
-	public ParserRule getSTSelectionExpressionRule() {
-		return getSTSelectionExpressionAccess().getRule();
+	public ParserRule getSTAccessExpressionRule() {
+		return getSTAccessExpressionAccess().getRule();
 	}
 	
-	//MultibitPartialAccess:
-	//    (accessSpecifier=MultiBitAccessSpecifier) index=INT;
-	public STCoreGrammarAccess.MultibitPartialAccessElements getMultibitPartialAccessAccess() {
-		return gaSTCore.getMultibitPartialAccessAccess();
+	//STPrimaryExpression returns STExpression:
+	//    '(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
+	public STCoreGrammarAccess.STPrimaryExpressionElements getSTPrimaryExpressionAccess() {
+		return gaSTCore.getSTPrimaryExpressionAccess();
 	}
 	
-	public ParserRule getMultibitPartialAccessRule() {
-		return getMultibitPartialAccessAccess().getRule();
+	public ParserRule getSTPrimaryExpressionRule() {
+		return getSTPrimaryExpressionAccess().getRule();
 	}
 	
-	//enum MultiBitAccessSpecifier:
-	//    lwordAccess='.%L' | dwordAccess='.%D' | wordAccess='.%W' | byteAccess='.%B' | bitAccess='.%X' |
-	//    bitAccessShortcut='.';
-	public STCoreGrammarAccess.MultiBitAccessSpecifierElements getMultiBitAccessSpecifierAccess() {
-		return gaSTCore.getMultiBitAccessSpecifierAccess();
+	//STFeatureExpression returns STExpression:
+	//    {STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STExpression (',' parameters+=STExpression)* )? ')' )?;
+	public STCoreGrammarAccess.STFeatureExpressionElements getSTFeatureExpressionAccess() {
+		return gaSTCore.getSTFeatureExpressionAccess();
 	}
 	
-	public EnumRule getMultiBitAccessSpecifierRule() {
-		return getMultiBitAccessSpecifierAccess().getRule();
+	public ParserRule getSTFeatureExpressionRule() {
+		return getSTFeatureExpressionAccess().getRule();
 	}
 	
-	//STAtomicExpression returns STExpression:
-	//    '(' STExpression ')' |
-	//    {STSymbol} (type=[datatype::DataType] '#')? symbol=[VarDeclaration] (bitaccessor=MultibitPartialAccess)? (=>poeInvocation?=
-	//    '(' (parameters+=STExpression (',' parameters+=STExpression)*)? ')')? ;
-	public STCoreGrammarAccess.STAtomicExpressionElements getSTAtomicExpressionAccess() {
-		return gaSTCore.getSTAtomicExpressionAccess();
+	//enum STMultiBitAccessSpecifier:
+	//    L='%L' | D='%D' | W='%W' | B='%B' | X='%X';
+	public STCoreGrammarAccess.STMultiBitAccessSpecifierElements getSTMultiBitAccessSpecifierAccess() {
+		return gaSTCore.getSTMultiBitAccessSpecifierAccess();
 	}
 	
-	public ParserRule getSTAtomicExpressionRule() {
-		return getSTAtomicExpressionAccess().getRule();
+	public EnumRule getSTMultiBitAccessSpecifierRule() {
+		return getSTMultiBitAccessSpecifierAccess().getRule();
+	}
+	
+	//STMultibitPartialExpression returns STExpression:
+	//    {STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? index=INT;
+	public STCoreGrammarAccess.STMultibitPartialExpressionElements getSTMultibitPartialExpressionAccess() {
+		return gaSTCore.getSTMultibitPartialExpressionAccess();
+	}
+	
+	public ParserRule getSTMultibitPartialExpressionRule() {
+		return getSTMultibitPartialExpressionAccess().getRule();
 	}
 	
 	//STLiteralExpressions returns STExpression:
@@ -873,7 +877,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//Number returns ecore::EBigDecimal:
-	//    ('+' | '-')? INT ('.' (EXT_INT | INT))?;
+	//    ('+' | '-')? INT (=> '.' (EXT_INT | INT))?;
 	public STCoreGrammarAccess.NumberElements getNumberAccess() {
 		return gaSTCore.getNumberAccess();
 	}
@@ -882,7 +886,6 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getNumberAccess().getRule();
 	}
 	
-	// // INT ? '.' (EXT_INT | INT);
 	//Date returns ecore::EDate:
 	//    INT '-' INT '-' INT;
 	public STCoreGrammarAccess.DateElements getDateAccess() {
@@ -894,7 +897,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//TimeOfDay:
-	//    INT ':' INT ':' INT ('.' INT)?;
+	//    INT ':' INT ':' INT (=> '.' INT)?;
 	public STCoreGrammarAccess.TimeOfDayElements getTimeOfDayAccess() {
 		return gaSTCore.getTimeOfDayAccess();
 	}

@@ -30,13 +30,12 @@
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//UnaryOperator/PLUS"/>
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//UnaryOperator/NOT"/>
     </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//MultiBitAccessSpecifier">
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//MultiBitAccessSpecifier/lwordAccess"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//MultiBitAccessSpecifier/dwordAccess"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//MultiBitAccessSpecifier/wordAccess"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//MultiBitAccessSpecifier/byteAccess"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//MultiBitAccessSpecifier/bitAccess"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//MultiBitAccessSpecifier/bitAccessShortcut"/>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STMultiBitAccessSpecifier">
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/L"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/D"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/W"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/B"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/X"/>
     </genEnums>
     <genClasses ecoreClass="STCore.ecore#//Code">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//Code/statements"/>
@@ -44,16 +43,6 @@
     <genClasses ecoreClass="STCore.ecore#//VarDeclarationBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclarationBlock/constant"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclarationBlock/varDeclarations"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//VarDeclaration">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclaration/name"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/locatedAt"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclaration/array"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/ranges"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclaration/count"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/type"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/maxLength"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/defaultValue"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//InitializerExpression"/>
     <genClasses ecoreClass="STCore.ecore#//ArrayInitializerExpression">
@@ -65,8 +54,8 @@
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStatement"/>
     <genClasses ecoreClass="STCore.ecore#//STAssignmentStatement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/lhs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/rhs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/right"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STIfStatment">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STIfStatment/condition"/>
@@ -105,10 +94,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STRepeatStatement/condition"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STExpression"/>
-    <genClasses ecoreClass="STCore.ecore#//MultibitPartialAccess">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//MultibitPartialAccess/accessSpecifier"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//MultibitPartialAccess/index"/>
-    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STNumericLiteral">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STNumericLiteral/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STNumericLiteral/value"/>
@@ -134,6 +119,15 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStringLiteral/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STStringLiteral/value"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//VarDeclaration">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/locatedAt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclaration/array"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/ranges"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclaration/count"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/maxLength"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/defaultValue"/>
+    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STReturn"/>
     <genClasses ecoreClass="STCore.ecore#//STContinue"/>
     <genClasses ecoreClass="STCore.ecore#//STExit"/>
@@ -147,22 +141,21 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STUnaryExpression/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STUnaryExpression/expression"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STMemberSelection">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STMemberSelection/receiver"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMemberSelection/structAccess"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STMemberSelection/member"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMemberSelection/arrayAccess"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STMemberSelection/index"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMemberSelection/poeInvocation"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STMemberSelection/parameters"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STMemberSelection/bitaccessor"/>
+    <genClasses ecoreClass="STCore.ecore#//STMemberAccessExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STMemberAccessExpression/receiver"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STMemberAccessExpression/member"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STSymbol">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STSymbol/type"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STSymbol/symbol"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSymbol/bitaccessor"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STSymbol/poeInvocation"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSymbol/parameters"/>
+    <genClasses ecoreClass="STCore.ecore#//STArrayAccessExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayAccessExpression/receiver"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayAccessExpression/index"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STFeatureExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STFeatureExpression/feature"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STFeatureExpression/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STMultibitPartialExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMultibitPartialExpression/specifier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMultibitPartialExpression/index"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

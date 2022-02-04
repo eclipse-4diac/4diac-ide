@@ -9,20 +9,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="VarDeclarationBlock">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclarations" upperBound="-1"
-        eType="#//VarDeclaration" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="locatedAt" eType="#//VarDeclaration"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="array" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ranges" upperBound="-1"
-        eType="#//STExpression" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="count" unique="false" upperBound="-1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//LibraryElement"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="maxLength" eType="#//STExpression"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" eType="#//InitializerExpression"
+        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InitializerExpression"/>
@@ -38,8 +25,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STAssignmentStatement" eSuperTypes="#//STStatement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="#//VarDeclaration"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//STExpression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STIfStatment" eSuperTypes="#//STStatement">
@@ -123,17 +111,12 @@
     <eLiterals name="PLUS" value="1" literal="+"/>
     <eLiterals name="NOT" value="2" literal="NOT"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MultibitPartialAccess">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accessSpecifier" eType="#//MultiBitAccessSpecifier"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="MultiBitAccessSpecifier">
-    <eLiterals name="lwordAccess" literal=".%L"/>
-    <eLiterals name="dwordAccess" value="1" literal=".%D"/>
-    <eLiterals name="wordAccess" value="2" literal=".%W"/>
-    <eLiterals name="byteAccess" value="3" literal=".%B"/>
-    <eLiterals name="bitAccess" value="4" literal=".%X"/>
-    <eLiterals name="bitAccessShortcut" value="5" literal="."/>
+  <eClassifiers xsi:type="ecore:EEnum" name="STMultiBitAccessSpecifier">
+    <eLiterals name="L" literal="%L"/>
+    <eLiterals name="D" value="1" literal="%D"/>
+    <eLiterals name="W" value="2" literal="%W"/>
+    <eLiterals name="B" value="3" literal="%B"/>
+    <eLiterals name="X" value="4" literal="%X"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STNumericLiteral" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"
@@ -166,6 +149,19 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration" eSuperTypes="platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="locatedAt" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="array" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ranges" upperBound="-1"
+        eType="#//STExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="count" unique="false" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//LibraryElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="maxLength" eType="#//STExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" eType="#//InitializerExpression"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STReturn" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STContinue" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STExit" eSuperTypes="#//STStatement"/>
@@ -182,27 +178,25 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STMemberSelection" eSuperTypes="#//STExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="STMemberAccessExpression" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//STExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="structAccess" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="member" eType="#//VarDeclaration"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrayAccess" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="index" upperBound="-1"
-        eType="#//STExpression" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="poeInvocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-        eType="#//STExpression" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="bitaccessor" eType="#//MultibitPartialAccess"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="member" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STSymbol" eSuperTypes="#//STExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="symbol" eType="#//VarDeclaration"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="bitaccessor" eType="#//MultibitPartialAccess"
+  <eClassifiers xsi:type="ecore:EClass" name="STArrayAccessExpression" eSuperTypes="#//STExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//STExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="poeInvocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="index" upperBound="-1"
+        eType="#//STExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STFeatureExpression" eSuperTypes="#//STExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="#//STExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STMultibitPartialExpression" eSuperTypes="#//STExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="specifier" eType="#//STMultiBitAccessSpecifier"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
   </eClassifiers>
 </ecore:EPackage>

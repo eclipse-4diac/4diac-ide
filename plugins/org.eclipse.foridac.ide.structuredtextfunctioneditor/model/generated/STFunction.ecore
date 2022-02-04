@@ -10,7 +10,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclarations" upperBound="-1"
-        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.ecore#//VarDeclaration"
+        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varTempDeclarations" upperBound="-1"
         eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.ecore#//VarDeclarationBlock"

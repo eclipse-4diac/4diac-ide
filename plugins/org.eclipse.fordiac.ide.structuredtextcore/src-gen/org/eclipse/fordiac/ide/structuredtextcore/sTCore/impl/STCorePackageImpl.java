@@ -22,8 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitializerExpress
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.InitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultiBitAccessSpecifier;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
@@ -37,16 +36,18 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberSelection;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberAccessExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultiBitAccessSpecifier;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STSymbol;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
@@ -76,13 +77,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   private EClass varDeclarationBlockEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass varDeclarationEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -187,13 +181,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass multibitPartialAccessEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   private EClass stNumericLiteralEClass = null;
 
   /**
@@ -230,6 +217,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   private EClass stStringLiteralEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass varDeclarationEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -278,14 +272,28 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass stMemberSelectionEClass = null;
+  private EClass stMemberAccessExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass stSymbolEClass = null;
+  private EClass stArrayAccessExpressionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stFeatureExpressionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stMultibitPartialExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -306,7 +314,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EEnum multiBitAccessSpecifierEEnum = null;
+  private EEnum stMultiBitAccessSpecifierEEnum = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -437,105 +445,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getVarDeclaration()
-  {
-    return varDeclarationEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getVarDeclaration_Name()
-  {
-    return (EAttribute)varDeclarationEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getVarDeclaration_LocatedAt()
-  {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getVarDeclaration_Array()
-  {
-    return (EAttribute)varDeclarationEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getVarDeclaration_Ranges()
-  {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(3);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getVarDeclaration_Count()
-  {
-    return (EAttribute)varDeclarationEClass.getEStructuralFeatures().get(4);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getVarDeclaration_Type()
-  {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getVarDeclaration_MaxLength()
-  {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(6);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getVarDeclaration_DefaultValue()
-  {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(7);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EClass getInitializerExpression()
   {
     return initializerExpressionEClass;
@@ -624,7 +533,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTAssignmentStatement_Lhs()
+  public EReference getSTAssignmentStatement_Left()
   {
     return (EReference)stAssignmentStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -635,7 +544,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTAssignmentStatement_Rhs()
+  public EReference getSTAssignmentStatement_Right()
   {
     return (EReference)stAssignmentStatementEClass.getEStructuralFeatures().get(1);
   }
@@ -965,39 +874,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getMultibitPartialAccess()
-  {
-    return multibitPartialAccessEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getMultibitPartialAccess_AccessSpecifier()
-  {
-    return (EAttribute)multibitPartialAccessEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getMultibitPartialAccess_Index()
-  {
-    return (EAttribute)multibitPartialAccessEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EClass getSTNumericLiteral()
   {
     return stNumericLiteralEClass;
@@ -1207,6 +1083,94 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
+  public EClass getVarDeclaration()
+  {
+    return varDeclarationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getVarDeclaration_LocatedAt()
+  {
+    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getVarDeclaration_Array()
+  {
+    return (EAttribute)varDeclarationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getVarDeclaration_Ranges()
+  {
+    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getVarDeclaration_Count()
+  {
+    return (EAttribute)varDeclarationEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getVarDeclaration_Type()
+  {
+    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getVarDeclaration_MaxLength()
+  {
+    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getVarDeclaration_DefaultValue()
+  {
+    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getSTReturn()
   {
     return stReturnEClass;
@@ -1328,9 +1292,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getSTMemberSelection()
+  public EClass getSTMemberAccessExpression()
   {
-    return stMemberSelectionEClass;
+    return stMemberAccessExpressionEClass;
   }
 
   /**
@@ -1339,9 +1303,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTMemberSelection_Receiver()
+  public EReference getSTMemberAccessExpression_Receiver()
   {
-    return (EReference)stMemberSelectionEClass.getEStructuralFeatures().get(0);
+    return (EReference)stMemberAccessExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1350,9 +1314,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getSTMemberSelection_StructAccess()
+  public EReference getSTMemberAccessExpression_Member()
   {
-    return (EAttribute)stMemberSelectionEClass.getEStructuralFeatures().get(1);
+    return (EReference)stMemberAccessExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1361,9 +1325,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTMemberSelection_Member()
+  public EClass getSTArrayAccessExpression()
   {
-    return (EReference)stMemberSelectionEClass.getEStructuralFeatures().get(2);
+    return stArrayAccessExpressionEClass;
   }
 
   /**
@@ -1372,9 +1336,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getSTMemberSelection_ArrayAccess()
+  public EReference getSTArrayAccessExpression_Receiver()
   {
-    return (EAttribute)stMemberSelectionEClass.getEStructuralFeatures().get(3);
+    return (EReference)stArrayAccessExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1383,9 +1347,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTMemberSelection_Index()
+  public EReference getSTArrayAccessExpression_Index()
   {
-    return (EReference)stMemberSelectionEClass.getEStructuralFeatures().get(4);
+    return (EReference)stArrayAccessExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1394,9 +1358,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getSTMemberSelection_PoeInvocation()
+  public EClass getSTFeatureExpression()
   {
-    return (EAttribute)stMemberSelectionEClass.getEStructuralFeatures().get(5);
+    return stFeatureExpressionEClass;
   }
 
   /**
@@ -1405,9 +1369,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTMemberSelection_Parameters()
+  public EReference getSTFeatureExpression_Feature()
   {
-    return (EReference)stMemberSelectionEClass.getEStructuralFeatures().get(6);
+    return (EReference)stFeatureExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1416,9 +1380,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTMemberSelection_Bitaccessor()
+  public EReference getSTFeatureExpression_Parameters()
   {
-    return (EReference)stMemberSelectionEClass.getEStructuralFeatures().get(7);
+    return (EReference)stFeatureExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1427,9 +1391,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getSTSymbol()
+  public EClass getSTMultibitPartialExpression()
   {
-    return stSymbolEClass;
+    return stMultibitPartialExpressionEClass;
   }
 
   /**
@@ -1438,9 +1402,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTSymbol_Type()
+  public EAttribute getSTMultibitPartialExpression_Specifier()
   {
-    return (EReference)stSymbolEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)stMultibitPartialExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1449,42 +1413,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTSymbol_Symbol()
+  public EAttribute getSTMultibitPartialExpression_Index()
   {
-    return (EReference)stSymbolEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTSymbol_Bitaccessor()
-  {
-    return (EReference)stSymbolEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getSTSymbol_PoeInvocation()
-  {
-    return (EAttribute)stSymbolEClass.getEStructuralFeatures().get(3);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSTSymbol_Parameters()
-  {
-    return (EReference)stSymbolEClass.getEStructuralFeatures().get(4);
+    return (EAttribute)stMultibitPartialExpressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1515,9 +1446,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EEnum getMultiBitAccessSpecifier()
+  public EEnum getSTMultiBitAccessSpecifier()
   {
-    return multiBitAccessSpecifierEEnum;
+    return stMultiBitAccessSpecifierEEnum;
   }
 
   /**
@@ -1558,16 +1489,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEAttribute(varDeclarationBlockEClass, VAR_DECLARATION_BLOCK__CONSTANT);
     createEReference(varDeclarationBlockEClass, VAR_DECLARATION_BLOCK__VAR_DECLARATIONS);
 
-    varDeclarationEClass = createEClass(VAR_DECLARATION);
-    createEAttribute(varDeclarationEClass, VAR_DECLARATION__NAME);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__LOCATED_AT);
-    createEAttribute(varDeclarationEClass, VAR_DECLARATION__ARRAY);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__RANGES);
-    createEAttribute(varDeclarationEClass, VAR_DECLARATION__COUNT);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__TYPE);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__MAX_LENGTH);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__DEFAULT_VALUE);
-
     initializerExpressionEClass = createEClass(INITIALIZER_EXPRESSION);
 
     arrayInitializerExpressionEClass = createEClass(ARRAY_INITIALIZER_EXPRESSION);
@@ -1580,8 +1501,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stStatementEClass = createEClass(ST_STATEMENT);
 
     stAssignmentStatementEClass = createEClass(ST_ASSIGNMENT_STATEMENT);
-    createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__LHS);
-    createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__RHS);
+    createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__LEFT);
+    createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__RIGHT);
 
     stIfStatmentEClass = createEClass(ST_IF_STATMENT);
     createEReference(stIfStatmentEClass, ST_IF_STATMENT__CONDITION);
@@ -1621,10 +1542,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
 
     stExpressionEClass = createEClass(ST_EXPRESSION);
 
-    multibitPartialAccessEClass = createEClass(MULTIBIT_PARTIAL_ACCESS);
-    createEAttribute(multibitPartialAccessEClass, MULTIBIT_PARTIAL_ACCESS__ACCESS_SPECIFIER);
-    createEAttribute(multibitPartialAccessEClass, MULTIBIT_PARTIAL_ACCESS__INDEX);
-
     stNumericLiteralEClass = createEClass(ST_NUMERIC_LITERAL);
     createEReference(stNumericLiteralEClass, ST_NUMERIC_LITERAL__TYPE);
     createEAttribute(stNumericLiteralEClass, ST_NUMERIC_LITERAL__VALUE);
@@ -1650,6 +1567,15 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEReference(stStringLiteralEClass, ST_STRING_LITERAL__TYPE);
     createEAttribute(stStringLiteralEClass, ST_STRING_LITERAL__VALUE);
 
+    varDeclarationEClass = createEClass(VAR_DECLARATION);
+    createEReference(varDeclarationEClass, VAR_DECLARATION__LOCATED_AT);
+    createEAttribute(varDeclarationEClass, VAR_DECLARATION__ARRAY);
+    createEReference(varDeclarationEClass, VAR_DECLARATION__RANGES);
+    createEAttribute(varDeclarationEClass, VAR_DECLARATION__COUNT);
+    createEReference(varDeclarationEClass, VAR_DECLARATION__TYPE);
+    createEReference(varDeclarationEClass, VAR_DECLARATION__MAX_LENGTH);
+    createEReference(varDeclarationEClass, VAR_DECLARATION__DEFAULT_VALUE);
+
     stReturnEClass = createEClass(ST_RETURN);
 
     stContinueEClass = createEClass(ST_CONTINUE);
@@ -1667,27 +1593,26 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEAttribute(stUnaryExpressionEClass, ST_UNARY_EXPRESSION__OP);
     createEReference(stUnaryExpressionEClass, ST_UNARY_EXPRESSION__EXPRESSION);
 
-    stMemberSelectionEClass = createEClass(ST_MEMBER_SELECTION);
-    createEReference(stMemberSelectionEClass, ST_MEMBER_SELECTION__RECEIVER);
-    createEAttribute(stMemberSelectionEClass, ST_MEMBER_SELECTION__STRUCT_ACCESS);
-    createEReference(stMemberSelectionEClass, ST_MEMBER_SELECTION__MEMBER);
-    createEAttribute(stMemberSelectionEClass, ST_MEMBER_SELECTION__ARRAY_ACCESS);
-    createEReference(stMemberSelectionEClass, ST_MEMBER_SELECTION__INDEX);
-    createEAttribute(stMemberSelectionEClass, ST_MEMBER_SELECTION__POE_INVOCATION);
-    createEReference(stMemberSelectionEClass, ST_MEMBER_SELECTION__PARAMETERS);
-    createEReference(stMemberSelectionEClass, ST_MEMBER_SELECTION__BITACCESSOR);
+    stMemberAccessExpressionEClass = createEClass(ST_MEMBER_ACCESS_EXPRESSION);
+    createEReference(stMemberAccessExpressionEClass, ST_MEMBER_ACCESS_EXPRESSION__RECEIVER);
+    createEReference(stMemberAccessExpressionEClass, ST_MEMBER_ACCESS_EXPRESSION__MEMBER);
 
-    stSymbolEClass = createEClass(ST_SYMBOL);
-    createEReference(stSymbolEClass, ST_SYMBOL__TYPE);
-    createEReference(stSymbolEClass, ST_SYMBOL__SYMBOL);
-    createEReference(stSymbolEClass, ST_SYMBOL__BITACCESSOR);
-    createEAttribute(stSymbolEClass, ST_SYMBOL__POE_INVOCATION);
-    createEReference(stSymbolEClass, ST_SYMBOL__PARAMETERS);
+    stArrayAccessExpressionEClass = createEClass(ST_ARRAY_ACCESS_EXPRESSION);
+    createEReference(stArrayAccessExpressionEClass, ST_ARRAY_ACCESS_EXPRESSION__RECEIVER);
+    createEReference(stArrayAccessExpressionEClass, ST_ARRAY_ACCESS_EXPRESSION__INDEX);
+
+    stFeatureExpressionEClass = createEClass(ST_FEATURE_EXPRESSION);
+    createEReference(stFeatureExpressionEClass, ST_FEATURE_EXPRESSION__FEATURE);
+    createEReference(stFeatureExpressionEClass, ST_FEATURE_EXPRESSION__PARAMETERS);
+
+    stMultibitPartialExpressionEClass = createEClass(ST_MULTIBIT_PARTIAL_EXPRESSION);
+    createEAttribute(stMultibitPartialExpressionEClass, ST_MULTIBIT_PARTIAL_EXPRESSION__SPECIFIER);
+    createEAttribute(stMultibitPartialExpressionEClass, ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX);
 
     // Create enums
     binaryOperatorEEnum = createEEnum(BINARY_OPERATOR);
     unaryOperatorEEnum = createEEnum(UNARY_OPERATOR);
-    multiBitAccessSpecifierEEnum = createEEnum(MULTI_BIT_ACCESS_SPECIFIER);
+    stMultiBitAccessSpecifierEEnum = createEEnum(ST_MULTI_BIT_ACCESS_SPECIFIER);
   }
 
   /**
@@ -1737,14 +1662,17 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stTimeOfDayLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stDateAndTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stStringLiteralEClass.getESuperTypes().add(this.getSTExpression());
+    varDeclarationEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
     stReturnEClass.getESuperTypes().add(this.getSTStatement());
     stContinueEClass.getESuperTypes().add(this.getSTStatement());
     stExitEClass.getESuperTypes().add(this.getSTStatement());
     stNopEClass.getESuperTypes().add(this.getSTStatement());
     stBinaryExpressionEClass.getESuperTypes().add(this.getSTExpression());
     stUnaryExpressionEClass.getESuperTypes().add(this.getSTExpression());
-    stMemberSelectionEClass.getESuperTypes().add(this.getSTExpression());
-    stSymbolEClass.getESuperTypes().add(this.getSTExpression());
+    stMemberAccessExpressionEClass.getESuperTypes().add(this.getSTExpression());
+    stArrayAccessExpressionEClass.getESuperTypes().add(this.getSTExpression());
+    stFeatureExpressionEClass.getESuperTypes().add(this.getSTExpression());
+    stMultibitPartialExpressionEClass.getESuperTypes().add(this.getSTExpression());
 
     // Initialize classes and features; add operations and parameters
     initEClass(codeEClass, Code.class, "Code", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1752,17 +1680,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
 
     initEClass(varDeclarationBlockEClass, VarDeclarationBlock.class, "VarDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getVarDeclarationBlock_Constant(), ecorePackage.getEBoolean(), "constant", null, 0, 1, VarDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclarationBlock_VarDeclarations(), this.getVarDeclaration(), null, "varDeclarations", null, 0, -1, VarDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(varDeclarationEClass, VarDeclaration.class, "VarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getVarDeclaration_Name(), ecorePackage.getEString(), "name", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclaration_LocatedAt(), this.getVarDeclaration(), null, "locatedAt", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVarDeclaration_Array(), ecorePackage.getEBoolean(), "array", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclaration_Ranges(), this.getSTExpression(), null, "ranges", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVarDeclaration_Count(), ecorePackage.getEString(), "count", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclaration_Type(), theLibraryElementPackage.getLibraryElement(), null, "type", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclaration_MaxLength(), this.getSTExpression(), null, "maxLength", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclaration_DefaultValue(), this.getInitializerExpression(), null, "defaultValue", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVarDeclarationBlock_VarDeclarations(), theLibraryElementPackage.getINamedElement(), null, "varDeclarations", null, 0, -1, VarDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(initializerExpressionEClass, InitializerExpression.class, "InitializerExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1776,8 +1694,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEClass(stStatementEClass, STStatement.class, "STStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(stAssignmentStatementEClass, STAssignmentStatement.class, "STAssignmentStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTAssignmentStatement_Lhs(), this.getVarDeclaration(), null, "lhs", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSTAssignmentStatement_Rhs(), this.getSTExpression(), null, "rhs", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTAssignmentStatement_Left(), this.getSTExpression(), null, "left", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTAssignmentStatement_Right(), this.getSTExpression(), null, "right", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stIfStatmentEClass, STIfStatment.class, "STIfStatment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTIfStatment_Condition(), this.getSTExpression(), null, "condition", null, 0, 1, STIfStatment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1817,10 +1735,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
 
     initEClass(stExpressionEClass, STExpression.class, "STExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    initEClass(multibitPartialAccessEClass, MultibitPartialAccess.class, "MultibitPartialAccess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMultibitPartialAccess_AccessSpecifier(), this.getMultiBitAccessSpecifier(), "accessSpecifier", null, 0, 1, MultibitPartialAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMultibitPartialAccess_Index(), ecorePackage.getEBigInteger(), "index", null, 0, 1, MultibitPartialAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
     initEClass(stNumericLiteralEClass, STNumericLiteral.class, "STNumericLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTNumericLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STNumericLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSTNumericLiteral_Value(), ecorePackage.getEBigDecimal(), "value", null, 0, 1, STNumericLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1846,6 +1760,15 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEReference(getSTStringLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STStringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSTStringLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, STStringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(varDeclarationEClass, VarDeclaration.class, "VarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getVarDeclaration_LocatedAt(), theLibraryElementPackage.getINamedElement(), null, "locatedAt", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getVarDeclaration_Array(), ecorePackage.getEBoolean(), "array", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVarDeclaration_Ranges(), this.getSTExpression(), null, "ranges", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getVarDeclaration_Count(), ecorePackage.getEString(), "count", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVarDeclaration_Type(), theLibraryElementPackage.getLibraryElement(), null, "type", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVarDeclaration_MaxLength(), this.getSTExpression(), null, "maxLength", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVarDeclaration_DefaultValue(), this.getInitializerExpression(), null, "defaultValue", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(stReturnEClass, STReturn.class, "STReturn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(stContinueEClass, STContinue.class, "STContinue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1863,22 +1786,21 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEAttribute(getSTUnaryExpression_Op(), this.getUnaryOperator(), "op", null, 0, 1, STUnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTUnaryExpression_Expression(), this.getSTExpression(), null, "expression", null, 0, 1, STUnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(stMemberSelectionEClass, STMemberSelection.class, "STMemberSelection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTMemberSelection_Receiver(), this.getSTExpression(), null, "receiver", null, 0, 1, STMemberSelection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSTMemberSelection_StructAccess(), ecorePackage.getEBoolean(), "structAccess", null, 0, 1, STMemberSelection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSTMemberSelection_Member(), this.getVarDeclaration(), null, "member", null, 0, 1, STMemberSelection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSTMemberSelection_ArrayAccess(), ecorePackage.getEBoolean(), "arrayAccess", null, 0, 1, STMemberSelection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSTMemberSelection_Index(), this.getSTExpression(), null, "index", null, 0, -1, STMemberSelection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSTMemberSelection_PoeInvocation(), ecorePackage.getEBoolean(), "poeInvocation", null, 0, 1, STMemberSelection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSTMemberSelection_Parameters(), this.getSTExpression(), null, "parameters", null, 0, -1, STMemberSelection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSTMemberSelection_Bitaccessor(), this.getMultibitPartialAccess(), null, "bitaccessor", null, 0, 1, STMemberSelection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(stMemberAccessExpressionEClass, STMemberAccessExpression.class, "STMemberAccessExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTMemberAccessExpression_Receiver(), this.getSTExpression(), null, "receiver", null, 0, 1, STMemberAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTMemberAccessExpression_Member(), this.getSTExpression(), null, "member", null, 0, 1, STMemberAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(stSymbolEClass, STSymbol.class, "STSymbol", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTSymbol_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSTSymbol_Symbol(), this.getVarDeclaration(), null, "symbol", null, 0, 1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSTSymbol_Bitaccessor(), this.getMultibitPartialAccess(), null, "bitaccessor", null, 0, 1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSTSymbol_PoeInvocation(), ecorePackage.getEBoolean(), "poeInvocation", null, 0, 1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSTSymbol_Parameters(), this.getSTExpression(), null, "parameters", null, 0, -1, STSymbol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(stArrayAccessExpressionEClass, STArrayAccessExpression.class, "STArrayAccessExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTArrayAccessExpression_Receiver(), this.getSTExpression(), null, "receiver", null, 0, 1, STArrayAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTArrayAccessExpression_Index(), this.getSTExpression(), null, "index", null, 0, -1, STArrayAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(stFeatureExpressionEClass, STFeatureExpression.class, "STFeatureExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTFeatureExpression_Feature(), theLibraryElementPackage.getINamedElement(), null, "feature", null, 0, 1, STFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTFeatureExpression_Parameters(), this.getSTExpression(), null, "parameters", null, 0, -1, STFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(stMultibitPartialExpressionEClass, STMultibitPartialExpression.class, "STMultibitPartialExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSTMultibitPartialExpression_Specifier(), this.getSTMultiBitAccessSpecifier(), "specifier", null, 0, 1, STMultibitPartialExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTMultibitPartialExpression_Index(), ecorePackage.getEBigInteger(), "index", null, 0, 1, STMultibitPartialExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
     initEEnum(binaryOperatorEEnum, BinaryOperator.class, "BinaryOperator");
@@ -1905,13 +1827,12 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.PLUS);
     addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.NOT);
 
-    initEEnum(multiBitAccessSpecifierEEnum, MultiBitAccessSpecifier.class, "MultiBitAccessSpecifier");
-    addEEnumLiteral(multiBitAccessSpecifierEEnum, MultiBitAccessSpecifier.LWORD_ACCESS);
-    addEEnumLiteral(multiBitAccessSpecifierEEnum, MultiBitAccessSpecifier.DWORD_ACCESS);
-    addEEnumLiteral(multiBitAccessSpecifierEEnum, MultiBitAccessSpecifier.WORD_ACCESS);
-    addEEnumLiteral(multiBitAccessSpecifierEEnum, MultiBitAccessSpecifier.BYTE_ACCESS);
-    addEEnumLiteral(multiBitAccessSpecifierEEnum, MultiBitAccessSpecifier.BIT_ACCESS);
-    addEEnumLiteral(multiBitAccessSpecifierEEnum, MultiBitAccessSpecifier.BIT_ACCESS_SHORTCUT);
+    initEEnum(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.class, "STMultiBitAccessSpecifier");
+    addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.L);
+    addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.D);
+    addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.W);
+    addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.B);
+    addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.X);
 
     // Create resource
     createResource(eNS_URI);

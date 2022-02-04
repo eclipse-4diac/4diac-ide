@@ -10,47 +10,46 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultiBitAccessSpecifier;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.MultibitPartialAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultiBitAccessSpecifier;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultibitPartialExpression;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Multibit Partial Access</b></em>'.
+ * An implementation of the model object '<em><b>ST Multibit Partial Expression</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.MultibitPartialAccessImpl#getAccessSpecifier <em>Access Specifier</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.MultibitPartialAccessImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STMultibitPartialExpressionImpl#getSpecifier <em>Specifier</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STMultibitPartialExpressionImpl#getIndex <em>Index</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container implements MultibitPartialAccess
+public class STMultibitPartialExpressionImpl extends STExpressionImpl implements STMultibitPartialExpression
 {
   /**
-   * The default value of the '{@link #getAccessSpecifier() <em>Access Specifier</em>}' attribute.
+   * The default value of the '{@link #getSpecifier() <em>Specifier</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getAccessSpecifier()
+   * @see #getSpecifier()
    * @generated
    * @ordered
    */
-  protected static final MultiBitAccessSpecifier ACCESS_SPECIFIER_EDEFAULT = MultiBitAccessSpecifier.LWORD_ACCESS;
+  protected static final STMultiBitAccessSpecifier SPECIFIER_EDEFAULT = STMultiBitAccessSpecifier.L;
 
   /**
-   * The cached value of the '{@link #getAccessSpecifier() <em>Access Specifier</em>}' attribute.
+   * The cached value of the '{@link #getSpecifier() <em>Specifier</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getAccessSpecifier()
+   * @see #getSpecifier()
    * @generated
    * @ordered
    */
-  protected MultiBitAccessSpecifier accessSpecifier = ACCESS_SPECIFIER_EDEFAULT;
+  protected STMultiBitAccessSpecifier specifier = SPECIFIER_EDEFAULT;
 
   /**
    * The default value of the '{@link #getIndex() <em>Index</em>}' attribute.
@@ -77,7 +76,7 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected MultibitPartialAccessImpl()
+  protected STMultibitPartialExpressionImpl()
   {
     super();
   }
@@ -90,7 +89,7 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
   @Override
   protected EClass eStaticClass()
   {
-    return STCorePackage.Literals.MULTIBIT_PARTIAL_ACCESS;
+    return STCorePackage.Literals.ST_MULTIBIT_PARTIAL_EXPRESSION;
   }
 
   /**
@@ -99,9 +98,9 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
    * @generated
    */
   @Override
-  public MultiBitAccessSpecifier getAccessSpecifier()
+  public STMultiBitAccessSpecifier getSpecifier()
   {
-    return accessSpecifier;
+    return specifier;
   }
 
   /**
@@ -110,12 +109,12 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
    * @generated
    */
   @Override
-  public void setAccessSpecifier(MultiBitAccessSpecifier newAccessSpecifier)
+  public void setSpecifier(STMultiBitAccessSpecifier newSpecifier)
   {
-    MultiBitAccessSpecifier oldAccessSpecifier = accessSpecifier;
-    accessSpecifier = newAccessSpecifier == null ? ACCESS_SPECIFIER_EDEFAULT : newAccessSpecifier;
+    STMultiBitAccessSpecifier oldSpecifier = specifier;
+    specifier = newSpecifier == null ? SPECIFIER_EDEFAULT : newSpecifier;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.MULTIBIT_PARTIAL_ACCESS__ACCESS_SPECIFIER, oldAccessSpecifier, accessSpecifier));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__SPECIFIER, oldSpecifier, specifier));
   }
 
   /**
@@ -140,7 +139,7 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
     BigInteger oldIndex = index;
     index = newIndex;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.MULTIBIT_PARTIAL_ACCESS__INDEX, oldIndex, index));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX, oldIndex, index));
   }
 
   /**
@@ -153,9 +152,9 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
   {
     switch (featureID)
     {
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS__ACCESS_SPECIFIER:
-        return getAccessSpecifier();
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS__INDEX:
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__SPECIFIER:
+        return getSpecifier();
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX:
         return getIndex();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -171,10 +170,10 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
   {
     switch (featureID)
     {
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS__ACCESS_SPECIFIER:
-        setAccessSpecifier((MultiBitAccessSpecifier)newValue);
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__SPECIFIER:
+        setSpecifier((STMultiBitAccessSpecifier)newValue);
         return;
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS__INDEX:
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX:
         setIndex((BigInteger)newValue);
         return;
     }
@@ -191,10 +190,10 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
   {
     switch (featureID)
     {
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS__ACCESS_SPECIFIER:
-        setAccessSpecifier(ACCESS_SPECIFIER_EDEFAULT);
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__SPECIFIER:
+        setSpecifier(SPECIFIER_EDEFAULT);
         return;
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS__INDEX:
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX:
         setIndex(INDEX_EDEFAULT);
         return;
     }
@@ -211,9 +210,9 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
   {
     switch (featureID)
     {
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS__ACCESS_SPECIFIER:
-        return accessSpecifier != ACCESS_SPECIFIER_EDEFAULT;
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS__INDEX:
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__SPECIFIER:
+        return specifier != SPECIFIER_EDEFAULT;
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX:
         return INDEX_EDEFAULT == null ? index != null : !INDEX_EDEFAULT.equals(index);
     }
     return super.eIsSet(featureID);
@@ -230,12 +229,12 @@ public class MultibitPartialAccessImpl extends MinimalEObjectImpl.Container impl
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (accessSpecifier: ");
-    result.append(accessSpecifier);
+    result.append(" (specifier: ");
+    result.append(specifier);
     result.append(", index: ");
     result.append(index);
     result.append(')');
     return result.toString();
   }
 
-} //MultibitPartialAccessImpl
+} //STMultibitPartialExpressionImpl

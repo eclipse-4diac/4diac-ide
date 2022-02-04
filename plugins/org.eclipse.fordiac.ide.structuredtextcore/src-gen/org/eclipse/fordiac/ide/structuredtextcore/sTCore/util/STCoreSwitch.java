@@ -8,6 +8,8 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.*;
 
 /**
@@ -84,13 +86,6 @@ public class STCoreSwitch<T> extends Switch<T>
       {
         VarDeclarationBlock varDeclarationBlock = (VarDeclarationBlock)theEObject;
         T result = caseVarDeclarationBlock(varDeclarationBlock);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case STCorePackage.VAR_DECLARATION:
-      {
-        VarDeclaration varDeclaration = (VarDeclaration)theEObject;
-        T result = caseVarDeclaration(varDeclaration);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -200,13 +195,6 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS:
-      {
-        MultibitPartialAccess multibitPartialAccess = (MultibitPartialAccess)theEObject;
-        T result = caseMultibitPartialAccess(multibitPartialAccess);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case STCorePackage.ST_NUMERIC_LITERAL:
       {
         STNumericLiteral stNumericLiteral = (STNumericLiteral)theEObject;
@@ -261,6 +249,14 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case STCorePackage.VAR_DECLARATION:
+      {
+        VarDeclaration varDeclaration = (VarDeclaration)theEObject;
+        T result = caseVarDeclaration(varDeclaration);
+        if (result == null) result = caseINamedElement(varDeclaration);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case STCorePackage.ST_RETURN:
       {
         STReturn stReturn = (STReturn)theEObject;
@@ -311,21 +307,39 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.ST_MEMBER_SELECTION:
+      case STCorePackage.ST_MEMBER_ACCESS_EXPRESSION:
       {
-        STMemberSelection stMemberSelection = (STMemberSelection)theEObject;
-        T result = caseSTMemberSelection(stMemberSelection);
-        if (result == null) result = caseSTExpression(stMemberSelection);
-        if (result == null) result = caseInitializerExpression(stMemberSelection);
+        STMemberAccessExpression stMemberAccessExpression = (STMemberAccessExpression)theEObject;
+        T result = caseSTMemberAccessExpression(stMemberAccessExpression);
+        if (result == null) result = caseSTExpression(stMemberAccessExpression);
+        if (result == null) result = caseInitializerExpression(stMemberAccessExpression);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.ST_SYMBOL:
+      case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION:
       {
-        STSymbol stSymbol = (STSymbol)theEObject;
-        T result = caseSTSymbol(stSymbol);
-        if (result == null) result = caseSTExpression(stSymbol);
-        if (result == null) result = caseInitializerExpression(stSymbol);
+        STArrayAccessExpression stArrayAccessExpression = (STArrayAccessExpression)theEObject;
+        T result = caseSTArrayAccessExpression(stArrayAccessExpression);
+        if (result == null) result = caseSTExpression(stArrayAccessExpression);
+        if (result == null) result = caseInitializerExpression(stArrayAccessExpression);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case STCorePackage.ST_FEATURE_EXPRESSION:
+      {
+        STFeatureExpression stFeatureExpression = (STFeatureExpression)theEObject;
+        T result = caseSTFeatureExpression(stFeatureExpression);
+        if (result == null) result = caseSTExpression(stFeatureExpression);
+        if (result == null) result = caseInitializerExpression(stFeatureExpression);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION:
+      {
+        STMultibitPartialExpression stMultibitPartialExpression = (STMultibitPartialExpression)theEObject;
+        T result = caseSTMultibitPartialExpression(stMultibitPartialExpression);
+        if (result == null) result = caseSTExpression(stMultibitPartialExpression);
+        if (result == null) result = caseInitializerExpression(stMultibitPartialExpression);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -361,22 +375,6 @@ public class STCoreSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseVarDeclarationBlock(VarDeclarationBlock object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Var Declaration</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Var Declaration</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseVarDeclaration(VarDeclaration object)
   {
     return null;
   }
@@ -606,22 +604,6 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Multibit Partial Access</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Multibit Partial Access</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseMultibitPartialAccess(MultibitPartialAccess object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>ST Numeric Literal</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -713,6 +695,22 @@ public class STCoreSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSTStringLiteral(STStringLiteral object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Var Declaration</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Var Declaration</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseVarDeclaration(VarDeclaration object)
   {
     return null;
   }
@@ -814,33 +812,81 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Member Selection</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Member Access Expression</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Member Selection</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Member Access Expression</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSTMemberSelection(STMemberSelection object)
+  public T caseSTMemberAccessExpression(STMemberAccessExpression object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>ST Symbol</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Array Access Expression</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST Symbol</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Array Access Expression</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSTSymbol(STSymbol object)
+  public T caseSTArrayAccessExpression(STArrayAccessExpression object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Feature Expression</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Feature Expression</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTFeatureExpression(STFeatureExpression object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Multibit Partial Expression</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Multibit Partial Expression</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTMultibitPartialExpression(STMultibitPartialExpression object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>INamed Element</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>INamed Element</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseINamedElement(INamedElement object)
   {
     return null;
   }

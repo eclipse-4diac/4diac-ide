@@ -42,15 +42,6 @@ public interface STCoreFactory extends EFactory
   VarDeclarationBlock createVarDeclarationBlock();
 
   /**
-   * Returns a new object of class '<em>Var Declaration</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Var Declaration</em>'.
-   * @generated
-   */
-  VarDeclaration createVarDeclaration();
-
-  /**
    * Returns a new object of class '<em>Initializer Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -177,15 +168,6 @@ public interface STCoreFactory extends EFactory
   STExpression createSTExpression();
 
   /**
-   * Returns a new object of class '<em>Multibit Partial Access</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Multibit Partial Access</em>'.
-   * @generated
-   */
-  MultibitPartialAccess createMultibitPartialAccess();
-
-  /**
    * Returns a new object of class '<em>ST Numeric Literal</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -238,6 +220,15 @@ public interface STCoreFactory extends EFactory
    * @generated
    */
   STStringLiteral createSTStringLiteral();
+
+  /**
+   * Returns a new object of class '<em>Var Declaration</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Var Declaration</em>'.
+   * @generated
+   */
+  VarDeclaration createVarDeclaration();
 
   /**
    * Returns a new object of class '<em>ST Return</em>'.
@@ -294,22 +285,40 @@ public interface STCoreFactory extends EFactory
   STUnaryExpression createSTUnaryExpression();
 
   /**
-   * Returns a new object of class '<em>ST Member Selection</em>'.
+   * Returns a new object of class '<em>ST Member Access Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Member Selection</em>'.
+   * @return a new object of class '<em>ST Member Access Expression</em>'.
    * @generated
    */
-  STMemberSelection createSTMemberSelection();
+  STMemberAccessExpression createSTMemberAccessExpression();
 
   /**
-   * Returns a new object of class '<em>ST Symbol</em>'.
+   * Returns a new object of class '<em>ST Array Access Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST Symbol</em>'.
+   * @return a new object of class '<em>ST Array Access Expression</em>'.
    * @generated
    */
-  STSymbol createSTSymbol();
+  STArrayAccessExpression createSTArrayAccessExpression();
+
+  /**
+   * Returns a new object of class '<em>ST Feature Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Feature Expression</em>'.
+   * @generated
+   */
+  STFeatureExpression createSTFeatureExpression();
+
+  /**
+   * Returns a new object of class '<em>ST Multibit Partial Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Multibit Partial Expression</em>'.
+   * @generated
+   */
+  STMultibitPartialExpression createSTMultibitPartialExpression();
 
   /**
    * Returns the package supported by this factory.

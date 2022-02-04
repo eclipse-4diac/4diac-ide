@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,8 +23,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAssignmentStatementImpl#getLhs <em>Lhs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAssignmentStatementImpl#getRhs <em>Rhs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAssignmentStatementImpl#getLeft <em>Left</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STAssignmentStatementImpl#getRight <em>Right</em>}</li>
  * </ul>
  *
  * @generated
@@ -33,24 +32,24 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 public class STAssignmentStatementImpl extends STStatementImpl implements STAssignmentStatement
 {
   /**
-   * The cached value of the '{@link #getLhs() <em>Lhs</em>}' reference.
+   * The cached value of the '{@link #getLeft() <em>Left</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getLhs()
+   * @see #getLeft()
    * @generated
    * @ordered
    */
-  protected VarDeclaration lhs;
+  protected STExpression left;
 
   /**
-   * The cached value of the '{@link #getRhs() <em>Rhs</em>}' containment reference.
+   * The cached value of the '{@link #getRight() <em>Right</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getRhs()
+   * @see #getRight()
    * @generated
    * @ordered
    */
-  protected STExpression rhs;
+  protected STExpression right;
 
   /**
    * <!-- begin-user-doc -->
@@ -79,19 +78,9 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
    * @generated
    */
   @Override
-  public VarDeclaration getLhs()
+  public STExpression getLeft()
   {
-    if (lhs != null && lhs.eIsProxy())
-    {
-      InternalEObject oldLhs = (InternalEObject)lhs;
-      lhs = (VarDeclaration)eResolveProxy(oldLhs);
-      if (lhs != oldLhs)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS, oldLhs, lhs));
-      }
-    }
-    return lhs;
+    return left;
   }
 
   /**
@@ -99,48 +88,13 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
    * <!-- end-user-doc -->
    * @generated
    */
-  public VarDeclaration basicGetLhs()
+  public NotificationChain basicSetLeft(STExpression newLeft, NotificationChain msgs)
   {
-    return lhs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void setLhs(VarDeclaration newLhs)
-  {
-    VarDeclaration oldLhs = lhs;
-    lhs = newLhs;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS, oldLhs, lhs));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public STExpression getRhs()
-  {
-    return rhs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetRhs(STExpression newRhs, NotificationChain msgs)
-  {
-    STExpression oldRhs = rhs;
-    rhs = newRhs;
+    STExpression oldLeft = left;
+    left = newLeft;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS, oldRhs, newRhs);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT, oldLeft, newLeft);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -152,20 +106,70 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
    * @generated
    */
   @Override
-  public void setRhs(STExpression newRhs)
+  public void setLeft(STExpression newLeft)
   {
-    if (newRhs != rhs)
+    if (newLeft != left)
     {
       NotificationChain msgs = null;
-      if (rhs != null)
-        msgs = ((InternalEObject)rhs).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS, null, msgs);
-      if (newRhs != null)
-        msgs = ((InternalEObject)newRhs).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS, null, msgs);
-      msgs = basicSetRhs(newRhs, msgs);
+      if (left != null)
+        msgs = ((InternalEObject)left).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT, null, msgs);
+      if (newLeft != null)
+        msgs = ((InternalEObject)newLeft).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT, null, msgs);
+      msgs = basicSetLeft(newLeft, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS, newRhs, newRhs));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT, newLeft, newLeft));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STExpression getRight()
+  {
+    return right;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetRight(STExpression newRight, NotificationChain msgs)
+  {
+    STExpression oldRight = right;
+    right = newRight;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT, oldRight, newRight);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setRight(STExpression newRight)
+  {
+    if (newRight != right)
+    {
+      NotificationChain msgs = null;
+      if (right != null)
+        msgs = ((InternalEObject)right).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT, null, msgs);
+      if (newRight != null)
+        msgs = ((InternalEObject)newRight).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT, null, msgs);
+      msgs = basicSetRight(newRight, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT, newRight, newRight));
   }
 
   /**
@@ -178,8 +182,10 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
   {
     switch (featureID)
     {
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS:
-        return basicSetRhs(null, msgs);
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+        return basicSetLeft(null, msgs);
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+        return basicSetRight(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -194,11 +200,10 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
   {
     switch (featureID)
     {
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS:
-        if (resolve) return getLhs();
-        return basicGetLhs();
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS:
-        return getRhs();
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+        return getLeft();
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+        return getRight();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -213,11 +218,11 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
   {
     switch (featureID)
     {
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS:
-        setLhs((VarDeclaration)newValue);
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+        setLeft((STExpression)newValue);
         return;
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS:
-        setRhs((STExpression)newValue);
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+        setRight((STExpression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -233,11 +238,11 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
   {
     switch (featureID)
     {
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS:
-        setLhs((VarDeclaration)null);
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+        setLeft((STExpression)null);
         return;
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS:
-        setRhs((STExpression)null);
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+        setRight((STExpression)null);
         return;
     }
     super.eUnset(featureID);
@@ -253,10 +258,10 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
   {
     switch (featureID)
     {
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__LHS:
-        return lhs != null;
-      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RHS:
-        return rhs != null;
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+        return left != null;
+      case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+        return right != null;
     }
     return super.eIsSet(featureID);
   }

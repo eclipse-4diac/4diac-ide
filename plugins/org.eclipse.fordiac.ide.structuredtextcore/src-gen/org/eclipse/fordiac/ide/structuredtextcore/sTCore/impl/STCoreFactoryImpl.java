@@ -68,7 +68,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
     {
       case STCorePackage.CODE: return createCode();
       case STCorePackage.VAR_DECLARATION_BLOCK: return createVarDeclarationBlock();
-      case STCorePackage.VAR_DECLARATION: return createVarDeclaration();
       case STCorePackage.INITIALIZER_EXPRESSION: return createInitializerExpression();
       case STCorePackage.ARRAY_INITIALIZER_EXPRESSION: return createArrayInitializerExpression();
       case STCorePackage.ARRAY_INIT_ELEMENT: return createArrayInitElement();
@@ -83,21 +82,23 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ST_WHILE_STATEMENT: return createSTWhileStatement();
       case STCorePackage.ST_REPEAT_STATEMENT: return createSTRepeatStatement();
       case STCorePackage.ST_EXPRESSION: return createSTExpression();
-      case STCorePackage.MULTIBIT_PARTIAL_ACCESS: return createMultibitPartialAccess();
       case STCorePackage.ST_NUMERIC_LITERAL: return createSTNumericLiteral();
       case STCorePackage.ST_DATE_LITERAL: return createSTDateLiteral();
       case STCorePackage.ST_TIME_LITERAL: return createSTTimeLiteral();
       case STCorePackage.ST_TIME_OF_DAY_LITERAL: return createSTTimeOfDayLiteral();
       case STCorePackage.ST_DATE_AND_TIME_LITERAL: return createSTDateAndTimeLiteral();
       case STCorePackage.ST_STRING_LITERAL: return createSTStringLiteral();
+      case STCorePackage.VAR_DECLARATION: return createVarDeclaration();
       case STCorePackage.ST_RETURN: return createSTReturn();
       case STCorePackage.ST_CONTINUE: return createSTContinue();
       case STCorePackage.ST_EXIT: return createSTExit();
       case STCorePackage.ST_NOP: return createSTNop();
       case STCorePackage.ST_BINARY_EXPRESSION: return createSTBinaryExpression();
       case STCorePackage.ST_UNARY_EXPRESSION: return createSTUnaryExpression();
-      case STCorePackage.ST_MEMBER_SELECTION: return createSTMemberSelection();
-      case STCorePackage.ST_SYMBOL: return createSTSymbol();
+      case STCorePackage.ST_MEMBER_ACCESS_EXPRESSION: return createSTMemberAccessExpression();
+      case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION: return createSTArrayAccessExpression();
+      case STCorePackage.ST_FEATURE_EXPRESSION: return createSTFeatureExpression();
+      case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION: return createSTMultibitPartialExpression();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -117,8 +118,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
         return createBinaryOperatorFromString(eDataType, initialValue);
       case STCorePackage.UNARY_OPERATOR:
         return createUnaryOperatorFromString(eDataType, initialValue);
-      case STCorePackage.MULTI_BIT_ACCESS_SPECIFIER:
-        return createMultiBitAccessSpecifierFromString(eDataType, initialValue);
+      case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
+        return createSTMultiBitAccessSpecifierFromString(eDataType, initialValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -138,8 +139,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
         return convertBinaryOperatorToString(eDataType, instanceValue);
       case STCorePackage.UNARY_OPERATOR:
         return convertUnaryOperatorToString(eDataType, instanceValue);
-      case STCorePackage.MULTI_BIT_ACCESS_SPECIFIER:
-        return convertMultiBitAccessSpecifierToString(eDataType, instanceValue);
+      case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
+        return convertSTMultiBitAccessSpecifierToString(eDataType, instanceValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -167,18 +168,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     VarDeclarationBlockImpl varDeclarationBlock = new VarDeclarationBlockImpl();
     return varDeclarationBlock;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public VarDeclaration createVarDeclaration()
-  {
-    VarDeclarationImpl varDeclaration = new VarDeclarationImpl();
-    return varDeclaration;
   }
 
   /**
@@ -355,18 +344,6 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public MultibitPartialAccess createMultibitPartialAccess()
-  {
-    MultibitPartialAccessImpl multibitPartialAccess = new MultibitPartialAccessImpl();
-    return multibitPartialAccess;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public STNumericLiteral createSTNumericLiteral()
   {
     STNumericLiteralImpl stNumericLiteral = new STNumericLiteralImpl();
@@ -431,6 +408,18 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     STStringLiteralImpl stStringLiteral = new STStringLiteralImpl();
     return stStringLiteral;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public VarDeclaration createVarDeclaration()
+  {
+    VarDeclarationImpl varDeclaration = new VarDeclarationImpl();
+    return varDeclaration;
   }
 
   /**
@@ -511,10 +500,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public STMemberSelection createSTMemberSelection()
+  public STMemberAccessExpression createSTMemberAccessExpression()
   {
-    STMemberSelectionImpl stMemberSelection = new STMemberSelectionImpl();
-    return stMemberSelection;
+    STMemberAccessExpressionImpl stMemberAccessExpression = new STMemberAccessExpressionImpl();
+    return stMemberAccessExpression;
   }
 
   /**
@@ -523,10 +512,34 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public STSymbol createSTSymbol()
+  public STArrayAccessExpression createSTArrayAccessExpression()
   {
-    STSymbolImpl stSymbol = new STSymbolImpl();
-    return stSymbol;
+    STArrayAccessExpressionImpl stArrayAccessExpression = new STArrayAccessExpressionImpl();
+    return stArrayAccessExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STFeatureExpression createSTFeatureExpression()
+  {
+    STFeatureExpressionImpl stFeatureExpression = new STFeatureExpressionImpl();
+    return stFeatureExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STMultibitPartialExpression createSTMultibitPartialExpression()
+  {
+    STMultibitPartialExpressionImpl stMultibitPartialExpression = new STMultibitPartialExpressionImpl();
+    return stMultibitPartialExpression;
   }
 
   /**
@@ -578,9 +591,9 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public MultiBitAccessSpecifier createMultiBitAccessSpecifierFromString(EDataType eDataType, String initialValue)
+  public STMultiBitAccessSpecifier createSTMultiBitAccessSpecifierFromString(EDataType eDataType, String initialValue)
   {
-    MultiBitAccessSpecifier result = MultiBitAccessSpecifier.get(initialValue);
+    STMultiBitAccessSpecifier result = STMultiBitAccessSpecifier.get(initialValue);
     if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
     return result;
   }
@@ -590,7 +603,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public String convertMultiBitAccessSpecifierToString(EDataType eDataType, Object instanceValue)
+  public String convertSTMultiBitAccessSpecifierToString(EDataType eDataType, Object instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
   }
