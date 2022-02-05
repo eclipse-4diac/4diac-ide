@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -37,74 +37,74 @@ import org.eclipse.ui.part.FileEditorInput;
 public abstract class LaunchShortcut implements ILaunchShortcut2 {
 
 	@Override
-	public void launch(ISelection selection, String mode) {
+	public void launch(final ISelection selection, final String mode) {
 		launch(getLaunchableResource(selection), mode);
 	}
 
 	@Override
-	public void launch(IEditorPart editor, String mode) {
+	public void launch(final IEditorPart editor, final String mode) {
 		launch(getLaunchableResource(editor), mode);
 	}
 
-	public void launch(IResource resource, String mode) {
+	public void launch(final IResource resource, final String mode) {
 		try {
-			ILaunchConfiguration[] configurations = getLaunchConfgurations(resource);
+			final ILaunchConfiguration[] configurations = getLaunchConfgurations(resource);
 			if (configurations.length == 0) {
-				ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-				ILaunchConfigurationType type = manager.getLaunchConfigurationType(getLaunchConfigurationId());
-				ILaunchConfigurationWorkingCopy configuration = type.newInstance(null, resource.getName());
+				final ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+				final ILaunchConfigurationType type = manager.getLaunchConfigurationType(getLaunchConfigurationId());
+				final ILaunchConfigurationWorkingCopy configuration = type.newInstance(null, resource.getName());
 				initializeDefaultLaunchConfiguration(configuration, resource, mode);
 				configuration.doSave();
 				launch(resource, configuration, mode);
 			} else {
 				launch(resource, configurations[0], mode);
 			}
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			launch(resource, null, mode);
 		}
 	}
 
 	public abstract void launch(IResource resource, ILaunchConfiguration configuration, String mode);
 
-	public void initializeDefaultLaunchConfiguration(ILaunchConfigurationWorkingCopy configuration, IResource resource,
-			String mode) {
+	public void initializeDefaultLaunchConfiguration(final ILaunchConfigurationWorkingCopy configuration, final IResource resource,
+			final String mode) {
 		configuration.setAttribute(LaunchConfigurationAttributes.RESOURCE, resource.getFullPath().toString());
 	}
 
 	@Override
-	public ILaunchConfiguration[] getLaunchConfigurations(ISelection selection) {
+	public ILaunchConfiguration[] getLaunchConfigurations(final ISelection selection) {
 		return getLaunchConfgurations(getLaunchableResource(selection));
 	}
 
 	@Override
-	public ILaunchConfiguration[] getLaunchConfigurations(IEditorPart editorpart) {
+	public ILaunchConfiguration[] getLaunchConfigurations(final IEditorPart editorpart) {
 		return getLaunchConfgurations(getLaunchableResource(editorpart));
 	}
 
-	protected ILaunchConfiguration[] getLaunchConfgurations(IResource resource) {
-		List<ILaunchConfiguration> configurations = new ArrayList<ILaunchConfiguration>();
+	protected ILaunchConfiguration[] getLaunchConfgurations(final IResource resource) {
+		final List<ILaunchConfiguration> configurations = new ArrayList<>();
 
-		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-		ILaunchConfigurationType type = manager.getLaunchConfigurationType(getLaunchConfigurationId());
+		final ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+		final ILaunchConfigurationType type = manager.getLaunchConfigurationType(getLaunchConfigurationId());
 
 		try {
-			for (ILaunchConfiguration configuration : manager.getLaunchConfigurations(type)) {
+			for (final ILaunchConfiguration configuration : manager.getLaunchConfigurations(type)) {
 				try {
-					IResource targetResource = LaunchConfigurationAttributes.getResource(configuration);
+					final IResource targetResource = LaunchConfigurationAttributes.getResource(configuration);
 					if (resource.equals(targetResource)) {
 						configurations.add(configuration);
 					}
-				} catch (CoreException e) {
+				} catch (final CoreException e) {
 				}
 			}
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 		}
 
 		return configurations.toArray(new ILaunchConfiguration[configurations.size()]);
 	}
 
 	@Override
-	public IResource getLaunchableResource(ISelection selection) {
+	public IResource getLaunchableResource(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final Object firstElement = ((IStructuredSelection) selection).getFirstElement();
 			if (firstElement instanceof IResource) {
@@ -115,8 +115,8 @@ public abstract class LaunchShortcut implements ILaunchShortcut2 {
 	}
 
 	@Override
-	public IResource getLaunchableResource(IEditorPart editorpart) {
-		IEditorInput editorInput = editorpart.getEditorInput();
+	public IResource getLaunchableResource(final IEditorPart editorpart) {
+		final IEditorInput editorInput = editorpart.getEditorInput();
 		if (editorInput instanceof FileEditorInput) {
 			return ((FileEditorInput) editorInput).getFile();
 		}

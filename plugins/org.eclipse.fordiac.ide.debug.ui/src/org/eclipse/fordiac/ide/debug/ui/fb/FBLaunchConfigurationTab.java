@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -59,22 +60,22 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	private List<Variable> arguments;
 
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		super.createControl(parent);
 
-		Composite eventComponent = createEventComponent((Composite) getControl());
+		final Composite eventComponent = createEventComponent((Composite) getControl());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(eventComponent);
 
-		Composite argumentsComponent = createArgumentsComponent((Composite) getControl());
+		final Composite argumentsComponent = createArgumentsComponent((Composite) getControl());
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(argumentsComponent);
 	}
 
-	protected Composite createEventComponent(Composite parent) {
-		Group group = new Group(parent, SWT.BORDER);
+	protected Composite createEventComponent(final Composite parent) {
+		final Group group = new Group(parent, SWT.BORDER);
 		GridLayoutFactory.swtDefaults().applyTo(group);
 		group.setText("Event");
 
-		Composite comp = new Composite(group, SWT.NONE);
+		final Composite comp = new Composite(group, SWT.NONE);
 		GridLayoutFactory.swtDefaults().numColumns(1).applyTo(comp);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comp);
 
@@ -87,29 +88,29 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		return group;
 	}
 
-	protected Composite createArgumentsComponent(Composite parent) {
-		Group group = new Group(parent, SWT.BORDER);
+	protected Composite createArgumentsComponent(final Composite parent) {
+		final Group group = new Group(parent, SWT.BORDER);
 		GridLayoutFactory.swtDefaults().applyTo(group);
 		group.setText("Arguments");
 
-		Composite comp = new Composite(group, SWT.NONE);
+		final Composite comp = new Composite(group, SWT.NONE);
 		GridLayoutFactory.swtDefaults().numColumns(1).applyTo(comp);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
 
 		argumentsTable = new TreeViewer(comp,
 				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
-		Tree tree = argumentsTable.getTree();
+		final Tree tree = argumentsTable.getTree();
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(tree);
 		tree.setHeaderVisible(true);
 		tree.setLinesVisible(true);
 		argumentsTable.setContentProvider(new ArgumentsContentProvider());
 
-		TreeViewerColumn nameColumn = new TreeViewerColumn(argumentsTable, SWT.NONE);
+		final TreeViewerColumn nameColumn = new TreeViewerColumn(argumentsTable, SWT.NONE);
 		nameColumn.getColumn().setText("Name");
 		nameColumn.getColumn().setWidth(300);
 		nameColumn.setLabelProvider(new DelegatingStyledCellLabelProvider(new ArgumentsNameLabelProvider()));
 
-		TreeViewerColumn valueColumn = new TreeViewerColumn(argumentsTable, SWT.NONE);
+		final TreeViewerColumn valueColumn = new TreeViewerColumn(argumentsTable, SWT.NONE);
 		valueColumn.getColumn().setText("Value");
 		valueColumn.getColumn().setWidth(300);
 		valueColumn.setLabelProvider(new DelegatingStyledCellLabelProvider(new ArgumentsValueLabelProvider()));
@@ -119,33 +120,33 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	}
 
 	@Override
-	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
+	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		super.setDefaults(configuration);
 		configuration.removeAttribute(FBLaunchConfigurationAttributes.EVENT);
 		configuration.removeAttribute(FBLaunchConfigurationAttributes.ARGUMENTS);
 	}
 
 	@Override
-	public void initializeFrom(ILaunchConfiguration configuration) {
+	public void initializeFrom(final ILaunchConfiguration configuration) {
 		super.initializeFrom(configuration);
 		try {
-			FBType fbType = getFBType();
-			List<Event> events = getInputEvents(fbType);
+			final FBType fbType = getFBType();
+			final List<Event> events = getInputEvents(fbType);
 			eventCombo.setInput(events);
-			if (events.size() != 0) {
-				Event event = FBLaunchConfigurationAttributes.getEvent(configuration, fbType, events.get(0));
+			if (!events.isEmpty()) {
+				final Event event = FBLaunchConfigurationAttributes.getEvent(configuration, fbType, events.get(0));
 				eventCombo.setSelection(new StructuredSelection(event), true);
 			}
 			arguments = FBLaunchConfigurationAttributes.getArguments(configuration, getDefaultArguments(fbType));
 			argumentsTable.setInput(arguments);
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 		}
 	}
 
 	@Override
-	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
+	public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
 		super.performApply(configuration);
-		Event event = (Event) eventCombo.getStructuredSelection().getFirstElement();
+		final Event event = (Event) eventCombo.getStructuredSelection().getFirstElement();
 		if (event != null) {
 			configuration.setAttribute(FBLaunchConfigurationAttributes.EVENT, event.getName());
 		} else {
@@ -159,13 +160,14 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		}
 	}
 
+	@Override
 	protected void handleResourceUpdated() {
-		FBType fbType = getFBType();
+		final FBType fbType = getFBType();
 		// event
-		Event oldEvent = (Event) eventCombo.getStructuredSelection().getFirstElement();
-		List<Event> events = getInputEvents(fbType);
+		final Event oldEvent = (Event) eventCombo.getStructuredSelection().getFirstElement();
+		final List<Event> events = getInputEvents(fbType);
 		eventCombo.setInput(events);
-		if (events.size() != 0) {
+		if (!events.isEmpty()) {
 			Event event;
 			if (oldEvent != null) {
 				event = events.stream().filter(e -> e.getName().equals(oldEvent.getName())).findFirst()
@@ -176,14 +178,14 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 			eventCombo.setSelection(new StructuredSelection(event), true);
 		}
 		// arguments
-		var oldArguments = arguments;
+		final var oldArguments = arguments;
 		arguments = getDefaultArguments(fbType);
 		if (oldArguments != null && arguments != null) {
 			arguments.forEach(variable -> oldArguments.stream()
 					.filter(arg -> Objects.equals(arg.getName(), variable.getName())).findFirst().ifPresent(arg -> {
 						try {
 							variable.setValue(arg.getValue().toString());
-						} catch (Exception e) {
+						} catch (final Exception e) {
 							// ignore
 						}
 					}));
@@ -192,28 +194,28 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		updateLaunchConfigurationDialog();
 	}
 
-	protected List<Event> getInputEvents(FBType fbType) {
+	protected List<Event> getInputEvents(final FBType fbType) {
 		if (fbType != null) {
 			return fbType.getInterfaceList().getEventInputs();
 		}
 		return Collections.emptyList();
 	}
 
-	protected List<Variable> getDefaultArguments(FBType fbType) {
+	protected List<Variable> getDefaultArguments(final FBType fbType) {
 		if (fbType != null) {
-			return fbType.getInterfaceList().getInputVars().stream().map(decl -> new ElementaryVariable(decl))
+			return fbType.getInterfaceList().getInputVars().stream().map(ElementaryVariable::new)
 					.collect(Collectors.toList());
 		}
 		return Collections.emptyList();
 	}
 
 	@Override
-	protected boolean filterTargetResource(IResource resource) throws CoreException {
+	protected boolean filterTargetResource(final IResource resource) throws CoreException {
 		if (resource instanceof IFile) {
-			if (resource.getFileExtension().equalsIgnoreCase(TypeLibrary.FB_TYPE_FILE_ENDING)) {
-				var paletteEntry = TypeLibrary.getPaletteEntryForFile((IFile) resource);
+			if (resource.getFileExtension().equalsIgnoreCase(TypeLibraryTags.FB_TYPE_FILE_ENDING)) {
+				final var paletteEntry = TypeLibrary.getPaletteEntryForFile((IFile) resource);
 				if (paletteEntry != null) {
-					var libraryElement = paletteEntry.getType();
+					final var libraryElement = paletteEntry.getType();
 					if (libraryElement instanceof FBType) {
 						return filterTargetFBType((FBType) libraryElement);
 					}
@@ -221,7 +223,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 			}
 			return false;
 		} else if (resource instanceof IContainer) {
-			for (IResource child : ((IContainer) resource).members()) {
+			for (final IResource child : ((IContainer) resource).members()) {
 				if (filterTargetResource(child)) {
 					return true;
 				}
@@ -234,11 +236,11 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	protected abstract boolean filterTargetFBType(FBType fbType) throws CoreException;
 
 	protected FBType getFBType() {
-		IResource resource = getResource();
+		final IResource resource = getResource();
 		if (resource instanceof IFile) {
-			var paletteEntry = TypeLibrary.getPaletteEntryForFile((IFile) resource);
+			final var paletteEntry = TypeLibrary.getPaletteEntryForFile((IFile) resource);
 			if (paletteEntry != null) {
-				var libraryElement = paletteEntry.getType();
+				final var libraryElement = paletteEntry.getType();
 				if (libraryElement instanceof FBType) {
 					return (FBType) libraryElement;
 				}
@@ -250,9 +252,9 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	private static class EventsLabelProvider extends LabelProvider {
 
 		@Override
-		public String getText(Object element) {
+		public String getText(final Object element) {
 			if (element instanceof Event) {
-				Event event = (Event) element;
+				final Event event = (Event) element;
 				return event.getName();
 			}
 			return super.getText(element);
@@ -263,22 +265,22 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	public static class ArgumentsContentProvider implements ITreeContentProvider {
 
 		@Override
-		public Object[] getElements(Object inputElement) {
+		public Object[] getElements(final Object inputElement) {
 			return ArrayContentProvider.getInstance().getElements(inputElement);
 		}
 
 		@Override
-		public Object[] getChildren(Object parentElement) {
+		public Object[] getChildren(final Object parentElement) {
 			return new Object[0];
 		}
 
 		@Override
-		public Object getParent(Object element) {
+		public Object getParent(final Object element) {
 			return null;
 		}
 
 		@Override
-		public boolean hasChildren(Object element) {
+		public boolean hasChildren(final Object element) {
 			return false;
 		}
 	}
@@ -286,9 +288,9 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	private static class ArgumentsNameLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
 		@Override
-		public StyledString getStyledText(Object element) {
+		public StyledString getStyledText(final Object element) {
 			if (element instanceof Variable) {
-				Variable variable = (Variable) element;
+				final Variable variable = (Variable) element;
 				return new StyledString(variable.getName());
 			}
 			return null;
@@ -299,9 +301,9 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	private static class ArgumentsValueLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
 		@Override
-		public StyledString getStyledText(Object element) {
+		public StyledString getStyledText(final Object element) {
 			if (element instanceof Variable) {
-				Variable variable = (Variable) element;
+				final Variable variable = (Variable) element;
 				return new StyledString(variable.getValue().toString());
 			}
 			return null;
@@ -312,23 +314,23 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	private class ArgumentsValueEditingSupport extends EditingSupport {
 		private final CellEditor editor;
 
-		private ArgumentsValueEditingSupport(TreeViewer viewer) {
+		private ArgumentsValueEditingSupport(final TreeViewer viewer) {
 			super(viewer);
 			this.editor = new TextCellEditor(viewer.getTree());
 		}
 
 		@Override
-		protected CellEditor getCellEditor(Object element) {
+		protected CellEditor getCellEditor(final Object element) {
 			return editor;
 		}
 
 		@Override
-		protected boolean canEdit(Object element) {
+		protected boolean canEdit(final Object element) {
 			return element instanceof Variable;
 		}
 
 		@Override
-		protected Object getValue(Object element) {
+		protected Object getValue(final Object element) {
 			if (element instanceof Variable) {
 				return ((Variable) element).getValue().toString();
 			}
@@ -336,12 +338,12 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		}
 
 		@Override
-		protected void setValue(Object element, Object value) {
+		protected void setValue(final Object element, final Object value) {
 			if (element instanceof Variable) {
 				final Variable variable = (Variable) element;
 				try {
 					variable.setValue(value.toString());
-				} catch (Throwable t) {
+				} catch (final Throwable t) {
 					MessageDialog.openError(getViewer().getControl().getShell(), "Invalid Value",
 							String.format("'%s' is not a valid value for variable %s with type %s", value.toString(),
 									variable.getName(), variable.getDeclaration().getType().getName()));

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -30,7 +30,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 	private final EvaluatorProcess process;
 	private final CommonEvaluatorDebugger debugger;
 
-	public EvaluatorDebugTarget(String name, Evaluator evaluator, ILaunch launch) {
+	public EvaluatorDebugTarget(final String name, final Evaluator evaluator, final ILaunch launch) {
 		super(null);
 		this.name = name;
 		this.launch = launch;
@@ -40,7 +40,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 		launch.addDebugTarget(this);
 		this.fireCreationEvent();
 	}
-	
+
 	public void start() {
 		this.process.start();
 	}
@@ -51,48 +51,48 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public boolean canResume() {
-		return this.debugger.getThreads().stream().anyMatch(thread -> thread.canResume());
+		return this.debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::canResume);
 	}
 
 	@Override
 	public boolean canSuspend() {
-		return this.debugger.getThreads().stream().anyMatch(thread -> thread.canSuspend());
+		return this.debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::canSuspend);
 	}
 
 	@Override
 	public boolean isSuspended() {
-		return this.debugger.getThreads().stream().anyMatch(thread -> thread.isSuspended());
+		return this.debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::isSuspended);
 	}
 
 	@Override
 	public void resume() throws DebugException {
-		for (EvaluatorDebugThread thread : this.debugger.getThreads()) {
+		for (final EvaluatorDebugThread thread : this.debugger.getThreads()) {
 			thread.resume();
 		}
 	}
 
 	@Override
 	public void suspend() throws DebugException {
-		for (EvaluatorDebugThread thread : this.debugger.getThreads()) {
+		for (final EvaluatorDebugThread thread : this.debugger.getThreads()) {
 			thread.suspend();
 		}
 	}
 
 	@Override
-	public boolean supportsBreakpoint(IBreakpoint breakpoint) {
+	public boolean supportsBreakpoint(final IBreakpoint breakpoint) {
 		return false;
 	}
 
 	@Override
-	public void breakpointAdded(IBreakpoint breakpoint) {
+	public void breakpointAdded(final IBreakpoint breakpoint) {
 	}
 
 	@Override
-	public void breakpointRemoved(IBreakpoint breakpoint, IMarkerDelta delta) {
+	public void breakpointRemoved(final IBreakpoint breakpoint, final IMarkerDelta delta) {
 	}
 
 	@Override
-	public void breakpointChanged(IBreakpoint breakpoint, IMarkerDelta delta) {
+	public void breakpointChanged(final IBreakpoint breakpoint, final IMarkerDelta delta) {
 	}
 
 	@Override
@@ -146,7 +146,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 	}
 
 	@Override
-	public IMemoryBlock getMemoryBlock(long startAddress, long length) throws DebugException {
+	public IMemoryBlock getMemoryBlock(final long startAddress, final long length) throws DebugException {
 		throw new DebugException(Status.error("Getting memory blocks is not supported"));
 	}
 
@@ -157,7 +157,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public IThread[] getThreads() throws DebugException {
-		List<EvaluatorDebugThread> threads = this.debugger.getThreads();
+		final List<EvaluatorDebugThread> threads = this.debugger.getThreads();
 		return threads.toArray(new IThread[threads.size()]);
 	}
 

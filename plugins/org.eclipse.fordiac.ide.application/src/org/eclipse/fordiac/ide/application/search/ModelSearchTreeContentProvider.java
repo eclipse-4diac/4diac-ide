@@ -28,7 +28,7 @@ public class ModelSearchTreeContentProvider implements ITreeContentProvider, IMo
 	private final AbstractTreeViewer treeViewer;
 	private Map<Object, Set<Object>> childrenMap;
 
-	private final Object[] EMPTY_ARR = new Object[0];
+	private final static Object[] EMPTY_ARR = new Object[0];
 
 	public ModelSearchTreeContentProvider(final ModelSearchResultPage resultPage,
 			final AbstractTreeViewer abstractTreeViewer) {
@@ -44,7 +44,7 @@ public class ModelSearchTreeContentProvider implements ITreeContentProvider, IMo
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
-		return null;
+		return EMPTY_ARR;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class ModelSearchTreeContentProvider implements ITreeContentProvider, IMo
 	}
 
 	@Override
-	public void elementsChanged(Object[] updatedElements) {
+	public void elementsChanged(final Object[] updatedElements) {
 		System.err.println("not supported yet");
 	}
 

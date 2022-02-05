@@ -74,6 +74,7 @@ class AnnotationsIsInterfaceConnectionTest {
 
 	}
 
+	@SuppressWarnings("squid:S5960")
 	private static DataConnection addVerifyConnection(final SubApp subapp, final IInterfaceElement source,
 			final IInterfaceElement destination,
 			final boolean expected) {

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -40,28 +40,28 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 
 	@Override
-	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
+	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch, final IProgressMonitor monitor)
 			throws CoreException {
 		final IResource resource = LaunchConfigurationAttributes.getResource(configuration);
-		if (resource != null && resource instanceof IFile) {
-			FBType type = (FBType) TypeLibrary.getPaletteEntryForFile((IFile) resource).getType();
-			var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
-			var defaultArguments = getDefaultArguments(type);
-			var variables = FBLaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
+		if (resource instanceof IFile) {
+			final FBType type = (FBType) TypeLibrary.getPaletteEntryForFile((IFile) resource).getType();
+			final var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
+			final var defaultArguments = getDefaultArguments(type);
+			final var variables = FBLaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
 			launch(type, event, variables, configuration, mode, launch, monitor);
 		}
 	}
 
-	public void launch(FBType type, Event event, List<Variable> variables, ILaunchConfiguration configuration,
-			String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		Queue<Event> queue = new ArrayBlockingQueue<>(1000);
-		Evaluator evaluator = createEvaluator(type, queue, variables);
+	public void launch(final FBType type, final Event event, final List<Variable> variables, final ILaunchConfiguration configuration,
+			final String mode, final ILaunch launch, final IProgressMonitor monitor) throws CoreException {
+		final Queue<Event> queue = new ArrayBlockingQueue<>(1000);
+		final Evaluator evaluator = createEvaluator(type, queue, variables);
 		queue.add(event);
 		if (ILaunchManager.RUN_MODE.equals(mode)) {
-			EvaluatorProcess process = new EvaluatorProcess(configuration.getName(), evaluator, launch);
+			final EvaluatorProcess process = new EvaluatorProcess(configuration.getName(), evaluator, launch);
 			process.start();
 		} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
-			EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator, launch);
+			final EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator, launch);
 			debugTarget.start();
 		} else {
 			throw new CoreException(Status.error("Illegal launch mode: " + mode));
@@ -71,14 +71,14 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 	public abstract FBEvaluator<? extends FBType> createEvaluator(FBType type, Queue<Event> queue,
 			List<Variable> variables) throws CoreException;
 
-	protected List<Variable> getDefaultArguments(FBType type) {
-		return type.getInterfaceList().getInputVars().stream().map(decl -> new ElementaryVariable(decl))
+	protected List<Variable> getDefaultArguments(final FBType type) {
+		return type.getInterfaceList().getInputVars().stream().map(ElementaryVariable::new)
 				.collect(Collectors.toList());
 	}
 
-	protected Event getDefaultEvent(FBType type) {
+	protected Event getDefaultEvent(final FBType type) {
 		final var eventInputs = type.getInterfaceList().getEventInputs();
-		if (eventInputs.size() != 0) {
+		if (!eventInputs.isEmpty()) {
 			return eventInputs.get(0);
 		}
 		return null;

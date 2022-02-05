@@ -38,7 +38,6 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	private Button type;
 	private Button comment;
 	private Text query;
-	private Composite composite;
 
 	public Button getInstanceName() {
 		return instanceName;
@@ -66,7 +65,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		GridLayoutFactory.fillDefaults().numColumns(1).margins(LayoutConstants.getMargins()).generateLayout(parent);
 
 		// Factory for the big composite
-		composite = WidgetFactory.composite(NONE).create(parent);
+		final Composite composite = WidgetFactory.composite(NONE).create(parent);
 		GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(composite);
 
 		final LabelFactory labelFactory = LabelFactory.newLabel(SWT.NONE);
@@ -87,7 +86,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		comment.setSelection(true);
 
 		// Text box for the actual search
-		labelFactory.text("Containing Text:").create(composite); 
+		labelFactory.text("Containing Text:").create(composite);
 		query = WidgetFactory.text(SWT.BORDER).message("Type query").create(composite);
 		query.setFocus();
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(query);

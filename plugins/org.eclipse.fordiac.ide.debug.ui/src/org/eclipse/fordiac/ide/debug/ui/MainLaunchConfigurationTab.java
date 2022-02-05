@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -39,27 +39,27 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 	private Text resourceText;
-	private Button resourceButton;
+
 	@Override
-	public void createControl(Composite parent) {
-		Composite comp = new Composite(parent, SWT.NONE);
+	public void createControl(final Composite parent) {
+		final Composite comp = new Composite(parent, SWT.NONE);
 		GridLayoutFactory.swtDefaults().applyTo(comp);
 		setControl(comp);
 
-		Composite resourceComponent = createResourceComponent(comp);
+		final Composite resourceComponent = createResourceComponent(comp);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(resourceComponent);
 	}
 
-	protected Composite createResourceComponent(Composite parent) {
-		Group group = new Group(parent, SWT.BORDER);
+	protected Composite createResourceComponent(final Composite parent) {
+		final Group group = new Group(parent, SWT.BORDER);
 		GridLayoutFactory.swtDefaults().applyTo(group);
 		group.setText("Target");
 
-		Composite comp = new Composite(group, SWT.NONE);
+		final Composite comp = new Composite(group, SWT.NONE);
 		GridLayoutFactory.swtDefaults().numColumns(3).applyTo(comp);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comp);
 
-		Label resourceLabel = new Label(comp, SWT.NONE);
+		final Label resourceLabel = new Label(comp, SWT.NONE);
 		resourceLabel.setText("Location:");
 		GridDataFactory.swtDefaults().applyTo(resourceLabel);
 
@@ -69,7 +69,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		resourceText.addModifyListener(e -> scheduleUpdateJob());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(resourceText);
 
-		resourceButton = new Button(comp, SWT.BORDER);
+		final Button resourceButton = new Button(comp, SWT.BORDER);
 		resourceButton.setText("Browse...");
 		resourceButton.addSelectionListener(widgetSelectedAdapter(e -> handleResourceButtonSelected()));
 		GridDataFactory.swtDefaults().applyTo(resourceButton);
@@ -78,7 +78,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 	private void handleResourceButtonSelected() {
 		IResource resource = getResource();
-		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), new WorkbenchLabelProvider(),
+		final ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), new WorkbenchLabelProvider(),
 				new WorkbenchContentProvider());
 		dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
 		if (resource != null) {
@@ -88,47 +88,47 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		dialog.addFilter(new ViewerFilter() {
 
 			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				IResource resource = Adapters.adapt(element, IResource.class);
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+				final IResource resource = Adapters.adapt(element, IResource.class);
 				try {
 					return filterTargetResource(resource);
-				} catch (CoreException e) {
+				} catch (final CoreException e) {
 				}
 				return false;
 			}
 		});
 		dialog.open();
-		Object[] result = dialog.getResult();
+		final Object[] result = dialog.getResult();
 		if (result != null && result.length > 0 && result[0] instanceof IResource) {
 			resource = (IResource) result[0];
-			String resourceString = resource.getFullPath().toString();
+			final String resourceString = resource.getFullPath().toString();
 			resourceText.setText(resourceString);
 			handleResourceUpdated();
 		}
 	}
 
 	@Override
-	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
+	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(LaunchConfigurationAttributes.RESOURCE, "");
 	}
 
 	@Override
-	public void initializeFrom(ILaunchConfiguration configuration) {
+	public void initializeFrom(final ILaunchConfiguration configuration) {
 		try {
-			String resourceAttribute = configuration.getAttribute(LaunchConfigurationAttributes.RESOURCE, "");
+			final String resourceAttribute = configuration.getAttribute(LaunchConfigurationAttributes.RESOURCE, "");
 			resourceText.setText(resourceAttribute);
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 		}
 	}
 
 	@Override
-	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		String resourceString = resourceText.getText();
+	public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
+		final String resourceString = resourceText.getText();
 		configuration.setAttribute(LaunchConfigurationAttributes.RESOURCE, resourceString);
 	}
 
 	protected abstract void handleResourceUpdated();
-	
+
 	protected abstract boolean filterTargetResource(IResource resource) throws CoreException;
 
 	@Override
@@ -137,7 +137,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 	}
 
 	protected IResource getResource() {
-		String resourceString = resourceText.getText();
+		final String resourceString = resourceText.getText();
 		if (resourceString != null && !resourceString.isEmpty()) {
 			return ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(resourceString));
 		}

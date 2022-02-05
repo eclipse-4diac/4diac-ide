@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.search.internal.ui.text.SearchResultUpdater;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search2.internal.ui.SearchView;
@@ -109,7 +108,7 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 	}
 
-	private void searchResources(AutomationSystem sys) {
+	private void searchResources(final AutomationSystem sys) {
 		for (final Device dev : sys.getSystemConfiguration().getDevices()) {
 			if (matchEObject(dev)) {
 				searchResult.addResult(dev);
@@ -180,9 +179,7 @@ public class ModelSearchQuery implements ISearchQuery {
 	@Override
 	public ModelSearchResult getSearchResult() {
 		if (searchResult == null) {
-			final ModelSearchResult mResult = new ModelSearchResult(this);
-			new SearchResultUpdater(mResult);
-			searchResult = mResult;
+			searchResult = new ModelSearchResult(this);
 		}
 		return searchResult;
 	}

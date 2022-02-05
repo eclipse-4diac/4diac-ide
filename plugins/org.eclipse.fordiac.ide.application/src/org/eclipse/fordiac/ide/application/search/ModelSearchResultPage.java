@@ -42,7 +42,7 @@ import org.eclipse.ui.IMemento;
 
 public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
-	private final String ID = "org.eclipse.fordiac.ide.application.search.ModelSearchResultPage"; //$NON-NLS-1$
+	private static final String ID = "org.eclipse.fordiac.ide.application.search.ModelSearchResultPage"; //$NON-NLS-1$
 	private ModelSearchTableContentProvider contentProvider;
 	private String searchDescription;
 
@@ -88,7 +88,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	}
 
 	@Override
-	public void setInput(ISearchResult newSearch, Object viewState) {
+	public void setInput(final ISearchResult newSearch, final Object viewState) {
 		super.setInput(newSearch, viewState);
 		if (newSearch != null) {
 			this.searchDescription = newSearch.getLabel();
@@ -115,7 +115,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colKind.getColumn().setText("Element Kind");
 		colKind.setLabelProvider(new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				final String kind = element.getClass().getSimpleName();
 				return kind.substring(0, kind.length() - 4);
 			}
@@ -126,7 +126,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 		colName.setLabelProvider(new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				if (element instanceof INamedElement) {
 					return ((INamedElement) element).getName();
 				}
@@ -137,7 +137,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colComment.getColumn().setText(FordiacMessages.Comment);
 		colComment.setLabelProvider(new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				if (element instanceof INamedElement) {
 					return ((INamedElement) element).getComment();
 				}
@@ -149,7 +149,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 		colType.setLabelProvider(new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				if (element instanceof FBType) {
 					return ((FBType) element).getName();
 				}
@@ -182,7 +182,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		return super.getViewer();
 	}
 
-	public static void showResult(EObject obj) {
+	public static void showResult(final EObject obj) {
 		EObject toOpen = obj;
 		if (obj instanceof VarDeclaration) {
 			toOpen = ((VarDeclaration) obj).getFBNetworkElement();
@@ -198,7 +198,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	}
 
 	@Override
-	protected void fillContextMenu(IMenuManager mgr) {
+	protected void fillContextMenu(final IMenuManager mgr) {
 		final Action showInEditor = new ShowInEditorAction(this);
 		mgr.prependToGroup(IContextMenuConstants.GROUP_SHOW, showInEditor);
 		super.fillContextMenu(mgr);
@@ -207,7 +207,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	private static class ShowInEditorAction extends Action {
 		private final ModelSearchResultPage fPage;
 
-		public ShowInEditorAction(AbstractTextSearchViewPage page) {
+		public ShowInEditorAction(final AbstractTextSearchViewPage page) {
 			super("Show in Editor");
 			setToolTipText("Shows element in the editor");
 			fPage = (ModelSearchResultPage) page;

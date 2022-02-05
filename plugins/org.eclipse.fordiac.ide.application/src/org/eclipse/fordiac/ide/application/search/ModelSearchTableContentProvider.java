@@ -22,7 +22,7 @@ public class ModelSearchTableContentProvider implements IStructuredContentProvid
 
 	private final ModelSearchResultPage resultPage;
 	private ModelSearchResult result;
-	private final Object[] EMPTY_ARR = new Object[0];
+	private final static Object[] EMPTY_ARR = new Object[0];
 
 	public ModelSearchTableContentProvider(final ModelSearchResultPage page) {
 		this.resultPage = page;
@@ -52,12 +52,12 @@ public class ModelSearchTableContentProvider implements IStructuredContentProvid
 	}
 
 	@Override
-	public void elementsChanged(Object[] updatedElements) {
+	public void elementsChanged(final Object[] updatedElements) {
 		// TODO implement updating
 	}
 
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		result = (ModelSearchResult) newInput;
 	}
 
