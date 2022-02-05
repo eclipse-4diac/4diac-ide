@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.List;
 
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -23,8 +23,8 @@ public class NewGroupHandler extends AbstractContainerElementHandler {
 
 	@Override
 	protected AbstractCreateFBNetworkElementCommand createContainerCreationCommand(final List<?> selection,
-			final FBNetwork network, final Point pos) {
-		return new CreateGroupCommand(network, selection, pos.x, pos.y);
+			final FBNetwork network, final Rectangle posSizeRef) {
+		return new CreateGroupCommand(network, selection, posSizeRef);
 	}
 
 }

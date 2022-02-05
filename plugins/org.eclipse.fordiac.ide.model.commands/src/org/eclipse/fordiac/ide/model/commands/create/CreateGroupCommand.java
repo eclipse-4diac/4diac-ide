@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.commands.create;
 
 import java.util.List;
 
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -23,13 +24,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 
+	private static final int GROUP_TOP_BORDER = 20;
+	private static final int GROUP_BORDER = 2;
 	private static final String INITIAL_GROUP_NAME = "__Group01"; //$NON-NLS-1$
 
 	private final AddElementsToGroup addElements;
+	private final Rectangle posSizeRef;
 
-	public CreateGroupCommand(final FBNetwork fbNetwork, final List<?> selection, final int x, final int y) {
-		super(fbNetwork, LibraryElementFactory.eINSTANCE.createGroup(), x, y);
-		addElements = new AddElementsToGroup(getElement(), selection);
+	public CreateGroupCommand(final FBNetwork fbNetwork, final List<?> selection, final Rectangle posSizeRef) {
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createGroup(), posSizeRef.x, posSizeRef.y);
+		addElements = new AddElementsToGroup(getElement(), selection, posSizeRef.getTopLeft());
+		this.posSizeRef = checkPosSizeRef(posSizeRef);
 	}
 
 	@Override
@@ -39,6 +44,9 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 
 	@Override
 	public void execute() {
+		updateCreatePosition(posSizeRef.x, posSizeRef.y);
+		getElement().setWidth(posSizeRef.width);
+		getElement().setHeight(posSizeRef.height);
 		super.execute();
 		addElements.execute();
 	}
@@ -68,6 +76,20 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 	@Override
 	public Group getElement() {
 		return (Group) super.getElement();
+	}
+
+	private final Rectangle checkPosSizeRef(final Rectangle posSizeRef) {
+		if (!addElements.getElementsToAdd().isEmpty()) {
+			// if we do not have an empty group move it a bit to the left and up so that the FBs stay at their positions
+			posSizeRef.x -= GROUP_BORDER;
+			posSizeRef.y -= GROUP_TOP_BORDER;
+			posSizeRef.width += 2 * GROUP_BORDER;
+			posSizeRef.height += GROUP_TOP_BORDER + GROUP_BORDER;
+			// ensure that in the beginning the group has at least our default size
+			posSizeRef.width = Math.max(posSizeRef.width, getElement().getWidth());
+			posSizeRef.height = Math.max(posSizeRef.height, getElement().getHeight());
+		}
+		return posSizeRef;
 	}
 
 	private boolean allElementsInSameFBnetwork() {

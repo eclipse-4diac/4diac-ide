@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -30,7 +31,7 @@ public class GroupCreateCommandTest extends FBNetworkTestBase {
 	private static final String NAME_GROUP3 = "__Group03";  //$NON-NLS-1$
 
 	public static State createOneGroup(final State state) {
-		state.setCommand(new CreateGroupCommand(state.getFbNetwork(), Collections.emptyList(), 0, 0));
+		state.setCommand(new CreateGroupCommand(state.getFbNetwork(), Collections.emptyList(), new Rectangle()));
 		tester.get().test(state.getCommand() instanceof CreateGroupCommand);
 		return commandExecution(state);
 	}
@@ -53,8 +54,8 @@ public class GroupCreateCommandTest extends FBNetworkTestBase {
 
 	public static State createTwoGroups(final State state) {
 		final CompoundCommand cmd = new CompoundCommand();
-		cmd.add(new CreateGroupCommand(state.getFbNetwork(), Collections.emptyList(), 0, 0));
-		cmd.add(new CreateGroupCommand(state.getFbNetwork(), Collections.emptyList(), 0, 0));
+		cmd.add(new CreateGroupCommand(state.getFbNetwork(), Collections.emptyList(), new Rectangle()));
+		cmd.add(new CreateGroupCommand(state.getFbNetwork(), Collections.emptyList(), new Rectangle()));
 		state.setCommand(cmd);
 		return commandExecution(state);
 	}

@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.swt.graphics.Point;
 
 public class UngroupCommand extends Command {
 
@@ -24,8 +23,7 @@ public class UngroupCommand extends Command {
 
 	public UngroupCommand(final Group group) {
 		deleteCommand = new DeleteGroupCommand(group);
-		removeCommand = new RemoveElementsFromGroup(group.getGroupElements(),
-				new Point(group.getPosition().getX(), group.getPosition().getY()));
+		removeCommand = new RemoveElementsFromGroup(group.getGroupElements());
 	}
 
 	@Override

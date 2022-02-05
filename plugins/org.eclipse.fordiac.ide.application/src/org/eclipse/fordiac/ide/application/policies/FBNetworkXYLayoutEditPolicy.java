@@ -126,14 +126,24 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	private Command handleDragToRootRequest(final ChangeBoundsRequest request) {
 		final List<EditPart> editParts = request.getEditParts();
 		final Point destination = getTranslatedAndZoomedPoint(request);
-		List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
+		final List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
 		if (!fbEls.isEmpty()) {
 			return new MoveElementsFromSubAppCommand(fbEls,
 					new org.eclipse.swt.graphics.Point(destination.x, destination.y));
 		}
-		fbEls = collectFromGroupDraggedFBs(editParts);
-		if (!fbEls.isEmpty()) {
-			return new RemoveElementsFromGroup(fbEls, new org.eclipse.swt.graphics.Point(destination.x, destination.y));
+		return createRemoveFromGroup(editParts, request);
+	}
+
+	private Command createRemoveFromGroup(final List<EditPart> editParts, final ChangeBoundsRequest request) {
+		final GroupContentEditPart groupContent = getGroupContentEditPart(editParts);
+		if (groupContent != null) {
+			final List<FBNetworkElement> fbEls = collectFromGroupDraggedFBs(editParts);
+			if (!fbEls.isEmpty()) {
+				final Point topLeft = groupContent.getFigure().getBounds().getTopLeft();
+				final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+				topLeft.translate(moveDelta.x, moveDelta.y);
+				return new RemoveElementsFromGroup(fbEls, topLeft);
+			}
 		}
 		return null;
 	}
@@ -152,6 +162,11 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				.filter(el -> !el.getFbNetwork().equals(fbNetwork))   // only take fbentworkelements that are not in the
 				// same subapp
 				.collect(Collectors.toList());
+	}
+
+	private static GroupContentEditPart getGroupContentEditPart(final List<EditPart> editParts) {
+		return (GroupContentEditPart) editParts.stream().filter(ep -> ep.getParent() instanceof GroupContentEditPart)
+				.map(EditPart::getParent).findFirst().orElse(null);
 	}
 
 	private static List<FBNetworkElement> collectFromGroupDraggedFBs(final List<EditPart> editParts) {

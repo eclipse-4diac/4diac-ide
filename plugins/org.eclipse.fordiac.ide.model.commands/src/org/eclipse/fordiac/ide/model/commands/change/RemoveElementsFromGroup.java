@@ -14,30 +14,32 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.swt.graphics.Point;
 
 public class RemoveElementsFromGroup extends Command {
 
 	private final Group sourceGroup;
-	private final Point destination;
+	private final Point offset;
 	private final List<FBNetworkElement> elements;
-	private final Map<FBNetworkElement, org.eclipse.fordiac.ide.model.libraryElement.Position> oldPos = new HashMap<>();
-	private final Map<FBNetworkElement, org.eclipse.fordiac.ide.model.libraryElement.Position> newPos = new HashMap<>();
 
 
-	public RemoveElementsFromGroup(final Collection<FBNetworkElement> elements, final Point destination) {
+	public RemoveElementsFromGroup(final Collection<FBNetworkElement> elements, final Point offset) {
 		this.elements = new ArrayList<>(elements);
 		this.sourceGroup = getGroup(this.elements);
-		this.destination = getTargetPosition(destination);
+		this.offset = offset;
+	}
+
+	public RemoveElementsFromGroup(final Collection<FBNetworkElement> elements) {
+		this.elements = new ArrayList<>(elements);
+		this.sourceGroup = getGroup(this.elements);
+		this.offset = getOffsetFromGroup(sourceGroup);
 	}
 
 	@Override
@@ -47,28 +49,22 @@ public class RemoveElementsFromGroup extends Command {
 
 	@Override
 	public void execute() {
-		elements.forEach(el -> {
-			oldPos.put(el, el.getPosition());
-			el.setGroup(null);
-		});
-		FBNetworkHelper.moveFBNetworkToDestination(elements, destination);
+		performRemove();
 	}
-
 	@Override
 	public void undo() {
-		elements.forEach(el -> {
-			el.setGroup(sourceGroup);
-			newPos.put(el, el.getPosition());
-			el.setPosition(oldPos.get(el));
-		});
+		elements.forEach(el -> el.setGroup(sourceGroup));
+		FBNetworkHelper.moveFBNetworkByOffset(elements, -offset.x, -offset.y);
 	}
 
 	@Override
 	public void redo() {
-		elements.forEach(el -> {
-			el.setGroup(null);
-			el.setPosition(newPos.get(el));
-		});
+		performRemove();
+	}
+
+	private void performRemove() {
+		elements.forEach(el -> el.setGroup(null));
+		FBNetworkHelper.moveFBNetworkByOffset(elements, offset.x, offset.y);
 	}
 
 	private static Group getGroup(final List<FBNetworkElement> elements) {
@@ -82,13 +78,12 @@ public class RemoveElementsFromGroup extends Command {
 		return elements.stream().allMatch(el -> sourceGroup.equals(el.getGroup()));
 	}
 
-	private Point getTargetPosition(final Point destination) {
-		Point targetPos = destination;
-		if (targetPos == null && sourceGroup != null) {
+	private static Point getOffsetFromGroup(final Group sourceGroup) {
+		if (sourceGroup != null) {
 			final Position position = sourceGroup.getPosition();
-			targetPos = new Point(position.getX(), position.getY());
+			return new Point(position.getX(), position.getY());
 		}
-		return targetPos;
+		return new Point();
 	}
 
 }

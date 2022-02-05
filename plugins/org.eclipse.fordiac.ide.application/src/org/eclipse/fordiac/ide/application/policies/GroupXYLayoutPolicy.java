@@ -53,11 +53,16 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 	protected Command getAddCommand(final Request request) {
 
 		if (isDragAndDropRequestForGroup(request, getTargetEditPart(request))) {
-			final List<EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
+			final ChangeBoundsRequest changeBoundsRequest = (ChangeBoundsRequest) request;
+			final List<EditPart> editParts = changeBoundsRequest.getEditParts();
 			final Group dropGroup = ((GroupContentNetwork) getTargetEditPart(request).getModel()).getGroup();
 			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, dropGroup);
 			if (!fbEls.isEmpty()) {
-				return new AddElementsToGroup(dropGroup, fbEls);
+				final Point topLeft = ((GraphicalEditPart) getTargetEditPart(request)).getFigure().getBounds()
+						.getTopLeft();
+				final Point moveDelta = changeBoundsRequest.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+				topLeft.translate(-moveDelta.x, -moveDelta.y);
+				return new AddElementsToGroup(dropGroup, fbEls, topLeft);
 			}
 		}
 		// currently we don't want to allow any other add command in the future maybe drop from pallette
