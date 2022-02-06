@@ -36,6 +36,8 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.handles.ResizeHandle;
@@ -76,7 +78,7 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			}
 			// return a command that can move a "PositionableElement"
 			if (child.getModel() instanceof PositionableElement && RequestUtil.isMoveRequest(request)) {
-				final Point moveDelta = request.getMoveDelta();
+				final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
 				final PositionableElement temp = (PositionableElement) child.getModel();
 				return new SetPositionCommand(temp, moveDelta.x, moveDelta.y);
 			}
@@ -112,5 +114,9 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command getAddCommand(final Request generic) {
 		return null;
+	}
+
+	protected ZoomManager getZoomManager() {
+		return ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
 	}
 }

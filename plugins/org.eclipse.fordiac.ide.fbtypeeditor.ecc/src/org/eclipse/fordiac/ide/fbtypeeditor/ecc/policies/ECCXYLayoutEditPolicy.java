@@ -27,6 +27,8 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
@@ -42,7 +44,7 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
 		if ((child.getModel() instanceof ECState) && (RequestUtil.isMoveRequest(request))) {
-			final Point moveDelta = request.getMoveDelta();
+			final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
 			final ECState state = (ECState) child.getModel();
 			return new SetPositionCommand(state, moveDelta.x, moveDelta.y);
 		}
@@ -72,5 +74,9 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			return new CreateECStateCommand((ECState) request.getNewObject(), point, (ECC) getHost().getModel());
 		}
 		return null;
+	}
+
+	protected ZoomManager getZoomManager() {
+		return ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
 	}
 }

@@ -75,14 +75,14 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	private static Command createChangeGroupSizeCommand(final Group group, final ChangeBoundsRequest request) {
-		final Point moveDelta = request.getMoveDelta();
-		final Dimension sizeDelta = request.getSizeDelta();
+	private Command createChangeGroupSizeCommand(final Group group, final ChangeBoundsRequest request) {
+		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		final Dimension sizeDelta = request.getSizeDelta().getScaled(1.0 / getZoomManager().getZoom());
 		return new ChangeGroupBoundsCommand(group, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
 	}
 
-	private static Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request) {
-		final Point moveDelta = request.getMoveDelta();
+	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request) {
+		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
 		if (model instanceof FBNetworkElement) {
 			return new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y);
 		}
