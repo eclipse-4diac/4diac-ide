@@ -186,8 +186,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 		if (getParent() != null) {
 			final Position position = getModel().getPosition();
 			final Point asPoint = position.asPoint();
-			final Rectangle bounds = new Rectangle(asPoint,
-					getGroupSize());
+			final Rectangle bounds = new Rectangle(asPoint, getGroupSize());
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}

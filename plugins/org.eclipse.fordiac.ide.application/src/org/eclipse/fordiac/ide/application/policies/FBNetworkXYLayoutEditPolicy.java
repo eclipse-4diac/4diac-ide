@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2022 Profactor GmbH, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Michael Hofmann, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - implemented group resizing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
@@ -29,7 +31,6 @@ import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
@@ -58,7 +59,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
 		if (child.getModel() instanceof Group) {
-			return new ModifiedResizeablePolicy();
+			return new GroupResizePolicy();
 		}
 		return new ModifiedNonResizeableEditPolicy();
 	}
@@ -78,6 +79,10 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	private Command createChangeGroupSizeCommand(final Group group, final ChangeBoundsRequest request) {
 		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
 		final Dimension sizeDelta = request.getSizeDelta().getScaled(1.0 / getZoomManager().getZoom());
+		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
+			// we hit the min size and we are just moving, return a set position command
+			return createMoveCommand(group, request);
+		}
 		return new ChangeGroupBoundsCommand(group, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
 	}
 
@@ -118,6 +123,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		}
 		return null;
 	}
+
 
 	protected ZoomManager getZoomManager() {
 		return ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();

@@ -12,7 +12,6 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -43,11 +42,8 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 
 	protected void refreshPosition() {
 		if (getParent() != null) {
-			PositionableElement positionableElement = getPositionableElement();
-			Position position = positionableElement.getPosition();
-			Point asPoint = position.asPoint();
-			final Rectangle bounds = new Rectangle(asPoint,
-					new Dimension(-1, -1));
+			final Position position = getPositionableElement().getPosition();
+			final Rectangle bounds = new Rectangle(position.asPoint(), new Dimension(-1, -1));
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}
