@@ -21,6 +21,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.tools.ResizeTracker;
@@ -107,7 +108,7 @@ public class GroupResizePolicy extends ModifiedResizeablePolicy {
 
 	private void updateGroupMinBounds() {
 		final Rectangle groupBounds = getHost().getFigure().getBounds();
-		final GraphicalEditPart groupContent = getGroupContent();
+		final GraphicalEditPart groupContent = getGroupContent(getHost());
 		if (groupContent != null) { // this should never be the case but just for safety
 			final Rectangle groupContentFigureBounds = groupContent.getFigure().getBounds();
 			minGroupBounds = getGroupContentBounds(groupContent);
@@ -122,16 +123,16 @@ public class GroupResizePolicy extends ModifiedResizeablePolicy {
 		}
 	}
 
-	private GraphicalEditPart getGroupContent() {
-		return (GraphicalEditPart) getHost().getChildren().stream()
+	public static GraphicalEditPart getGroupContent(final EditPart groupEP) {
+		return (GraphicalEditPart) groupEP.getChildren().stream()
 				.filter(GroupContentEditPart.class::isInstance).findAny().orElse(null);
 	}
 
-	private static Rectangle getGroupContentBounds(final GraphicalEditPart groupContent) {
+	public static Rectangle getGroupContentBounds(final EditPart groupContent) {
 		Rectangle selectionExtend = null;
 		for (final Object child : groupContent.getChildren()) {
 			if (child instanceof GraphicalEditPart) {
-				final Rectangle fbBounds = ((GraphicalEditPart) child).getFigure().getBounds();
+				final Rectangle fbBounds = getBoundsForEditPart((GraphicalEditPart) child);
 				if (selectionExtend == null) {
 					selectionExtend = fbBounds.getCopy();
 				} else {
@@ -140,6 +141,13 @@ public class GroupResizePolicy extends ModifiedResizeablePolicy {
 			}
 		}
 		return (selectionExtend != null) ? selectionExtend : getDefaultGroupContentBounds();
+	}
+
+	private static Rectangle getBoundsForEditPart(final GraphicalEditPart ep) {
+		final Rectangle bounds = ep.getFigure().getBounds().getCopy();
+		ep.getFigure().invalidate();
+		bounds.setSize(ep.getFigure().getPreferredSize());
+		return bounds;
 	}
 
 	private static Rectangle getDefaultGroupContentBounds() {

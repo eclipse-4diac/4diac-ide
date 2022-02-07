@@ -62,17 +62,13 @@ public class ChangeGroupBoundsCommand extends Command {
 		updateSize(newWidth, newHeight);
 	}
 
-	private final CompoundCommand createSetPosCommand(final Group group, final int dx, final int dy) {
+	private static final CompoundCommand createSetPosCommand(final Group group, final int dx, final int dy) {
 		if (dx != 0 || dy != 0) {
 			final CompoundCommand cmd = new CompoundCommand();
 			cmd.add(new SetPositionCommand(group, dx, dy));
 			// ensure that the group elements stay at their position when the group grows or shrinks on the left/top
 			// side
-			// check if the lower right corner would be moved and adjust the position accordingly, this happens when the
-			// min size of the group is reached and the group is just moved and resized
-			final int effDx = ((dx + dw) != 0) ? -dw : dx;
-			final int effDy = ((dy + dh) != 0) ? -dh : dy;
-			group.getGroupElements().forEach(el -> cmd.add(new SetPositionCommand(el, -effDx, -effDy)));
+			group.getGroupElements().forEach(el -> cmd.add(new SetPositionCommand(el, -dx, -dy)));
 			return cmd;
 		}
 		return null;

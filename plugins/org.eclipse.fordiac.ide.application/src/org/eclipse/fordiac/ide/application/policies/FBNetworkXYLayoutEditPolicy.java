@@ -48,6 +48,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
@@ -77,13 +78,31 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	private Command createChangeGroupSizeCommand(final Group group, final ChangeBoundsRequest request) {
-		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
 		final Dimension sizeDelta = request.getSizeDelta().getScaled(1.0 / getZoomManager().getZoom());
 		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
 			// we hit the min size and we are just moving, return a set position command
 			return createMoveCommand(group, request);
 		}
-		return new ChangeGroupBoundsCommand(group, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
+		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		final ChangeGroupBoundsCommand changeGroupBoundsCommand = new ChangeGroupBoundsCommand(group, moveDelta.x,
+				moveDelta.y, sizeDelta.width, sizeDelta.height);
+
+		if (isMoveWithResizing(sizeDelta, moveDelta)) {
+			// we have a move resize situation where we have to re-compensate FB positions
+			final int dx = moveDelta.x + sizeDelta.width;
+			final int dy = moveDelta.y + sizeDelta.height;
+			final CompoundCommand cmd = new CompoundCommand();
+			cmd.add(changeGroupBoundsCommand);
+			group.getGroupElements().forEach(el -> cmd.add(new SetPositionCommand(el, dx, dy)));
+			return cmd;
+		}
+
+		return changeGroupBoundsCommand;
+	}
+
+	private static boolean isMoveWithResizing(final Dimension sizeDelta, final Point moveDelta) {
+		return (moveDelta.x != 0 && (moveDelta.x + sizeDelta.width) != 0)
+				|| (moveDelta.y != 0 && (moveDelta.y + sizeDelta.height) != 0);
 	}
 
 	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request) {

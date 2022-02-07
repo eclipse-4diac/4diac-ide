@@ -407,6 +407,11 @@
              id="org.eclipse.fordiac.ide.application.commands.openType"
              name="Open Type in Editor">
     </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             description="Trim the size of a group to the minimum size required by its contents"
+             id="org.eclipse.fordiac.ide.application.commands.trimGroup"
+             name="Trim Group">
+    </command>
   </extension>
   <extension point="org.eclipse.ui.handlers">
   
@@ -595,6 +600,9 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.OpenTypeHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.openType">
     </handler>
+    <handler class="org.eclipse.fordiac.ide.application.handlers.TrimGroupHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.trimGroup">
+    </handler>
   </extension>
   <extension point="org.eclipse.ui.bindings">
     <key commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
@@ -764,6 +772,8 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
                label="Toggle Connection Visibility">
       </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.trimGroup" >
+      </command>
     </menuContribution>
     <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
       <toolbar id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar">
@@ -894,10 +904,6 @@
           </and>
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
-               label="Toggle Connection Visibility">
-        <visibleWhen checkEnabled="true"></visibleWhen>
-      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="Ungroup"
                tooltip="Remove group">
@@ -906,6 +912,20 @@
             <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
           </with>
         </visibleWhen>
+      </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.trimGroup" >
+      	<visibleWhen checkEnabled="false">
+          <with variable="selection">
+            <count value="1" />
+            <iterate ifEmpty="false">
+            	<instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupEditPart" />
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
+               label="Toggle Connection Visibility">
+        <visibleWhen checkEnabled="true"></visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
         <visibleWhen checkEnabled="true">
