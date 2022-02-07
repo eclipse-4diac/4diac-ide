@@ -93,6 +93,8 @@ public final class ValueValidator {
 
 	private static final String[] timeNames = { "d", "h", "m", "s", "ms", "us", "ns" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 	private static final int[] timesMaxs = { 365, 24, 60, 60, 1000, 1000, 1000 };
+	
+	private static final String REGEX_VIRTUAL_DNS_ENTRY = "^(%<)[^<>%%](.)*(>%)$" ; 
 
 	private static final String TIME_SHORT_FORM = "T"; //$NON-NLS-1$
 	private static final String LONG_TIME_SHORT_FORM = "LT"; //$NON-NLS-1$
@@ -246,6 +248,13 @@ public final class ValueValidator {
 	public static String validateValue(final DataType type, final String value) {
 		final var pattern = Pattern.compile(REGEX_LITERAL_SPLITTER);
 		final var matcher = pattern.matcher(value);
+		
+		final var virtualDNSPattern = Pattern.compile(REGEX_VIRTUAL_DNS_ENTRY);
+		final var virtualDNSmatcher = virtualDNSPattern.matcher(value);
+		
+		if (virtualDNSmatcher.find()) {
+			return EMPTY_STRING;
+		}
 
 		// check if literal matches the general literal structure (<type>#)?(<radix>#)?<value>
 		if (!matcher.find()) {
