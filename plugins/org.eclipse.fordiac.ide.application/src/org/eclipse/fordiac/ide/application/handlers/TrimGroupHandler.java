@@ -82,7 +82,7 @@ public class TrimGroupHandler extends AbstractHandler {
 		return groupContentBounds;
 	}
 
-	private static ChangeGroupBoundsCommand createChangeGroupBoundsCommand(final Group group,
+	public static ChangeGroupBoundsCommand createChangeGroupBoundsCommand(final Group group,
 			final Rectangle groupContentContainerBounds, final Rectangle groupContentBounds) {
 		final int dx = groupContentBounds.x - groupContentContainerBounds.x;
 		final int dy = groupContentBounds.y - groupContentContainerBounds.y;

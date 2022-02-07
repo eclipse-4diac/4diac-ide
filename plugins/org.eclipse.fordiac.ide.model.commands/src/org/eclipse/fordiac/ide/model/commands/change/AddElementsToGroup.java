@@ -31,11 +31,11 @@ public class AddElementsToGroup extends Command {
 	private final Group targetGroup;
 	private final List<FBNetworkElement> elementsToAdd;
 	private final CompoundCommand removeFromOtherGroups = new CompoundCommand();
-	private final Point offset;
+	private Point offset;
 
 	public AddElementsToGroup(final Group targetGroup, final List<?> selection, final Point offset) {
 		this.targetGroup = targetGroup;
-		this.offset = offset;
+		this.offset = offset.getCopy();
 		elementsToAdd = createElementList(selection);
 		identifyRemoveElements();
 	}
@@ -106,6 +106,14 @@ public class AddElementsToGroup extends Command {
 			}
 		}
 		return elements;
+	}
+
+	public void setOffset(final Point offset) {
+		this.offset = offset.getCopy();
+	}
+
+	public Point getOffset() {
+		return offset;
 	}
 
 	private int getOriginalPositionX() {

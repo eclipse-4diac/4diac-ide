@@ -19,6 +19,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
+import org.eclipse.fordiac.ide.application.handlers.TrimGroupHandler;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -31,6 +32,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
@@ -58,11 +60,7 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 			final Group dropGroup = ((GroupContentNetwork) getTargetEditPart(request).getModel()).getGroup();
 			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, dropGroup);
 			if (!fbEls.isEmpty()) {
-				final Point topLeft = ((GraphicalEditPart) getTargetEditPart(request)).getFigure().getBounds()
-						.getTopLeft();
-				final Point moveDelta = changeBoundsRequest.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
-				topLeft.translate(-moveDelta.x, -moveDelta.y);
-				return new AddElementsToGroup(dropGroup, fbEls, topLeft);
+				return createAddToGroupCommand(changeBoundsRequest, dropGroup, fbEls);
 			}
 		}
 		// currently we don't want to allow any other add command in the future maybe drop from pallette
@@ -96,6 +94,53 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 	private Group getGroup() {
 		final Object model = getHost().getModel();
 		return (model instanceof GroupContentNetwork) ? ((GroupContentNetwork) model).getGroup() : null;
+	}
+
+	private Command createAddToGroupCommand(final ChangeBoundsRequest request, final Group dropGroup,
+			final List<FBNetworkElement> fbEls) {
+		final Rectangle groupContentBounds = ((GraphicalEditPart) getTargetEditPart(request)).getFigure().getBounds();
+		final Point topLeft = groupContentBounds.getTopLeft();
+		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		topLeft.translate(-moveDelta.x, -moveDelta.y);
+		final AddElementsToGroup addElementsToGroup = new AddElementsToGroup(dropGroup, fbEls, topLeft);
+
+		final Rectangle newContentBounds = getNewContentBounds(request.getEditParts());
+		newContentBounds.translate(moveDelta);
+		if (!groupContentBounds.contains(newContentBounds)) {
+			//we need to increase the size of the group
+			return createAddGroupAndResizeCommand(dropGroup, addElementsToGroup, groupContentBounds, newContentBounds);
+		}
+
+		return addElementsToGroup;
+	}
+
+	private static Rectangle getNewContentBounds(final List<EditPart> editParts) {
+		Rectangle selectionExtend = null;
+		for (final EditPart selElem : editParts) {
+			if (selElem instanceof GraphicalEditPart
+					&& ((GraphicalEditPart) selElem).getModel() instanceof FBNetworkElement) {
+				// only consider the selected FBNetworkElements
+				final Rectangle fbBounds = ((GraphicalEditPart) selElem).getFigure().getBounds();
+				if (selectionExtend == null) {
+					selectionExtend = fbBounds.getCopy();
+				} else {
+					selectionExtend.union(fbBounds);
+				}
+			}
+		}
+		return (selectionExtend != null) ? selectionExtend : new Rectangle();
+	}
+
+	private static Command createAddGroupAndResizeCommand(final Group dropGroup,
+			final AddElementsToGroup addElementsToGroup, final Rectangle groupContentBounds, final Rectangle newContentBounds) {
+		final CompoundCommand cmd = new CompoundCommand();
+		newContentBounds.union(groupContentBounds);
+		cmd.add(TrimGroupHandler.createChangeGroupBoundsCommand(dropGroup, groupContentBounds, newContentBounds));
+		final Point offset = addElementsToGroup.getOffset();
+		offset.translate(newContentBounds.x - groupContentBounds.x, newContentBounds.y - groupContentBounds.y);
+		addElementsToGroup.setOffset(offset);
+		cmd.add(addElementsToGroup);
+		return cmd;
 	}
 
 }
