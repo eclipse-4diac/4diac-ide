@@ -69,7 +69,7 @@ public class SystemExporter extends CommonElementExporter {
 			} catch (final XMLStreamException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
-			writeToFile(targetFile);
+			writeToFile(targetFile, null);
 		}
 		final long endTime = System.currentTimeMillis();
 		FordiacLogHelper
