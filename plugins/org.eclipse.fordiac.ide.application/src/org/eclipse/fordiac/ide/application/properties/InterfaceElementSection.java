@@ -15,70 +15,43 @@
  *   Lisa Sonnleithner - new TypeAndCommentSection
  *   Alois Zoitl - Harmonized and improved connection section
  *               - added instance comment editing
+ *   Dunja Životin - extracted in/out connections table into a separate widget
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
 import java.text.MessageFormat;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
-import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnPixelData;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InterfaceElementSection extends AbstractSection {
-	private Section connectionSection;
 	private TableViewer connectionsViewer;
-
-	private static final String TARGET = "target"; //$NON-NLS-1$
-	private static final String PIN = "pin"; //$NON-NLS-1$
-	private static final String COMMENT = "comment"; //$NON-NLS-1$
-
-	private static final int TARGET_PIN_WIDTH = 100;
-	private static final int COMMENT_WIDTH = 200;
 
 	private Text typeText;
 	private Text typeCommentText;
@@ -89,7 +62,8 @@ public class InterfaceElementSection extends AbstractSection {
 	private CLabel currentParameterTextCLabel;
 	private Button openEditorButton;
 	private Section infoSection;
-	private AddDeleteWidget deleteButton;
+	// Added
+	private ConnectionDisplayWidget connectionDisplayWidget;
 
 
 	@Override
@@ -102,55 +76,10 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	private void createConnectionDisplaySection(final Composite parent) {
-
-		connectionSection = getWidgetFactory().createSection(parent,
-				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
-		connectionSection.setText(Messages.InterfaceElementSection_ConnectionGroup);
-		connectionSection.setLayout(new GridLayout(1, false));
-		connectionSection
-		.setLayoutData(GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).create());
-
-		final Composite composite = getWidgetFactory().createComposite(connectionSection);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		deleteButton = new AddDeleteWidget();
-		deleteButton.createControls(composite, getWidgetFactory());
-		deleteButton.setVisibleCreateButton(false);
-
-		connectionsViewer = createConnectionsViewer(composite);
-
-		deleteButton.bindToTableViewer(connectionsViewer, this, ref -> null,
-				ref -> new DeleteConnectionCommand((Connection) ref));
-
-		connectionSection.setClient(composite);
+		connectionDisplayWidget = new ConnectionDisplayWidget(getWidgetFactory(), parent, this);
 	}
 
-	private TableViewer createConnectionsViewer(final Composite parent) {
-		final TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
-		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
-		viewer.setColumnProperties(new String[] { TARGET, PIN, COMMENT });
-		viewer.setCellModifier(new ConnectionCellModifier(viewer));
-		viewer.setCellEditors(new CellEditor[] { null, null, new CustomTextCellEditor(viewer.getTable()) });
-		viewer.setLabelProvider(new ConnectionTableLabelProvider());
-		viewer.setContentProvider(new ConnectionContentProvider());
-		viewer.addDoubleClickListener(ElementSelector::jumpToPinFromDoubleClickEvent);
-		return viewer;
-	}
 
-	private static TableLayout createTableLayout(final Table table) {
-		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText(FordiacMessages.Target);
-		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText(FordiacMessages.Pin);
-		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText(FordiacMessages.Comment);
-		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(TARGET_PIN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(TARGET_PIN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(COMMENT_WIDTH));
-		return layout;
-	}
 
 	private void createTypeInfoSection(final Composite parent) {
 		// textfields in this section without a button need to span 2 cols so that all
@@ -249,7 +178,7 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 			typeText.setText(itype);
 
-			refreshConnectionsViewer();
+			connectionDisplayWidget.refreshConnectionsViewer(getType());
 
 			if (fb != null) {
 				setEditable(!fb.isContainedInTypedInstance());
@@ -283,22 +212,12 @@ public class InterfaceElementSection extends AbstractSection {
 		currentParameterText.setVisible(isDataIO && getType().isIsInput());
 	}
 
-	private void refreshConnectionsViewer() {
-		if (getType().isIsInput()) {
-			connectionSection.setText(Messages.InterfaceElementSection_InConnections);
-		} else {
-			connectionSection.setText(Messages.InterfaceElementSection_OutConnections);
-		}
-
-		connectionsViewer.setInput(getType());
-	}
-
 	private void setEditable(final boolean editable) {
 		currentParameterText.setEditable(editable);
 		currentParameterText.setEnabled(editable);
 		instanceCommentText.setEditable(editable);
 		instanceCommentText.setEnabled(editable);
-		deleteButton.setVisibleDeleteButton(editable);
+		connectionDisplayWidget.setEditable(editable);
 	}
 
 	protected String setParameterAndType() {
@@ -373,115 +292,6 @@ public class InterfaceElementSection extends AbstractSection {
 	@Override
 	protected void setInputInit() {
 		// no implementation needed
-	}
-
-	private static class ConnectionContentProvider implements IStructuredContentProvider {
-		@Override
-		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof IInterfaceElement) {
-				final IInterfaceElement element = ((IInterfaceElement) inputElement);
-				if ((element.isIsInput() && (null != element.getFBNetworkElement()))
-						|| (!element.isIsInput() && (null == element.getFBNetworkElement()))) {
-					return element.getInputConnections().toArray();
-				}
-				return element.getOutputConnections().toArray();
-			}
-			return new Object[] {};
-		}
-	}
-
-	private class ConnectionTableLabelProvider extends LabelProvider implements ITableLabelProvider {
-		public static final int TARGET_COL_INDEX = 0;
-		public static final int PIN_COL_INDEX = 1;
-		public static final int COMMENT_COL_INDEX = 2;
-
-		AdapterFactoryLabelProvider labelProvider = new AdapterFactoryLabelProvider(getAdapterFactory());
-
-		@Override
-		public Image getColumnImage(final Object element, final int columnIndex) {
-			if (element instanceof Connection) {
-				final Connection con = ((Connection) element);
-				final IInterfaceElement ie = getInterfaceElement(con);
-				if (null != ie) {
-					switch (columnIndex) {
-					case TARGET_COL_INDEX:
-						if (null != ie.getFBNetworkElement()) {
-							return labelProvider.getImage(ie.getFBNetworkElement());
-						}
-						break;
-					case PIN_COL_INDEX:
-						return labelProvider.getImage(ie);
-					default:
-						break;
-					}
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof Connection) {
-				final Connection con = ((Connection) element);
-				final IInterfaceElement ie = getInterfaceElement(con);
-				if (null != ie) {
-					switch (columnIndex) {
-					case TARGET_COL_INDEX:
-						if (null != ie.getFBNetworkElement()) {
-							return ie.getFBNetworkElement().getName();
-						} else if (ie.eContainer().eContainer() instanceof CompositeFBType) {
-							return ((CompositeFBType) ie.eContainer().eContainer()).getName();
-						}
-						break;
-					case PIN_COL_INDEX:
-						return ie.getName();
-					case COMMENT_COL_INDEX:
-						return con.getComment() != null ? con.getComment() : ""; //$NON-NLS-1$
-					default:
-						break;
-					}
-				}
-			}
-			return element.toString();
-		}
-
-		private IInterfaceElement getInterfaceElement(final Connection con) {
-			return (getType().equals(con.getSource())) ? con.getDestination() : con.getSource();
-		}
-	}
-
-	private class ConnectionCellModifier implements ICellModifier {
-		private final TableViewer viewer;
-
-		public ConnectionCellModifier(final TableViewer viewer) {
-			this.viewer = viewer;
-		}
-
-		@Override
-		public boolean canModify(final Object element, final String property) {
-			return COMMENT.equals(property);
-		}
-
-		@Override
-		public Object getValue(final Object element, final String property) {
-			if (COMMENT.equals(property)) {
-				final Connection con = (Connection) element;
-				return con.getComment() != null ? con.getComment() : ""; //$NON-NLS-1$
-			}
-			return null;
-		}
-
-		@Override
-		public void modify(final Object element, final String property, final Object value) {
-			final TableItem tableItem = (TableItem) element;
-			final Object data = tableItem.getData();
-
-			if (COMMENT.equals(property)) {
-				final Connection con = (Connection) data;
-				executeCommand(new ChangeCommentCommand(con, value.toString()));
-				viewer.refresh(data);
-			}
-		}
 	}
 
 }

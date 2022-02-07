@@ -13,6 +13,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
  *     - extract table viewer creation, add initialvalue/arraysize columns
+ *   Dunja Životin
+ *     - extracted a part of the class into a separate widget
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
@@ -21,9 +23,8 @@ import java.util.Arrays;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventLabelProvider;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
+import org.eclipse.fordiac.ide.gef.widgets.PinInfoDataWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -49,39 +50,27 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataInterfaceElementSection extends AdapterInterfaceElementSection {
-	private Text arraySizeText;
-	private Text initValueText;
+
 	private TableViewer withEventsViewer;
 	private Group eventComposite;
+	private PinInfoDataWidget pinInfoDataWidget;
+
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createDataSection(getLeftComposite());
 		createEventSection(getRightComposite());
 	}
 
-	private void createDataSection(final Composite parent) {
-		getWidgetFactory().createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
-		arraySizeText = createGroupText(parent, true);
-		arraySizeText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(new ChangeArraySizeCommand((VarDeclaration) type, arraySizeText.getText()));
-			addContentAdapter();
-		});
-		getWidgetFactory().createCLabel(parent, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
-		initValueText = createGroupText(parent, true);
-		initValueText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(new ChangeValueCommand((VarDeclaration) type, initValueText.getText()));
-			addContentAdapter();
-		});
+	@Override
+	protected void createPinInfoSection(final Composite parent) {
+		pinInfoDataWidget = new PinInfoDataWidget(parent, getWidgetFactory());
 	}
+
 
 	private void createEventSection(final Composite parent) {
 		eventComposite = getWidgetFactory().createGroup(parent, FordiacMessages.With);
@@ -125,20 +114,6 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		super.setInput(part, selection);
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		// hide with part for sub app type events
-		eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
-		if (null == commandStack) { // disable all field
-			arraySizeText.setEnabled(false);
-			initValueText.setEnabled(false);
-			withEventsViewer.setInput(null);
-			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
-		}
-	}
-
-	@Override
 	protected VarDeclaration getType() {
 		return (VarDeclaration) super.getType();
 	}
@@ -149,8 +124,14 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			arraySizeText.setText(0 >= getType().getArraySize() ? "" : (Integer.toString((getType()).getArraySize()))); //$NON-NLS-1$
-			initValueText.setText(null == getType().getValue() ? "" : getType().getValue().getValue()); //$NON-NLS-1$
+			pinInfoDataWidget.getNameText().setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+			pinInfoDataWidget.getCommentText().setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			pinInfoDataWidget.getTypeSelectionWidget().refresh(); // TODO: have a selection for this widget
+
+			pinInfoDataWidget.getArraySizeText()
+			.setText(0 >= getType().getArraySize() ? "" : (Integer.toString((getType()).getArraySize())));//$NON-NLS-1$
+			pinInfoDataWidget.getInitValueText()
+			.setText(null == getType().getValue() ? "" : getType().getValue().getValue());//$NON-NLS-1$
 			if (getType().eContainer().eContainer() instanceof FBType) {
 				eventComposite.setVisible(true);
 				withEventsViewer.setInput(getType());
@@ -165,6 +146,19 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	@Override
+	public void setInput(final IWorkbenchPart part, final ISelection selection) {
+		super.setInput(part, selection);
+		Assert.isTrue(selection instanceof IStructuredSelection);
+		// hide with part for sub app type events
+		eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
+		if (null == commandStack) { // disable all fields
+			pinInfoDataWidget.disableAllFields();
+			withEventsViewer.setInput(null);
+			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
+		}
+	}
+
+	@Override
 	protected void handleDataSelectionChanged(final String dataName) {
 		final DataType newType = getDataTypeLib().getTypeIfExists(dataName);
 		if (newType != null) {
@@ -176,4 +170,5 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
 		return () -> getDataTypeLib().getDataTypesSorted();
 	}
+
 }

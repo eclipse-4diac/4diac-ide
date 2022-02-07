@@ -13,6 +13,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - moved adapter search code to palette
  *               - cleaned command stack handling for property sections
+ *   Dunja Životin
+ *     - extracted a part of the class into a separate widget
  ******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
@@ -23,32 +25,23 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
+import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AdapterInterfaceElementSection extends AbstractSection {
-	protected TypeSelectionWidget typeSelectionWidget;
-	private Text nameText;
-	private Text commentText;
+
+	protected PinInfoBasicWidget pinInfoBasicWidget;
 
 	@Override
 	protected IInterfaceElement getInputType(final Object input) {
@@ -73,46 +66,25 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createTypeAndCommentSection(getLeftComposite());
+		createPinInfoSection(getLeftComposite());
 	}
 
-	protected void createTypeAndCommentSection(final Composite parent) {
-		parent.setLayout(new GridLayout(2, false));
-		parent.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
-		nameText = createGroupText(parent, true);
-		nameText.addVerifyListener(new IdentifierVerifyListener());
-		nameText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
-			addContentAdapter();
-		});
-		getWidgetFactory().createCLabel(parent, FordiacMessages.Comment + ":"); //$NON-NLS-1$
-		commentText = createGroupText(parent, true);
-		commentText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
-			addContentAdapter();
-		});
-		getWidgetFactory().createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
-		typeSelectionWidget = new TypeSelectionWidget(getWidgetFactory());
-		typeSelectionWidget.createControls(parent);
+	protected void createPinInfoSection(final Composite parent) {
+		pinInfoBasicWidget = new PinInfoBasicWidget(parent, getWidgetFactory());
 	}
 
 	@Override
 	protected void setInputCode() {
-		nameText.setEnabled(false);
-		commentText.setEnabled(false);
+		pinInfoBasicWidget.getNameText().setEnabled(false);
+		pinInfoBasicWidget.getCommentText().setEnabled(false);
 	}
 
 	@Override
 	public void refresh() {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if (null != type) {
-			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			typeSelectionWidget.refresh();
+		if (null != type && pinInfoBasicWidget != null) {
+			pinInfoBasicWidget.refresh(getType());
 		}
 		commandStack = commandStackBuffer;
 	}
@@ -120,8 +92,11 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
-		typeSelectionWidget.initialize(getType(), getTypeSelectionContentProvider(),
-				this::handleDataSelectionChanged);
+		if (pinInfoBasicWidget != null) {
+			pinInfoBasicWidget.getTypeSelectionWidget().initialize(getType(), getTypeSelectionContentProvider(),
+					this::handleDataSelectionChanged);
+		}
+
 	}
 
 	protected void handleDataSelectionChanged(final String dataName) {

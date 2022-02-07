@@ -129,6 +129,10 @@
                    indented="false"
                    label="Struct Element">
       </propertyTab>
+      <propertyTab category="Interface"
+                   id="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   label="Pin">
+      </propertyTab>
     </propertyTabs>
   </extension>
   <extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
@@ -178,7 +182,8 @@
       </propertySection>
       <propertySection class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                        id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-                       tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
+                       tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
+                       filter="org.eclipse.fordiac.ide.application.properties.TypedInterfacePinFilter">
         <input type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
         </input>
       </propertySection>
@@ -249,6 +254,19 @@
         <input type="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
         </input>
       </propertySection>
+      
+      <propertySection class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"
+                   id="org.eclipse.fordiac.ide.application.properties.PinEventSection"
+                   tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   filter="org.eclipse.fordiac.ide.application.properties.PinEventInfoFilter">
+      </propertySection>
+        
+	<propertySection class="org.eclipse.fordiac.ide.application.properties.PinDataInfoSection"
+                   id="org.eclipse.fordiac.ide.application.properties.PinDataSection"
+                   tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   filter="org.eclipse.fordiac.ide.application.properties.PinDataInfoFilter">
+      </propertySection>
+      
     </propertySections>
   </extension>
   <extension point="org.eclipse.fordiac.ide.model.ui.openListener">
