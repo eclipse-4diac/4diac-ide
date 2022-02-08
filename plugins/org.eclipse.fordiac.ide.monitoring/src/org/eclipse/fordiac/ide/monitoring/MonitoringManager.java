@@ -183,25 +183,29 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 */
 	@Override
 	public void disableSystem(final AutomationSystem system) {
-		final SystemMonitoringData data = systemMonitoringData.remove(system);
+		getSystemMonitoringData(system).disableSystem();
 		notifyWatchesChanged();
-		if (null != data) {
-			data.disableSystem();
-		}
 	}
 
 	@Override
 	public void disableSystemSynch(final AutomationSystem system, final IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
-		final SystemMonitoringData data = systemMonitoringData.remove(system);
-		if (null != data) {
-			data.disableSystemSynch(monitor);
-		}
+		getSystemMonitoringData(system).disableSystemSynch(monitor);
 	}
 
 	@Override
 	public boolean isSystemMonitored(final AutomationSystem system) {
-		return systemMonitoringData.containsKey(system);
+		return getSystemMonitoringData(system).isMonitoringForSystemEnabled();
+	}
+
+	/** Contains system.
+	 *
+	 * @param system the system
+	 *
+	 * @return true, if successful */
+	public boolean monitoringForSystemEnabled(final AutomationSystem system) {
+		final SystemMonitoringData data = getSystemMonitoringData(system);
+		return data.isMonitoringForSystemEnabled();
 	}
 
 	public Set<AutomationSystem> getMonitoredSystems() {
