@@ -94,7 +94,7 @@ public final class ValueValidator {
 	private static final String[] timeNames = { "d", "h", "m", "s", "ms", "us", "ns" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 	private static final int[] timesMaxs = { 365, 24, 60, 60, 1000, 1000, 1000 };
 	
-	private static final String REGEX_VIRTUAL_DNS_ENTRY = "^(%<)[^<>%%](.)*(>%)$" ; 
+	private static final String REGEX_VIRTUAL_DNS_ENTRY = "(%)(.)*(%)" ; 
 
 	private static final String TIME_SHORT_FORM = "T"; //$NON-NLS-1$
 	private static final String LONG_TIME_SHORT_FORM = "LT"; //$NON-NLS-1$
@@ -245,21 +245,59 @@ public final class ValueValidator {
 	 * @return empty string if the literal is valid, otherwise an error message what
 	 *         is wrong with the literal
 	 */
-	public static String validateValue(final DataType type, final String value) {
+	public static String validateValue(final DataType type, final String value) { 
 		final var pattern = Pattern.compile(REGEX_LITERAL_SPLITTER);
 		final var matcher = pattern.matcher(value);
 		
 		final var virtualDNSPattern = Pattern.compile(REGEX_VIRTUAL_DNS_ENTRY);
 		final var virtualDNSmatcher = virtualDNSPattern.matcher(value);
 		
+		// check if literal is a virtual DNS entry
 		if (virtualDNSmatcher.find()) {
-			return EMPTY_STRING;
+			boolean outbound = !(value.charAt(0) == '%' && value.charAt(value.length()-1) == '%');
+			boolean inbound = false;
+			
+			int counter = 0;
+			// true if % is followed by %
+			boolean followUp = false;
+			
+			for(int i = 0; i < value.length(); ++i) {
+				
+				if(value.charAt(i) == '%') {
+					counter++;
+					if(i < value.length()-1 && counter % 2 == 0) {
+						followUp = value.charAt(i+1) == '%';
+					}
+				}
+				
+			}
+			
+			// true if literal is a single virtual DNS entry
+			boolean single = counter == 2;
+			
+			inbound = counter % 2 == 1;
+			
+			if(outbound && inbound) {
+				return Messages.VALIDATOR_VIRTUAL_DNS_ILLEGAL_FORMAT;
+			}
+			
+			if(inbound && !outbound) {
+				return Messages.VALIDATOR_VIRTUAL_DNS_MULTIPLE_BOUNDING_CHARACTERS; 
+			}
+			
+ 			if(outbound && !inbound || (!followUp && !single)) {
+				return Messages.VALIDATOR_VIRTUAL_DNS_CHARACTERS_OUT_OF_BOUNDS; 
+			}	
+			
+			return EMPTY_STRING; 
 		}
-
+		
 		// check if literal matches the general literal structure (<type>#)?(<radix>#)?<value>
 		if (!matcher.find()) {
 			return Messages.VALIDATOR_UNKOWN_LITERAL_ERROR_PLEASE_CHECK_SANENESS_OF_LITERAL;
 		}
+		
+		
 
 		// First group contains the type specifier if present
 		var typeSpecifier = matcher.group(1);
@@ -280,6 +318,7 @@ public final class ValueValidator {
 			// no base information available, so base 10 is implicitly selected
 			baseSpecifier = EMPTY_STRING;
 		}
+		
 
 		DataType literalType = null;
 
