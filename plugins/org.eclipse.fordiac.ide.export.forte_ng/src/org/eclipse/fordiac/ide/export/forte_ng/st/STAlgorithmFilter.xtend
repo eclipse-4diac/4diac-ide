@@ -73,6 +73,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.model.structuredtext.util.StructuredTextParseUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseClause
 
 class STAlgorithmFilter {
 
@@ -474,6 +475,7 @@ class STAlgorithmFilter {
 		return list
 	}
 	
+	
 	def private indexForLoopVariables(ForStatement forStatement) {
 		val forRootAlgorithm = forStatement.rootContainer as StructuredTextAlgorithm
 		
@@ -492,7 +494,14 @@ class STAlgorithmFilter {
 				containmentLevel++;
 				searchItem = container
 			}
-			container = container.eContainer.eContainer
+			
+			if(container instanceof ElseClause){
+				container = container.eContainer
+			}
+			else{
+				container = container.eContainer.eContainer
+			}
+
 		}
 		val forStatementsInAlgorithm = forRootAlgorithm.statements.statements.filter[it instanceof ForStatement]
 		
