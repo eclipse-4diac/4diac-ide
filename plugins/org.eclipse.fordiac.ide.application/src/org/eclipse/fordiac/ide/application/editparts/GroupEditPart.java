@@ -101,6 +101,13 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 	protected void refreshName() {
 		// as we don't have a name label we don't want to do anything here
 	}
+	
+	public Rectangle getCommentBounds() {
+		if (commentFigure != null) {
+			return commentFigure.getBounds();
+		}
+		return null;
+	}
 
 	@Override
 	protected Adapter createContentAdapter() {
