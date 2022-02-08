@@ -370,7 +370,13 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
 			mapping.getProperty(LAYOUT_DATA).addConnectionPoints(connEp.getModel(), createPointList(node, startPort, endPort, bendPoints, calculatedX, calculatedY));
 		}
-		node.getChildren().forEach(child -> calculateNodePositionsRecursively(mapping, child, calculatedX, calculatedY));
+		// position inside of group -> relative
+		// outside -> absolute
+		if (ep instanceof GroupEditPart) {
+			node.getChildren().forEach(child -> calculateNodePositionsRecursively(mapping, child, 0, 0));
+		} else {			
+			node.getChildren().forEach(child -> calculateNodePositionsRecursively(mapping, child, calculatedX, calculatedY));
+		}
 	}
 
 	private static PointList createPointList(final ElkNode node, final ElkPort startPort, final ElkPort endPort,
