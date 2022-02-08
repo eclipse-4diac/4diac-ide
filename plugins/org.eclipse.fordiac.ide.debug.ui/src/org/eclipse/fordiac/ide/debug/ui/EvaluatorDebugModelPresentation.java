@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -24,7 +24,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorDescriptor;
@@ -35,16 +34,16 @@ import org.eclipse.ui.part.FileEditorInput;
 public class EvaluatorDebugModelPresentation implements IDebugModelPresentation {
 
 	@Override
-	public IEditorInput getEditorInput(Object element) {
+	public IEditorInput getEditorInput(final Object element) {
 		if (element instanceof FBType) {
-			FBType fbType = (FBType) element;
-			return new FBTypeEditorInput(fbType, fbType.getPaletteEntry());
+			final FBType fbType = (FBType) element;
+			return new FileEditorInput(fbType.getPaletteEntry().getFile());
 		} else if (element instanceof Resource) {
-			Resource resource = (Resource) element;
-			URI uri = resource.getURI();
+			final Resource resource = (Resource) element;
+			final URI uri = resource.getURI();
 			if (uri.isPlatformResource()) {
-				String path = uri.toPlatformString(true);
-				IResource workspaceResource = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(path));
+				final String path = uri.toPlatformString(true);
+				final IResource workspaceResource = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(path));
 				if (workspaceResource instanceof IFile) {
 					return new FileEditorInput((IFile) workspaceResource);
 				}
@@ -56,24 +55,17 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 	}
 
 	@Override
-	public String getEditorId(IEditorInput input, Object element) {
+	public String getEditorId(final IEditorInput input, final Object element) {
 		if (input instanceof FileEditorInput) {
-			String fileName = ((FileEditorInput) input).getFile().getName();
-			IEditorDescriptor editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry()
+			final String fileName = ((FileEditorInput) input).getFile().getName();
+			final IEditorDescriptor editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry()
 					.getDefaultEditor(fileName);
 			if (editorDescriptor != null) {
 				return editorDescriptor.getId();
 			}
 		} else if (input instanceof URIEditorInput) {
-			URI uri = ((URIEditorInput) input).getURI();
-			IEditorDescriptor editorDescriptor = EditUIUtil.getDefaultEditor(uri, null);
-			if (editorDescriptor != null) {
-				return editorDescriptor.getId();
-			}
-		} else if (input instanceof FBTypeEditorInput) {
-			String fileName = ((FBTypeEditorInput) input).getPaletteEntry().getFile().getName();
-			IEditorDescriptor editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry()
-					.getDefaultEditor(fileName);
+			final URI uri = ((URIEditorInput) input).getURI();
+			final IEditorDescriptor editorDescriptor = EditUIUtil.getDefaultEditor(uri, null);
 			if (editorDescriptor != null) {
 				return editorDescriptor.getId();
 			}
@@ -82,34 +74,34 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 	}
 
 	@Override
-	public void setAttribute(String attribute, Object value) {
+	public void setAttribute(final String attribute, final Object value) {
 	}
 
 	@Override
-	public Image getImage(Object element) {
+	public Image getImage(final Object element) {
 		return null;
 	}
 
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 		return null;
 	}
 
 	@Override
-	public void computeDetail(IValue value, IValueDetailListener listener) {
+	public void computeDetail(final IValue value, final IValueDetailListener listener) {
 	}
 
 	@Override
-	public boolean isLabelProperty(Object element, String property) {
+	public boolean isLabelProperty(final Object element, final String property) {
 		return false;
 	}
 
 	@Override
-	public void addListener(ILabelProviderListener listener) {
+	public void addListener(final ILabelProviderListener listener) {
 	}
 
 	@Override
-	public void removeListener(ILabelProviderListener listener) {
+	public void removeListener(final ILabelProviderListener listener) {
 	}
 
 	@Override
