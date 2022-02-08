@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.model.validation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.stream.Stream;
 
@@ -130,6 +131,44 @@ public class ValueValidatorTest {
 			final String expectedErrorString) {
 		final String resultString = ValueValidator.validateValue(type, value);
 		assertEquals(expectedErrorString, resultString);
+	}
+	
+	static Stream<Arguments> validateValidVirtualDNSEntryTestCases(){
+		return Stream.of(Arguments.of(IecTypes.GenericTypes.ANY, "%<more>%", NO_ERROR),
+		Arguments.of(IecTypes.GenericTypes.ANY, "%<Format>%", NO_ERROR),
+		Arguments.of(IecTypes.GenericTypes.ANY, "%<more1>%", NO_ERROR),
+		Arguments.of(IecTypes.GenericTypes.ANY, "%<_more>%", NO_ERROR),
+		Arguments.of(IecTypes.GenericTypes.ANY, "%<mo3re>%", NO_ERROR),
+		Arguments.of(IecTypes.GenericTypes.ANY, "%<More>%", NO_ERROR),
+		Arguments.of(IecTypes.GenericTypes.ANY, "%<7>%", NO_ERROR));
+	}
+	
+	@DisplayName("Validator tests for valid virtual DNS Entries")
+	@ParameterizedTest
+	@MethodSource("validateValidVirtualDNSEntryTestCases")
+	@SuppressWarnings("static-method")
+	void validateValidVirtualDNSEntries(final DataType type, final String value, final String expectedErrorString) {
+		final String resultString = ValueValidator.validateValue(type, value);
+		assertEquals(expectedErrorString, resultString);
+	}
+		
+	static Stream<Arguments> validateInValidVirtualDNSEntryTestCases(){
+	return Stream.of(Arguments.of(IecTypes.GenericTypes.ANY, "%<more>%22"),
+	Arguments.of(IecTypes.GenericTypes.ANY, "22%<Format>%"),
+	Arguments.of(IecTypes.GenericTypes.ANY, "%%<more1>%"),
+	Arguments.of(IecTypes.GenericTypes.ANY, "<%<_more>%33"),
+	Arguments.of(IecTypes.GenericTypes.ANY, "%<<mo3re>%"),
+	Arguments.of(IecTypes.GenericTypes.ANY, "%<%<More>%"),
+	Arguments.of(IecTypes.GenericTypes.ANY, "%<>%"));
+	}
+	
+	@DisplayName("Validator tests for invalid virtual DNS Entries")
+	@ParameterizedTest
+	@MethodSource("validateInValidVirtualDNSEntryTestCases")
+	@SuppressWarnings("static-method")
+	void validateInValidVirtualDNSEntries(final DataType type, final String value) {
+		final String resultString = ValueValidator.validateValue(type, value);
+		assertFalse(resultString.equals(NO_ERROR));
 	}
 
 
