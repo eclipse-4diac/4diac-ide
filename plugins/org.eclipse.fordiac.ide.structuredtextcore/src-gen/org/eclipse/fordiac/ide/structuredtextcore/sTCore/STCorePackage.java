@@ -266,14 +266,14 @@ public interface STCorePackage extends EPackage
   int ST_ASSIGNMENT_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl <em>ST If Statment</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatementImpl <em>ST If Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatementImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTIfStatement()
    * @generated
    */
-  int ST_IF_STATMENT = 7;
+  int ST_IF_STATEMENT = 7;
 
   /**
    * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -282,7 +282,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__CONDITION = ST_STATEMENT_FEATURE_COUNT + 0;
+  int ST_IF_STATEMENT__CONDITION = ST_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -291,7 +291,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 1;
+  int ST_IF_STATEMENT__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Elseifs</b></em>' containment reference list.
@@ -300,7 +300,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__ELSEIFS = ST_STATEMENT_FEATURE_COUNT + 2;
+  int ST_IF_STATEMENT__ELSEIFS = ST_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Else</b></em>' containment reference.
@@ -309,16 +309,16 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__ELSE = ST_STATEMENT_FEATURE_COUNT + 3;
+  int ST_IF_STATEMENT__ELSE = ST_STATEMENT_FEATURE_COUNT + 3;
 
   /**
-   * The number of structural features of the '<em>ST If Statment</em>' class.
+   * The number of structural features of the '<em>ST If Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 4;
+  int ST_IF_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STElseIfPartImpl <em>ST Else If Part</em>}' class.
@@ -1444,58 +1444,58 @@ public interface STCorePackage extends EPackage
   EReference getSTAssignmentStatement_Right();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment <em>ST If Statment</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement <em>ST If Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST If Statment</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment
+   * @return the meta object for class '<em>ST If Statement</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement
    * @generated
    */
-  EClass getSTIfStatment();
+  EClass getSTIfStatement();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getCondition <em>Condition</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getCondition <em>Condition</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Condition</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getCondition()
-   * @see #getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getCondition()
+   * @see #getSTIfStatement()
    * @generated
    */
-  EReference getSTIfStatment_Condition();
+  EReference getSTIfStatement_Condition();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getStatements <em>Statements</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Statements</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getStatements()
-   * @see #getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getStatements()
+   * @see #getSTIfStatement()
    * @generated
    */
-  EReference getSTIfStatment_Statements();
+  EReference getSTIfStatement_Statements();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElseifs <em>Elseifs</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElseifs <em>Elseifs</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Elseifs</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElseifs()
-   * @see #getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElseifs()
+   * @see #getSTIfStatement()
    * @generated
    */
-  EReference getSTIfStatment_Elseifs();
+  EReference getSTIfStatement_Elseifs();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElse <em>Else</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElse <em>Else</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Else</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElse()
-   * @see #getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElse()
+   * @see #getSTIfStatement()
    * @generated
    */
-  EReference getSTIfStatment_Else();
+  EReference getSTIfStatement_Else();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart <em>ST Else If Part</em>}'.
@@ -2474,14 +2474,14 @@ public interface STCorePackage extends EPackage
     EReference ST_ASSIGNMENT_STATEMENT__RIGHT = eINSTANCE.getSTAssignmentStatement_Right();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl <em>ST If Statment</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatementImpl <em>ST If Statement</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTIfStatment()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatementImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTIfStatement()
      * @generated
      */
-    EClass ST_IF_STATMENT = eINSTANCE.getSTIfStatment();
+    EClass ST_IF_STATEMENT = eINSTANCE.getSTIfStatement();
 
     /**
      * The meta object literal for the '<em><b>Condition</b></em>' containment reference feature.
@@ -2489,7 +2489,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_IF_STATMENT__CONDITION = eINSTANCE.getSTIfStatment_Condition();
+    EReference ST_IF_STATEMENT__CONDITION = eINSTANCE.getSTIfStatement_Condition();
 
     /**
      * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
@@ -2497,7 +2497,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_IF_STATMENT__STATEMENTS = eINSTANCE.getSTIfStatment_Statements();
+    EReference ST_IF_STATEMENT__STATEMENTS = eINSTANCE.getSTIfStatement_Statements();
 
     /**
      * The meta object literal for the '<em><b>Elseifs</b></em>' containment reference list feature.
@@ -2505,7 +2505,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_IF_STATMENT__ELSEIFS = eINSTANCE.getSTIfStatment_Elseifs();
+    EReference ST_IF_STATEMENT__ELSEIFS = eINSTANCE.getSTIfStatement_Elseifs();
 
     /**
      * The meta object literal for the '<em><b>Else</b></em>' containment reference feature.
@@ -2513,7 +2513,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_IF_STATMENT__ELSE = eINSTANCE.getSTIfStatment_Else();
+    EReference ST_IF_STATEMENT__ELSE = eINSTANCE.getSTIfStatement_Else();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STElseIfPartImpl <em>ST Else If Part</em>}' class.

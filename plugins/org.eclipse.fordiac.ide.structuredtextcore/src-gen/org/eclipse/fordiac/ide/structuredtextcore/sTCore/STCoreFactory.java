@@ -87,13 +87,13 @@ public interface STCoreFactory extends EFactory
   STAssignmentStatement createSTAssignmentStatement();
 
   /**
-   * Returns a new object of class '<em>ST If Statment</em>'.
+   * Returns a new object of class '<em>ST If Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>ST If Statment</em>'.
+   * @return a new object of class '<em>ST If Statement</em>'.
    * @generated
    */
-  STIfStatment createSTIfStatment();
+  STIfStatement createSTIfStatement();
 
   /**
    * Returns a new object of class '<em>ST Else If Part</em>'.

@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
@@ -125,8 +125,8 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 			case STCorePackage.ST_FOR_STATEMENT:
 				sequence_STForStatement(context, (STForStatement) semanticObject); 
 				return; 
-			case STCorePackage.ST_IF_STATMENT:
-				sequence_STIfStatment(context, (STIfStatment) semanticObject); 
+			case STCorePackage.ST_IF_STATEMENT:
+				sequence_STIfStatement(context, (STIfStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_MEMBER_ACCESS_EXPRESSION:
 				sequence_STAccessExpression(context, (STMemberAccessExpression) semanticObject); 

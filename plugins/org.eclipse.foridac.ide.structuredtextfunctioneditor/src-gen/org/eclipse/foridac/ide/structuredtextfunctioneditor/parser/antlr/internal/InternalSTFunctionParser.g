@@ -907,11 +907,11 @@ ruleSTStatement returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTStatementAccess().getSTIfStatmentParserRuleCall_0_0_0());
+					newCompositeNode(grammarAccess.getSTStatementAccess().getSTIfStatementParserRuleCall_0_0_0());
 				}
-				this_STIfStatment_0=ruleSTIfStatment
+				this_STIfStatement_0=ruleSTIfStatement
 				{
-					$current = $this_STIfStatment_0.current;
+					$current = $this_STIfStatement_0.current;
 					afterParserOrEnumRuleCall();
 				}
 				    |
@@ -1085,15 +1085,15 @@ ruleSTAssignmentStatement returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleSTIfStatment
-entryRuleSTIfStatment returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getSTIfStatmentRule()); }
-	iv_ruleSTIfStatment=ruleSTIfStatment
-	{ $current=$iv_ruleSTIfStatment.current; }
+// Entry rule entryRuleSTIfStatement
+entryRuleSTIfStatement returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTIfStatementRule()); }
+	iv_ruleSTIfStatement=ruleSTIfStatement
+	{ $current=$iv_ruleSTIfStatement.current; }
 	EOF;
 
-// Rule STIfStatment
-ruleSTIfStatment returns [EObject current=null]
+// Rule STIfStatement
+ruleSTIfStatement returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -1103,17 +1103,17 @@ ruleSTIfStatment returns [EObject current=null]
 	(
 		otherlv_0=IF
 		{
-			newLeafNode(otherlv_0, grammarAccess.getSTIfStatmentAccess().getIFKeyword_0());
+			newLeafNode(otherlv_0, grammarAccess.getSTIfStatementAccess().getIFKeyword_0());
 		}
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTIfStatmentAccess().getConditionSTExpressionParserRuleCall_1_0());
+					newCompositeNode(grammarAccess.getSTIfStatementAccess().getConditionSTExpressionParserRuleCall_1_0());
 				}
 				lv_condition_1_0=ruleSTExpression
 				{
 					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getSTIfStatmentRule());
+						$current = createModelElementForParent(grammarAccess.getSTIfStatementRule());
 					}
 					set(
 						$current,
@@ -1126,17 +1126,17 @@ ruleSTIfStatment returns [EObject current=null]
 		)
 		otherlv_2=THEN
 		{
-			newLeafNode(otherlv_2, grammarAccess.getSTIfStatmentAccess().getTHENKeyword_2());
+			newLeafNode(otherlv_2, grammarAccess.getSTIfStatementAccess().getTHENKeyword_2());
 		}
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTIfStatmentAccess().getStatementsSTStatementParserRuleCall_3_0());
+					newCompositeNode(grammarAccess.getSTIfStatementAccess().getStatementsSTStatementParserRuleCall_3_0());
 				}
 				lv_statements_3_0=ruleSTStatement
 				{
 					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getSTIfStatmentRule());
+						$current = createModelElementForParent(grammarAccess.getSTIfStatementRule());
 					}
 					add(
 						$current,
@@ -1150,12 +1150,12 @@ ruleSTIfStatment returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTIfStatmentAccess().getElseifsSTElseIfPartParserRuleCall_4_0());
+					newCompositeNode(grammarAccess.getSTIfStatementAccess().getElseifsSTElseIfPartParserRuleCall_4_0());
 				}
 				lv_elseifs_4_0=ruleSTElseIfPart
 				{
 					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getSTIfStatmentRule());
+						$current = createModelElementForParent(grammarAccess.getSTIfStatementRule());
 					}
 					add(
 						$current,
@@ -1169,12 +1169,12 @@ ruleSTIfStatment returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTIfStatmentAccess().getElseSTElsePartParserRuleCall_5_0());
+					newCompositeNode(grammarAccess.getSTIfStatementAccess().getElseSTElsePartParserRuleCall_5_0());
 				}
 				lv_else_5_0=ruleSTElsePart
 				{
 					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getSTIfStatmentRule());
+						$current = createModelElementForParent(grammarAccess.getSTIfStatementRule());
 					}
 					set(
 						$current,
@@ -1187,7 +1187,7 @@ ruleSTIfStatment returns [EObject current=null]
 		)?
 		otherlv_6=END_IF
 		{
-			newLeafNode(otherlv_6, grammarAccess.getSTIfStatmentAccess().getEND_IFKeyword_6());
+			newLeafNode(otherlv_6, grammarAccess.getSTIfStatementAccess().getEND_IFKeyword_6());
 		}
 	)
 ;

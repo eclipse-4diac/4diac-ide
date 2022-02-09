@@ -520,7 +520,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
 		private final Alternatives cAlternatives_0_0 = (Alternatives)cGroup_0.eContents().get(0);
-		private final RuleCall cSTIfStatmentParserRuleCall_0_0_0 = (RuleCall)cAlternatives_0_0.eContents().get(0);
+		private final RuleCall cSTIfStatementParserRuleCall_0_0_0 = (RuleCall)cAlternatives_0_0.eContents().get(0);
 		private final RuleCall cSTCaseStatementParserRuleCall_0_0_1 = (RuleCall)cAlternatives_0_0.eContents().get(1);
 		private final RuleCall cSTForStatementParserRuleCall_0_0_2 = (RuleCall)cAlternatives_0_0.eContents().get(2);
 		private final RuleCall cSTWhileStatementParserRuleCall_0_0_3 = (RuleCall)cAlternatives_0_0.eContents().get(3);
@@ -541,7 +541,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cSemicolonKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		
 		//STStatement:
-		//    (STIfStatment |
+		//    (STIfStatement |
 		//    STCaseStatement |
 		//    STForStatement |
 		//    STWhileStatement |
@@ -553,7 +553,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//    {STNop} ';';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(STIfStatment |
+		//(STIfStatement |
 		//STCaseStatement |
 		//STForStatement |
 		//STWhileStatement |
@@ -565,7 +565,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//{STNop} ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//(STIfStatment |
+		//(STIfStatement |
 		//STCaseStatement |
 		//STForStatement |
 		//STWhileStatement |
@@ -576,7 +576,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//{STExit} 'EXIT') ';'
 		public Group getGroup_0() { return cGroup_0; }
 		
-		//(STIfStatment |
+		//(STIfStatement |
 		//STCaseStatement |
 		//STForStatement |
 		//STWhileStatement |
@@ -587,8 +587,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//{STExit} 'EXIT')
 		public Alternatives getAlternatives_0_0() { return cAlternatives_0_0; }
 		
-		//STIfStatment
-		public RuleCall getSTIfStatmentParserRuleCall_0_0_0() { return cSTIfStatmentParserRuleCall_0_0_0; }
+		//STIfStatement
+		public RuleCall getSTIfStatementParserRuleCall_0_0_0() { return cSTIfStatementParserRuleCall_0_0_0; }
 		
 		//STCaseStatement
 		public RuleCall getSTCaseStatementParserRuleCall_0_0_1() { return cSTCaseStatementParserRuleCall_0_0_1; }
@@ -676,8 +676,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STExpression
 		public RuleCall getRightSTExpressionParserRuleCall_2_0() { return cRightSTExpressionParserRuleCall_2_0; }
 	}
-	public class STIfStatmentElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STIfStatment");
+	public class STIfStatementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STIfStatement");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cIFKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cConditionAssignment_1 = (Assignment)cGroup.eContents().get(1);
@@ -691,7 +691,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cElseSTElsePartParserRuleCall_5_0 = (RuleCall)cElseAssignment_5.eContents().get(0);
 		private final Keyword cEND_IFKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
-		//STIfStatment:
+		//STIfStatement:
 		//    'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -2746,7 +2746,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final ArrayInitElementElements pArrayInitElement;
 	private final STStatementElements pSTStatement;
 	private final STAssignmentStatementElements pSTAssignmentStatement;
-	private final STIfStatmentElements pSTIfStatment;
+	private final STIfStatementElements pSTIfStatement;
 	private final STElseIfPartElements pSTElseIfPart;
 	private final STCaseStatementElements pSTCaseStatement;
 	private final STCaseCasesElements pSTCaseCases;
@@ -2827,7 +2827,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pArrayInitElement = new ArrayInitElementElements();
 		this.pSTStatement = new STStatementElements();
 		this.pSTAssignmentStatement = new STAssignmentStatementElements();
-		this.pSTIfStatment = new STIfStatmentElements();
+		this.pSTIfStatement = new STIfStatementElements();
 		this.pSTElseIfPart = new STElseIfPartElements();
 		this.pSTCaseStatement = new STCaseStatementElements();
 		this.pSTCaseCases = new STCaseCasesElements();
@@ -3018,7 +3018,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STStatement:
-	//    (STIfStatment |
+	//    (STIfStatement |
 	//    STCaseStatement |
 	//    STForStatement |
 	//    STWhileStatement |
@@ -3047,14 +3047,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTAssignmentStatementAccess().getRule();
 	}
 	
-	//STIfStatment:
+	//STIfStatement:
 	//    'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
-	public STIfStatmentElements getSTIfStatmentAccess() {
-		return pSTIfStatment;
+	public STIfStatementElements getSTIfStatementAccess() {
+		return pSTIfStatement;
 	}
 	
-	public ParserRule getSTIfStatmentRule() {
-		return getSTIfStatmentAccess().getRule();
+	public ParserRule getSTIfStatementRule() {
+		return getSTIfStatementAccess().getRule();
 	}
 	
 	//STElseIfPart:

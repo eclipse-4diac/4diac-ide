@@ -113,9 +113,9 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTAssignmentStatementAdapter();
       }
       @Override
-      public Adapter caseSTIfStatment(STIfStatment object)
+      public Adapter caseSTIfStatement(STIfStatement object)
       {
-        return createSTIfStatmentAdapter();
+        return createSTIfStatementAdapter();
       }
       @Override
       public Adapter caseSTElseIfPart(STElseIfPart object)
@@ -375,16 +375,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment <em>ST If Statment</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement <em>ST If Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement
    * @generated
    */
-  public Adapter createSTIfStatmentAdapter()
+  public Adapter createSTIfStatementAdapter()
   {
     return null;
   }

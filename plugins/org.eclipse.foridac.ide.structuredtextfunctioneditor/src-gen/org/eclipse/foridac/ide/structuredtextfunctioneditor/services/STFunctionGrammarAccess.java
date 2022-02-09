@@ -310,7 +310,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STStatement:
-	//    (STIfStatment |
+	//    (STIfStatement |
 	//    STCaseStatement |
 	//    STForStatement |
 	//    STWhileStatement |
@@ -339,14 +339,14 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTAssignmentStatementAccess().getRule();
 	}
 	
-	//STIfStatment:
+	//STIfStatement:
 	//    'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
-	public STCoreGrammarAccess.STIfStatmentElements getSTIfStatmentAccess() {
-		return gaSTCore.getSTIfStatmentAccess();
+	public STCoreGrammarAccess.STIfStatementElements getSTIfStatementAccess() {
+		return gaSTCore.getSTIfStatementAccess();
 	}
 	
-	public ParserRule getSTIfStatmentRule() {
-		return getSTIfStatmentAccess().getRule();
+	public ParserRule getSTIfStatementRule() {
+		return getSTIfStatementAccess().getRule();
 	}
 	
 	//STElseIfPart:

@@ -7,24 +7,24 @@ import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>ST If Statment</b></em>'.
+ * A representation of the model object '<em><b>ST If Statement</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getCondition <em>Condition</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getStatements <em>Statements</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElseifs <em>Elseifs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElse <em>Else</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getCondition <em>Condition</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getStatements <em>Statements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElseifs <em>Elseifs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElse <em>Else</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatment()
+ * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatement()
  * @model
  * @generated
  */
-public interface STIfStatment extends STStatement
+public interface STIfStatement extends STStatement
 {
   /**
    * Returns the value of the '<em><b>Condition</b></em>' containment reference.
@@ -32,14 +32,14 @@ public interface STIfStatment extends STStatement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Condition</em>' containment reference.
    * @see #setCondition(STExpression)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatment_Condition()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatement_Condition()
    * @model containment="true"
    * @generated
    */
   STExpression getCondition();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getCondition <em>Condition</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getCondition <em>Condition</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Condition</em>' containment reference.
@@ -54,7 +54,7 @@ public interface STIfStatment extends STStatement
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Statements</em>' containment reference list.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatment_Statements()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatement_Statements()
    * @model containment="true"
    * @generated
    */
@@ -66,7 +66,7 @@ public interface STIfStatment extends STStatement
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Elseifs</em>' containment reference list.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatment_Elseifs()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatement_Elseifs()
    * @model containment="true"
    * @generated
    */
@@ -78,14 +78,14 @@ public interface STIfStatment extends STStatement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Else</em>' containment reference.
    * @see #setElse(STElsePart)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatment_Else()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTIfStatement_Else()
    * @model containment="true"
    * @generated
    */
   STElsePart getElse();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElse <em>Else</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElse <em>Else</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Else</em>' containment reference.
@@ -94,4 +94,4 @@ public interface STIfStatment extends STStatement
    */
   void setElse(STElsePart value);
 
-} // STIfStatment
+} // STIfStatement

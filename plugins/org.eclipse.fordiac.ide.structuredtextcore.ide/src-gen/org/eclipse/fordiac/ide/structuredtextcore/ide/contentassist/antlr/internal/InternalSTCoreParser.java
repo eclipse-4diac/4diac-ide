@@ -905,23 +905,23 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "ruleSTAssignmentStatement"
 
 
-    // $ANTLR start "entryRuleSTIfStatment"
-    // InternalSTCoreParser.g:336:1: entryRuleSTIfStatment : ruleSTIfStatment EOF ;
-    public final void entryRuleSTIfStatment() throws RecognitionException {
+    // $ANTLR start "entryRuleSTIfStatement"
+    // InternalSTCoreParser.g:336:1: entryRuleSTIfStatement : ruleSTIfStatement EOF ;
+    public final void entryRuleSTIfStatement() throws RecognitionException {
         try {
-            // InternalSTCoreParser.g:337:1: ( ruleSTIfStatment EOF )
-            // InternalSTCoreParser.g:338:1: ruleSTIfStatment EOF
+            // InternalSTCoreParser.g:337:1: ( ruleSTIfStatement EOF )
+            // InternalSTCoreParser.g:338:1: ruleSTIfStatement EOF
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentRule()); 
+               before(grammarAccess.getSTIfStatementRule()); 
             }
             pushFollow(FOLLOW_1);
-            ruleSTIfStatment();
+            ruleSTIfStatement();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentRule()); 
+               after(grammarAccess.getSTIfStatementRule()); 
             }
             match(input,EOF,FOLLOW_2); if (state.failed) return ;
 
@@ -936,30 +936,30 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "entryRuleSTIfStatment"
+    // $ANTLR end "entryRuleSTIfStatement"
 
 
-    // $ANTLR start "ruleSTIfStatment"
-    // InternalSTCoreParser.g:345:1: ruleSTIfStatment : ( ( rule__STIfStatment__Group__0 ) ) ;
-    public final void ruleSTIfStatment() throws RecognitionException {
+    // $ANTLR start "ruleSTIfStatement"
+    // InternalSTCoreParser.g:345:1: ruleSTIfStatement : ( ( rule__STIfStatement__Group__0 ) ) ;
+    public final void ruleSTIfStatement() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:349:2: ( ( ( rule__STIfStatment__Group__0 ) ) )
-            // InternalSTCoreParser.g:350:2: ( ( rule__STIfStatment__Group__0 ) )
+            // InternalSTCoreParser.g:349:2: ( ( ( rule__STIfStatement__Group__0 ) ) )
+            // InternalSTCoreParser.g:350:2: ( ( rule__STIfStatement__Group__0 ) )
             {
-            // InternalSTCoreParser.g:350:2: ( ( rule__STIfStatment__Group__0 ) )
-            // InternalSTCoreParser.g:351:3: ( rule__STIfStatment__Group__0 )
+            // InternalSTCoreParser.g:350:2: ( ( rule__STIfStatement__Group__0 ) )
+            // InternalSTCoreParser.g:351:3: ( rule__STIfStatement__Group__0 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getGroup()); 
+               before(grammarAccess.getSTIfStatementAccess().getGroup()); 
             }
-            // InternalSTCoreParser.g:352:3: ( rule__STIfStatment__Group__0 )
-            // InternalSTCoreParser.g:352:4: rule__STIfStatment__Group__0
+            // InternalSTCoreParser.g:352:3: ( rule__STIfStatement__Group__0 )
+            // InternalSTCoreParser.g:352:4: rule__STIfStatement__Group__0
             {
             pushFollow(FOLLOW_2);
-            rule__STIfStatment__Group__0();
+            rule__STIfStatement__Group__0();
 
             state._fsp--;
             if (state.failed) return ;
@@ -967,7 +967,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getGroup()); 
+               after(grammarAccess.getSTIfStatementAccess().getGroup()); 
             }
 
             }
@@ -987,7 +987,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "ruleSTIfStatment"
+    // $ANTLR end "ruleSTIfStatement"
 
 
     // $ANTLR start "entryRuleSTElseIfPart"
@@ -5360,13 +5360,13 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__STStatement__Alternatives_0_0"
-    // InternalSTCoreParser.g:1606:1: rule__STStatement__Alternatives_0_0 : ( ( ruleSTIfStatment ) | ( ruleSTCaseStatement ) | ( ruleSTForStatement ) | ( ruleSTWhileStatement ) | ( ruleSTRepeatStatement ) | ( ruleSTAssignmentStatement ) | ( ( rule__STStatement__Group_0_0_6__0 ) ) | ( ( rule__STStatement__Group_0_0_7__0 ) ) | ( ( rule__STStatement__Group_0_0_8__0 ) ) );
+    // InternalSTCoreParser.g:1606:1: rule__STStatement__Alternatives_0_0 : ( ( ruleSTIfStatement ) | ( ruleSTCaseStatement ) | ( ruleSTForStatement ) | ( ruleSTWhileStatement ) | ( ruleSTRepeatStatement ) | ( ruleSTAssignmentStatement ) | ( ( rule__STStatement__Group_0_0_6__0 ) ) | ( ( rule__STStatement__Group_0_0_7__0 ) ) | ( ( rule__STStatement__Group_0_0_8__0 ) ) );
     public final void rule__STStatement__Alternatives_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:1610:1: ( ( ruleSTIfStatment ) | ( ruleSTCaseStatement ) | ( ruleSTForStatement ) | ( ruleSTWhileStatement ) | ( ruleSTRepeatStatement ) | ( ruleSTAssignmentStatement ) | ( ( rule__STStatement__Group_0_0_6__0 ) ) | ( ( rule__STStatement__Group_0_0_7__0 ) ) | ( ( rule__STStatement__Group_0_0_8__0 ) ) )
+            // InternalSTCoreParser.g:1610:1: ( ( ruleSTIfStatement ) | ( ruleSTCaseStatement ) | ( ruleSTForStatement ) | ( ruleSTWhileStatement ) | ( ruleSTRepeatStatement ) | ( ruleSTAssignmentStatement ) | ( ( rule__STStatement__Group_0_0_6__0 ) ) | ( ( rule__STStatement__Group_0_0_7__0 ) ) | ( ( rule__STStatement__Group_0_0_8__0 ) ) )
             int alt6=9;
             switch ( input.LA(1) ) {
             case IF:
@@ -5467,21 +5467,21 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
 
             switch (alt6) {
                 case 1 :
-                    // InternalSTCoreParser.g:1611:2: ( ruleSTIfStatment )
+                    // InternalSTCoreParser.g:1611:2: ( ruleSTIfStatement )
                     {
-                    // InternalSTCoreParser.g:1611:2: ( ruleSTIfStatment )
-                    // InternalSTCoreParser.g:1612:3: ruleSTIfStatment
+                    // InternalSTCoreParser.g:1611:2: ( ruleSTIfStatement )
+                    // InternalSTCoreParser.g:1612:3: ruleSTIfStatement
                     {
                     if ( state.backtracking==0 ) {
-                       before(grammarAccess.getSTStatementAccess().getSTIfStatmentParserRuleCall_0_0_0()); 
+                       before(grammarAccess.getSTStatementAccess().getSTIfStatementParserRuleCall_0_0_0()); 
                     }
                     pushFollow(FOLLOW_2);
-                    ruleSTIfStatment();
+                    ruleSTIfStatement();
 
                     state._fsp--;
                     if (state.failed) return ;
                     if ( state.backtracking==0 ) {
-                       after(grammarAccess.getSTStatementAccess().getSTIfStatmentParserRuleCall_0_0_0()); 
+                       after(grammarAccess.getSTStatementAccess().getSTIfStatementParserRuleCall_0_0_0()); 
                     }
 
                     }
@@ -13650,23 +13650,23 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__STAssignmentStatement__Group__2__Impl"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__0"
-    // InternalSTCoreParser.g:3898:1: rule__STIfStatment__Group__0 : rule__STIfStatment__Group__0__Impl rule__STIfStatment__Group__1 ;
-    public final void rule__STIfStatment__Group__0() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__0"
+    // InternalSTCoreParser.g:3898:1: rule__STIfStatement__Group__0 : rule__STIfStatement__Group__0__Impl rule__STIfStatement__Group__1 ;
+    public final void rule__STIfStatement__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:3902:1: ( rule__STIfStatment__Group__0__Impl rule__STIfStatment__Group__1 )
-            // InternalSTCoreParser.g:3903:2: rule__STIfStatment__Group__0__Impl rule__STIfStatment__Group__1
+            // InternalSTCoreParser.g:3902:1: ( rule__STIfStatement__Group__0__Impl rule__STIfStatement__Group__1 )
+            // InternalSTCoreParser.g:3903:2: rule__STIfStatement__Group__0__Impl rule__STIfStatement__Group__1
             {
             pushFollow(FOLLOW_11);
-            rule__STIfStatment__Group__0__Impl();
+            rule__STIfStatement__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__STIfStatment__Group__1();
+            rule__STIfStatement__Group__1();
 
             state._fsp--;
             if (state.failed) return ;
@@ -13685,12 +13685,12 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__0"
+    // $ANTLR end "rule__STIfStatement__Group__0"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__0__Impl"
-    // InternalSTCoreParser.g:3910:1: rule__STIfStatment__Group__0__Impl : ( IF ) ;
-    public final void rule__STIfStatment__Group__0__Impl() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__0__Impl"
+    // InternalSTCoreParser.g:3910:1: rule__STIfStatement__Group__0__Impl : ( IF ) ;
+    public final void rule__STIfStatement__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -13702,11 +13702,11 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             // InternalSTCoreParser.g:3916:2: IF
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getIFKeyword_0()); 
+               before(grammarAccess.getSTIfStatementAccess().getIFKeyword_0()); 
             }
             match(input,IF,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getIFKeyword_0()); 
+               after(grammarAccess.getSTIfStatementAccess().getIFKeyword_0()); 
             }
 
             }
@@ -13726,26 +13726,26 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__0__Impl"
+    // $ANTLR end "rule__STIfStatement__Group__0__Impl"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__1"
-    // InternalSTCoreParser.g:3925:1: rule__STIfStatment__Group__1 : rule__STIfStatment__Group__1__Impl rule__STIfStatment__Group__2 ;
-    public final void rule__STIfStatment__Group__1() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__1"
+    // InternalSTCoreParser.g:3925:1: rule__STIfStatement__Group__1 : rule__STIfStatement__Group__1__Impl rule__STIfStatement__Group__2 ;
+    public final void rule__STIfStatement__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:3929:1: ( rule__STIfStatment__Group__1__Impl rule__STIfStatment__Group__2 )
-            // InternalSTCoreParser.g:3930:2: rule__STIfStatment__Group__1__Impl rule__STIfStatment__Group__2
+            // InternalSTCoreParser.g:3929:1: ( rule__STIfStatement__Group__1__Impl rule__STIfStatement__Group__2 )
+            // InternalSTCoreParser.g:3930:2: rule__STIfStatement__Group__1__Impl rule__STIfStatement__Group__2
             {
             pushFollow(FOLLOW_25);
-            rule__STIfStatment__Group__1__Impl();
+            rule__STIfStatement__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__STIfStatment__Group__2();
+            rule__STIfStatement__Group__2();
 
             state._fsp--;
             if (state.failed) return ;
@@ -13764,30 +13764,30 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__1"
+    // $ANTLR end "rule__STIfStatement__Group__1"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__1__Impl"
-    // InternalSTCoreParser.g:3937:1: rule__STIfStatment__Group__1__Impl : ( ( rule__STIfStatment__ConditionAssignment_1 ) ) ;
-    public final void rule__STIfStatment__Group__1__Impl() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__1__Impl"
+    // InternalSTCoreParser.g:3937:1: rule__STIfStatement__Group__1__Impl : ( ( rule__STIfStatement__ConditionAssignment_1 ) ) ;
+    public final void rule__STIfStatement__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:3941:1: ( ( ( rule__STIfStatment__ConditionAssignment_1 ) ) )
-            // InternalSTCoreParser.g:3942:1: ( ( rule__STIfStatment__ConditionAssignment_1 ) )
+            // InternalSTCoreParser.g:3941:1: ( ( ( rule__STIfStatement__ConditionAssignment_1 ) ) )
+            // InternalSTCoreParser.g:3942:1: ( ( rule__STIfStatement__ConditionAssignment_1 ) )
             {
-            // InternalSTCoreParser.g:3942:1: ( ( rule__STIfStatment__ConditionAssignment_1 ) )
-            // InternalSTCoreParser.g:3943:2: ( rule__STIfStatment__ConditionAssignment_1 )
+            // InternalSTCoreParser.g:3942:1: ( ( rule__STIfStatement__ConditionAssignment_1 ) )
+            // InternalSTCoreParser.g:3943:2: ( rule__STIfStatement__ConditionAssignment_1 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getConditionAssignment_1()); 
+               before(grammarAccess.getSTIfStatementAccess().getConditionAssignment_1()); 
             }
-            // InternalSTCoreParser.g:3944:2: ( rule__STIfStatment__ConditionAssignment_1 )
-            // InternalSTCoreParser.g:3944:3: rule__STIfStatment__ConditionAssignment_1
+            // InternalSTCoreParser.g:3944:2: ( rule__STIfStatement__ConditionAssignment_1 )
+            // InternalSTCoreParser.g:3944:3: rule__STIfStatement__ConditionAssignment_1
             {
             pushFollow(FOLLOW_2);
-            rule__STIfStatment__ConditionAssignment_1();
+            rule__STIfStatement__ConditionAssignment_1();
 
             state._fsp--;
             if (state.failed) return ;
@@ -13795,7 +13795,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getConditionAssignment_1()); 
+               after(grammarAccess.getSTIfStatementAccess().getConditionAssignment_1()); 
             }
 
             }
@@ -13815,26 +13815,26 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__1__Impl"
+    // $ANTLR end "rule__STIfStatement__Group__1__Impl"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__2"
-    // InternalSTCoreParser.g:3952:1: rule__STIfStatment__Group__2 : rule__STIfStatment__Group__2__Impl rule__STIfStatment__Group__3 ;
-    public final void rule__STIfStatment__Group__2() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__2"
+    // InternalSTCoreParser.g:3952:1: rule__STIfStatement__Group__2 : rule__STIfStatement__Group__2__Impl rule__STIfStatement__Group__3 ;
+    public final void rule__STIfStatement__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:3956:1: ( rule__STIfStatment__Group__2__Impl rule__STIfStatment__Group__3 )
-            // InternalSTCoreParser.g:3957:2: rule__STIfStatment__Group__2__Impl rule__STIfStatment__Group__3
+            // InternalSTCoreParser.g:3956:1: ( rule__STIfStatement__Group__2__Impl rule__STIfStatement__Group__3 )
+            // InternalSTCoreParser.g:3957:2: rule__STIfStatement__Group__2__Impl rule__STIfStatement__Group__3
             {
             pushFollow(FOLLOW_26);
-            rule__STIfStatment__Group__2__Impl();
+            rule__STIfStatement__Group__2__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__STIfStatment__Group__3();
+            rule__STIfStatement__Group__3();
 
             state._fsp--;
             if (state.failed) return ;
@@ -13853,12 +13853,12 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__2"
+    // $ANTLR end "rule__STIfStatement__Group__2"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__2__Impl"
-    // InternalSTCoreParser.g:3964:1: rule__STIfStatment__Group__2__Impl : ( THEN ) ;
-    public final void rule__STIfStatment__Group__2__Impl() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__2__Impl"
+    // InternalSTCoreParser.g:3964:1: rule__STIfStatement__Group__2__Impl : ( THEN ) ;
+    public final void rule__STIfStatement__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -13870,11 +13870,11 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             // InternalSTCoreParser.g:3970:2: THEN
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getTHENKeyword_2()); 
+               before(grammarAccess.getSTIfStatementAccess().getTHENKeyword_2()); 
             }
             match(input,THEN,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getTHENKeyword_2()); 
+               after(grammarAccess.getSTIfStatementAccess().getTHENKeyword_2()); 
             }
 
             }
@@ -13894,26 +13894,26 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__2__Impl"
+    // $ANTLR end "rule__STIfStatement__Group__2__Impl"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__3"
-    // InternalSTCoreParser.g:3979:1: rule__STIfStatment__Group__3 : rule__STIfStatment__Group__3__Impl rule__STIfStatment__Group__4 ;
-    public final void rule__STIfStatment__Group__3() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__3"
+    // InternalSTCoreParser.g:3979:1: rule__STIfStatement__Group__3 : rule__STIfStatement__Group__3__Impl rule__STIfStatement__Group__4 ;
+    public final void rule__STIfStatement__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:3983:1: ( rule__STIfStatment__Group__3__Impl rule__STIfStatment__Group__4 )
-            // InternalSTCoreParser.g:3984:2: rule__STIfStatment__Group__3__Impl rule__STIfStatment__Group__4
+            // InternalSTCoreParser.g:3983:1: ( rule__STIfStatement__Group__3__Impl rule__STIfStatement__Group__4 )
+            // InternalSTCoreParser.g:3984:2: rule__STIfStatement__Group__3__Impl rule__STIfStatement__Group__4
             {
             pushFollow(FOLLOW_26);
-            rule__STIfStatment__Group__3__Impl();
+            rule__STIfStatement__Group__3__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__STIfStatment__Group__4();
+            rule__STIfStatement__Group__4();
 
             state._fsp--;
             if (state.failed) return ;
@@ -13932,26 +13932,26 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__3"
+    // $ANTLR end "rule__STIfStatement__Group__3"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__3__Impl"
-    // InternalSTCoreParser.g:3991:1: rule__STIfStatment__Group__3__Impl : ( ( rule__STIfStatment__StatementsAssignment_3 )* ) ;
-    public final void rule__STIfStatment__Group__3__Impl() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__3__Impl"
+    // InternalSTCoreParser.g:3991:1: rule__STIfStatement__Group__3__Impl : ( ( rule__STIfStatement__StatementsAssignment_3 )* ) ;
+    public final void rule__STIfStatement__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:3995:1: ( ( ( rule__STIfStatment__StatementsAssignment_3 )* ) )
-            // InternalSTCoreParser.g:3996:1: ( ( rule__STIfStatment__StatementsAssignment_3 )* )
+            // InternalSTCoreParser.g:3995:1: ( ( ( rule__STIfStatement__StatementsAssignment_3 )* ) )
+            // InternalSTCoreParser.g:3996:1: ( ( rule__STIfStatement__StatementsAssignment_3 )* )
             {
-            // InternalSTCoreParser.g:3996:1: ( ( rule__STIfStatment__StatementsAssignment_3 )* )
-            // InternalSTCoreParser.g:3997:2: ( rule__STIfStatment__StatementsAssignment_3 )*
+            // InternalSTCoreParser.g:3996:1: ( ( rule__STIfStatement__StatementsAssignment_3 )* )
+            // InternalSTCoreParser.g:3997:2: ( rule__STIfStatement__StatementsAssignment_3 )*
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getStatementsAssignment_3()); 
+               before(grammarAccess.getSTIfStatementAccess().getStatementsAssignment_3()); 
             }
-            // InternalSTCoreParser.g:3998:2: ( rule__STIfStatment__StatementsAssignment_3 )*
+            // InternalSTCoreParser.g:3998:2: ( rule__STIfStatement__StatementsAssignment_3 )*
             loop39:
             do {
                 int alt39=2;
@@ -13964,10 +13964,10 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
 
                 switch (alt39) {
             	case 1 :
-            	    // InternalSTCoreParser.g:3998:3: rule__STIfStatment__StatementsAssignment_3
+            	    // InternalSTCoreParser.g:3998:3: rule__STIfStatement__StatementsAssignment_3
             	    {
             	    pushFollow(FOLLOW_3);
-            	    rule__STIfStatment__StatementsAssignment_3();
+            	    rule__STIfStatement__StatementsAssignment_3();
 
             	    state._fsp--;
             	    if (state.failed) return ;
@@ -13981,7 +13981,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             } while (true);
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getStatementsAssignment_3()); 
+               after(grammarAccess.getSTIfStatementAccess().getStatementsAssignment_3()); 
             }
 
             }
@@ -14001,26 +14001,26 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__3__Impl"
+    // $ANTLR end "rule__STIfStatement__Group__3__Impl"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__4"
-    // InternalSTCoreParser.g:4006:1: rule__STIfStatment__Group__4 : rule__STIfStatment__Group__4__Impl rule__STIfStatment__Group__5 ;
-    public final void rule__STIfStatment__Group__4() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__4"
+    // InternalSTCoreParser.g:4006:1: rule__STIfStatement__Group__4 : rule__STIfStatement__Group__4__Impl rule__STIfStatement__Group__5 ;
+    public final void rule__STIfStatement__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:4010:1: ( rule__STIfStatment__Group__4__Impl rule__STIfStatment__Group__5 )
-            // InternalSTCoreParser.g:4011:2: rule__STIfStatment__Group__4__Impl rule__STIfStatment__Group__5
+            // InternalSTCoreParser.g:4010:1: ( rule__STIfStatement__Group__4__Impl rule__STIfStatement__Group__5 )
+            // InternalSTCoreParser.g:4011:2: rule__STIfStatement__Group__4__Impl rule__STIfStatement__Group__5
             {
             pushFollow(FOLLOW_26);
-            rule__STIfStatment__Group__4__Impl();
+            rule__STIfStatement__Group__4__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__STIfStatment__Group__5();
+            rule__STIfStatement__Group__5();
 
             state._fsp--;
             if (state.failed) return ;
@@ -14039,26 +14039,26 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__4"
+    // $ANTLR end "rule__STIfStatement__Group__4"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__4__Impl"
-    // InternalSTCoreParser.g:4018:1: rule__STIfStatment__Group__4__Impl : ( ( rule__STIfStatment__ElseifsAssignment_4 )* ) ;
-    public final void rule__STIfStatment__Group__4__Impl() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__4__Impl"
+    // InternalSTCoreParser.g:4018:1: rule__STIfStatement__Group__4__Impl : ( ( rule__STIfStatement__ElseifsAssignment_4 )* ) ;
+    public final void rule__STIfStatement__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:4022:1: ( ( ( rule__STIfStatment__ElseifsAssignment_4 )* ) )
-            // InternalSTCoreParser.g:4023:1: ( ( rule__STIfStatment__ElseifsAssignment_4 )* )
+            // InternalSTCoreParser.g:4022:1: ( ( ( rule__STIfStatement__ElseifsAssignment_4 )* ) )
+            // InternalSTCoreParser.g:4023:1: ( ( rule__STIfStatement__ElseifsAssignment_4 )* )
             {
-            // InternalSTCoreParser.g:4023:1: ( ( rule__STIfStatment__ElseifsAssignment_4 )* )
-            // InternalSTCoreParser.g:4024:2: ( rule__STIfStatment__ElseifsAssignment_4 )*
+            // InternalSTCoreParser.g:4023:1: ( ( rule__STIfStatement__ElseifsAssignment_4 )* )
+            // InternalSTCoreParser.g:4024:2: ( rule__STIfStatement__ElseifsAssignment_4 )*
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getElseifsAssignment_4()); 
+               before(grammarAccess.getSTIfStatementAccess().getElseifsAssignment_4()); 
             }
-            // InternalSTCoreParser.g:4025:2: ( rule__STIfStatment__ElseifsAssignment_4 )*
+            // InternalSTCoreParser.g:4025:2: ( rule__STIfStatement__ElseifsAssignment_4 )*
             loop40:
             do {
                 int alt40=2;
@@ -14071,10 +14071,10 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
 
                 switch (alt40) {
             	case 1 :
-            	    // InternalSTCoreParser.g:4025:3: rule__STIfStatment__ElseifsAssignment_4
+            	    // InternalSTCoreParser.g:4025:3: rule__STIfStatement__ElseifsAssignment_4
             	    {
             	    pushFollow(FOLLOW_27);
-            	    rule__STIfStatment__ElseifsAssignment_4();
+            	    rule__STIfStatement__ElseifsAssignment_4();
 
             	    state._fsp--;
             	    if (state.failed) return ;
@@ -14088,7 +14088,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             } while (true);
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getElseifsAssignment_4()); 
+               after(grammarAccess.getSTIfStatementAccess().getElseifsAssignment_4()); 
             }
 
             }
@@ -14108,26 +14108,26 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__4__Impl"
+    // $ANTLR end "rule__STIfStatement__Group__4__Impl"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__5"
-    // InternalSTCoreParser.g:4033:1: rule__STIfStatment__Group__5 : rule__STIfStatment__Group__5__Impl rule__STIfStatment__Group__6 ;
-    public final void rule__STIfStatment__Group__5() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__5"
+    // InternalSTCoreParser.g:4033:1: rule__STIfStatement__Group__5 : rule__STIfStatement__Group__5__Impl rule__STIfStatement__Group__6 ;
+    public final void rule__STIfStatement__Group__5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:4037:1: ( rule__STIfStatment__Group__5__Impl rule__STIfStatment__Group__6 )
-            // InternalSTCoreParser.g:4038:2: rule__STIfStatment__Group__5__Impl rule__STIfStatment__Group__6
+            // InternalSTCoreParser.g:4037:1: ( rule__STIfStatement__Group__5__Impl rule__STIfStatement__Group__6 )
+            // InternalSTCoreParser.g:4038:2: rule__STIfStatement__Group__5__Impl rule__STIfStatement__Group__6
             {
             pushFollow(FOLLOW_26);
-            rule__STIfStatment__Group__5__Impl();
+            rule__STIfStatement__Group__5__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__STIfStatment__Group__6();
+            rule__STIfStatement__Group__6();
 
             state._fsp--;
             if (state.failed) return ;
@@ -14146,26 +14146,26 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__5"
+    // $ANTLR end "rule__STIfStatement__Group__5"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__5__Impl"
-    // InternalSTCoreParser.g:4045:1: rule__STIfStatment__Group__5__Impl : ( ( rule__STIfStatment__ElseAssignment_5 )? ) ;
-    public final void rule__STIfStatment__Group__5__Impl() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__5__Impl"
+    // InternalSTCoreParser.g:4045:1: rule__STIfStatement__Group__5__Impl : ( ( rule__STIfStatement__ElseAssignment_5 )? ) ;
+    public final void rule__STIfStatement__Group__5__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:4049:1: ( ( ( rule__STIfStatment__ElseAssignment_5 )? ) )
-            // InternalSTCoreParser.g:4050:1: ( ( rule__STIfStatment__ElseAssignment_5 )? )
+            // InternalSTCoreParser.g:4049:1: ( ( ( rule__STIfStatement__ElseAssignment_5 )? ) )
+            // InternalSTCoreParser.g:4050:1: ( ( rule__STIfStatement__ElseAssignment_5 )? )
             {
-            // InternalSTCoreParser.g:4050:1: ( ( rule__STIfStatment__ElseAssignment_5 )? )
-            // InternalSTCoreParser.g:4051:2: ( rule__STIfStatment__ElseAssignment_5 )?
+            // InternalSTCoreParser.g:4050:1: ( ( rule__STIfStatement__ElseAssignment_5 )? )
+            // InternalSTCoreParser.g:4051:2: ( rule__STIfStatement__ElseAssignment_5 )?
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getElseAssignment_5()); 
+               before(grammarAccess.getSTIfStatementAccess().getElseAssignment_5()); 
             }
-            // InternalSTCoreParser.g:4052:2: ( rule__STIfStatment__ElseAssignment_5 )?
+            // InternalSTCoreParser.g:4052:2: ( rule__STIfStatement__ElseAssignment_5 )?
             int alt41=2;
             int LA41_0 = input.LA(1);
 
@@ -14174,10 +14174,10 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             }
             switch (alt41) {
                 case 1 :
-                    // InternalSTCoreParser.g:4052:3: rule__STIfStatment__ElseAssignment_5
+                    // InternalSTCoreParser.g:4052:3: rule__STIfStatement__ElseAssignment_5
                     {
                     pushFollow(FOLLOW_2);
-                    rule__STIfStatment__ElseAssignment_5();
+                    rule__STIfStatement__ElseAssignment_5();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -14188,7 +14188,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getElseAssignment_5()); 
+               after(grammarAccess.getSTIfStatementAccess().getElseAssignment_5()); 
             }
 
             }
@@ -14208,21 +14208,21 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__5__Impl"
+    // $ANTLR end "rule__STIfStatement__Group__5__Impl"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__6"
-    // InternalSTCoreParser.g:4060:1: rule__STIfStatment__Group__6 : rule__STIfStatment__Group__6__Impl ;
-    public final void rule__STIfStatment__Group__6() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__6"
+    // InternalSTCoreParser.g:4060:1: rule__STIfStatement__Group__6 : rule__STIfStatement__Group__6__Impl ;
+    public final void rule__STIfStatement__Group__6() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTCoreParser.g:4064:1: ( rule__STIfStatment__Group__6__Impl )
-            // InternalSTCoreParser.g:4065:2: rule__STIfStatment__Group__6__Impl
+            // InternalSTCoreParser.g:4064:1: ( rule__STIfStatement__Group__6__Impl )
+            // InternalSTCoreParser.g:4065:2: rule__STIfStatement__Group__6__Impl
             {
             pushFollow(FOLLOW_2);
-            rule__STIfStatment__Group__6__Impl();
+            rule__STIfStatement__Group__6__Impl();
 
             state._fsp--;
             if (state.failed) return ;
@@ -14241,12 +14241,12 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__6"
+    // $ANTLR end "rule__STIfStatement__Group__6"
 
 
-    // $ANTLR start "rule__STIfStatment__Group__6__Impl"
-    // InternalSTCoreParser.g:4071:1: rule__STIfStatment__Group__6__Impl : ( END_IF ) ;
-    public final void rule__STIfStatment__Group__6__Impl() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__Group__6__Impl"
+    // InternalSTCoreParser.g:4071:1: rule__STIfStatement__Group__6__Impl : ( END_IF ) ;
+    public final void rule__STIfStatement__Group__6__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -14258,11 +14258,11 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             // InternalSTCoreParser.g:4077:2: END_IF
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getEND_IFKeyword_6()); 
+               before(grammarAccess.getSTIfStatementAccess().getEND_IFKeyword_6()); 
             }
             match(input,END_IF,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getEND_IFKeyword_6()); 
+               after(grammarAccess.getSTIfStatementAccess().getEND_IFKeyword_6()); 
             }
 
             }
@@ -14282,7 +14282,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__Group__6__Impl"
+    // $ANTLR end "rule__STIfStatement__Group__6__Impl"
 
 
     // $ANTLR start "rule__STElseIfPart__Group__0"
@@ -28823,9 +28823,9 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__STAssignmentStatement__RightAssignment_2"
 
 
-    // $ANTLR start "rule__STIfStatment__ConditionAssignment_1"
-    // InternalSTCoreParser.g:8662:1: rule__STIfStatment__ConditionAssignment_1 : ( ruleSTExpression ) ;
-    public final void rule__STIfStatment__ConditionAssignment_1() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__ConditionAssignment_1"
+    // InternalSTCoreParser.g:8662:1: rule__STIfStatement__ConditionAssignment_1 : ( ruleSTExpression ) ;
+    public final void rule__STIfStatement__ConditionAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -28837,7 +28837,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             // InternalSTCoreParser.g:8668:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getConditionSTExpressionParserRuleCall_1_0()); 
+               before(grammarAccess.getSTIfStatementAccess().getConditionSTExpressionParserRuleCall_1_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleSTExpression();
@@ -28845,7 +28845,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getConditionSTExpressionParserRuleCall_1_0()); 
+               after(grammarAccess.getSTIfStatementAccess().getConditionSTExpressionParserRuleCall_1_0()); 
             }
 
             }
@@ -28865,12 +28865,12 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__ConditionAssignment_1"
+    // $ANTLR end "rule__STIfStatement__ConditionAssignment_1"
 
 
-    // $ANTLR start "rule__STIfStatment__StatementsAssignment_3"
-    // InternalSTCoreParser.g:8677:1: rule__STIfStatment__StatementsAssignment_3 : ( ruleSTStatement ) ;
-    public final void rule__STIfStatment__StatementsAssignment_3() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__StatementsAssignment_3"
+    // InternalSTCoreParser.g:8677:1: rule__STIfStatement__StatementsAssignment_3 : ( ruleSTStatement ) ;
+    public final void rule__STIfStatement__StatementsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -28882,7 +28882,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             // InternalSTCoreParser.g:8683:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getStatementsSTStatementParserRuleCall_3_0()); 
+               before(grammarAccess.getSTIfStatementAccess().getStatementsSTStatementParserRuleCall_3_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleSTStatement();
@@ -28890,7 +28890,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getStatementsSTStatementParserRuleCall_3_0()); 
+               after(grammarAccess.getSTIfStatementAccess().getStatementsSTStatementParserRuleCall_3_0()); 
             }
 
             }
@@ -28910,12 +28910,12 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__StatementsAssignment_3"
+    // $ANTLR end "rule__STIfStatement__StatementsAssignment_3"
 
 
-    // $ANTLR start "rule__STIfStatment__ElseifsAssignment_4"
-    // InternalSTCoreParser.g:8692:1: rule__STIfStatment__ElseifsAssignment_4 : ( ruleSTElseIfPart ) ;
-    public final void rule__STIfStatment__ElseifsAssignment_4() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__ElseifsAssignment_4"
+    // InternalSTCoreParser.g:8692:1: rule__STIfStatement__ElseifsAssignment_4 : ( ruleSTElseIfPart ) ;
+    public final void rule__STIfStatement__ElseifsAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -28927,7 +28927,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             // InternalSTCoreParser.g:8698:3: ruleSTElseIfPart
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getElseifsSTElseIfPartParserRuleCall_4_0()); 
+               before(grammarAccess.getSTIfStatementAccess().getElseifsSTElseIfPartParserRuleCall_4_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleSTElseIfPart();
@@ -28935,7 +28935,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getElseifsSTElseIfPartParserRuleCall_4_0()); 
+               after(grammarAccess.getSTIfStatementAccess().getElseifsSTElseIfPartParserRuleCall_4_0()); 
             }
 
             }
@@ -28955,12 +28955,12 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__ElseifsAssignment_4"
+    // $ANTLR end "rule__STIfStatement__ElseifsAssignment_4"
 
 
-    // $ANTLR start "rule__STIfStatment__ElseAssignment_5"
-    // InternalSTCoreParser.g:8707:1: rule__STIfStatment__ElseAssignment_5 : ( ruleSTElsePart ) ;
-    public final void rule__STIfStatment__ElseAssignment_5() throws RecognitionException {
+    // $ANTLR start "rule__STIfStatement__ElseAssignment_5"
+    // InternalSTCoreParser.g:8707:1: rule__STIfStatement__ElseAssignment_5 : ( ruleSTElsePart ) ;
+    public final void rule__STIfStatement__ElseAssignment_5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -28972,7 +28972,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             // InternalSTCoreParser.g:8713:3: ruleSTElsePart
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTIfStatmentAccess().getElseSTElsePartParserRuleCall_5_0()); 
+               before(grammarAccess.getSTIfStatementAccess().getElseSTElsePartParserRuleCall_5_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleSTElsePart();
@@ -28980,7 +28980,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTIfStatmentAccess().getElseSTElsePartParserRuleCall_5_0()); 
+               after(grammarAccess.getSTIfStatementAccess().getElseSTElsePartParserRuleCall_5_0()); 
             }
 
             }
@@ -29000,7 +29000,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__STIfStatment__ElseAssignment_5"
+    // $ANTLR end "rule__STIfStatement__ElseAssignment_5"
 
 
     // $ANTLR start "rule__STElseIfPart__ConditionAssignment_1"

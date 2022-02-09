@@ -61,7 +61,7 @@ ArrayInitElement:
 	indexOrInitExpression=STExpression ('(' initExpression=STExpression ')')?;
 	
 STStatement:
-	(STIfStatment |
+	(STIfStatement |
 	STCaseStatement |
 	STForStatement |
 	STWhileStatement |
@@ -76,7 +76,7 @@ STAssignmentStatement:
 	left=STAccessExpression ':=' right=STExpression
 ;
 
-STIfStatment:
+STIfStatement:
 	'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
 
 STElseIfPart:

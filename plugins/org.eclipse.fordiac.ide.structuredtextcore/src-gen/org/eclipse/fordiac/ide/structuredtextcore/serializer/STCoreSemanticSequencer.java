@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
@@ -109,8 +109,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ST_FOR_STATEMENT:
 				sequence_STForStatement(context, (STForStatement) semanticObject); 
 				return; 
-			case STCorePackage.ST_IF_STATMENT:
-				sequence_STIfStatment(context, (STIfStatment) semanticObject); 
+			case STCorePackage.ST_IF_STATEMENT:
+				sequence_STIfStatement(context, (STIfStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_MEMBER_ACCESS_EXPRESSION:
 				sequence_STAccessExpression(context, (STMemberAccessExpression) semanticObject); 
@@ -546,13 +546,13 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatement returns STIfStatment
-	 *     STIfStatment returns STIfStatment
+	 *     STStatement returns STIfStatement
+	 *     STIfStatement returns STIfStatement
 	 *
 	 * Constraint:
 	 *     (condition=STExpression statements+=STStatement* elseifs+=STElseIfPart* else=STElsePart?)
 	 */
-	protected void sequence_STIfStatment(ISerializationContext context, STIfStatment semanticObject) {
+	protected void sequence_STIfStatement(ISerializationContext context, STIfStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

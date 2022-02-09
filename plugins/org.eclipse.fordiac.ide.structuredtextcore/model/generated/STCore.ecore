@@ -30,7 +30,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STIfStatment" eSuperTypes="#//STStatement">
+  <eClassifiers xsi:type="ecore:EClass" name="STIfStatement" eSuperTypes="#//STStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//STExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
