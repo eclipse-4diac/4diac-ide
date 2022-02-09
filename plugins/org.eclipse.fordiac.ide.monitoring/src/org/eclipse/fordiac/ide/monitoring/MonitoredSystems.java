@@ -15,7 +15,6 @@
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -67,14 +66,6 @@ public class MonitoredSystems extends CompoundContributionItem {
 		public void fill(final Menu menu, final int index) {
 			createSystemMonitoringMenuEntry(system, menu, index);
 		}
-
-		private static void createSystemMonitoringMenuEntry(final AutomationSystem system, final Menu menu, final int index) {
-			final MenuItem item = (index == -1) ? new MenuItem(menu, SWT.CHECK) : new MenuItem(menu, SWT.CHECK, index);
-			item.setText(system.getName());
-			item.setSelection(true);
-			item.addSelectionListener(new SystemMonitoringSelectionAdapter(system));
-		}
-
 	}
 
 	private static class EmptyMonitoringContribution extends ContributionItem {
@@ -87,16 +78,26 @@ public class MonitoredSystems extends CompoundContributionItem {
 		}
 	}
 
+	private static void createSystemMonitoringMenuEntry(final AutomationSystem system, final Menu menu,
+			final int index) {
+		final MenuItem item = (index == -1) ? new MenuItem(menu, SWT.CHECK) : new MenuItem(menu, SWT.CHECK, index);
+		item.setText(system.getName());
+		final MonitoringManager manager = MonitoringManager.getInstance();
+		item.setSelection(manager.monitoringForSystemEnabled(system));
+		item.addSelectionListener(new SystemMonitoringSelectionAdapter(system));
+	}
+
+	public static void createMenuEntriesForSystems(final Menu menu) {
+		for (final AutomationSystem system : MonitoringManager.getInstance().getMonitoredSystems()) {
+			createSystemMonitoringMenuEntry(system, menu, -1);
+		}
+	}
+
 	@Override
 	protected IContributionItem[] getContributionItems() {
-		final ArrayList<ContributionItem> menuList = new ArrayList<>();
-		final Set<AutomationSystem> systems = MonitoringManager.getInstance().getMonitoredSystems();
-		if (systems.isEmpty()) {
-			menuList.add(new EmptyMonitoringContribution());
-		} else {
-			for (final AutomationSystem system : MonitoringManager.getInstance().getMonitoredSystems()) {
-				menuList.add(new MonitorSystemContribution(system));
-			}
+		final ArrayList<MonitorSystemContribution> menuList = new ArrayList<>();
+		for (final AutomationSystem system : MonitoringManager.getInstance().getMonitoredSystems()) {
+			menuList.add(new MonitorSystemContribution(system));
 		}
 		return menuList.toArray(new IContributionItem[menuList.size()]);
 	}

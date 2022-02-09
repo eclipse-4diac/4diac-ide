@@ -42,7 +42,7 @@ public class MonitorSystemStateProvider extends State {
 							&& SystemManager.isSystemFile(((TreeSelection) selection).getFirstElement())) {
 						final AutomationSystem system = SystemManager.INSTANCE
 								.getSystem((IFile) ((TreeSelection) selection).getFirstElement());
-						return Boolean.valueOf(MonitoringManager.getInstance().isSystemMonitored(system));
+						return Boolean.valueOf(MonitoringManager.getInstance().monitoringForSystemEnabled(system));
 					}
 				}
 			}
