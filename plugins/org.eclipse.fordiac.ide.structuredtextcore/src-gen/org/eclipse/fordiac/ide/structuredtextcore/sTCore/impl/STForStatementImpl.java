@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +32,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getFor <em>For</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getVariable <em>Variable</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getFrom <em>From</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getTo <em>To</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getBy <em>By</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STForStatementImpl#getStatements <em>Statements</em>}</li>
@@ -42,14 +44,24 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 public class STForStatementImpl extends STStatementImpl implements STForStatement
 {
   /**
-   * The cached value of the '{@link #getFor() <em>For</em>}' containment reference.
+   * The cached value of the '{@link #getVariable() <em>Variable</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getFor()
+   * @see #getVariable()
    * @generated
    * @ordered
    */
-  protected STExpression for_;
+  protected STVarDeclaration variable;
+
+  /**
+   * The cached value of the '{@link #getFrom() <em>From</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFrom()
+   * @generated
+   * @ordered
+   */
+  protected STExpression from;
 
   /**
    * The cached value of the '{@link #getTo() <em>To</em>}' containment reference.
@@ -108,9 +120,19 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
    * @generated
    */
   @Override
-  public STExpression getFor()
+  public STVarDeclaration getVariable()
   {
-    return for_;
+    if (variable != null && variable.eIsProxy())
+    {
+      InternalEObject oldVariable = (InternalEObject)variable;
+      variable = (STVarDeclaration)eResolveProxy(oldVariable);
+      if (variable != oldVariable)
+      {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_FOR_STATEMENT__VARIABLE, oldVariable, variable));
+      }
+    }
+    return variable;
   }
 
   /**
@@ -118,13 +140,48 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetFor(STExpression newFor, NotificationChain msgs)
+  public STVarDeclaration basicGetVariable()
   {
-    STExpression oldFor = for_;
-    for_ = newFor;
+    return variable;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setVariable(STVarDeclaration newVariable)
+  {
+    STVarDeclaration oldVariable = variable;
+    variable = newVariable;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_FOR_STATEMENT__VARIABLE, oldVariable, variable));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STExpression getFrom()
+  {
+    return from;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFrom(STExpression newFrom, NotificationChain msgs)
+  {
+    STExpression oldFrom = from;
+    from = newFrom;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_FOR_STATEMENT__FOR, oldFor, newFor);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_FOR_STATEMENT__FROM, oldFrom, newFrom);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -136,20 +193,20 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
    * @generated
    */
   @Override
-  public void setFor(STExpression newFor)
+  public void setFrom(STExpression newFrom)
   {
-    if (newFor != for_)
+    if (newFrom != from)
     {
       NotificationChain msgs = null;
-      if (for_ != null)
-        msgs = ((InternalEObject)for_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_FOR_STATEMENT__FOR, null, msgs);
-      if (newFor != null)
-        msgs = ((InternalEObject)newFor).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_FOR_STATEMENT__FOR, null, msgs);
-      msgs = basicSetFor(newFor, msgs);
+      if (from != null)
+        msgs = ((InternalEObject)from).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_FOR_STATEMENT__FROM, null, msgs);
+      if (newFrom != null)
+        msgs = ((InternalEObject)newFrom).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_FOR_STATEMENT__FROM, null, msgs);
+      msgs = basicSetFrom(newFrom, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_FOR_STATEMENT__FOR, newFor, newFor));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_FOR_STATEMENT__FROM, newFrom, newFrom));
   }
 
   /**
@@ -277,8 +334,8 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
   {
     switch (featureID)
     {
-      case STCorePackage.ST_FOR_STATEMENT__FOR:
-        return basicSetFor(null, msgs);
+      case STCorePackage.ST_FOR_STATEMENT__FROM:
+        return basicSetFrom(null, msgs);
       case STCorePackage.ST_FOR_STATEMENT__TO:
         return basicSetTo(null, msgs);
       case STCorePackage.ST_FOR_STATEMENT__BY:
@@ -299,8 +356,11 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
   {
     switch (featureID)
     {
-      case STCorePackage.ST_FOR_STATEMENT__FOR:
-        return getFor();
+      case STCorePackage.ST_FOR_STATEMENT__VARIABLE:
+        if (resolve) return getVariable();
+        return basicGetVariable();
+      case STCorePackage.ST_FOR_STATEMENT__FROM:
+        return getFrom();
       case STCorePackage.ST_FOR_STATEMENT__TO:
         return getTo();
       case STCorePackage.ST_FOR_STATEMENT__BY:
@@ -322,8 +382,11 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
   {
     switch (featureID)
     {
-      case STCorePackage.ST_FOR_STATEMENT__FOR:
-        setFor((STExpression)newValue);
+      case STCorePackage.ST_FOR_STATEMENT__VARIABLE:
+        setVariable((STVarDeclaration)newValue);
+        return;
+      case STCorePackage.ST_FOR_STATEMENT__FROM:
+        setFrom((STExpression)newValue);
         return;
       case STCorePackage.ST_FOR_STATEMENT__TO:
         setTo((STExpression)newValue);
@@ -349,8 +412,11 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
   {
     switch (featureID)
     {
-      case STCorePackage.ST_FOR_STATEMENT__FOR:
-        setFor((STExpression)null);
+      case STCorePackage.ST_FOR_STATEMENT__VARIABLE:
+        setVariable((STVarDeclaration)null);
+        return;
+      case STCorePackage.ST_FOR_STATEMENT__FROM:
+        setFrom((STExpression)null);
         return;
       case STCorePackage.ST_FOR_STATEMENT__TO:
         setTo((STExpression)null);
@@ -375,8 +441,10 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
   {
     switch (featureID)
     {
-      case STCorePackage.ST_FOR_STATEMENT__FOR:
-        return for_ != null;
+      case STCorePackage.ST_FOR_STATEMENT__VARIABLE:
+        return variable != null;
+      case STCorePackage.ST_FOR_STATEMENT__FROM:
+        return from != null;
       case STCorePackage.ST_FOR_STATEMENT__TO:
         return to != null;
       case STCorePackage.ST_FOR_STATEMENT__BY:

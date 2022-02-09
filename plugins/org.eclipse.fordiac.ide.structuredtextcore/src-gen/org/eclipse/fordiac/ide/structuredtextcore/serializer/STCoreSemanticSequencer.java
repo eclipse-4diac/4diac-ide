@@ -537,7 +537,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STForStatement returns STForStatement
 	 *
 	 * Constraint:
-	 *     (for=STExpression to=STExpression by=STExpression? statements+=STStatement*)
+	 *     (variable=[STVarDeclaration|ID] from=STExpression to=STExpression by=STExpression? statements+=STStatement*)
 	 */
 	protected void sequence_STForStatement(ISerializationContext context, STForStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

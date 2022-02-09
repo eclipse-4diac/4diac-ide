@@ -891,27 +891,31 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STForStatement");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cFORKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cForAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cForSTExpressionParserRuleCall_1_0 = (RuleCall)cForAssignment_1.eContents().get(0);
-		private final Keyword cTOKeyword_2 = (Keyword)cGroup.eContents().get(2);
-		private final Assignment cToAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cToSTExpressionParserRuleCall_3_0 = (RuleCall)cToAssignment_3.eContents().get(0);
-		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
-		private final Keyword cBYKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
-		private final Assignment cByAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
-		private final RuleCall cBySTExpressionParserRuleCall_4_1_0 = (RuleCall)cByAssignment_4_1.eContents().get(0);
-		private final Keyword cDOKeyword_5 = (Keyword)cGroup.eContents().get(5);
-		private final Assignment cStatementsAssignment_6 = (Assignment)cGroup.eContents().get(6);
-		private final RuleCall cStatementsSTStatementParserRuleCall_6_0 = (RuleCall)cStatementsAssignment_6.eContents().get(0);
-		private final Keyword cEND_FORKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final Assignment cVariableAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final CrossReference cVariableSTVarDeclarationCrossReference_1_0 = (CrossReference)cVariableAssignment_1.eContents().get(0);
+		private final RuleCall cVariableSTVarDeclarationIDTerminalRuleCall_1_0_1 = (RuleCall)cVariableSTVarDeclarationCrossReference_1_0.eContents().get(1);
+		private final Keyword cColonEqualsSignKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cFromAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cFromSTExpressionParserRuleCall_3_0 = (RuleCall)cFromAssignment_3.eContents().get(0);
+		private final Keyword cTOKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Assignment cToAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cToSTExpressionParserRuleCall_5_0 = (RuleCall)cToAssignment_5.eContents().get(0);
+		private final Group cGroup_6 = (Group)cGroup.eContents().get(6);
+		private final Keyword cBYKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
+		private final Assignment cByAssignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
+		private final RuleCall cBySTExpressionParserRuleCall_6_1_0 = (RuleCall)cByAssignment_6_1.eContents().get(0);
+		private final Keyword cDOKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final Assignment cStatementsAssignment_8 = (Assignment)cGroup.eContents().get(8);
+		private final RuleCall cStatementsSTStatementParserRuleCall_8_0 = (RuleCall)cStatementsAssignment_8.eContents().get(0);
+		private final Keyword cEND_FORKeyword_9 = (Keyword)cGroup.eContents().get(9);
 		
 		//STForStatement:
-		//    'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+		//    'FOR' variable=[STVarDeclaration] ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
 		//    statements+=STStatement*
 		//    'END_FOR';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+		//'FOR' variable=[STVarDeclaration] ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
 		//statements+=STStatement*
 		//'END_FOR'
 		public Group getGroup() { return cGroup; }
@@ -919,44 +923,56 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'FOR'
 		public Keyword getFORKeyword_0() { return cFORKeyword_0; }
 		
-		//for=STExpression
-		public Assignment getForAssignment_1() { return cForAssignment_1; }
+		//variable=[STVarDeclaration]
+		public Assignment getVariableAssignment_1() { return cVariableAssignment_1; }
+		
+		//[STVarDeclaration]
+		public CrossReference getVariableSTVarDeclarationCrossReference_1_0() { return cVariableSTVarDeclarationCrossReference_1_0; }
+		
+		//ID
+		public RuleCall getVariableSTVarDeclarationIDTerminalRuleCall_1_0_1() { return cVariableSTVarDeclarationIDTerminalRuleCall_1_0_1; }
+		
+		//':='
+		public Keyword getColonEqualsSignKeyword_2() { return cColonEqualsSignKeyword_2; }
+		
+		//from=STExpression
+		public Assignment getFromAssignment_3() { return cFromAssignment_3; }
 		
 		//STExpression
-		public RuleCall getForSTExpressionParserRuleCall_1_0() { return cForSTExpressionParserRuleCall_1_0; }
+		public RuleCall getFromSTExpressionParserRuleCall_3_0() { return cFromSTExpressionParserRuleCall_3_0; }
 		
 		//'TO'
-		public Keyword getTOKeyword_2() { return cTOKeyword_2; }
+		public Keyword getTOKeyword_4() { return cTOKeyword_4; }
 		
 		//to=STExpression
-		public Assignment getToAssignment_3() { return cToAssignment_3; }
+		public Assignment getToAssignment_5() { return cToAssignment_5; }
 		
 		//STExpression
-		public RuleCall getToSTExpressionParserRuleCall_3_0() { return cToSTExpressionParserRuleCall_3_0; }
+		public RuleCall getToSTExpressionParserRuleCall_5_0() { return cToSTExpressionParserRuleCall_5_0; }
 		
 		//('BY' by=STExpression)?
-		public Group getGroup_4() { return cGroup_4; }
+		public Group getGroup_6() { return cGroup_6; }
 		
 		//'BY'
-		public Keyword getBYKeyword_4_0() { return cBYKeyword_4_0; }
+		public Keyword getBYKeyword_6_0() { return cBYKeyword_6_0; }
 		
 		//by=STExpression
-		public Assignment getByAssignment_4_1() { return cByAssignment_4_1; }
+		public Assignment getByAssignment_6_1() { return cByAssignment_6_1; }
 		
 		//STExpression
-		public RuleCall getBySTExpressionParserRuleCall_4_1_0() { return cBySTExpressionParserRuleCall_4_1_0; }
+		public RuleCall getBySTExpressionParserRuleCall_6_1_0() { return cBySTExpressionParserRuleCall_6_1_0; }
 		
 		//'DO'
-		public Keyword getDOKeyword_5() { return cDOKeyword_5; }
+		public Keyword getDOKeyword_7() { return cDOKeyword_7; }
 		
 		//statements+=STStatement*
-		public Assignment getStatementsAssignment_6() { return cStatementsAssignment_6; }
+		public Assignment getStatementsAssignment_8() { return cStatementsAssignment_8; }
 		
 		//STStatement
-		public RuleCall getStatementsSTStatementParserRuleCall_6_0() { return cStatementsSTStatementParserRuleCall_6_0; }
+		public RuleCall getStatementsSTStatementParserRuleCall_8_0() { return cStatementsSTStatementParserRuleCall_8_0; }
 		
 		//'END_FOR'
-		public Keyword getEND_FORKeyword_7() { return cEND_FORKeyword_7; }
+		public Keyword getEND_FORKeyword_9() { return cEND_FORKeyword_9; }
 	}
 	public class STWhileStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STWhileStatement");
@@ -3098,7 +3114,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STForStatement:
-	//    'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+	//    'FOR' variable=[STVarDeclaration] ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
 	//    statements+=STStatement*
 	//    'END_FOR';
 	public STForStatementElements getSTForStatementAccess() {

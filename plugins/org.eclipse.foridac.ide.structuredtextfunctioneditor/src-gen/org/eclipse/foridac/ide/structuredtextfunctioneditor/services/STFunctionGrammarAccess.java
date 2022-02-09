@@ -390,7 +390,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STForStatement:
-	//    'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+	//    'FOR' variable=[STVarDeclaration] ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
 	//    statements+=STStatement*
 	//    'END_FOR';
 	public STCoreGrammarAccess.STForStatementElements getSTForStatementAccess() {

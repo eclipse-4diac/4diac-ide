@@ -479,13 +479,22 @@ public interface STCorePackage extends EPackage
   int ST_FOR_STATEMENT = 12;
 
   /**
-   * The feature id for the '<em><b>For</b></em>' containment reference.
+   * The feature id for the '<em><b>Variable</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__FOR = ST_STATEMENT_FEATURE_COUNT + 0;
+  int ST_FOR_STATEMENT__VARIABLE = ST_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>From</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_FOR_STATEMENT__FROM = ST_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>To</b></em>' containment reference.
@@ -494,7 +503,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__TO = ST_STATEMENT_FEATURE_COUNT + 1;
+  int ST_FOR_STATEMENT__TO = ST_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>By</b></em>' containment reference.
@@ -503,7 +512,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__BY = ST_STATEMENT_FEATURE_COUNT + 2;
+  int ST_FOR_STATEMENT__BY = ST_STATEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -512,7 +521,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 3;
+  int ST_FOR_STATEMENT__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 4;
 
   /**
    * The number of structural features of the '<em>ST For Statement</em>' class.
@@ -521,7 +530,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 4;
+  int ST_FOR_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 5;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STWhileStatementImpl <em>ST While Statement</em>}' class.
@@ -1636,15 +1645,26 @@ public interface STCorePackage extends EPackage
   EClass getSTForStatement();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFor <em>For</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getVariable <em>Variable</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>For</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFor()
+   * @return the meta object for the reference '<em>Variable</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getVariable()
    * @see #getSTForStatement()
    * @generated
    */
-  EReference getSTForStatement_For();
+  EReference getSTForStatement_Variable();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFrom <em>From</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>From</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFrom()
+   * @see #getSTForStatement()
+   * @generated
+   */
+  EReference getSTForStatement_From();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getTo <em>To</em>}'.
@@ -2630,12 +2650,20 @@ public interface STCorePackage extends EPackage
     EClass ST_FOR_STATEMENT = eINSTANCE.getSTForStatement();
 
     /**
-     * The meta object literal for the '<em><b>For</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Variable</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_FOR_STATEMENT__FOR = eINSTANCE.getSTForStatement_For();
+    EReference ST_FOR_STATEMENT__VARIABLE = eINSTANCE.getSTForStatement_Variable();
+
+    /**
+     * The meta object literal for the '<em><b>From</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ST_FOR_STATEMENT__FROM = eINSTANCE.getSTForStatement_From();
 
     /**
      * The meta object literal for the '<em><b>To</b></em>' containment reference feature.

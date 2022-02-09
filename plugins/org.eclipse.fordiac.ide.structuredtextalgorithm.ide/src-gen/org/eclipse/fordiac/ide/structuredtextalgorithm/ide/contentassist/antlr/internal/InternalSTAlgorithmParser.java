@@ -4631,7 +4631,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
                         if ( (LA1_5==FullStop) ) {
                             int LA1_6 = input.LA(4);
 
-                            if ( (LA1_6==RULE_INT) ) {
+                            if ( (LA1_6==RULE_EXT_INT) ) {
                                 int LA1_7 = input.LA(5);
 
                                 if ( ((LA1_7>=MS && LA1_7<=NS)||LA1_7==US||(LA1_7>=D && LA1_7<=S)) ) {
@@ -4640,7 +4640,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
                             }
-                            else if ( (LA1_6==RULE_EXT_INT) ) {
+                            else if ( (LA1_6==RULE_INT) ) {
                                 int LA1_8 = input.LA(5);
 
                                 if ( ((LA1_8>=MS && LA1_8<=NS)||LA1_8==US||(LA1_8>=D && LA1_8<=S)) ) {
@@ -4672,7 +4672,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
                         if ( (LA1_5==FullStop) ) {
                             int LA1_6 = input.LA(4);
 
-                            if ( (LA1_6==RULE_INT) ) {
+                            if ( (LA1_6==RULE_EXT_INT) ) {
                                 int LA1_7 = input.LA(5);
 
                                 if ( ((LA1_7>=MS && LA1_7<=NS)||LA1_7==US||(LA1_7>=D && LA1_7<=S)) ) {
@@ -4681,7 +4681,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
                             }
-                            else if ( (LA1_6==RULE_EXT_INT) ) {
+                            else if ( (LA1_6==RULE_INT) ) {
                                 int LA1_8 = input.LA(5);
 
                                 if ( ((LA1_8>=MS && LA1_8<=NS)||LA1_8==US||(LA1_8>=D && LA1_8<=S)) ) {
@@ -17475,7 +17475,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             // InternalSTAlgorithmParser.g:5066:1: ( rule__STForStatement__Group__0__Impl rule__STForStatement__Group__1 )
             // InternalSTAlgorithmParser.g:5067:2: rule__STForStatement__Group__0__Impl rule__STForStatement__Group__1
             {
-            pushFollow(FOLLOW_19);
+            pushFollow(FOLLOW_6);
             rule__STForStatement__Group__0__Impl();
 
             state._fsp--;
@@ -17554,7 +17554,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             // InternalSTAlgorithmParser.g:5093:1: ( rule__STForStatement__Group__1__Impl rule__STForStatement__Group__2 )
             // InternalSTAlgorithmParser.g:5094:2: rule__STForStatement__Group__1__Impl rule__STForStatement__Group__2
             {
-            pushFollow(FOLLOW_40);
+            pushFollow(FOLLOW_32);
             rule__STForStatement__Group__1__Impl();
 
             state._fsp--;
@@ -17583,26 +17583,26 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STForStatement__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:5101:1: rule__STForStatement__Group__1__Impl : ( ( rule__STForStatement__ForAssignment_1 ) ) ;
+    // InternalSTAlgorithmParser.g:5101:1: rule__STForStatement__Group__1__Impl : ( ( rule__STForStatement__VariableAssignment_1 ) ) ;
     public final void rule__STForStatement__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5105:1: ( ( ( rule__STForStatement__ForAssignment_1 ) ) )
-            // InternalSTAlgorithmParser.g:5106:1: ( ( rule__STForStatement__ForAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:5105:1: ( ( ( rule__STForStatement__VariableAssignment_1 ) ) )
+            // InternalSTAlgorithmParser.g:5106:1: ( ( rule__STForStatement__VariableAssignment_1 ) )
             {
-            // InternalSTAlgorithmParser.g:5106:1: ( ( rule__STForStatement__ForAssignment_1 ) )
-            // InternalSTAlgorithmParser.g:5107:2: ( rule__STForStatement__ForAssignment_1 )
+            // InternalSTAlgorithmParser.g:5106:1: ( ( rule__STForStatement__VariableAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:5107:2: ( rule__STForStatement__VariableAssignment_1 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getForAssignment_1()); 
+               before(grammarAccess.getSTForStatementAccess().getVariableAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:5108:2: ( rule__STForStatement__ForAssignment_1 )
-            // InternalSTAlgorithmParser.g:5108:3: rule__STForStatement__ForAssignment_1
+            // InternalSTAlgorithmParser.g:5108:2: ( rule__STForStatement__VariableAssignment_1 )
+            // InternalSTAlgorithmParser.g:5108:3: rule__STForStatement__VariableAssignment_1
             {
             pushFollow(FOLLOW_2);
-            rule__STForStatement__ForAssignment_1();
+            rule__STForStatement__VariableAssignment_1();
 
             state._fsp--;
             if (state.failed) return ;
@@ -17610,7 +17610,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getForAssignment_1()); 
+               after(grammarAccess.getSTForStatementAccess().getVariableAssignment_1()); 
             }
 
             }
@@ -17672,24 +17672,24 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STForStatement__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:5128:1: rule__STForStatement__Group__2__Impl : ( TO ) ;
+    // InternalSTAlgorithmParser.g:5128:1: rule__STForStatement__Group__2__Impl : ( ColonEqualsSign ) ;
     public final void rule__STForStatement__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5132:1: ( ( TO ) )
-            // InternalSTAlgorithmParser.g:5133:1: ( TO )
+            // InternalSTAlgorithmParser.g:5132:1: ( ( ColonEqualsSign ) )
+            // InternalSTAlgorithmParser.g:5133:1: ( ColonEqualsSign )
             {
-            // InternalSTAlgorithmParser.g:5133:1: ( TO )
-            // InternalSTAlgorithmParser.g:5134:2: TO
+            // InternalSTAlgorithmParser.g:5133:1: ( ColonEqualsSign )
+            // InternalSTAlgorithmParser.g:5134:2: ColonEqualsSign
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getTOKeyword_2()); 
+               before(grammarAccess.getSTForStatementAccess().getColonEqualsSignKeyword_2()); 
             }
-            match(input,TO,FOLLOW_2); if (state.failed) return ;
+            match(input,ColonEqualsSign,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getTOKeyword_2()); 
+               after(grammarAccess.getSTForStatementAccess().getColonEqualsSignKeyword_2()); 
             }
 
             }
@@ -17722,7 +17722,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             // InternalSTAlgorithmParser.g:5147:1: ( rule__STForStatement__Group__3__Impl rule__STForStatement__Group__4 )
             // InternalSTAlgorithmParser.g:5148:2: rule__STForStatement__Group__3__Impl rule__STForStatement__Group__4
             {
-            pushFollow(FOLLOW_41);
+            pushFollow(FOLLOW_40);
             rule__STForStatement__Group__3__Impl();
 
             state._fsp--;
@@ -17751,26 +17751,26 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STForStatement__Group__3__Impl"
-    // InternalSTAlgorithmParser.g:5155:1: rule__STForStatement__Group__3__Impl : ( ( rule__STForStatement__ToAssignment_3 ) ) ;
+    // InternalSTAlgorithmParser.g:5155:1: rule__STForStatement__Group__3__Impl : ( ( rule__STForStatement__FromAssignment_3 ) ) ;
     public final void rule__STForStatement__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5159:1: ( ( ( rule__STForStatement__ToAssignment_3 ) ) )
-            // InternalSTAlgorithmParser.g:5160:1: ( ( rule__STForStatement__ToAssignment_3 ) )
+            // InternalSTAlgorithmParser.g:5159:1: ( ( ( rule__STForStatement__FromAssignment_3 ) ) )
+            // InternalSTAlgorithmParser.g:5160:1: ( ( rule__STForStatement__FromAssignment_3 ) )
             {
-            // InternalSTAlgorithmParser.g:5160:1: ( ( rule__STForStatement__ToAssignment_3 ) )
-            // InternalSTAlgorithmParser.g:5161:2: ( rule__STForStatement__ToAssignment_3 )
+            // InternalSTAlgorithmParser.g:5160:1: ( ( rule__STForStatement__FromAssignment_3 ) )
+            // InternalSTAlgorithmParser.g:5161:2: ( rule__STForStatement__FromAssignment_3 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getToAssignment_3()); 
+               before(grammarAccess.getSTForStatementAccess().getFromAssignment_3()); 
             }
-            // InternalSTAlgorithmParser.g:5162:2: ( rule__STForStatement__ToAssignment_3 )
-            // InternalSTAlgorithmParser.g:5162:3: rule__STForStatement__ToAssignment_3
+            // InternalSTAlgorithmParser.g:5162:2: ( rule__STForStatement__FromAssignment_3 )
+            // InternalSTAlgorithmParser.g:5162:3: rule__STForStatement__FromAssignment_3
             {
             pushFollow(FOLLOW_2);
-            rule__STForStatement__ToAssignment_3();
+            rule__STForStatement__FromAssignment_3();
 
             state._fsp--;
             if (state.failed) return ;
@@ -17778,7 +17778,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getToAssignment_3()); 
+               after(grammarAccess.getSTForStatementAccess().getFromAssignment_3()); 
             }
 
             }
@@ -17811,7 +17811,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             // InternalSTAlgorithmParser.g:5174:1: ( rule__STForStatement__Group__4__Impl rule__STForStatement__Group__5 )
             // InternalSTAlgorithmParser.g:5175:2: rule__STForStatement__Group__4__Impl rule__STForStatement__Group__5
             {
-            pushFollow(FOLLOW_41);
+            pushFollow(FOLLOW_19);
             rule__STForStatement__Group__4__Impl();
 
             state._fsp--;
@@ -17840,45 +17840,24 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STForStatement__Group__4__Impl"
-    // InternalSTAlgorithmParser.g:5182:1: rule__STForStatement__Group__4__Impl : ( ( rule__STForStatement__Group_4__0 )? ) ;
+    // InternalSTAlgorithmParser.g:5182:1: rule__STForStatement__Group__4__Impl : ( TO ) ;
     public final void rule__STForStatement__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5186:1: ( ( ( rule__STForStatement__Group_4__0 )? ) )
-            // InternalSTAlgorithmParser.g:5187:1: ( ( rule__STForStatement__Group_4__0 )? )
+            // InternalSTAlgorithmParser.g:5186:1: ( ( TO ) )
+            // InternalSTAlgorithmParser.g:5187:1: ( TO )
             {
-            // InternalSTAlgorithmParser.g:5187:1: ( ( rule__STForStatement__Group_4__0 )? )
-            // InternalSTAlgorithmParser.g:5188:2: ( rule__STForStatement__Group_4__0 )?
+            // InternalSTAlgorithmParser.g:5187:1: ( TO )
+            // InternalSTAlgorithmParser.g:5188:2: TO
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getGroup_4()); 
+               before(grammarAccess.getSTForStatementAccess().getTOKeyword_4()); 
             }
-            // InternalSTAlgorithmParser.g:5189:2: ( rule__STForStatement__Group_4__0 )?
-            int alt52=2;
-            int LA52_0 = input.LA(1);
-
-            if ( (LA52_0==BY) ) {
-                alt52=1;
-            }
-            switch (alt52) {
-                case 1 :
-                    // InternalSTAlgorithmParser.g:5189:3: rule__STForStatement__Group_4__0
-                    {
-                    pushFollow(FOLLOW_2);
-                    rule__STForStatement__Group_4__0();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-
-            }
-
+            match(input,TO,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getGroup_4()); 
+               after(grammarAccess.getSTForStatementAccess().getTOKeyword_4()); 
             }
 
             }
@@ -17911,7 +17890,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             // InternalSTAlgorithmParser.g:5201:1: ( rule__STForStatement__Group__5__Impl rule__STForStatement__Group__6 )
             // InternalSTAlgorithmParser.g:5202:2: rule__STForStatement__Group__5__Impl rule__STForStatement__Group__6
             {
-            pushFollow(FOLLOW_42);
+            pushFollow(FOLLOW_41);
             rule__STForStatement__Group__5__Impl();
 
             state._fsp--;
@@ -17940,24 +17919,34 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STForStatement__Group__5__Impl"
-    // InternalSTAlgorithmParser.g:5209:1: rule__STForStatement__Group__5__Impl : ( DO ) ;
+    // InternalSTAlgorithmParser.g:5209:1: rule__STForStatement__Group__5__Impl : ( ( rule__STForStatement__ToAssignment_5 ) ) ;
     public final void rule__STForStatement__Group__5__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5213:1: ( ( DO ) )
-            // InternalSTAlgorithmParser.g:5214:1: ( DO )
+            // InternalSTAlgorithmParser.g:5213:1: ( ( ( rule__STForStatement__ToAssignment_5 ) ) )
+            // InternalSTAlgorithmParser.g:5214:1: ( ( rule__STForStatement__ToAssignment_5 ) )
             {
-            // InternalSTAlgorithmParser.g:5214:1: ( DO )
-            // InternalSTAlgorithmParser.g:5215:2: DO
+            // InternalSTAlgorithmParser.g:5214:1: ( ( rule__STForStatement__ToAssignment_5 ) )
+            // InternalSTAlgorithmParser.g:5215:2: ( rule__STForStatement__ToAssignment_5 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getDOKeyword_5()); 
+               before(grammarAccess.getSTForStatementAccess().getToAssignment_5()); 
             }
-            match(input,DO,FOLLOW_2); if (state.failed) return ;
+            // InternalSTAlgorithmParser.g:5216:2: ( rule__STForStatement__ToAssignment_5 )
+            // InternalSTAlgorithmParser.g:5216:3: rule__STForStatement__ToAssignment_5
+            {
+            pushFollow(FOLLOW_2);
+            rule__STForStatement__ToAssignment_5();
+
+            state._fsp--;
+            if (state.failed) return ;
+
+            }
+
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getDOKeyword_5()); 
+               after(grammarAccess.getSTForStatementAccess().getToAssignment_5()); 
             }
 
             }
@@ -17990,7 +17979,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             // InternalSTAlgorithmParser.g:5228:1: ( rule__STForStatement__Group__6__Impl rule__STForStatement__Group__7 )
             // InternalSTAlgorithmParser.g:5229:2: rule__STForStatement__Group__6__Impl rule__STForStatement__Group__7
             {
-            pushFollow(FOLLOW_42);
+            pushFollow(FOLLOW_41);
             rule__STForStatement__Group__6__Impl();
 
             state._fsp--;
@@ -18019,52 +18008,45 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STForStatement__Group__6__Impl"
-    // InternalSTAlgorithmParser.g:5236:1: rule__STForStatement__Group__6__Impl : ( ( rule__STForStatement__StatementsAssignment_6 )* ) ;
+    // InternalSTAlgorithmParser.g:5236:1: rule__STForStatement__Group__6__Impl : ( ( rule__STForStatement__Group_6__0 )? ) ;
     public final void rule__STForStatement__Group__6__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5240:1: ( ( ( rule__STForStatement__StatementsAssignment_6 )* ) )
-            // InternalSTAlgorithmParser.g:5241:1: ( ( rule__STForStatement__StatementsAssignment_6 )* )
+            // InternalSTAlgorithmParser.g:5240:1: ( ( ( rule__STForStatement__Group_6__0 )? ) )
+            // InternalSTAlgorithmParser.g:5241:1: ( ( rule__STForStatement__Group_6__0 )? )
             {
-            // InternalSTAlgorithmParser.g:5241:1: ( ( rule__STForStatement__StatementsAssignment_6 )* )
-            // InternalSTAlgorithmParser.g:5242:2: ( rule__STForStatement__StatementsAssignment_6 )*
+            // InternalSTAlgorithmParser.g:5241:1: ( ( rule__STForStatement__Group_6__0 )? )
+            // InternalSTAlgorithmParser.g:5242:2: ( rule__STForStatement__Group_6__0 )?
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getStatementsAssignment_6()); 
+               before(grammarAccess.getSTForStatementAccess().getGroup_6()); 
             }
-            // InternalSTAlgorithmParser.g:5243:2: ( rule__STForStatement__StatementsAssignment_6 )*
-            loop53:
-            do {
-                int alt53=2;
-                int LA53_0 = input.LA(1);
+            // InternalSTAlgorithmParser.g:5243:2: ( rule__STForStatement__Group_6__0 )?
+            int alt52=2;
+            int LA52_0 = input.LA(1);
 
-                if ( ((LA53_0>=LDATE_AND_TIME && LA53_0<=DATE_AND_TIME)||LA53_0==TIME_OF_DAY||LA53_0==CONTINUE||LA53_0==WSTRING||(LA53_0>=STRING && LA53_0<=DWORD)||(LA53_0>=LDATE && LA53_0<=WCHAR)||(LA53_0>=BOOL && LA53_0<=DINT)||(LA53_0>=FALSE && LA53_0<=UINT)||(LA53_0>=WHILE && LA53_0<=CASE)||(LA53_0>=EXIT && LA53_0<=LDT)||(LA53_0>=TOD && LA53_0<=TRUE)||(LA53_0>=DT && LA53_0<=LT)||LA53_0==D_2||LA53_0==IF||LA53_0==T||LA53_0==LeftParenthesis||LA53_0==PlusSign||LA53_0==HyphenMinus||LA53_0==Semicolon||(LA53_0>=RULE_NON_DECIMAL && LA53_0<=RULE_INT)||(LA53_0>=RULE_ID && LA53_0<=RULE_WSTRING)) ) {
-                    alt53=1;
-                }
+            if ( (LA52_0==BY) ) {
+                alt52=1;
+            }
+            switch (alt52) {
+                case 1 :
+                    // InternalSTAlgorithmParser.g:5243:3: rule__STForStatement__Group_6__0
+                    {
+                    pushFollow(FOLLOW_2);
+                    rule__STForStatement__Group_6__0();
 
+                    state._fsp--;
+                    if (state.failed) return ;
 
-                switch (alt53) {
-            	case 1 :
-            	    // InternalSTAlgorithmParser.g:5243:3: rule__STForStatement__StatementsAssignment_6
-            	    {
-            	    pushFollow(FOLLOW_10);
-            	    rule__STForStatement__StatementsAssignment_6();
+                    }
+                    break;
 
-            	    state._fsp--;
-            	    if (state.failed) return ;
-
-            	    }
-            	    break;
-
-            	default :
-            	    break loop53;
-                }
-            } while (true);
+            }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getStatementsAssignment_6()); 
+               after(grammarAccess.getSTForStatementAccess().getGroup_6()); 
             }
 
             }
@@ -18088,17 +18070,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STForStatement__Group__7"
-    // InternalSTAlgorithmParser.g:5251:1: rule__STForStatement__Group__7 : rule__STForStatement__Group__7__Impl ;
+    // InternalSTAlgorithmParser.g:5251:1: rule__STForStatement__Group__7 : rule__STForStatement__Group__7__Impl rule__STForStatement__Group__8 ;
     public final void rule__STForStatement__Group__7() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5255:1: ( rule__STForStatement__Group__7__Impl )
-            // InternalSTAlgorithmParser.g:5256:2: rule__STForStatement__Group__7__Impl
+            // InternalSTAlgorithmParser.g:5255:1: ( rule__STForStatement__Group__7__Impl rule__STForStatement__Group__8 )
+            // InternalSTAlgorithmParser.g:5256:2: rule__STForStatement__Group__7__Impl rule__STForStatement__Group__8
             {
-            pushFollow(FOLLOW_2);
+            pushFollow(FOLLOW_42);
             rule__STForStatement__Group__7__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+            pushFollow(FOLLOW_2);
+            rule__STForStatement__Group__8();
 
             state._fsp--;
             if (state.failed) return ;
@@ -18121,24 +18108,24 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STForStatement__Group__7__Impl"
-    // InternalSTAlgorithmParser.g:5262:1: rule__STForStatement__Group__7__Impl : ( END_FOR ) ;
+    // InternalSTAlgorithmParser.g:5263:1: rule__STForStatement__Group__7__Impl : ( DO ) ;
     public final void rule__STForStatement__Group__7__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5266:1: ( ( END_FOR ) )
-            // InternalSTAlgorithmParser.g:5267:1: ( END_FOR )
+            // InternalSTAlgorithmParser.g:5267:1: ( ( DO ) )
+            // InternalSTAlgorithmParser.g:5268:1: ( DO )
             {
-            // InternalSTAlgorithmParser.g:5267:1: ( END_FOR )
-            // InternalSTAlgorithmParser.g:5268:2: END_FOR
+            // InternalSTAlgorithmParser.g:5268:1: ( DO )
+            // InternalSTAlgorithmParser.g:5269:2: DO
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getEND_FORKeyword_7()); 
+               before(grammarAccess.getSTForStatementAccess().getDOKeyword_7()); 
             }
-            match(input,END_FOR,FOLLOW_2); if (state.failed) return ;
+            match(input,DO,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getEND_FORKeyword_7()); 
+               after(grammarAccess.getSTForStatementAccess().getDOKeyword_7()); 
             }
 
             }
@@ -18161,23 +18148,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
     // $ANTLR end "rule__STForStatement__Group__7__Impl"
 
 
-    // $ANTLR start "rule__STForStatement__Group_4__0"
-    // InternalSTAlgorithmParser.g:5278:1: rule__STForStatement__Group_4__0 : rule__STForStatement__Group_4__0__Impl rule__STForStatement__Group_4__1 ;
-    public final void rule__STForStatement__Group_4__0() throws RecognitionException {
+    // $ANTLR start "rule__STForStatement__Group__8"
+    // InternalSTAlgorithmParser.g:5278:1: rule__STForStatement__Group__8 : rule__STForStatement__Group__8__Impl rule__STForStatement__Group__9 ;
+    public final void rule__STForStatement__Group__8() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5282:1: ( rule__STForStatement__Group_4__0__Impl rule__STForStatement__Group_4__1 )
-            // InternalSTAlgorithmParser.g:5283:2: rule__STForStatement__Group_4__0__Impl rule__STForStatement__Group_4__1
+            // InternalSTAlgorithmParser.g:5282:1: ( rule__STForStatement__Group__8__Impl rule__STForStatement__Group__9 )
+            // InternalSTAlgorithmParser.g:5283:2: rule__STForStatement__Group__8__Impl rule__STForStatement__Group__9
             {
-            pushFollow(FOLLOW_19);
-            rule__STForStatement__Group_4__0__Impl();
+            pushFollow(FOLLOW_42);
+            rule__STForStatement__Group__8__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__STForStatement__Group_4__1();
+            rule__STForStatement__Group__9();
 
             state._fsp--;
             if (state.failed) return ;
@@ -18196,28 +18183,209 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
         }
         return ;
     }
-    // $ANTLR end "rule__STForStatement__Group_4__0"
+    // $ANTLR end "rule__STForStatement__Group__8"
 
 
-    // $ANTLR start "rule__STForStatement__Group_4__0__Impl"
-    // InternalSTAlgorithmParser.g:5290:1: rule__STForStatement__Group_4__0__Impl : ( BY ) ;
-    public final void rule__STForStatement__Group_4__0__Impl() throws RecognitionException {
+    // $ANTLR start "rule__STForStatement__Group__8__Impl"
+    // InternalSTAlgorithmParser.g:5290:1: rule__STForStatement__Group__8__Impl : ( ( rule__STForStatement__StatementsAssignment_8 )* ) ;
+    public final void rule__STForStatement__Group__8__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5294:1: ( ( BY ) )
-            // InternalSTAlgorithmParser.g:5295:1: ( BY )
+            // InternalSTAlgorithmParser.g:5294:1: ( ( ( rule__STForStatement__StatementsAssignment_8 )* ) )
+            // InternalSTAlgorithmParser.g:5295:1: ( ( rule__STForStatement__StatementsAssignment_8 )* )
             {
-            // InternalSTAlgorithmParser.g:5295:1: ( BY )
-            // InternalSTAlgorithmParser.g:5296:2: BY
+            // InternalSTAlgorithmParser.g:5295:1: ( ( rule__STForStatement__StatementsAssignment_8 )* )
+            // InternalSTAlgorithmParser.g:5296:2: ( rule__STForStatement__StatementsAssignment_8 )*
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getBYKeyword_4_0()); 
+               before(grammarAccess.getSTForStatementAccess().getStatementsAssignment_8()); 
+            }
+            // InternalSTAlgorithmParser.g:5297:2: ( rule__STForStatement__StatementsAssignment_8 )*
+            loop53:
+            do {
+                int alt53=2;
+                int LA53_0 = input.LA(1);
+
+                if ( ((LA53_0>=LDATE_AND_TIME && LA53_0<=DATE_AND_TIME)||LA53_0==TIME_OF_DAY||LA53_0==CONTINUE||LA53_0==WSTRING||(LA53_0>=STRING && LA53_0<=DWORD)||(LA53_0>=LDATE && LA53_0<=WCHAR)||(LA53_0>=BOOL && LA53_0<=DINT)||(LA53_0>=FALSE && LA53_0<=UINT)||(LA53_0>=WHILE && LA53_0<=CASE)||(LA53_0>=EXIT && LA53_0<=LDT)||(LA53_0>=TOD && LA53_0<=TRUE)||(LA53_0>=DT && LA53_0<=LT)||LA53_0==D_2||LA53_0==IF||LA53_0==T||LA53_0==LeftParenthesis||LA53_0==PlusSign||LA53_0==HyphenMinus||LA53_0==Semicolon||(LA53_0>=RULE_NON_DECIMAL && LA53_0<=RULE_INT)||(LA53_0>=RULE_ID && LA53_0<=RULE_WSTRING)) ) {
+                    alt53=1;
+                }
+
+
+                switch (alt53) {
+            	case 1 :
+            	    // InternalSTAlgorithmParser.g:5297:3: rule__STForStatement__StatementsAssignment_8
+            	    {
+            	    pushFollow(FOLLOW_10);
+            	    rule__STForStatement__StatementsAssignment_8();
+
+            	    state._fsp--;
+            	    if (state.failed) return ;
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop53;
+                }
+            } while (true);
+
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getSTForStatementAccess().getStatementsAssignment_8()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__STForStatement__Group__8__Impl"
+
+
+    // $ANTLR start "rule__STForStatement__Group__9"
+    // InternalSTAlgorithmParser.g:5305:1: rule__STForStatement__Group__9 : rule__STForStatement__Group__9__Impl ;
+    public final void rule__STForStatement__Group__9() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalSTAlgorithmParser.g:5309:1: ( rule__STForStatement__Group__9__Impl )
+            // InternalSTAlgorithmParser.g:5310:2: rule__STForStatement__Group__9__Impl
+            {
+            pushFollow(FOLLOW_2);
+            rule__STForStatement__Group__9__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__STForStatement__Group__9"
+
+
+    // $ANTLR start "rule__STForStatement__Group__9__Impl"
+    // InternalSTAlgorithmParser.g:5316:1: rule__STForStatement__Group__9__Impl : ( END_FOR ) ;
+    public final void rule__STForStatement__Group__9__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalSTAlgorithmParser.g:5320:1: ( ( END_FOR ) )
+            // InternalSTAlgorithmParser.g:5321:1: ( END_FOR )
+            {
+            // InternalSTAlgorithmParser.g:5321:1: ( END_FOR )
+            // InternalSTAlgorithmParser.g:5322:2: END_FOR
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getSTForStatementAccess().getEND_FORKeyword_9()); 
+            }
+            match(input,END_FOR,FOLLOW_2); if (state.failed) return ;
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getSTForStatementAccess().getEND_FORKeyword_9()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__STForStatement__Group__9__Impl"
+
+
+    // $ANTLR start "rule__STForStatement__Group_6__0"
+    // InternalSTAlgorithmParser.g:5332:1: rule__STForStatement__Group_6__0 : rule__STForStatement__Group_6__0__Impl rule__STForStatement__Group_6__1 ;
+    public final void rule__STForStatement__Group_6__0() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalSTAlgorithmParser.g:5336:1: ( rule__STForStatement__Group_6__0__Impl rule__STForStatement__Group_6__1 )
+            // InternalSTAlgorithmParser.g:5337:2: rule__STForStatement__Group_6__0__Impl rule__STForStatement__Group_6__1
+            {
+            pushFollow(FOLLOW_19);
+            rule__STForStatement__Group_6__0__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+            pushFollow(FOLLOW_2);
+            rule__STForStatement__Group_6__1();
+
+            state._fsp--;
+            if (state.failed) return ;
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__STForStatement__Group_6__0"
+
+
+    // $ANTLR start "rule__STForStatement__Group_6__0__Impl"
+    // InternalSTAlgorithmParser.g:5344:1: rule__STForStatement__Group_6__0__Impl : ( BY ) ;
+    public final void rule__STForStatement__Group_6__0__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalSTAlgorithmParser.g:5348:1: ( ( BY ) )
+            // InternalSTAlgorithmParser.g:5349:1: ( BY )
+            {
+            // InternalSTAlgorithmParser.g:5349:1: ( BY )
+            // InternalSTAlgorithmParser.g:5350:2: BY
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getSTForStatementAccess().getBYKeyword_6_0()); 
             }
             match(input,BY,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getBYKeyword_4_0()); 
+               after(grammarAccess.getSTForStatementAccess().getBYKeyword_6_0()); 
             }
 
             }
@@ -18237,21 +18405,21 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
         }
         return ;
     }
-    // $ANTLR end "rule__STForStatement__Group_4__0__Impl"
+    // $ANTLR end "rule__STForStatement__Group_6__0__Impl"
 
 
-    // $ANTLR start "rule__STForStatement__Group_4__1"
-    // InternalSTAlgorithmParser.g:5305:1: rule__STForStatement__Group_4__1 : rule__STForStatement__Group_4__1__Impl ;
-    public final void rule__STForStatement__Group_4__1() throws RecognitionException {
+    // $ANTLR start "rule__STForStatement__Group_6__1"
+    // InternalSTAlgorithmParser.g:5359:1: rule__STForStatement__Group_6__1 : rule__STForStatement__Group_6__1__Impl ;
+    public final void rule__STForStatement__Group_6__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5309:1: ( rule__STForStatement__Group_4__1__Impl )
-            // InternalSTAlgorithmParser.g:5310:2: rule__STForStatement__Group_4__1__Impl
+            // InternalSTAlgorithmParser.g:5363:1: ( rule__STForStatement__Group_6__1__Impl )
+            // InternalSTAlgorithmParser.g:5364:2: rule__STForStatement__Group_6__1__Impl
             {
             pushFollow(FOLLOW_2);
-            rule__STForStatement__Group_4__1__Impl();
+            rule__STForStatement__Group_6__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
@@ -18270,30 +18438,30 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
         }
         return ;
     }
-    // $ANTLR end "rule__STForStatement__Group_4__1"
+    // $ANTLR end "rule__STForStatement__Group_6__1"
 
 
-    // $ANTLR start "rule__STForStatement__Group_4__1__Impl"
-    // InternalSTAlgorithmParser.g:5316:1: rule__STForStatement__Group_4__1__Impl : ( ( rule__STForStatement__ByAssignment_4_1 ) ) ;
-    public final void rule__STForStatement__Group_4__1__Impl() throws RecognitionException {
+    // $ANTLR start "rule__STForStatement__Group_6__1__Impl"
+    // InternalSTAlgorithmParser.g:5370:1: rule__STForStatement__Group_6__1__Impl : ( ( rule__STForStatement__ByAssignment_6_1 ) ) ;
+    public final void rule__STForStatement__Group_6__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5320:1: ( ( ( rule__STForStatement__ByAssignment_4_1 ) ) )
-            // InternalSTAlgorithmParser.g:5321:1: ( ( rule__STForStatement__ByAssignment_4_1 ) )
+            // InternalSTAlgorithmParser.g:5374:1: ( ( ( rule__STForStatement__ByAssignment_6_1 ) ) )
+            // InternalSTAlgorithmParser.g:5375:1: ( ( rule__STForStatement__ByAssignment_6_1 ) )
             {
-            // InternalSTAlgorithmParser.g:5321:1: ( ( rule__STForStatement__ByAssignment_4_1 ) )
-            // InternalSTAlgorithmParser.g:5322:2: ( rule__STForStatement__ByAssignment_4_1 )
+            // InternalSTAlgorithmParser.g:5375:1: ( ( rule__STForStatement__ByAssignment_6_1 ) )
+            // InternalSTAlgorithmParser.g:5376:2: ( rule__STForStatement__ByAssignment_6_1 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getByAssignment_4_1()); 
+               before(grammarAccess.getSTForStatementAccess().getByAssignment_6_1()); 
             }
-            // InternalSTAlgorithmParser.g:5323:2: ( rule__STForStatement__ByAssignment_4_1 )
-            // InternalSTAlgorithmParser.g:5323:3: rule__STForStatement__ByAssignment_4_1
+            // InternalSTAlgorithmParser.g:5377:2: ( rule__STForStatement__ByAssignment_6_1 )
+            // InternalSTAlgorithmParser.g:5377:3: rule__STForStatement__ByAssignment_6_1
             {
             pushFollow(FOLLOW_2);
-            rule__STForStatement__ByAssignment_4_1();
+            rule__STForStatement__ByAssignment_6_1();
 
             state._fsp--;
             if (state.failed) return ;
@@ -18301,7 +18469,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getByAssignment_4_1()); 
+               after(grammarAccess.getSTForStatementAccess().getByAssignment_6_1()); 
             }
 
             }
@@ -18321,18 +18489,18 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
         }
         return ;
     }
-    // $ANTLR end "rule__STForStatement__Group_4__1__Impl"
+    // $ANTLR end "rule__STForStatement__Group_6__1__Impl"
 
 
     // $ANTLR start "rule__STWhileStatement__Group__0"
-    // InternalSTAlgorithmParser.g:5332:1: rule__STWhileStatement__Group__0 : rule__STWhileStatement__Group__0__Impl rule__STWhileStatement__Group__1 ;
+    // InternalSTAlgorithmParser.g:5386:1: rule__STWhileStatement__Group__0 : rule__STWhileStatement__Group__0__Impl rule__STWhileStatement__Group__1 ;
     public final void rule__STWhileStatement__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5336:1: ( rule__STWhileStatement__Group__0__Impl rule__STWhileStatement__Group__1 )
-            // InternalSTAlgorithmParser.g:5337:2: rule__STWhileStatement__Group__0__Impl rule__STWhileStatement__Group__1
+            // InternalSTAlgorithmParser.g:5390:1: ( rule__STWhileStatement__Group__0__Impl rule__STWhileStatement__Group__1 )
+            // InternalSTAlgorithmParser.g:5391:2: rule__STWhileStatement__Group__0__Impl rule__STWhileStatement__Group__1
             {
             pushFollow(FOLLOW_19);
             rule__STWhileStatement__Group__0__Impl();
@@ -18363,17 +18531,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:5344:1: rule__STWhileStatement__Group__0__Impl : ( WHILE ) ;
+    // InternalSTAlgorithmParser.g:5398:1: rule__STWhileStatement__Group__0__Impl : ( WHILE ) ;
     public final void rule__STWhileStatement__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5348:1: ( ( WHILE ) )
-            // InternalSTAlgorithmParser.g:5349:1: ( WHILE )
+            // InternalSTAlgorithmParser.g:5402:1: ( ( WHILE ) )
+            // InternalSTAlgorithmParser.g:5403:1: ( WHILE )
             {
-            // InternalSTAlgorithmParser.g:5349:1: ( WHILE )
-            // InternalSTAlgorithmParser.g:5350:2: WHILE
+            // InternalSTAlgorithmParser.g:5403:1: ( WHILE )
+            // InternalSTAlgorithmParser.g:5404:2: WHILE
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTWhileStatementAccess().getWHILEKeyword_0()); 
@@ -18404,14 +18572,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__Group__1"
-    // InternalSTAlgorithmParser.g:5359:1: rule__STWhileStatement__Group__1 : rule__STWhileStatement__Group__1__Impl rule__STWhileStatement__Group__2 ;
+    // InternalSTAlgorithmParser.g:5413:1: rule__STWhileStatement__Group__1 : rule__STWhileStatement__Group__1__Impl rule__STWhileStatement__Group__2 ;
     public final void rule__STWhileStatement__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5363:1: ( rule__STWhileStatement__Group__1__Impl rule__STWhileStatement__Group__2 )
-            // InternalSTAlgorithmParser.g:5364:2: rule__STWhileStatement__Group__1__Impl rule__STWhileStatement__Group__2
+            // InternalSTAlgorithmParser.g:5417:1: ( rule__STWhileStatement__Group__1__Impl rule__STWhileStatement__Group__2 )
+            // InternalSTAlgorithmParser.g:5418:2: rule__STWhileStatement__Group__1__Impl rule__STWhileStatement__Group__2
             {
             pushFollow(FOLLOW_43);
             rule__STWhileStatement__Group__1__Impl();
@@ -18442,23 +18610,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:5371:1: rule__STWhileStatement__Group__1__Impl : ( ( rule__STWhileStatement__ConditionAssignment_1 ) ) ;
+    // InternalSTAlgorithmParser.g:5425:1: rule__STWhileStatement__Group__1__Impl : ( ( rule__STWhileStatement__ConditionAssignment_1 ) ) ;
     public final void rule__STWhileStatement__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5375:1: ( ( ( rule__STWhileStatement__ConditionAssignment_1 ) ) )
-            // InternalSTAlgorithmParser.g:5376:1: ( ( rule__STWhileStatement__ConditionAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:5429:1: ( ( ( rule__STWhileStatement__ConditionAssignment_1 ) ) )
+            // InternalSTAlgorithmParser.g:5430:1: ( ( rule__STWhileStatement__ConditionAssignment_1 ) )
             {
-            // InternalSTAlgorithmParser.g:5376:1: ( ( rule__STWhileStatement__ConditionAssignment_1 ) )
-            // InternalSTAlgorithmParser.g:5377:2: ( rule__STWhileStatement__ConditionAssignment_1 )
+            // InternalSTAlgorithmParser.g:5430:1: ( ( rule__STWhileStatement__ConditionAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:5431:2: ( rule__STWhileStatement__ConditionAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTWhileStatementAccess().getConditionAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:5378:2: ( rule__STWhileStatement__ConditionAssignment_1 )
-            // InternalSTAlgorithmParser.g:5378:3: rule__STWhileStatement__ConditionAssignment_1
+            // InternalSTAlgorithmParser.g:5432:2: ( rule__STWhileStatement__ConditionAssignment_1 )
+            // InternalSTAlgorithmParser.g:5432:3: rule__STWhileStatement__ConditionAssignment_1
             {
             pushFollow(FOLLOW_2);
             rule__STWhileStatement__ConditionAssignment_1();
@@ -18493,14 +18661,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__Group__2"
-    // InternalSTAlgorithmParser.g:5386:1: rule__STWhileStatement__Group__2 : rule__STWhileStatement__Group__2__Impl rule__STWhileStatement__Group__3 ;
+    // InternalSTAlgorithmParser.g:5440:1: rule__STWhileStatement__Group__2 : rule__STWhileStatement__Group__2__Impl rule__STWhileStatement__Group__3 ;
     public final void rule__STWhileStatement__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5390:1: ( rule__STWhileStatement__Group__2__Impl rule__STWhileStatement__Group__3 )
-            // InternalSTAlgorithmParser.g:5391:2: rule__STWhileStatement__Group__2__Impl rule__STWhileStatement__Group__3
+            // InternalSTAlgorithmParser.g:5444:1: ( rule__STWhileStatement__Group__2__Impl rule__STWhileStatement__Group__3 )
+            // InternalSTAlgorithmParser.g:5445:2: rule__STWhileStatement__Group__2__Impl rule__STWhileStatement__Group__3
             {
             pushFollow(FOLLOW_44);
             rule__STWhileStatement__Group__2__Impl();
@@ -18531,17 +18699,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:5398:1: rule__STWhileStatement__Group__2__Impl : ( DO ) ;
+    // InternalSTAlgorithmParser.g:5452:1: rule__STWhileStatement__Group__2__Impl : ( DO ) ;
     public final void rule__STWhileStatement__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5402:1: ( ( DO ) )
-            // InternalSTAlgorithmParser.g:5403:1: ( DO )
+            // InternalSTAlgorithmParser.g:5456:1: ( ( DO ) )
+            // InternalSTAlgorithmParser.g:5457:1: ( DO )
             {
-            // InternalSTAlgorithmParser.g:5403:1: ( DO )
-            // InternalSTAlgorithmParser.g:5404:2: DO
+            // InternalSTAlgorithmParser.g:5457:1: ( DO )
+            // InternalSTAlgorithmParser.g:5458:2: DO
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTWhileStatementAccess().getDOKeyword_2()); 
@@ -18572,14 +18740,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__Group__3"
-    // InternalSTAlgorithmParser.g:5413:1: rule__STWhileStatement__Group__3 : rule__STWhileStatement__Group__3__Impl rule__STWhileStatement__Group__4 ;
+    // InternalSTAlgorithmParser.g:5467:1: rule__STWhileStatement__Group__3 : rule__STWhileStatement__Group__3__Impl rule__STWhileStatement__Group__4 ;
     public final void rule__STWhileStatement__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5417:1: ( rule__STWhileStatement__Group__3__Impl rule__STWhileStatement__Group__4 )
-            // InternalSTAlgorithmParser.g:5418:2: rule__STWhileStatement__Group__3__Impl rule__STWhileStatement__Group__4
+            // InternalSTAlgorithmParser.g:5471:1: ( rule__STWhileStatement__Group__3__Impl rule__STWhileStatement__Group__4 )
+            // InternalSTAlgorithmParser.g:5472:2: rule__STWhileStatement__Group__3__Impl rule__STWhileStatement__Group__4
             {
             pushFollow(FOLLOW_44);
             rule__STWhileStatement__Group__3__Impl();
@@ -18610,22 +18778,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__Group__3__Impl"
-    // InternalSTAlgorithmParser.g:5425:1: rule__STWhileStatement__Group__3__Impl : ( ( rule__STWhileStatement__StatementsAssignment_3 )* ) ;
+    // InternalSTAlgorithmParser.g:5479:1: rule__STWhileStatement__Group__3__Impl : ( ( rule__STWhileStatement__StatementsAssignment_3 )* ) ;
     public final void rule__STWhileStatement__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5429:1: ( ( ( rule__STWhileStatement__StatementsAssignment_3 )* ) )
-            // InternalSTAlgorithmParser.g:5430:1: ( ( rule__STWhileStatement__StatementsAssignment_3 )* )
+            // InternalSTAlgorithmParser.g:5483:1: ( ( ( rule__STWhileStatement__StatementsAssignment_3 )* ) )
+            // InternalSTAlgorithmParser.g:5484:1: ( ( rule__STWhileStatement__StatementsAssignment_3 )* )
             {
-            // InternalSTAlgorithmParser.g:5430:1: ( ( rule__STWhileStatement__StatementsAssignment_3 )* )
-            // InternalSTAlgorithmParser.g:5431:2: ( rule__STWhileStatement__StatementsAssignment_3 )*
+            // InternalSTAlgorithmParser.g:5484:1: ( ( rule__STWhileStatement__StatementsAssignment_3 )* )
+            // InternalSTAlgorithmParser.g:5485:2: ( rule__STWhileStatement__StatementsAssignment_3 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTWhileStatementAccess().getStatementsAssignment_3()); 
             }
-            // InternalSTAlgorithmParser.g:5432:2: ( rule__STWhileStatement__StatementsAssignment_3 )*
+            // InternalSTAlgorithmParser.g:5486:2: ( rule__STWhileStatement__StatementsAssignment_3 )*
             loop54:
             do {
                 int alt54=2;
@@ -18638,7 +18806,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt54) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:5432:3: rule__STWhileStatement__StatementsAssignment_3
+            	    // InternalSTAlgorithmParser.g:5486:3: rule__STWhileStatement__StatementsAssignment_3
             	    {
             	    pushFollow(FOLLOW_10);
             	    rule__STWhileStatement__StatementsAssignment_3();
@@ -18679,14 +18847,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__Group__4"
-    // InternalSTAlgorithmParser.g:5440:1: rule__STWhileStatement__Group__4 : rule__STWhileStatement__Group__4__Impl ;
+    // InternalSTAlgorithmParser.g:5494:1: rule__STWhileStatement__Group__4 : rule__STWhileStatement__Group__4__Impl ;
     public final void rule__STWhileStatement__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5444:1: ( rule__STWhileStatement__Group__4__Impl )
-            // InternalSTAlgorithmParser.g:5445:2: rule__STWhileStatement__Group__4__Impl
+            // InternalSTAlgorithmParser.g:5498:1: ( rule__STWhileStatement__Group__4__Impl )
+            // InternalSTAlgorithmParser.g:5499:2: rule__STWhileStatement__Group__4__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STWhileStatement__Group__4__Impl();
@@ -18712,17 +18880,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__Group__4__Impl"
-    // InternalSTAlgorithmParser.g:5451:1: rule__STWhileStatement__Group__4__Impl : ( END_WHILE ) ;
+    // InternalSTAlgorithmParser.g:5505:1: rule__STWhileStatement__Group__4__Impl : ( END_WHILE ) ;
     public final void rule__STWhileStatement__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5455:1: ( ( END_WHILE ) )
-            // InternalSTAlgorithmParser.g:5456:1: ( END_WHILE )
+            // InternalSTAlgorithmParser.g:5509:1: ( ( END_WHILE ) )
+            // InternalSTAlgorithmParser.g:5510:1: ( END_WHILE )
             {
-            // InternalSTAlgorithmParser.g:5456:1: ( END_WHILE )
-            // InternalSTAlgorithmParser.g:5457:2: END_WHILE
+            // InternalSTAlgorithmParser.g:5510:1: ( END_WHILE )
+            // InternalSTAlgorithmParser.g:5511:2: END_WHILE
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTWhileStatementAccess().getEND_WHILEKeyword_4()); 
@@ -18753,14 +18921,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__0"
-    // InternalSTAlgorithmParser.g:5467:1: rule__STRepeatStatement__Group__0 : rule__STRepeatStatement__Group__0__Impl rule__STRepeatStatement__Group__1 ;
+    // InternalSTAlgorithmParser.g:5521:1: rule__STRepeatStatement__Group__0 : rule__STRepeatStatement__Group__0__Impl rule__STRepeatStatement__Group__1 ;
     public final void rule__STRepeatStatement__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5471:1: ( rule__STRepeatStatement__Group__0__Impl rule__STRepeatStatement__Group__1 )
-            // InternalSTAlgorithmParser.g:5472:2: rule__STRepeatStatement__Group__0__Impl rule__STRepeatStatement__Group__1
+            // InternalSTAlgorithmParser.g:5525:1: ( rule__STRepeatStatement__Group__0__Impl rule__STRepeatStatement__Group__1 )
+            // InternalSTAlgorithmParser.g:5526:2: rule__STRepeatStatement__Group__0__Impl rule__STRepeatStatement__Group__1
             {
             pushFollow(FOLLOW_45);
             rule__STRepeatStatement__Group__0__Impl();
@@ -18791,17 +18959,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:5479:1: rule__STRepeatStatement__Group__0__Impl : ( REPEAT ) ;
+    // InternalSTAlgorithmParser.g:5533:1: rule__STRepeatStatement__Group__0__Impl : ( REPEAT ) ;
     public final void rule__STRepeatStatement__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5483:1: ( ( REPEAT ) )
-            // InternalSTAlgorithmParser.g:5484:1: ( REPEAT )
+            // InternalSTAlgorithmParser.g:5537:1: ( ( REPEAT ) )
+            // InternalSTAlgorithmParser.g:5538:1: ( REPEAT )
             {
-            // InternalSTAlgorithmParser.g:5484:1: ( REPEAT )
-            // InternalSTAlgorithmParser.g:5485:2: REPEAT
+            // InternalSTAlgorithmParser.g:5538:1: ( REPEAT )
+            // InternalSTAlgorithmParser.g:5539:2: REPEAT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTRepeatStatementAccess().getREPEATKeyword_0()); 
@@ -18832,14 +19000,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__1"
-    // InternalSTAlgorithmParser.g:5494:1: rule__STRepeatStatement__Group__1 : rule__STRepeatStatement__Group__1__Impl rule__STRepeatStatement__Group__2 ;
+    // InternalSTAlgorithmParser.g:5548:1: rule__STRepeatStatement__Group__1 : rule__STRepeatStatement__Group__1__Impl rule__STRepeatStatement__Group__2 ;
     public final void rule__STRepeatStatement__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5498:1: ( rule__STRepeatStatement__Group__1__Impl rule__STRepeatStatement__Group__2 )
-            // InternalSTAlgorithmParser.g:5499:2: rule__STRepeatStatement__Group__1__Impl rule__STRepeatStatement__Group__2
+            // InternalSTAlgorithmParser.g:5552:1: ( rule__STRepeatStatement__Group__1__Impl rule__STRepeatStatement__Group__2 )
+            // InternalSTAlgorithmParser.g:5553:2: rule__STRepeatStatement__Group__1__Impl rule__STRepeatStatement__Group__2
             {
             pushFollow(FOLLOW_45);
             rule__STRepeatStatement__Group__1__Impl();
@@ -18870,22 +19038,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:5506:1: rule__STRepeatStatement__Group__1__Impl : ( ( rule__STRepeatStatement__StatementsAssignment_1 )* ) ;
+    // InternalSTAlgorithmParser.g:5560:1: rule__STRepeatStatement__Group__1__Impl : ( ( rule__STRepeatStatement__StatementsAssignment_1 )* ) ;
     public final void rule__STRepeatStatement__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5510:1: ( ( ( rule__STRepeatStatement__StatementsAssignment_1 )* ) )
-            // InternalSTAlgorithmParser.g:5511:1: ( ( rule__STRepeatStatement__StatementsAssignment_1 )* )
+            // InternalSTAlgorithmParser.g:5564:1: ( ( ( rule__STRepeatStatement__StatementsAssignment_1 )* ) )
+            // InternalSTAlgorithmParser.g:5565:1: ( ( rule__STRepeatStatement__StatementsAssignment_1 )* )
             {
-            // InternalSTAlgorithmParser.g:5511:1: ( ( rule__STRepeatStatement__StatementsAssignment_1 )* )
-            // InternalSTAlgorithmParser.g:5512:2: ( rule__STRepeatStatement__StatementsAssignment_1 )*
+            // InternalSTAlgorithmParser.g:5565:1: ( ( rule__STRepeatStatement__StatementsAssignment_1 )* )
+            // InternalSTAlgorithmParser.g:5566:2: ( rule__STRepeatStatement__StatementsAssignment_1 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTRepeatStatementAccess().getStatementsAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:5513:2: ( rule__STRepeatStatement__StatementsAssignment_1 )*
+            // InternalSTAlgorithmParser.g:5567:2: ( rule__STRepeatStatement__StatementsAssignment_1 )*
             loop55:
             do {
                 int alt55=2;
@@ -18898,7 +19066,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt55) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:5513:3: rule__STRepeatStatement__StatementsAssignment_1
+            	    // InternalSTAlgorithmParser.g:5567:3: rule__STRepeatStatement__StatementsAssignment_1
             	    {
             	    pushFollow(FOLLOW_10);
             	    rule__STRepeatStatement__StatementsAssignment_1();
@@ -18939,14 +19107,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__2"
-    // InternalSTAlgorithmParser.g:5521:1: rule__STRepeatStatement__Group__2 : rule__STRepeatStatement__Group__2__Impl rule__STRepeatStatement__Group__3 ;
+    // InternalSTAlgorithmParser.g:5575:1: rule__STRepeatStatement__Group__2 : rule__STRepeatStatement__Group__2__Impl rule__STRepeatStatement__Group__3 ;
     public final void rule__STRepeatStatement__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5525:1: ( rule__STRepeatStatement__Group__2__Impl rule__STRepeatStatement__Group__3 )
-            // InternalSTAlgorithmParser.g:5526:2: rule__STRepeatStatement__Group__2__Impl rule__STRepeatStatement__Group__3
+            // InternalSTAlgorithmParser.g:5579:1: ( rule__STRepeatStatement__Group__2__Impl rule__STRepeatStatement__Group__3 )
+            // InternalSTAlgorithmParser.g:5580:2: rule__STRepeatStatement__Group__2__Impl rule__STRepeatStatement__Group__3
             {
             pushFollow(FOLLOW_19);
             rule__STRepeatStatement__Group__2__Impl();
@@ -18977,17 +19145,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:5533:1: rule__STRepeatStatement__Group__2__Impl : ( UNTIL ) ;
+    // InternalSTAlgorithmParser.g:5587:1: rule__STRepeatStatement__Group__2__Impl : ( UNTIL ) ;
     public final void rule__STRepeatStatement__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5537:1: ( ( UNTIL ) )
-            // InternalSTAlgorithmParser.g:5538:1: ( UNTIL )
+            // InternalSTAlgorithmParser.g:5591:1: ( ( UNTIL ) )
+            // InternalSTAlgorithmParser.g:5592:1: ( UNTIL )
             {
-            // InternalSTAlgorithmParser.g:5538:1: ( UNTIL )
-            // InternalSTAlgorithmParser.g:5539:2: UNTIL
+            // InternalSTAlgorithmParser.g:5592:1: ( UNTIL )
+            // InternalSTAlgorithmParser.g:5593:2: UNTIL
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTRepeatStatementAccess().getUNTILKeyword_2()); 
@@ -19018,14 +19186,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__3"
-    // InternalSTAlgorithmParser.g:5548:1: rule__STRepeatStatement__Group__3 : rule__STRepeatStatement__Group__3__Impl rule__STRepeatStatement__Group__4 ;
+    // InternalSTAlgorithmParser.g:5602:1: rule__STRepeatStatement__Group__3 : rule__STRepeatStatement__Group__3__Impl rule__STRepeatStatement__Group__4 ;
     public final void rule__STRepeatStatement__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5552:1: ( rule__STRepeatStatement__Group__3__Impl rule__STRepeatStatement__Group__4 )
-            // InternalSTAlgorithmParser.g:5553:2: rule__STRepeatStatement__Group__3__Impl rule__STRepeatStatement__Group__4
+            // InternalSTAlgorithmParser.g:5606:1: ( rule__STRepeatStatement__Group__3__Impl rule__STRepeatStatement__Group__4 )
+            // InternalSTAlgorithmParser.g:5607:2: rule__STRepeatStatement__Group__3__Impl rule__STRepeatStatement__Group__4
             {
             pushFollow(FOLLOW_46);
             rule__STRepeatStatement__Group__3__Impl();
@@ -19056,23 +19224,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__3__Impl"
-    // InternalSTAlgorithmParser.g:5560:1: rule__STRepeatStatement__Group__3__Impl : ( ( rule__STRepeatStatement__ConditionAssignment_3 ) ) ;
+    // InternalSTAlgorithmParser.g:5614:1: rule__STRepeatStatement__Group__3__Impl : ( ( rule__STRepeatStatement__ConditionAssignment_3 ) ) ;
     public final void rule__STRepeatStatement__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5564:1: ( ( ( rule__STRepeatStatement__ConditionAssignment_3 ) ) )
-            // InternalSTAlgorithmParser.g:5565:1: ( ( rule__STRepeatStatement__ConditionAssignment_3 ) )
+            // InternalSTAlgorithmParser.g:5618:1: ( ( ( rule__STRepeatStatement__ConditionAssignment_3 ) ) )
+            // InternalSTAlgorithmParser.g:5619:1: ( ( rule__STRepeatStatement__ConditionAssignment_3 ) )
             {
-            // InternalSTAlgorithmParser.g:5565:1: ( ( rule__STRepeatStatement__ConditionAssignment_3 ) )
-            // InternalSTAlgorithmParser.g:5566:2: ( rule__STRepeatStatement__ConditionAssignment_3 )
+            // InternalSTAlgorithmParser.g:5619:1: ( ( rule__STRepeatStatement__ConditionAssignment_3 ) )
+            // InternalSTAlgorithmParser.g:5620:2: ( rule__STRepeatStatement__ConditionAssignment_3 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTRepeatStatementAccess().getConditionAssignment_3()); 
             }
-            // InternalSTAlgorithmParser.g:5567:2: ( rule__STRepeatStatement__ConditionAssignment_3 )
-            // InternalSTAlgorithmParser.g:5567:3: rule__STRepeatStatement__ConditionAssignment_3
+            // InternalSTAlgorithmParser.g:5621:2: ( rule__STRepeatStatement__ConditionAssignment_3 )
+            // InternalSTAlgorithmParser.g:5621:3: rule__STRepeatStatement__ConditionAssignment_3
             {
             pushFollow(FOLLOW_2);
             rule__STRepeatStatement__ConditionAssignment_3();
@@ -19107,14 +19275,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__4"
-    // InternalSTAlgorithmParser.g:5575:1: rule__STRepeatStatement__Group__4 : rule__STRepeatStatement__Group__4__Impl ;
+    // InternalSTAlgorithmParser.g:5629:1: rule__STRepeatStatement__Group__4 : rule__STRepeatStatement__Group__4__Impl ;
     public final void rule__STRepeatStatement__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5579:1: ( rule__STRepeatStatement__Group__4__Impl )
-            // InternalSTAlgorithmParser.g:5580:2: rule__STRepeatStatement__Group__4__Impl
+            // InternalSTAlgorithmParser.g:5633:1: ( rule__STRepeatStatement__Group__4__Impl )
+            // InternalSTAlgorithmParser.g:5634:2: rule__STRepeatStatement__Group__4__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STRepeatStatement__Group__4__Impl();
@@ -19140,17 +19308,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__Group__4__Impl"
-    // InternalSTAlgorithmParser.g:5586:1: rule__STRepeatStatement__Group__4__Impl : ( END_REPEAT ) ;
+    // InternalSTAlgorithmParser.g:5640:1: rule__STRepeatStatement__Group__4__Impl : ( END_REPEAT ) ;
     public final void rule__STRepeatStatement__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5590:1: ( ( END_REPEAT ) )
-            // InternalSTAlgorithmParser.g:5591:1: ( END_REPEAT )
+            // InternalSTAlgorithmParser.g:5644:1: ( ( END_REPEAT ) )
+            // InternalSTAlgorithmParser.g:5645:1: ( END_REPEAT )
             {
-            // InternalSTAlgorithmParser.g:5591:1: ( END_REPEAT )
-            // InternalSTAlgorithmParser.g:5592:2: END_REPEAT
+            // InternalSTAlgorithmParser.g:5645:1: ( END_REPEAT )
+            // InternalSTAlgorithmParser.g:5646:2: END_REPEAT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTRepeatStatementAccess().getEND_REPEATKeyword_4()); 
@@ -19181,14 +19349,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group__0"
-    // InternalSTAlgorithmParser.g:5602:1: rule__STSubrangeExpression__Group__0 : rule__STSubrangeExpression__Group__0__Impl rule__STSubrangeExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:5656:1: rule__STSubrangeExpression__Group__0 : rule__STSubrangeExpression__Group__0__Impl rule__STSubrangeExpression__Group__1 ;
     public final void rule__STSubrangeExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5606:1: ( rule__STSubrangeExpression__Group__0__Impl rule__STSubrangeExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:5607:2: rule__STSubrangeExpression__Group__0__Impl rule__STSubrangeExpression__Group__1
+            // InternalSTAlgorithmParser.g:5660:1: ( rule__STSubrangeExpression__Group__0__Impl rule__STSubrangeExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:5661:2: rule__STSubrangeExpression__Group__0__Impl rule__STSubrangeExpression__Group__1
             {
             pushFollow(FOLLOW_47);
             rule__STSubrangeExpression__Group__0__Impl();
@@ -19219,17 +19387,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:5614:1: rule__STSubrangeExpression__Group__0__Impl : ( ruleSTOrExpression ) ;
+    // InternalSTAlgorithmParser.g:5668:1: rule__STSubrangeExpression__Group__0__Impl : ( ruleSTOrExpression ) ;
     public final void rule__STSubrangeExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5618:1: ( ( ruleSTOrExpression ) )
-            // InternalSTAlgorithmParser.g:5619:1: ( ruleSTOrExpression )
+            // InternalSTAlgorithmParser.g:5672:1: ( ( ruleSTOrExpression ) )
+            // InternalSTAlgorithmParser.g:5673:1: ( ruleSTOrExpression )
             {
-            // InternalSTAlgorithmParser.g:5619:1: ( ruleSTOrExpression )
-            // InternalSTAlgorithmParser.g:5620:2: ruleSTOrExpression
+            // InternalSTAlgorithmParser.g:5673:1: ( ruleSTOrExpression )
+            // InternalSTAlgorithmParser.g:5674:2: ruleSTOrExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getSTOrExpressionParserRuleCall_0()); 
@@ -19264,14 +19432,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group__1"
-    // InternalSTAlgorithmParser.g:5629:1: rule__STSubrangeExpression__Group__1 : rule__STSubrangeExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:5683:1: rule__STSubrangeExpression__Group__1 : rule__STSubrangeExpression__Group__1__Impl ;
     public final void rule__STSubrangeExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5633:1: ( rule__STSubrangeExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:5634:2: rule__STSubrangeExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:5687:1: ( rule__STSubrangeExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:5688:2: rule__STSubrangeExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STSubrangeExpression__Group__1__Impl();
@@ -19297,22 +19465,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:5640:1: rule__STSubrangeExpression__Group__1__Impl : ( ( rule__STSubrangeExpression__Group_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:5694:1: rule__STSubrangeExpression__Group__1__Impl : ( ( rule__STSubrangeExpression__Group_1__0 )* ) ;
     public final void rule__STSubrangeExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5644:1: ( ( ( rule__STSubrangeExpression__Group_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:5645:1: ( ( rule__STSubrangeExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:5698:1: ( ( ( rule__STSubrangeExpression__Group_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:5699:1: ( ( rule__STSubrangeExpression__Group_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:5645:1: ( ( rule__STSubrangeExpression__Group_1__0 )* )
-            // InternalSTAlgorithmParser.g:5646:2: ( rule__STSubrangeExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:5699:1: ( ( rule__STSubrangeExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:5700:2: ( rule__STSubrangeExpression__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getGroup_1()); 
             }
-            // InternalSTAlgorithmParser.g:5647:2: ( rule__STSubrangeExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:5701:2: ( rule__STSubrangeExpression__Group_1__0 )*
             loop56:
             do {
                 int alt56=2;
@@ -19325,7 +19493,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt56) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:5647:3: rule__STSubrangeExpression__Group_1__0
+            	    // InternalSTAlgorithmParser.g:5701:3: rule__STSubrangeExpression__Group_1__0
             	    {
             	    pushFollow(FOLLOW_48);
             	    rule__STSubrangeExpression__Group_1__0();
@@ -19366,14 +19534,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:5656:1: rule__STSubrangeExpression__Group_1__0 : rule__STSubrangeExpression__Group_1__0__Impl rule__STSubrangeExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:5710:1: rule__STSubrangeExpression__Group_1__0 : rule__STSubrangeExpression__Group_1__0__Impl rule__STSubrangeExpression__Group_1__1 ;
     public final void rule__STSubrangeExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5660:1: ( rule__STSubrangeExpression__Group_1__0__Impl rule__STSubrangeExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:5661:2: rule__STSubrangeExpression__Group_1__0__Impl rule__STSubrangeExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:5714:1: ( rule__STSubrangeExpression__Group_1__0__Impl rule__STSubrangeExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:5715:2: rule__STSubrangeExpression__Group_1__0__Impl rule__STSubrangeExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STSubrangeExpression__Group_1__0__Impl();
@@ -19404,23 +19572,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:5668:1: rule__STSubrangeExpression__Group_1__0__Impl : ( ( rule__STSubrangeExpression__Group_1_0__0 ) ) ;
+    // InternalSTAlgorithmParser.g:5722:1: rule__STSubrangeExpression__Group_1__0__Impl : ( ( rule__STSubrangeExpression__Group_1_0__0 ) ) ;
     public final void rule__STSubrangeExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5672:1: ( ( ( rule__STSubrangeExpression__Group_1_0__0 ) ) )
-            // InternalSTAlgorithmParser.g:5673:1: ( ( rule__STSubrangeExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:5726:1: ( ( ( rule__STSubrangeExpression__Group_1_0__0 ) ) )
+            // InternalSTAlgorithmParser.g:5727:1: ( ( rule__STSubrangeExpression__Group_1_0__0 ) )
             {
-            // InternalSTAlgorithmParser.g:5673:1: ( ( rule__STSubrangeExpression__Group_1_0__0 ) )
-            // InternalSTAlgorithmParser.g:5674:2: ( rule__STSubrangeExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:5727:1: ( ( rule__STSubrangeExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:5728:2: ( rule__STSubrangeExpression__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getGroup_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:5675:2: ( rule__STSubrangeExpression__Group_1_0__0 )
-            // InternalSTAlgorithmParser.g:5675:3: rule__STSubrangeExpression__Group_1_0__0
+            // InternalSTAlgorithmParser.g:5729:2: ( rule__STSubrangeExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:5729:3: rule__STSubrangeExpression__Group_1_0__0
             {
             pushFollow(FOLLOW_2);
             rule__STSubrangeExpression__Group_1_0__0();
@@ -19455,14 +19623,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:5683:1: rule__STSubrangeExpression__Group_1__1 : rule__STSubrangeExpression__Group_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:5737:1: rule__STSubrangeExpression__Group_1__1 : rule__STSubrangeExpression__Group_1__1__Impl ;
     public final void rule__STSubrangeExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5687:1: ( rule__STSubrangeExpression__Group_1__1__Impl )
-            // InternalSTAlgorithmParser.g:5688:2: rule__STSubrangeExpression__Group_1__1__Impl
+            // InternalSTAlgorithmParser.g:5741:1: ( rule__STSubrangeExpression__Group_1__1__Impl )
+            // InternalSTAlgorithmParser.g:5742:2: rule__STSubrangeExpression__Group_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STSubrangeExpression__Group_1__1__Impl();
@@ -19488,23 +19656,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:5694:1: rule__STSubrangeExpression__Group_1__1__Impl : ( ( rule__STSubrangeExpression__RightAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:5748:1: rule__STSubrangeExpression__Group_1__1__Impl : ( ( rule__STSubrangeExpression__RightAssignment_1_1 ) ) ;
     public final void rule__STSubrangeExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5698:1: ( ( ( rule__STSubrangeExpression__RightAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:5699:1: ( ( rule__STSubrangeExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:5752:1: ( ( ( rule__STSubrangeExpression__RightAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:5753:1: ( ( rule__STSubrangeExpression__RightAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:5699:1: ( ( rule__STSubrangeExpression__RightAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:5700:2: ( rule__STSubrangeExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:5753:1: ( ( rule__STSubrangeExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:5754:2: ( rule__STSubrangeExpression__RightAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getRightAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:5701:2: ( rule__STSubrangeExpression__RightAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:5701:3: rule__STSubrangeExpression__RightAssignment_1_1
+            // InternalSTAlgorithmParser.g:5755:2: ( rule__STSubrangeExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:5755:3: rule__STSubrangeExpression__RightAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STSubrangeExpression__RightAssignment_1_1();
@@ -19539,14 +19707,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:5710:1: rule__STSubrangeExpression__Group_1_0__0 : rule__STSubrangeExpression__Group_1_0__0__Impl rule__STSubrangeExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:5764:1: rule__STSubrangeExpression__Group_1_0__0 : rule__STSubrangeExpression__Group_1_0__0__Impl rule__STSubrangeExpression__Group_1_0__1 ;
     public final void rule__STSubrangeExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5714:1: ( rule__STSubrangeExpression__Group_1_0__0__Impl rule__STSubrangeExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:5715:2: rule__STSubrangeExpression__Group_1_0__0__Impl rule__STSubrangeExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:5768:1: ( rule__STSubrangeExpression__Group_1_0__0__Impl rule__STSubrangeExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:5769:2: rule__STSubrangeExpression__Group_1_0__0__Impl rule__STSubrangeExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_47);
             rule__STSubrangeExpression__Group_1_0__0__Impl();
@@ -19577,23 +19745,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:5722:1: rule__STSubrangeExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:5776:1: rule__STSubrangeExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STSubrangeExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5726:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:5727:1: ( () )
+            // InternalSTAlgorithmParser.g:5780:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:5781:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:5727:1: ( () )
-            // InternalSTAlgorithmParser.g:5728:2: ()
+            // InternalSTAlgorithmParser.g:5781:1: ( () )
+            // InternalSTAlgorithmParser.g:5782:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:5729:2: ()
-            // InternalSTAlgorithmParser.g:5729:3: 
+            // InternalSTAlgorithmParser.g:5783:2: ()
+            // InternalSTAlgorithmParser.g:5783:3: 
             {
             }
 
@@ -19618,14 +19786,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:5737:1: rule__STSubrangeExpression__Group_1_0__1 : rule__STSubrangeExpression__Group_1_0__1__Impl ;
+    // InternalSTAlgorithmParser.g:5791:1: rule__STSubrangeExpression__Group_1_0__1 : rule__STSubrangeExpression__Group_1_0__1__Impl ;
     public final void rule__STSubrangeExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5741:1: ( rule__STSubrangeExpression__Group_1_0__1__Impl )
-            // InternalSTAlgorithmParser.g:5742:2: rule__STSubrangeExpression__Group_1_0__1__Impl
+            // InternalSTAlgorithmParser.g:5795:1: ( rule__STSubrangeExpression__Group_1_0__1__Impl )
+            // InternalSTAlgorithmParser.g:5796:2: rule__STSubrangeExpression__Group_1_0__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STSubrangeExpression__Group_1_0__1__Impl();
@@ -19651,23 +19819,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:5748:1: rule__STSubrangeExpression__Group_1_0__1__Impl : ( ( rule__STSubrangeExpression__OpAssignment_1_0_1 ) ) ;
+    // InternalSTAlgorithmParser.g:5802:1: rule__STSubrangeExpression__Group_1_0__1__Impl : ( ( rule__STSubrangeExpression__OpAssignment_1_0_1 ) ) ;
     public final void rule__STSubrangeExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5752:1: ( ( ( rule__STSubrangeExpression__OpAssignment_1_0_1 ) ) )
-            // InternalSTAlgorithmParser.g:5753:1: ( ( rule__STSubrangeExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:5806:1: ( ( ( rule__STSubrangeExpression__OpAssignment_1_0_1 ) ) )
+            // InternalSTAlgorithmParser.g:5807:1: ( ( rule__STSubrangeExpression__OpAssignment_1_0_1 ) )
             {
-            // InternalSTAlgorithmParser.g:5753:1: ( ( rule__STSubrangeExpression__OpAssignment_1_0_1 ) )
-            // InternalSTAlgorithmParser.g:5754:2: ( rule__STSubrangeExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:5807:1: ( ( rule__STSubrangeExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:5808:2: ( rule__STSubrangeExpression__OpAssignment_1_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getOpAssignment_1_0_1()); 
             }
-            // InternalSTAlgorithmParser.g:5755:2: ( rule__STSubrangeExpression__OpAssignment_1_0_1 )
-            // InternalSTAlgorithmParser.g:5755:3: rule__STSubrangeExpression__OpAssignment_1_0_1
+            // InternalSTAlgorithmParser.g:5809:2: ( rule__STSubrangeExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:5809:3: rule__STSubrangeExpression__OpAssignment_1_0_1
             {
             pushFollow(FOLLOW_2);
             rule__STSubrangeExpression__OpAssignment_1_0_1();
@@ -19702,14 +19870,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group__0"
-    // InternalSTAlgorithmParser.g:5764:1: rule__STOrExpression__Group__0 : rule__STOrExpression__Group__0__Impl rule__STOrExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:5818:1: rule__STOrExpression__Group__0 : rule__STOrExpression__Group__0__Impl rule__STOrExpression__Group__1 ;
     public final void rule__STOrExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5768:1: ( rule__STOrExpression__Group__0__Impl rule__STOrExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:5769:2: rule__STOrExpression__Group__0__Impl rule__STOrExpression__Group__1
+            // InternalSTAlgorithmParser.g:5822:1: ( rule__STOrExpression__Group__0__Impl rule__STOrExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:5823:2: rule__STOrExpression__Group__0__Impl rule__STOrExpression__Group__1
             {
             pushFollow(FOLLOW_49);
             rule__STOrExpression__Group__0__Impl();
@@ -19740,17 +19908,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:5776:1: rule__STOrExpression__Group__0__Impl : ( ruleSTXorExpression ) ;
+    // InternalSTAlgorithmParser.g:5830:1: rule__STOrExpression__Group__0__Impl : ( ruleSTXorExpression ) ;
     public final void rule__STOrExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5780:1: ( ( ruleSTXorExpression ) )
-            // InternalSTAlgorithmParser.g:5781:1: ( ruleSTXorExpression )
+            // InternalSTAlgorithmParser.g:5834:1: ( ( ruleSTXorExpression ) )
+            // InternalSTAlgorithmParser.g:5835:1: ( ruleSTXorExpression )
             {
-            // InternalSTAlgorithmParser.g:5781:1: ( ruleSTXorExpression )
-            // InternalSTAlgorithmParser.g:5782:2: ruleSTXorExpression
+            // InternalSTAlgorithmParser.g:5835:1: ( ruleSTXorExpression )
+            // InternalSTAlgorithmParser.g:5836:2: ruleSTXorExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getSTXorExpressionParserRuleCall_0()); 
@@ -19785,14 +19953,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group__1"
-    // InternalSTAlgorithmParser.g:5791:1: rule__STOrExpression__Group__1 : rule__STOrExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:5845:1: rule__STOrExpression__Group__1 : rule__STOrExpression__Group__1__Impl ;
     public final void rule__STOrExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5795:1: ( rule__STOrExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:5796:2: rule__STOrExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:5849:1: ( rule__STOrExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:5850:2: rule__STOrExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STOrExpression__Group__1__Impl();
@@ -19818,22 +19986,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:5802:1: rule__STOrExpression__Group__1__Impl : ( ( rule__STOrExpression__Group_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:5856:1: rule__STOrExpression__Group__1__Impl : ( ( rule__STOrExpression__Group_1__0 )* ) ;
     public final void rule__STOrExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5806:1: ( ( ( rule__STOrExpression__Group_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:5807:1: ( ( rule__STOrExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:5860:1: ( ( ( rule__STOrExpression__Group_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:5861:1: ( ( rule__STOrExpression__Group_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:5807:1: ( ( rule__STOrExpression__Group_1__0 )* )
-            // InternalSTAlgorithmParser.g:5808:2: ( rule__STOrExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:5861:1: ( ( rule__STOrExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:5862:2: ( rule__STOrExpression__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getGroup_1()); 
             }
-            // InternalSTAlgorithmParser.g:5809:2: ( rule__STOrExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:5863:2: ( rule__STOrExpression__Group_1__0 )*
             loop57:
             do {
                 int alt57=2;
@@ -19846,7 +20014,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt57) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:5809:3: rule__STOrExpression__Group_1__0
+            	    // InternalSTAlgorithmParser.g:5863:3: rule__STOrExpression__Group_1__0
             	    {
             	    pushFollow(FOLLOW_50);
             	    rule__STOrExpression__Group_1__0();
@@ -19887,14 +20055,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:5818:1: rule__STOrExpression__Group_1__0 : rule__STOrExpression__Group_1__0__Impl rule__STOrExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:5872:1: rule__STOrExpression__Group_1__0 : rule__STOrExpression__Group_1__0__Impl rule__STOrExpression__Group_1__1 ;
     public final void rule__STOrExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5822:1: ( rule__STOrExpression__Group_1__0__Impl rule__STOrExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:5823:2: rule__STOrExpression__Group_1__0__Impl rule__STOrExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:5876:1: ( rule__STOrExpression__Group_1__0__Impl rule__STOrExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:5877:2: rule__STOrExpression__Group_1__0__Impl rule__STOrExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STOrExpression__Group_1__0__Impl();
@@ -19925,23 +20093,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:5830:1: rule__STOrExpression__Group_1__0__Impl : ( ( rule__STOrExpression__Group_1_0__0 ) ) ;
+    // InternalSTAlgorithmParser.g:5884:1: rule__STOrExpression__Group_1__0__Impl : ( ( rule__STOrExpression__Group_1_0__0 ) ) ;
     public final void rule__STOrExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5834:1: ( ( ( rule__STOrExpression__Group_1_0__0 ) ) )
-            // InternalSTAlgorithmParser.g:5835:1: ( ( rule__STOrExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:5888:1: ( ( ( rule__STOrExpression__Group_1_0__0 ) ) )
+            // InternalSTAlgorithmParser.g:5889:1: ( ( rule__STOrExpression__Group_1_0__0 ) )
             {
-            // InternalSTAlgorithmParser.g:5835:1: ( ( rule__STOrExpression__Group_1_0__0 ) )
-            // InternalSTAlgorithmParser.g:5836:2: ( rule__STOrExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:5889:1: ( ( rule__STOrExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:5890:2: ( rule__STOrExpression__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getGroup_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:5837:2: ( rule__STOrExpression__Group_1_0__0 )
-            // InternalSTAlgorithmParser.g:5837:3: rule__STOrExpression__Group_1_0__0
+            // InternalSTAlgorithmParser.g:5891:2: ( rule__STOrExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:5891:3: rule__STOrExpression__Group_1_0__0
             {
             pushFollow(FOLLOW_2);
             rule__STOrExpression__Group_1_0__0();
@@ -19976,14 +20144,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:5845:1: rule__STOrExpression__Group_1__1 : rule__STOrExpression__Group_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:5899:1: rule__STOrExpression__Group_1__1 : rule__STOrExpression__Group_1__1__Impl ;
     public final void rule__STOrExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5849:1: ( rule__STOrExpression__Group_1__1__Impl )
-            // InternalSTAlgorithmParser.g:5850:2: rule__STOrExpression__Group_1__1__Impl
+            // InternalSTAlgorithmParser.g:5903:1: ( rule__STOrExpression__Group_1__1__Impl )
+            // InternalSTAlgorithmParser.g:5904:2: rule__STOrExpression__Group_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STOrExpression__Group_1__1__Impl();
@@ -20009,23 +20177,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:5856:1: rule__STOrExpression__Group_1__1__Impl : ( ( rule__STOrExpression__RightAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:5910:1: rule__STOrExpression__Group_1__1__Impl : ( ( rule__STOrExpression__RightAssignment_1_1 ) ) ;
     public final void rule__STOrExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5860:1: ( ( ( rule__STOrExpression__RightAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:5861:1: ( ( rule__STOrExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:5914:1: ( ( ( rule__STOrExpression__RightAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:5915:1: ( ( rule__STOrExpression__RightAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:5861:1: ( ( rule__STOrExpression__RightAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:5862:2: ( rule__STOrExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:5915:1: ( ( rule__STOrExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:5916:2: ( rule__STOrExpression__RightAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getRightAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:5863:2: ( rule__STOrExpression__RightAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:5863:3: rule__STOrExpression__RightAssignment_1_1
+            // InternalSTAlgorithmParser.g:5917:2: ( rule__STOrExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:5917:3: rule__STOrExpression__RightAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STOrExpression__RightAssignment_1_1();
@@ -20060,14 +20228,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:5872:1: rule__STOrExpression__Group_1_0__0 : rule__STOrExpression__Group_1_0__0__Impl rule__STOrExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:5926:1: rule__STOrExpression__Group_1_0__0 : rule__STOrExpression__Group_1_0__0__Impl rule__STOrExpression__Group_1_0__1 ;
     public final void rule__STOrExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5876:1: ( rule__STOrExpression__Group_1_0__0__Impl rule__STOrExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:5877:2: rule__STOrExpression__Group_1_0__0__Impl rule__STOrExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:5930:1: ( rule__STOrExpression__Group_1_0__0__Impl rule__STOrExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:5931:2: rule__STOrExpression__Group_1_0__0__Impl rule__STOrExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_49);
             rule__STOrExpression__Group_1_0__0__Impl();
@@ -20098,23 +20266,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:5884:1: rule__STOrExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:5938:1: rule__STOrExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STOrExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5888:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:5889:1: ( () )
+            // InternalSTAlgorithmParser.g:5942:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:5943:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:5889:1: ( () )
-            // InternalSTAlgorithmParser.g:5890:2: ()
+            // InternalSTAlgorithmParser.g:5943:1: ( () )
+            // InternalSTAlgorithmParser.g:5944:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:5891:2: ()
-            // InternalSTAlgorithmParser.g:5891:3: 
+            // InternalSTAlgorithmParser.g:5945:2: ()
+            // InternalSTAlgorithmParser.g:5945:3: 
             {
             }
 
@@ -20139,14 +20307,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:5899:1: rule__STOrExpression__Group_1_0__1 : rule__STOrExpression__Group_1_0__1__Impl ;
+    // InternalSTAlgorithmParser.g:5953:1: rule__STOrExpression__Group_1_0__1 : rule__STOrExpression__Group_1_0__1__Impl ;
     public final void rule__STOrExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5903:1: ( rule__STOrExpression__Group_1_0__1__Impl )
-            // InternalSTAlgorithmParser.g:5904:2: rule__STOrExpression__Group_1_0__1__Impl
+            // InternalSTAlgorithmParser.g:5957:1: ( rule__STOrExpression__Group_1_0__1__Impl )
+            // InternalSTAlgorithmParser.g:5958:2: rule__STOrExpression__Group_1_0__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STOrExpression__Group_1_0__1__Impl();
@@ -20172,23 +20340,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:5910:1: rule__STOrExpression__Group_1_0__1__Impl : ( ( rule__STOrExpression__OpAssignment_1_0_1 ) ) ;
+    // InternalSTAlgorithmParser.g:5964:1: rule__STOrExpression__Group_1_0__1__Impl : ( ( rule__STOrExpression__OpAssignment_1_0_1 ) ) ;
     public final void rule__STOrExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5914:1: ( ( ( rule__STOrExpression__OpAssignment_1_0_1 ) ) )
-            // InternalSTAlgorithmParser.g:5915:1: ( ( rule__STOrExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:5968:1: ( ( ( rule__STOrExpression__OpAssignment_1_0_1 ) ) )
+            // InternalSTAlgorithmParser.g:5969:1: ( ( rule__STOrExpression__OpAssignment_1_0_1 ) )
             {
-            // InternalSTAlgorithmParser.g:5915:1: ( ( rule__STOrExpression__OpAssignment_1_0_1 ) )
-            // InternalSTAlgorithmParser.g:5916:2: ( rule__STOrExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:5969:1: ( ( rule__STOrExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:5970:2: ( rule__STOrExpression__OpAssignment_1_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getOpAssignment_1_0_1()); 
             }
-            // InternalSTAlgorithmParser.g:5917:2: ( rule__STOrExpression__OpAssignment_1_0_1 )
-            // InternalSTAlgorithmParser.g:5917:3: rule__STOrExpression__OpAssignment_1_0_1
+            // InternalSTAlgorithmParser.g:5971:2: ( rule__STOrExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:5971:3: rule__STOrExpression__OpAssignment_1_0_1
             {
             pushFollow(FOLLOW_2);
             rule__STOrExpression__OpAssignment_1_0_1();
@@ -20223,14 +20391,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group__0"
-    // InternalSTAlgorithmParser.g:5926:1: rule__STXorExpression__Group__0 : rule__STXorExpression__Group__0__Impl rule__STXorExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:5980:1: rule__STXorExpression__Group__0 : rule__STXorExpression__Group__0__Impl rule__STXorExpression__Group__1 ;
     public final void rule__STXorExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5930:1: ( rule__STXorExpression__Group__0__Impl rule__STXorExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:5931:2: rule__STXorExpression__Group__0__Impl rule__STXorExpression__Group__1
+            // InternalSTAlgorithmParser.g:5984:1: ( rule__STXorExpression__Group__0__Impl rule__STXorExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:5985:2: rule__STXorExpression__Group__0__Impl rule__STXorExpression__Group__1
             {
             pushFollow(FOLLOW_51);
             rule__STXorExpression__Group__0__Impl();
@@ -20261,17 +20429,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:5938:1: rule__STXorExpression__Group__0__Impl : ( ruleSTAndExpression ) ;
+    // InternalSTAlgorithmParser.g:5992:1: rule__STXorExpression__Group__0__Impl : ( ruleSTAndExpression ) ;
     public final void rule__STXorExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5942:1: ( ( ruleSTAndExpression ) )
-            // InternalSTAlgorithmParser.g:5943:1: ( ruleSTAndExpression )
+            // InternalSTAlgorithmParser.g:5996:1: ( ( ruleSTAndExpression ) )
+            // InternalSTAlgorithmParser.g:5997:1: ( ruleSTAndExpression )
             {
-            // InternalSTAlgorithmParser.g:5943:1: ( ruleSTAndExpression )
-            // InternalSTAlgorithmParser.g:5944:2: ruleSTAndExpression
+            // InternalSTAlgorithmParser.g:5997:1: ( ruleSTAndExpression )
+            // InternalSTAlgorithmParser.g:5998:2: ruleSTAndExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getSTAndExpressionParserRuleCall_0()); 
@@ -20306,14 +20474,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group__1"
-    // InternalSTAlgorithmParser.g:5953:1: rule__STXorExpression__Group__1 : rule__STXorExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:6007:1: rule__STXorExpression__Group__1 : rule__STXorExpression__Group__1__Impl ;
     public final void rule__STXorExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5957:1: ( rule__STXorExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:5958:2: rule__STXorExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:6011:1: ( rule__STXorExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:6012:2: rule__STXorExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STXorExpression__Group__1__Impl();
@@ -20339,22 +20507,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:5964:1: rule__STXorExpression__Group__1__Impl : ( ( rule__STXorExpression__Group_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:6018:1: rule__STXorExpression__Group__1__Impl : ( ( rule__STXorExpression__Group_1__0 )* ) ;
     public final void rule__STXorExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5968:1: ( ( ( rule__STXorExpression__Group_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:5969:1: ( ( rule__STXorExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6022:1: ( ( ( rule__STXorExpression__Group_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:6023:1: ( ( rule__STXorExpression__Group_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:5969:1: ( ( rule__STXorExpression__Group_1__0 )* )
-            // InternalSTAlgorithmParser.g:5970:2: ( rule__STXorExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6023:1: ( ( rule__STXorExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6024:2: ( rule__STXorExpression__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getGroup_1()); 
             }
-            // InternalSTAlgorithmParser.g:5971:2: ( rule__STXorExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6025:2: ( rule__STXorExpression__Group_1__0 )*
             loop58:
             do {
                 int alt58=2;
@@ -20367,7 +20535,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt58) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:5971:3: rule__STXorExpression__Group_1__0
+            	    // InternalSTAlgorithmParser.g:6025:3: rule__STXorExpression__Group_1__0
             	    {
             	    pushFollow(FOLLOW_52);
             	    rule__STXorExpression__Group_1__0();
@@ -20408,14 +20576,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:5980:1: rule__STXorExpression__Group_1__0 : rule__STXorExpression__Group_1__0__Impl rule__STXorExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:6034:1: rule__STXorExpression__Group_1__0 : rule__STXorExpression__Group_1__0__Impl rule__STXorExpression__Group_1__1 ;
     public final void rule__STXorExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5984:1: ( rule__STXorExpression__Group_1__0__Impl rule__STXorExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:5985:2: rule__STXorExpression__Group_1__0__Impl rule__STXorExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:6038:1: ( rule__STXorExpression__Group_1__0__Impl rule__STXorExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:6039:2: rule__STXorExpression__Group_1__0__Impl rule__STXorExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STXorExpression__Group_1__0__Impl();
@@ -20446,23 +20614,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:5992:1: rule__STXorExpression__Group_1__0__Impl : ( ( rule__STXorExpression__Group_1_0__0 ) ) ;
+    // InternalSTAlgorithmParser.g:6046:1: rule__STXorExpression__Group_1__0__Impl : ( ( rule__STXorExpression__Group_1_0__0 ) ) ;
     public final void rule__STXorExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:5996:1: ( ( ( rule__STXorExpression__Group_1_0__0 ) ) )
-            // InternalSTAlgorithmParser.g:5997:1: ( ( rule__STXorExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6050:1: ( ( ( rule__STXorExpression__Group_1_0__0 ) ) )
+            // InternalSTAlgorithmParser.g:6051:1: ( ( rule__STXorExpression__Group_1_0__0 ) )
             {
-            // InternalSTAlgorithmParser.g:5997:1: ( ( rule__STXorExpression__Group_1_0__0 ) )
-            // InternalSTAlgorithmParser.g:5998:2: ( rule__STXorExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6051:1: ( ( rule__STXorExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6052:2: ( rule__STXorExpression__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getGroup_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:5999:2: ( rule__STXorExpression__Group_1_0__0 )
-            // InternalSTAlgorithmParser.g:5999:3: rule__STXorExpression__Group_1_0__0
+            // InternalSTAlgorithmParser.g:6053:2: ( rule__STXorExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6053:3: rule__STXorExpression__Group_1_0__0
             {
             pushFollow(FOLLOW_2);
             rule__STXorExpression__Group_1_0__0();
@@ -20497,14 +20665,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:6007:1: rule__STXorExpression__Group_1__1 : rule__STXorExpression__Group_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:6061:1: rule__STXorExpression__Group_1__1 : rule__STXorExpression__Group_1__1__Impl ;
     public final void rule__STXorExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6011:1: ( rule__STXorExpression__Group_1__1__Impl )
-            // InternalSTAlgorithmParser.g:6012:2: rule__STXorExpression__Group_1__1__Impl
+            // InternalSTAlgorithmParser.g:6065:1: ( rule__STXorExpression__Group_1__1__Impl )
+            // InternalSTAlgorithmParser.g:6066:2: rule__STXorExpression__Group_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STXorExpression__Group_1__1__Impl();
@@ -20530,23 +20698,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:6018:1: rule__STXorExpression__Group_1__1__Impl : ( ( rule__STXorExpression__RightAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6072:1: rule__STXorExpression__Group_1__1__Impl : ( ( rule__STXorExpression__RightAssignment_1_1 ) ) ;
     public final void rule__STXorExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6022:1: ( ( ( rule__STXorExpression__RightAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:6023:1: ( ( rule__STXorExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6076:1: ( ( ( rule__STXorExpression__RightAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:6077:1: ( ( rule__STXorExpression__RightAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6023:1: ( ( rule__STXorExpression__RightAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:6024:2: ( rule__STXorExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6077:1: ( ( rule__STXorExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6078:2: ( rule__STXorExpression__RightAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getRightAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:6025:2: ( rule__STXorExpression__RightAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:6025:3: rule__STXorExpression__RightAssignment_1_1
+            // InternalSTAlgorithmParser.g:6079:2: ( rule__STXorExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6079:3: rule__STXorExpression__RightAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STXorExpression__RightAssignment_1_1();
@@ -20581,14 +20749,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:6034:1: rule__STXorExpression__Group_1_0__0 : rule__STXorExpression__Group_1_0__0__Impl rule__STXorExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:6088:1: rule__STXorExpression__Group_1_0__0 : rule__STXorExpression__Group_1_0__0__Impl rule__STXorExpression__Group_1_0__1 ;
     public final void rule__STXorExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6038:1: ( rule__STXorExpression__Group_1_0__0__Impl rule__STXorExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:6039:2: rule__STXorExpression__Group_1_0__0__Impl rule__STXorExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:6092:1: ( rule__STXorExpression__Group_1_0__0__Impl rule__STXorExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:6093:2: rule__STXorExpression__Group_1_0__0__Impl rule__STXorExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_51);
             rule__STXorExpression__Group_1_0__0__Impl();
@@ -20619,23 +20787,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:6046:1: rule__STXorExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:6100:1: rule__STXorExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STXorExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6050:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:6051:1: ( () )
+            // InternalSTAlgorithmParser.g:6104:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:6105:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:6051:1: ( () )
-            // InternalSTAlgorithmParser.g:6052:2: ()
+            // InternalSTAlgorithmParser.g:6105:1: ( () )
+            // InternalSTAlgorithmParser.g:6106:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:6053:2: ()
-            // InternalSTAlgorithmParser.g:6053:3: 
+            // InternalSTAlgorithmParser.g:6107:2: ()
+            // InternalSTAlgorithmParser.g:6107:3: 
             {
             }
 
@@ -20660,14 +20828,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:6061:1: rule__STXorExpression__Group_1_0__1 : rule__STXorExpression__Group_1_0__1__Impl ;
+    // InternalSTAlgorithmParser.g:6115:1: rule__STXorExpression__Group_1_0__1 : rule__STXorExpression__Group_1_0__1__Impl ;
     public final void rule__STXorExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6065:1: ( rule__STXorExpression__Group_1_0__1__Impl )
-            // InternalSTAlgorithmParser.g:6066:2: rule__STXorExpression__Group_1_0__1__Impl
+            // InternalSTAlgorithmParser.g:6119:1: ( rule__STXorExpression__Group_1_0__1__Impl )
+            // InternalSTAlgorithmParser.g:6120:2: rule__STXorExpression__Group_1_0__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STXorExpression__Group_1_0__1__Impl();
@@ -20693,23 +20861,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:6072:1: rule__STXorExpression__Group_1_0__1__Impl : ( ( rule__STXorExpression__OpAssignment_1_0_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6126:1: rule__STXorExpression__Group_1_0__1__Impl : ( ( rule__STXorExpression__OpAssignment_1_0_1 ) ) ;
     public final void rule__STXorExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6076:1: ( ( ( rule__STXorExpression__OpAssignment_1_0_1 ) ) )
-            // InternalSTAlgorithmParser.g:6077:1: ( ( rule__STXorExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6130:1: ( ( ( rule__STXorExpression__OpAssignment_1_0_1 ) ) )
+            // InternalSTAlgorithmParser.g:6131:1: ( ( rule__STXorExpression__OpAssignment_1_0_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6077:1: ( ( rule__STXorExpression__OpAssignment_1_0_1 ) )
-            // InternalSTAlgorithmParser.g:6078:2: ( rule__STXorExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6131:1: ( ( rule__STXorExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6132:2: ( rule__STXorExpression__OpAssignment_1_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getOpAssignment_1_0_1()); 
             }
-            // InternalSTAlgorithmParser.g:6079:2: ( rule__STXorExpression__OpAssignment_1_0_1 )
-            // InternalSTAlgorithmParser.g:6079:3: rule__STXorExpression__OpAssignment_1_0_1
+            // InternalSTAlgorithmParser.g:6133:2: ( rule__STXorExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6133:3: rule__STXorExpression__OpAssignment_1_0_1
             {
             pushFollow(FOLLOW_2);
             rule__STXorExpression__OpAssignment_1_0_1();
@@ -20744,14 +20912,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group__0"
-    // InternalSTAlgorithmParser.g:6088:1: rule__STAndExpression__Group__0 : rule__STAndExpression__Group__0__Impl rule__STAndExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:6142:1: rule__STAndExpression__Group__0 : rule__STAndExpression__Group__0__Impl rule__STAndExpression__Group__1 ;
     public final void rule__STAndExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6092:1: ( rule__STAndExpression__Group__0__Impl rule__STAndExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:6093:2: rule__STAndExpression__Group__0__Impl rule__STAndExpression__Group__1
+            // InternalSTAlgorithmParser.g:6146:1: ( rule__STAndExpression__Group__0__Impl rule__STAndExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:6147:2: rule__STAndExpression__Group__0__Impl rule__STAndExpression__Group__1
             {
             pushFollow(FOLLOW_53);
             rule__STAndExpression__Group__0__Impl();
@@ -20782,17 +20950,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:6100:1: rule__STAndExpression__Group__0__Impl : ( ruleSTEqualityExpression ) ;
+    // InternalSTAlgorithmParser.g:6154:1: rule__STAndExpression__Group__0__Impl : ( ruleSTEqualityExpression ) ;
     public final void rule__STAndExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6104:1: ( ( ruleSTEqualityExpression ) )
-            // InternalSTAlgorithmParser.g:6105:1: ( ruleSTEqualityExpression )
+            // InternalSTAlgorithmParser.g:6158:1: ( ( ruleSTEqualityExpression ) )
+            // InternalSTAlgorithmParser.g:6159:1: ( ruleSTEqualityExpression )
             {
-            // InternalSTAlgorithmParser.g:6105:1: ( ruleSTEqualityExpression )
-            // InternalSTAlgorithmParser.g:6106:2: ruleSTEqualityExpression
+            // InternalSTAlgorithmParser.g:6159:1: ( ruleSTEqualityExpression )
+            // InternalSTAlgorithmParser.g:6160:2: ruleSTEqualityExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getSTEqualityExpressionParserRuleCall_0()); 
@@ -20827,14 +20995,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group__1"
-    // InternalSTAlgorithmParser.g:6115:1: rule__STAndExpression__Group__1 : rule__STAndExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:6169:1: rule__STAndExpression__Group__1 : rule__STAndExpression__Group__1__Impl ;
     public final void rule__STAndExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6119:1: ( rule__STAndExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:6120:2: rule__STAndExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:6173:1: ( rule__STAndExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:6174:2: rule__STAndExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAndExpression__Group__1__Impl();
@@ -20860,22 +21028,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:6126:1: rule__STAndExpression__Group__1__Impl : ( ( rule__STAndExpression__Group_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:6180:1: rule__STAndExpression__Group__1__Impl : ( ( rule__STAndExpression__Group_1__0 )* ) ;
     public final void rule__STAndExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6130:1: ( ( ( rule__STAndExpression__Group_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:6131:1: ( ( rule__STAndExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6184:1: ( ( ( rule__STAndExpression__Group_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:6185:1: ( ( rule__STAndExpression__Group_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:6131:1: ( ( rule__STAndExpression__Group_1__0 )* )
-            // InternalSTAlgorithmParser.g:6132:2: ( rule__STAndExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6185:1: ( ( rule__STAndExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6186:2: ( rule__STAndExpression__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getGroup_1()); 
             }
-            // InternalSTAlgorithmParser.g:6133:2: ( rule__STAndExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6187:2: ( rule__STAndExpression__Group_1__0 )*
             loop59:
             do {
                 int alt59=2;
@@ -20888,7 +21056,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt59) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:6133:3: rule__STAndExpression__Group_1__0
+            	    // InternalSTAlgorithmParser.g:6187:3: rule__STAndExpression__Group_1__0
             	    {
             	    pushFollow(FOLLOW_54);
             	    rule__STAndExpression__Group_1__0();
@@ -20929,14 +21097,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:6142:1: rule__STAndExpression__Group_1__0 : rule__STAndExpression__Group_1__0__Impl rule__STAndExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:6196:1: rule__STAndExpression__Group_1__0 : rule__STAndExpression__Group_1__0__Impl rule__STAndExpression__Group_1__1 ;
     public final void rule__STAndExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6146:1: ( rule__STAndExpression__Group_1__0__Impl rule__STAndExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:6147:2: rule__STAndExpression__Group_1__0__Impl rule__STAndExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:6200:1: ( rule__STAndExpression__Group_1__0__Impl rule__STAndExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:6201:2: rule__STAndExpression__Group_1__0__Impl rule__STAndExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STAndExpression__Group_1__0__Impl();
@@ -20967,23 +21135,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:6154:1: rule__STAndExpression__Group_1__0__Impl : ( ( rule__STAndExpression__Group_1_0__0 ) ) ;
+    // InternalSTAlgorithmParser.g:6208:1: rule__STAndExpression__Group_1__0__Impl : ( ( rule__STAndExpression__Group_1_0__0 ) ) ;
     public final void rule__STAndExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6158:1: ( ( ( rule__STAndExpression__Group_1_0__0 ) ) )
-            // InternalSTAlgorithmParser.g:6159:1: ( ( rule__STAndExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6212:1: ( ( ( rule__STAndExpression__Group_1_0__0 ) ) )
+            // InternalSTAlgorithmParser.g:6213:1: ( ( rule__STAndExpression__Group_1_0__0 ) )
             {
-            // InternalSTAlgorithmParser.g:6159:1: ( ( rule__STAndExpression__Group_1_0__0 ) )
-            // InternalSTAlgorithmParser.g:6160:2: ( rule__STAndExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6213:1: ( ( rule__STAndExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6214:2: ( rule__STAndExpression__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getGroup_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:6161:2: ( rule__STAndExpression__Group_1_0__0 )
-            // InternalSTAlgorithmParser.g:6161:3: rule__STAndExpression__Group_1_0__0
+            // InternalSTAlgorithmParser.g:6215:2: ( rule__STAndExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6215:3: rule__STAndExpression__Group_1_0__0
             {
             pushFollow(FOLLOW_2);
             rule__STAndExpression__Group_1_0__0();
@@ -21018,14 +21186,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:6169:1: rule__STAndExpression__Group_1__1 : rule__STAndExpression__Group_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:6223:1: rule__STAndExpression__Group_1__1 : rule__STAndExpression__Group_1__1__Impl ;
     public final void rule__STAndExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6173:1: ( rule__STAndExpression__Group_1__1__Impl )
-            // InternalSTAlgorithmParser.g:6174:2: rule__STAndExpression__Group_1__1__Impl
+            // InternalSTAlgorithmParser.g:6227:1: ( rule__STAndExpression__Group_1__1__Impl )
+            // InternalSTAlgorithmParser.g:6228:2: rule__STAndExpression__Group_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAndExpression__Group_1__1__Impl();
@@ -21051,23 +21219,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:6180:1: rule__STAndExpression__Group_1__1__Impl : ( ( rule__STAndExpression__RightAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6234:1: rule__STAndExpression__Group_1__1__Impl : ( ( rule__STAndExpression__RightAssignment_1_1 ) ) ;
     public final void rule__STAndExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6184:1: ( ( ( rule__STAndExpression__RightAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:6185:1: ( ( rule__STAndExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6238:1: ( ( ( rule__STAndExpression__RightAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:6239:1: ( ( rule__STAndExpression__RightAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6185:1: ( ( rule__STAndExpression__RightAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:6186:2: ( rule__STAndExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6239:1: ( ( rule__STAndExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6240:2: ( rule__STAndExpression__RightAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getRightAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:6187:2: ( rule__STAndExpression__RightAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:6187:3: rule__STAndExpression__RightAssignment_1_1
+            // InternalSTAlgorithmParser.g:6241:2: ( rule__STAndExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6241:3: rule__STAndExpression__RightAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STAndExpression__RightAssignment_1_1();
@@ -21102,14 +21270,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:6196:1: rule__STAndExpression__Group_1_0__0 : rule__STAndExpression__Group_1_0__0__Impl rule__STAndExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:6250:1: rule__STAndExpression__Group_1_0__0 : rule__STAndExpression__Group_1_0__0__Impl rule__STAndExpression__Group_1_0__1 ;
     public final void rule__STAndExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6200:1: ( rule__STAndExpression__Group_1_0__0__Impl rule__STAndExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:6201:2: rule__STAndExpression__Group_1_0__0__Impl rule__STAndExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:6254:1: ( rule__STAndExpression__Group_1_0__0__Impl rule__STAndExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:6255:2: rule__STAndExpression__Group_1_0__0__Impl rule__STAndExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_53);
             rule__STAndExpression__Group_1_0__0__Impl();
@@ -21140,23 +21308,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:6208:1: rule__STAndExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:6262:1: rule__STAndExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STAndExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6212:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:6213:1: ( () )
+            // InternalSTAlgorithmParser.g:6266:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:6267:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:6213:1: ( () )
-            // InternalSTAlgorithmParser.g:6214:2: ()
+            // InternalSTAlgorithmParser.g:6267:1: ( () )
+            // InternalSTAlgorithmParser.g:6268:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:6215:2: ()
-            // InternalSTAlgorithmParser.g:6215:3: 
+            // InternalSTAlgorithmParser.g:6269:2: ()
+            // InternalSTAlgorithmParser.g:6269:3: 
             {
             }
 
@@ -21181,14 +21349,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:6223:1: rule__STAndExpression__Group_1_0__1 : rule__STAndExpression__Group_1_0__1__Impl ;
+    // InternalSTAlgorithmParser.g:6277:1: rule__STAndExpression__Group_1_0__1 : rule__STAndExpression__Group_1_0__1__Impl ;
     public final void rule__STAndExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6227:1: ( rule__STAndExpression__Group_1_0__1__Impl )
-            // InternalSTAlgorithmParser.g:6228:2: rule__STAndExpression__Group_1_0__1__Impl
+            // InternalSTAlgorithmParser.g:6281:1: ( rule__STAndExpression__Group_1_0__1__Impl )
+            // InternalSTAlgorithmParser.g:6282:2: rule__STAndExpression__Group_1_0__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAndExpression__Group_1_0__1__Impl();
@@ -21214,23 +21382,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:6234:1: rule__STAndExpression__Group_1_0__1__Impl : ( ( rule__STAndExpression__OpAssignment_1_0_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6288:1: rule__STAndExpression__Group_1_0__1__Impl : ( ( rule__STAndExpression__OpAssignment_1_0_1 ) ) ;
     public final void rule__STAndExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6238:1: ( ( ( rule__STAndExpression__OpAssignment_1_0_1 ) ) )
-            // InternalSTAlgorithmParser.g:6239:1: ( ( rule__STAndExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6292:1: ( ( ( rule__STAndExpression__OpAssignment_1_0_1 ) ) )
+            // InternalSTAlgorithmParser.g:6293:1: ( ( rule__STAndExpression__OpAssignment_1_0_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6239:1: ( ( rule__STAndExpression__OpAssignment_1_0_1 ) )
-            // InternalSTAlgorithmParser.g:6240:2: ( rule__STAndExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6293:1: ( ( rule__STAndExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6294:2: ( rule__STAndExpression__OpAssignment_1_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getOpAssignment_1_0_1()); 
             }
-            // InternalSTAlgorithmParser.g:6241:2: ( rule__STAndExpression__OpAssignment_1_0_1 )
-            // InternalSTAlgorithmParser.g:6241:3: rule__STAndExpression__OpAssignment_1_0_1
+            // InternalSTAlgorithmParser.g:6295:2: ( rule__STAndExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6295:3: rule__STAndExpression__OpAssignment_1_0_1
             {
             pushFollow(FOLLOW_2);
             rule__STAndExpression__OpAssignment_1_0_1();
@@ -21265,14 +21433,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group__0"
-    // InternalSTAlgorithmParser.g:6250:1: rule__STEqualityExpression__Group__0 : rule__STEqualityExpression__Group__0__Impl rule__STEqualityExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:6304:1: rule__STEqualityExpression__Group__0 : rule__STEqualityExpression__Group__0__Impl rule__STEqualityExpression__Group__1 ;
     public final void rule__STEqualityExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6254:1: ( rule__STEqualityExpression__Group__0__Impl rule__STEqualityExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:6255:2: rule__STEqualityExpression__Group__0__Impl rule__STEqualityExpression__Group__1
+            // InternalSTAlgorithmParser.g:6308:1: ( rule__STEqualityExpression__Group__0__Impl rule__STEqualityExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:6309:2: rule__STEqualityExpression__Group__0__Impl rule__STEqualityExpression__Group__1
             {
             pushFollow(FOLLOW_55);
             rule__STEqualityExpression__Group__0__Impl();
@@ -21303,17 +21471,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:6262:1: rule__STEqualityExpression__Group__0__Impl : ( ruleSTComparisonExpression ) ;
+    // InternalSTAlgorithmParser.g:6316:1: rule__STEqualityExpression__Group__0__Impl : ( ruleSTComparisonExpression ) ;
     public final void rule__STEqualityExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6266:1: ( ( ruleSTComparisonExpression ) )
-            // InternalSTAlgorithmParser.g:6267:1: ( ruleSTComparisonExpression )
+            // InternalSTAlgorithmParser.g:6320:1: ( ( ruleSTComparisonExpression ) )
+            // InternalSTAlgorithmParser.g:6321:1: ( ruleSTComparisonExpression )
             {
-            // InternalSTAlgorithmParser.g:6267:1: ( ruleSTComparisonExpression )
-            // InternalSTAlgorithmParser.g:6268:2: ruleSTComparisonExpression
+            // InternalSTAlgorithmParser.g:6321:1: ( ruleSTComparisonExpression )
+            // InternalSTAlgorithmParser.g:6322:2: ruleSTComparisonExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getSTComparisonExpressionParserRuleCall_0()); 
@@ -21348,14 +21516,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group__1"
-    // InternalSTAlgorithmParser.g:6277:1: rule__STEqualityExpression__Group__1 : rule__STEqualityExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:6331:1: rule__STEqualityExpression__Group__1 : rule__STEqualityExpression__Group__1__Impl ;
     public final void rule__STEqualityExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6281:1: ( rule__STEqualityExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:6282:2: rule__STEqualityExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:6335:1: ( rule__STEqualityExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:6336:2: rule__STEqualityExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STEqualityExpression__Group__1__Impl();
@@ -21381,22 +21549,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:6288:1: rule__STEqualityExpression__Group__1__Impl : ( ( rule__STEqualityExpression__Group_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:6342:1: rule__STEqualityExpression__Group__1__Impl : ( ( rule__STEqualityExpression__Group_1__0 )* ) ;
     public final void rule__STEqualityExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6292:1: ( ( ( rule__STEqualityExpression__Group_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:6293:1: ( ( rule__STEqualityExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6346:1: ( ( ( rule__STEqualityExpression__Group_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:6347:1: ( ( rule__STEqualityExpression__Group_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:6293:1: ( ( rule__STEqualityExpression__Group_1__0 )* )
-            // InternalSTAlgorithmParser.g:6294:2: ( rule__STEqualityExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6347:1: ( ( rule__STEqualityExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6348:2: ( rule__STEqualityExpression__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getGroup_1()); 
             }
-            // InternalSTAlgorithmParser.g:6295:2: ( rule__STEqualityExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6349:2: ( rule__STEqualityExpression__Group_1__0 )*
             loop60:
             do {
                 int alt60=2;
@@ -21409,7 +21577,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt60) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:6295:3: rule__STEqualityExpression__Group_1__0
+            	    // InternalSTAlgorithmParser.g:6349:3: rule__STEqualityExpression__Group_1__0
             	    {
             	    pushFollow(FOLLOW_56);
             	    rule__STEqualityExpression__Group_1__0();
@@ -21450,14 +21618,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:6304:1: rule__STEqualityExpression__Group_1__0 : rule__STEqualityExpression__Group_1__0__Impl rule__STEqualityExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:6358:1: rule__STEqualityExpression__Group_1__0 : rule__STEqualityExpression__Group_1__0__Impl rule__STEqualityExpression__Group_1__1 ;
     public final void rule__STEqualityExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6308:1: ( rule__STEqualityExpression__Group_1__0__Impl rule__STEqualityExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:6309:2: rule__STEqualityExpression__Group_1__0__Impl rule__STEqualityExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:6362:1: ( rule__STEqualityExpression__Group_1__0__Impl rule__STEqualityExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:6363:2: rule__STEqualityExpression__Group_1__0__Impl rule__STEqualityExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STEqualityExpression__Group_1__0__Impl();
@@ -21488,23 +21656,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:6316:1: rule__STEqualityExpression__Group_1__0__Impl : ( ( rule__STEqualityExpression__Group_1_0__0 ) ) ;
+    // InternalSTAlgorithmParser.g:6370:1: rule__STEqualityExpression__Group_1__0__Impl : ( ( rule__STEqualityExpression__Group_1_0__0 ) ) ;
     public final void rule__STEqualityExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6320:1: ( ( ( rule__STEqualityExpression__Group_1_0__0 ) ) )
-            // InternalSTAlgorithmParser.g:6321:1: ( ( rule__STEqualityExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6374:1: ( ( ( rule__STEqualityExpression__Group_1_0__0 ) ) )
+            // InternalSTAlgorithmParser.g:6375:1: ( ( rule__STEqualityExpression__Group_1_0__0 ) )
             {
-            // InternalSTAlgorithmParser.g:6321:1: ( ( rule__STEqualityExpression__Group_1_0__0 ) )
-            // InternalSTAlgorithmParser.g:6322:2: ( rule__STEqualityExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6375:1: ( ( rule__STEqualityExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6376:2: ( rule__STEqualityExpression__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getGroup_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:6323:2: ( rule__STEqualityExpression__Group_1_0__0 )
-            // InternalSTAlgorithmParser.g:6323:3: rule__STEqualityExpression__Group_1_0__0
+            // InternalSTAlgorithmParser.g:6377:2: ( rule__STEqualityExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6377:3: rule__STEqualityExpression__Group_1_0__0
             {
             pushFollow(FOLLOW_2);
             rule__STEqualityExpression__Group_1_0__0();
@@ -21539,14 +21707,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:6331:1: rule__STEqualityExpression__Group_1__1 : rule__STEqualityExpression__Group_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:6385:1: rule__STEqualityExpression__Group_1__1 : rule__STEqualityExpression__Group_1__1__Impl ;
     public final void rule__STEqualityExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6335:1: ( rule__STEqualityExpression__Group_1__1__Impl )
-            // InternalSTAlgorithmParser.g:6336:2: rule__STEqualityExpression__Group_1__1__Impl
+            // InternalSTAlgorithmParser.g:6389:1: ( rule__STEqualityExpression__Group_1__1__Impl )
+            // InternalSTAlgorithmParser.g:6390:2: rule__STEqualityExpression__Group_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STEqualityExpression__Group_1__1__Impl();
@@ -21572,23 +21740,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:6342:1: rule__STEqualityExpression__Group_1__1__Impl : ( ( rule__STEqualityExpression__RightAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6396:1: rule__STEqualityExpression__Group_1__1__Impl : ( ( rule__STEqualityExpression__RightAssignment_1_1 ) ) ;
     public final void rule__STEqualityExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6346:1: ( ( ( rule__STEqualityExpression__RightAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:6347:1: ( ( rule__STEqualityExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6400:1: ( ( ( rule__STEqualityExpression__RightAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:6401:1: ( ( rule__STEqualityExpression__RightAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6347:1: ( ( rule__STEqualityExpression__RightAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:6348:2: ( rule__STEqualityExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6401:1: ( ( rule__STEqualityExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6402:2: ( rule__STEqualityExpression__RightAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getRightAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:6349:2: ( rule__STEqualityExpression__RightAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:6349:3: rule__STEqualityExpression__RightAssignment_1_1
+            // InternalSTAlgorithmParser.g:6403:2: ( rule__STEqualityExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6403:3: rule__STEqualityExpression__RightAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STEqualityExpression__RightAssignment_1_1();
@@ -21623,14 +21791,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:6358:1: rule__STEqualityExpression__Group_1_0__0 : rule__STEqualityExpression__Group_1_0__0__Impl rule__STEqualityExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:6412:1: rule__STEqualityExpression__Group_1_0__0 : rule__STEqualityExpression__Group_1_0__0__Impl rule__STEqualityExpression__Group_1_0__1 ;
     public final void rule__STEqualityExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6362:1: ( rule__STEqualityExpression__Group_1_0__0__Impl rule__STEqualityExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:6363:2: rule__STEqualityExpression__Group_1_0__0__Impl rule__STEqualityExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:6416:1: ( rule__STEqualityExpression__Group_1_0__0__Impl rule__STEqualityExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:6417:2: rule__STEqualityExpression__Group_1_0__0__Impl rule__STEqualityExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_55);
             rule__STEqualityExpression__Group_1_0__0__Impl();
@@ -21661,23 +21829,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:6370:1: rule__STEqualityExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:6424:1: rule__STEqualityExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STEqualityExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6374:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:6375:1: ( () )
+            // InternalSTAlgorithmParser.g:6428:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:6429:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:6375:1: ( () )
-            // InternalSTAlgorithmParser.g:6376:2: ()
+            // InternalSTAlgorithmParser.g:6429:1: ( () )
+            // InternalSTAlgorithmParser.g:6430:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:6377:2: ()
-            // InternalSTAlgorithmParser.g:6377:3: 
+            // InternalSTAlgorithmParser.g:6431:2: ()
+            // InternalSTAlgorithmParser.g:6431:3: 
             {
             }
 
@@ -21702,14 +21870,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:6385:1: rule__STEqualityExpression__Group_1_0__1 : rule__STEqualityExpression__Group_1_0__1__Impl ;
+    // InternalSTAlgorithmParser.g:6439:1: rule__STEqualityExpression__Group_1_0__1 : rule__STEqualityExpression__Group_1_0__1__Impl ;
     public final void rule__STEqualityExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6389:1: ( rule__STEqualityExpression__Group_1_0__1__Impl )
-            // InternalSTAlgorithmParser.g:6390:2: rule__STEqualityExpression__Group_1_0__1__Impl
+            // InternalSTAlgorithmParser.g:6443:1: ( rule__STEqualityExpression__Group_1_0__1__Impl )
+            // InternalSTAlgorithmParser.g:6444:2: rule__STEqualityExpression__Group_1_0__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STEqualityExpression__Group_1_0__1__Impl();
@@ -21735,23 +21903,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:6396:1: rule__STEqualityExpression__Group_1_0__1__Impl : ( ( rule__STEqualityExpression__OpAssignment_1_0_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6450:1: rule__STEqualityExpression__Group_1_0__1__Impl : ( ( rule__STEqualityExpression__OpAssignment_1_0_1 ) ) ;
     public final void rule__STEqualityExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6400:1: ( ( ( rule__STEqualityExpression__OpAssignment_1_0_1 ) ) )
-            // InternalSTAlgorithmParser.g:6401:1: ( ( rule__STEqualityExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6454:1: ( ( ( rule__STEqualityExpression__OpAssignment_1_0_1 ) ) )
+            // InternalSTAlgorithmParser.g:6455:1: ( ( rule__STEqualityExpression__OpAssignment_1_0_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6401:1: ( ( rule__STEqualityExpression__OpAssignment_1_0_1 ) )
-            // InternalSTAlgorithmParser.g:6402:2: ( rule__STEqualityExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6455:1: ( ( rule__STEqualityExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6456:2: ( rule__STEqualityExpression__OpAssignment_1_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getOpAssignment_1_0_1()); 
             }
-            // InternalSTAlgorithmParser.g:6403:2: ( rule__STEqualityExpression__OpAssignment_1_0_1 )
-            // InternalSTAlgorithmParser.g:6403:3: rule__STEqualityExpression__OpAssignment_1_0_1
+            // InternalSTAlgorithmParser.g:6457:2: ( rule__STEqualityExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6457:3: rule__STEqualityExpression__OpAssignment_1_0_1
             {
             pushFollow(FOLLOW_2);
             rule__STEqualityExpression__OpAssignment_1_0_1();
@@ -21786,14 +21954,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group__0"
-    // InternalSTAlgorithmParser.g:6412:1: rule__STComparisonExpression__Group__0 : rule__STComparisonExpression__Group__0__Impl rule__STComparisonExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:6466:1: rule__STComparisonExpression__Group__0 : rule__STComparisonExpression__Group__0__Impl rule__STComparisonExpression__Group__1 ;
     public final void rule__STComparisonExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6416:1: ( rule__STComparisonExpression__Group__0__Impl rule__STComparisonExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:6417:2: rule__STComparisonExpression__Group__0__Impl rule__STComparisonExpression__Group__1
+            // InternalSTAlgorithmParser.g:6470:1: ( rule__STComparisonExpression__Group__0__Impl rule__STComparisonExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:6471:2: rule__STComparisonExpression__Group__0__Impl rule__STComparisonExpression__Group__1
             {
             pushFollow(FOLLOW_57);
             rule__STComparisonExpression__Group__0__Impl();
@@ -21824,17 +21992,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:6424:1: rule__STComparisonExpression__Group__0__Impl : ( ruleSTAddSubExpression ) ;
+    // InternalSTAlgorithmParser.g:6478:1: rule__STComparisonExpression__Group__0__Impl : ( ruleSTAddSubExpression ) ;
     public final void rule__STComparisonExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6428:1: ( ( ruleSTAddSubExpression ) )
-            // InternalSTAlgorithmParser.g:6429:1: ( ruleSTAddSubExpression )
+            // InternalSTAlgorithmParser.g:6482:1: ( ( ruleSTAddSubExpression ) )
+            // InternalSTAlgorithmParser.g:6483:1: ( ruleSTAddSubExpression )
             {
-            // InternalSTAlgorithmParser.g:6429:1: ( ruleSTAddSubExpression )
-            // InternalSTAlgorithmParser.g:6430:2: ruleSTAddSubExpression
+            // InternalSTAlgorithmParser.g:6483:1: ( ruleSTAddSubExpression )
+            // InternalSTAlgorithmParser.g:6484:2: ruleSTAddSubExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getSTAddSubExpressionParserRuleCall_0()); 
@@ -21869,14 +22037,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group__1"
-    // InternalSTAlgorithmParser.g:6439:1: rule__STComparisonExpression__Group__1 : rule__STComparisonExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:6493:1: rule__STComparisonExpression__Group__1 : rule__STComparisonExpression__Group__1__Impl ;
     public final void rule__STComparisonExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6443:1: ( rule__STComparisonExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:6444:2: rule__STComparisonExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:6497:1: ( rule__STComparisonExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:6498:2: rule__STComparisonExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STComparisonExpression__Group__1__Impl();
@@ -21902,22 +22070,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:6450:1: rule__STComparisonExpression__Group__1__Impl : ( ( rule__STComparisonExpression__Group_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:6504:1: rule__STComparisonExpression__Group__1__Impl : ( ( rule__STComparisonExpression__Group_1__0 )* ) ;
     public final void rule__STComparisonExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6454:1: ( ( ( rule__STComparisonExpression__Group_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:6455:1: ( ( rule__STComparisonExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6508:1: ( ( ( rule__STComparisonExpression__Group_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:6509:1: ( ( rule__STComparisonExpression__Group_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:6455:1: ( ( rule__STComparisonExpression__Group_1__0 )* )
-            // InternalSTAlgorithmParser.g:6456:2: ( rule__STComparisonExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6509:1: ( ( rule__STComparisonExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6510:2: ( rule__STComparisonExpression__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getGroup_1()); 
             }
-            // InternalSTAlgorithmParser.g:6457:2: ( rule__STComparisonExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6511:2: ( rule__STComparisonExpression__Group_1__0 )*
             loop61:
             do {
                 int alt61=2;
@@ -21930,7 +22098,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt61) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:6457:3: rule__STComparisonExpression__Group_1__0
+            	    // InternalSTAlgorithmParser.g:6511:3: rule__STComparisonExpression__Group_1__0
             	    {
             	    pushFollow(FOLLOW_58);
             	    rule__STComparisonExpression__Group_1__0();
@@ -21971,14 +22139,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:6466:1: rule__STComparisonExpression__Group_1__0 : rule__STComparisonExpression__Group_1__0__Impl rule__STComparisonExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:6520:1: rule__STComparisonExpression__Group_1__0 : rule__STComparisonExpression__Group_1__0__Impl rule__STComparisonExpression__Group_1__1 ;
     public final void rule__STComparisonExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6470:1: ( rule__STComparisonExpression__Group_1__0__Impl rule__STComparisonExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:6471:2: rule__STComparisonExpression__Group_1__0__Impl rule__STComparisonExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:6524:1: ( rule__STComparisonExpression__Group_1__0__Impl rule__STComparisonExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:6525:2: rule__STComparisonExpression__Group_1__0__Impl rule__STComparisonExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STComparisonExpression__Group_1__0__Impl();
@@ -22009,23 +22177,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:6478:1: rule__STComparisonExpression__Group_1__0__Impl : ( ( rule__STComparisonExpression__Group_1_0__0 ) ) ;
+    // InternalSTAlgorithmParser.g:6532:1: rule__STComparisonExpression__Group_1__0__Impl : ( ( rule__STComparisonExpression__Group_1_0__0 ) ) ;
     public final void rule__STComparisonExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6482:1: ( ( ( rule__STComparisonExpression__Group_1_0__0 ) ) )
-            // InternalSTAlgorithmParser.g:6483:1: ( ( rule__STComparisonExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6536:1: ( ( ( rule__STComparisonExpression__Group_1_0__0 ) ) )
+            // InternalSTAlgorithmParser.g:6537:1: ( ( rule__STComparisonExpression__Group_1_0__0 ) )
             {
-            // InternalSTAlgorithmParser.g:6483:1: ( ( rule__STComparisonExpression__Group_1_0__0 ) )
-            // InternalSTAlgorithmParser.g:6484:2: ( rule__STComparisonExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6537:1: ( ( rule__STComparisonExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6538:2: ( rule__STComparisonExpression__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getGroup_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:6485:2: ( rule__STComparisonExpression__Group_1_0__0 )
-            // InternalSTAlgorithmParser.g:6485:3: rule__STComparisonExpression__Group_1_0__0
+            // InternalSTAlgorithmParser.g:6539:2: ( rule__STComparisonExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6539:3: rule__STComparisonExpression__Group_1_0__0
             {
             pushFollow(FOLLOW_2);
             rule__STComparisonExpression__Group_1_0__0();
@@ -22060,14 +22228,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:6493:1: rule__STComparisonExpression__Group_1__1 : rule__STComparisonExpression__Group_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:6547:1: rule__STComparisonExpression__Group_1__1 : rule__STComparisonExpression__Group_1__1__Impl ;
     public final void rule__STComparisonExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6497:1: ( rule__STComparisonExpression__Group_1__1__Impl )
-            // InternalSTAlgorithmParser.g:6498:2: rule__STComparisonExpression__Group_1__1__Impl
+            // InternalSTAlgorithmParser.g:6551:1: ( rule__STComparisonExpression__Group_1__1__Impl )
+            // InternalSTAlgorithmParser.g:6552:2: rule__STComparisonExpression__Group_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STComparisonExpression__Group_1__1__Impl();
@@ -22093,23 +22261,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:6504:1: rule__STComparisonExpression__Group_1__1__Impl : ( ( rule__STComparisonExpression__RightAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6558:1: rule__STComparisonExpression__Group_1__1__Impl : ( ( rule__STComparisonExpression__RightAssignment_1_1 ) ) ;
     public final void rule__STComparisonExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6508:1: ( ( ( rule__STComparisonExpression__RightAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:6509:1: ( ( rule__STComparisonExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6562:1: ( ( ( rule__STComparisonExpression__RightAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:6563:1: ( ( rule__STComparisonExpression__RightAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6509:1: ( ( rule__STComparisonExpression__RightAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:6510:2: ( rule__STComparisonExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6563:1: ( ( rule__STComparisonExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6564:2: ( rule__STComparisonExpression__RightAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getRightAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:6511:2: ( rule__STComparisonExpression__RightAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:6511:3: rule__STComparisonExpression__RightAssignment_1_1
+            // InternalSTAlgorithmParser.g:6565:2: ( rule__STComparisonExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6565:3: rule__STComparisonExpression__RightAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STComparisonExpression__RightAssignment_1_1();
@@ -22144,14 +22312,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:6520:1: rule__STComparisonExpression__Group_1_0__0 : rule__STComparisonExpression__Group_1_0__0__Impl rule__STComparisonExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:6574:1: rule__STComparisonExpression__Group_1_0__0 : rule__STComparisonExpression__Group_1_0__0__Impl rule__STComparisonExpression__Group_1_0__1 ;
     public final void rule__STComparisonExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6524:1: ( rule__STComparisonExpression__Group_1_0__0__Impl rule__STComparisonExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:6525:2: rule__STComparisonExpression__Group_1_0__0__Impl rule__STComparisonExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:6578:1: ( rule__STComparisonExpression__Group_1_0__0__Impl rule__STComparisonExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:6579:2: rule__STComparisonExpression__Group_1_0__0__Impl rule__STComparisonExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_57);
             rule__STComparisonExpression__Group_1_0__0__Impl();
@@ -22182,23 +22350,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:6532:1: rule__STComparisonExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:6586:1: rule__STComparisonExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STComparisonExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6536:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:6537:1: ( () )
+            // InternalSTAlgorithmParser.g:6590:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:6591:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:6537:1: ( () )
-            // InternalSTAlgorithmParser.g:6538:2: ()
+            // InternalSTAlgorithmParser.g:6591:1: ( () )
+            // InternalSTAlgorithmParser.g:6592:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:6539:2: ()
-            // InternalSTAlgorithmParser.g:6539:3: 
+            // InternalSTAlgorithmParser.g:6593:2: ()
+            // InternalSTAlgorithmParser.g:6593:3: 
             {
             }
 
@@ -22223,14 +22391,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:6547:1: rule__STComparisonExpression__Group_1_0__1 : rule__STComparisonExpression__Group_1_0__1__Impl ;
+    // InternalSTAlgorithmParser.g:6601:1: rule__STComparisonExpression__Group_1_0__1 : rule__STComparisonExpression__Group_1_0__1__Impl ;
     public final void rule__STComparisonExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6551:1: ( rule__STComparisonExpression__Group_1_0__1__Impl )
-            // InternalSTAlgorithmParser.g:6552:2: rule__STComparisonExpression__Group_1_0__1__Impl
+            // InternalSTAlgorithmParser.g:6605:1: ( rule__STComparisonExpression__Group_1_0__1__Impl )
+            // InternalSTAlgorithmParser.g:6606:2: rule__STComparisonExpression__Group_1_0__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STComparisonExpression__Group_1_0__1__Impl();
@@ -22256,23 +22424,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:6558:1: rule__STComparisonExpression__Group_1_0__1__Impl : ( ( rule__STComparisonExpression__OpAssignment_1_0_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6612:1: rule__STComparisonExpression__Group_1_0__1__Impl : ( ( rule__STComparisonExpression__OpAssignment_1_0_1 ) ) ;
     public final void rule__STComparisonExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6562:1: ( ( ( rule__STComparisonExpression__OpAssignment_1_0_1 ) ) )
-            // InternalSTAlgorithmParser.g:6563:1: ( ( rule__STComparisonExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6616:1: ( ( ( rule__STComparisonExpression__OpAssignment_1_0_1 ) ) )
+            // InternalSTAlgorithmParser.g:6617:1: ( ( rule__STComparisonExpression__OpAssignment_1_0_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6563:1: ( ( rule__STComparisonExpression__OpAssignment_1_0_1 ) )
-            // InternalSTAlgorithmParser.g:6564:2: ( rule__STComparisonExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6617:1: ( ( rule__STComparisonExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6618:2: ( rule__STComparisonExpression__OpAssignment_1_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getOpAssignment_1_0_1()); 
             }
-            // InternalSTAlgorithmParser.g:6565:2: ( rule__STComparisonExpression__OpAssignment_1_0_1 )
-            // InternalSTAlgorithmParser.g:6565:3: rule__STComparisonExpression__OpAssignment_1_0_1
+            // InternalSTAlgorithmParser.g:6619:2: ( rule__STComparisonExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6619:3: rule__STComparisonExpression__OpAssignment_1_0_1
             {
             pushFollow(FOLLOW_2);
             rule__STComparisonExpression__OpAssignment_1_0_1();
@@ -22307,14 +22475,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group__0"
-    // InternalSTAlgorithmParser.g:6574:1: rule__STAddSubExpression__Group__0 : rule__STAddSubExpression__Group__0__Impl rule__STAddSubExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:6628:1: rule__STAddSubExpression__Group__0 : rule__STAddSubExpression__Group__0__Impl rule__STAddSubExpression__Group__1 ;
     public final void rule__STAddSubExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6578:1: ( rule__STAddSubExpression__Group__0__Impl rule__STAddSubExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:6579:2: rule__STAddSubExpression__Group__0__Impl rule__STAddSubExpression__Group__1
+            // InternalSTAlgorithmParser.g:6632:1: ( rule__STAddSubExpression__Group__0__Impl rule__STAddSubExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:6633:2: rule__STAddSubExpression__Group__0__Impl rule__STAddSubExpression__Group__1
             {
             pushFollow(FOLLOW_59);
             rule__STAddSubExpression__Group__0__Impl();
@@ -22345,17 +22513,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:6586:1: rule__STAddSubExpression__Group__0__Impl : ( ruleSTMulDivModExpression ) ;
+    // InternalSTAlgorithmParser.g:6640:1: rule__STAddSubExpression__Group__0__Impl : ( ruleSTMulDivModExpression ) ;
     public final void rule__STAddSubExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6590:1: ( ( ruleSTMulDivModExpression ) )
-            // InternalSTAlgorithmParser.g:6591:1: ( ruleSTMulDivModExpression )
+            // InternalSTAlgorithmParser.g:6644:1: ( ( ruleSTMulDivModExpression ) )
+            // InternalSTAlgorithmParser.g:6645:1: ( ruleSTMulDivModExpression )
             {
-            // InternalSTAlgorithmParser.g:6591:1: ( ruleSTMulDivModExpression )
-            // InternalSTAlgorithmParser.g:6592:2: ruleSTMulDivModExpression
+            // InternalSTAlgorithmParser.g:6645:1: ( ruleSTMulDivModExpression )
+            // InternalSTAlgorithmParser.g:6646:2: ruleSTMulDivModExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getSTMulDivModExpressionParserRuleCall_0()); 
@@ -22390,14 +22558,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group__1"
-    // InternalSTAlgorithmParser.g:6601:1: rule__STAddSubExpression__Group__1 : rule__STAddSubExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:6655:1: rule__STAddSubExpression__Group__1 : rule__STAddSubExpression__Group__1__Impl ;
     public final void rule__STAddSubExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6605:1: ( rule__STAddSubExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:6606:2: rule__STAddSubExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:6659:1: ( rule__STAddSubExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:6660:2: rule__STAddSubExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAddSubExpression__Group__1__Impl();
@@ -22423,22 +22591,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:6612:1: rule__STAddSubExpression__Group__1__Impl : ( ( rule__STAddSubExpression__Group_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:6666:1: rule__STAddSubExpression__Group__1__Impl : ( ( rule__STAddSubExpression__Group_1__0 )* ) ;
     public final void rule__STAddSubExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6616:1: ( ( ( rule__STAddSubExpression__Group_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:6617:1: ( ( rule__STAddSubExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6670:1: ( ( ( rule__STAddSubExpression__Group_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:6671:1: ( ( rule__STAddSubExpression__Group_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:6617:1: ( ( rule__STAddSubExpression__Group_1__0 )* )
-            // InternalSTAlgorithmParser.g:6618:2: ( rule__STAddSubExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6671:1: ( ( rule__STAddSubExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6672:2: ( rule__STAddSubExpression__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getGroup_1()); 
             }
-            // InternalSTAlgorithmParser.g:6619:2: ( rule__STAddSubExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6673:2: ( rule__STAddSubExpression__Group_1__0 )*
             loop62:
             do {
                 int alt62=2;
@@ -22451,7 +22619,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt62) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:6619:3: rule__STAddSubExpression__Group_1__0
+            	    // InternalSTAlgorithmParser.g:6673:3: rule__STAddSubExpression__Group_1__0
             	    {
             	    pushFollow(FOLLOW_60);
             	    rule__STAddSubExpression__Group_1__0();
@@ -22492,14 +22660,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:6628:1: rule__STAddSubExpression__Group_1__0 : rule__STAddSubExpression__Group_1__0__Impl rule__STAddSubExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:6682:1: rule__STAddSubExpression__Group_1__0 : rule__STAddSubExpression__Group_1__0__Impl rule__STAddSubExpression__Group_1__1 ;
     public final void rule__STAddSubExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6632:1: ( rule__STAddSubExpression__Group_1__0__Impl rule__STAddSubExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:6633:2: rule__STAddSubExpression__Group_1__0__Impl rule__STAddSubExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:6686:1: ( rule__STAddSubExpression__Group_1__0__Impl rule__STAddSubExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:6687:2: rule__STAddSubExpression__Group_1__0__Impl rule__STAddSubExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STAddSubExpression__Group_1__0__Impl();
@@ -22530,23 +22698,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:6640:1: rule__STAddSubExpression__Group_1__0__Impl : ( ( rule__STAddSubExpression__Group_1_0__0 ) ) ;
+    // InternalSTAlgorithmParser.g:6694:1: rule__STAddSubExpression__Group_1__0__Impl : ( ( rule__STAddSubExpression__Group_1_0__0 ) ) ;
     public final void rule__STAddSubExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6644:1: ( ( ( rule__STAddSubExpression__Group_1_0__0 ) ) )
-            // InternalSTAlgorithmParser.g:6645:1: ( ( rule__STAddSubExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6698:1: ( ( ( rule__STAddSubExpression__Group_1_0__0 ) ) )
+            // InternalSTAlgorithmParser.g:6699:1: ( ( rule__STAddSubExpression__Group_1_0__0 ) )
             {
-            // InternalSTAlgorithmParser.g:6645:1: ( ( rule__STAddSubExpression__Group_1_0__0 ) )
-            // InternalSTAlgorithmParser.g:6646:2: ( rule__STAddSubExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6699:1: ( ( rule__STAddSubExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6700:2: ( rule__STAddSubExpression__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getGroup_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:6647:2: ( rule__STAddSubExpression__Group_1_0__0 )
-            // InternalSTAlgorithmParser.g:6647:3: rule__STAddSubExpression__Group_1_0__0
+            // InternalSTAlgorithmParser.g:6701:2: ( rule__STAddSubExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6701:3: rule__STAddSubExpression__Group_1_0__0
             {
             pushFollow(FOLLOW_2);
             rule__STAddSubExpression__Group_1_0__0();
@@ -22581,14 +22749,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:6655:1: rule__STAddSubExpression__Group_1__1 : rule__STAddSubExpression__Group_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:6709:1: rule__STAddSubExpression__Group_1__1 : rule__STAddSubExpression__Group_1__1__Impl ;
     public final void rule__STAddSubExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6659:1: ( rule__STAddSubExpression__Group_1__1__Impl )
-            // InternalSTAlgorithmParser.g:6660:2: rule__STAddSubExpression__Group_1__1__Impl
+            // InternalSTAlgorithmParser.g:6713:1: ( rule__STAddSubExpression__Group_1__1__Impl )
+            // InternalSTAlgorithmParser.g:6714:2: rule__STAddSubExpression__Group_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAddSubExpression__Group_1__1__Impl();
@@ -22614,23 +22782,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:6666:1: rule__STAddSubExpression__Group_1__1__Impl : ( ( rule__STAddSubExpression__RightAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6720:1: rule__STAddSubExpression__Group_1__1__Impl : ( ( rule__STAddSubExpression__RightAssignment_1_1 ) ) ;
     public final void rule__STAddSubExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6670:1: ( ( ( rule__STAddSubExpression__RightAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:6671:1: ( ( rule__STAddSubExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6724:1: ( ( ( rule__STAddSubExpression__RightAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:6725:1: ( ( rule__STAddSubExpression__RightAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6671:1: ( ( rule__STAddSubExpression__RightAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:6672:2: ( rule__STAddSubExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6725:1: ( ( rule__STAddSubExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6726:2: ( rule__STAddSubExpression__RightAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getRightAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:6673:2: ( rule__STAddSubExpression__RightAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:6673:3: rule__STAddSubExpression__RightAssignment_1_1
+            // InternalSTAlgorithmParser.g:6727:2: ( rule__STAddSubExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6727:3: rule__STAddSubExpression__RightAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STAddSubExpression__RightAssignment_1_1();
@@ -22665,14 +22833,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:6682:1: rule__STAddSubExpression__Group_1_0__0 : rule__STAddSubExpression__Group_1_0__0__Impl rule__STAddSubExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:6736:1: rule__STAddSubExpression__Group_1_0__0 : rule__STAddSubExpression__Group_1_0__0__Impl rule__STAddSubExpression__Group_1_0__1 ;
     public final void rule__STAddSubExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6686:1: ( rule__STAddSubExpression__Group_1_0__0__Impl rule__STAddSubExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:6687:2: rule__STAddSubExpression__Group_1_0__0__Impl rule__STAddSubExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:6740:1: ( rule__STAddSubExpression__Group_1_0__0__Impl rule__STAddSubExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:6741:2: rule__STAddSubExpression__Group_1_0__0__Impl rule__STAddSubExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_59);
             rule__STAddSubExpression__Group_1_0__0__Impl();
@@ -22703,23 +22871,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:6694:1: rule__STAddSubExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:6748:1: rule__STAddSubExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STAddSubExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6698:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:6699:1: ( () )
+            // InternalSTAlgorithmParser.g:6752:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:6753:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:6699:1: ( () )
-            // InternalSTAlgorithmParser.g:6700:2: ()
+            // InternalSTAlgorithmParser.g:6753:1: ( () )
+            // InternalSTAlgorithmParser.g:6754:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:6701:2: ()
-            // InternalSTAlgorithmParser.g:6701:3: 
+            // InternalSTAlgorithmParser.g:6755:2: ()
+            // InternalSTAlgorithmParser.g:6755:3: 
             {
             }
 
@@ -22744,14 +22912,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:6709:1: rule__STAddSubExpression__Group_1_0__1 : rule__STAddSubExpression__Group_1_0__1__Impl ;
+    // InternalSTAlgorithmParser.g:6763:1: rule__STAddSubExpression__Group_1_0__1 : rule__STAddSubExpression__Group_1_0__1__Impl ;
     public final void rule__STAddSubExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6713:1: ( rule__STAddSubExpression__Group_1_0__1__Impl )
-            // InternalSTAlgorithmParser.g:6714:2: rule__STAddSubExpression__Group_1_0__1__Impl
+            // InternalSTAlgorithmParser.g:6767:1: ( rule__STAddSubExpression__Group_1_0__1__Impl )
+            // InternalSTAlgorithmParser.g:6768:2: rule__STAddSubExpression__Group_1_0__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAddSubExpression__Group_1_0__1__Impl();
@@ -22777,23 +22945,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:6720:1: rule__STAddSubExpression__Group_1_0__1__Impl : ( ( rule__STAddSubExpression__OpAssignment_1_0_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6774:1: rule__STAddSubExpression__Group_1_0__1__Impl : ( ( rule__STAddSubExpression__OpAssignment_1_0_1 ) ) ;
     public final void rule__STAddSubExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6724:1: ( ( ( rule__STAddSubExpression__OpAssignment_1_0_1 ) ) )
-            // InternalSTAlgorithmParser.g:6725:1: ( ( rule__STAddSubExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6778:1: ( ( ( rule__STAddSubExpression__OpAssignment_1_0_1 ) ) )
+            // InternalSTAlgorithmParser.g:6779:1: ( ( rule__STAddSubExpression__OpAssignment_1_0_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6725:1: ( ( rule__STAddSubExpression__OpAssignment_1_0_1 ) )
-            // InternalSTAlgorithmParser.g:6726:2: ( rule__STAddSubExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6779:1: ( ( rule__STAddSubExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6780:2: ( rule__STAddSubExpression__OpAssignment_1_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getOpAssignment_1_0_1()); 
             }
-            // InternalSTAlgorithmParser.g:6727:2: ( rule__STAddSubExpression__OpAssignment_1_0_1 )
-            // InternalSTAlgorithmParser.g:6727:3: rule__STAddSubExpression__OpAssignment_1_0_1
+            // InternalSTAlgorithmParser.g:6781:2: ( rule__STAddSubExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6781:3: rule__STAddSubExpression__OpAssignment_1_0_1
             {
             pushFollow(FOLLOW_2);
             rule__STAddSubExpression__OpAssignment_1_0_1();
@@ -22828,14 +22996,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group__0"
-    // InternalSTAlgorithmParser.g:6736:1: rule__STMulDivModExpression__Group__0 : rule__STMulDivModExpression__Group__0__Impl rule__STMulDivModExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:6790:1: rule__STMulDivModExpression__Group__0 : rule__STMulDivModExpression__Group__0__Impl rule__STMulDivModExpression__Group__1 ;
     public final void rule__STMulDivModExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6740:1: ( rule__STMulDivModExpression__Group__0__Impl rule__STMulDivModExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:6741:2: rule__STMulDivModExpression__Group__0__Impl rule__STMulDivModExpression__Group__1
+            // InternalSTAlgorithmParser.g:6794:1: ( rule__STMulDivModExpression__Group__0__Impl rule__STMulDivModExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:6795:2: rule__STMulDivModExpression__Group__0__Impl rule__STMulDivModExpression__Group__1
             {
             pushFollow(FOLLOW_61);
             rule__STMulDivModExpression__Group__0__Impl();
@@ -22866,17 +23034,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:6748:1: rule__STMulDivModExpression__Group__0__Impl : ( ruleSTPowerExpression ) ;
+    // InternalSTAlgorithmParser.g:6802:1: rule__STMulDivModExpression__Group__0__Impl : ( ruleSTPowerExpression ) ;
     public final void rule__STMulDivModExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6752:1: ( ( ruleSTPowerExpression ) )
-            // InternalSTAlgorithmParser.g:6753:1: ( ruleSTPowerExpression )
+            // InternalSTAlgorithmParser.g:6806:1: ( ( ruleSTPowerExpression ) )
+            // InternalSTAlgorithmParser.g:6807:1: ( ruleSTPowerExpression )
             {
-            // InternalSTAlgorithmParser.g:6753:1: ( ruleSTPowerExpression )
-            // InternalSTAlgorithmParser.g:6754:2: ruleSTPowerExpression
+            // InternalSTAlgorithmParser.g:6807:1: ( ruleSTPowerExpression )
+            // InternalSTAlgorithmParser.g:6808:2: ruleSTPowerExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getSTPowerExpressionParserRuleCall_0()); 
@@ -22911,14 +23079,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group__1"
-    // InternalSTAlgorithmParser.g:6763:1: rule__STMulDivModExpression__Group__1 : rule__STMulDivModExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:6817:1: rule__STMulDivModExpression__Group__1 : rule__STMulDivModExpression__Group__1__Impl ;
     public final void rule__STMulDivModExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6767:1: ( rule__STMulDivModExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:6768:2: rule__STMulDivModExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:6821:1: ( rule__STMulDivModExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:6822:2: rule__STMulDivModExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STMulDivModExpression__Group__1__Impl();
@@ -22944,22 +23112,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:6774:1: rule__STMulDivModExpression__Group__1__Impl : ( ( rule__STMulDivModExpression__Group_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:6828:1: rule__STMulDivModExpression__Group__1__Impl : ( ( rule__STMulDivModExpression__Group_1__0 )* ) ;
     public final void rule__STMulDivModExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6778:1: ( ( ( rule__STMulDivModExpression__Group_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:6779:1: ( ( rule__STMulDivModExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6832:1: ( ( ( rule__STMulDivModExpression__Group_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:6833:1: ( ( rule__STMulDivModExpression__Group_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:6779:1: ( ( rule__STMulDivModExpression__Group_1__0 )* )
-            // InternalSTAlgorithmParser.g:6780:2: ( rule__STMulDivModExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6833:1: ( ( rule__STMulDivModExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6834:2: ( rule__STMulDivModExpression__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getGroup_1()); 
             }
-            // InternalSTAlgorithmParser.g:6781:2: ( rule__STMulDivModExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6835:2: ( rule__STMulDivModExpression__Group_1__0 )*
             loop63:
             do {
                 int alt63=2;
@@ -22972,7 +23140,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt63) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:6781:3: rule__STMulDivModExpression__Group_1__0
+            	    // InternalSTAlgorithmParser.g:6835:3: rule__STMulDivModExpression__Group_1__0
             	    {
             	    pushFollow(FOLLOW_62);
             	    rule__STMulDivModExpression__Group_1__0();
@@ -23013,14 +23181,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:6790:1: rule__STMulDivModExpression__Group_1__0 : rule__STMulDivModExpression__Group_1__0__Impl rule__STMulDivModExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:6844:1: rule__STMulDivModExpression__Group_1__0 : rule__STMulDivModExpression__Group_1__0__Impl rule__STMulDivModExpression__Group_1__1 ;
     public final void rule__STMulDivModExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6794:1: ( rule__STMulDivModExpression__Group_1__0__Impl rule__STMulDivModExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:6795:2: rule__STMulDivModExpression__Group_1__0__Impl rule__STMulDivModExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:6848:1: ( rule__STMulDivModExpression__Group_1__0__Impl rule__STMulDivModExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:6849:2: rule__STMulDivModExpression__Group_1__0__Impl rule__STMulDivModExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STMulDivModExpression__Group_1__0__Impl();
@@ -23051,23 +23219,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:6802:1: rule__STMulDivModExpression__Group_1__0__Impl : ( ( rule__STMulDivModExpression__Group_1_0__0 ) ) ;
+    // InternalSTAlgorithmParser.g:6856:1: rule__STMulDivModExpression__Group_1__0__Impl : ( ( rule__STMulDivModExpression__Group_1_0__0 ) ) ;
     public final void rule__STMulDivModExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6806:1: ( ( ( rule__STMulDivModExpression__Group_1_0__0 ) ) )
-            // InternalSTAlgorithmParser.g:6807:1: ( ( rule__STMulDivModExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6860:1: ( ( ( rule__STMulDivModExpression__Group_1_0__0 ) ) )
+            // InternalSTAlgorithmParser.g:6861:1: ( ( rule__STMulDivModExpression__Group_1_0__0 ) )
             {
-            // InternalSTAlgorithmParser.g:6807:1: ( ( rule__STMulDivModExpression__Group_1_0__0 ) )
-            // InternalSTAlgorithmParser.g:6808:2: ( rule__STMulDivModExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6861:1: ( ( rule__STMulDivModExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:6862:2: ( rule__STMulDivModExpression__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getGroup_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:6809:2: ( rule__STMulDivModExpression__Group_1_0__0 )
-            // InternalSTAlgorithmParser.g:6809:3: rule__STMulDivModExpression__Group_1_0__0
+            // InternalSTAlgorithmParser.g:6863:2: ( rule__STMulDivModExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:6863:3: rule__STMulDivModExpression__Group_1_0__0
             {
             pushFollow(FOLLOW_2);
             rule__STMulDivModExpression__Group_1_0__0();
@@ -23102,14 +23270,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:6817:1: rule__STMulDivModExpression__Group_1__1 : rule__STMulDivModExpression__Group_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:6871:1: rule__STMulDivModExpression__Group_1__1 : rule__STMulDivModExpression__Group_1__1__Impl ;
     public final void rule__STMulDivModExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6821:1: ( rule__STMulDivModExpression__Group_1__1__Impl )
-            // InternalSTAlgorithmParser.g:6822:2: rule__STMulDivModExpression__Group_1__1__Impl
+            // InternalSTAlgorithmParser.g:6875:1: ( rule__STMulDivModExpression__Group_1__1__Impl )
+            // InternalSTAlgorithmParser.g:6876:2: rule__STMulDivModExpression__Group_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STMulDivModExpression__Group_1__1__Impl();
@@ -23135,23 +23303,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:6828:1: rule__STMulDivModExpression__Group_1__1__Impl : ( ( rule__STMulDivModExpression__RightAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6882:1: rule__STMulDivModExpression__Group_1__1__Impl : ( ( rule__STMulDivModExpression__RightAssignment_1_1 ) ) ;
     public final void rule__STMulDivModExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6832:1: ( ( ( rule__STMulDivModExpression__RightAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:6833:1: ( ( rule__STMulDivModExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6886:1: ( ( ( rule__STMulDivModExpression__RightAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:6887:1: ( ( rule__STMulDivModExpression__RightAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6833:1: ( ( rule__STMulDivModExpression__RightAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:6834:2: ( rule__STMulDivModExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6887:1: ( ( rule__STMulDivModExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:6888:2: ( rule__STMulDivModExpression__RightAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getRightAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:6835:2: ( rule__STMulDivModExpression__RightAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:6835:3: rule__STMulDivModExpression__RightAssignment_1_1
+            // InternalSTAlgorithmParser.g:6889:2: ( rule__STMulDivModExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:6889:3: rule__STMulDivModExpression__RightAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STMulDivModExpression__RightAssignment_1_1();
@@ -23186,14 +23354,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:6844:1: rule__STMulDivModExpression__Group_1_0__0 : rule__STMulDivModExpression__Group_1_0__0__Impl rule__STMulDivModExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:6898:1: rule__STMulDivModExpression__Group_1_0__0 : rule__STMulDivModExpression__Group_1_0__0__Impl rule__STMulDivModExpression__Group_1_0__1 ;
     public final void rule__STMulDivModExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6848:1: ( rule__STMulDivModExpression__Group_1_0__0__Impl rule__STMulDivModExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:6849:2: rule__STMulDivModExpression__Group_1_0__0__Impl rule__STMulDivModExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:6902:1: ( rule__STMulDivModExpression__Group_1_0__0__Impl rule__STMulDivModExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:6903:2: rule__STMulDivModExpression__Group_1_0__0__Impl rule__STMulDivModExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_61);
             rule__STMulDivModExpression__Group_1_0__0__Impl();
@@ -23224,23 +23392,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:6856:1: rule__STMulDivModExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:6910:1: rule__STMulDivModExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STMulDivModExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6860:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:6861:1: ( () )
+            // InternalSTAlgorithmParser.g:6914:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:6915:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:6861:1: ( () )
-            // InternalSTAlgorithmParser.g:6862:2: ()
+            // InternalSTAlgorithmParser.g:6915:1: ( () )
+            // InternalSTAlgorithmParser.g:6916:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:6863:2: ()
-            // InternalSTAlgorithmParser.g:6863:3: 
+            // InternalSTAlgorithmParser.g:6917:2: ()
+            // InternalSTAlgorithmParser.g:6917:3: 
             {
             }
 
@@ -23265,14 +23433,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:6871:1: rule__STMulDivModExpression__Group_1_0__1 : rule__STMulDivModExpression__Group_1_0__1__Impl ;
+    // InternalSTAlgorithmParser.g:6925:1: rule__STMulDivModExpression__Group_1_0__1 : rule__STMulDivModExpression__Group_1_0__1__Impl ;
     public final void rule__STMulDivModExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6875:1: ( rule__STMulDivModExpression__Group_1_0__1__Impl )
-            // InternalSTAlgorithmParser.g:6876:2: rule__STMulDivModExpression__Group_1_0__1__Impl
+            // InternalSTAlgorithmParser.g:6929:1: ( rule__STMulDivModExpression__Group_1_0__1__Impl )
+            // InternalSTAlgorithmParser.g:6930:2: rule__STMulDivModExpression__Group_1_0__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STMulDivModExpression__Group_1_0__1__Impl();
@@ -23298,23 +23466,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:6882:1: rule__STMulDivModExpression__Group_1_0__1__Impl : ( ( rule__STMulDivModExpression__OpAssignment_1_0_1 ) ) ;
+    // InternalSTAlgorithmParser.g:6936:1: rule__STMulDivModExpression__Group_1_0__1__Impl : ( ( rule__STMulDivModExpression__OpAssignment_1_0_1 ) ) ;
     public final void rule__STMulDivModExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6886:1: ( ( ( rule__STMulDivModExpression__OpAssignment_1_0_1 ) ) )
-            // InternalSTAlgorithmParser.g:6887:1: ( ( rule__STMulDivModExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6940:1: ( ( ( rule__STMulDivModExpression__OpAssignment_1_0_1 ) ) )
+            // InternalSTAlgorithmParser.g:6941:1: ( ( rule__STMulDivModExpression__OpAssignment_1_0_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6887:1: ( ( rule__STMulDivModExpression__OpAssignment_1_0_1 ) )
-            // InternalSTAlgorithmParser.g:6888:2: ( rule__STMulDivModExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6941:1: ( ( rule__STMulDivModExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:6942:2: ( rule__STMulDivModExpression__OpAssignment_1_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getOpAssignment_1_0_1()); 
             }
-            // InternalSTAlgorithmParser.g:6889:2: ( rule__STMulDivModExpression__OpAssignment_1_0_1 )
-            // InternalSTAlgorithmParser.g:6889:3: rule__STMulDivModExpression__OpAssignment_1_0_1
+            // InternalSTAlgorithmParser.g:6943:2: ( rule__STMulDivModExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:6943:3: rule__STMulDivModExpression__OpAssignment_1_0_1
             {
             pushFollow(FOLLOW_2);
             rule__STMulDivModExpression__OpAssignment_1_0_1();
@@ -23349,14 +23517,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group__0"
-    // InternalSTAlgorithmParser.g:6898:1: rule__STPowerExpression__Group__0 : rule__STPowerExpression__Group__0__Impl rule__STPowerExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:6952:1: rule__STPowerExpression__Group__0 : rule__STPowerExpression__Group__0__Impl rule__STPowerExpression__Group__1 ;
     public final void rule__STPowerExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6902:1: ( rule__STPowerExpression__Group__0__Impl rule__STPowerExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:6903:2: rule__STPowerExpression__Group__0__Impl rule__STPowerExpression__Group__1
+            // InternalSTAlgorithmParser.g:6956:1: ( rule__STPowerExpression__Group__0__Impl rule__STPowerExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:6957:2: rule__STPowerExpression__Group__0__Impl rule__STPowerExpression__Group__1
             {
             pushFollow(FOLLOW_63);
             rule__STPowerExpression__Group__0__Impl();
@@ -23387,17 +23555,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:6910:1: rule__STPowerExpression__Group__0__Impl : ( ruleSTUnaryExpression ) ;
+    // InternalSTAlgorithmParser.g:6964:1: rule__STPowerExpression__Group__0__Impl : ( ruleSTUnaryExpression ) ;
     public final void rule__STPowerExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6914:1: ( ( ruleSTUnaryExpression ) )
-            // InternalSTAlgorithmParser.g:6915:1: ( ruleSTUnaryExpression )
+            // InternalSTAlgorithmParser.g:6968:1: ( ( ruleSTUnaryExpression ) )
+            // InternalSTAlgorithmParser.g:6969:1: ( ruleSTUnaryExpression )
             {
-            // InternalSTAlgorithmParser.g:6915:1: ( ruleSTUnaryExpression )
-            // InternalSTAlgorithmParser.g:6916:2: ruleSTUnaryExpression
+            // InternalSTAlgorithmParser.g:6969:1: ( ruleSTUnaryExpression )
+            // InternalSTAlgorithmParser.g:6970:2: ruleSTUnaryExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getSTUnaryExpressionParserRuleCall_0()); 
@@ -23432,14 +23600,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group__1"
-    // InternalSTAlgorithmParser.g:6925:1: rule__STPowerExpression__Group__1 : rule__STPowerExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:6979:1: rule__STPowerExpression__Group__1 : rule__STPowerExpression__Group__1__Impl ;
     public final void rule__STPowerExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6929:1: ( rule__STPowerExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:6930:2: rule__STPowerExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:6983:1: ( rule__STPowerExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:6984:2: rule__STPowerExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STPowerExpression__Group__1__Impl();
@@ -23465,22 +23633,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:6936:1: rule__STPowerExpression__Group__1__Impl : ( ( rule__STPowerExpression__Group_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:6990:1: rule__STPowerExpression__Group__1__Impl : ( ( rule__STPowerExpression__Group_1__0 )* ) ;
     public final void rule__STPowerExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6940:1: ( ( ( rule__STPowerExpression__Group_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:6941:1: ( ( rule__STPowerExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6994:1: ( ( ( rule__STPowerExpression__Group_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:6995:1: ( ( rule__STPowerExpression__Group_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:6941:1: ( ( rule__STPowerExpression__Group_1__0 )* )
-            // InternalSTAlgorithmParser.g:6942:2: ( rule__STPowerExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6995:1: ( ( rule__STPowerExpression__Group_1__0 )* )
+            // InternalSTAlgorithmParser.g:6996:2: ( rule__STPowerExpression__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getGroup_1()); 
             }
-            // InternalSTAlgorithmParser.g:6943:2: ( rule__STPowerExpression__Group_1__0 )*
+            // InternalSTAlgorithmParser.g:6997:2: ( rule__STPowerExpression__Group_1__0 )*
             loop64:
             do {
                 int alt64=2;
@@ -23493,7 +23661,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt64) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:6943:3: rule__STPowerExpression__Group_1__0
+            	    // InternalSTAlgorithmParser.g:6997:3: rule__STPowerExpression__Group_1__0
             	    {
             	    pushFollow(FOLLOW_64);
             	    rule__STPowerExpression__Group_1__0();
@@ -23534,14 +23702,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:6952:1: rule__STPowerExpression__Group_1__0 : rule__STPowerExpression__Group_1__0__Impl rule__STPowerExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:7006:1: rule__STPowerExpression__Group_1__0 : rule__STPowerExpression__Group_1__0__Impl rule__STPowerExpression__Group_1__1 ;
     public final void rule__STPowerExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6956:1: ( rule__STPowerExpression__Group_1__0__Impl rule__STPowerExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:6957:2: rule__STPowerExpression__Group_1__0__Impl rule__STPowerExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:7010:1: ( rule__STPowerExpression__Group_1__0__Impl rule__STPowerExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:7011:2: rule__STPowerExpression__Group_1__0__Impl rule__STPowerExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STPowerExpression__Group_1__0__Impl();
@@ -23572,23 +23740,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:6964:1: rule__STPowerExpression__Group_1__0__Impl : ( ( rule__STPowerExpression__Group_1_0__0 ) ) ;
+    // InternalSTAlgorithmParser.g:7018:1: rule__STPowerExpression__Group_1__0__Impl : ( ( rule__STPowerExpression__Group_1_0__0 ) ) ;
     public final void rule__STPowerExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6968:1: ( ( ( rule__STPowerExpression__Group_1_0__0 ) ) )
-            // InternalSTAlgorithmParser.g:6969:1: ( ( rule__STPowerExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:7022:1: ( ( ( rule__STPowerExpression__Group_1_0__0 ) ) )
+            // InternalSTAlgorithmParser.g:7023:1: ( ( rule__STPowerExpression__Group_1_0__0 ) )
             {
-            // InternalSTAlgorithmParser.g:6969:1: ( ( rule__STPowerExpression__Group_1_0__0 ) )
-            // InternalSTAlgorithmParser.g:6970:2: ( rule__STPowerExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:7023:1: ( ( rule__STPowerExpression__Group_1_0__0 ) )
+            // InternalSTAlgorithmParser.g:7024:2: ( rule__STPowerExpression__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getGroup_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:6971:2: ( rule__STPowerExpression__Group_1_0__0 )
-            // InternalSTAlgorithmParser.g:6971:3: rule__STPowerExpression__Group_1_0__0
+            // InternalSTAlgorithmParser.g:7025:2: ( rule__STPowerExpression__Group_1_0__0 )
+            // InternalSTAlgorithmParser.g:7025:3: rule__STPowerExpression__Group_1_0__0
             {
             pushFollow(FOLLOW_2);
             rule__STPowerExpression__Group_1_0__0();
@@ -23623,14 +23791,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:6979:1: rule__STPowerExpression__Group_1__1 : rule__STPowerExpression__Group_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:7033:1: rule__STPowerExpression__Group_1__1 : rule__STPowerExpression__Group_1__1__Impl ;
     public final void rule__STPowerExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6983:1: ( rule__STPowerExpression__Group_1__1__Impl )
-            // InternalSTAlgorithmParser.g:6984:2: rule__STPowerExpression__Group_1__1__Impl
+            // InternalSTAlgorithmParser.g:7037:1: ( rule__STPowerExpression__Group_1__1__Impl )
+            // InternalSTAlgorithmParser.g:7038:2: rule__STPowerExpression__Group_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STPowerExpression__Group_1__1__Impl();
@@ -23656,23 +23824,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:6990:1: rule__STPowerExpression__Group_1__1__Impl : ( ( rule__STPowerExpression__RightAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:7044:1: rule__STPowerExpression__Group_1__1__Impl : ( ( rule__STPowerExpression__RightAssignment_1_1 ) ) ;
     public final void rule__STPowerExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:6994:1: ( ( ( rule__STPowerExpression__RightAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:6995:1: ( ( rule__STPowerExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:7048:1: ( ( ( rule__STPowerExpression__RightAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:7049:1: ( ( rule__STPowerExpression__RightAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:6995:1: ( ( rule__STPowerExpression__RightAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:6996:2: ( rule__STPowerExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:7049:1: ( ( rule__STPowerExpression__RightAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:7050:2: ( rule__STPowerExpression__RightAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getRightAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:6997:2: ( rule__STPowerExpression__RightAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:6997:3: rule__STPowerExpression__RightAssignment_1_1
+            // InternalSTAlgorithmParser.g:7051:2: ( rule__STPowerExpression__RightAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:7051:3: rule__STPowerExpression__RightAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STPowerExpression__RightAssignment_1_1();
@@ -23707,14 +23875,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:7006:1: rule__STPowerExpression__Group_1_0__0 : rule__STPowerExpression__Group_1_0__0__Impl rule__STPowerExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:7060:1: rule__STPowerExpression__Group_1_0__0 : rule__STPowerExpression__Group_1_0__0__Impl rule__STPowerExpression__Group_1_0__1 ;
     public final void rule__STPowerExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7010:1: ( rule__STPowerExpression__Group_1_0__0__Impl rule__STPowerExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:7011:2: rule__STPowerExpression__Group_1_0__0__Impl rule__STPowerExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:7064:1: ( rule__STPowerExpression__Group_1_0__0__Impl rule__STPowerExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:7065:2: rule__STPowerExpression__Group_1_0__0__Impl rule__STPowerExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_63);
             rule__STPowerExpression__Group_1_0__0__Impl();
@@ -23745,23 +23913,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:7018:1: rule__STPowerExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:7072:1: rule__STPowerExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STPowerExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7022:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:7023:1: ( () )
+            // InternalSTAlgorithmParser.g:7076:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:7077:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:7023:1: ( () )
-            // InternalSTAlgorithmParser.g:7024:2: ()
+            // InternalSTAlgorithmParser.g:7077:1: ( () )
+            // InternalSTAlgorithmParser.g:7078:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:7025:2: ()
-            // InternalSTAlgorithmParser.g:7025:3: 
+            // InternalSTAlgorithmParser.g:7079:2: ()
+            // InternalSTAlgorithmParser.g:7079:3: 
             {
             }
 
@@ -23786,14 +23954,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:7033:1: rule__STPowerExpression__Group_1_0__1 : rule__STPowerExpression__Group_1_0__1__Impl ;
+    // InternalSTAlgorithmParser.g:7087:1: rule__STPowerExpression__Group_1_0__1 : rule__STPowerExpression__Group_1_0__1__Impl ;
     public final void rule__STPowerExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7037:1: ( rule__STPowerExpression__Group_1_0__1__Impl )
-            // InternalSTAlgorithmParser.g:7038:2: rule__STPowerExpression__Group_1_0__1__Impl
+            // InternalSTAlgorithmParser.g:7091:1: ( rule__STPowerExpression__Group_1_0__1__Impl )
+            // InternalSTAlgorithmParser.g:7092:2: rule__STPowerExpression__Group_1_0__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STPowerExpression__Group_1_0__1__Impl();
@@ -23819,23 +23987,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:7044:1: rule__STPowerExpression__Group_1_0__1__Impl : ( ( rule__STPowerExpression__OpAssignment_1_0_1 ) ) ;
+    // InternalSTAlgorithmParser.g:7098:1: rule__STPowerExpression__Group_1_0__1__Impl : ( ( rule__STPowerExpression__OpAssignment_1_0_1 ) ) ;
     public final void rule__STPowerExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7048:1: ( ( ( rule__STPowerExpression__OpAssignment_1_0_1 ) ) )
-            // InternalSTAlgorithmParser.g:7049:1: ( ( rule__STPowerExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:7102:1: ( ( ( rule__STPowerExpression__OpAssignment_1_0_1 ) ) )
+            // InternalSTAlgorithmParser.g:7103:1: ( ( rule__STPowerExpression__OpAssignment_1_0_1 ) )
             {
-            // InternalSTAlgorithmParser.g:7049:1: ( ( rule__STPowerExpression__OpAssignment_1_0_1 ) )
-            // InternalSTAlgorithmParser.g:7050:2: ( rule__STPowerExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:7103:1: ( ( rule__STPowerExpression__OpAssignment_1_0_1 ) )
+            // InternalSTAlgorithmParser.g:7104:2: ( rule__STPowerExpression__OpAssignment_1_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getOpAssignment_1_0_1()); 
             }
-            // InternalSTAlgorithmParser.g:7051:2: ( rule__STPowerExpression__OpAssignment_1_0_1 )
-            // InternalSTAlgorithmParser.g:7051:3: rule__STPowerExpression__OpAssignment_1_0_1
+            // InternalSTAlgorithmParser.g:7105:2: ( rule__STPowerExpression__OpAssignment_1_0_1 )
+            // InternalSTAlgorithmParser.g:7105:3: rule__STPowerExpression__OpAssignment_1_0_1
             {
             pushFollow(FOLLOW_2);
             rule__STPowerExpression__OpAssignment_1_0_1();
@@ -23870,14 +24038,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STUnaryExpression__Group_1__0"
-    // InternalSTAlgorithmParser.g:7060:1: rule__STUnaryExpression__Group_1__0 : rule__STUnaryExpression__Group_1__0__Impl rule__STUnaryExpression__Group_1__1 ;
+    // InternalSTAlgorithmParser.g:7114:1: rule__STUnaryExpression__Group_1__0 : rule__STUnaryExpression__Group_1__0__Impl rule__STUnaryExpression__Group_1__1 ;
     public final void rule__STUnaryExpression__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7064:1: ( rule__STUnaryExpression__Group_1__0__Impl rule__STUnaryExpression__Group_1__1 )
-            // InternalSTAlgorithmParser.g:7065:2: rule__STUnaryExpression__Group_1__0__Impl rule__STUnaryExpression__Group_1__1
+            // InternalSTAlgorithmParser.g:7118:1: ( rule__STUnaryExpression__Group_1__0__Impl rule__STUnaryExpression__Group_1__1 )
+            // InternalSTAlgorithmParser.g:7119:2: rule__STUnaryExpression__Group_1__0__Impl rule__STUnaryExpression__Group_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STUnaryExpression__Group_1__0__Impl();
@@ -23908,23 +24076,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STUnaryExpression__Group_1__0__Impl"
-    // InternalSTAlgorithmParser.g:7072:1: rule__STUnaryExpression__Group_1__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:7126:1: rule__STUnaryExpression__Group_1__0__Impl : ( () ) ;
     public final void rule__STUnaryExpression__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7076:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:7077:1: ( () )
+            // InternalSTAlgorithmParser.g:7130:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:7131:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:7077:1: ( () )
-            // InternalSTAlgorithmParser.g:7078:2: ()
+            // InternalSTAlgorithmParser.g:7131:1: ( () )
+            // InternalSTAlgorithmParser.g:7132:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTUnaryExpressionAccess().getSTUnaryExpressionAction_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:7079:2: ()
-            // InternalSTAlgorithmParser.g:7079:3: 
+            // InternalSTAlgorithmParser.g:7133:2: ()
+            // InternalSTAlgorithmParser.g:7133:3: 
             {
             }
 
@@ -23949,14 +24117,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STUnaryExpression__Group_1__1"
-    // InternalSTAlgorithmParser.g:7087:1: rule__STUnaryExpression__Group_1__1 : rule__STUnaryExpression__Group_1__1__Impl rule__STUnaryExpression__Group_1__2 ;
+    // InternalSTAlgorithmParser.g:7141:1: rule__STUnaryExpression__Group_1__1 : rule__STUnaryExpression__Group_1__1__Impl rule__STUnaryExpression__Group_1__2 ;
     public final void rule__STUnaryExpression__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7091:1: ( rule__STUnaryExpression__Group_1__1__Impl rule__STUnaryExpression__Group_1__2 )
-            // InternalSTAlgorithmParser.g:7092:2: rule__STUnaryExpression__Group_1__1__Impl rule__STUnaryExpression__Group_1__2
+            // InternalSTAlgorithmParser.g:7145:1: ( rule__STUnaryExpression__Group_1__1__Impl rule__STUnaryExpression__Group_1__2 )
+            // InternalSTAlgorithmParser.g:7146:2: rule__STUnaryExpression__Group_1__1__Impl rule__STUnaryExpression__Group_1__2
             {
             pushFollow(FOLLOW_19);
             rule__STUnaryExpression__Group_1__1__Impl();
@@ -23987,23 +24155,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STUnaryExpression__Group_1__1__Impl"
-    // InternalSTAlgorithmParser.g:7099:1: rule__STUnaryExpression__Group_1__1__Impl : ( ( rule__STUnaryExpression__OpAssignment_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:7153:1: rule__STUnaryExpression__Group_1__1__Impl : ( ( rule__STUnaryExpression__OpAssignment_1_1 ) ) ;
     public final void rule__STUnaryExpression__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7103:1: ( ( ( rule__STUnaryExpression__OpAssignment_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:7104:1: ( ( rule__STUnaryExpression__OpAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:7157:1: ( ( ( rule__STUnaryExpression__OpAssignment_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:7158:1: ( ( rule__STUnaryExpression__OpAssignment_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:7104:1: ( ( rule__STUnaryExpression__OpAssignment_1_1 ) )
-            // InternalSTAlgorithmParser.g:7105:2: ( rule__STUnaryExpression__OpAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:7158:1: ( ( rule__STUnaryExpression__OpAssignment_1_1 ) )
+            // InternalSTAlgorithmParser.g:7159:2: ( rule__STUnaryExpression__OpAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTUnaryExpressionAccess().getOpAssignment_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:7106:2: ( rule__STUnaryExpression__OpAssignment_1_1 )
-            // InternalSTAlgorithmParser.g:7106:3: rule__STUnaryExpression__OpAssignment_1_1
+            // InternalSTAlgorithmParser.g:7160:2: ( rule__STUnaryExpression__OpAssignment_1_1 )
+            // InternalSTAlgorithmParser.g:7160:3: rule__STUnaryExpression__OpAssignment_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STUnaryExpression__OpAssignment_1_1();
@@ -24038,14 +24206,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STUnaryExpression__Group_1__2"
-    // InternalSTAlgorithmParser.g:7114:1: rule__STUnaryExpression__Group_1__2 : rule__STUnaryExpression__Group_1__2__Impl ;
+    // InternalSTAlgorithmParser.g:7168:1: rule__STUnaryExpression__Group_1__2 : rule__STUnaryExpression__Group_1__2__Impl ;
     public final void rule__STUnaryExpression__Group_1__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7118:1: ( rule__STUnaryExpression__Group_1__2__Impl )
-            // InternalSTAlgorithmParser.g:7119:2: rule__STUnaryExpression__Group_1__2__Impl
+            // InternalSTAlgorithmParser.g:7172:1: ( rule__STUnaryExpression__Group_1__2__Impl )
+            // InternalSTAlgorithmParser.g:7173:2: rule__STUnaryExpression__Group_1__2__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STUnaryExpression__Group_1__2__Impl();
@@ -24071,23 +24239,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STUnaryExpression__Group_1__2__Impl"
-    // InternalSTAlgorithmParser.g:7125:1: rule__STUnaryExpression__Group_1__2__Impl : ( ( rule__STUnaryExpression__ExpressionAssignment_1_2 ) ) ;
+    // InternalSTAlgorithmParser.g:7179:1: rule__STUnaryExpression__Group_1__2__Impl : ( ( rule__STUnaryExpression__ExpressionAssignment_1_2 ) ) ;
     public final void rule__STUnaryExpression__Group_1__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7129:1: ( ( ( rule__STUnaryExpression__ExpressionAssignment_1_2 ) ) )
-            // InternalSTAlgorithmParser.g:7130:1: ( ( rule__STUnaryExpression__ExpressionAssignment_1_2 ) )
+            // InternalSTAlgorithmParser.g:7183:1: ( ( ( rule__STUnaryExpression__ExpressionAssignment_1_2 ) ) )
+            // InternalSTAlgorithmParser.g:7184:1: ( ( rule__STUnaryExpression__ExpressionAssignment_1_2 ) )
             {
-            // InternalSTAlgorithmParser.g:7130:1: ( ( rule__STUnaryExpression__ExpressionAssignment_1_2 ) )
-            // InternalSTAlgorithmParser.g:7131:2: ( rule__STUnaryExpression__ExpressionAssignment_1_2 )
+            // InternalSTAlgorithmParser.g:7184:1: ( ( rule__STUnaryExpression__ExpressionAssignment_1_2 ) )
+            // InternalSTAlgorithmParser.g:7185:2: ( rule__STUnaryExpression__ExpressionAssignment_1_2 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTUnaryExpressionAccess().getExpressionAssignment_1_2()); 
             }
-            // InternalSTAlgorithmParser.g:7132:2: ( rule__STUnaryExpression__ExpressionAssignment_1_2 )
-            // InternalSTAlgorithmParser.g:7132:3: rule__STUnaryExpression__ExpressionAssignment_1_2
+            // InternalSTAlgorithmParser.g:7186:2: ( rule__STUnaryExpression__ExpressionAssignment_1_2 )
+            // InternalSTAlgorithmParser.g:7186:3: rule__STUnaryExpression__ExpressionAssignment_1_2
             {
             pushFollow(FOLLOW_2);
             rule__STUnaryExpression__ExpressionAssignment_1_2();
@@ -24122,14 +24290,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group__0"
-    // InternalSTAlgorithmParser.g:7141:1: rule__STAccessExpression__Group__0 : rule__STAccessExpression__Group__0__Impl rule__STAccessExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:7195:1: rule__STAccessExpression__Group__0 : rule__STAccessExpression__Group__0__Impl rule__STAccessExpression__Group__1 ;
     public final void rule__STAccessExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7145:1: ( rule__STAccessExpression__Group__0__Impl rule__STAccessExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:7146:2: rule__STAccessExpression__Group__0__Impl rule__STAccessExpression__Group__1
+            // InternalSTAlgorithmParser.g:7199:1: ( rule__STAccessExpression__Group__0__Impl rule__STAccessExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:7200:2: rule__STAccessExpression__Group__0__Impl rule__STAccessExpression__Group__1
             {
             pushFollow(FOLLOW_65);
             rule__STAccessExpression__Group__0__Impl();
@@ -24160,17 +24328,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:7153:1: rule__STAccessExpression__Group__0__Impl : ( ruleSTPrimaryExpression ) ;
+    // InternalSTAlgorithmParser.g:7207:1: rule__STAccessExpression__Group__0__Impl : ( ruleSTPrimaryExpression ) ;
     public final void rule__STAccessExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7157:1: ( ( ruleSTPrimaryExpression ) )
-            // InternalSTAlgorithmParser.g:7158:1: ( ruleSTPrimaryExpression )
+            // InternalSTAlgorithmParser.g:7211:1: ( ( ruleSTPrimaryExpression ) )
+            // InternalSTAlgorithmParser.g:7212:1: ( ruleSTPrimaryExpression )
             {
-            // InternalSTAlgorithmParser.g:7158:1: ( ruleSTPrimaryExpression )
-            // InternalSTAlgorithmParser.g:7159:2: ruleSTPrimaryExpression
+            // InternalSTAlgorithmParser.g:7212:1: ( ruleSTPrimaryExpression )
+            // InternalSTAlgorithmParser.g:7213:2: ruleSTPrimaryExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getSTPrimaryExpressionParserRuleCall_0()); 
@@ -24205,14 +24373,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group__1"
-    // InternalSTAlgorithmParser.g:7168:1: rule__STAccessExpression__Group__1 : rule__STAccessExpression__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:7222:1: rule__STAccessExpression__Group__1 : rule__STAccessExpression__Group__1__Impl ;
     public final void rule__STAccessExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7172:1: ( rule__STAccessExpression__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:7173:2: rule__STAccessExpression__Group__1__Impl
+            // InternalSTAlgorithmParser.g:7226:1: ( rule__STAccessExpression__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:7227:2: rule__STAccessExpression__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAccessExpression__Group__1__Impl();
@@ -24238,22 +24406,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:7179:1: rule__STAccessExpression__Group__1__Impl : ( ( rule__STAccessExpression__Alternatives_1 )* ) ;
+    // InternalSTAlgorithmParser.g:7233:1: rule__STAccessExpression__Group__1__Impl : ( ( rule__STAccessExpression__Alternatives_1 )* ) ;
     public final void rule__STAccessExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7183:1: ( ( ( rule__STAccessExpression__Alternatives_1 )* ) )
-            // InternalSTAlgorithmParser.g:7184:1: ( ( rule__STAccessExpression__Alternatives_1 )* )
+            // InternalSTAlgorithmParser.g:7237:1: ( ( ( rule__STAccessExpression__Alternatives_1 )* ) )
+            // InternalSTAlgorithmParser.g:7238:1: ( ( rule__STAccessExpression__Alternatives_1 )* )
             {
-            // InternalSTAlgorithmParser.g:7184:1: ( ( rule__STAccessExpression__Alternatives_1 )* )
-            // InternalSTAlgorithmParser.g:7185:2: ( rule__STAccessExpression__Alternatives_1 )*
+            // InternalSTAlgorithmParser.g:7238:1: ( ( rule__STAccessExpression__Alternatives_1 )* )
+            // InternalSTAlgorithmParser.g:7239:2: ( rule__STAccessExpression__Alternatives_1 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getAlternatives_1()); 
             }
-            // InternalSTAlgorithmParser.g:7186:2: ( rule__STAccessExpression__Alternatives_1 )*
+            // InternalSTAlgorithmParser.g:7240:2: ( rule__STAccessExpression__Alternatives_1 )*
             loop65:
             do {
                 int alt65=2;
@@ -24266,7 +24434,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt65) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:7186:3: rule__STAccessExpression__Alternatives_1
+            	    // InternalSTAlgorithmParser.g:7240:3: rule__STAccessExpression__Alternatives_1
             	    {
             	    pushFollow(FOLLOW_66);
             	    rule__STAccessExpression__Alternatives_1();
@@ -24307,14 +24475,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_0__0"
-    // InternalSTAlgorithmParser.g:7195:1: rule__STAccessExpression__Group_1_0__0 : rule__STAccessExpression__Group_1_0__0__Impl rule__STAccessExpression__Group_1_0__1 ;
+    // InternalSTAlgorithmParser.g:7249:1: rule__STAccessExpression__Group_1_0__0 : rule__STAccessExpression__Group_1_0__0__Impl rule__STAccessExpression__Group_1_0__1 ;
     public final void rule__STAccessExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7199:1: ( rule__STAccessExpression__Group_1_0__0__Impl rule__STAccessExpression__Group_1_0__1 )
-            // InternalSTAlgorithmParser.g:7200:2: rule__STAccessExpression__Group_1_0__0__Impl rule__STAccessExpression__Group_1_0__1
+            // InternalSTAlgorithmParser.g:7253:1: ( rule__STAccessExpression__Group_1_0__0__Impl rule__STAccessExpression__Group_1_0__1 )
+            // InternalSTAlgorithmParser.g:7254:2: rule__STAccessExpression__Group_1_0__0__Impl rule__STAccessExpression__Group_1_0__1
             {
             pushFollow(FOLLOW_67);
             rule__STAccessExpression__Group_1_0__0__Impl();
@@ -24345,23 +24513,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_0__0__Impl"
-    // InternalSTAlgorithmParser.g:7207:1: rule__STAccessExpression__Group_1_0__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:7261:1: rule__STAccessExpression__Group_1_0__0__Impl : ( () ) ;
     public final void rule__STAccessExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7211:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:7212:1: ( () )
+            // InternalSTAlgorithmParser.g:7265:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:7266:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:7212:1: ( () )
-            // InternalSTAlgorithmParser.g:7213:2: ()
+            // InternalSTAlgorithmParser.g:7266:1: ( () )
+            // InternalSTAlgorithmParser.g:7267:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getSTMemberAccessExpressionReceiverAction_1_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:7214:2: ()
-            // InternalSTAlgorithmParser.g:7214:3: 
+            // InternalSTAlgorithmParser.g:7268:2: ()
+            // InternalSTAlgorithmParser.g:7268:3: 
             {
             }
 
@@ -24386,14 +24554,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_0__1"
-    // InternalSTAlgorithmParser.g:7222:1: rule__STAccessExpression__Group_1_0__1 : rule__STAccessExpression__Group_1_0__1__Impl rule__STAccessExpression__Group_1_0__2 ;
+    // InternalSTAlgorithmParser.g:7276:1: rule__STAccessExpression__Group_1_0__1 : rule__STAccessExpression__Group_1_0__1__Impl rule__STAccessExpression__Group_1_0__2 ;
     public final void rule__STAccessExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7226:1: ( rule__STAccessExpression__Group_1_0__1__Impl rule__STAccessExpression__Group_1_0__2 )
-            // InternalSTAlgorithmParser.g:7227:2: rule__STAccessExpression__Group_1_0__1__Impl rule__STAccessExpression__Group_1_0__2
+            // InternalSTAlgorithmParser.g:7280:1: ( rule__STAccessExpression__Group_1_0__1__Impl rule__STAccessExpression__Group_1_0__2 )
+            // InternalSTAlgorithmParser.g:7281:2: rule__STAccessExpression__Group_1_0__1__Impl rule__STAccessExpression__Group_1_0__2
             {
             pushFollow(FOLLOW_68);
             rule__STAccessExpression__Group_1_0__1__Impl();
@@ -24424,17 +24592,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_0__1__Impl"
-    // InternalSTAlgorithmParser.g:7234:1: rule__STAccessExpression__Group_1_0__1__Impl : ( FullStop ) ;
+    // InternalSTAlgorithmParser.g:7288:1: rule__STAccessExpression__Group_1_0__1__Impl : ( FullStop ) ;
     public final void rule__STAccessExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7238:1: ( ( FullStop ) )
-            // InternalSTAlgorithmParser.g:7239:1: ( FullStop )
+            // InternalSTAlgorithmParser.g:7292:1: ( ( FullStop ) )
+            // InternalSTAlgorithmParser.g:7293:1: ( FullStop )
             {
-            // InternalSTAlgorithmParser.g:7239:1: ( FullStop )
-            // InternalSTAlgorithmParser.g:7240:2: FullStop
+            // InternalSTAlgorithmParser.g:7293:1: ( FullStop )
+            // InternalSTAlgorithmParser.g:7294:2: FullStop
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getFullStopKeyword_1_0_1()); 
@@ -24465,14 +24633,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_0__2"
-    // InternalSTAlgorithmParser.g:7249:1: rule__STAccessExpression__Group_1_0__2 : rule__STAccessExpression__Group_1_0__2__Impl ;
+    // InternalSTAlgorithmParser.g:7303:1: rule__STAccessExpression__Group_1_0__2 : rule__STAccessExpression__Group_1_0__2__Impl ;
     public final void rule__STAccessExpression__Group_1_0__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7253:1: ( rule__STAccessExpression__Group_1_0__2__Impl )
-            // InternalSTAlgorithmParser.g:7254:2: rule__STAccessExpression__Group_1_0__2__Impl
+            // InternalSTAlgorithmParser.g:7307:1: ( rule__STAccessExpression__Group_1_0__2__Impl )
+            // InternalSTAlgorithmParser.g:7308:2: rule__STAccessExpression__Group_1_0__2__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAccessExpression__Group_1_0__2__Impl();
@@ -24498,23 +24666,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_0__2__Impl"
-    // InternalSTAlgorithmParser.g:7260:1: rule__STAccessExpression__Group_1_0__2__Impl : ( ( rule__STAccessExpression__MemberAssignment_1_0_2 ) ) ;
+    // InternalSTAlgorithmParser.g:7314:1: rule__STAccessExpression__Group_1_0__2__Impl : ( ( rule__STAccessExpression__MemberAssignment_1_0_2 ) ) ;
     public final void rule__STAccessExpression__Group_1_0__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7264:1: ( ( ( rule__STAccessExpression__MemberAssignment_1_0_2 ) ) )
-            // InternalSTAlgorithmParser.g:7265:1: ( ( rule__STAccessExpression__MemberAssignment_1_0_2 ) )
+            // InternalSTAlgorithmParser.g:7318:1: ( ( ( rule__STAccessExpression__MemberAssignment_1_0_2 ) ) )
+            // InternalSTAlgorithmParser.g:7319:1: ( ( rule__STAccessExpression__MemberAssignment_1_0_2 ) )
             {
-            // InternalSTAlgorithmParser.g:7265:1: ( ( rule__STAccessExpression__MemberAssignment_1_0_2 ) )
-            // InternalSTAlgorithmParser.g:7266:2: ( rule__STAccessExpression__MemberAssignment_1_0_2 )
+            // InternalSTAlgorithmParser.g:7319:1: ( ( rule__STAccessExpression__MemberAssignment_1_0_2 ) )
+            // InternalSTAlgorithmParser.g:7320:2: ( rule__STAccessExpression__MemberAssignment_1_0_2 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getMemberAssignment_1_0_2()); 
             }
-            // InternalSTAlgorithmParser.g:7267:2: ( rule__STAccessExpression__MemberAssignment_1_0_2 )
-            // InternalSTAlgorithmParser.g:7267:3: rule__STAccessExpression__MemberAssignment_1_0_2
+            // InternalSTAlgorithmParser.g:7321:2: ( rule__STAccessExpression__MemberAssignment_1_0_2 )
+            // InternalSTAlgorithmParser.g:7321:3: rule__STAccessExpression__MemberAssignment_1_0_2
             {
             pushFollow(FOLLOW_2);
             rule__STAccessExpression__MemberAssignment_1_0_2();
@@ -24549,14 +24717,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__0"
-    // InternalSTAlgorithmParser.g:7276:1: rule__STAccessExpression__Group_1_1__0 : rule__STAccessExpression__Group_1_1__0__Impl rule__STAccessExpression__Group_1_1__1 ;
+    // InternalSTAlgorithmParser.g:7330:1: rule__STAccessExpression__Group_1_1__0 : rule__STAccessExpression__Group_1_1__0__Impl rule__STAccessExpression__Group_1_1__1 ;
     public final void rule__STAccessExpression__Group_1_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7280:1: ( rule__STAccessExpression__Group_1_1__0__Impl rule__STAccessExpression__Group_1_1__1 )
-            // InternalSTAlgorithmParser.g:7281:2: rule__STAccessExpression__Group_1_1__0__Impl rule__STAccessExpression__Group_1_1__1
+            // InternalSTAlgorithmParser.g:7334:1: ( rule__STAccessExpression__Group_1_1__0__Impl rule__STAccessExpression__Group_1_1__1 )
+            // InternalSTAlgorithmParser.g:7335:2: rule__STAccessExpression__Group_1_1__0__Impl rule__STAccessExpression__Group_1_1__1
             {
             pushFollow(FOLLOW_65);
             rule__STAccessExpression__Group_1_1__0__Impl();
@@ -24587,23 +24755,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__0__Impl"
-    // InternalSTAlgorithmParser.g:7288:1: rule__STAccessExpression__Group_1_1__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:7342:1: rule__STAccessExpression__Group_1_1__0__Impl : ( () ) ;
     public final void rule__STAccessExpression__Group_1_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7292:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:7293:1: ( () )
+            // InternalSTAlgorithmParser.g:7346:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:7347:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:7293:1: ( () )
-            // InternalSTAlgorithmParser.g:7294:2: ()
+            // InternalSTAlgorithmParser.g:7347:1: ( () )
+            // InternalSTAlgorithmParser.g:7348:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getSTArrayAccessExpressionReceiverAction_1_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:7295:2: ()
-            // InternalSTAlgorithmParser.g:7295:3: 
+            // InternalSTAlgorithmParser.g:7349:2: ()
+            // InternalSTAlgorithmParser.g:7349:3: 
             {
             }
 
@@ -24628,14 +24796,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__1"
-    // InternalSTAlgorithmParser.g:7303:1: rule__STAccessExpression__Group_1_1__1 : rule__STAccessExpression__Group_1_1__1__Impl rule__STAccessExpression__Group_1_1__2 ;
+    // InternalSTAlgorithmParser.g:7357:1: rule__STAccessExpression__Group_1_1__1 : rule__STAccessExpression__Group_1_1__1__Impl rule__STAccessExpression__Group_1_1__2 ;
     public final void rule__STAccessExpression__Group_1_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7307:1: ( rule__STAccessExpression__Group_1_1__1__Impl rule__STAccessExpression__Group_1_1__2 )
-            // InternalSTAlgorithmParser.g:7308:2: rule__STAccessExpression__Group_1_1__1__Impl rule__STAccessExpression__Group_1_1__2
+            // InternalSTAlgorithmParser.g:7361:1: ( rule__STAccessExpression__Group_1_1__1__Impl rule__STAccessExpression__Group_1_1__2 )
+            // InternalSTAlgorithmParser.g:7362:2: rule__STAccessExpression__Group_1_1__1__Impl rule__STAccessExpression__Group_1_1__2
             {
             pushFollow(FOLLOW_19);
             rule__STAccessExpression__Group_1_1__1__Impl();
@@ -24666,17 +24834,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__1__Impl"
-    // InternalSTAlgorithmParser.g:7315:1: rule__STAccessExpression__Group_1_1__1__Impl : ( LeftSquareBracket ) ;
+    // InternalSTAlgorithmParser.g:7369:1: rule__STAccessExpression__Group_1_1__1__Impl : ( LeftSquareBracket ) ;
     public final void rule__STAccessExpression__Group_1_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7319:1: ( ( LeftSquareBracket ) )
-            // InternalSTAlgorithmParser.g:7320:1: ( LeftSquareBracket )
+            // InternalSTAlgorithmParser.g:7373:1: ( ( LeftSquareBracket ) )
+            // InternalSTAlgorithmParser.g:7374:1: ( LeftSquareBracket )
             {
-            // InternalSTAlgorithmParser.g:7320:1: ( LeftSquareBracket )
-            // InternalSTAlgorithmParser.g:7321:2: LeftSquareBracket
+            // InternalSTAlgorithmParser.g:7374:1: ( LeftSquareBracket )
+            // InternalSTAlgorithmParser.g:7375:2: LeftSquareBracket
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getLeftSquareBracketKeyword_1_1_1()); 
@@ -24707,14 +24875,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__2"
-    // InternalSTAlgorithmParser.g:7330:1: rule__STAccessExpression__Group_1_1__2 : rule__STAccessExpression__Group_1_1__2__Impl rule__STAccessExpression__Group_1_1__3 ;
+    // InternalSTAlgorithmParser.g:7384:1: rule__STAccessExpression__Group_1_1__2 : rule__STAccessExpression__Group_1_1__2__Impl rule__STAccessExpression__Group_1_1__3 ;
     public final void rule__STAccessExpression__Group_1_1__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7334:1: ( rule__STAccessExpression__Group_1_1__2__Impl rule__STAccessExpression__Group_1_1__3 )
-            // InternalSTAlgorithmParser.g:7335:2: rule__STAccessExpression__Group_1_1__2__Impl rule__STAccessExpression__Group_1_1__3
+            // InternalSTAlgorithmParser.g:7388:1: ( rule__STAccessExpression__Group_1_1__2__Impl rule__STAccessExpression__Group_1_1__3 )
+            // InternalSTAlgorithmParser.g:7389:2: rule__STAccessExpression__Group_1_1__2__Impl rule__STAccessExpression__Group_1_1__3
             {
             pushFollow(FOLLOW_20);
             rule__STAccessExpression__Group_1_1__2__Impl();
@@ -24745,23 +24913,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__2__Impl"
-    // InternalSTAlgorithmParser.g:7342:1: rule__STAccessExpression__Group_1_1__2__Impl : ( ( rule__STAccessExpression__IndexAssignment_1_1_2 ) ) ;
+    // InternalSTAlgorithmParser.g:7396:1: rule__STAccessExpression__Group_1_1__2__Impl : ( ( rule__STAccessExpression__IndexAssignment_1_1_2 ) ) ;
     public final void rule__STAccessExpression__Group_1_1__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7346:1: ( ( ( rule__STAccessExpression__IndexAssignment_1_1_2 ) ) )
-            // InternalSTAlgorithmParser.g:7347:1: ( ( rule__STAccessExpression__IndexAssignment_1_1_2 ) )
+            // InternalSTAlgorithmParser.g:7400:1: ( ( ( rule__STAccessExpression__IndexAssignment_1_1_2 ) ) )
+            // InternalSTAlgorithmParser.g:7401:1: ( ( rule__STAccessExpression__IndexAssignment_1_1_2 ) )
             {
-            // InternalSTAlgorithmParser.g:7347:1: ( ( rule__STAccessExpression__IndexAssignment_1_1_2 ) )
-            // InternalSTAlgorithmParser.g:7348:2: ( rule__STAccessExpression__IndexAssignment_1_1_2 )
+            // InternalSTAlgorithmParser.g:7401:1: ( ( rule__STAccessExpression__IndexAssignment_1_1_2 ) )
+            // InternalSTAlgorithmParser.g:7402:2: ( rule__STAccessExpression__IndexAssignment_1_1_2 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getIndexAssignment_1_1_2()); 
             }
-            // InternalSTAlgorithmParser.g:7349:2: ( rule__STAccessExpression__IndexAssignment_1_1_2 )
-            // InternalSTAlgorithmParser.g:7349:3: rule__STAccessExpression__IndexAssignment_1_1_2
+            // InternalSTAlgorithmParser.g:7403:2: ( rule__STAccessExpression__IndexAssignment_1_1_2 )
+            // InternalSTAlgorithmParser.g:7403:3: rule__STAccessExpression__IndexAssignment_1_1_2
             {
             pushFollow(FOLLOW_2);
             rule__STAccessExpression__IndexAssignment_1_1_2();
@@ -24796,14 +24964,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__3"
-    // InternalSTAlgorithmParser.g:7357:1: rule__STAccessExpression__Group_1_1__3 : rule__STAccessExpression__Group_1_1__3__Impl rule__STAccessExpression__Group_1_1__4 ;
+    // InternalSTAlgorithmParser.g:7411:1: rule__STAccessExpression__Group_1_1__3 : rule__STAccessExpression__Group_1_1__3__Impl rule__STAccessExpression__Group_1_1__4 ;
     public final void rule__STAccessExpression__Group_1_1__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7361:1: ( rule__STAccessExpression__Group_1_1__3__Impl rule__STAccessExpression__Group_1_1__4 )
-            // InternalSTAlgorithmParser.g:7362:2: rule__STAccessExpression__Group_1_1__3__Impl rule__STAccessExpression__Group_1_1__4
+            // InternalSTAlgorithmParser.g:7415:1: ( rule__STAccessExpression__Group_1_1__3__Impl rule__STAccessExpression__Group_1_1__4 )
+            // InternalSTAlgorithmParser.g:7416:2: rule__STAccessExpression__Group_1_1__3__Impl rule__STAccessExpression__Group_1_1__4
             {
             pushFollow(FOLLOW_20);
             rule__STAccessExpression__Group_1_1__3__Impl();
@@ -24834,22 +25002,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__3__Impl"
-    // InternalSTAlgorithmParser.g:7369:1: rule__STAccessExpression__Group_1_1__3__Impl : ( ( rule__STAccessExpression__Group_1_1_3__0 )* ) ;
+    // InternalSTAlgorithmParser.g:7423:1: rule__STAccessExpression__Group_1_1__3__Impl : ( ( rule__STAccessExpression__Group_1_1_3__0 )* ) ;
     public final void rule__STAccessExpression__Group_1_1__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7373:1: ( ( ( rule__STAccessExpression__Group_1_1_3__0 )* ) )
-            // InternalSTAlgorithmParser.g:7374:1: ( ( rule__STAccessExpression__Group_1_1_3__0 )* )
+            // InternalSTAlgorithmParser.g:7427:1: ( ( ( rule__STAccessExpression__Group_1_1_3__0 )* ) )
+            // InternalSTAlgorithmParser.g:7428:1: ( ( rule__STAccessExpression__Group_1_1_3__0 )* )
             {
-            // InternalSTAlgorithmParser.g:7374:1: ( ( rule__STAccessExpression__Group_1_1_3__0 )* )
-            // InternalSTAlgorithmParser.g:7375:2: ( rule__STAccessExpression__Group_1_1_3__0 )*
+            // InternalSTAlgorithmParser.g:7428:1: ( ( rule__STAccessExpression__Group_1_1_3__0 )* )
+            // InternalSTAlgorithmParser.g:7429:2: ( rule__STAccessExpression__Group_1_1_3__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getGroup_1_1_3()); 
             }
-            // InternalSTAlgorithmParser.g:7376:2: ( rule__STAccessExpression__Group_1_1_3__0 )*
+            // InternalSTAlgorithmParser.g:7430:2: ( rule__STAccessExpression__Group_1_1_3__0 )*
             loop66:
             do {
                 int alt66=2;
@@ -24862,7 +25030,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt66) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:7376:3: rule__STAccessExpression__Group_1_1_3__0
+            	    // InternalSTAlgorithmParser.g:7430:3: rule__STAccessExpression__Group_1_1_3__0
             	    {
             	    pushFollow(FOLLOW_21);
             	    rule__STAccessExpression__Group_1_1_3__0();
@@ -24903,14 +25071,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__4"
-    // InternalSTAlgorithmParser.g:7384:1: rule__STAccessExpression__Group_1_1__4 : rule__STAccessExpression__Group_1_1__4__Impl ;
+    // InternalSTAlgorithmParser.g:7438:1: rule__STAccessExpression__Group_1_1__4 : rule__STAccessExpression__Group_1_1__4__Impl ;
     public final void rule__STAccessExpression__Group_1_1__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7388:1: ( rule__STAccessExpression__Group_1_1__4__Impl )
-            // InternalSTAlgorithmParser.g:7389:2: rule__STAccessExpression__Group_1_1__4__Impl
+            // InternalSTAlgorithmParser.g:7442:1: ( rule__STAccessExpression__Group_1_1__4__Impl )
+            // InternalSTAlgorithmParser.g:7443:2: rule__STAccessExpression__Group_1_1__4__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAccessExpression__Group_1_1__4__Impl();
@@ -24936,17 +25104,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1__4__Impl"
-    // InternalSTAlgorithmParser.g:7395:1: rule__STAccessExpression__Group_1_1__4__Impl : ( RightSquareBracket ) ;
+    // InternalSTAlgorithmParser.g:7449:1: rule__STAccessExpression__Group_1_1__4__Impl : ( RightSquareBracket ) ;
     public final void rule__STAccessExpression__Group_1_1__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7399:1: ( ( RightSquareBracket ) )
-            // InternalSTAlgorithmParser.g:7400:1: ( RightSquareBracket )
+            // InternalSTAlgorithmParser.g:7453:1: ( ( RightSquareBracket ) )
+            // InternalSTAlgorithmParser.g:7454:1: ( RightSquareBracket )
             {
-            // InternalSTAlgorithmParser.g:7400:1: ( RightSquareBracket )
-            // InternalSTAlgorithmParser.g:7401:2: RightSquareBracket
+            // InternalSTAlgorithmParser.g:7454:1: ( RightSquareBracket )
+            // InternalSTAlgorithmParser.g:7455:2: RightSquareBracket
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getRightSquareBracketKeyword_1_1_4()); 
@@ -24977,14 +25145,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1_3__0"
-    // InternalSTAlgorithmParser.g:7411:1: rule__STAccessExpression__Group_1_1_3__0 : rule__STAccessExpression__Group_1_1_3__0__Impl rule__STAccessExpression__Group_1_1_3__1 ;
+    // InternalSTAlgorithmParser.g:7465:1: rule__STAccessExpression__Group_1_1_3__0 : rule__STAccessExpression__Group_1_1_3__0__Impl rule__STAccessExpression__Group_1_1_3__1 ;
     public final void rule__STAccessExpression__Group_1_1_3__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7415:1: ( rule__STAccessExpression__Group_1_1_3__0__Impl rule__STAccessExpression__Group_1_1_3__1 )
-            // InternalSTAlgorithmParser.g:7416:2: rule__STAccessExpression__Group_1_1_3__0__Impl rule__STAccessExpression__Group_1_1_3__1
+            // InternalSTAlgorithmParser.g:7469:1: ( rule__STAccessExpression__Group_1_1_3__0__Impl rule__STAccessExpression__Group_1_1_3__1 )
+            // InternalSTAlgorithmParser.g:7470:2: rule__STAccessExpression__Group_1_1_3__0__Impl rule__STAccessExpression__Group_1_1_3__1
             {
             pushFollow(FOLLOW_19);
             rule__STAccessExpression__Group_1_1_3__0__Impl();
@@ -25015,17 +25183,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1_3__0__Impl"
-    // InternalSTAlgorithmParser.g:7423:1: rule__STAccessExpression__Group_1_1_3__0__Impl : ( Comma ) ;
+    // InternalSTAlgorithmParser.g:7477:1: rule__STAccessExpression__Group_1_1_3__0__Impl : ( Comma ) ;
     public final void rule__STAccessExpression__Group_1_1_3__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7427:1: ( ( Comma ) )
-            // InternalSTAlgorithmParser.g:7428:1: ( Comma )
+            // InternalSTAlgorithmParser.g:7481:1: ( ( Comma ) )
+            // InternalSTAlgorithmParser.g:7482:1: ( Comma )
             {
-            // InternalSTAlgorithmParser.g:7428:1: ( Comma )
-            // InternalSTAlgorithmParser.g:7429:2: Comma
+            // InternalSTAlgorithmParser.g:7482:1: ( Comma )
+            // InternalSTAlgorithmParser.g:7483:2: Comma
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getCommaKeyword_1_1_3_0()); 
@@ -25056,14 +25224,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1_3__1"
-    // InternalSTAlgorithmParser.g:7438:1: rule__STAccessExpression__Group_1_1_3__1 : rule__STAccessExpression__Group_1_1_3__1__Impl ;
+    // InternalSTAlgorithmParser.g:7492:1: rule__STAccessExpression__Group_1_1_3__1 : rule__STAccessExpression__Group_1_1_3__1__Impl ;
     public final void rule__STAccessExpression__Group_1_1_3__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7442:1: ( rule__STAccessExpression__Group_1_1_3__1__Impl )
-            // InternalSTAlgorithmParser.g:7443:2: rule__STAccessExpression__Group_1_1_3__1__Impl
+            // InternalSTAlgorithmParser.g:7496:1: ( rule__STAccessExpression__Group_1_1_3__1__Impl )
+            // InternalSTAlgorithmParser.g:7497:2: rule__STAccessExpression__Group_1_1_3__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STAccessExpression__Group_1_1_3__1__Impl();
@@ -25089,23 +25257,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__Group_1_1_3__1__Impl"
-    // InternalSTAlgorithmParser.g:7449:1: rule__STAccessExpression__Group_1_1_3__1__Impl : ( ( rule__STAccessExpression__IndexAssignment_1_1_3_1 ) ) ;
+    // InternalSTAlgorithmParser.g:7503:1: rule__STAccessExpression__Group_1_1_3__1__Impl : ( ( rule__STAccessExpression__IndexAssignment_1_1_3_1 ) ) ;
     public final void rule__STAccessExpression__Group_1_1_3__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7453:1: ( ( ( rule__STAccessExpression__IndexAssignment_1_1_3_1 ) ) )
-            // InternalSTAlgorithmParser.g:7454:1: ( ( rule__STAccessExpression__IndexAssignment_1_1_3_1 ) )
+            // InternalSTAlgorithmParser.g:7507:1: ( ( ( rule__STAccessExpression__IndexAssignment_1_1_3_1 ) ) )
+            // InternalSTAlgorithmParser.g:7508:1: ( ( rule__STAccessExpression__IndexAssignment_1_1_3_1 ) )
             {
-            // InternalSTAlgorithmParser.g:7454:1: ( ( rule__STAccessExpression__IndexAssignment_1_1_3_1 ) )
-            // InternalSTAlgorithmParser.g:7455:2: ( rule__STAccessExpression__IndexAssignment_1_1_3_1 )
+            // InternalSTAlgorithmParser.g:7508:1: ( ( rule__STAccessExpression__IndexAssignment_1_1_3_1 ) )
+            // InternalSTAlgorithmParser.g:7509:2: ( rule__STAccessExpression__IndexAssignment_1_1_3_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getIndexAssignment_1_1_3_1()); 
             }
-            // InternalSTAlgorithmParser.g:7456:2: ( rule__STAccessExpression__IndexAssignment_1_1_3_1 )
-            // InternalSTAlgorithmParser.g:7456:3: rule__STAccessExpression__IndexAssignment_1_1_3_1
+            // InternalSTAlgorithmParser.g:7510:2: ( rule__STAccessExpression__IndexAssignment_1_1_3_1 )
+            // InternalSTAlgorithmParser.g:7510:3: rule__STAccessExpression__IndexAssignment_1_1_3_1
             {
             pushFollow(FOLLOW_2);
             rule__STAccessExpression__IndexAssignment_1_1_3_1();
@@ -25140,14 +25308,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPrimaryExpression__Group_0__0"
-    // InternalSTAlgorithmParser.g:7465:1: rule__STPrimaryExpression__Group_0__0 : rule__STPrimaryExpression__Group_0__0__Impl rule__STPrimaryExpression__Group_0__1 ;
+    // InternalSTAlgorithmParser.g:7519:1: rule__STPrimaryExpression__Group_0__0 : rule__STPrimaryExpression__Group_0__0__Impl rule__STPrimaryExpression__Group_0__1 ;
     public final void rule__STPrimaryExpression__Group_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7469:1: ( rule__STPrimaryExpression__Group_0__0__Impl rule__STPrimaryExpression__Group_0__1 )
-            // InternalSTAlgorithmParser.g:7470:2: rule__STPrimaryExpression__Group_0__0__Impl rule__STPrimaryExpression__Group_0__1
+            // InternalSTAlgorithmParser.g:7523:1: ( rule__STPrimaryExpression__Group_0__0__Impl rule__STPrimaryExpression__Group_0__1 )
+            // InternalSTAlgorithmParser.g:7524:2: rule__STPrimaryExpression__Group_0__0__Impl rule__STPrimaryExpression__Group_0__1
             {
             pushFollow(FOLLOW_19);
             rule__STPrimaryExpression__Group_0__0__Impl();
@@ -25178,17 +25346,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPrimaryExpression__Group_0__0__Impl"
-    // InternalSTAlgorithmParser.g:7477:1: rule__STPrimaryExpression__Group_0__0__Impl : ( LeftParenthesis ) ;
+    // InternalSTAlgorithmParser.g:7531:1: rule__STPrimaryExpression__Group_0__0__Impl : ( LeftParenthesis ) ;
     public final void rule__STPrimaryExpression__Group_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7481:1: ( ( LeftParenthesis ) )
-            // InternalSTAlgorithmParser.g:7482:1: ( LeftParenthesis )
+            // InternalSTAlgorithmParser.g:7535:1: ( ( LeftParenthesis ) )
+            // InternalSTAlgorithmParser.g:7536:1: ( LeftParenthesis )
             {
-            // InternalSTAlgorithmParser.g:7482:1: ( LeftParenthesis )
-            // InternalSTAlgorithmParser.g:7483:2: LeftParenthesis
+            // InternalSTAlgorithmParser.g:7536:1: ( LeftParenthesis )
+            // InternalSTAlgorithmParser.g:7537:2: LeftParenthesis
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPrimaryExpressionAccess().getLeftParenthesisKeyword_0_0()); 
@@ -25219,14 +25387,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPrimaryExpression__Group_0__1"
-    // InternalSTAlgorithmParser.g:7492:1: rule__STPrimaryExpression__Group_0__1 : rule__STPrimaryExpression__Group_0__1__Impl rule__STPrimaryExpression__Group_0__2 ;
+    // InternalSTAlgorithmParser.g:7546:1: rule__STPrimaryExpression__Group_0__1 : rule__STPrimaryExpression__Group_0__1__Impl rule__STPrimaryExpression__Group_0__2 ;
     public final void rule__STPrimaryExpression__Group_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7496:1: ( rule__STPrimaryExpression__Group_0__1__Impl rule__STPrimaryExpression__Group_0__2 )
-            // InternalSTAlgorithmParser.g:7497:2: rule__STPrimaryExpression__Group_0__1__Impl rule__STPrimaryExpression__Group_0__2
+            // InternalSTAlgorithmParser.g:7550:1: ( rule__STPrimaryExpression__Group_0__1__Impl rule__STPrimaryExpression__Group_0__2 )
+            // InternalSTAlgorithmParser.g:7551:2: rule__STPrimaryExpression__Group_0__1__Impl rule__STPrimaryExpression__Group_0__2
             {
             pushFollow(FOLLOW_26);
             rule__STPrimaryExpression__Group_0__1__Impl();
@@ -25257,17 +25425,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPrimaryExpression__Group_0__1__Impl"
-    // InternalSTAlgorithmParser.g:7504:1: rule__STPrimaryExpression__Group_0__1__Impl : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:7558:1: rule__STPrimaryExpression__Group_0__1__Impl : ( ruleSTExpression ) ;
     public final void rule__STPrimaryExpression__Group_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7508:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:7509:1: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:7562:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:7563:1: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:7509:1: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:7510:2: ruleSTExpression
+            // InternalSTAlgorithmParser.g:7563:1: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:7564:2: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPrimaryExpressionAccess().getSTExpressionParserRuleCall_0_1()); 
@@ -25302,14 +25470,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPrimaryExpression__Group_0__2"
-    // InternalSTAlgorithmParser.g:7519:1: rule__STPrimaryExpression__Group_0__2 : rule__STPrimaryExpression__Group_0__2__Impl ;
+    // InternalSTAlgorithmParser.g:7573:1: rule__STPrimaryExpression__Group_0__2 : rule__STPrimaryExpression__Group_0__2__Impl ;
     public final void rule__STPrimaryExpression__Group_0__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7523:1: ( rule__STPrimaryExpression__Group_0__2__Impl )
-            // InternalSTAlgorithmParser.g:7524:2: rule__STPrimaryExpression__Group_0__2__Impl
+            // InternalSTAlgorithmParser.g:7577:1: ( rule__STPrimaryExpression__Group_0__2__Impl )
+            // InternalSTAlgorithmParser.g:7578:2: rule__STPrimaryExpression__Group_0__2__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STPrimaryExpression__Group_0__2__Impl();
@@ -25335,17 +25503,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPrimaryExpression__Group_0__2__Impl"
-    // InternalSTAlgorithmParser.g:7530:1: rule__STPrimaryExpression__Group_0__2__Impl : ( RightParenthesis ) ;
+    // InternalSTAlgorithmParser.g:7584:1: rule__STPrimaryExpression__Group_0__2__Impl : ( RightParenthesis ) ;
     public final void rule__STPrimaryExpression__Group_0__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7534:1: ( ( RightParenthesis ) )
-            // InternalSTAlgorithmParser.g:7535:1: ( RightParenthesis )
+            // InternalSTAlgorithmParser.g:7588:1: ( ( RightParenthesis ) )
+            // InternalSTAlgorithmParser.g:7589:1: ( RightParenthesis )
             {
-            // InternalSTAlgorithmParser.g:7535:1: ( RightParenthesis )
-            // InternalSTAlgorithmParser.g:7536:2: RightParenthesis
+            // InternalSTAlgorithmParser.g:7589:1: ( RightParenthesis )
+            // InternalSTAlgorithmParser.g:7590:2: RightParenthesis
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPrimaryExpressionAccess().getRightParenthesisKeyword_0_2()); 
@@ -25376,14 +25544,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group__0"
-    // InternalSTAlgorithmParser.g:7546:1: rule__STFeatureExpression__Group__0 : rule__STFeatureExpression__Group__0__Impl rule__STFeatureExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:7600:1: rule__STFeatureExpression__Group__0 : rule__STFeatureExpression__Group__0__Impl rule__STFeatureExpression__Group__1 ;
     public final void rule__STFeatureExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7550:1: ( rule__STFeatureExpression__Group__0__Impl rule__STFeatureExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:7551:2: rule__STFeatureExpression__Group__0__Impl rule__STFeatureExpression__Group__1
+            // InternalSTAlgorithmParser.g:7604:1: ( rule__STFeatureExpression__Group__0__Impl rule__STFeatureExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:7605:2: rule__STFeatureExpression__Group__0__Impl rule__STFeatureExpression__Group__1
             {
             pushFollow(FOLLOW_6);
             rule__STFeatureExpression__Group__0__Impl();
@@ -25414,23 +25582,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:7558:1: rule__STFeatureExpression__Group__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:7612:1: rule__STFeatureExpression__Group__0__Impl : ( () ) ;
     public final void rule__STFeatureExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7562:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:7563:1: ( () )
+            // InternalSTAlgorithmParser.g:7616:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:7617:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:7563:1: ( () )
-            // InternalSTAlgorithmParser.g:7564:2: ()
+            // InternalSTAlgorithmParser.g:7617:1: ( () )
+            // InternalSTAlgorithmParser.g:7618:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getSTFeatureExpressionAction_0()); 
             }
-            // InternalSTAlgorithmParser.g:7565:2: ()
-            // InternalSTAlgorithmParser.g:7565:3: 
+            // InternalSTAlgorithmParser.g:7619:2: ()
+            // InternalSTAlgorithmParser.g:7619:3: 
             {
             }
 
@@ -25455,14 +25623,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group__1"
-    // InternalSTAlgorithmParser.g:7573:1: rule__STFeatureExpression__Group__1 : rule__STFeatureExpression__Group__1__Impl rule__STFeatureExpression__Group__2 ;
+    // InternalSTAlgorithmParser.g:7627:1: rule__STFeatureExpression__Group__1 : rule__STFeatureExpression__Group__1__Impl rule__STFeatureExpression__Group__2 ;
     public final void rule__STFeatureExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7577:1: ( rule__STFeatureExpression__Group__1__Impl rule__STFeatureExpression__Group__2 )
-            // InternalSTAlgorithmParser.g:7578:2: rule__STFeatureExpression__Group__1__Impl rule__STFeatureExpression__Group__2
+            // InternalSTAlgorithmParser.g:7631:1: ( rule__STFeatureExpression__Group__1__Impl rule__STFeatureExpression__Group__2 )
+            // InternalSTAlgorithmParser.g:7632:2: rule__STFeatureExpression__Group__1__Impl rule__STFeatureExpression__Group__2
             {
             pushFollow(FOLLOW_25);
             rule__STFeatureExpression__Group__1__Impl();
@@ -25493,23 +25661,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:7585:1: rule__STFeatureExpression__Group__1__Impl : ( ( rule__STFeatureExpression__FeatureAssignment_1 ) ) ;
+    // InternalSTAlgorithmParser.g:7639:1: rule__STFeatureExpression__Group__1__Impl : ( ( rule__STFeatureExpression__FeatureAssignment_1 ) ) ;
     public final void rule__STFeatureExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7589:1: ( ( ( rule__STFeatureExpression__FeatureAssignment_1 ) ) )
-            // InternalSTAlgorithmParser.g:7590:1: ( ( rule__STFeatureExpression__FeatureAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:7643:1: ( ( ( rule__STFeatureExpression__FeatureAssignment_1 ) ) )
+            // InternalSTAlgorithmParser.g:7644:1: ( ( rule__STFeatureExpression__FeatureAssignment_1 ) )
             {
-            // InternalSTAlgorithmParser.g:7590:1: ( ( rule__STFeatureExpression__FeatureAssignment_1 ) )
-            // InternalSTAlgorithmParser.g:7591:2: ( rule__STFeatureExpression__FeatureAssignment_1 )
+            // InternalSTAlgorithmParser.g:7644:1: ( ( rule__STFeatureExpression__FeatureAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:7645:2: ( rule__STFeatureExpression__FeatureAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getFeatureAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:7592:2: ( rule__STFeatureExpression__FeatureAssignment_1 )
-            // InternalSTAlgorithmParser.g:7592:3: rule__STFeatureExpression__FeatureAssignment_1
+            // InternalSTAlgorithmParser.g:7646:2: ( rule__STFeatureExpression__FeatureAssignment_1 )
+            // InternalSTAlgorithmParser.g:7646:3: rule__STFeatureExpression__FeatureAssignment_1
             {
             pushFollow(FOLLOW_2);
             rule__STFeatureExpression__FeatureAssignment_1();
@@ -25544,14 +25712,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group__2"
-    // InternalSTAlgorithmParser.g:7600:1: rule__STFeatureExpression__Group__2 : rule__STFeatureExpression__Group__2__Impl ;
+    // InternalSTAlgorithmParser.g:7654:1: rule__STFeatureExpression__Group__2 : rule__STFeatureExpression__Group__2__Impl ;
     public final void rule__STFeatureExpression__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7604:1: ( rule__STFeatureExpression__Group__2__Impl )
-            // InternalSTAlgorithmParser.g:7605:2: rule__STFeatureExpression__Group__2__Impl
+            // InternalSTAlgorithmParser.g:7658:1: ( rule__STFeatureExpression__Group__2__Impl )
+            // InternalSTAlgorithmParser.g:7659:2: rule__STFeatureExpression__Group__2__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STFeatureExpression__Group__2__Impl();
@@ -25577,27 +25745,27 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:7611:1: rule__STFeatureExpression__Group__2__Impl : ( ( rule__STFeatureExpression__Group_2__0 )? ) ;
+    // InternalSTAlgorithmParser.g:7665:1: rule__STFeatureExpression__Group__2__Impl : ( ( rule__STFeatureExpression__Group_2__0 )? ) ;
     public final void rule__STFeatureExpression__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7615:1: ( ( ( rule__STFeatureExpression__Group_2__0 )? ) )
-            // InternalSTAlgorithmParser.g:7616:1: ( ( rule__STFeatureExpression__Group_2__0 )? )
+            // InternalSTAlgorithmParser.g:7669:1: ( ( ( rule__STFeatureExpression__Group_2__0 )? ) )
+            // InternalSTAlgorithmParser.g:7670:1: ( ( rule__STFeatureExpression__Group_2__0 )? )
             {
-            // InternalSTAlgorithmParser.g:7616:1: ( ( rule__STFeatureExpression__Group_2__0 )? )
-            // InternalSTAlgorithmParser.g:7617:2: ( rule__STFeatureExpression__Group_2__0 )?
+            // InternalSTAlgorithmParser.g:7670:1: ( ( rule__STFeatureExpression__Group_2__0 )? )
+            // InternalSTAlgorithmParser.g:7671:2: ( rule__STFeatureExpression__Group_2__0 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getGroup_2()); 
             }
-            // InternalSTAlgorithmParser.g:7618:2: ( rule__STFeatureExpression__Group_2__0 )?
+            // InternalSTAlgorithmParser.g:7672:2: ( rule__STFeatureExpression__Group_2__0 )?
             int alt67=2;
             alt67 = dfa67.predict(input);
             switch (alt67) {
                 case 1 :
-                    // InternalSTAlgorithmParser.g:7618:3: rule__STFeatureExpression__Group_2__0
+                    // InternalSTAlgorithmParser.g:7672:3: rule__STFeatureExpression__Group_2__0
                     {
                     pushFollow(FOLLOW_2);
                     rule__STFeatureExpression__Group_2__0();
@@ -25635,14 +25803,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2__0"
-    // InternalSTAlgorithmParser.g:7627:1: rule__STFeatureExpression__Group_2__0 : rule__STFeatureExpression__Group_2__0__Impl rule__STFeatureExpression__Group_2__1 ;
+    // InternalSTAlgorithmParser.g:7681:1: rule__STFeatureExpression__Group_2__0 : rule__STFeatureExpression__Group_2__0__Impl rule__STFeatureExpression__Group_2__1 ;
     public final void rule__STFeatureExpression__Group_2__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7631:1: ( rule__STFeatureExpression__Group_2__0__Impl rule__STFeatureExpression__Group_2__1 )
-            // InternalSTAlgorithmParser.g:7632:2: rule__STFeatureExpression__Group_2__0__Impl rule__STFeatureExpression__Group_2__1
+            // InternalSTAlgorithmParser.g:7685:1: ( rule__STFeatureExpression__Group_2__0__Impl rule__STFeatureExpression__Group_2__1 )
+            // InternalSTAlgorithmParser.g:7686:2: rule__STFeatureExpression__Group_2__0__Impl rule__STFeatureExpression__Group_2__1
             {
             pushFollow(FOLLOW_69);
             rule__STFeatureExpression__Group_2__0__Impl();
@@ -25673,23 +25841,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2__0__Impl"
-    // InternalSTAlgorithmParser.g:7639:1: rule__STFeatureExpression__Group_2__0__Impl : ( ( LeftParenthesis ) ) ;
+    // InternalSTAlgorithmParser.g:7693:1: rule__STFeatureExpression__Group_2__0__Impl : ( ( LeftParenthesis ) ) ;
     public final void rule__STFeatureExpression__Group_2__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7643:1: ( ( ( LeftParenthesis ) ) )
-            // InternalSTAlgorithmParser.g:7644:1: ( ( LeftParenthesis ) )
+            // InternalSTAlgorithmParser.g:7697:1: ( ( ( LeftParenthesis ) ) )
+            // InternalSTAlgorithmParser.g:7698:1: ( ( LeftParenthesis ) )
             {
-            // InternalSTAlgorithmParser.g:7644:1: ( ( LeftParenthesis ) )
-            // InternalSTAlgorithmParser.g:7645:2: ( LeftParenthesis )
+            // InternalSTAlgorithmParser.g:7698:1: ( ( LeftParenthesis ) )
+            // InternalSTAlgorithmParser.g:7699:2: ( LeftParenthesis )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getLeftParenthesisKeyword_2_0()); 
             }
-            // InternalSTAlgorithmParser.g:7646:2: ( LeftParenthesis )
-            // InternalSTAlgorithmParser.g:7646:3: LeftParenthesis
+            // InternalSTAlgorithmParser.g:7700:2: ( LeftParenthesis )
+            // InternalSTAlgorithmParser.g:7700:3: LeftParenthesis
             {
             match(input,LeftParenthesis,FOLLOW_2); if (state.failed) return ;
 
@@ -25720,14 +25888,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2__1"
-    // InternalSTAlgorithmParser.g:7654:1: rule__STFeatureExpression__Group_2__1 : rule__STFeatureExpression__Group_2__1__Impl rule__STFeatureExpression__Group_2__2 ;
+    // InternalSTAlgorithmParser.g:7708:1: rule__STFeatureExpression__Group_2__1 : rule__STFeatureExpression__Group_2__1__Impl rule__STFeatureExpression__Group_2__2 ;
     public final void rule__STFeatureExpression__Group_2__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7658:1: ( rule__STFeatureExpression__Group_2__1__Impl rule__STFeatureExpression__Group_2__2 )
-            // InternalSTAlgorithmParser.g:7659:2: rule__STFeatureExpression__Group_2__1__Impl rule__STFeatureExpression__Group_2__2
+            // InternalSTAlgorithmParser.g:7712:1: ( rule__STFeatureExpression__Group_2__1__Impl rule__STFeatureExpression__Group_2__2 )
+            // InternalSTAlgorithmParser.g:7713:2: rule__STFeatureExpression__Group_2__1__Impl rule__STFeatureExpression__Group_2__2
             {
             pushFollow(FOLLOW_69);
             rule__STFeatureExpression__Group_2__1__Impl();
@@ -25758,22 +25926,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2__1__Impl"
-    // InternalSTAlgorithmParser.g:7666:1: rule__STFeatureExpression__Group_2__1__Impl : ( ( rule__STFeatureExpression__Group_2_1__0 )? ) ;
+    // InternalSTAlgorithmParser.g:7720:1: rule__STFeatureExpression__Group_2__1__Impl : ( ( rule__STFeatureExpression__Group_2_1__0 )? ) ;
     public final void rule__STFeatureExpression__Group_2__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7670:1: ( ( ( rule__STFeatureExpression__Group_2_1__0 )? ) )
-            // InternalSTAlgorithmParser.g:7671:1: ( ( rule__STFeatureExpression__Group_2_1__0 )? )
+            // InternalSTAlgorithmParser.g:7724:1: ( ( ( rule__STFeatureExpression__Group_2_1__0 )? ) )
+            // InternalSTAlgorithmParser.g:7725:1: ( ( rule__STFeatureExpression__Group_2_1__0 )? )
             {
-            // InternalSTAlgorithmParser.g:7671:1: ( ( rule__STFeatureExpression__Group_2_1__0 )? )
-            // InternalSTAlgorithmParser.g:7672:2: ( rule__STFeatureExpression__Group_2_1__0 )?
+            // InternalSTAlgorithmParser.g:7725:1: ( ( rule__STFeatureExpression__Group_2_1__0 )? )
+            // InternalSTAlgorithmParser.g:7726:2: ( rule__STFeatureExpression__Group_2_1__0 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getGroup_2_1()); 
             }
-            // InternalSTAlgorithmParser.g:7673:2: ( rule__STFeatureExpression__Group_2_1__0 )?
+            // InternalSTAlgorithmParser.g:7727:2: ( rule__STFeatureExpression__Group_2_1__0 )?
             int alt68=2;
             int LA68_0 = input.LA(1);
 
@@ -25782,7 +25950,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
             switch (alt68) {
                 case 1 :
-                    // InternalSTAlgorithmParser.g:7673:3: rule__STFeatureExpression__Group_2_1__0
+                    // InternalSTAlgorithmParser.g:7727:3: rule__STFeatureExpression__Group_2_1__0
                     {
                     pushFollow(FOLLOW_2);
                     rule__STFeatureExpression__Group_2_1__0();
@@ -25820,14 +25988,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2__2"
-    // InternalSTAlgorithmParser.g:7681:1: rule__STFeatureExpression__Group_2__2 : rule__STFeatureExpression__Group_2__2__Impl ;
+    // InternalSTAlgorithmParser.g:7735:1: rule__STFeatureExpression__Group_2__2 : rule__STFeatureExpression__Group_2__2__Impl ;
     public final void rule__STFeatureExpression__Group_2__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7685:1: ( rule__STFeatureExpression__Group_2__2__Impl )
-            // InternalSTAlgorithmParser.g:7686:2: rule__STFeatureExpression__Group_2__2__Impl
+            // InternalSTAlgorithmParser.g:7739:1: ( rule__STFeatureExpression__Group_2__2__Impl )
+            // InternalSTAlgorithmParser.g:7740:2: rule__STFeatureExpression__Group_2__2__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STFeatureExpression__Group_2__2__Impl();
@@ -25853,17 +26021,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2__2__Impl"
-    // InternalSTAlgorithmParser.g:7692:1: rule__STFeatureExpression__Group_2__2__Impl : ( RightParenthesis ) ;
+    // InternalSTAlgorithmParser.g:7746:1: rule__STFeatureExpression__Group_2__2__Impl : ( RightParenthesis ) ;
     public final void rule__STFeatureExpression__Group_2__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7696:1: ( ( RightParenthesis ) )
-            // InternalSTAlgorithmParser.g:7697:1: ( RightParenthesis )
+            // InternalSTAlgorithmParser.g:7750:1: ( ( RightParenthesis ) )
+            // InternalSTAlgorithmParser.g:7751:1: ( RightParenthesis )
             {
-            // InternalSTAlgorithmParser.g:7697:1: ( RightParenthesis )
-            // InternalSTAlgorithmParser.g:7698:2: RightParenthesis
+            // InternalSTAlgorithmParser.g:7751:1: ( RightParenthesis )
+            // InternalSTAlgorithmParser.g:7752:2: RightParenthesis
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getRightParenthesisKeyword_2_2()); 
@@ -25894,14 +26062,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2_1__0"
-    // InternalSTAlgorithmParser.g:7708:1: rule__STFeatureExpression__Group_2_1__0 : rule__STFeatureExpression__Group_2_1__0__Impl rule__STFeatureExpression__Group_2_1__1 ;
+    // InternalSTAlgorithmParser.g:7762:1: rule__STFeatureExpression__Group_2_1__0 : rule__STFeatureExpression__Group_2_1__0__Impl rule__STFeatureExpression__Group_2_1__1 ;
     public final void rule__STFeatureExpression__Group_2_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7712:1: ( rule__STFeatureExpression__Group_2_1__0__Impl rule__STFeatureExpression__Group_2_1__1 )
-            // InternalSTAlgorithmParser.g:7713:2: rule__STFeatureExpression__Group_2_1__0__Impl rule__STFeatureExpression__Group_2_1__1
+            // InternalSTAlgorithmParser.g:7766:1: ( rule__STFeatureExpression__Group_2_1__0__Impl rule__STFeatureExpression__Group_2_1__1 )
+            // InternalSTAlgorithmParser.g:7767:2: rule__STFeatureExpression__Group_2_1__0__Impl rule__STFeatureExpression__Group_2_1__1
             {
             pushFollow(FOLLOW_70);
             rule__STFeatureExpression__Group_2_1__0__Impl();
@@ -25932,23 +26100,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2_1__0__Impl"
-    // InternalSTAlgorithmParser.g:7720:1: rule__STFeatureExpression__Group_2_1__0__Impl : ( ( rule__STFeatureExpression__ParametersAssignment_2_1_0 ) ) ;
+    // InternalSTAlgorithmParser.g:7774:1: rule__STFeatureExpression__Group_2_1__0__Impl : ( ( rule__STFeatureExpression__ParametersAssignment_2_1_0 ) ) ;
     public final void rule__STFeatureExpression__Group_2_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7724:1: ( ( ( rule__STFeatureExpression__ParametersAssignment_2_1_0 ) ) )
-            // InternalSTAlgorithmParser.g:7725:1: ( ( rule__STFeatureExpression__ParametersAssignment_2_1_0 ) )
+            // InternalSTAlgorithmParser.g:7778:1: ( ( ( rule__STFeatureExpression__ParametersAssignment_2_1_0 ) ) )
+            // InternalSTAlgorithmParser.g:7779:1: ( ( rule__STFeatureExpression__ParametersAssignment_2_1_0 ) )
             {
-            // InternalSTAlgorithmParser.g:7725:1: ( ( rule__STFeatureExpression__ParametersAssignment_2_1_0 ) )
-            // InternalSTAlgorithmParser.g:7726:2: ( rule__STFeatureExpression__ParametersAssignment_2_1_0 )
+            // InternalSTAlgorithmParser.g:7779:1: ( ( rule__STFeatureExpression__ParametersAssignment_2_1_0 ) )
+            // InternalSTAlgorithmParser.g:7780:2: ( rule__STFeatureExpression__ParametersAssignment_2_1_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getParametersAssignment_2_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:7727:2: ( rule__STFeatureExpression__ParametersAssignment_2_1_0 )
-            // InternalSTAlgorithmParser.g:7727:3: rule__STFeatureExpression__ParametersAssignment_2_1_0
+            // InternalSTAlgorithmParser.g:7781:2: ( rule__STFeatureExpression__ParametersAssignment_2_1_0 )
+            // InternalSTAlgorithmParser.g:7781:3: rule__STFeatureExpression__ParametersAssignment_2_1_0
             {
             pushFollow(FOLLOW_2);
             rule__STFeatureExpression__ParametersAssignment_2_1_0();
@@ -25983,14 +26151,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2_1__1"
-    // InternalSTAlgorithmParser.g:7735:1: rule__STFeatureExpression__Group_2_1__1 : rule__STFeatureExpression__Group_2_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:7789:1: rule__STFeatureExpression__Group_2_1__1 : rule__STFeatureExpression__Group_2_1__1__Impl ;
     public final void rule__STFeatureExpression__Group_2_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7739:1: ( rule__STFeatureExpression__Group_2_1__1__Impl )
-            // InternalSTAlgorithmParser.g:7740:2: rule__STFeatureExpression__Group_2_1__1__Impl
+            // InternalSTAlgorithmParser.g:7793:1: ( rule__STFeatureExpression__Group_2_1__1__Impl )
+            // InternalSTAlgorithmParser.g:7794:2: rule__STFeatureExpression__Group_2_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STFeatureExpression__Group_2_1__1__Impl();
@@ -26016,22 +26184,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2_1__1__Impl"
-    // InternalSTAlgorithmParser.g:7746:1: rule__STFeatureExpression__Group_2_1__1__Impl : ( ( rule__STFeatureExpression__Group_2_1_1__0 )* ) ;
+    // InternalSTAlgorithmParser.g:7800:1: rule__STFeatureExpression__Group_2_1__1__Impl : ( ( rule__STFeatureExpression__Group_2_1_1__0 )* ) ;
     public final void rule__STFeatureExpression__Group_2_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7750:1: ( ( ( rule__STFeatureExpression__Group_2_1_1__0 )* ) )
-            // InternalSTAlgorithmParser.g:7751:1: ( ( rule__STFeatureExpression__Group_2_1_1__0 )* )
+            // InternalSTAlgorithmParser.g:7804:1: ( ( ( rule__STFeatureExpression__Group_2_1_1__0 )* ) )
+            // InternalSTAlgorithmParser.g:7805:1: ( ( rule__STFeatureExpression__Group_2_1_1__0 )* )
             {
-            // InternalSTAlgorithmParser.g:7751:1: ( ( rule__STFeatureExpression__Group_2_1_1__0 )* )
-            // InternalSTAlgorithmParser.g:7752:2: ( rule__STFeatureExpression__Group_2_1_1__0 )*
+            // InternalSTAlgorithmParser.g:7805:1: ( ( rule__STFeatureExpression__Group_2_1_1__0 )* )
+            // InternalSTAlgorithmParser.g:7806:2: ( rule__STFeatureExpression__Group_2_1_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getGroup_2_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:7753:2: ( rule__STFeatureExpression__Group_2_1_1__0 )*
+            // InternalSTAlgorithmParser.g:7807:2: ( rule__STFeatureExpression__Group_2_1_1__0 )*
             loop69:
             do {
                 int alt69=2;
@@ -26044,7 +26212,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
                 switch (alt69) {
             	case 1 :
-            	    // InternalSTAlgorithmParser.g:7753:3: rule__STFeatureExpression__Group_2_1_1__0
+            	    // InternalSTAlgorithmParser.g:7807:3: rule__STFeatureExpression__Group_2_1_1__0
             	    {
             	    pushFollow(FOLLOW_21);
             	    rule__STFeatureExpression__Group_2_1_1__0();
@@ -26085,14 +26253,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2_1_1__0"
-    // InternalSTAlgorithmParser.g:7762:1: rule__STFeatureExpression__Group_2_1_1__0 : rule__STFeatureExpression__Group_2_1_1__0__Impl rule__STFeatureExpression__Group_2_1_1__1 ;
+    // InternalSTAlgorithmParser.g:7816:1: rule__STFeatureExpression__Group_2_1_1__0 : rule__STFeatureExpression__Group_2_1_1__0__Impl rule__STFeatureExpression__Group_2_1_1__1 ;
     public final void rule__STFeatureExpression__Group_2_1_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7766:1: ( rule__STFeatureExpression__Group_2_1_1__0__Impl rule__STFeatureExpression__Group_2_1_1__1 )
-            // InternalSTAlgorithmParser.g:7767:2: rule__STFeatureExpression__Group_2_1_1__0__Impl rule__STFeatureExpression__Group_2_1_1__1
+            // InternalSTAlgorithmParser.g:7820:1: ( rule__STFeatureExpression__Group_2_1_1__0__Impl rule__STFeatureExpression__Group_2_1_1__1 )
+            // InternalSTAlgorithmParser.g:7821:2: rule__STFeatureExpression__Group_2_1_1__0__Impl rule__STFeatureExpression__Group_2_1_1__1
             {
             pushFollow(FOLLOW_19);
             rule__STFeatureExpression__Group_2_1_1__0__Impl();
@@ -26123,17 +26291,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2_1_1__0__Impl"
-    // InternalSTAlgorithmParser.g:7774:1: rule__STFeatureExpression__Group_2_1_1__0__Impl : ( Comma ) ;
+    // InternalSTAlgorithmParser.g:7828:1: rule__STFeatureExpression__Group_2_1_1__0__Impl : ( Comma ) ;
     public final void rule__STFeatureExpression__Group_2_1_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7778:1: ( ( Comma ) )
-            // InternalSTAlgorithmParser.g:7779:1: ( Comma )
+            // InternalSTAlgorithmParser.g:7832:1: ( ( Comma ) )
+            // InternalSTAlgorithmParser.g:7833:1: ( Comma )
             {
-            // InternalSTAlgorithmParser.g:7779:1: ( Comma )
-            // InternalSTAlgorithmParser.g:7780:2: Comma
+            // InternalSTAlgorithmParser.g:7833:1: ( Comma )
+            // InternalSTAlgorithmParser.g:7834:2: Comma
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getCommaKeyword_2_1_1_0()); 
@@ -26164,14 +26332,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2_1_1__1"
-    // InternalSTAlgorithmParser.g:7789:1: rule__STFeatureExpression__Group_2_1_1__1 : rule__STFeatureExpression__Group_2_1_1__1__Impl ;
+    // InternalSTAlgorithmParser.g:7843:1: rule__STFeatureExpression__Group_2_1_1__1 : rule__STFeatureExpression__Group_2_1_1__1__Impl ;
     public final void rule__STFeatureExpression__Group_2_1_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7793:1: ( rule__STFeatureExpression__Group_2_1_1__1__Impl )
-            // InternalSTAlgorithmParser.g:7794:2: rule__STFeatureExpression__Group_2_1_1__1__Impl
+            // InternalSTAlgorithmParser.g:7847:1: ( rule__STFeatureExpression__Group_2_1_1__1__Impl )
+            // InternalSTAlgorithmParser.g:7848:2: rule__STFeatureExpression__Group_2_1_1__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STFeatureExpression__Group_2_1_1__1__Impl();
@@ -26197,23 +26365,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__Group_2_1_1__1__Impl"
-    // InternalSTAlgorithmParser.g:7800:1: rule__STFeatureExpression__Group_2_1_1__1__Impl : ( ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 ) ) ;
+    // InternalSTAlgorithmParser.g:7854:1: rule__STFeatureExpression__Group_2_1_1__1__Impl : ( ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 ) ) ;
     public final void rule__STFeatureExpression__Group_2_1_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7804:1: ( ( ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 ) ) )
-            // InternalSTAlgorithmParser.g:7805:1: ( ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 ) )
+            // InternalSTAlgorithmParser.g:7858:1: ( ( ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 ) ) )
+            // InternalSTAlgorithmParser.g:7859:1: ( ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 ) )
             {
-            // InternalSTAlgorithmParser.g:7805:1: ( ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 ) )
-            // InternalSTAlgorithmParser.g:7806:2: ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 )
+            // InternalSTAlgorithmParser.g:7859:1: ( ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 ) )
+            // InternalSTAlgorithmParser.g:7860:2: ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getParametersAssignment_2_1_1_1()); 
             }
-            // InternalSTAlgorithmParser.g:7807:2: ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 )
-            // InternalSTAlgorithmParser.g:7807:3: rule__STFeatureExpression__ParametersAssignment_2_1_1_1
+            // InternalSTAlgorithmParser.g:7861:2: ( rule__STFeatureExpression__ParametersAssignment_2_1_1_1 )
+            // InternalSTAlgorithmParser.g:7861:3: rule__STFeatureExpression__ParametersAssignment_2_1_1_1
             {
             pushFollow(FOLLOW_2);
             rule__STFeatureExpression__ParametersAssignment_2_1_1_1();
@@ -26248,14 +26416,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__Group__0"
-    // InternalSTAlgorithmParser.g:7816:1: rule__STMultibitPartialExpression__Group__0 : rule__STMultibitPartialExpression__Group__0__Impl rule__STMultibitPartialExpression__Group__1 ;
+    // InternalSTAlgorithmParser.g:7870:1: rule__STMultibitPartialExpression__Group__0 : rule__STMultibitPartialExpression__Group__0__Impl rule__STMultibitPartialExpression__Group__1 ;
     public final void rule__STMultibitPartialExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7820:1: ( rule__STMultibitPartialExpression__Group__0__Impl rule__STMultibitPartialExpression__Group__1 )
-            // InternalSTAlgorithmParser.g:7821:2: rule__STMultibitPartialExpression__Group__0__Impl rule__STMultibitPartialExpression__Group__1
+            // InternalSTAlgorithmParser.g:7874:1: ( rule__STMultibitPartialExpression__Group__0__Impl rule__STMultibitPartialExpression__Group__1 )
+            // InternalSTAlgorithmParser.g:7875:2: rule__STMultibitPartialExpression__Group__0__Impl rule__STMultibitPartialExpression__Group__1
             {
             pushFollow(FOLLOW_68);
             rule__STMultibitPartialExpression__Group__0__Impl();
@@ -26286,23 +26454,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:7828:1: rule__STMultibitPartialExpression__Group__0__Impl : ( () ) ;
+    // InternalSTAlgorithmParser.g:7882:1: rule__STMultibitPartialExpression__Group__0__Impl : ( () ) ;
     public final void rule__STMultibitPartialExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7832:1: ( ( () ) )
-            // InternalSTAlgorithmParser.g:7833:1: ( () )
+            // InternalSTAlgorithmParser.g:7886:1: ( ( () ) )
+            // InternalSTAlgorithmParser.g:7887:1: ( () )
             {
-            // InternalSTAlgorithmParser.g:7833:1: ( () )
-            // InternalSTAlgorithmParser.g:7834:2: ()
+            // InternalSTAlgorithmParser.g:7887:1: ( () )
+            // InternalSTAlgorithmParser.g:7888:2: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMultibitPartialExpressionAccess().getSTMultibitPartialExpressionAction_0()); 
             }
-            // InternalSTAlgorithmParser.g:7835:2: ()
-            // InternalSTAlgorithmParser.g:7835:3: 
+            // InternalSTAlgorithmParser.g:7889:2: ()
+            // InternalSTAlgorithmParser.g:7889:3: 
             {
             }
 
@@ -26327,14 +26495,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__Group__1"
-    // InternalSTAlgorithmParser.g:7843:1: rule__STMultibitPartialExpression__Group__1 : rule__STMultibitPartialExpression__Group__1__Impl rule__STMultibitPartialExpression__Group__2 ;
+    // InternalSTAlgorithmParser.g:7897:1: rule__STMultibitPartialExpression__Group__1 : rule__STMultibitPartialExpression__Group__1__Impl rule__STMultibitPartialExpression__Group__2 ;
     public final void rule__STMultibitPartialExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7847:1: ( rule__STMultibitPartialExpression__Group__1__Impl rule__STMultibitPartialExpression__Group__2 )
-            // InternalSTAlgorithmParser.g:7848:2: rule__STMultibitPartialExpression__Group__1__Impl rule__STMultibitPartialExpression__Group__2
+            // InternalSTAlgorithmParser.g:7901:1: ( rule__STMultibitPartialExpression__Group__1__Impl rule__STMultibitPartialExpression__Group__2 )
+            // InternalSTAlgorithmParser.g:7902:2: rule__STMultibitPartialExpression__Group__1__Impl rule__STMultibitPartialExpression__Group__2
             {
             pushFollow(FOLLOW_68);
             rule__STMultibitPartialExpression__Group__1__Impl();
@@ -26365,22 +26533,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:7855:1: rule__STMultibitPartialExpression__Group__1__Impl : ( ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )? ) ;
+    // InternalSTAlgorithmParser.g:7909:1: rule__STMultibitPartialExpression__Group__1__Impl : ( ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )? ) ;
     public final void rule__STMultibitPartialExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7859:1: ( ( ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )? ) )
-            // InternalSTAlgorithmParser.g:7860:1: ( ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )? )
+            // InternalSTAlgorithmParser.g:7913:1: ( ( ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )? ) )
+            // InternalSTAlgorithmParser.g:7914:1: ( ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )? )
             {
-            // InternalSTAlgorithmParser.g:7860:1: ( ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )? )
-            // InternalSTAlgorithmParser.g:7861:2: ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )?
+            // InternalSTAlgorithmParser.g:7914:1: ( ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )? )
+            // InternalSTAlgorithmParser.g:7915:2: ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMultibitPartialExpressionAccess().getSpecifierAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:7862:2: ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )?
+            // InternalSTAlgorithmParser.g:7916:2: ( rule__STMultibitPartialExpression__SpecifierAssignment_1 )?
             int alt70=2;
             int LA70_0 = input.LA(1);
 
@@ -26389,7 +26557,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
             switch (alt70) {
                 case 1 :
-                    // InternalSTAlgorithmParser.g:7862:3: rule__STMultibitPartialExpression__SpecifierAssignment_1
+                    // InternalSTAlgorithmParser.g:7916:3: rule__STMultibitPartialExpression__SpecifierAssignment_1
                     {
                     pushFollow(FOLLOW_2);
                     rule__STMultibitPartialExpression__SpecifierAssignment_1();
@@ -26427,14 +26595,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__Group__2"
-    // InternalSTAlgorithmParser.g:7870:1: rule__STMultibitPartialExpression__Group__2 : rule__STMultibitPartialExpression__Group__2__Impl ;
+    // InternalSTAlgorithmParser.g:7924:1: rule__STMultibitPartialExpression__Group__2 : rule__STMultibitPartialExpression__Group__2__Impl ;
     public final void rule__STMultibitPartialExpression__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7874:1: ( rule__STMultibitPartialExpression__Group__2__Impl )
-            // InternalSTAlgorithmParser.g:7875:2: rule__STMultibitPartialExpression__Group__2__Impl
+            // InternalSTAlgorithmParser.g:7928:1: ( rule__STMultibitPartialExpression__Group__2__Impl )
+            // InternalSTAlgorithmParser.g:7929:2: rule__STMultibitPartialExpression__Group__2__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STMultibitPartialExpression__Group__2__Impl();
@@ -26460,23 +26628,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:7881:1: rule__STMultibitPartialExpression__Group__2__Impl : ( ( rule__STMultibitPartialExpression__IndexAssignment_2 ) ) ;
+    // InternalSTAlgorithmParser.g:7935:1: rule__STMultibitPartialExpression__Group__2__Impl : ( ( rule__STMultibitPartialExpression__IndexAssignment_2 ) ) ;
     public final void rule__STMultibitPartialExpression__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7885:1: ( ( ( rule__STMultibitPartialExpression__IndexAssignment_2 ) ) )
-            // InternalSTAlgorithmParser.g:7886:1: ( ( rule__STMultibitPartialExpression__IndexAssignment_2 ) )
+            // InternalSTAlgorithmParser.g:7939:1: ( ( ( rule__STMultibitPartialExpression__IndexAssignment_2 ) ) )
+            // InternalSTAlgorithmParser.g:7940:1: ( ( rule__STMultibitPartialExpression__IndexAssignment_2 ) )
             {
-            // InternalSTAlgorithmParser.g:7886:1: ( ( rule__STMultibitPartialExpression__IndexAssignment_2 ) )
-            // InternalSTAlgorithmParser.g:7887:2: ( rule__STMultibitPartialExpression__IndexAssignment_2 )
+            // InternalSTAlgorithmParser.g:7940:1: ( ( rule__STMultibitPartialExpression__IndexAssignment_2 ) )
+            // InternalSTAlgorithmParser.g:7941:2: ( rule__STMultibitPartialExpression__IndexAssignment_2 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMultibitPartialExpressionAccess().getIndexAssignment_2()); 
             }
-            // InternalSTAlgorithmParser.g:7888:2: ( rule__STMultibitPartialExpression__IndexAssignment_2 )
-            // InternalSTAlgorithmParser.g:7888:3: rule__STMultibitPartialExpression__IndexAssignment_2
+            // InternalSTAlgorithmParser.g:7942:2: ( rule__STMultibitPartialExpression__IndexAssignment_2 )
+            // InternalSTAlgorithmParser.g:7942:3: rule__STMultibitPartialExpression__IndexAssignment_2
             {
             pushFollow(FOLLOW_2);
             rule__STMultibitPartialExpression__IndexAssignment_2();
@@ -26511,14 +26679,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STNumericLiteral__Group__0"
-    // InternalSTAlgorithmParser.g:7897:1: rule__STNumericLiteral__Group__0 : rule__STNumericLiteral__Group__0__Impl rule__STNumericLiteral__Group__1 ;
+    // InternalSTAlgorithmParser.g:7951:1: rule__STNumericLiteral__Group__0 : rule__STNumericLiteral__Group__0__Impl rule__STNumericLiteral__Group__1 ;
     public final void rule__STNumericLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7901:1: ( rule__STNumericLiteral__Group__0__Impl rule__STNumericLiteral__Group__1 )
-            // InternalSTAlgorithmParser.g:7902:2: rule__STNumericLiteral__Group__0__Impl rule__STNumericLiteral__Group__1
+            // InternalSTAlgorithmParser.g:7955:1: ( rule__STNumericLiteral__Group__0__Impl rule__STNumericLiteral__Group__1 )
+            // InternalSTAlgorithmParser.g:7956:2: rule__STNumericLiteral__Group__0__Impl rule__STNumericLiteral__Group__1
             {
             pushFollow(FOLLOW_71);
             rule__STNumericLiteral__Group__0__Impl();
@@ -26549,22 +26717,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STNumericLiteral__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:7909:1: rule__STNumericLiteral__Group__0__Impl : ( ( rule__STNumericLiteral__TypeAssignment_0 )? ) ;
+    // InternalSTAlgorithmParser.g:7963:1: rule__STNumericLiteral__Group__0__Impl : ( ( rule__STNumericLiteral__TypeAssignment_0 )? ) ;
     public final void rule__STNumericLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7913:1: ( ( ( rule__STNumericLiteral__TypeAssignment_0 )? ) )
-            // InternalSTAlgorithmParser.g:7914:1: ( ( rule__STNumericLiteral__TypeAssignment_0 )? )
+            // InternalSTAlgorithmParser.g:7967:1: ( ( ( rule__STNumericLiteral__TypeAssignment_0 )? ) )
+            // InternalSTAlgorithmParser.g:7968:1: ( ( rule__STNumericLiteral__TypeAssignment_0 )? )
             {
-            // InternalSTAlgorithmParser.g:7914:1: ( ( rule__STNumericLiteral__TypeAssignment_0 )? )
-            // InternalSTAlgorithmParser.g:7915:2: ( rule__STNumericLiteral__TypeAssignment_0 )?
+            // InternalSTAlgorithmParser.g:7968:1: ( ( rule__STNumericLiteral__TypeAssignment_0 )? )
+            // InternalSTAlgorithmParser.g:7969:2: ( rule__STNumericLiteral__TypeAssignment_0 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTNumericLiteralAccess().getTypeAssignment_0()); 
             }
-            // InternalSTAlgorithmParser.g:7916:2: ( rule__STNumericLiteral__TypeAssignment_0 )?
+            // InternalSTAlgorithmParser.g:7970:2: ( rule__STNumericLiteral__TypeAssignment_0 )?
             int alt71=2;
             int LA71_0 = input.LA(1);
 
@@ -26573,7 +26741,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
             switch (alt71) {
                 case 1 :
-                    // InternalSTAlgorithmParser.g:7916:3: rule__STNumericLiteral__TypeAssignment_0
+                    // InternalSTAlgorithmParser.g:7970:3: rule__STNumericLiteral__TypeAssignment_0
                     {
                     pushFollow(FOLLOW_2);
                     rule__STNumericLiteral__TypeAssignment_0();
@@ -26611,14 +26779,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STNumericLiteral__Group__1"
-    // InternalSTAlgorithmParser.g:7924:1: rule__STNumericLiteral__Group__1 : rule__STNumericLiteral__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:7978:1: rule__STNumericLiteral__Group__1 : rule__STNumericLiteral__Group__1__Impl ;
     public final void rule__STNumericLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7928:1: ( rule__STNumericLiteral__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:7929:2: rule__STNumericLiteral__Group__1__Impl
+            // InternalSTAlgorithmParser.g:7982:1: ( rule__STNumericLiteral__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:7983:2: rule__STNumericLiteral__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STNumericLiteral__Group__1__Impl();
@@ -26644,23 +26812,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STNumericLiteral__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:7935:1: rule__STNumericLiteral__Group__1__Impl : ( ( rule__STNumericLiteral__ValueAssignment_1 ) ) ;
+    // InternalSTAlgorithmParser.g:7989:1: rule__STNumericLiteral__Group__1__Impl : ( ( rule__STNumericLiteral__ValueAssignment_1 ) ) ;
     public final void rule__STNumericLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7939:1: ( ( ( rule__STNumericLiteral__ValueAssignment_1 ) ) )
-            // InternalSTAlgorithmParser.g:7940:1: ( ( rule__STNumericLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:7993:1: ( ( ( rule__STNumericLiteral__ValueAssignment_1 ) ) )
+            // InternalSTAlgorithmParser.g:7994:1: ( ( rule__STNumericLiteral__ValueAssignment_1 ) )
             {
-            // InternalSTAlgorithmParser.g:7940:1: ( ( rule__STNumericLiteral__ValueAssignment_1 ) )
-            // InternalSTAlgorithmParser.g:7941:2: ( rule__STNumericLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:7994:1: ( ( rule__STNumericLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:7995:2: ( rule__STNumericLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTNumericLiteralAccess().getValueAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:7942:2: ( rule__STNumericLiteral__ValueAssignment_1 )
-            // InternalSTAlgorithmParser.g:7942:3: rule__STNumericLiteral__ValueAssignment_1
+            // InternalSTAlgorithmParser.g:7996:2: ( rule__STNumericLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:7996:3: rule__STNumericLiteral__ValueAssignment_1
             {
             pushFollow(FOLLOW_2);
             rule__STNumericLiteral__ValueAssignment_1();
@@ -26695,14 +26863,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateLiteral__Group__0"
-    // InternalSTAlgorithmParser.g:7951:1: rule__STDateLiteral__Group__0 : rule__STDateLiteral__Group__0__Impl rule__STDateLiteral__Group__1 ;
+    // InternalSTAlgorithmParser.g:8005:1: rule__STDateLiteral__Group__0 : rule__STDateLiteral__Group__0__Impl rule__STDateLiteral__Group__1 ;
     public final void rule__STDateLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7955:1: ( rule__STDateLiteral__Group__0__Impl rule__STDateLiteral__Group__1 )
-            // InternalSTAlgorithmParser.g:7956:2: rule__STDateLiteral__Group__0__Impl rule__STDateLiteral__Group__1
+            // InternalSTAlgorithmParser.g:8009:1: ( rule__STDateLiteral__Group__0__Impl rule__STDateLiteral__Group__1 )
+            // InternalSTAlgorithmParser.g:8010:2: rule__STDateLiteral__Group__0__Impl rule__STDateLiteral__Group__1
             {
             pushFollow(FOLLOW_72);
             rule__STDateLiteral__Group__0__Impl();
@@ -26733,23 +26901,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateLiteral__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:7963:1: rule__STDateLiteral__Group__0__Impl : ( ( rule__STDateLiteral__TypeAssignment_0 ) ) ;
+    // InternalSTAlgorithmParser.g:8017:1: rule__STDateLiteral__Group__0__Impl : ( ( rule__STDateLiteral__TypeAssignment_0 ) ) ;
     public final void rule__STDateLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7967:1: ( ( ( rule__STDateLiteral__TypeAssignment_0 ) ) )
-            // InternalSTAlgorithmParser.g:7968:1: ( ( rule__STDateLiteral__TypeAssignment_0 ) )
+            // InternalSTAlgorithmParser.g:8021:1: ( ( ( rule__STDateLiteral__TypeAssignment_0 ) ) )
+            // InternalSTAlgorithmParser.g:8022:1: ( ( rule__STDateLiteral__TypeAssignment_0 ) )
             {
-            // InternalSTAlgorithmParser.g:7968:1: ( ( rule__STDateLiteral__TypeAssignment_0 ) )
-            // InternalSTAlgorithmParser.g:7969:2: ( rule__STDateLiteral__TypeAssignment_0 )
+            // InternalSTAlgorithmParser.g:8022:1: ( ( rule__STDateLiteral__TypeAssignment_0 ) )
+            // InternalSTAlgorithmParser.g:8023:2: ( rule__STDateLiteral__TypeAssignment_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateLiteralAccess().getTypeAssignment_0()); 
             }
-            // InternalSTAlgorithmParser.g:7970:2: ( rule__STDateLiteral__TypeAssignment_0 )
-            // InternalSTAlgorithmParser.g:7970:3: rule__STDateLiteral__TypeAssignment_0
+            // InternalSTAlgorithmParser.g:8024:2: ( rule__STDateLiteral__TypeAssignment_0 )
+            // InternalSTAlgorithmParser.g:8024:3: rule__STDateLiteral__TypeAssignment_0
             {
             pushFollow(FOLLOW_2);
             rule__STDateLiteral__TypeAssignment_0();
@@ -26784,14 +26952,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateLiteral__Group__1"
-    // InternalSTAlgorithmParser.g:7978:1: rule__STDateLiteral__Group__1 : rule__STDateLiteral__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:8032:1: rule__STDateLiteral__Group__1 : rule__STDateLiteral__Group__1__Impl ;
     public final void rule__STDateLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7982:1: ( rule__STDateLiteral__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:7983:2: rule__STDateLiteral__Group__1__Impl
+            // InternalSTAlgorithmParser.g:8036:1: ( rule__STDateLiteral__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:8037:2: rule__STDateLiteral__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STDateLiteral__Group__1__Impl();
@@ -26817,23 +26985,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateLiteral__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:7989:1: rule__STDateLiteral__Group__1__Impl : ( ( rule__STDateLiteral__ValueAssignment_1 ) ) ;
+    // InternalSTAlgorithmParser.g:8043:1: rule__STDateLiteral__Group__1__Impl : ( ( rule__STDateLiteral__ValueAssignment_1 ) ) ;
     public final void rule__STDateLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:7993:1: ( ( ( rule__STDateLiteral__ValueAssignment_1 ) ) )
-            // InternalSTAlgorithmParser.g:7994:1: ( ( rule__STDateLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8047:1: ( ( ( rule__STDateLiteral__ValueAssignment_1 ) ) )
+            // InternalSTAlgorithmParser.g:8048:1: ( ( rule__STDateLiteral__ValueAssignment_1 ) )
             {
-            // InternalSTAlgorithmParser.g:7994:1: ( ( rule__STDateLiteral__ValueAssignment_1 ) )
-            // InternalSTAlgorithmParser.g:7995:2: ( rule__STDateLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8048:1: ( ( rule__STDateLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8049:2: ( rule__STDateLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateLiteralAccess().getValueAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:7996:2: ( rule__STDateLiteral__ValueAssignment_1 )
-            // InternalSTAlgorithmParser.g:7996:3: rule__STDateLiteral__ValueAssignment_1
+            // InternalSTAlgorithmParser.g:8050:2: ( rule__STDateLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8050:3: rule__STDateLiteral__ValueAssignment_1
             {
             pushFollow(FOLLOW_2);
             rule__STDateLiteral__ValueAssignment_1();
@@ -26868,14 +27036,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeLiteral__Group__0"
-    // InternalSTAlgorithmParser.g:8005:1: rule__STTimeLiteral__Group__0 : rule__STTimeLiteral__Group__0__Impl rule__STTimeLiteral__Group__1 ;
+    // InternalSTAlgorithmParser.g:8059:1: rule__STTimeLiteral__Group__0 : rule__STTimeLiteral__Group__0__Impl rule__STTimeLiteral__Group__1 ;
     public final void rule__STTimeLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8009:1: ( rule__STTimeLiteral__Group__0__Impl rule__STTimeLiteral__Group__1 )
-            // InternalSTAlgorithmParser.g:8010:2: rule__STTimeLiteral__Group__0__Impl rule__STTimeLiteral__Group__1
+            // InternalSTAlgorithmParser.g:8063:1: ( rule__STTimeLiteral__Group__0__Impl rule__STTimeLiteral__Group__1 )
+            // InternalSTAlgorithmParser.g:8064:2: rule__STTimeLiteral__Group__0__Impl rule__STTimeLiteral__Group__1
             {
             pushFollow(FOLLOW_73);
             rule__STTimeLiteral__Group__0__Impl();
@@ -26906,23 +27074,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeLiteral__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:8017:1: rule__STTimeLiteral__Group__0__Impl : ( ( rule__STTimeLiteral__TypeAssignment_0 ) ) ;
+    // InternalSTAlgorithmParser.g:8071:1: rule__STTimeLiteral__Group__0__Impl : ( ( rule__STTimeLiteral__TypeAssignment_0 ) ) ;
     public final void rule__STTimeLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8021:1: ( ( ( rule__STTimeLiteral__TypeAssignment_0 ) ) )
-            // InternalSTAlgorithmParser.g:8022:1: ( ( rule__STTimeLiteral__TypeAssignment_0 ) )
+            // InternalSTAlgorithmParser.g:8075:1: ( ( ( rule__STTimeLiteral__TypeAssignment_0 ) ) )
+            // InternalSTAlgorithmParser.g:8076:1: ( ( rule__STTimeLiteral__TypeAssignment_0 ) )
             {
-            // InternalSTAlgorithmParser.g:8022:1: ( ( rule__STTimeLiteral__TypeAssignment_0 ) )
-            // InternalSTAlgorithmParser.g:8023:2: ( rule__STTimeLiteral__TypeAssignment_0 )
+            // InternalSTAlgorithmParser.g:8076:1: ( ( rule__STTimeLiteral__TypeAssignment_0 ) )
+            // InternalSTAlgorithmParser.g:8077:2: ( rule__STTimeLiteral__TypeAssignment_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeLiteralAccess().getTypeAssignment_0()); 
             }
-            // InternalSTAlgorithmParser.g:8024:2: ( rule__STTimeLiteral__TypeAssignment_0 )
-            // InternalSTAlgorithmParser.g:8024:3: rule__STTimeLiteral__TypeAssignment_0
+            // InternalSTAlgorithmParser.g:8078:2: ( rule__STTimeLiteral__TypeAssignment_0 )
+            // InternalSTAlgorithmParser.g:8078:3: rule__STTimeLiteral__TypeAssignment_0
             {
             pushFollow(FOLLOW_2);
             rule__STTimeLiteral__TypeAssignment_0();
@@ -26957,14 +27125,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeLiteral__Group__1"
-    // InternalSTAlgorithmParser.g:8032:1: rule__STTimeLiteral__Group__1 : rule__STTimeLiteral__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:8086:1: rule__STTimeLiteral__Group__1 : rule__STTimeLiteral__Group__1__Impl ;
     public final void rule__STTimeLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8036:1: ( rule__STTimeLiteral__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:8037:2: rule__STTimeLiteral__Group__1__Impl
+            // InternalSTAlgorithmParser.g:8090:1: ( rule__STTimeLiteral__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:8091:2: rule__STTimeLiteral__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STTimeLiteral__Group__1__Impl();
@@ -26990,23 +27158,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeLiteral__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:8043:1: rule__STTimeLiteral__Group__1__Impl : ( ( rule__STTimeLiteral__ValueAssignment_1 ) ) ;
+    // InternalSTAlgorithmParser.g:8097:1: rule__STTimeLiteral__Group__1__Impl : ( ( rule__STTimeLiteral__ValueAssignment_1 ) ) ;
     public final void rule__STTimeLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8047:1: ( ( ( rule__STTimeLiteral__ValueAssignment_1 ) ) )
-            // InternalSTAlgorithmParser.g:8048:1: ( ( rule__STTimeLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8101:1: ( ( ( rule__STTimeLiteral__ValueAssignment_1 ) ) )
+            // InternalSTAlgorithmParser.g:8102:1: ( ( rule__STTimeLiteral__ValueAssignment_1 ) )
             {
-            // InternalSTAlgorithmParser.g:8048:1: ( ( rule__STTimeLiteral__ValueAssignment_1 ) )
-            // InternalSTAlgorithmParser.g:8049:2: ( rule__STTimeLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8102:1: ( ( rule__STTimeLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8103:2: ( rule__STTimeLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeLiteralAccess().getValueAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:8050:2: ( rule__STTimeLiteral__ValueAssignment_1 )
-            // InternalSTAlgorithmParser.g:8050:3: rule__STTimeLiteral__ValueAssignment_1
+            // InternalSTAlgorithmParser.g:8104:2: ( rule__STTimeLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8104:3: rule__STTimeLiteral__ValueAssignment_1
             {
             pushFollow(FOLLOW_2);
             rule__STTimeLiteral__ValueAssignment_1();
@@ -27041,14 +27209,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeOfDayLiteral__Group__0"
-    // InternalSTAlgorithmParser.g:8059:1: rule__STTimeOfDayLiteral__Group__0 : rule__STTimeOfDayLiteral__Group__0__Impl rule__STTimeOfDayLiteral__Group__1 ;
+    // InternalSTAlgorithmParser.g:8113:1: rule__STTimeOfDayLiteral__Group__0 : rule__STTimeOfDayLiteral__Group__0__Impl rule__STTimeOfDayLiteral__Group__1 ;
     public final void rule__STTimeOfDayLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8063:1: ( rule__STTimeOfDayLiteral__Group__0__Impl rule__STTimeOfDayLiteral__Group__1 )
-            // InternalSTAlgorithmParser.g:8064:2: rule__STTimeOfDayLiteral__Group__0__Impl rule__STTimeOfDayLiteral__Group__1
+            // InternalSTAlgorithmParser.g:8117:1: ( rule__STTimeOfDayLiteral__Group__0__Impl rule__STTimeOfDayLiteral__Group__1 )
+            // InternalSTAlgorithmParser.g:8118:2: rule__STTimeOfDayLiteral__Group__0__Impl rule__STTimeOfDayLiteral__Group__1
             {
             pushFollow(FOLLOW_72);
             rule__STTimeOfDayLiteral__Group__0__Impl();
@@ -27079,23 +27247,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeOfDayLiteral__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:8071:1: rule__STTimeOfDayLiteral__Group__0__Impl : ( ( rule__STTimeOfDayLiteral__TypeAssignment_0 ) ) ;
+    // InternalSTAlgorithmParser.g:8125:1: rule__STTimeOfDayLiteral__Group__0__Impl : ( ( rule__STTimeOfDayLiteral__TypeAssignment_0 ) ) ;
     public final void rule__STTimeOfDayLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8075:1: ( ( ( rule__STTimeOfDayLiteral__TypeAssignment_0 ) ) )
-            // InternalSTAlgorithmParser.g:8076:1: ( ( rule__STTimeOfDayLiteral__TypeAssignment_0 ) )
+            // InternalSTAlgorithmParser.g:8129:1: ( ( ( rule__STTimeOfDayLiteral__TypeAssignment_0 ) ) )
+            // InternalSTAlgorithmParser.g:8130:1: ( ( rule__STTimeOfDayLiteral__TypeAssignment_0 ) )
             {
-            // InternalSTAlgorithmParser.g:8076:1: ( ( rule__STTimeOfDayLiteral__TypeAssignment_0 ) )
-            // InternalSTAlgorithmParser.g:8077:2: ( rule__STTimeOfDayLiteral__TypeAssignment_0 )
+            // InternalSTAlgorithmParser.g:8130:1: ( ( rule__STTimeOfDayLiteral__TypeAssignment_0 ) )
+            // InternalSTAlgorithmParser.g:8131:2: ( rule__STTimeOfDayLiteral__TypeAssignment_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeAssignment_0()); 
             }
-            // InternalSTAlgorithmParser.g:8078:2: ( rule__STTimeOfDayLiteral__TypeAssignment_0 )
-            // InternalSTAlgorithmParser.g:8078:3: rule__STTimeOfDayLiteral__TypeAssignment_0
+            // InternalSTAlgorithmParser.g:8132:2: ( rule__STTimeOfDayLiteral__TypeAssignment_0 )
+            // InternalSTAlgorithmParser.g:8132:3: rule__STTimeOfDayLiteral__TypeAssignment_0
             {
             pushFollow(FOLLOW_2);
             rule__STTimeOfDayLiteral__TypeAssignment_0();
@@ -27130,14 +27298,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeOfDayLiteral__Group__1"
-    // InternalSTAlgorithmParser.g:8086:1: rule__STTimeOfDayLiteral__Group__1 : rule__STTimeOfDayLiteral__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:8140:1: rule__STTimeOfDayLiteral__Group__1 : rule__STTimeOfDayLiteral__Group__1__Impl ;
     public final void rule__STTimeOfDayLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8090:1: ( rule__STTimeOfDayLiteral__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:8091:2: rule__STTimeOfDayLiteral__Group__1__Impl
+            // InternalSTAlgorithmParser.g:8144:1: ( rule__STTimeOfDayLiteral__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:8145:2: rule__STTimeOfDayLiteral__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STTimeOfDayLiteral__Group__1__Impl();
@@ -27163,23 +27331,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeOfDayLiteral__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:8097:1: rule__STTimeOfDayLiteral__Group__1__Impl : ( ( rule__STTimeOfDayLiteral__ValueAssignment_1 ) ) ;
+    // InternalSTAlgorithmParser.g:8151:1: rule__STTimeOfDayLiteral__Group__1__Impl : ( ( rule__STTimeOfDayLiteral__ValueAssignment_1 ) ) ;
     public final void rule__STTimeOfDayLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8101:1: ( ( ( rule__STTimeOfDayLiteral__ValueAssignment_1 ) ) )
-            // InternalSTAlgorithmParser.g:8102:1: ( ( rule__STTimeOfDayLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8155:1: ( ( ( rule__STTimeOfDayLiteral__ValueAssignment_1 ) ) )
+            // InternalSTAlgorithmParser.g:8156:1: ( ( rule__STTimeOfDayLiteral__ValueAssignment_1 ) )
             {
-            // InternalSTAlgorithmParser.g:8102:1: ( ( rule__STTimeOfDayLiteral__ValueAssignment_1 ) )
-            // InternalSTAlgorithmParser.g:8103:2: ( rule__STTimeOfDayLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8156:1: ( ( rule__STTimeOfDayLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8157:2: ( rule__STTimeOfDayLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeOfDayLiteralAccess().getValueAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:8104:2: ( rule__STTimeOfDayLiteral__ValueAssignment_1 )
-            // InternalSTAlgorithmParser.g:8104:3: rule__STTimeOfDayLiteral__ValueAssignment_1
+            // InternalSTAlgorithmParser.g:8158:2: ( rule__STTimeOfDayLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8158:3: rule__STTimeOfDayLiteral__ValueAssignment_1
             {
             pushFollow(FOLLOW_2);
             rule__STTimeOfDayLiteral__ValueAssignment_1();
@@ -27214,14 +27382,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__Group__0"
-    // InternalSTAlgorithmParser.g:8113:1: rule__STDateAndTimeLiteral__Group__0 : rule__STDateAndTimeLiteral__Group__0__Impl rule__STDateAndTimeLiteral__Group__1 ;
+    // InternalSTAlgorithmParser.g:8167:1: rule__STDateAndTimeLiteral__Group__0 : rule__STDateAndTimeLiteral__Group__0__Impl rule__STDateAndTimeLiteral__Group__1 ;
     public final void rule__STDateAndTimeLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8117:1: ( rule__STDateAndTimeLiteral__Group__0__Impl rule__STDateAndTimeLiteral__Group__1 )
-            // InternalSTAlgorithmParser.g:8118:2: rule__STDateAndTimeLiteral__Group__0__Impl rule__STDateAndTimeLiteral__Group__1
+            // InternalSTAlgorithmParser.g:8171:1: ( rule__STDateAndTimeLiteral__Group__0__Impl rule__STDateAndTimeLiteral__Group__1 )
+            // InternalSTAlgorithmParser.g:8172:2: rule__STDateAndTimeLiteral__Group__0__Impl rule__STDateAndTimeLiteral__Group__1
             {
             pushFollow(FOLLOW_72);
             rule__STDateAndTimeLiteral__Group__0__Impl();
@@ -27252,23 +27420,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:8125:1: rule__STDateAndTimeLiteral__Group__0__Impl : ( ( rule__STDateAndTimeLiteral__TypeAssignment_0 ) ) ;
+    // InternalSTAlgorithmParser.g:8179:1: rule__STDateAndTimeLiteral__Group__0__Impl : ( ( rule__STDateAndTimeLiteral__TypeAssignment_0 ) ) ;
     public final void rule__STDateAndTimeLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8129:1: ( ( ( rule__STDateAndTimeLiteral__TypeAssignment_0 ) ) )
-            // InternalSTAlgorithmParser.g:8130:1: ( ( rule__STDateAndTimeLiteral__TypeAssignment_0 ) )
+            // InternalSTAlgorithmParser.g:8183:1: ( ( ( rule__STDateAndTimeLiteral__TypeAssignment_0 ) ) )
+            // InternalSTAlgorithmParser.g:8184:1: ( ( rule__STDateAndTimeLiteral__TypeAssignment_0 ) )
             {
-            // InternalSTAlgorithmParser.g:8130:1: ( ( rule__STDateAndTimeLiteral__TypeAssignment_0 ) )
-            // InternalSTAlgorithmParser.g:8131:2: ( rule__STDateAndTimeLiteral__TypeAssignment_0 )
+            // InternalSTAlgorithmParser.g:8184:1: ( ( rule__STDateAndTimeLiteral__TypeAssignment_0 ) )
+            // InternalSTAlgorithmParser.g:8185:2: ( rule__STDateAndTimeLiteral__TypeAssignment_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeAssignment_0()); 
             }
-            // InternalSTAlgorithmParser.g:8132:2: ( rule__STDateAndTimeLiteral__TypeAssignment_0 )
-            // InternalSTAlgorithmParser.g:8132:3: rule__STDateAndTimeLiteral__TypeAssignment_0
+            // InternalSTAlgorithmParser.g:8186:2: ( rule__STDateAndTimeLiteral__TypeAssignment_0 )
+            // InternalSTAlgorithmParser.g:8186:3: rule__STDateAndTimeLiteral__TypeAssignment_0
             {
             pushFollow(FOLLOW_2);
             rule__STDateAndTimeLiteral__TypeAssignment_0();
@@ -27303,14 +27471,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__Group__1"
-    // InternalSTAlgorithmParser.g:8140:1: rule__STDateAndTimeLiteral__Group__1 : rule__STDateAndTimeLiteral__Group__1__Impl rule__STDateAndTimeLiteral__Group__2 ;
+    // InternalSTAlgorithmParser.g:8194:1: rule__STDateAndTimeLiteral__Group__1 : rule__STDateAndTimeLiteral__Group__1__Impl rule__STDateAndTimeLiteral__Group__2 ;
     public final void rule__STDateAndTimeLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8144:1: ( rule__STDateAndTimeLiteral__Group__1__Impl rule__STDateAndTimeLiteral__Group__2 )
-            // InternalSTAlgorithmParser.g:8145:2: rule__STDateAndTimeLiteral__Group__1__Impl rule__STDateAndTimeLiteral__Group__2
+            // InternalSTAlgorithmParser.g:8198:1: ( rule__STDateAndTimeLiteral__Group__1__Impl rule__STDateAndTimeLiteral__Group__2 )
+            // InternalSTAlgorithmParser.g:8199:2: rule__STDateAndTimeLiteral__Group__1__Impl rule__STDateAndTimeLiteral__Group__2
             {
             pushFollow(FOLLOW_74);
             rule__STDateAndTimeLiteral__Group__1__Impl();
@@ -27341,23 +27509,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:8152:1: rule__STDateAndTimeLiteral__Group__1__Impl : ( ( rule__STDateAndTimeLiteral__DateValueAssignment_1 ) ) ;
+    // InternalSTAlgorithmParser.g:8206:1: rule__STDateAndTimeLiteral__Group__1__Impl : ( ( rule__STDateAndTimeLiteral__DateValueAssignment_1 ) ) ;
     public final void rule__STDateAndTimeLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8156:1: ( ( ( rule__STDateAndTimeLiteral__DateValueAssignment_1 ) ) )
-            // InternalSTAlgorithmParser.g:8157:1: ( ( rule__STDateAndTimeLiteral__DateValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8210:1: ( ( ( rule__STDateAndTimeLiteral__DateValueAssignment_1 ) ) )
+            // InternalSTAlgorithmParser.g:8211:1: ( ( rule__STDateAndTimeLiteral__DateValueAssignment_1 ) )
             {
-            // InternalSTAlgorithmParser.g:8157:1: ( ( rule__STDateAndTimeLiteral__DateValueAssignment_1 ) )
-            // InternalSTAlgorithmParser.g:8158:2: ( rule__STDateAndTimeLiteral__DateValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8211:1: ( ( rule__STDateAndTimeLiteral__DateValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8212:2: ( rule__STDateAndTimeLiteral__DateValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getDateValueAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:8159:2: ( rule__STDateAndTimeLiteral__DateValueAssignment_1 )
-            // InternalSTAlgorithmParser.g:8159:3: rule__STDateAndTimeLiteral__DateValueAssignment_1
+            // InternalSTAlgorithmParser.g:8213:2: ( rule__STDateAndTimeLiteral__DateValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8213:3: rule__STDateAndTimeLiteral__DateValueAssignment_1
             {
             pushFollow(FOLLOW_2);
             rule__STDateAndTimeLiteral__DateValueAssignment_1();
@@ -27392,14 +27560,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__Group__2"
-    // InternalSTAlgorithmParser.g:8167:1: rule__STDateAndTimeLiteral__Group__2 : rule__STDateAndTimeLiteral__Group__2__Impl rule__STDateAndTimeLiteral__Group__3 ;
+    // InternalSTAlgorithmParser.g:8221:1: rule__STDateAndTimeLiteral__Group__2 : rule__STDateAndTimeLiteral__Group__2__Impl rule__STDateAndTimeLiteral__Group__3 ;
     public final void rule__STDateAndTimeLiteral__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8171:1: ( rule__STDateAndTimeLiteral__Group__2__Impl rule__STDateAndTimeLiteral__Group__3 )
-            // InternalSTAlgorithmParser.g:8172:2: rule__STDateAndTimeLiteral__Group__2__Impl rule__STDateAndTimeLiteral__Group__3
+            // InternalSTAlgorithmParser.g:8225:1: ( rule__STDateAndTimeLiteral__Group__2__Impl rule__STDateAndTimeLiteral__Group__3 )
+            // InternalSTAlgorithmParser.g:8226:2: rule__STDateAndTimeLiteral__Group__2__Impl rule__STDateAndTimeLiteral__Group__3
             {
             pushFollow(FOLLOW_72);
             rule__STDateAndTimeLiteral__Group__2__Impl();
@@ -27430,17 +27598,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:8179:1: rule__STDateAndTimeLiteral__Group__2__Impl : ( HyphenMinus ) ;
+    // InternalSTAlgorithmParser.g:8233:1: rule__STDateAndTimeLiteral__Group__2__Impl : ( HyphenMinus ) ;
     public final void rule__STDateAndTimeLiteral__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8183:1: ( ( HyphenMinus ) )
-            // InternalSTAlgorithmParser.g:8184:1: ( HyphenMinus )
+            // InternalSTAlgorithmParser.g:8237:1: ( ( HyphenMinus ) )
+            // InternalSTAlgorithmParser.g:8238:1: ( HyphenMinus )
             {
-            // InternalSTAlgorithmParser.g:8184:1: ( HyphenMinus )
-            // InternalSTAlgorithmParser.g:8185:2: HyphenMinus
+            // InternalSTAlgorithmParser.g:8238:1: ( HyphenMinus )
+            // InternalSTAlgorithmParser.g:8239:2: HyphenMinus
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getHyphenMinusKeyword_2()); 
@@ -27471,14 +27639,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__Group__3"
-    // InternalSTAlgorithmParser.g:8194:1: rule__STDateAndTimeLiteral__Group__3 : rule__STDateAndTimeLiteral__Group__3__Impl ;
+    // InternalSTAlgorithmParser.g:8248:1: rule__STDateAndTimeLiteral__Group__3 : rule__STDateAndTimeLiteral__Group__3__Impl ;
     public final void rule__STDateAndTimeLiteral__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8198:1: ( rule__STDateAndTimeLiteral__Group__3__Impl )
-            // InternalSTAlgorithmParser.g:8199:2: rule__STDateAndTimeLiteral__Group__3__Impl
+            // InternalSTAlgorithmParser.g:8252:1: ( rule__STDateAndTimeLiteral__Group__3__Impl )
+            // InternalSTAlgorithmParser.g:8253:2: rule__STDateAndTimeLiteral__Group__3__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STDateAndTimeLiteral__Group__3__Impl();
@@ -27504,23 +27672,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__Group__3__Impl"
-    // InternalSTAlgorithmParser.g:8205:1: rule__STDateAndTimeLiteral__Group__3__Impl : ( ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 ) ) ;
+    // InternalSTAlgorithmParser.g:8259:1: rule__STDateAndTimeLiteral__Group__3__Impl : ( ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 ) ) ;
     public final void rule__STDateAndTimeLiteral__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8209:1: ( ( ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 ) ) )
-            // InternalSTAlgorithmParser.g:8210:1: ( ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 ) )
+            // InternalSTAlgorithmParser.g:8263:1: ( ( ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 ) ) )
+            // InternalSTAlgorithmParser.g:8264:1: ( ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 ) )
             {
-            // InternalSTAlgorithmParser.g:8210:1: ( ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 ) )
-            // InternalSTAlgorithmParser.g:8211:2: ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 )
+            // InternalSTAlgorithmParser.g:8264:1: ( ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 ) )
+            // InternalSTAlgorithmParser.g:8265:2: ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getTimeOfDayValueAssignment_3()); 
             }
-            // InternalSTAlgorithmParser.g:8212:2: ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 )
-            // InternalSTAlgorithmParser.g:8212:3: rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3
+            // InternalSTAlgorithmParser.g:8266:2: ( rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 )
+            // InternalSTAlgorithmParser.g:8266:3: rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3
             {
             pushFollow(FOLLOW_2);
             rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3();
@@ -27555,14 +27723,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STStringLiteral__Group__0"
-    // InternalSTAlgorithmParser.g:8221:1: rule__STStringLiteral__Group__0 : rule__STStringLiteral__Group__0__Impl rule__STStringLiteral__Group__1 ;
+    // InternalSTAlgorithmParser.g:8275:1: rule__STStringLiteral__Group__0 : rule__STStringLiteral__Group__0__Impl rule__STStringLiteral__Group__1 ;
     public final void rule__STStringLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8225:1: ( rule__STStringLiteral__Group__0__Impl rule__STStringLiteral__Group__1 )
-            // InternalSTAlgorithmParser.g:8226:2: rule__STStringLiteral__Group__0__Impl rule__STStringLiteral__Group__1
+            // InternalSTAlgorithmParser.g:8279:1: ( rule__STStringLiteral__Group__0__Impl rule__STStringLiteral__Group__1 )
+            // InternalSTAlgorithmParser.g:8280:2: rule__STStringLiteral__Group__0__Impl rule__STStringLiteral__Group__1
             {
             pushFollow(FOLLOW_75);
             rule__STStringLiteral__Group__0__Impl();
@@ -27593,22 +27761,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STStringLiteral__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:8233:1: rule__STStringLiteral__Group__0__Impl : ( ( rule__STStringLiteral__TypeAssignment_0 )? ) ;
+    // InternalSTAlgorithmParser.g:8287:1: rule__STStringLiteral__Group__0__Impl : ( ( rule__STStringLiteral__TypeAssignment_0 )? ) ;
     public final void rule__STStringLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8237:1: ( ( ( rule__STStringLiteral__TypeAssignment_0 )? ) )
-            // InternalSTAlgorithmParser.g:8238:1: ( ( rule__STStringLiteral__TypeAssignment_0 )? )
+            // InternalSTAlgorithmParser.g:8291:1: ( ( ( rule__STStringLiteral__TypeAssignment_0 )? ) )
+            // InternalSTAlgorithmParser.g:8292:1: ( ( rule__STStringLiteral__TypeAssignment_0 )? )
             {
-            // InternalSTAlgorithmParser.g:8238:1: ( ( rule__STStringLiteral__TypeAssignment_0 )? )
-            // InternalSTAlgorithmParser.g:8239:2: ( rule__STStringLiteral__TypeAssignment_0 )?
+            // InternalSTAlgorithmParser.g:8292:1: ( ( rule__STStringLiteral__TypeAssignment_0 )? )
+            // InternalSTAlgorithmParser.g:8293:2: ( rule__STStringLiteral__TypeAssignment_0 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTStringLiteralAccess().getTypeAssignment_0()); 
             }
-            // InternalSTAlgorithmParser.g:8240:2: ( rule__STStringLiteral__TypeAssignment_0 )?
+            // InternalSTAlgorithmParser.g:8294:2: ( rule__STStringLiteral__TypeAssignment_0 )?
             int alt72=2;
             int LA72_0 = input.LA(1);
 
@@ -27617,7 +27785,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
             switch (alt72) {
                 case 1 :
-                    // InternalSTAlgorithmParser.g:8240:3: rule__STStringLiteral__TypeAssignment_0
+                    // InternalSTAlgorithmParser.g:8294:3: rule__STStringLiteral__TypeAssignment_0
                     {
                     pushFollow(FOLLOW_2);
                     rule__STStringLiteral__TypeAssignment_0();
@@ -27655,14 +27823,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STStringLiteral__Group__1"
-    // InternalSTAlgorithmParser.g:8248:1: rule__STStringLiteral__Group__1 : rule__STStringLiteral__Group__1__Impl ;
+    // InternalSTAlgorithmParser.g:8302:1: rule__STStringLiteral__Group__1 : rule__STStringLiteral__Group__1__Impl ;
     public final void rule__STStringLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8252:1: ( rule__STStringLiteral__Group__1__Impl )
-            // InternalSTAlgorithmParser.g:8253:2: rule__STStringLiteral__Group__1__Impl
+            // InternalSTAlgorithmParser.g:8306:1: ( rule__STStringLiteral__Group__1__Impl )
+            // InternalSTAlgorithmParser.g:8307:2: rule__STStringLiteral__Group__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__STStringLiteral__Group__1__Impl();
@@ -27688,23 +27856,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STStringLiteral__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:8259:1: rule__STStringLiteral__Group__1__Impl : ( ( rule__STStringLiteral__ValueAssignment_1 ) ) ;
+    // InternalSTAlgorithmParser.g:8313:1: rule__STStringLiteral__Group__1__Impl : ( ( rule__STStringLiteral__ValueAssignment_1 ) ) ;
     public final void rule__STStringLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8263:1: ( ( ( rule__STStringLiteral__ValueAssignment_1 ) ) )
-            // InternalSTAlgorithmParser.g:8264:1: ( ( rule__STStringLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8317:1: ( ( ( rule__STStringLiteral__ValueAssignment_1 ) ) )
+            // InternalSTAlgorithmParser.g:8318:1: ( ( rule__STStringLiteral__ValueAssignment_1 ) )
             {
-            // InternalSTAlgorithmParser.g:8264:1: ( ( rule__STStringLiteral__ValueAssignment_1 ) )
-            // InternalSTAlgorithmParser.g:8265:2: ( rule__STStringLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8318:1: ( ( rule__STStringLiteral__ValueAssignment_1 ) )
+            // InternalSTAlgorithmParser.g:8319:2: ( rule__STStringLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTStringLiteralAccess().getValueAssignment_1()); 
             }
-            // InternalSTAlgorithmParser.g:8266:2: ( rule__STStringLiteral__ValueAssignment_1 )
-            // InternalSTAlgorithmParser.g:8266:3: rule__STStringLiteral__ValueAssignment_1
+            // InternalSTAlgorithmParser.g:8320:2: ( rule__STStringLiteral__ValueAssignment_1 )
+            // InternalSTAlgorithmParser.g:8320:3: rule__STStringLiteral__ValueAssignment_1
             {
             pushFollow(FOLLOW_2);
             rule__STStringLiteral__ValueAssignment_1();
@@ -27739,14 +27907,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group__0"
-    // InternalSTAlgorithmParser.g:8275:1: rule__Number__Group__0 : rule__Number__Group__0__Impl rule__Number__Group__1 ;
+    // InternalSTAlgorithmParser.g:8329:1: rule__Number__Group__0 : rule__Number__Group__0__Impl rule__Number__Group__1 ;
     public final void rule__Number__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8279:1: ( rule__Number__Group__0__Impl rule__Number__Group__1 )
-            // InternalSTAlgorithmParser.g:8280:2: rule__Number__Group__0__Impl rule__Number__Group__1
+            // InternalSTAlgorithmParser.g:8333:1: ( rule__Number__Group__0__Impl rule__Number__Group__1 )
+            // InternalSTAlgorithmParser.g:8334:2: rule__Number__Group__0__Impl rule__Number__Group__1
             {
             pushFollow(FOLLOW_73);
             rule__Number__Group__0__Impl();
@@ -27777,22 +27945,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:8287:1: rule__Number__Group__0__Impl : ( ( rule__Number__Alternatives_0 )? ) ;
+    // InternalSTAlgorithmParser.g:8341:1: rule__Number__Group__0__Impl : ( ( rule__Number__Alternatives_0 )? ) ;
     public final void rule__Number__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8291:1: ( ( ( rule__Number__Alternatives_0 )? ) )
-            // InternalSTAlgorithmParser.g:8292:1: ( ( rule__Number__Alternatives_0 )? )
+            // InternalSTAlgorithmParser.g:8345:1: ( ( ( rule__Number__Alternatives_0 )? ) )
+            // InternalSTAlgorithmParser.g:8346:1: ( ( rule__Number__Alternatives_0 )? )
             {
-            // InternalSTAlgorithmParser.g:8292:1: ( ( rule__Number__Alternatives_0 )? )
-            // InternalSTAlgorithmParser.g:8293:2: ( rule__Number__Alternatives_0 )?
+            // InternalSTAlgorithmParser.g:8346:1: ( ( rule__Number__Alternatives_0 )? )
+            // InternalSTAlgorithmParser.g:8347:2: ( rule__Number__Alternatives_0 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getNumberAccess().getAlternatives_0()); 
             }
-            // InternalSTAlgorithmParser.g:8294:2: ( rule__Number__Alternatives_0 )?
+            // InternalSTAlgorithmParser.g:8348:2: ( rule__Number__Alternatives_0 )?
             int alt73=2;
             int LA73_0 = input.LA(1);
 
@@ -27801,7 +27969,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
             switch (alt73) {
                 case 1 :
-                    // InternalSTAlgorithmParser.g:8294:3: rule__Number__Alternatives_0
+                    // InternalSTAlgorithmParser.g:8348:3: rule__Number__Alternatives_0
                     {
                     pushFollow(FOLLOW_2);
                     rule__Number__Alternatives_0();
@@ -27839,14 +28007,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group__1"
-    // InternalSTAlgorithmParser.g:8302:1: rule__Number__Group__1 : rule__Number__Group__1__Impl rule__Number__Group__2 ;
+    // InternalSTAlgorithmParser.g:8356:1: rule__Number__Group__1 : rule__Number__Group__1__Impl rule__Number__Group__2 ;
     public final void rule__Number__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8306:1: ( rule__Number__Group__1__Impl rule__Number__Group__2 )
-            // InternalSTAlgorithmParser.g:8307:2: rule__Number__Group__1__Impl rule__Number__Group__2
+            // InternalSTAlgorithmParser.g:8360:1: ( rule__Number__Group__1__Impl rule__Number__Group__2 )
+            // InternalSTAlgorithmParser.g:8361:2: rule__Number__Group__1__Impl rule__Number__Group__2
             {
             pushFollow(FOLLOW_67);
             rule__Number__Group__1__Impl();
@@ -27877,17 +28045,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:8314:1: rule__Number__Group__1__Impl : ( RULE_INT ) ;
+    // InternalSTAlgorithmParser.g:8368:1: rule__Number__Group__1__Impl : ( RULE_INT ) ;
     public final void rule__Number__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8318:1: ( ( RULE_INT ) )
-            // InternalSTAlgorithmParser.g:8319:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8372:1: ( ( RULE_INT ) )
+            // InternalSTAlgorithmParser.g:8373:1: ( RULE_INT )
             {
-            // InternalSTAlgorithmParser.g:8319:1: ( RULE_INT )
-            // InternalSTAlgorithmParser.g:8320:2: RULE_INT
+            // InternalSTAlgorithmParser.g:8373:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8374:2: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getNumberAccess().getINTTerminalRuleCall_1()); 
@@ -27918,14 +28086,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group__2"
-    // InternalSTAlgorithmParser.g:8329:1: rule__Number__Group__2 : rule__Number__Group__2__Impl ;
+    // InternalSTAlgorithmParser.g:8383:1: rule__Number__Group__2 : rule__Number__Group__2__Impl ;
     public final void rule__Number__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8333:1: ( rule__Number__Group__2__Impl )
-            // InternalSTAlgorithmParser.g:8334:2: rule__Number__Group__2__Impl
+            // InternalSTAlgorithmParser.g:8387:1: ( rule__Number__Group__2__Impl )
+            // InternalSTAlgorithmParser.g:8388:2: rule__Number__Group__2__Impl
             {
             pushFollow(FOLLOW_2);
             rule__Number__Group__2__Impl();
@@ -27951,22 +28119,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:8340:1: rule__Number__Group__2__Impl : ( ( rule__Number__Group_2__0 )? ) ;
+    // InternalSTAlgorithmParser.g:8394:1: rule__Number__Group__2__Impl : ( ( rule__Number__Group_2__0 )? ) ;
     public final void rule__Number__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8344:1: ( ( ( rule__Number__Group_2__0 )? ) )
-            // InternalSTAlgorithmParser.g:8345:1: ( ( rule__Number__Group_2__0 )? )
+            // InternalSTAlgorithmParser.g:8398:1: ( ( ( rule__Number__Group_2__0 )? ) )
+            // InternalSTAlgorithmParser.g:8399:1: ( ( rule__Number__Group_2__0 )? )
             {
-            // InternalSTAlgorithmParser.g:8345:1: ( ( rule__Number__Group_2__0 )? )
-            // InternalSTAlgorithmParser.g:8346:2: ( rule__Number__Group_2__0 )?
+            // InternalSTAlgorithmParser.g:8399:1: ( ( rule__Number__Group_2__0 )? )
+            // InternalSTAlgorithmParser.g:8400:2: ( rule__Number__Group_2__0 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getNumberAccess().getGroup_2()); 
             }
-            // InternalSTAlgorithmParser.g:8347:2: ( rule__Number__Group_2__0 )?
+            // InternalSTAlgorithmParser.g:8401:2: ( rule__Number__Group_2__0 )?
             int alt74=2;
             int LA74_0 = input.LA(1);
 
@@ -27986,7 +28154,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
             switch (alt74) {
                 case 1 :
-                    // InternalSTAlgorithmParser.g:8347:3: rule__Number__Group_2__0
+                    // InternalSTAlgorithmParser.g:8401:3: rule__Number__Group_2__0
                     {
                     pushFollow(FOLLOW_2);
                     rule__Number__Group_2__0();
@@ -28024,14 +28192,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group_2__0"
-    // InternalSTAlgorithmParser.g:8356:1: rule__Number__Group_2__0 : rule__Number__Group_2__0__Impl rule__Number__Group_2__1 ;
+    // InternalSTAlgorithmParser.g:8410:1: rule__Number__Group_2__0 : rule__Number__Group_2__0__Impl rule__Number__Group_2__1 ;
     public final void rule__Number__Group_2__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8360:1: ( rule__Number__Group_2__0__Impl rule__Number__Group_2__1 )
-            // InternalSTAlgorithmParser.g:8361:2: rule__Number__Group_2__0__Impl rule__Number__Group_2__1
+            // InternalSTAlgorithmParser.g:8414:1: ( rule__Number__Group_2__0__Impl rule__Number__Group_2__1 )
+            // InternalSTAlgorithmParser.g:8415:2: rule__Number__Group_2__0__Impl rule__Number__Group_2__1
             {
             pushFollow(FOLLOW_76);
             rule__Number__Group_2__0__Impl();
@@ -28062,23 +28230,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group_2__0__Impl"
-    // InternalSTAlgorithmParser.g:8368:1: rule__Number__Group_2__0__Impl : ( ( FullStop ) ) ;
+    // InternalSTAlgorithmParser.g:8422:1: rule__Number__Group_2__0__Impl : ( ( FullStop ) ) ;
     public final void rule__Number__Group_2__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8372:1: ( ( ( FullStop ) ) )
-            // InternalSTAlgorithmParser.g:8373:1: ( ( FullStop ) )
+            // InternalSTAlgorithmParser.g:8426:1: ( ( ( FullStop ) ) )
+            // InternalSTAlgorithmParser.g:8427:1: ( ( FullStop ) )
             {
-            // InternalSTAlgorithmParser.g:8373:1: ( ( FullStop ) )
-            // InternalSTAlgorithmParser.g:8374:2: ( FullStop )
+            // InternalSTAlgorithmParser.g:8427:1: ( ( FullStop ) )
+            // InternalSTAlgorithmParser.g:8428:2: ( FullStop )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getNumberAccess().getFullStopKeyword_2_0()); 
             }
-            // InternalSTAlgorithmParser.g:8375:2: ( FullStop )
-            // InternalSTAlgorithmParser.g:8375:3: FullStop
+            // InternalSTAlgorithmParser.g:8429:2: ( FullStop )
+            // InternalSTAlgorithmParser.g:8429:3: FullStop
             {
             match(input,FullStop,FOLLOW_2); if (state.failed) return ;
 
@@ -28109,14 +28277,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group_2__1"
-    // InternalSTAlgorithmParser.g:8383:1: rule__Number__Group_2__1 : rule__Number__Group_2__1__Impl ;
+    // InternalSTAlgorithmParser.g:8437:1: rule__Number__Group_2__1 : rule__Number__Group_2__1__Impl ;
     public final void rule__Number__Group_2__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8387:1: ( rule__Number__Group_2__1__Impl )
-            // InternalSTAlgorithmParser.g:8388:2: rule__Number__Group_2__1__Impl
+            // InternalSTAlgorithmParser.g:8441:1: ( rule__Number__Group_2__1__Impl )
+            // InternalSTAlgorithmParser.g:8442:2: rule__Number__Group_2__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__Number__Group_2__1__Impl();
@@ -28142,23 +28310,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Number__Group_2__1__Impl"
-    // InternalSTAlgorithmParser.g:8394:1: rule__Number__Group_2__1__Impl : ( ( rule__Number__Alternatives_2_1 ) ) ;
+    // InternalSTAlgorithmParser.g:8448:1: rule__Number__Group_2__1__Impl : ( ( rule__Number__Alternatives_2_1 ) ) ;
     public final void rule__Number__Group_2__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8398:1: ( ( ( rule__Number__Alternatives_2_1 ) ) )
-            // InternalSTAlgorithmParser.g:8399:1: ( ( rule__Number__Alternatives_2_1 ) )
+            // InternalSTAlgorithmParser.g:8452:1: ( ( ( rule__Number__Alternatives_2_1 ) ) )
+            // InternalSTAlgorithmParser.g:8453:1: ( ( rule__Number__Alternatives_2_1 ) )
             {
-            // InternalSTAlgorithmParser.g:8399:1: ( ( rule__Number__Alternatives_2_1 ) )
-            // InternalSTAlgorithmParser.g:8400:2: ( rule__Number__Alternatives_2_1 )
+            // InternalSTAlgorithmParser.g:8453:1: ( ( rule__Number__Alternatives_2_1 ) )
+            // InternalSTAlgorithmParser.g:8454:2: ( rule__Number__Alternatives_2_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getNumberAccess().getAlternatives_2_1()); 
             }
-            // InternalSTAlgorithmParser.g:8401:2: ( rule__Number__Alternatives_2_1 )
-            // InternalSTAlgorithmParser.g:8401:3: rule__Number__Alternatives_2_1
+            // InternalSTAlgorithmParser.g:8455:2: ( rule__Number__Alternatives_2_1 )
+            // InternalSTAlgorithmParser.g:8455:3: rule__Number__Alternatives_2_1
             {
             pushFollow(FOLLOW_2);
             rule__Number__Alternatives_2_1();
@@ -28193,14 +28361,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__0"
-    // InternalSTAlgorithmParser.g:8410:1: rule__Date__Group__0 : rule__Date__Group__0__Impl rule__Date__Group__1 ;
+    // InternalSTAlgorithmParser.g:8464:1: rule__Date__Group__0 : rule__Date__Group__0__Impl rule__Date__Group__1 ;
     public final void rule__Date__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8414:1: ( rule__Date__Group__0__Impl rule__Date__Group__1 )
-            // InternalSTAlgorithmParser.g:8415:2: rule__Date__Group__0__Impl rule__Date__Group__1
+            // InternalSTAlgorithmParser.g:8468:1: ( rule__Date__Group__0__Impl rule__Date__Group__1 )
+            // InternalSTAlgorithmParser.g:8469:2: rule__Date__Group__0__Impl rule__Date__Group__1
             {
             pushFollow(FOLLOW_74);
             rule__Date__Group__0__Impl();
@@ -28231,17 +28399,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:8422:1: rule__Date__Group__0__Impl : ( RULE_INT ) ;
+    // InternalSTAlgorithmParser.g:8476:1: rule__Date__Group__0__Impl : ( RULE_INT ) ;
     public final void rule__Date__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8426:1: ( ( RULE_INT ) )
-            // InternalSTAlgorithmParser.g:8427:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8480:1: ( ( RULE_INT ) )
+            // InternalSTAlgorithmParser.g:8481:1: ( RULE_INT )
             {
-            // InternalSTAlgorithmParser.g:8427:1: ( RULE_INT )
-            // InternalSTAlgorithmParser.g:8428:2: RULE_INT
+            // InternalSTAlgorithmParser.g:8481:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8482:2: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getDateAccess().getINTTerminalRuleCall_0()); 
@@ -28272,14 +28440,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__1"
-    // InternalSTAlgorithmParser.g:8437:1: rule__Date__Group__1 : rule__Date__Group__1__Impl rule__Date__Group__2 ;
+    // InternalSTAlgorithmParser.g:8491:1: rule__Date__Group__1 : rule__Date__Group__1__Impl rule__Date__Group__2 ;
     public final void rule__Date__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8441:1: ( rule__Date__Group__1__Impl rule__Date__Group__2 )
-            // InternalSTAlgorithmParser.g:8442:2: rule__Date__Group__1__Impl rule__Date__Group__2
+            // InternalSTAlgorithmParser.g:8495:1: ( rule__Date__Group__1__Impl rule__Date__Group__2 )
+            // InternalSTAlgorithmParser.g:8496:2: rule__Date__Group__1__Impl rule__Date__Group__2
             {
             pushFollow(FOLLOW_72);
             rule__Date__Group__1__Impl();
@@ -28310,17 +28478,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:8449:1: rule__Date__Group__1__Impl : ( HyphenMinus ) ;
+    // InternalSTAlgorithmParser.g:8503:1: rule__Date__Group__1__Impl : ( HyphenMinus ) ;
     public final void rule__Date__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8453:1: ( ( HyphenMinus ) )
-            // InternalSTAlgorithmParser.g:8454:1: ( HyphenMinus )
+            // InternalSTAlgorithmParser.g:8507:1: ( ( HyphenMinus ) )
+            // InternalSTAlgorithmParser.g:8508:1: ( HyphenMinus )
             {
-            // InternalSTAlgorithmParser.g:8454:1: ( HyphenMinus )
-            // InternalSTAlgorithmParser.g:8455:2: HyphenMinus
+            // InternalSTAlgorithmParser.g:8508:1: ( HyphenMinus )
+            // InternalSTAlgorithmParser.g:8509:2: HyphenMinus
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getDateAccess().getHyphenMinusKeyword_1()); 
@@ -28351,14 +28519,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__2"
-    // InternalSTAlgorithmParser.g:8464:1: rule__Date__Group__2 : rule__Date__Group__2__Impl rule__Date__Group__3 ;
+    // InternalSTAlgorithmParser.g:8518:1: rule__Date__Group__2 : rule__Date__Group__2__Impl rule__Date__Group__3 ;
     public final void rule__Date__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8468:1: ( rule__Date__Group__2__Impl rule__Date__Group__3 )
-            // InternalSTAlgorithmParser.g:8469:2: rule__Date__Group__2__Impl rule__Date__Group__3
+            // InternalSTAlgorithmParser.g:8522:1: ( rule__Date__Group__2__Impl rule__Date__Group__3 )
+            // InternalSTAlgorithmParser.g:8523:2: rule__Date__Group__2__Impl rule__Date__Group__3
             {
             pushFollow(FOLLOW_74);
             rule__Date__Group__2__Impl();
@@ -28389,17 +28557,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:8476:1: rule__Date__Group__2__Impl : ( RULE_INT ) ;
+    // InternalSTAlgorithmParser.g:8530:1: rule__Date__Group__2__Impl : ( RULE_INT ) ;
     public final void rule__Date__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8480:1: ( ( RULE_INT ) )
-            // InternalSTAlgorithmParser.g:8481:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8534:1: ( ( RULE_INT ) )
+            // InternalSTAlgorithmParser.g:8535:1: ( RULE_INT )
             {
-            // InternalSTAlgorithmParser.g:8481:1: ( RULE_INT )
-            // InternalSTAlgorithmParser.g:8482:2: RULE_INT
+            // InternalSTAlgorithmParser.g:8535:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8536:2: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getDateAccess().getINTTerminalRuleCall_2()); 
@@ -28430,14 +28598,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__3"
-    // InternalSTAlgorithmParser.g:8491:1: rule__Date__Group__3 : rule__Date__Group__3__Impl rule__Date__Group__4 ;
+    // InternalSTAlgorithmParser.g:8545:1: rule__Date__Group__3 : rule__Date__Group__3__Impl rule__Date__Group__4 ;
     public final void rule__Date__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8495:1: ( rule__Date__Group__3__Impl rule__Date__Group__4 )
-            // InternalSTAlgorithmParser.g:8496:2: rule__Date__Group__3__Impl rule__Date__Group__4
+            // InternalSTAlgorithmParser.g:8549:1: ( rule__Date__Group__3__Impl rule__Date__Group__4 )
+            // InternalSTAlgorithmParser.g:8550:2: rule__Date__Group__3__Impl rule__Date__Group__4
             {
             pushFollow(FOLLOW_72);
             rule__Date__Group__3__Impl();
@@ -28468,17 +28636,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__3__Impl"
-    // InternalSTAlgorithmParser.g:8503:1: rule__Date__Group__3__Impl : ( HyphenMinus ) ;
+    // InternalSTAlgorithmParser.g:8557:1: rule__Date__Group__3__Impl : ( HyphenMinus ) ;
     public final void rule__Date__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8507:1: ( ( HyphenMinus ) )
-            // InternalSTAlgorithmParser.g:8508:1: ( HyphenMinus )
+            // InternalSTAlgorithmParser.g:8561:1: ( ( HyphenMinus ) )
+            // InternalSTAlgorithmParser.g:8562:1: ( HyphenMinus )
             {
-            // InternalSTAlgorithmParser.g:8508:1: ( HyphenMinus )
-            // InternalSTAlgorithmParser.g:8509:2: HyphenMinus
+            // InternalSTAlgorithmParser.g:8562:1: ( HyphenMinus )
+            // InternalSTAlgorithmParser.g:8563:2: HyphenMinus
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getDateAccess().getHyphenMinusKeyword_3()); 
@@ -28509,14 +28677,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__4"
-    // InternalSTAlgorithmParser.g:8518:1: rule__Date__Group__4 : rule__Date__Group__4__Impl ;
+    // InternalSTAlgorithmParser.g:8572:1: rule__Date__Group__4 : rule__Date__Group__4__Impl ;
     public final void rule__Date__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8522:1: ( rule__Date__Group__4__Impl )
-            // InternalSTAlgorithmParser.g:8523:2: rule__Date__Group__4__Impl
+            // InternalSTAlgorithmParser.g:8576:1: ( rule__Date__Group__4__Impl )
+            // InternalSTAlgorithmParser.g:8577:2: rule__Date__Group__4__Impl
             {
             pushFollow(FOLLOW_2);
             rule__Date__Group__4__Impl();
@@ -28542,17 +28710,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Date__Group__4__Impl"
-    // InternalSTAlgorithmParser.g:8529:1: rule__Date__Group__4__Impl : ( RULE_INT ) ;
+    // InternalSTAlgorithmParser.g:8583:1: rule__Date__Group__4__Impl : ( RULE_INT ) ;
     public final void rule__Date__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8533:1: ( ( RULE_INT ) )
-            // InternalSTAlgorithmParser.g:8534:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8587:1: ( ( RULE_INT ) )
+            // InternalSTAlgorithmParser.g:8588:1: ( RULE_INT )
             {
-            // InternalSTAlgorithmParser.g:8534:1: ( RULE_INT )
-            // InternalSTAlgorithmParser.g:8535:2: RULE_INT
+            // InternalSTAlgorithmParser.g:8588:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8589:2: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getDateAccess().getINTTerminalRuleCall_4()); 
@@ -28583,14 +28751,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__0"
-    // InternalSTAlgorithmParser.g:8545:1: rule__TimeOfDay__Group__0 : rule__TimeOfDay__Group__0__Impl rule__TimeOfDay__Group__1 ;
+    // InternalSTAlgorithmParser.g:8599:1: rule__TimeOfDay__Group__0 : rule__TimeOfDay__Group__0__Impl rule__TimeOfDay__Group__1 ;
     public final void rule__TimeOfDay__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8549:1: ( rule__TimeOfDay__Group__0__Impl rule__TimeOfDay__Group__1 )
-            // InternalSTAlgorithmParser.g:8550:2: rule__TimeOfDay__Group__0__Impl rule__TimeOfDay__Group__1
+            // InternalSTAlgorithmParser.g:8603:1: ( rule__TimeOfDay__Group__0__Impl rule__TimeOfDay__Group__1 )
+            // InternalSTAlgorithmParser.g:8604:2: rule__TimeOfDay__Group__0__Impl rule__TimeOfDay__Group__1
             {
             pushFollow(FOLLOW_77);
             rule__TimeOfDay__Group__0__Impl();
@@ -28621,17 +28789,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:8557:1: rule__TimeOfDay__Group__0__Impl : ( RULE_INT ) ;
+    // InternalSTAlgorithmParser.g:8611:1: rule__TimeOfDay__Group__0__Impl : ( RULE_INT ) ;
     public final void rule__TimeOfDay__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8561:1: ( ( RULE_INT ) )
-            // InternalSTAlgorithmParser.g:8562:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8615:1: ( ( RULE_INT ) )
+            // InternalSTAlgorithmParser.g:8616:1: ( RULE_INT )
             {
-            // InternalSTAlgorithmParser.g:8562:1: ( RULE_INT )
-            // InternalSTAlgorithmParser.g:8563:2: RULE_INT
+            // InternalSTAlgorithmParser.g:8616:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8617:2: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_0()); 
@@ -28662,14 +28830,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__1"
-    // InternalSTAlgorithmParser.g:8572:1: rule__TimeOfDay__Group__1 : rule__TimeOfDay__Group__1__Impl rule__TimeOfDay__Group__2 ;
+    // InternalSTAlgorithmParser.g:8626:1: rule__TimeOfDay__Group__1 : rule__TimeOfDay__Group__1__Impl rule__TimeOfDay__Group__2 ;
     public final void rule__TimeOfDay__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8576:1: ( rule__TimeOfDay__Group__1__Impl rule__TimeOfDay__Group__2 )
-            // InternalSTAlgorithmParser.g:8577:2: rule__TimeOfDay__Group__1__Impl rule__TimeOfDay__Group__2
+            // InternalSTAlgorithmParser.g:8630:1: ( rule__TimeOfDay__Group__1__Impl rule__TimeOfDay__Group__2 )
+            // InternalSTAlgorithmParser.g:8631:2: rule__TimeOfDay__Group__1__Impl rule__TimeOfDay__Group__2
             {
             pushFollow(FOLLOW_72);
             rule__TimeOfDay__Group__1__Impl();
@@ -28700,17 +28868,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:8584:1: rule__TimeOfDay__Group__1__Impl : ( Colon ) ;
+    // InternalSTAlgorithmParser.g:8638:1: rule__TimeOfDay__Group__1__Impl : ( Colon ) ;
     public final void rule__TimeOfDay__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8588:1: ( ( Colon ) )
-            // InternalSTAlgorithmParser.g:8589:1: ( Colon )
+            // InternalSTAlgorithmParser.g:8642:1: ( ( Colon ) )
+            // InternalSTAlgorithmParser.g:8643:1: ( Colon )
             {
-            // InternalSTAlgorithmParser.g:8589:1: ( Colon )
-            // InternalSTAlgorithmParser.g:8590:2: Colon
+            // InternalSTAlgorithmParser.g:8643:1: ( Colon )
+            // InternalSTAlgorithmParser.g:8644:2: Colon
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeOfDayAccess().getColonKeyword_1()); 
@@ -28741,14 +28909,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__2"
-    // InternalSTAlgorithmParser.g:8599:1: rule__TimeOfDay__Group__2 : rule__TimeOfDay__Group__2__Impl rule__TimeOfDay__Group__3 ;
+    // InternalSTAlgorithmParser.g:8653:1: rule__TimeOfDay__Group__2 : rule__TimeOfDay__Group__2__Impl rule__TimeOfDay__Group__3 ;
     public final void rule__TimeOfDay__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8603:1: ( rule__TimeOfDay__Group__2__Impl rule__TimeOfDay__Group__3 )
-            // InternalSTAlgorithmParser.g:8604:2: rule__TimeOfDay__Group__2__Impl rule__TimeOfDay__Group__3
+            // InternalSTAlgorithmParser.g:8657:1: ( rule__TimeOfDay__Group__2__Impl rule__TimeOfDay__Group__3 )
+            // InternalSTAlgorithmParser.g:8658:2: rule__TimeOfDay__Group__2__Impl rule__TimeOfDay__Group__3
             {
             pushFollow(FOLLOW_77);
             rule__TimeOfDay__Group__2__Impl();
@@ -28779,17 +28947,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:8611:1: rule__TimeOfDay__Group__2__Impl : ( RULE_INT ) ;
+    // InternalSTAlgorithmParser.g:8665:1: rule__TimeOfDay__Group__2__Impl : ( RULE_INT ) ;
     public final void rule__TimeOfDay__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8615:1: ( ( RULE_INT ) )
-            // InternalSTAlgorithmParser.g:8616:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8669:1: ( ( RULE_INT ) )
+            // InternalSTAlgorithmParser.g:8670:1: ( RULE_INT )
             {
-            // InternalSTAlgorithmParser.g:8616:1: ( RULE_INT )
-            // InternalSTAlgorithmParser.g:8617:2: RULE_INT
+            // InternalSTAlgorithmParser.g:8670:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8671:2: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_2()); 
@@ -28820,14 +28988,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__3"
-    // InternalSTAlgorithmParser.g:8626:1: rule__TimeOfDay__Group__3 : rule__TimeOfDay__Group__3__Impl rule__TimeOfDay__Group__4 ;
+    // InternalSTAlgorithmParser.g:8680:1: rule__TimeOfDay__Group__3 : rule__TimeOfDay__Group__3__Impl rule__TimeOfDay__Group__4 ;
     public final void rule__TimeOfDay__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8630:1: ( rule__TimeOfDay__Group__3__Impl rule__TimeOfDay__Group__4 )
-            // InternalSTAlgorithmParser.g:8631:2: rule__TimeOfDay__Group__3__Impl rule__TimeOfDay__Group__4
+            // InternalSTAlgorithmParser.g:8684:1: ( rule__TimeOfDay__Group__3__Impl rule__TimeOfDay__Group__4 )
+            // InternalSTAlgorithmParser.g:8685:2: rule__TimeOfDay__Group__3__Impl rule__TimeOfDay__Group__4
             {
             pushFollow(FOLLOW_72);
             rule__TimeOfDay__Group__3__Impl();
@@ -28858,17 +29026,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__3__Impl"
-    // InternalSTAlgorithmParser.g:8638:1: rule__TimeOfDay__Group__3__Impl : ( Colon ) ;
+    // InternalSTAlgorithmParser.g:8692:1: rule__TimeOfDay__Group__3__Impl : ( Colon ) ;
     public final void rule__TimeOfDay__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8642:1: ( ( Colon ) )
-            // InternalSTAlgorithmParser.g:8643:1: ( Colon )
+            // InternalSTAlgorithmParser.g:8696:1: ( ( Colon ) )
+            // InternalSTAlgorithmParser.g:8697:1: ( Colon )
             {
-            // InternalSTAlgorithmParser.g:8643:1: ( Colon )
-            // InternalSTAlgorithmParser.g:8644:2: Colon
+            // InternalSTAlgorithmParser.g:8697:1: ( Colon )
+            // InternalSTAlgorithmParser.g:8698:2: Colon
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeOfDayAccess().getColonKeyword_3()); 
@@ -28899,14 +29067,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__4"
-    // InternalSTAlgorithmParser.g:8653:1: rule__TimeOfDay__Group__4 : rule__TimeOfDay__Group__4__Impl rule__TimeOfDay__Group__5 ;
+    // InternalSTAlgorithmParser.g:8707:1: rule__TimeOfDay__Group__4 : rule__TimeOfDay__Group__4__Impl rule__TimeOfDay__Group__5 ;
     public final void rule__TimeOfDay__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8657:1: ( rule__TimeOfDay__Group__4__Impl rule__TimeOfDay__Group__5 )
-            // InternalSTAlgorithmParser.g:8658:2: rule__TimeOfDay__Group__4__Impl rule__TimeOfDay__Group__5
+            // InternalSTAlgorithmParser.g:8711:1: ( rule__TimeOfDay__Group__4__Impl rule__TimeOfDay__Group__5 )
+            // InternalSTAlgorithmParser.g:8712:2: rule__TimeOfDay__Group__4__Impl rule__TimeOfDay__Group__5
             {
             pushFollow(FOLLOW_67);
             rule__TimeOfDay__Group__4__Impl();
@@ -28937,17 +29105,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__4__Impl"
-    // InternalSTAlgorithmParser.g:8665:1: rule__TimeOfDay__Group__4__Impl : ( RULE_INT ) ;
+    // InternalSTAlgorithmParser.g:8719:1: rule__TimeOfDay__Group__4__Impl : ( RULE_INT ) ;
     public final void rule__TimeOfDay__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8669:1: ( ( RULE_INT ) )
-            // InternalSTAlgorithmParser.g:8670:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8723:1: ( ( RULE_INT ) )
+            // InternalSTAlgorithmParser.g:8724:1: ( RULE_INT )
             {
-            // InternalSTAlgorithmParser.g:8670:1: ( RULE_INT )
-            // InternalSTAlgorithmParser.g:8671:2: RULE_INT
+            // InternalSTAlgorithmParser.g:8724:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8725:2: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_4()); 
@@ -28978,14 +29146,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__5"
-    // InternalSTAlgorithmParser.g:8680:1: rule__TimeOfDay__Group__5 : rule__TimeOfDay__Group__5__Impl ;
+    // InternalSTAlgorithmParser.g:8734:1: rule__TimeOfDay__Group__5 : rule__TimeOfDay__Group__5__Impl ;
     public final void rule__TimeOfDay__Group__5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8684:1: ( rule__TimeOfDay__Group__5__Impl )
-            // InternalSTAlgorithmParser.g:8685:2: rule__TimeOfDay__Group__5__Impl
+            // InternalSTAlgorithmParser.g:8738:1: ( rule__TimeOfDay__Group__5__Impl )
+            // InternalSTAlgorithmParser.g:8739:2: rule__TimeOfDay__Group__5__Impl
             {
             pushFollow(FOLLOW_2);
             rule__TimeOfDay__Group__5__Impl();
@@ -29011,22 +29179,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group__5__Impl"
-    // InternalSTAlgorithmParser.g:8691:1: rule__TimeOfDay__Group__5__Impl : ( ( rule__TimeOfDay__Group_5__0 )? ) ;
+    // InternalSTAlgorithmParser.g:8745:1: rule__TimeOfDay__Group__5__Impl : ( ( rule__TimeOfDay__Group_5__0 )? ) ;
     public final void rule__TimeOfDay__Group__5__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8695:1: ( ( ( rule__TimeOfDay__Group_5__0 )? ) )
-            // InternalSTAlgorithmParser.g:8696:1: ( ( rule__TimeOfDay__Group_5__0 )? )
+            // InternalSTAlgorithmParser.g:8749:1: ( ( ( rule__TimeOfDay__Group_5__0 )? ) )
+            // InternalSTAlgorithmParser.g:8750:1: ( ( rule__TimeOfDay__Group_5__0 )? )
             {
-            // InternalSTAlgorithmParser.g:8696:1: ( ( rule__TimeOfDay__Group_5__0 )? )
-            // InternalSTAlgorithmParser.g:8697:2: ( rule__TimeOfDay__Group_5__0 )?
+            // InternalSTAlgorithmParser.g:8750:1: ( ( rule__TimeOfDay__Group_5__0 )? )
+            // InternalSTAlgorithmParser.g:8751:2: ( rule__TimeOfDay__Group_5__0 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeOfDayAccess().getGroup_5()); 
             }
-            // InternalSTAlgorithmParser.g:8698:2: ( rule__TimeOfDay__Group_5__0 )?
+            // InternalSTAlgorithmParser.g:8752:2: ( rule__TimeOfDay__Group_5__0 )?
             int alt75=2;
             int LA75_0 = input.LA(1);
 
@@ -29043,7 +29211,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
             switch (alt75) {
                 case 1 :
-                    // InternalSTAlgorithmParser.g:8698:3: rule__TimeOfDay__Group_5__0
+                    // InternalSTAlgorithmParser.g:8752:3: rule__TimeOfDay__Group_5__0
                     {
                     pushFollow(FOLLOW_2);
                     rule__TimeOfDay__Group_5__0();
@@ -29081,14 +29249,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group_5__0"
-    // InternalSTAlgorithmParser.g:8707:1: rule__TimeOfDay__Group_5__0 : rule__TimeOfDay__Group_5__0__Impl rule__TimeOfDay__Group_5__1 ;
+    // InternalSTAlgorithmParser.g:8761:1: rule__TimeOfDay__Group_5__0 : rule__TimeOfDay__Group_5__0__Impl rule__TimeOfDay__Group_5__1 ;
     public final void rule__TimeOfDay__Group_5__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8711:1: ( rule__TimeOfDay__Group_5__0__Impl rule__TimeOfDay__Group_5__1 )
-            // InternalSTAlgorithmParser.g:8712:2: rule__TimeOfDay__Group_5__0__Impl rule__TimeOfDay__Group_5__1
+            // InternalSTAlgorithmParser.g:8765:1: ( rule__TimeOfDay__Group_5__0__Impl rule__TimeOfDay__Group_5__1 )
+            // InternalSTAlgorithmParser.g:8766:2: rule__TimeOfDay__Group_5__0__Impl rule__TimeOfDay__Group_5__1
             {
             pushFollow(FOLLOW_72);
             rule__TimeOfDay__Group_5__0__Impl();
@@ -29119,23 +29287,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group_5__0__Impl"
-    // InternalSTAlgorithmParser.g:8719:1: rule__TimeOfDay__Group_5__0__Impl : ( ( FullStop ) ) ;
+    // InternalSTAlgorithmParser.g:8773:1: rule__TimeOfDay__Group_5__0__Impl : ( ( FullStop ) ) ;
     public final void rule__TimeOfDay__Group_5__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8723:1: ( ( ( FullStop ) ) )
-            // InternalSTAlgorithmParser.g:8724:1: ( ( FullStop ) )
+            // InternalSTAlgorithmParser.g:8777:1: ( ( ( FullStop ) ) )
+            // InternalSTAlgorithmParser.g:8778:1: ( ( FullStop ) )
             {
-            // InternalSTAlgorithmParser.g:8724:1: ( ( FullStop ) )
-            // InternalSTAlgorithmParser.g:8725:2: ( FullStop )
+            // InternalSTAlgorithmParser.g:8778:1: ( ( FullStop ) )
+            // InternalSTAlgorithmParser.g:8779:2: ( FullStop )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeOfDayAccess().getFullStopKeyword_5_0()); 
             }
-            // InternalSTAlgorithmParser.g:8726:2: ( FullStop )
-            // InternalSTAlgorithmParser.g:8726:3: FullStop
+            // InternalSTAlgorithmParser.g:8780:2: ( FullStop )
+            // InternalSTAlgorithmParser.g:8780:3: FullStop
             {
             match(input,FullStop,FOLLOW_2); if (state.failed) return ;
 
@@ -29166,14 +29334,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group_5__1"
-    // InternalSTAlgorithmParser.g:8734:1: rule__TimeOfDay__Group_5__1 : rule__TimeOfDay__Group_5__1__Impl ;
+    // InternalSTAlgorithmParser.g:8788:1: rule__TimeOfDay__Group_5__1 : rule__TimeOfDay__Group_5__1__Impl ;
     public final void rule__TimeOfDay__Group_5__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8738:1: ( rule__TimeOfDay__Group_5__1__Impl )
-            // InternalSTAlgorithmParser.g:8739:2: rule__TimeOfDay__Group_5__1__Impl
+            // InternalSTAlgorithmParser.g:8792:1: ( rule__TimeOfDay__Group_5__1__Impl )
+            // InternalSTAlgorithmParser.g:8793:2: rule__TimeOfDay__Group_5__1__Impl
             {
             pushFollow(FOLLOW_2);
             rule__TimeOfDay__Group_5__1__Impl();
@@ -29199,17 +29367,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__TimeOfDay__Group_5__1__Impl"
-    // InternalSTAlgorithmParser.g:8745:1: rule__TimeOfDay__Group_5__1__Impl : ( RULE_INT ) ;
+    // InternalSTAlgorithmParser.g:8799:1: rule__TimeOfDay__Group_5__1__Impl : ( RULE_INT ) ;
     public final void rule__TimeOfDay__Group_5__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8749:1: ( ( RULE_INT ) )
-            // InternalSTAlgorithmParser.g:8750:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8803:1: ( ( RULE_INT ) )
+            // InternalSTAlgorithmParser.g:8804:1: ( RULE_INT )
             {
-            // InternalSTAlgorithmParser.g:8750:1: ( RULE_INT )
-            // InternalSTAlgorithmParser.g:8751:2: RULE_INT
+            // InternalSTAlgorithmParser.g:8804:1: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:8805:2: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_5_1()); 
@@ -29240,14 +29408,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Time__Group__0"
-    // InternalSTAlgorithmParser.g:8761:1: rule__Time__Group__0 : rule__Time__Group__0__Impl rule__Time__Group__1 ;
+    // InternalSTAlgorithmParser.g:8815:1: rule__Time__Group__0 : rule__Time__Group__0__Impl rule__Time__Group__1 ;
     public final void rule__Time__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8765:1: ( rule__Time__Group__0__Impl rule__Time__Group__1 )
-            // InternalSTAlgorithmParser.g:8766:2: rule__Time__Group__0__Impl rule__Time__Group__1
+            // InternalSTAlgorithmParser.g:8819:1: ( rule__Time__Group__0__Impl rule__Time__Group__1 )
+            // InternalSTAlgorithmParser.g:8820:2: rule__Time__Group__0__Impl rule__Time__Group__1
             {
             pushFollow(FOLLOW_78);
             rule__Time__Group__0__Impl();
@@ -29278,17 +29446,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Time__Group__0__Impl"
-    // InternalSTAlgorithmParser.g:8773:1: rule__Time__Group__0__Impl : ( ruleNumber ) ;
+    // InternalSTAlgorithmParser.g:8827:1: rule__Time__Group__0__Impl : ( ruleNumber ) ;
     public final void rule__Time__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8777:1: ( ( ruleNumber ) )
-            // InternalSTAlgorithmParser.g:8778:1: ( ruleNumber )
+            // InternalSTAlgorithmParser.g:8831:1: ( ( ruleNumber ) )
+            // InternalSTAlgorithmParser.g:8832:1: ( ruleNumber )
             {
-            // InternalSTAlgorithmParser.g:8778:1: ( ruleNumber )
-            // InternalSTAlgorithmParser.g:8779:2: ruleNumber
+            // InternalSTAlgorithmParser.g:8832:1: ( ruleNumber )
+            // InternalSTAlgorithmParser.g:8833:2: ruleNumber
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeAccess().getNumberParserRuleCall_0()); 
@@ -29323,14 +29491,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Time__Group__1"
-    // InternalSTAlgorithmParser.g:8788:1: rule__Time__Group__1 : rule__Time__Group__1__Impl rule__Time__Group__2 ;
+    // InternalSTAlgorithmParser.g:8842:1: rule__Time__Group__1 : rule__Time__Group__1__Impl rule__Time__Group__2 ;
     public final void rule__Time__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8792:1: ( rule__Time__Group__1__Impl rule__Time__Group__2 )
-            // InternalSTAlgorithmParser.g:8793:2: rule__Time__Group__1__Impl rule__Time__Group__2
+            // InternalSTAlgorithmParser.g:8846:1: ( rule__Time__Group__1__Impl rule__Time__Group__2 )
+            // InternalSTAlgorithmParser.g:8847:2: rule__Time__Group__1__Impl rule__Time__Group__2
             {
             pushFollow(FOLLOW_79);
             rule__Time__Group__1__Impl();
@@ -29361,23 +29529,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Time__Group__1__Impl"
-    // InternalSTAlgorithmParser.g:8800:1: rule__Time__Group__1__Impl : ( ( rule__Time__Alternatives_1 ) ) ;
+    // InternalSTAlgorithmParser.g:8854:1: rule__Time__Group__1__Impl : ( ( rule__Time__Alternatives_1 ) ) ;
     public final void rule__Time__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8804:1: ( ( ( rule__Time__Alternatives_1 ) ) )
-            // InternalSTAlgorithmParser.g:8805:1: ( ( rule__Time__Alternatives_1 ) )
+            // InternalSTAlgorithmParser.g:8858:1: ( ( ( rule__Time__Alternatives_1 ) ) )
+            // InternalSTAlgorithmParser.g:8859:1: ( ( rule__Time__Alternatives_1 ) )
             {
-            // InternalSTAlgorithmParser.g:8805:1: ( ( rule__Time__Alternatives_1 ) )
-            // InternalSTAlgorithmParser.g:8806:2: ( rule__Time__Alternatives_1 )
+            // InternalSTAlgorithmParser.g:8859:1: ( ( rule__Time__Alternatives_1 ) )
+            // InternalSTAlgorithmParser.g:8860:2: ( rule__Time__Alternatives_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeAccess().getAlternatives_1()); 
             }
-            // InternalSTAlgorithmParser.g:8807:2: ( rule__Time__Alternatives_1 )
-            // InternalSTAlgorithmParser.g:8807:3: rule__Time__Alternatives_1
+            // InternalSTAlgorithmParser.g:8861:2: ( rule__Time__Alternatives_1 )
+            // InternalSTAlgorithmParser.g:8861:3: rule__Time__Alternatives_1
             {
             pushFollow(FOLLOW_2);
             rule__Time__Alternatives_1();
@@ -29412,14 +29580,14 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Time__Group__2"
-    // InternalSTAlgorithmParser.g:8815:1: rule__Time__Group__2 : rule__Time__Group__2__Impl ;
+    // InternalSTAlgorithmParser.g:8869:1: rule__Time__Group__2 : rule__Time__Group__2__Impl ;
     public final void rule__Time__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8819:1: ( rule__Time__Group__2__Impl )
-            // InternalSTAlgorithmParser.g:8820:2: rule__Time__Group__2__Impl
+            // InternalSTAlgorithmParser.g:8873:1: ( rule__Time__Group__2__Impl )
+            // InternalSTAlgorithmParser.g:8874:2: rule__Time__Group__2__Impl
             {
             pushFollow(FOLLOW_2);
             rule__Time__Group__2__Impl();
@@ -29445,22 +29613,22 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__Time__Group__2__Impl"
-    // InternalSTAlgorithmParser.g:8826:1: rule__Time__Group__2__Impl : ( ( KW__ )? ) ;
+    // InternalSTAlgorithmParser.g:8880:1: rule__Time__Group__2__Impl : ( ( KW__ )? ) ;
     public final void rule__Time__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8830:1: ( ( ( KW__ )? ) )
-            // InternalSTAlgorithmParser.g:8831:1: ( ( KW__ )? )
+            // InternalSTAlgorithmParser.g:8884:1: ( ( ( KW__ )? ) )
+            // InternalSTAlgorithmParser.g:8885:1: ( ( KW__ )? )
             {
-            // InternalSTAlgorithmParser.g:8831:1: ( ( KW__ )? )
-            // InternalSTAlgorithmParser.g:8832:2: ( KW__ )?
+            // InternalSTAlgorithmParser.g:8885:1: ( ( KW__ )? )
+            // InternalSTAlgorithmParser.g:8886:2: ( KW__ )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTimeAccess().get_Keyword_2()); 
             }
-            // InternalSTAlgorithmParser.g:8833:2: ( KW__ )?
+            // InternalSTAlgorithmParser.g:8887:2: ( KW__ )?
             int alt76=2;
             int LA76_0 = input.LA(1);
 
@@ -29469,7 +29637,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             }
             switch (alt76) {
                 case 1 :
-                    // InternalSTAlgorithmParser.g:8833:3: KW__
+                    // InternalSTAlgorithmParser.g:8887:3: KW__
                     {
                     match(input,KW__,FOLLOW_2); if (state.failed) return ;
 
@@ -29503,17 +29671,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAlgorithms__AlgorithmsAssignment_1"
-    // InternalSTAlgorithmParser.g:8842:1: rule__STAlgorithms__AlgorithmsAssignment_1 : ( ruleSTAlgorithm ) ;
+    // InternalSTAlgorithmParser.g:8896:1: rule__STAlgorithms__AlgorithmsAssignment_1 : ( ruleSTAlgorithm ) ;
     public final void rule__STAlgorithms__AlgorithmsAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8846:1: ( ( ruleSTAlgorithm ) )
-            // InternalSTAlgorithmParser.g:8847:2: ( ruleSTAlgorithm )
+            // InternalSTAlgorithmParser.g:8900:1: ( ( ruleSTAlgorithm ) )
+            // InternalSTAlgorithmParser.g:8901:2: ( ruleSTAlgorithm )
             {
-            // InternalSTAlgorithmParser.g:8847:2: ( ruleSTAlgorithm )
-            // InternalSTAlgorithmParser.g:8848:3: ruleSTAlgorithm
+            // InternalSTAlgorithmParser.g:8901:2: ( ruleSTAlgorithm )
+            // InternalSTAlgorithmParser.g:8902:3: ruleSTAlgorithm
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAlgorithmsAccess().getAlgorithmsSTAlgorithmParserRuleCall_1_0()); 
@@ -29548,17 +29716,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAlgorithm__NameAssignment_1"
-    // InternalSTAlgorithmParser.g:8857:1: rule__STAlgorithm__NameAssignment_1 : ( RULE_ID ) ;
+    // InternalSTAlgorithmParser.g:8911:1: rule__STAlgorithm__NameAssignment_1 : ( RULE_ID ) ;
     public final void rule__STAlgorithm__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8861:1: ( ( RULE_ID ) )
-            // InternalSTAlgorithmParser.g:8862:2: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:8915:1: ( ( RULE_ID ) )
+            // InternalSTAlgorithmParser.g:8916:2: ( RULE_ID )
             {
-            // InternalSTAlgorithmParser.g:8862:2: ( RULE_ID )
-            // InternalSTAlgorithmParser.g:8863:3: RULE_ID
+            // InternalSTAlgorithmParser.g:8916:2: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:8917:3: RULE_ID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAlgorithmAccess().getNameIDTerminalRuleCall_1_0()); 
@@ -29589,17 +29757,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAlgorithm__BodyAssignment_2"
-    // InternalSTAlgorithmParser.g:8872:1: rule__STAlgorithm__BodyAssignment_2 : ( ruleSTAlgorithmBody ) ;
+    // InternalSTAlgorithmParser.g:8926:1: rule__STAlgorithm__BodyAssignment_2 : ( ruleSTAlgorithmBody ) ;
     public final void rule__STAlgorithm__BodyAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8876:1: ( ( ruleSTAlgorithmBody ) )
-            // InternalSTAlgorithmParser.g:8877:2: ( ruleSTAlgorithmBody )
+            // InternalSTAlgorithmParser.g:8930:1: ( ( ruleSTAlgorithmBody ) )
+            // InternalSTAlgorithmParser.g:8931:2: ( ruleSTAlgorithmBody )
             {
-            // InternalSTAlgorithmParser.g:8877:2: ( ruleSTAlgorithmBody )
-            // InternalSTAlgorithmParser.g:8878:3: ruleSTAlgorithmBody
+            // InternalSTAlgorithmParser.g:8931:2: ( ruleSTAlgorithmBody )
+            // InternalSTAlgorithmParser.g:8932:3: ruleSTAlgorithmBody
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAlgorithmAccess().getBodySTAlgorithmBodyParserRuleCall_2_0()); 
@@ -29634,17 +29802,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAlgorithmBody__VarTempDeclarationsAssignment_1"
-    // InternalSTAlgorithmParser.g:8887:1: rule__STAlgorithmBody__VarTempDeclarationsAssignment_1 : ( ruleVarTempDeclarationBlock ) ;
+    // InternalSTAlgorithmParser.g:8941:1: rule__STAlgorithmBody__VarTempDeclarationsAssignment_1 : ( ruleVarTempDeclarationBlock ) ;
     public final void rule__STAlgorithmBody__VarTempDeclarationsAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8891:1: ( ( ruleVarTempDeclarationBlock ) )
-            // InternalSTAlgorithmParser.g:8892:2: ( ruleVarTempDeclarationBlock )
+            // InternalSTAlgorithmParser.g:8945:1: ( ( ruleVarTempDeclarationBlock ) )
+            // InternalSTAlgorithmParser.g:8946:2: ( ruleVarTempDeclarationBlock )
             {
-            // InternalSTAlgorithmParser.g:8892:2: ( ruleVarTempDeclarationBlock )
-            // InternalSTAlgorithmParser.g:8893:3: ruleVarTempDeclarationBlock
+            // InternalSTAlgorithmParser.g:8946:2: ( ruleVarTempDeclarationBlock )
+            // InternalSTAlgorithmParser.g:8947:3: ruleVarTempDeclarationBlock
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAlgorithmBodyAccess().getVarTempDeclarationsVarTempDeclarationBlockParserRuleCall_1_0()); 
@@ -29679,17 +29847,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAlgorithmBody__StatementsAssignment_2"
-    // InternalSTAlgorithmParser.g:8902:1: rule__STAlgorithmBody__StatementsAssignment_2 : ( ruleSTStatement ) ;
+    // InternalSTAlgorithmParser.g:8956:1: rule__STAlgorithmBody__StatementsAssignment_2 : ( ruleSTStatement ) ;
     public final void rule__STAlgorithmBody__StatementsAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8906:1: ( ( ruleSTStatement ) )
-            // InternalSTAlgorithmParser.g:8907:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:8960:1: ( ( ruleSTStatement ) )
+            // InternalSTAlgorithmParser.g:8961:2: ( ruleSTStatement )
             {
-            // InternalSTAlgorithmParser.g:8907:2: ( ruleSTStatement )
-            // InternalSTAlgorithmParser.g:8908:3: ruleSTStatement
+            // InternalSTAlgorithmParser.g:8961:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:8962:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAlgorithmBodyAccess().getStatementsSTStatementParserRuleCall_2_0()); 
@@ -29724,23 +29892,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarTempDeclarationBlock__ConstantAssignment_2"
-    // InternalSTAlgorithmParser.g:8917:1: rule__VarTempDeclarationBlock__ConstantAssignment_2 : ( ( CONSTANT ) ) ;
+    // InternalSTAlgorithmParser.g:8971:1: rule__VarTempDeclarationBlock__ConstantAssignment_2 : ( ( CONSTANT ) ) ;
     public final void rule__VarTempDeclarationBlock__ConstantAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8921:1: ( ( ( CONSTANT ) ) )
-            // InternalSTAlgorithmParser.g:8922:2: ( ( CONSTANT ) )
+            // InternalSTAlgorithmParser.g:8975:1: ( ( ( CONSTANT ) ) )
+            // InternalSTAlgorithmParser.g:8976:2: ( ( CONSTANT ) )
             {
-            // InternalSTAlgorithmParser.g:8922:2: ( ( CONSTANT ) )
-            // InternalSTAlgorithmParser.g:8923:3: ( CONSTANT )
+            // InternalSTAlgorithmParser.g:8976:2: ( ( CONSTANT ) )
+            // InternalSTAlgorithmParser.g:8977:3: ( CONSTANT )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarTempDeclarationBlockAccess().getConstantCONSTANTKeyword_2_0()); 
             }
-            // InternalSTAlgorithmParser.g:8924:3: ( CONSTANT )
-            // InternalSTAlgorithmParser.g:8925:4: CONSTANT
+            // InternalSTAlgorithmParser.g:8978:3: ( CONSTANT )
+            // InternalSTAlgorithmParser.g:8979:4: CONSTANT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarTempDeclarationBlockAccess().getConstantCONSTANTKeyword_2_0()); 
@@ -29777,17 +29945,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarTempDeclarationBlock__VarDeclarationsAssignment_3"
-    // InternalSTAlgorithmParser.g:8936:1: rule__VarTempDeclarationBlock__VarDeclarationsAssignment_3 : ( ruleVarDeclaration ) ;
+    // InternalSTAlgorithmParser.g:8990:1: rule__VarTempDeclarationBlock__VarDeclarationsAssignment_3 : ( ruleVarDeclaration ) ;
     public final void rule__VarTempDeclarationBlock__VarDeclarationsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8940:1: ( ( ruleVarDeclaration ) )
-            // InternalSTAlgorithmParser.g:8941:2: ( ruleVarDeclaration )
+            // InternalSTAlgorithmParser.g:8994:1: ( ( ruleVarDeclaration ) )
+            // InternalSTAlgorithmParser.g:8995:2: ( ruleVarDeclaration )
             {
-            // InternalSTAlgorithmParser.g:8941:2: ( ruleVarDeclaration )
-            // InternalSTAlgorithmParser.g:8942:3: ruleVarDeclaration
+            // InternalSTAlgorithmParser.g:8995:2: ( ruleVarDeclaration )
+            // InternalSTAlgorithmParser.g:8996:3: ruleVarDeclaration
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarTempDeclarationBlockAccess().getVarDeclarationsVarDeclarationParserRuleCall_3_0()); 
@@ -29822,17 +29990,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__NameAssignment_1"
-    // InternalSTAlgorithmParser.g:8951:1: rule__VarDeclaration__NameAssignment_1 : ( RULE_ID ) ;
+    // InternalSTAlgorithmParser.g:9005:1: rule__VarDeclaration__NameAssignment_1 : ( RULE_ID ) ;
     public final void rule__VarDeclaration__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8955:1: ( ( RULE_ID ) )
-            // InternalSTAlgorithmParser.g:8956:2: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:9009:1: ( ( RULE_ID ) )
+            // InternalSTAlgorithmParser.g:9010:2: ( RULE_ID )
             {
-            // InternalSTAlgorithmParser.g:8956:2: ( RULE_ID )
-            // InternalSTAlgorithmParser.g:8957:3: RULE_ID
+            // InternalSTAlgorithmParser.g:9010:2: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:9011:3: RULE_ID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getNameIDTerminalRuleCall_1_0()); 
@@ -29863,23 +30031,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__LocatedAtAssignment_2_1"
-    // InternalSTAlgorithmParser.g:8966:1: rule__VarDeclaration__LocatedAtAssignment_2_1 : ( ( RULE_ID ) ) ;
+    // InternalSTAlgorithmParser.g:9020:1: rule__VarDeclaration__LocatedAtAssignment_2_1 : ( ( RULE_ID ) ) ;
     public final void rule__VarDeclaration__LocatedAtAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8970:1: ( ( ( RULE_ID ) ) )
-            // InternalSTAlgorithmParser.g:8971:2: ( ( RULE_ID ) )
+            // InternalSTAlgorithmParser.g:9024:1: ( ( ( RULE_ID ) ) )
+            // InternalSTAlgorithmParser.g:9025:2: ( ( RULE_ID ) )
             {
-            // InternalSTAlgorithmParser.g:8971:2: ( ( RULE_ID ) )
-            // InternalSTAlgorithmParser.g:8972:3: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:9025:2: ( ( RULE_ID ) )
+            // InternalSTAlgorithmParser.g:9026:3: ( RULE_ID )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getLocatedAtINamedElementCrossReference_2_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:8973:3: ( RULE_ID )
-            // InternalSTAlgorithmParser.g:8974:4: RULE_ID
+            // InternalSTAlgorithmParser.g:9027:3: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:9028:4: RULE_ID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getLocatedAtINamedElementIDTerminalRuleCall_2_1_0_1()); 
@@ -29916,23 +30084,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__ArrayAssignment_4_0"
-    // InternalSTAlgorithmParser.g:8985:1: rule__VarDeclaration__ArrayAssignment_4_0 : ( ( ARRAY ) ) ;
+    // InternalSTAlgorithmParser.g:9039:1: rule__VarDeclaration__ArrayAssignment_4_0 : ( ( ARRAY ) ) ;
     public final void rule__VarDeclaration__ArrayAssignment_4_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:8989:1: ( ( ( ARRAY ) ) )
-            // InternalSTAlgorithmParser.g:8990:2: ( ( ARRAY ) )
+            // InternalSTAlgorithmParser.g:9043:1: ( ( ( ARRAY ) ) )
+            // InternalSTAlgorithmParser.g:9044:2: ( ( ARRAY ) )
             {
-            // InternalSTAlgorithmParser.g:8990:2: ( ( ARRAY ) )
-            // InternalSTAlgorithmParser.g:8991:3: ( ARRAY )
+            // InternalSTAlgorithmParser.g:9044:2: ( ( ARRAY ) )
+            // InternalSTAlgorithmParser.g:9045:3: ( ARRAY )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getArrayARRAYKeyword_4_0_0()); 
             }
-            // InternalSTAlgorithmParser.g:8992:3: ( ARRAY )
-            // InternalSTAlgorithmParser.g:8993:4: ARRAY
+            // InternalSTAlgorithmParser.g:9046:3: ( ARRAY )
+            // InternalSTAlgorithmParser.g:9047:4: ARRAY
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getArrayARRAYKeyword_4_0_0()); 
@@ -29969,17 +30137,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__RangesAssignment_4_1_0_1"
-    // InternalSTAlgorithmParser.g:9004:1: rule__VarDeclaration__RangesAssignment_4_1_0_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9058:1: rule__VarDeclaration__RangesAssignment_4_1_0_1 : ( ruleSTExpression ) ;
     public final void rule__VarDeclaration__RangesAssignment_4_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9008:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9009:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9062:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9063:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9009:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9010:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9063:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9064:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getRangesSTExpressionParserRuleCall_4_1_0_1_0()); 
@@ -30014,17 +30182,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__RangesAssignment_4_1_0_2_1"
-    // InternalSTAlgorithmParser.g:9019:1: rule__VarDeclaration__RangesAssignment_4_1_0_2_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9073:1: rule__VarDeclaration__RangesAssignment_4_1_0_2_1 : ( ruleSTExpression ) ;
     public final void rule__VarDeclaration__RangesAssignment_4_1_0_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9023:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9024:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9077:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9078:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9024:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9025:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9078:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9079:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getRangesSTExpressionParserRuleCall_4_1_0_2_1_0()); 
@@ -30059,23 +30227,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__CountAssignment_4_1_1_1"
-    // InternalSTAlgorithmParser.g:9034:1: rule__VarDeclaration__CountAssignment_4_1_1_1 : ( ( Asterisk ) ) ;
+    // InternalSTAlgorithmParser.g:9088:1: rule__VarDeclaration__CountAssignment_4_1_1_1 : ( ( Asterisk ) ) ;
     public final void rule__VarDeclaration__CountAssignment_4_1_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9038:1: ( ( ( Asterisk ) ) )
-            // InternalSTAlgorithmParser.g:9039:2: ( ( Asterisk ) )
+            // InternalSTAlgorithmParser.g:9092:1: ( ( ( Asterisk ) ) )
+            // InternalSTAlgorithmParser.g:9093:2: ( ( Asterisk ) )
             {
-            // InternalSTAlgorithmParser.g:9039:2: ( ( Asterisk ) )
-            // InternalSTAlgorithmParser.g:9040:3: ( Asterisk )
+            // InternalSTAlgorithmParser.g:9093:2: ( ( Asterisk ) )
+            // InternalSTAlgorithmParser.g:9094:3: ( Asterisk )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getCountAsteriskKeyword_4_1_1_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:9041:3: ( Asterisk )
-            // InternalSTAlgorithmParser.g:9042:4: Asterisk
+            // InternalSTAlgorithmParser.g:9095:3: ( Asterisk )
+            // InternalSTAlgorithmParser.g:9096:4: Asterisk
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getCountAsteriskKeyword_4_1_1_1_0()); 
@@ -30112,23 +30280,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__CountAssignment_4_1_1_2_1"
-    // InternalSTAlgorithmParser.g:9053:1: rule__VarDeclaration__CountAssignment_4_1_1_2_1 : ( ( Asterisk ) ) ;
+    // InternalSTAlgorithmParser.g:9107:1: rule__VarDeclaration__CountAssignment_4_1_1_2_1 : ( ( Asterisk ) ) ;
     public final void rule__VarDeclaration__CountAssignment_4_1_1_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9057:1: ( ( ( Asterisk ) ) )
-            // InternalSTAlgorithmParser.g:9058:2: ( ( Asterisk ) )
+            // InternalSTAlgorithmParser.g:9111:1: ( ( ( Asterisk ) ) )
+            // InternalSTAlgorithmParser.g:9112:2: ( ( Asterisk ) )
             {
-            // InternalSTAlgorithmParser.g:9058:2: ( ( Asterisk ) )
-            // InternalSTAlgorithmParser.g:9059:3: ( Asterisk )
+            // InternalSTAlgorithmParser.g:9112:2: ( ( Asterisk ) )
+            // InternalSTAlgorithmParser.g:9113:3: ( Asterisk )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getCountAsteriskKeyword_4_1_1_2_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:9060:3: ( Asterisk )
-            // InternalSTAlgorithmParser.g:9061:4: Asterisk
+            // InternalSTAlgorithmParser.g:9114:3: ( Asterisk )
+            // InternalSTAlgorithmParser.g:9115:4: Asterisk
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getCountAsteriskKeyword_4_1_1_2_1_0()); 
@@ -30165,23 +30333,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__TypeAssignment_5"
-    // InternalSTAlgorithmParser.g:9072:1: rule__VarDeclaration__TypeAssignment_5 : ( ( RULE_ID ) ) ;
+    // InternalSTAlgorithmParser.g:9126:1: rule__VarDeclaration__TypeAssignment_5 : ( ( RULE_ID ) ) ;
     public final void rule__VarDeclaration__TypeAssignment_5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9076:1: ( ( ( RULE_ID ) ) )
-            // InternalSTAlgorithmParser.g:9077:2: ( ( RULE_ID ) )
+            // InternalSTAlgorithmParser.g:9130:1: ( ( ( RULE_ID ) ) )
+            // InternalSTAlgorithmParser.g:9131:2: ( ( RULE_ID ) )
             {
-            // InternalSTAlgorithmParser.g:9077:2: ( ( RULE_ID ) )
-            // InternalSTAlgorithmParser.g:9078:3: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:9131:2: ( ( RULE_ID ) )
+            // InternalSTAlgorithmParser.g:9132:3: ( RULE_ID )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getTypeLibraryElementCrossReference_5_0()); 
             }
-            // InternalSTAlgorithmParser.g:9079:3: ( RULE_ID )
-            // InternalSTAlgorithmParser.g:9080:4: RULE_ID
+            // InternalSTAlgorithmParser.g:9133:3: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:9134:4: RULE_ID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getTypeLibraryElementIDTerminalRuleCall_5_0_1()); 
@@ -30218,17 +30386,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__MaxLengthAssignment_6_1"
-    // InternalSTAlgorithmParser.g:9091:1: rule__VarDeclaration__MaxLengthAssignment_6_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9145:1: rule__VarDeclaration__MaxLengthAssignment_6_1 : ( ruleSTExpression ) ;
     public final void rule__VarDeclaration__MaxLengthAssignment_6_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9095:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9096:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9149:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9150:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9096:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9097:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9150:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9151:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getMaxLengthSTExpressionParserRuleCall_6_1_0()); 
@@ -30263,17 +30431,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__VarDeclaration__DefaultValueAssignment_7_1"
-    // InternalSTAlgorithmParser.g:9106:1: rule__VarDeclaration__DefaultValueAssignment_7_1 : ( ruleInitializerExpression ) ;
+    // InternalSTAlgorithmParser.g:9160:1: rule__VarDeclaration__DefaultValueAssignment_7_1 : ( ruleInitializerExpression ) ;
     public final void rule__VarDeclaration__DefaultValueAssignment_7_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9110:1: ( ( ruleInitializerExpression ) )
-            // InternalSTAlgorithmParser.g:9111:2: ( ruleInitializerExpression )
+            // InternalSTAlgorithmParser.g:9164:1: ( ( ruleInitializerExpression ) )
+            // InternalSTAlgorithmParser.g:9165:2: ( ruleInitializerExpression )
             {
-            // InternalSTAlgorithmParser.g:9111:2: ( ruleInitializerExpression )
-            // InternalSTAlgorithmParser.g:9112:3: ruleInitializerExpression
+            // InternalSTAlgorithmParser.g:9165:2: ( ruleInitializerExpression )
+            // InternalSTAlgorithmParser.g:9166:3: ruleInitializerExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getVarDeclarationAccess().getDefaultValueInitializerExpressionParserRuleCall_7_1_0()); 
@@ -30308,17 +30476,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__ArrayInitializerExpression__ValuesAssignment_1"
-    // InternalSTAlgorithmParser.g:9121:1: rule__ArrayInitializerExpression__ValuesAssignment_1 : ( ruleArrayInitElement ) ;
+    // InternalSTAlgorithmParser.g:9175:1: rule__ArrayInitializerExpression__ValuesAssignment_1 : ( ruleArrayInitElement ) ;
     public final void rule__ArrayInitializerExpression__ValuesAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9125:1: ( ( ruleArrayInitElement ) )
-            // InternalSTAlgorithmParser.g:9126:2: ( ruleArrayInitElement )
+            // InternalSTAlgorithmParser.g:9179:1: ( ( ruleArrayInitElement ) )
+            // InternalSTAlgorithmParser.g:9180:2: ( ruleArrayInitElement )
             {
-            // InternalSTAlgorithmParser.g:9126:2: ( ruleArrayInitElement )
-            // InternalSTAlgorithmParser.g:9127:3: ruleArrayInitElement
+            // InternalSTAlgorithmParser.g:9180:2: ( ruleArrayInitElement )
+            // InternalSTAlgorithmParser.g:9181:3: ruleArrayInitElement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayInitializerExpressionAccess().getValuesArrayInitElementParserRuleCall_1_0()); 
@@ -30353,17 +30521,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__ArrayInitializerExpression__ValuesAssignment_2_1"
-    // InternalSTAlgorithmParser.g:9136:1: rule__ArrayInitializerExpression__ValuesAssignment_2_1 : ( ruleArrayInitElement ) ;
+    // InternalSTAlgorithmParser.g:9190:1: rule__ArrayInitializerExpression__ValuesAssignment_2_1 : ( ruleArrayInitElement ) ;
     public final void rule__ArrayInitializerExpression__ValuesAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9140:1: ( ( ruleArrayInitElement ) )
-            // InternalSTAlgorithmParser.g:9141:2: ( ruleArrayInitElement )
+            // InternalSTAlgorithmParser.g:9194:1: ( ( ruleArrayInitElement ) )
+            // InternalSTAlgorithmParser.g:9195:2: ( ruleArrayInitElement )
             {
-            // InternalSTAlgorithmParser.g:9141:2: ( ruleArrayInitElement )
-            // InternalSTAlgorithmParser.g:9142:3: ruleArrayInitElement
+            // InternalSTAlgorithmParser.g:9195:2: ( ruleArrayInitElement )
+            // InternalSTAlgorithmParser.g:9196:3: ruleArrayInitElement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayInitializerExpressionAccess().getValuesArrayInitElementParserRuleCall_2_1_0()); 
@@ -30398,17 +30566,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__ArrayInitElement__IndexOrInitExpressionAssignment_0"
-    // InternalSTAlgorithmParser.g:9151:1: rule__ArrayInitElement__IndexOrInitExpressionAssignment_0 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9205:1: rule__ArrayInitElement__IndexOrInitExpressionAssignment_0 : ( ruleSTExpression ) ;
     public final void rule__ArrayInitElement__IndexOrInitExpressionAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9155:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9156:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9209:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9210:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9156:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9157:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9210:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9211:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayInitElementAccess().getIndexOrInitExpressionSTExpressionParserRuleCall_0_0()); 
@@ -30443,17 +30611,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__ArrayInitElement__InitExpressionAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9166:1: rule__ArrayInitElement__InitExpressionAssignment_1_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9220:1: rule__ArrayInitElement__InitExpressionAssignment_1_1 : ( ruleSTExpression ) ;
     public final void rule__ArrayInitElement__InitExpressionAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9170:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9171:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9224:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9225:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9171:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9172:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9225:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9226:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayInitElementAccess().getInitExpressionSTExpressionParserRuleCall_1_1_0()); 
@@ -30488,17 +30656,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAssignmentStatement__LeftAssignment_0"
-    // InternalSTAlgorithmParser.g:9181:1: rule__STAssignmentStatement__LeftAssignment_0 : ( ruleSTAccessExpression ) ;
+    // InternalSTAlgorithmParser.g:9235:1: rule__STAssignmentStatement__LeftAssignment_0 : ( ruleSTAccessExpression ) ;
     public final void rule__STAssignmentStatement__LeftAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9185:1: ( ( ruleSTAccessExpression ) )
-            // InternalSTAlgorithmParser.g:9186:2: ( ruleSTAccessExpression )
+            // InternalSTAlgorithmParser.g:9239:1: ( ( ruleSTAccessExpression ) )
+            // InternalSTAlgorithmParser.g:9240:2: ( ruleSTAccessExpression )
             {
-            // InternalSTAlgorithmParser.g:9186:2: ( ruleSTAccessExpression )
-            // InternalSTAlgorithmParser.g:9187:3: ruleSTAccessExpression
+            // InternalSTAlgorithmParser.g:9240:2: ( ruleSTAccessExpression )
+            // InternalSTAlgorithmParser.g:9241:3: ruleSTAccessExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAssignmentStatementAccess().getLeftSTAccessExpressionParserRuleCall_0_0()); 
@@ -30533,17 +30701,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAssignmentStatement__RightAssignment_2"
-    // InternalSTAlgorithmParser.g:9196:1: rule__STAssignmentStatement__RightAssignment_2 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9250:1: rule__STAssignmentStatement__RightAssignment_2 : ( ruleSTExpression ) ;
     public final void rule__STAssignmentStatement__RightAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9200:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9201:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9254:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9255:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9201:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9202:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9255:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9256:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAssignmentStatementAccess().getRightSTExpressionParserRuleCall_2_0()); 
@@ -30578,17 +30746,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STIfStatement__ConditionAssignment_1"
-    // InternalSTAlgorithmParser.g:9211:1: rule__STIfStatement__ConditionAssignment_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9265:1: rule__STIfStatement__ConditionAssignment_1 : ( ruleSTExpression ) ;
     public final void rule__STIfStatement__ConditionAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9215:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9216:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9269:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9270:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9216:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9217:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9270:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9271:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTIfStatementAccess().getConditionSTExpressionParserRuleCall_1_0()); 
@@ -30623,17 +30791,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STIfStatement__StatementsAssignment_3"
-    // InternalSTAlgorithmParser.g:9226:1: rule__STIfStatement__StatementsAssignment_3 : ( ruleSTStatement ) ;
+    // InternalSTAlgorithmParser.g:9280:1: rule__STIfStatement__StatementsAssignment_3 : ( ruleSTStatement ) ;
     public final void rule__STIfStatement__StatementsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9230:1: ( ( ruleSTStatement ) )
-            // InternalSTAlgorithmParser.g:9231:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9284:1: ( ( ruleSTStatement ) )
+            // InternalSTAlgorithmParser.g:9285:2: ( ruleSTStatement )
             {
-            // InternalSTAlgorithmParser.g:9231:2: ( ruleSTStatement )
-            // InternalSTAlgorithmParser.g:9232:3: ruleSTStatement
+            // InternalSTAlgorithmParser.g:9285:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9286:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTIfStatementAccess().getStatementsSTStatementParserRuleCall_3_0()); 
@@ -30668,17 +30836,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STIfStatement__ElseifsAssignment_4"
-    // InternalSTAlgorithmParser.g:9241:1: rule__STIfStatement__ElseifsAssignment_4 : ( ruleSTElseIfPart ) ;
+    // InternalSTAlgorithmParser.g:9295:1: rule__STIfStatement__ElseifsAssignment_4 : ( ruleSTElseIfPart ) ;
     public final void rule__STIfStatement__ElseifsAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9245:1: ( ( ruleSTElseIfPart ) )
-            // InternalSTAlgorithmParser.g:9246:2: ( ruleSTElseIfPart )
+            // InternalSTAlgorithmParser.g:9299:1: ( ( ruleSTElseIfPart ) )
+            // InternalSTAlgorithmParser.g:9300:2: ( ruleSTElseIfPart )
             {
-            // InternalSTAlgorithmParser.g:9246:2: ( ruleSTElseIfPart )
-            // InternalSTAlgorithmParser.g:9247:3: ruleSTElseIfPart
+            // InternalSTAlgorithmParser.g:9300:2: ( ruleSTElseIfPart )
+            // InternalSTAlgorithmParser.g:9301:3: ruleSTElseIfPart
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTIfStatementAccess().getElseifsSTElseIfPartParserRuleCall_4_0()); 
@@ -30713,17 +30881,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STIfStatement__ElseAssignment_5"
-    // InternalSTAlgorithmParser.g:9256:1: rule__STIfStatement__ElseAssignment_5 : ( ruleSTElsePart ) ;
+    // InternalSTAlgorithmParser.g:9310:1: rule__STIfStatement__ElseAssignment_5 : ( ruleSTElsePart ) ;
     public final void rule__STIfStatement__ElseAssignment_5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9260:1: ( ( ruleSTElsePart ) )
-            // InternalSTAlgorithmParser.g:9261:2: ( ruleSTElsePart )
+            // InternalSTAlgorithmParser.g:9314:1: ( ( ruleSTElsePart ) )
+            // InternalSTAlgorithmParser.g:9315:2: ( ruleSTElsePart )
             {
-            // InternalSTAlgorithmParser.g:9261:2: ( ruleSTElsePart )
-            // InternalSTAlgorithmParser.g:9262:3: ruleSTElsePart
+            // InternalSTAlgorithmParser.g:9315:2: ( ruleSTElsePart )
+            // InternalSTAlgorithmParser.g:9316:3: ruleSTElsePart
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTIfStatementAccess().getElseSTElsePartParserRuleCall_5_0()); 
@@ -30758,17 +30926,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STElseIfPart__ConditionAssignment_1"
-    // InternalSTAlgorithmParser.g:9271:1: rule__STElseIfPart__ConditionAssignment_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9325:1: rule__STElseIfPart__ConditionAssignment_1 : ( ruleSTExpression ) ;
     public final void rule__STElseIfPart__ConditionAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9275:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9276:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9329:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9330:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9276:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9277:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9330:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9331:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTElseIfPartAccess().getConditionSTExpressionParserRuleCall_1_0()); 
@@ -30803,17 +30971,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STElseIfPart__StatementsAssignment_3"
-    // InternalSTAlgorithmParser.g:9286:1: rule__STElseIfPart__StatementsAssignment_3 : ( ruleSTStatement ) ;
+    // InternalSTAlgorithmParser.g:9340:1: rule__STElseIfPart__StatementsAssignment_3 : ( ruleSTStatement ) ;
     public final void rule__STElseIfPart__StatementsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9290:1: ( ( ruleSTStatement ) )
-            // InternalSTAlgorithmParser.g:9291:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9344:1: ( ( ruleSTStatement ) )
+            // InternalSTAlgorithmParser.g:9345:2: ( ruleSTStatement )
             {
-            // InternalSTAlgorithmParser.g:9291:2: ( ruleSTStatement )
-            // InternalSTAlgorithmParser.g:9292:3: ruleSTStatement
+            // InternalSTAlgorithmParser.g:9345:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9346:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTElseIfPartAccess().getStatementsSTStatementParserRuleCall_3_0()); 
@@ -30848,17 +31016,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STCaseStatement__SelectorAssignment_1"
-    // InternalSTAlgorithmParser.g:9301:1: rule__STCaseStatement__SelectorAssignment_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9355:1: rule__STCaseStatement__SelectorAssignment_1 : ( ruleSTExpression ) ;
     public final void rule__STCaseStatement__SelectorAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9305:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9306:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9359:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9360:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9306:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9307:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9360:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9361:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTCaseStatementAccess().getSelectorSTExpressionParserRuleCall_1_0()); 
@@ -30893,17 +31061,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STCaseStatement__CasesAssignment_3"
-    // InternalSTAlgorithmParser.g:9316:1: rule__STCaseStatement__CasesAssignment_3 : ( ruleSTCaseCases ) ;
+    // InternalSTAlgorithmParser.g:9370:1: rule__STCaseStatement__CasesAssignment_3 : ( ruleSTCaseCases ) ;
     public final void rule__STCaseStatement__CasesAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9320:1: ( ( ruleSTCaseCases ) )
-            // InternalSTAlgorithmParser.g:9321:2: ( ruleSTCaseCases )
+            // InternalSTAlgorithmParser.g:9374:1: ( ( ruleSTCaseCases ) )
+            // InternalSTAlgorithmParser.g:9375:2: ( ruleSTCaseCases )
             {
-            // InternalSTAlgorithmParser.g:9321:2: ( ruleSTCaseCases )
-            // InternalSTAlgorithmParser.g:9322:3: ruleSTCaseCases
+            // InternalSTAlgorithmParser.g:9375:2: ( ruleSTCaseCases )
+            // InternalSTAlgorithmParser.g:9376:3: ruleSTCaseCases
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTCaseStatementAccess().getCasesSTCaseCasesParserRuleCall_3_0()); 
@@ -30938,17 +31106,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STCaseStatement__ElseAssignment_4"
-    // InternalSTAlgorithmParser.g:9331:1: rule__STCaseStatement__ElseAssignment_4 : ( ruleSTElsePart ) ;
+    // InternalSTAlgorithmParser.g:9385:1: rule__STCaseStatement__ElseAssignment_4 : ( ruleSTElsePart ) ;
     public final void rule__STCaseStatement__ElseAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9335:1: ( ( ruleSTElsePart ) )
-            // InternalSTAlgorithmParser.g:9336:2: ( ruleSTElsePart )
+            // InternalSTAlgorithmParser.g:9389:1: ( ( ruleSTElsePart ) )
+            // InternalSTAlgorithmParser.g:9390:2: ( ruleSTElsePart )
             {
-            // InternalSTAlgorithmParser.g:9336:2: ( ruleSTElsePart )
-            // InternalSTAlgorithmParser.g:9337:3: ruleSTElsePart
+            // InternalSTAlgorithmParser.g:9390:2: ( ruleSTElsePart )
+            // InternalSTAlgorithmParser.g:9391:3: ruleSTElsePart
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTCaseStatementAccess().getElseSTElsePartParserRuleCall_4_0()); 
@@ -30983,17 +31151,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STCaseCases__ConditionsAssignment_0"
-    // InternalSTAlgorithmParser.g:9346:1: rule__STCaseCases__ConditionsAssignment_0 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9400:1: rule__STCaseCases__ConditionsAssignment_0 : ( ruleSTExpression ) ;
     public final void rule__STCaseCases__ConditionsAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9350:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9351:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9404:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9405:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9351:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9352:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9405:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9406:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTCaseCasesAccess().getConditionsSTExpressionParserRuleCall_0_0()); 
@@ -31028,17 +31196,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STCaseCases__ConditionsAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9361:1: rule__STCaseCases__ConditionsAssignment_1_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9415:1: rule__STCaseCases__ConditionsAssignment_1_1 : ( ruleSTExpression ) ;
     public final void rule__STCaseCases__ConditionsAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9365:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9366:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9419:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9420:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9366:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9367:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9420:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9421:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTCaseCasesAccess().getConditionsSTExpressionParserRuleCall_1_1_0()); 
@@ -31073,17 +31241,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STCaseCases__StatementsAssignment_3"
-    // InternalSTAlgorithmParser.g:9376:1: rule__STCaseCases__StatementsAssignment_3 : ( ruleSTStatement ) ;
+    // InternalSTAlgorithmParser.g:9430:1: rule__STCaseCases__StatementsAssignment_3 : ( ruleSTStatement ) ;
     public final void rule__STCaseCases__StatementsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9380:1: ( ( ruleSTStatement ) )
-            // InternalSTAlgorithmParser.g:9381:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9434:1: ( ( ruleSTStatement ) )
+            // InternalSTAlgorithmParser.g:9435:2: ( ruleSTStatement )
             {
-            // InternalSTAlgorithmParser.g:9381:2: ( ruleSTStatement )
-            // InternalSTAlgorithmParser.g:9382:3: ruleSTStatement
+            // InternalSTAlgorithmParser.g:9435:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9436:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTCaseCasesAccess().getStatementsSTStatementParserRuleCall_3_0()); 
@@ -31118,17 +31286,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STElsePart__StatementsAssignment_2"
-    // InternalSTAlgorithmParser.g:9391:1: rule__STElsePart__StatementsAssignment_2 : ( ruleSTStatement ) ;
+    // InternalSTAlgorithmParser.g:9445:1: rule__STElsePart__StatementsAssignment_2 : ( ruleSTStatement ) ;
     public final void rule__STElsePart__StatementsAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9395:1: ( ( ruleSTStatement ) )
-            // InternalSTAlgorithmParser.g:9396:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9449:1: ( ( ruleSTStatement ) )
+            // InternalSTAlgorithmParser.g:9450:2: ( ruleSTStatement )
             {
-            // InternalSTAlgorithmParser.g:9396:2: ( ruleSTStatement )
-            // InternalSTAlgorithmParser.g:9397:3: ruleSTStatement
+            // InternalSTAlgorithmParser.g:9450:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9451:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTElsePartAccess().getStatementsSTStatementParserRuleCall_2_0()); 
@@ -31162,29 +31330,37 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
     // $ANTLR end "rule__STElsePart__StatementsAssignment_2"
 
 
-    // $ANTLR start "rule__STForStatement__ForAssignment_1"
-    // InternalSTAlgorithmParser.g:9406:1: rule__STForStatement__ForAssignment_1 : ( ruleSTExpression ) ;
-    public final void rule__STForStatement__ForAssignment_1() throws RecognitionException {
+    // $ANTLR start "rule__STForStatement__VariableAssignment_1"
+    // InternalSTAlgorithmParser.g:9460:1: rule__STForStatement__VariableAssignment_1 : ( ( RULE_ID ) ) ;
+    public final void rule__STForStatement__VariableAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9410:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9411:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9464:1: ( ( ( RULE_ID ) ) )
+            // InternalSTAlgorithmParser.g:9465:2: ( ( RULE_ID ) )
             {
-            // InternalSTAlgorithmParser.g:9411:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9412:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9465:2: ( ( RULE_ID ) )
+            // InternalSTAlgorithmParser.g:9466:3: ( RULE_ID )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getForSTExpressionParserRuleCall_1_0()); 
+               before(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationCrossReference_1_0()); 
             }
-            pushFollow(FOLLOW_2);
-            ruleSTExpression();
-
-            state._fsp--;
-            if (state.failed) return ;
+            // InternalSTAlgorithmParser.g:9467:3: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:9468:4: RULE_ID
+            {
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getForSTExpressionParserRuleCall_1_0()); 
+               before(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationIDTerminalRuleCall_1_0_1()); 
+            }
+            match(input,RULE_ID,FOLLOW_2); if (state.failed) return ;
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationIDTerminalRuleCall_1_0_1()); 
+            }
+
+            }
+
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationCrossReference_1_0()); 
             }
 
             }
@@ -31204,24 +31380,24 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
         }
         return ;
     }
-    // $ANTLR end "rule__STForStatement__ForAssignment_1"
+    // $ANTLR end "rule__STForStatement__VariableAssignment_1"
 
 
-    // $ANTLR start "rule__STForStatement__ToAssignment_3"
-    // InternalSTAlgorithmParser.g:9421:1: rule__STForStatement__ToAssignment_3 : ( ruleSTExpression ) ;
-    public final void rule__STForStatement__ToAssignment_3() throws RecognitionException {
+    // $ANTLR start "rule__STForStatement__FromAssignment_3"
+    // InternalSTAlgorithmParser.g:9479:1: rule__STForStatement__FromAssignment_3 : ( ruleSTExpression ) ;
+    public final void rule__STForStatement__FromAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9425:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9426:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9483:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9484:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9426:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9427:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9484:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9485:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getToSTExpressionParserRuleCall_3_0()); 
+               before(grammarAccess.getSTForStatementAccess().getFromSTExpressionParserRuleCall_3_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleSTExpression();
@@ -31229,7 +31405,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getToSTExpressionParserRuleCall_3_0()); 
+               after(grammarAccess.getSTForStatementAccess().getFromSTExpressionParserRuleCall_3_0()); 
             }
 
             }
@@ -31249,24 +31425,24 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
         }
         return ;
     }
-    // $ANTLR end "rule__STForStatement__ToAssignment_3"
+    // $ANTLR end "rule__STForStatement__FromAssignment_3"
 
 
-    // $ANTLR start "rule__STForStatement__ByAssignment_4_1"
-    // InternalSTAlgorithmParser.g:9436:1: rule__STForStatement__ByAssignment_4_1 : ( ruleSTExpression ) ;
-    public final void rule__STForStatement__ByAssignment_4_1() throws RecognitionException {
+    // $ANTLR start "rule__STForStatement__ToAssignment_5"
+    // InternalSTAlgorithmParser.g:9494:1: rule__STForStatement__ToAssignment_5 : ( ruleSTExpression ) ;
+    public final void rule__STForStatement__ToAssignment_5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9440:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9441:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9498:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9499:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9441:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9442:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9499:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9500:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getBySTExpressionParserRuleCall_4_1_0()); 
+               before(grammarAccess.getSTForStatementAccess().getToSTExpressionParserRuleCall_5_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleSTExpression();
@@ -31274,7 +31450,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getBySTExpressionParserRuleCall_4_1_0()); 
+               after(grammarAccess.getSTForStatementAccess().getToSTExpressionParserRuleCall_5_0()); 
             }
 
             }
@@ -31294,24 +31470,69 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
         }
         return ;
     }
-    // $ANTLR end "rule__STForStatement__ByAssignment_4_1"
+    // $ANTLR end "rule__STForStatement__ToAssignment_5"
 
 
-    // $ANTLR start "rule__STForStatement__StatementsAssignment_6"
-    // InternalSTAlgorithmParser.g:9451:1: rule__STForStatement__StatementsAssignment_6 : ( ruleSTStatement ) ;
-    public final void rule__STForStatement__StatementsAssignment_6() throws RecognitionException {
+    // $ANTLR start "rule__STForStatement__ByAssignment_6_1"
+    // InternalSTAlgorithmParser.g:9509:1: rule__STForStatement__ByAssignment_6_1 : ( ruleSTExpression ) ;
+    public final void rule__STForStatement__ByAssignment_6_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9455:1: ( ( ruleSTStatement ) )
-            // InternalSTAlgorithmParser.g:9456:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9513:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9514:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9456:2: ( ruleSTStatement )
-            // InternalSTAlgorithmParser.g:9457:3: ruleSTStatement
+            // InternalSTAlgorithmParser.g:9514:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9515:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getStatementsSTStatementParserRuleCall_6_0()); 
+               before(grammarAccess.getSTForStatementAccess().getBySTExpressionParserRuleCall_6_1_0()); 
+            }
+            pushFollow(FOLLOW_2);
+            ruleSTExpression();
+
+            state._fsp--;
+            if (state.failed) return ;
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getSTForStatementAccess().getBySTExpressionParserRuleCall_6_1_0()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__STForStatement__ByAssignment_6_1"
+
+
+    // $ANTLR start "rule__STForStatement__StatementsAssignment_8"
+    // InternalSTAlgorithmParser.g:9524:1: rule__STForStatement__StatementsAssignment_8 : ( ruleSTStatement ) ;
+    public final void rule__STForStatement__StatementsAssignment_8() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalSTAlgorithmParser.g:9528:1: ( ( ruleSTStatement ) )
+            // InternalSTAlgorithmParser.g:9529:2: ( ruleSTStatement )
+            {
+            // InternalSTAlgorithmParser.g:9529:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9530:3: ruleSTStatement
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getSTForStatementAccess().getStatementsSTStatementParserRuleCall_8_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleSTStatement();
@@ -31319,7 +31540,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getStatementsSTStatementParserRuleCall_6_0()); 
+               after(grammarAccess.getSTForStatementAccess().getStatementsSTStatementParserRuleCall_8_0()); 
             }
 
             }
@@ -31339,21 +31560,21 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
         }
         return ;
     }
-    // $ANTLR end "rule__STForStatement__StatementsAssignment_6"
+    // $ANTLR end "rule__STForStatement__StatementsAssignment_8"
 
 
     // $ANTLR start "rule__STWhileStatement__ConditionAssignment_1"
-    // InternalSTAlgorithmParser.g:9466:1: rule__STWhileStatement__ConditionAssignment_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9539:1: rule__STWhileStatement__ConditionAssignment_1 : ( ruleSTExpression ) ;
     public final void rule__STWhileStatement__ConditionAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9470:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9471:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9543:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9544:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9471:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9472:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9544:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9545:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTWhileStatementAccess().getConditionSTExpressionParserRuleCall_1_0()); 
@@ -31388,17 +31609,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STWhileStatement__StatementsAssignment_3"
-    // InternalSTAlgorithmParser.g:9481:1: rule__STWhileStatement__StatementsAssignment_3 : ( ruleSTStatement ) ;
+    // InternalSTAlgorithmParser.g:9554:1: rule__STWhileStatement__StatementsAssignment_3 : ( ruleSTStatement ) ;
     public final void rule__STWhileStatement__StatementsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9485:1: ( ( ruleSTStatement ) )
-            // InternalSTAlgorithmParser.g:9486:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9558:1: ( ( ruleSTStatement ) )
+            // InternalSTAlgorithmParser.g:9559:2: ( ruleSTStatement )
             {
-            // InternalSTAlgorithmParser.g:9486:2: ( ruleSTStatement )
-            // InternalSTAlgorithmParser.g:9487:3: ruleSTStatement
+            // InternalSTAlgorithmParser.g:9559:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9560:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTWhileStatementAccess().getStatementsSTStatementParserRuleCall_3_0()); 
@@ -31433,17 +31654,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__StatementsAssignment_1"
-    // InternalSTAlgorithmParser.g:9496:1: rule__STRepeatStatement__StatementsAssignment_1 : ( ruleSTStatement ) ;
+    // InternalSTAlgorithmParser.g:9569:1: rule__STRepeatStatement__StatementsAssignment_1 : ( ruleSTStatement ) ;
     public final void rule__STRepeatStatement__StatementsAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9500:1: ( ( ruleSTStatement ) )
-            // InternalSTAlgorithmParser.g:9501:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9573:1: ( ( ruleSTStatement ) )
+            // InternalSTAlgorithmParser.g:9574:2: ( ruleSTStatement )
             {
-            // InternalSTAlgorithmParser.g:9501:2: ( ruleSTStatement )
-            // InternalSTAlgorithmParser.g:9502:3: ruleSTStatement
+            // InternalSTAlgorithmParser.g:9574:2: ( ruleSTStatement )
+            // InternalSTAlgorithmParser.g:9575:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTRepeatStatementAccess().getStatementsSTStatementParserRuleCall_1_0()); 
@@ -31478,17 +31699,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STRepeatStatement__ConditionAssignment_3"
-    // InternalSTAlgorithmParser.g:9511:1: rule__STRepeatStatement__ConditionAssignment_3 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9584:1: rule__STRepeatStatement__ConditionAssignment_3 : ( ruleSTExpression ) ;
     public final void rule__STRepeatStatement__ConditionAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9515:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9516:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9588:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9589:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9516:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9517:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9589:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9590:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTRepeatStatementAccess().getConditionSTExpressionParserRuleCall_3_0()); 
@@ -31523,17 +31744,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__OpAssignment_1_0_1"
-    // InternalSTAlgorithmParser.g:9526:1: rule__STSubrangeExpression__OpAssignment_1_0_1 : ( ruleSubrangeOperator ) ;
+    // InternalSTAlgorithmParser.g:9599:1: rule__STSubrangeExpression__OpAssignment_1_0_1 : ( ruleSubrangeOperator ) ;
     public final void rule__STSubrangeExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9530:1: ( ( ruleSubrangeOperator ) )
-            // InternalSTAlgorithmParser.g:9531:2: ( ruleSubrangeOperator )
+            // InternalSTAlgorithmParser.g:9603:1: ( ( ruleSubrangeOperator ) )
+            // InternalSTAlgorithmParser.g:9604:2: ( ruleSubrangeOperator )
             {
-            // InternalSTAlgorithmParser.g:9531:2: ( ruleSubrangeOperator )
-            // InternalSTAlgorithmParser.g:9532:3: ruleSubrangeOperator
+            // InternalSTAlgorithmParser.g:9604:2: ( ruleSubrangeOperator )
+            // InternalSTAlgorithmParser.g:9605:3: ruleSubrangeOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getOpSubrangeOperatorEnumRuleCall_1_0_1_0()); 
@@ -31568,17 +31789,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STSubrangeExpression__RightAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9541:1: rule__STSubrangeExpression__RightAssignment_1_1 : ( ruleSTOrExpression ) ;
+    // InternalSTAlgorithmParser.g:9614:1: rule__STSubrangeExpression__RightAssignment_1_1 : ( ruleSTOrExpression ) ;
     public final void rule__STSubrangeExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9545:1: ( ( ruleSTOrExpression ) )
-            // InternalSTAlgorithmParser.g:9546:2: ( ruleSTOrExpression )
+            // InternalSTAlgorithmParser.g:9618:1: ( ( ruleSTOrExpression ) )
+            // InternalSTAlgorithmParser.g:9619:2: ( ruleSTOrExpression )
             {
-            // InternalSTAlgorithmParser.g:9546:2: ( ruleSTOrExpression )
-            // InternalSTAlgorithmParser.g:9547:3: ruleSTOrExpression
+            // InternalSTAlgorithmParser.g:9619:2: ( ruleSTOrExpression )
+            // InternalSTAlgorithmParser.g:9620:3: ruleSTOrExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getRightSTOrExpressionParserRuleCall_1_1_0()); 
@@ -31613,17 +31834,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__OpAssignment_1_0_1"
-    // InternalSTAlgorithmParser.g:9556:1: rule__STOrExpression__OpAssignment_1_0_1 : ( ruleOrOperator ) ;
+    // InternalSTAlgorithmParser.g:9629:1: rule__STOrExpression__OpAssignment_1_0_1 : ( ruleOrOperator ) ;
     public final void rule__STOrExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9560:1: ( ( ruleOrOperator ) )
-            // InternalSTAlgorithmParser.g:9561:2: ( ruleOrOperator )
+            // InternalSTAlgorithmParser.g:9633:1: ( ( ruleOrOperator ) )
+            // InternalSTAlgorithmParser.g:9634:2: ( ruleOrOperator )
             {
-            // InternalSTAlgorithmParser.g:9561:2: ( ruleOrOperator )
-            // InternalSTAlgorithmParser.g:9562:3: ruleOrOperator
+            // InternalSTAlgorithmParser.g:9634:2: ( ruleOrOperator )
+            // InternalSTAlgorithmParser.g:9635:3: ruleOrOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getOpOrOperatorEnumRuleCall_1_0_1_0()); 
@@ -31658,17 +31879,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STOrExpression__RightAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9571:1: rule__STOrExpression__RightAssignment_1_1 : ( ruleSTXorExpression ) ;
+    // InternalSTAlgorithmParser.g:9644:1: rule__STOrExpression__RightAssignment_1_1 : ( ruleSTXorExpression ) ;
     public final void rule__STOrExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9575:1: ( ( ruleSTXorExpression ) )
-            // InternalSTAlgorithmParser.g:9576:2: ( ruleSTXorExpression )
+            // InternalSTAlgorithmParser.g:9648:1: ( ( ruleSTXorExpression ) )
+            // InternalSTAlgorithmParser.g:9649:2: ( ruleSTXorExpression )
             {
-            // InternalSTAlgorithmParser.g:9576:2: ( ruleSTXorExpression )
-            // InternalSTAlgorithmParser.g:9577:3: ruleSTXorExpression
+            // InternalSTAlgorithmParser.g:9649:2: ( ruleSTXorExpression )
+            // InternalSTAlgorithmParser.g:9650:3: ruleSTXorExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getRightSTXorExpressionParserRuleCall_1_1_0()); 
@@ -31703,17 +31924,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__OpAssignment_1_0_1"
-    // InternalSTAlgorithmParser.g:9586:1: rule__STXorExpression__OpAssignment_1_0_1 : ( ruleXorOperator ) ;
+    // InternalSTAlgorithmParser.g:9659:1: rule__STXorExpression__OpAssignment_1_0_1 : ( ruleXorOperator ) ;
     public final void rule__STXorExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9590:1: ( ( ruleXorOperator ) )
-            // InternalSTAlgorithmParser.g:9591:2: ( ruleXorOperator )
+            // InternalSTAlgorithmParser.g:9663:1: ( ( ruleXorOperator ) )
+            // InternalSTAlgorithmParser.g:9664:2: ( ruleXorOperator )
             {
-            // InternalSTAlgorithmParser.g:9591:2: ( ruleXorOperator )
-            // InternalSTAlgorithmParser.g:9592:3: ruleXorOperator
+            // InternalSTAlgorithmParser.g:9664:2: ( ruleXorOperator )
+            // InternalSTAlgorithmParser.g:9665:3: ruleXorOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getOpXorOperatorEnumRuleCall_1_0_1_0()); 
@@ -31748,17 +31969,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STXorExpression__RightAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9601:1: rule__STXorExpression__RightAssignment_1_1 : ( ruleSTAndExpression ) ;
+    // InternalSTAlgorithmParser.g:9674:1: rule__STXorExpression__RightAssignment_1_1 : ( ruleSTAndExpression ) ;
     public final void rule__STXorExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9605:1: ( ( ruleSTAndExpression ) )
-            // InternalSTAlgorithmParser.g:9606:2: ( ruleSTAndExpression )
+            // InternalSTAlgorithmParser.g:9678:1: ( ( ruleSTAndExpression ) )
+            // InternalSTAlgorithmParser.g:9679:2: ( ruleSTAndExpression )
             {
-            // InternalSTAlgorithmParser.g:9606:2: ( ruleSTAndExpression )
-            // InternalSTAlgorithmParser.g:9607:3: ruleSTAndExpression
+            // InternalSTAlgorithmParser.g:9679:2: ( ruleSTAndExpression )
+            // InternalSTAlgorithmParser.g:9680:3: ruleSTAndExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getRightSTAndExpressionParserRuleCall_1_1_0()); 
@@ -31793,17 +32014,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__OpAssignment_1_0_1"
-    // InternalSTAlgorithmParser.g:9616:1: rule__STAndExpression__OpAssignment_1_0_1 : ( ruleAndOperator ) ;
+    // InternalSTAlgorithmParser.g:9689:1: rule__STAndExpression__OpAssignment_1_0_1 : ( ruleAndOperator ) ;
     public final void rule__STAndExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9620:1: ( ( ruleAndOperator ) )
-            // InternalSTAlgorithmParser.g:9621:2: ( ruleAndOperator )
+            // InternalSTAlgorithmParser.g:9693:1: ( ( ruleAndOperator ) )
+            // InternalSTAlgorithmParser.g:9694:2: ( ruleAndOperator )
             {
-            // InternalSTAlgorithmParser.g:9621:2: ( ruleAndOperator )
-            // InternalSTAlgorithmParser.g:9622:3: ruleAndOperator
+            // InternalSTAlgorithmParser.g:9694:2: ( ruleAndOperator )
+            // InternalSTAlgorithmParser.g:9695:3: ruleAndOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getOpAndOperatorEnumRuleCall_1_0_1_0()); 
@@ -31838,17 +32059,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAndExpression__RightAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9631:1: rule__STAndExpression__RightAssignment_1_1 : ( ruleSTEqualityExpression ) ;
+    // InternalSTAlgorithmParser.g:9704:1: rule__STAndExpression__RightAssignment_1_1 : ( ruleSTEqualityExpression ) ;
     public final void rule__STAndExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9635:1: ( ( ruleSTEqualityExpression ) )
-            // InternalSTAlgorithmParser.g:9636:2: ( ruleSTEqualityExpression )
+            // InternalSTAlgorithmParser.g:9708:1: ( ( ruleSTEqualityExpression ) )
+            // InternalSTAlgorithmParser.g:9709:2: ( ruleSTEqualityExpression )
             {
-            // InternalSTAlgorithmParser.g:9636:2: ( ruleSTEqualityExpression )
-            // InternalSTAlgorithmParser.g:9637:3: ruleSTEqualityExpression
+            // InternalSTAlgorithmParser.g:9709:2: ( ruleSTEqualityExpression )
+            // InternalSTAlgorithmParser.g:9710:3: ruleSTEqualityExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getRightSTEqualityExpressionParserRuleCall_1_1_0()); 
@@ -31883,17 +32104,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__OpAssignment_1_0_1"
-    // InternalSTAlgorithmParser.g:9646:1: rule__STEqualityExpression__OpAssignment_1_0_1 : ( ruleEqualityOperator ) ;
+    // InternalSTAlgorithmParser.g:9719:1: rule__STEqualityExpression__OpAssignment_1_0_1 : ( ruleEqualityOperator ) ;
     public final void rule__STEqualityExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9650:1: ( ( ruleEqualityOperator ) )
-            // InternalSTAlgorithmParser.g:9651:2: ( ruleEqualityOperator )
+            // InternalSTAlgorithmParser.g:9723:1: ( ( ruleEqualityOperator ) )
+            // InternalSTAlgorithmParser.g:9724:2: ( ruleEqualityOperator )
             {
-            // InternalSTAlgorithmParser.g:9651:2: ( ruleEqualityOperator )
-            // InternalSTAlgorithmParser.g:9652:3: ruleEqualityOperator
+            // InternalSTAlgorithmParser.g:9724:2: ( ruleEqualityOperator )
+            // InternalSTAlgorithmParser.g:9725:3: ruleEqualityOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getOpEqualityOperatorEnumRuleCall_1_0_1_0()); 
@@ -31928,17 +32149,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STEqualityExpression__RightAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9661:1: rule__STEqualityExpression__RightAssignment_1_1 : ( ruleSTComparisonExpression ) ;
+    // InternalSTAlgorithmParser.g:9734:1: rule__STEqualityExpression__RightAssignment_1_1 : ( ruleSTComparisonExpression ) ;
     public final void rule__STEqualityExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9665:1: ( ( ruleSTComparisonExpression ) )
-            // InternalSTAlgorithmParser.g:9666:2: ( ruleSTComparisonExpression )
+            // InternalSTAlgorithmParser.g:9738:1: ( ( ruleSTComparisonExpression ) )
+            // InternalSTAlgorithmParser.g:9739:2: ( ruleSTComparisonExpression )
             {
-            // InternalSTAlgorithmParser.g:9666:2: ( ruleSTComparisonExpression )
-            // InternalSTAlgorithmParser.g:9667:3: ruleSTComparisonExpression
+            // InternalSTAlgorithmParser.g:9739:2: ( ruleSTComparisonExpression )
+            // InternalSTAlgorithmParser.g:9740:3: ruleSTComparisonExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getRightSTComparisonExpressionParserRuleCall_1_1_0()); 
@@ -31973,17 +32194,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__OpAssignment_1_0_1"
-    // InternalSTAlgorithmParser.g:9676:1: rule__STComparisonExpression__OpAssignment_1_0_1 : ( ruleCompareOperator ) ;
+    // InternalSTAlgorithmParser.g:9749:1: rule__STComparisonExpression__OpAssignment_1_0_1 : ( ruleCompareOperator ) ;
     public final void rule__STComparisonExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9680:1: ( ( ruleCompareOperator ) )
-            // InternalSTAlgorithmParser.g:9681:2: ( ruleCompareOperator )
+            // InternalSTAlgorithmParser.g:9753:1: ( ( ruleCompareOperator ) )
+            // InternalSTAlgorithmParser.g:9754:2: ( ruleCompareOperator )
             {
-            // InternalSTAlgorithmParser.g:9681:2: ( ruleCompareOperator )
-            // InternalSTAlgorithmParser.g:9682:3: ruleCompareOperator
+            // InternalSTAlgorithmParser.g:9754:2: ( ruleCompareOperator )
+            // InternalSTAlgorithmParser.g:9755:3: ruleCompareOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getOpCompareOperatorEnumRuleCall_1_0_1_0()); 
@@ -32018,17 +32239,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STComparisonExpression__RightAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9691:1: rule__STComparisonExpression__RightAssignment_1_1 : ( ruleSTAddSubExpression ) ;
+    // InternalSTAlgorithmParser.g:9764:1: rule__STComparisonExpression__RightAssignment_1_1 : ( ruleSTAddSubExpression ) ;
     public final void rule__STComparisonExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9695:1: ( ( ruleSTAddSubExpression ) )
-            // InternalSTAlgorithmParser.g:9696:2: ( ruleSTAddSubExpression )
+            // InternalSTAlgorithmParser.g:9768:1: ( ( ruleSTAddSubExpression ) )
+            // InternalSTAlgorithmParser.g:9769:2: ( ruleSTAddSubExpression )
             {
-            // InternalSTAlgorithmParser.g:9696:2: ( ruleSTAddSubExpression )
-            // InternalSTAlgorithmParser.g:9697:3: ruleSTAddSubExpression
+            // InternalSTAlgorithmParser.g:9769:2: ( ruleSTAddSubExpression )
+            // InternalSTAlgorithmParser.g:9770:3: ruleSTAddSubExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getRightSTAddSubExpressionParserRuleCall_1_1_0()); 
@@ -32063,17 +32284,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__OpAssignment_1_0_1"
-    // InternalSTAlgorithmParser.g:9706:1: rule__STAddSubExpression__OpAssignment_1_0_1 : ( ruleAddSubOperator ) ;
+    // InternalSTAlgorithmParser.g:9779:1: rule__STAddSubExpression__OpAssignment_1_0_1 : ( ruleAddSubOperator ) ;
     public final void rule__STAddSubExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9710:1: ( ( ruleAddSubOperator ) )
-            // InternalSTAlgorithmParser.g:9711:2: ( ruleAddSubOperator )
+            // InternalSTAlgorithmParser.g:9783:1: ( ( ruleAddSubOperator ) )
+            // InternalSTAlgorithmParser.g:9784:2: ( ruleAddSubOperator )
             {
-            // InternalSTAlgorithmParser.g:9711:2: ( ruleAddSubOperator )
-            // InternalSTAlgorithmParser.g:9712:3: ruleAddSubOperator
+            // InternalSTAlgorithmParser.g:9784:2: ( ruleAddSubOperator )
+            // InternalSTAlgorithmParser.g:9785:3: ruleAddSubOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getOpAddSubOperatorEnumRuleCall_1_0_1_0()); 
@@ -32108,17 +32329,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAddSubExpression__RightAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9721:1: rule__STAddSubExpression__RightAssignment_1_1 : ( ruleSTMulDivModExpression ) ;
+    // InternalSTAlgorithmParser.g:9794:1: rule__STAddSubExpression__RightAssignment_1_1 : ( ruleSTMulDivModExpression ) ;
     public final void rule__STAddSubExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9725:1: ( ( ruleSTMulDivModExpression ) )
-            // InternalSTAlgorithmParser.g:9726:2: ( ruleSTMulDivModExpression )
+            // InternalSTAlgorithmParser.g:9798:1: ( ( ruleSTMulDivModExpression ) )
+            // InternalSTAlgorithmParser.g:9799:2: ( ruleSTMulDivModExpression )
             {
-            // InternalSTAlgorithmParser.g:9726:2: ( ruleSTMulDivModExpression )
-            // InternalSTAlgorithmParser.g:9727:3: ruleSTMulDivModExpression
+            // InternalSTAlgorithmParser.g:9799:2: ( ruleSTMulDivModExpression )
+            // InternalSTAlgorithmParser.g:9800:3: ruleSTMulDivModExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getRightSTMulDivModExpressionParserRuleCall_1_1_0()); 
@@ -32153,17 +32374,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__OpAssignment_1_0_1"
-    // InternalSTAlgorithmParser.g:9736:1: rule__STMulDivModExpression__OpAssignment_1_0_1 : ( ruleMulDivModOperator ) ;
+    // InternalSTAlgorithmParser.g:9809:1: rule__STMulDivModExpression__OpAssignment_1_0_1 : ( ruleMulDivModOperator ) ;
     public final void rule__STMulDivModExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9740:1: ( ( ruleMulDivModOperator ) )
-            // InternalSTAlgorithmParser.g:9741:2: ( ruleMulDivModOperator )
+            // InternalSTAlgorithmParser.g:9813:1: ( ( ruleMulDivModOperator ) )
+            // InternalSTAlgorithmParser.g:9814:2: ( ruleMulDivModOperator )
             {
-            // InternalSTAlgorithmParser.g:9741:2: ( ruleMulDivModOperator )
-            // InternalSTAlgorithmParser.g:9742:3: ruleMulDivModOperator
+            // InternalSTAlgorithmParser.g:9814:2: ( ruleMulDivModOperator )
+            // InternalSTAlgorithmParser.g:9815:3: ruleMulDivModOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getOpMulDivModOperatorEnumRuleCall_1_0_1_0()); 
@@ -32198,17 +32419,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMulDivModExpression__RightAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9751:1: rule__STMulDivModExpression__RightAssignment_1_1 : ( ruleSTPowerExpression ) ;
+    // InternalSTAlgorithmParser.g:9824:1: rule__STMulDivModExpression__RightAssignment_1_1 : ( ruleSTPowerExpression ) ;
     public final void rule__STMulDivModExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9755:1: ( ( ruleSTPowerExpression ) )
-            // InternalSTAlgorithmParser.g:9756:2: ( ruleSTPowerExpression )
+            // InternalSTAlgorithmParser.g:9828:1: ( ( ruleSTPowerExpression ) )
+            // InternalSTAlgorithmParser.g:9829:2: ( ruleSTPowerExpression )
             {
-            // InternalSTAlgorithmParser.g:9756:2: ( ruleSTPowerExpression )
-            // InternalSTAlgorithmParser.g:9757:3: ruleSTPowerExpression
+            // InternalSTAlgorithmParser.g:9829:2: ( ruleSTPowerExpression )
+            // InternalSTAlgorithmParser.g:9830:3: ruleSTPowerExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getRightSTPowerExpressionParserRuleCall_1_1_0()); 
@@ -32243,17 +32464,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__OpAssignment_1_0_1"
-    // InternalSTAlgorithmParser.g:9766:1: rule__STPowerExpression__OpAssignment_1_0_1 : ( rulePowerOperator ) ;
+    // InternalSTAlgorithmParser.g:9839:1: rule__STPowerExpression__OpAssignment_1_0_1 : ( rulePowerOperator ) ;
     public final void rule__STPowerExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9770:1: ( ( rulePowerOperator ) )
-            // InternalSTAlgorithmParser.g:9771:2: ( rulePowerOperator )
+            // InternalSTAlgorithmParser.g:9843:1: ( ( rulePowerOperator ) )
+            // InternalSTAlgorithmParser.g:9844:2: ( rulePowerOperator )
             {
-            // InternalSTAlgorithmParser.g:9771:2: ( rulePowerOperator )
-            // InternalSTAlgorithmParser.g:9772:3: rulePowerOperator
+            // InternalSTAlgorithmParser.g:9844:2: ( rulePowerOperator )
+            // InternalSTAlgorithmParser.g:9845:3: rulePowerOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getOpPowerOperatorEnumRuleCall_1_0_1_0()); 
@@ -32288,17 +32509,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STPowerExpression__RightAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9781:1: rule__STPowerExpression__RightAssignment_1_1 : ( ruleSTUnaryExpression ) ;
+    // InternalSTAlgorithmParser.g:9854:1: rule__STPowerExpression__RightAssignment_1_1 : ( ruleSTUnaryExpression ) ;
     public final void rule__STPowerExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9785:1: ( ( ruleSTUnaryExpression ) )
-            // InternalSTAlgorithmParser.g:9786:2: ( ruleSTUnaryExpression )
+            // InternalSTAlgorithmParser.g:9858:1: ( ( ruleSTUnaryExpression ) )
+            // InternalSTAlgorithmParser.g:9859:2: ( ruleSTUnaryExpression )
             {
-            // InternalSTAlgorithmParser.g:9786:2: ( ruleSTUnaryExpression )
-            // InternalSTAlgorithmParser.g:9787:3: ruleSTUnaryExpression
+            // InternalSTAlgorithmParser.g:9859:2: ( ruleSTUnaryExpression )
+            // InternalSTAlgorithmParser.g:9860:3: ruleSTUnaryExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getRightSTUnaryExpressionParserRuleCall_1_1_0()); 
@@ -32333,17 +32554,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STUnaryExpression__OpAssignment_1_1"
-    // InternalSTAlgorithmParser.g:9796:1: rule__STUnaryExpression__OpAssignment_1_1 : ( ruleUnaryOperator ) ;
+    // InternalSTAlgorithmParser.g:9869:1: rule__STUnaryExpression__OpAssignment_1_1 : ( ruleUnaryOperator ) ;
     public final void rule__STUnaryExpression__OpAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9800:1: ( ( ruleUnaryOperator ) )
-            // InternalSTAlgorithmParser.g:9801:2: ( ruleUnaryOperator )
+            // InternalSTAlgorithmParser.g:9873:1: ( ( ruleUnaryOperator ) )
+            // InternalSTAlgorithmParser.g:9874:2: ( ruleUnaryOperator )
             {
-            // InternalSTAlgorithmParser.g:9801:2: ( ruleUnaryOperator )
-            // InternalSTAlgorithmParser.g:9802:3: ruleUnaryOperator
+            // InternalSTAlgorithmParser.g:9874:2: ( ruleUnaryOperator )
+            // InternalSTAlgorithmParser.g:9875:3: ruleUnaryOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTUnaryExpressionAccess().getOpUnaryOperatorEnumRuleCall_1_1_0()); 
@@ -32378,17 +32599,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STUnaryExpression__ExpressionAssignment_1_2"
-    // InternalSTAlgorithmParser.g:9811:1: rule__STUnaryExpression__ExpressionAssignment_1_2 : ( ruleSTUnaryExpression ) ;
+    // InternalSTAlgorithmParser.g:9884:1: rule__STUnaryExpression__ExpressionAssignment_1_2 : ( ruleSTUnaryExpression ) ;
     public final void rule__STUnaryExpression__ExpressionAssignment_1_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9815:1: ( ( ruleSTUnaryExpression ) )
-            // InternalSTAlgorithmParser.g:9816:2: ( ruleSTUnaryExpression )
+            // InternalSTAlgorithmParser.g:9888:1: ( ( ruleSTUnaryExpression ) )
+            // InternalSTAlgorithmParser.g:9889:2: ( ruleSTUnaryExpression )
             {
-            // InternalSTAlgorithmParser.g:9816:2: ( ruleSTUnaryExpression )
-            // InternalSTAlgorithmParser.g:9817:3: ruleSTUnaryExpression
+            // InternalSTAlgorithmParser.g:9889:2: ( ruleSTUnaryExpression )
+            // InternalSTAlgorithmParser.g:9890:3: ruleSTUnaryExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTUnaryExpressionAccess().getExpressionSTUnaryExpressionParserRuleCall_1_2_0()); 
@@ -32423,23 +32644,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__MemberAssignment_1_0_2"
-    // InternalSTAlgorithmParser.g:9826:1: rule__STAccessExpression__MemberAssignment_1_0_2 : ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) ) ;
+    // InternalSTAlgorithmParser.g:9899:1: rule__STAccessExpression__MemberAssignment_1_0_2 : ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) ) ;
     public final void rule__STAccessExpression__MemberAssignment_1_0_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9830:1: ( ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) ) )
-            // InternalSTAlgorithmParser.g:9831:2: ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) )
+            // InternalSTAlgorithmParser.g:9903:1: ( ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) ) )
+            // InternalSTAlgorithmParser.g:9904:2: ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) )
             {
-            // InternalSTAlgorithmParser.g:9831:2: ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) )
-            // InternalSTAlgorithmParser.g:9832:3: ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 )
+            // InternalSTAlgorithmParser.g:9904:2: ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) )
+            // InternalSTAlgorithmParser.g:9905:3: ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getMemberAlternatives_1_0_2_0()); 
             }
-            // InternalSTAlgorithmParser.g:9833:3: ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 )
-            // InternalSTAlgorithmParser.g:9833:4: rule__STAccessExpression__MemberAlternatives_1_0_2_0
+            // InternalSTAlgorithmParser.g:9906:3: ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 )
+            // InternalSTAlgorithmParser.g:9906:4: rule__STAccessExpression__MemberAlternatives_1_0_2_0
             {
             pushFollow(FOLLOW_2);
             rule__STAccessExpression__MemberAlternatives_1_0_2_0();
@@ -32474,17 +32695,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__IndexAssignment_1_1_2"
-    // InternalSTAlgorithmParser.g:9841:1: rule__STAccessExpression__IndexAssignment_1_1_2 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9914:1: rule__STAccessExpression__IndexAssignment_1_1_2 : ( ruleSTExpression ) ;
     public final void rule__STAccessExpression__IndexAssignment_1_1_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9845:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9846:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9918:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9919:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9846:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9847:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9919:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9920:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getIndexSTExpressionParserRuleCall_1_1_2_0()); 
@@ -32519,17 +32740,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STAccessExpression__IndexAssignment_1_1_3_1"
-    // InternalSTAlgorithmParser.g:9856:1: rule__STAccessExpression__IndexAssignment_1_1_3_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9929:1: rule__STAccessExpression__IndexAssignment_1_1_3_1 : ( ruleSTExpression ) ;
     public final void rule__STAccessExpression__IndexAssignment_1_1_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9860:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9861:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9933:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9934:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9861:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9862:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9934:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9935:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getIndexSTExpressionParserRuleCall_1_1_3_1_0()); 
@@ -32564,23 +32785,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__FeatureAssignment_1"
-    // InternalSTAlgorithmParser.g:9871:1: rule__STFeatureExpression__FeatureAssignment_1 : ( ( RULE_ID ) ) ;
+    // InternalSTAlgorithmParser.g:9944:1: rule__STFeatureExpression__FeatureAssignment_1 : ( ( RULE_ID ) ) ;
     public final void rule__STFeatureExpression__FeatureAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9875:1: ( ( ( RULE_ID ) ) )
-            // InternalSTAlgorithmParser.g:9876:2: ( ( RULE_ID ) )
+            // InternalSTAlgorithmParser.g:9948:1: ( ( ( RULE_ID ) ) )
+            // InternalSTAlgorithmParser.g:9949:2: ( ( RULE_ID ) )
             {
-            // InternalSTAlgorithmParser.g:9876:2: ( ( RULE_ID ) )
-            // InternalSTAlgorithmParser.g:9877:3: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:9949:2: ( ( RULE_ID ) )
+            // InternalSTAlgorithmParser.g:9950:3: ( RULE_ID )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getFeatureINamedElementCrossReference_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:9878:3: ( RULE_ID )
-            // InternalSTAlgorithmParser.g:9879:4: RULE_ID
+            // InternalSTAlgorithmParser.g:9951:3: ( RULE_ID )
+            // InternalSTAlgorithmParser.g:9952:4: RULE_ID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getFeatureINamedElementIDTerminalRuleCall_1_0_1()); 
@@ -32617,17 +32838,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__ParametersAssignment_2_1_0"
-    // InternalSTAlgorithmParser.g:9890:1: rule__STFeatureExpression__ParametersAssignment_2_1_0 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9963:1: rule__STFeatureExpression__ParametersAssignment_2_1_0 : ( ruleSTExpression ) ;
     public final void rule__STFeatureExpression__ParametersAssignment_2_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9894:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9895:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9967:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9968:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9895:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9896:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9968:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9969:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getParametersSTExpressionParserRuleCall_2_1_0_0()); 
@@ -32662,17 +32883,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STFeatureExpression__ParametersAssignment_2_1_1_1"
-    // InternalSTAlgorithmParser.g:9905:1: rule__STFeatureExpression__ParametersAssignment_2_1_1_1 : ( ruleSTExpression ) ;
+    // InternalSTAlgorithmParser.g:9978:1: rule__STFeatureExpression__ParametersAssignment_2_1_1_1 : ( ruleSTExpression ) ;
     public final void rule__STFeatureExpression__ParametersAssignment_2_1_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9909:1: ( ( ruleSTExpression ) )
-            // InternalSTAlgorithmParser.g:9910:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9982:1: ( ( ruleSTExpression ) )
+            // InternalSTAlgorithmParser.g:9983:2: ( ruleSTExpression )
             {
-            // InternalSTAlgorithmParser.g:9910:2: ( ruleSTExpression )
-            // InternalSTAlgorithmParser.g:9911:3: ruleSTExpression
+            // InternalSTAlgorithmParser.g:9983:2: ( ruleSTExpression )
+            // InternalSTAlgorithmParser.g:9984:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getParametersSTExpressionParserRuleCall_2_1_1_1_0()); 
@@ -32707,17 +32928,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__SpecifierAssignment_1"
-    // InternalSTAlgorithmParser.g:9920:1: rule__STMultibitPartialExpression__SpecifierAssignment_1 : ( ruleSTMultiBitAccessSpecifier ) ;
+    // InternalSTAlgorithmParser.g:9993:1: rule__STMultibitPartialExpression__SpecifierAssignment_1 : ( ruleSTMultiBitAccessSpecifier ) ;
     public final void rule__STMultibitPartialExpression__SpecifierAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9924:1: ( ( ruleSTMultiBitAccessSpecifier ) )
-            // InternalSTAlgorithmParser.g:9925:2: ( ruleSTMultiBitAccessSpecifier )
+            // InternalSTAlgorithmParser.g:9997:1: ( ( ruleSTMultiBitAccessSpecifier ) )
+            // InternalSTAlgorithmParser.g:9998:2: ( ruleSTMultiBitAccessSpecifier )
             {
-            // InternalSTAlgorithmParser.g:9925:2: ( ruleSTMultiBitAccessSpecifier )
-            // InternalSTAlgorithmParser.g:9926:3: ruleSTMultiBitAccessSpecifier
+            // InternalSTAlgorithmParser.g:9998:2: ( ruleSTMultiBitAccessSpecifier )
+            // InternalSTAlgorithmParser.g:9999:3: ruleSTMultiBitAccessSpecifier
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMultibitPartialExpressionAccess().getSpecifierSTMultiBitAccessSpecifierEnumRuleCall_1_0()); 
@@ -32752,17 +32973,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__IndexAssignment_2"
-    // InternalSTAlgorithmParser.g:9935:1: rule__STMultibitPartialExpression__IndexAssignment_2 : ( RULE_INT ) ;
+    // InternalSTAlgorithmParser.g:10008:1: rule__STMultibitPartialExpression__IndexAssignment_2 : ( RULE_INT ) ;
     public final void rule__STMultibitPartialExpression__IndexAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9939:1: ( ( RULE_INT ) )
-            // InternalSTAlgorithmParser.g:9940:2: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:10012:1: ( ( RULE_INT ) )
+            // InternalSTAlgorithmParser.g:10013:2: ( RULE_INT )
             {
-            // InternalSTAlgorithmParser.g:9940:2: ( RULE_INT )
-            // InternalSTAlgorithmParser.g:9941:3: RULE_INT
+            // InternalSTAlgorithmParser.g:10013:2: ( RULE_INT )
+            // InternalSTAlgorithmParser.g:10014:3: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMultibitPartialExpressionAccess().getIndexINTTerminalRuleCall_2_0()); 
@@ -32793,17 +33014,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STNumericLiteral__TypeAssignment_0"
-    // InternalSTAlgorithmParser.g:9950:1: rule__STNumericLiteral__TypeAssignment_0 : ( ruleSTNumericLiteralType ) ;
+    // InternalSTAlgorithmParser.g:10023:1: rule__STNumericLiteral__TypeAssignment_0 : ( ruleSTNumericLiteralType ) ;
     public final void rule__STNumericLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9954:1: ( ( ruleSTNumericLiteralType ) )
-            // InternalSTAlgorithmParser.g:9955:2: ( ruleSTNumericLiteralType )
+            // InternalSTAlgorithmParser.g:10027:1: ( ( ruleSTNumericLiteralType ) )
+            // InternalSTAlgorithmParser.g:10028:2: ( ruleSTNumericLiteralType )
             {
-            // InternalSTAlgorithmParser.g:9955:2: ( ruleSTNumericLiteralType )
-            // InternalSTAlgorithmParser.g:9956:3: ruleSTNumericLiteralType
+            // InternalSTAlgorithmParser.g:10028:2: ( ruleSTNumericLiteralType )
+            // InternalSTAlgorithmParser.g:10029:3: ruleSTNumericLiteralType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTNumericLiteralAccess().getTypeSTNumericLiteralTypeParserRuleCall_0_0()); 
@@ -32838,23 +33059,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STNumericLiteral__ValueAssignment_1"
-    // InternalSTAlgorithmParser.g:9965:1: rule__STNumericLiteral__ValueAssignment_1 : ( ( rule__STNumericLiteral__ValueAlternatives_1_0 ) ) ;
+    // InternalSTAlgorithmParser.g:10038:1: rule__STNumericLiteral__ValueAssignment_1 : ( ( rule__STNumericLiteral__ValueAlternatives_1_0 ) ) ;
     public final void rule__STNumericLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9969:1: ( ( ( rule__STNumericLiteral__ValueAlternatives_1_0 ) ) )
-            // InternalSTAlgorithmParser.g:9970:2: ( ( rule__STNumericLiteral__ValueAlternatives_1_0 ) )
+            // InternalSTAlgorithmParser.g:10042:1: ( ( ( rule__STNumericLiteral__ValueAlternatives_1_0 ) ) )
+            // InternalSTAlgorithmParser.g:10043:2: ( ( rule__STNumericLiteral__ValueAlternatives_1_0 ) )
             {
-            // InternalSTAlgorithmParser.g:9970:2: ( ( rule__STNumericLiteral__ValueAlternatives_1_0 ) )
-            // InternalSTAlgorithmParser.g:9971:3: ( rule__STNumericLiteral__ValueAlternatives_1_0 )
+            // InternalSTAlgorithmParser.g:10043:2: ( ( rule__STNumericLiteral__ValueAlternatives_1_0 ) )
+            // InternalSTAlgorithmParser.g:10044:3: ( rule__STNumericLiteral__ValueAlternatives_1_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTNumericLiteralAccess().getValueAlternatives_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:9972:3: ( rule__STNumericLiteral__ValueAlternatives_1_0 )
-            // InternalSTAlgorithmParser.g:9972:4: rule__STNumericLiteral__ValueAlternatives_1_0
+            // InternalSTAlgorithmParser.g:10045:3: ( rule__STNumericLiteral__ValueAlternatives_1_0 )
+            // InternalSTAlgorithmParser.g:10045:4: rule__STNumericLiteral__ValueAlternatives_1_0
             {
             pushFollow(FOLLOW_2);
             rule__STNumericLiteral__ValueAlternatives_1_0();
@@ -32889,17 +33110,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateLiteral__TypeAssignment_0"
-    // InternalSTAlgorithmParser.g:9980:1: rule__STDateLiteral__TypeAssignment_0 : ( ruleSTDateLiteralType ) ;
+    // InternalSTAlgorithmParser.g:10053:1: rule__STDateLiteral__TypeAssignment_0 : ( ruleSTDateLiteralType ) ;
     public final void rule__STDateLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9984:1: ( ( ruleSTDateLiteralType ) )
-            // InternalSTAlgorithmParser.g:9985:2: ( ruleSTDateLiteralType )
+            // InternalSTAlgorithmParser.g:10057:1: ( ( ruleSTDateLiteralType ) )
+            // InternalSTAlgorithmParser.g:10058:2: ( ruleSTDateLiteralType )
             {
-            // InternalSTAlgorithmParser.g:9985:2: ( ruleSTDateLiteralType )
-            // InternalSTAlgorithmParser.g:9986:3: ruleSTDateLiteralType
+            // InternalSTAlgorithmParser.g:10058:2: ( ruleSTDateLiteralType )
+            // InternalSTAlgorithmParser.g:10059:3: ruleSTDateLiteralType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateLiteralAccess().getTypeSTDateLiteralTypeParserRuleCall_0_0()); 
@@ -32934,17 +33155,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateLiteral__ValueAssignment_1"
-    // InternalSTAlgorithmParser.g:9995:1: rule__STDateLiteral__ValueAssignment_1 : ( ruleDate ) ;
+    // InternalSTAlgorithmParser.g:10068:1: rule__STDateLiteral__ValueAssignment_1 : ( ruleDate ) ;
     public final void rule__STDateLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:9999:1: ( ( ruleDate ) )
-            // InternalSTAlgorithmParser.g:10000:2: ( ruleDate )
+            // InternalSTAlgorithmParser.g:10072:1: ( ( ruleDate ) )
+            // InternalSTAlgorithmParser.g:10073:2: ( ruleDate )
             {
-            // InternalSTAlgorithmParser.g:10000:2: ( ruleDate )
-            // InternalSTAlgorithmParser.g:10001:3: ruleDate
+            // InternalSTAlgorithmParser.g:10073:2: ( ruleDate )
+            // InternalSTAlgorithmParser.g:10074:3: ruleDate
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateLiteralAccess().getValueDateParserRuleCall_1_0()); 
@@ -32979,17 +33200,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeLiteral__TypeAssignment_0"
-    // InternalSTAlgorithmParser.g:10010:1: rule__STTimeLiteral__TypeAssignment_0 : ( ruleSTTimeLiteralType ) ;
+    // InternalSTAlgorithmParser.g:10083:1: rule__STTimeLiteral__TypeAssignment_0 : ( ruleSTTimeLiteralType ) ;
     public final void rule__STTimeLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:10014:1: ( ( ruleSTTimeLiteralType ) )
-            // InternalSTAlgorithmParser.g:10015:2: ( ruleSTTimeLiteralType )
+            // InternalSTAlgorithmParser.g:10087:1: ( ( ruleSTTimeLiteralType ) )
+            // InternalSTAlgorithmParser.g:10088:2: ( ruleSTTimeLiteralType )
             {
-            // InternalSTAlgorithmParser.g:10015:2: ( ruleSTTimeLiteralType )
-            // InternalSTAlgorithmParser.g:10016:3: ruleSTTimeLiteralType
+            // InternalSTAlgorithmParser.g:10088:2: ( ruleSTTimeLiteralType )
+            // InternalSTAlgorithmParser.g:10089:3: ruleSTTimeLiteralType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeLiteralAccess().getTypeSTTimeLiteralTypeParserRuleCall_0_0()); 
@@ -33024,17 +33245,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeLiteral__ValueAssignment_1"
-    // InternalSTAlgorithmParser.g:10025:1: rule__STTimeLiteral__ValueAssignment_1 : ( ruleTime ) ;
+    // InternalSTAlgorithmParser.g:10098:1: rule__STTimeLiteral__ValueAssignment_1 : ( ruleTime ) ;
     public final void rule__STTimeLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:10029:1: ( ( ruleTime ) )
-            // InternalSTAlgorithmParser.g:10030:2: ( ruleTime )
+            // InternalSTAlgorithmParser.g:10102:1: ( ( ruleTime ) )
+            // InternalSTAlgorithmParser.g:10103:2: ( ruleTime )
             {
-            // InternalSTAlgorithmParser.g:10030:2: ( ruleTime )
-            // InternalSTAlgorithmParser.g:10031:3: ruleTime
+            // InternalSTAlgorithmParser.g:10103:2: ( ruleTime )
+            // InternalSTAlgorithmParser.g:10104:3: ruleTime
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeLiteralAccess().getValueTimeParserRuleCall_1_0()); 
@@ -33069,17 +33290,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeOfDayLiteral__TypeAssignment_0"
-    // InternalSTAlgorithmParser.g:10040:1: rule__STTimeOfDayLiteral__TypeAssignment_0 : ( ruleSTTimeOfDayLiteralType ) ;
+    // InternalSTAlgorithmParser.g:10113:1: rule__STTimeOfDayLiteral__TypeAssignment_0 : ( ruleSTTimeOfDayLiteralType ) ;
     public final void rule__STTimeOfDayLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:10044:1: ( ( ruleSTTimeOfDayLiteralType ) )
-            // InternalSTAlgorithmParser.g:10045:2: ( ruleSTTimeOfDayLiteralType )
+            // InternalSTAlgorithmParser.g:10117:1: ( ( ruleSTTimeOfDayLiteralType ) )
+            // InternalSTAlgorithmParser.g:10118:2: ( ruleSTTimeOfDayLiteralType )
             {
-            // InternalSTAlgorithmParser.g:10045:2: ( ruleSTTimeOfDayLiteralType )
-            // InternalSTAlgorithmParser.g:10046:3: ruleSTTimeOfDayLiteralType
+            // InternalSTAlgorithmParser.g:10118:2: ( ruleSTTimeOfDayLiteralType )
+            // InternalSTAlgorithmParser.g:10119:3: ruleSTTimeOfDayLiteralType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeSTTimeOfDayLiteralTypeParserRuleCall_0_0()); 
@@ -33114,17 +33335,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STTimeOfDayLiteral__ValueAssignment_1"
-    // InternalSTAlgorithmParser.g:10055:1: rule__STTimeOfDayLiteral__ValueAssignment_1 : ( ruleTimeOfDay ) ;
+    // InternalSTAlgorithmParser.g:10128:1: rule__STTimeOfDayLiteral__ValueAssignment_1 : ( ruleTimeOfDay ) ;
     public final void rule__STTimeOfDayLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:10059:1: ( ( ruleTimeOfDay ) )
-            // InternalSTAlgorithmParser.g:10060:2: ( ruleTimeOfDay )
+            // InternalSTAlgorithmParser.g:10132:1: ( ( ruleTimeOfDay ) )
+            // InternalSTAlgorithmParser.g:10133:2: ( ruleTimeOfDay )
             {
-            // InternalSTAlgorithmParser.g:10060:2: ( ruleTimeOfDay )
-            // InternalSTAlgorithmParser.g:10061:3: ruleTimeOfDay
+            // InternalSTAlgorithmParser.g:10133:2: ( ruleTimeOfDay )
+            // InternalSTAlgorithmParser.g:10134:3: ruleTimeOfDay
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeOfDayLiteralAccess().getValueTimeOfDayParserRuleCall_1_0()); 
@@ -33159,17 +33380,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__TypeAssignment_0"
-    // InternalSTAlgorithmParser.g:10070:1: rule__STDateAndTimeLiteral__TypeAssignment_0 : ( ruleSTDateAndTimeLiteralType ) ;
+    // InternalSTAlgorithmParser.g:10143:1: rule__STDateAndTimeLiteral__TypeAssignment_0 : ( ruleSTDateAndTimeLiteralType ) ;
     public final void rule__STDateAndTimeLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:10074:1: ( ( ruleSTDateAndTimeLiteralType ) )
-            // InternalSTAlgorithmParser.g:10075:2: ( ruleSTDateAndTimeLiteralType )
+            // InternalSTAlgorithmParser.g:10147:1: ( ( ruleSTDateAndTimeLiteralType ) )
+            // InternalSTAlgorithmParser.g:10148:2: ( ruleSTDateAndTimeLiteralType )
             {
-            // InternalSTAlgorithmParser.g:10075:2: ( ruleSTDateAndTimeLiteralType )
-            // InternalSTAlgorithmParser.g:10076:3: ruleSTDateAndTimeLiteralType
+            // InternalSTAlgorithmParser.g:10148:2: ( ruleSTDateAndTimeLiteralType )
+            // InternalSTAlgorithmParser.g:10149:3: ruleSTDateAndTimeLiteralType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeSTDateAndTimeLiteralTypeParserRuleCall_0_0()); 
@@ -33204,17 +33425,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__DateValueAssignment_1"
-    // InternalSTAlgorithmParser.g:10085:1: rule__STDateAndTimeLiteral__DateValueAssignment_1 : ( ruleDate ) ;
+    // InternalSTAlgorithmParser.g:10158:1: rule__STDateAndTimeLiteral__DateValueAssignment_1 : ( ruleDate ) ;
     public final void rule__STDateAndTimeLiteral__DateValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:10089:1: ( ( ruleDate ) )
-            // InternalSTAlgorithmParser.g:10090:2: ( ruleDate )
+            // InternalSTAlgorithmParser.g:10162:1: ( ( ruleDate ) )
+            // InternalSTAlgorithmParser.g:10163:2: ( ruleDate )
             {
-            // InternalSTAlgorithmParser.g:10090:2: ( ruleDate )
-            // InternalSTAlgorithmParser.g:10091:3: ruleDate
+            // InternalSTAlgorithmParser.g:10163:2: ( ruleDate )
+            // InternalSTAlgorithmParser.g:10164:3: ruleDate
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getDateValueDateParserRuleCall_1_0()); 
@@ -33249,17 +33470,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3"
-    // InternalSTAlgorithmParser.g:10100:1: rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 : ( ruleTimeOfDay ) ;
+    // InternalSTAlgorithmParser.g:10173:1: rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3 : ( ruleTimeOfDay ) ;
     public final void rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:10104:1: ( ( ruleTimeOfDay ) )
-            // InternalSTAlgorithmParser.g:10105:2: ( ruleTimeOfDay )
+            // InternalSTAlgorithmParser.g:10177:1: ( ( ruleTimeOfDay ) )
+            // InternalSTAlgorithmParser.g:10178:2: ( ruleTimeOfDay )
             {
-            // InternalSTAlgorithmParser.g:10105:2: ( ruleTimeOfDay )
-            // InternalSTAlgorithmParser.g:10106:3: ruleTimeOfDay
+            // InternalSTAlgorithmParser.g:10178:2: ( ruleTimeOfDay )
+            // InternalSTAlgorithmParser.g:10179:3: ruleTimeOfDay
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getTimeOfDayValueTimeOfDayParserRuleCall_3_0()); 
@@ -33294,17 +33515,17 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STStringLiteral__TypeAssignment_0"
-    // InternalSTAlgorithmParser.g:10115:1: rule__STStringLiteral__TypeAssignment_0 : ( ruleSTStringLiteralType ) ;
+    // InternalSTAlgorithmParser.g:10188:1: rule__STStringLiteral__TypeAssignment_0 : ( ruleSTStringLiteralType ) ;
     public final void rule__STStringLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:10119:1: ( ( ruleSTStringLiteralType ) )
-            // InternalSTAlgorithmParser.g:10120:2: ( ruleSTStringLiteralType )
+            // InternalSTAlgorithmParser.g:10192:1: ( ( ruleSTStringLiteralType ) )
+            // InternalSTAlgorithmParser.g:10193:2: ( ruleSTStringLiteralType )
             {
-            // InternalSTAlgorithmParser.g:10120:2: ( ruleSTStringLiteralType )
-            // InternalSTAlgorithmParser.g:10121:3: ruleSTStringLiteralType
+            // InternalSTAlgorithmParser.g:10193:2: ( ruleSTStringLiteralType )
+            // InternalSTAlgorithmParser.g:10194:3: ruleSTStringLiteralType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTStringLiteralAccess().getTypeSTStringLiteralTypeParserRuleCall_0_0()); 
@@ -33339,23 +33560,23 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
 
     // $ANTLR start "rule__STStringLiteral__ValueAssignment_1"
-    // InternalSTAlgorithmParser.g:10130:1: rule__STStringLiteral__ValueAssignment_1 : ( ( rule__STStringLiteral__ValueAlternatives_1_0 ) ) ;
+    // InternalSTAlgorithmParser.g:10203:1: rule__STStringLiteral__ValueAssignment_1 : ( ( rule__STStringLiteral__ValueAlternatives_1_0 ) ) ;
     public final void rule__STStringLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTAlgorithmParser.g:10134:1: ( ( ( rule__STStringLiteral__ValueAlternatives_1_0 ) ) )
-            // InternalSTAlgorithmParser.g:10135:2: ( ( rule__STStringLiteral__ValueAlternatives_1_0 ) )
+            // InternalSTAlgorithmParser.g:10207:1: ( ( ( rule__STStringLiteral__ValueAlternatives_1_0 ) ) )
+            // InternalSTAlgorithmParser.g:10208:2: ( ( rule__STStringLiteral__ValueAlternatives_1_0 ) )
             {
-            // InternalSTAlgorithmParser.g:10135:2: ( ( rule__STStringLiteral__ValueAlternatives_1_0 ) )
-            // InternalSTAlgorithmParser.g:10136:3: ( rule__STStringLiteral__ValueAlternatives_1_0 )
+            // InternalSTAlgorithmParser.g:10208:2: ( ( rule__STStringLiteral__ValueAlternatives_1_0 ) )
+            // InternalSTAlgorithmParser.g:10209:3: ( rule__STStringLiteral__ValueAlternatives_1_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTStringLiteralAccess().getValueAlternatives_1_0()); 
             }
-            // InternalSTAlgorithmParser.g:10137:3: ( rule__STStringLiteral__ValueAlternatives_1_0 )
-            // InternalSTAlgorithmParser.g:10137:4: rule__STStringLiteral__ValueAlternatives_1_0
+            // InternalSTAlgorithmParser.g:10210:3: ( rule__STStringLiteral__ValueAlternatives_1_0 )
+            // InternalSTAlgorithmParser.g:10210:4: rule__STStringLiteral__ValueAlternatives_1_0
             {
             pushFollow(FOLLOW_2);
             rule__STStringLiteral__ValueAlternatives_1_0();
@@ -33435,8 +33656,8 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
     // $ANTLR start synpred114_InternalSTAlgorithmParser
     public final void synpred114_InternalSTAlgorithmParser_fragment() throws RecognitionException {   
-        // InternalSTAlgorithmParser.g:7618:3: ( rule__STFeatureExpression__Group_2__0 )
-        // InternalSTAlgorithmParser.g:7618:3: rule__STFeatureExpression__Group_2__0
+        // InternalSTAlgorithmParser.g:7672:3: ( rule__STFeatureExpression__Group_2__0 )
+        // InternalSTAlgorithmParser.g:7672:3: rule__STFeatureExpression__Group_2__0
         {
         pushFollow(FOLLOW_2);
         rule__STFeatureExpression__Group_2__0();
@@ -33450,8 +33671,8 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
     // $ANTLR start synpred121_InternalSTAlgorithmParser
     public final void synpred121_InternalSTAlgorithmParser_fragment() throws RecognitionException {   
-        // InternalSTAlgorithmParser.g:8347:3: ( rule__Number__Group_2__0 )
-        // InternalSTAlgorithmParser.g:8347:3: rule__Number__Group_2__0
+        // InternalSTAlgorithmParser.g:8401:3: ( rule__Number__Group_2__0 )
+        // InternalSTAlgorithmParser.g:8401:3: rule__Number__Group_2__0
         {
         pushFollow(FOLLOW_2);
         rule__Number__Group_2__0();
@@ -33465,8 +33686,8 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
 
     // $ANTLR start synpred122_InternalSTAlgorithmParser
     public final void synpred122_InternalSTAlgorithmParser_fragment() throws RecognitionException {   
-        // InternalSTAlgorithmParser.g:8698:3: ( rule__TimeOfDay__Group_5__0 )
-        // InternalSTAlgorithmParser.g:8698:3: rule__TimeOfDay__Group_5__0
+        // InternalSTAlgorithmParser.g:8752:3: ( rule__TimeOfDay__Group_5__0 )
+        // InternalSTAlgorithmParser.g:8752:3: rule__TimeOfDay__Group_5__0
         {
         pushFollow(FOLLOW_2);
         rule__TimeOfDay__Group_5__0();
@@ -34383,7 +34604,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalContentAssistPars
             this.transition = dfa_14;
         }
         public String getDescription() {
-            return "7618:2: ( rule__STFeatureExpression__Group_2__0 )?";
+            return "7672:2: ( rule__STFeatureExpression__Group_2__0 )?";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             TokenStream input = (TokenStream)_input;

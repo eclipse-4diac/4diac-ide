@@ -14,7 +14,8 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFor <em>For</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getVariable <em>Variable</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFrom <em>From</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getTo <em>To</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getBy <em>By</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getStatements <em>Statements</em>}</li>
@@ -27,26 +28,48 @@ import org.eclipse.emf.common.util.EList;
 public interface STForStatement extends STStatement
 {
   /**
-   * Returns the value of the '<em><b>For</b></em>' containment reference.
+   * Returns the value of the '<em><b>Variable</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>For</em>' containment reference.
-   * @see #setFor(STExpression)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTForStatement_For()
+   * @return the value of the '<em>Variable</em>' reference.
+   * @see #setVariable(STVarDeclaration)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTForStatement_Variable()
+   * @model
+   * @generated
+   */
+  STVarDeclaration getVariable();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getVariable <em>Variable</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Variable</em>' reference.
+   * @see #getVariable()
+   * @generated
+   */
+  void setVariable(STVarDeclaration value);
+
+  /**
+   * Returns the value of the '<em><b>From</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>From</em>' containment reference.
+   * @see #setFrom(STExpression)
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTForStatement_From()
    * @model containment="true"
    * @generated
    */
-  STExpression getFor();
+  STExpression getFrom();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFor <em>For</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFrom <em>From</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>For</em>' containment reference.
-   * @see #getFor()
+   * @param value the new value of the '<em>From</em>' containment reference.
+   * @see #getFrom()
    * @generated
    */
-  void setFor(STExpression value);
+  void setFrom(STExpression value);
 
   /**
    * Returns the value of the '<em><b>To</b></em>' containment reference.

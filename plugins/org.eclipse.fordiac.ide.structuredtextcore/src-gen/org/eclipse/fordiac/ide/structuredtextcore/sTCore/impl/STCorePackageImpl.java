@@ -753,7 +753,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTForStatement_For()
+  public EReference getSTForStatement_Variable()
   {
     return (EReference)stForStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -764,7 +764,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTForStatement_To()
+  public EReference getSTForStatement_From()
   {
     return (EReference)stForStatementEClass.getEStructuralFeatures().get(1);
   }
@@ -775,7 +775,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTForStatement_By()
+  public EReference getSTForStatement_To()
   {
     return (EReference)stForStatementEClass.getEStructuralFeatures().get(2);
   }
@@ -786,9 +786,20 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getSTForStatement_Statements()
+  public EReference getSTForStatement_By()
   {
     return (EReference)stForStatementEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTForStatement_Statements()
+  {
+    return (EReference)stForStatementEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -1527,7 +1538,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEReference(stElsePartEClass, ST_ELSE_PART__STATEMENTS);
 
     stForStatementEClass = createEClass(ST_FOR_STATEMENT);
-    createEReference(stForStatementEClass, ST_FOR_STATEMENT__FOR);
+    createEReference(stForStatementEClass, ST_FOR_STATEMENT__VARIABLE);
+    createEReference(stForStatementEClass, ST_FOR_STATEMENT__FROM);
     createEReference(stForStatementEClass, ST_FOR_STATEMENT__TO);
     createEReference(stForStatementEClass, ST_FOR_STATEMENT__BY);
     createEReference(stForStatementEClass, ST_FOR_STATEMENT__STATEMENTS);
@@ -1720,7 +1732,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEReference(getSTElsePart_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STElsePart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stForStatementEClass, STForStatement.class, "STForStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTForStatement_For(), this.getSTExpression(), null, "for", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTForStatement_Variable(), this.getSTVarDeclaration(), null, "variable", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTForStatement_From(), this.getSTExpression(), null, "from", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTForStatement_To(), this.getSTExpression(), null, "to", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTForStatement_By(), this.getSTExpression(), null, "by", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTForStatement_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

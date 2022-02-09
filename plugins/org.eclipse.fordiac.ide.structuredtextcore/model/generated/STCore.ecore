@@ -65,7 +65,8 @@
         eType="#//STStatement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STForStatement" eSuperTypes="#//STStatement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="for" eType="#//STExpression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//STVarDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//STExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//STExpression"
         containment="true"/>

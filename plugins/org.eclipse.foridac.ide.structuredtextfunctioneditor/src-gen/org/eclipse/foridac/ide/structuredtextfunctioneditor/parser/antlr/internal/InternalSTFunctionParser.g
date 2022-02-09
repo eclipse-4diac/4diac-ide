@@ -1507,32 +1507,49 @@ ruleSTForStatement returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTForStatementAccess().getForSTExpressionParserRuleCall_1_0());
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTForStatementRule());
+					}
 				}
-				lv_for_1_0=ruleSTExpression
+				otherlv_1=RULE_ID
+				{
+					newLeafNode(otherlv_1, grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationCrossReference_1_0());
+				}
+			)
+		)
+		otherlv_2=ColonEqualsSign
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSTForStatementAccess().getColonEqualsSignKeyword_2());
+		}
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTForStatementAccess().getFromSTExpressionParserRuleCall_3_0());
+				}
+				lv_from_3_0=ruleSTExpression
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTForStatementRule());
 					}
 					set(
 						$current,
-						"for",
-						lv_for_1_0,
+						"from",
+						lv_from_3_0,
 						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)
-		otherlv_2=TO
+		otherlv_4=TO
 		{
-			newLeafNode(otherlv_2, grammarAccess.getSTForStatementAccess().getTOKeyword_2());
+			newLeafNode(otherlv_4, grammarAccess.getSTForStatementAccess().getTOKeyword_4());
 		}
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTForStatementAccess().getToSTExpressionParserRuleCall_3_0());
+					newCompositeNode(grammarAccess.getSTForStatementAccess().getToSTExpressionParserRuleCall_5_0());
 				}
-				lv_to_3_0=ruleSTExpression
+				lv_to_5_0=ruleSTExpression
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTForStatementRule());
@@ -1540,23 +1557,23 @@ ruleSTForStatement returns [EObject current=null]
 					set(
 						$current,
 						"to",
-						lv_to_3_0,
+						lv_to_5_0,
 						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)
 		(
-			otherlv_4=BY
+			otherlv_6=BY
 			{
-				newLeafNode(otherlv_4, grammarAccess.getSTForStatementAccess().getBYKeyword_4_0());
+				newLeafNode(otherlv_6, grammarAccess.getSTForStatementAccess().getBYKeyword_6_0());
 			}
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTForStatementAccess().getBySTExpressionParserRuleCall_4_1_0());
+						newCompositeNode(grammarAccess.getSTForStatementAccess().getBySTExpressionParserRuleCall_6_1_0());
 					}
-					lv_by_5_0=ruleSTExpression
+					lv_by_7_0=ruleSTExpression
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTForStatementRule());
@@ -1564,23 +1581,23 @@ ruleSTForStatement returns [EObject current=null]
 						set(
 							$current,
 							"by",
-							lv_by_5_0,
+							lv_by_7_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
 						afterParserOrEnumRuleCall();
 					}
 				)
 			)
 		)?
-		otherlv_6=DO
+		otherlv_8=DO
 		{
-			newLeafNode(otherlv_6, grammarAccess.getSTForStatementAccess().getDOKeyword_5());
+			newLeafNode(otherlv_8, grammarAccess.getSTForStatementAccess().getDOKeyword_7());
 		}
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTForStatementAccess().getStatementsSTStatementParserRuleCall_6_0());
+					newCompositeNode(grammarAccess.getSTForStatementAccess().getStatementsSTStatementParserRuleCall_8_0());
 				}
-				lv_statements_7_0=ruleSTStatement
+				lv_statements_9_0=ruleSTStatement
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTForStatementRule());
@@ -1588,15 +1605,15 @@ ruleSTForStatement returns [EObject current=null]
 					add(
 						$current,
 						"statements",
-						lv_statements_7_0,
+						lv_statements_9_0,
 						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STStatement");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)*
-		otherlv_8=END_FOR
+		otherlv_10=END_FOR
 		{
-			newLeafNode(otherlv_8, grammarAccess.getSTForStatementAccess().getEND_FORKeyword_7());
+			newLeafNode(otherlv_10, grammarAccess.getSTForStatementAccess().getEND_FORKeyword_9());
 		}
 	)
 ;

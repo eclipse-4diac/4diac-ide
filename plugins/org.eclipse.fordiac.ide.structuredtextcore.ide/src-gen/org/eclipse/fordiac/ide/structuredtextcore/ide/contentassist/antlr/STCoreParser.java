@@ -89,7 +89,7 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTCaseCasesAccess().getGroup_1(), "rule__STCaseCases__Group_1__0");
 			builder.put(grammarAccess.getSTElsePartAccess().getGroup(), "rule__STElsePart__Group__0");
 			builder.put(grammarAccess.getSTForStatementAccess().getGroup(), "rule__STForStatement__Group__0");
-			builder.put(grammarAccess.getSTForStatementAccess().getGroup_4(), "rule__STForStatement__Group_4__0");
+			builder.put(grammarAccess.getSTForStatementAccess().getGroup_6(), "rule__STForStatement__Group_6__0");
 			builder.put(grammarAccess.getSTWhileStatementAccess().getGroup(), "rule__STWhileStatement__Group__0");
 			builder.put(grammarAccess.getSTRepeatStatementAccess().getGroup(), "rule__STRepeatStatement__Group__0");
 			builder.put(grammarAccess.getSTSubrangeExpressionAccess().getGroup(), "rule__STSubrangeExpression__Group__0");
@@ -182,10 +182,11 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTCaseCasesAccess().getConditionsAssignment_1_1(), "rule__STCaseCases__ConditionsAssignment_1_1");
 			builder.put(grammarAccess.getSTCaseCasesAccess().getStatementsAssignment_3(), "rule__STCaseCases__StatementsAssignment_3");
 			builder.put(grammarAccess.getSTElsePartAccess().getStatementsAssignment_2(), "rule__STElsePart__StatementsAssignment_2");
-			builder.put(grammarAccess.getSTForStatementAccess().getForAssignment_1(), "rule__STForStatement__ForAssignment_1");
-			builder.put(grammarAccess.getSTForStatementAccess().getToAssignment_3(), "rule__STForStatement__ToAssignment_3");
-			builder.put(grammarAccess.getSTForStatementAccess().getByAssignment_4_1(), "rule__STForStatement__ByAssignment_4_1");
-			builder.put(grammarAccess.getSTForStatementAccess().getStatementsAssignment_6(), "rule__STForStatement__StatementsAssignment_6");
+			builder.put(grammarAccess.getSTForStatementAccess().getVariableAssignment_1(), "rule__STForStatement__VariableAssignment_1");
+			builder.put(grammarAccess.getSTForStatementAccess().getFromAssignment_3(), "rule__STForStatement__FromAssignment_3");
+			builder.put(grammarAccess.getSTForStatementAccess().getToAssignment_5(), "rule__STForStatement__ToAssignment_5");
+			builder.put(grammarAccess.getSTForStatementAccess().getByAssignment_6_1(), "rule__STForStatement__ByAssignment_6_1");
+			builder.put(grammarAccess.getSTForStatementAccess().getStatementsAssignment_8(), "rule__STForStatement__StatementsAssignment_8");
 			builder.put(grammarAccess.getSTWhileStatementAccess().getConditionAssignment_1(), "rule__STWhileStatement__ConditionAssignment_1");
 			builder.put(grammarAccess.getSTWhileStatementAccess().getStatementsAssignment_3(), "rule__STWhileStatement__StatementsAssignment_3");
 			builder.put(grammarAccess.getSTRepeatStatementAccess().getStatementsAssignment_1(), "rule__STRepeatStatement__StatementsAssignment_1");
