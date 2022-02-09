@@ -73,6 +73,8 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 			if (element instanceof MonitoringElement) {
 				monitor.subTask("Add watch for: " + element.getPortString());
 				systemMonitoringData.sendAddWatch(element);
+				// set value to N/A that the user sees the connection worked
+				((MonitoringElement) element).setCurrentValue("N/A"); //$NON-NLS-1$
 				monitor.worked(1);
 			}
 		}

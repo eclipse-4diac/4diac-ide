@@ -50,6 +50,8 @@ public class SystemMonitoringData {
 
 	private final Map<String, List<MonitoringElement>> subappElements = new HashMap<>();
 
+	private boolean monitoringEnabled = false;
+
 	public Map<String, List<MonitoringElement>> getSubappElements() {
 		return subappElements;
 	}
@@ -88,7 +90,8 @@ public class SystemMonitoringData {
 		final EnableSystemMonitoringRunnable enable = new EnableSystemMonitoringRunnable(this);
 		final Shell shell = Display.getDefault().getActiveShell();
 		try {
-			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(true, true, enable);
+			new ProgressMonitorDialog(shell).run(true, true, enable);
+			monitoringEnabled = true;
 		} catch (final InvocationTargetException ex) {
 			MessageDialog.openError(shell, "Error", ex.getMessage());
 		} catch (final InterruptedException ex) {
@@ -100,6 +103,7 @@ public class SystemMonitoringData {
 	public void enableSystemSynch(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		final EnableSystemMonitoringRunnable enable = new EnableSystemMonitoringRunnable(this);
 		enable.run(monitor);
+		monitoringEnabled = true;
 	}
 
 	public void disableSystem() {
@@ -107,6 +111,7 @@ public class SystemMonitoringData {
 		final Shell shell = Display.getDefault().getActiveShell();
 		try {
 			new ProgressMonitorDialog(shell).run(true, true, disable);
+			monitoringEnabled = false;
 		} catch (final InvocationTargetException ex) {
 			MessageDialog.openError(shell, "Error", ex.getMessage());
 		} catch (final InterruptedException ex) {
@@ -117,6 +122,7 @@ public class SystemMonitoringData {
 
 	public void disableSystemSynch(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		final DisableSystemMonitoringRunnable disable = new DisableSystemMonitoringRunnable(this);
+		monitoringEnabled = false;
 		disable.run(monitor);
 	}
 
@@ -151,6 +157,10 @@ public class SystemMonitoringData {
 	public IDeviceManagementInteractor getDevMgmInteractor(final Device device) {
 		final DeviceMonitoringHandler handler = getDevMonitoringHandler(device);
 		return (null != handler) ? handler.getDevMgmInteractor() : null;
+	}
+
+	public boolean isMonitoringForSystemEnabled() {
+		return monitoringEnabled;
 	}
 
 	public void removeMonitoringElement(final MonitoringBaseElement element) {

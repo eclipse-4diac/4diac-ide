@@ -249,6 +249,9 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_INVALID_TIME_LITERAL;
 	public static String VALIDATOR_TOO_MANY_TIME_DEFINITIONS_FOUND;
 	public static String VALIDATOR_CONCRETE_TYPE_SPECIFIER_MANDATORY_FOR_ANYS;
+	public static String VALIDATOR_VIRTUAL_DNS_CHARACTERS_OUT_OF_BOUNDS;
+	public static String VALIDATOR_VIRTUAL_DNS_MULTIPLE_BOUNDING_CHARACTERS;
+	public static String VALIDATOR_VIRTUAL_DNS_ILLEGAL_FORMAT;
 
 	public static String Error_SelfInsertion;
 	public static String Error_RecursiveType;
