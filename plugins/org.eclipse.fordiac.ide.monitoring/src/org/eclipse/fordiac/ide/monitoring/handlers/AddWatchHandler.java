@@ -276,7 +276,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 					MessageFormat.format(Messages.MonitoringDialog_EnableMonitoringQuestion, system.getName()));
 
 			final Button checkBox = new Button(container, SWT.CHECK);
-			checkBox.setText(Messages.MonitoringDialog_DoNotShowAgain);
+			checkBox.setText(Messages.MonitoringPreferences_StartMonitoringWithoutAsking);
 			checkBox.addSelectionListener(new SelectionListener() {
 
 				@Override
