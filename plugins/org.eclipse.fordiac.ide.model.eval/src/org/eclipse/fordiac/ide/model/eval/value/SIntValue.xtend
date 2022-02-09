@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.SintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class SIntValue implements AnySignedValue, Comparable<SIntValue> {
+class SIntValue implements AnySignedValue {
 	final byte value;
 
 	public static final SIntValue DEFAULT = new SIntValue(0 as byte)
@@ -45,8 +45,6 @@ class SIntValue implements AnySignedValue, Comparable<SIntValue> {
 	override doubleValue() { value }
 
 	override floatValue() { value }
-
-	override compareTo(SIntValue o) { Byte.compare(value, o.value) }
 
 	override equals(Object obj) { if(obj instanceof SIntValue) value == obj.value else false }
 

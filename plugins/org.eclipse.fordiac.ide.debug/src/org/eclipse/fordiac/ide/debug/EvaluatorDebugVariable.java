@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -22,20 +22,20 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement implements IVa
 	private final Variable variable;
 	private EvaluatorDebugValue cachedValue;
 
-	public EvaluatorDebugVariable(Variable variable, EvaluatorDebugTarget debugTarget) {
+	public EvaluatorDebugVariable(final Variable variable, final EvaluatorDebugTarget debugTarget) {
 		super(debugTarget);
 		this.variable = variable;
 		this.cachedValue = new EvaluatorDebugValue(this.variable.getValue(), getDebugTarget());
 	}
 
 	@Override
-	public void setValue(String expression) throws DebugException {
+	public void setValue(final String expression) throws DebugException {
 		this.variable.setValue(expression);
 		this.fireChangeEvent(DebugEvent.CONTENT);
 	}
 
 	@Override
-	public void setValue(IValue value) throws DebugException {
+	public void setValue(final IValue value) throws DebugException {
 		if (value instanceof EvaluatorDebugValue) {
 			final EvaluatorDebugValue evaluatorValue = (EvaluatorDebugValue) value;
 			this.variable.setValue(evaluatorValue.getInternalValue());
@@ -52,15 +52,15 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement implements IVa
 	}
 
 	@Override
-	public boolean verifyValue(String expression) throws DebugException {
+	public boolean verifyValue(final String expression) throws DebugException {
 		return this.variable.validateValue(expression);
 	}
 
 	@Override
-	public boolean verifyValue(IValue value) throws DebugException {
+	public boolean verifyValue(final IValue value) throws DebugException {
 		if (value instanceof EvaluatorDebugValue) {
 			return ((EvaluatorDebugValue) value).getInternalValue().getType()
-					.isCompatibleWith(this.variable.getDeclaration().getType());
+					.isCompatibleWith(this.variable.getType());
 		}
 		return this.verifyValue(value.getValueString());
 	}
@@ -80,7 +80,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement implements IVa
 
 	@Override
 	public String getReferenceTypeName() throws DebugException {
-		return this.variable.getDeclaration().getTypeName();
+		return this.variable.getType().getName();
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement implements IVa
 	}
 
 	@Override
-	public int compareTo(EvaluatorDebugVariable o) {
+	public int compareTo(final EvaluatorDebugVariable o) {
 		return this.variable.getName().compareTo(o.variable.getName());
 	}
 }

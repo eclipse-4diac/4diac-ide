@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval
 
-import java.util.Collection
+import java.util.Map
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 
@@ -25,5 +25,5 @@ interface Evaluator {
 	
 	def Object getSourceElement()
 	
-	def Collection<Variable> getVariables()
+	def Map<String, Variable> getVariables()
 }

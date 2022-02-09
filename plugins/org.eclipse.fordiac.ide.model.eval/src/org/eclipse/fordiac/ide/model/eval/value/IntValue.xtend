@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.IntType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class IntValue implements AnySignedValue, Comparable<IntValue> {
+class IntValue implements AnySignedValue {
 	final short value;
 
 	public static final IntValue DEFAULT = new IntValue(0 as short)
@@ -45,8 +45,6 @@ class IntValue implements AnySignedValue, Comparable<IntValue> {
 	override doubleValue() { value }
 
 	override floatValue() { value }
-
-	override compareTo(IntValue o) { Short.compare(value, o.value) }
 
 	override equals(Object obj) { if(obj instanceof IntValue) value == obj.value else false }
 

@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.UsintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class USIntValue implements AnyUnsignedValue, Comparable<USIntValue> {
+class USIntValue implements AnyUnsignedValue {
 	final byte value;
 
 	public static final USIntValue DEFAULT = new USIntValue(0 as byte)
@@ -45,8 +45,6 @@ class USIntValue implements AnyUnsignedValue, Comparable<USIntValue> {
 	override doubleValue() { intValue }
 
 	override floatValue() { intValue }
-
-	override compareTo(USIntValue o) { Byte.compareUnsigned(value, o.value) }
 
 	override equals(Object obj) { if(obj instanceof USIntValue) value == obj.value else false }
 

@@ -18,7 +18,9 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes
 class BoolValue implements AnyBitValue {
 	final boolean value;
 
-	public static final BoolValue DEFAULT = new BoolValue(false)
+	public static final BoolValue FALSE = new BoolValue(false)
+	public static final BoolValue TRUE = new BoolValue(true)
+	public static final BoolValue DEFAULT = FALSE
 
 	private new(boolean value) {
 		this.value = value;

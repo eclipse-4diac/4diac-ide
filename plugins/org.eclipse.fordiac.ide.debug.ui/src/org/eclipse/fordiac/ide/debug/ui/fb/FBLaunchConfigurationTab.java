@@ -140,6 +140,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 			arguments = FBLaunchConfigurationAttributes.getArguments(configuration, getDefaultArguments(fbType));
 			argumentsTable.setInput(arguments);
 		} catch (final CoreException e) {
+			// ignore
 		}
 	}
 
@@ -194,14 +195,14 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		updateLaunchConfigurationDialog();
 	}
 
-	protected List<Event> getInputEvents(final FBType fbType) {
+	protected static List<Event> getInputEvents(final FBType fbType) {
 		if (fbType != null) {
 			return fbType.getInterfaceList().getEventInputs();
 		}
 		return Collections.emptyList();
 	}
 
-	protected List<Variable> getDefaultArguments(final FBType fbType) {
+	protected static List<Variable> getDefaultArguments(final FBType fbType) {
 		if (fbType != null) {
 			return fbType.getInterfaceList().getInputVars().stream().map(ElementaryVariable::new)
 					.collect(Collectors.toList());
@@ -346,7 +347,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 				} catch (final Throwable t) {
 					MessageDialog.openError(getViewer().getControl().getShell(), "Invalid Value",
 							String.format("'%s' is not a valid value for variable %s with type %s", value.toString(),
-									variable.getName(), variable.getDeclaration().getType().getName()));
+									variable.getName(), variable.getType().getName()));
 				}
 				getViewer().update(element, null);
 				FBLaunchConfigurationTab.this.updateLaunchConfigurationDialog();

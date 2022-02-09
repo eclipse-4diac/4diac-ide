@@ -20,22 +20,20 @@ import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.Accessors
 
-@Data
 abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
-	T type
-	Queue<Event> queue
-	Map<VarDeclaration, Variable> variables
+	@Accessors final T type
+	@Accessors final Queue<Event> queue
+	final Map<String, Variable> variables
 
 	new(T type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
 		super(parent)
 		this.type = type
 		this.queue = queue
-		this.variables = variables?.toMap[declaration] ?: newHashMap;
-		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach [
-			this.variables.computeIfAbsent(it)[new ElementaryVariable(it)]
+		this.variables = variables?.toMap[name] ?: newHashMap;
+		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach [ variable |
+			this.variables.computeIfAbsent(variable.name)[new ElementaryVariable(variable.name, variable.type)]
 		]
 	}
 
@@ -55,6 +53,6 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	}
 
 	override getVariables() {
-		variables.values.unmodifiableView
+		variables.unmodifiableView
 	}
 }

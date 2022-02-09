@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.RealType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class RealValue implements AnyRealValue, Comparable<RealValue> {
+class RealValue implements AnyRealValue {
 	final float value;
 
 	public static final RealValue DEFAULT = new RealValue(0.0f)
@@ -45,8 +45,6 @@ class RealValue implements AnyRealValue, Comparable<RealValue> {
 	override doubleValue() { value }
 
 	override floatValue() { value }
-
-	override compareTo(RealValue o) { Float.compare(value, o.value) }
 
 	override equals(Object obj) { if(obj instanceof RealValue) value == obj.value else false }
 

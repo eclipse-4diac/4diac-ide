@@ -12,20 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
-import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.xtend.lib.annotations.Data
 
+@Data
 abstract class AbstractVariable implements Variable {
-	@Accessors final VarDeclaration declaration
-	
-	new(VarDeclaration declaration) {
-		this.declaration = declaration
-	}
-	
-	override getName() {
-		declaration.name
-	}
+	String name
+	DataType type
 	
 	override toString() {
 		value.toString

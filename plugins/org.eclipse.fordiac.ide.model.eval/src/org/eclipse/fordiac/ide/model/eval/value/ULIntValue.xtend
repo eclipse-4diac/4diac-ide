@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.UlintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class ULIntValue implements AnyUnsignedValue, Comparable<ULIntValue> {
+class ULIntValue implements AnyUnsignedValue {
 	final long value;
 
 	public static final ULIntValue DEFAULT = new ULIntValue(0)
@@ -45,8 +45,6 @@ class ULIntValue implements AnyUnsignedValue, Comparable<ULIntValue> {
 	override doubleValue() { value }
 
 	override floatValue() { value }
-
-	override compareTo(ULIntValue o) { Long.compareUnsigned(value, o.value) }
 
 	override equals(Object obj) { if(obj instanceof ULIntValue) value == obj.value else false }
 

@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.UintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class UIntValue implements AnyUnsignedValue, Comparable<UIntValue> {
+class UIntValue implements AnyUnsignedValue {
 	final short value;
 
 	public static final UIntValue DEFAULT = new UIntValue(0 as short)
@@ -45,8 +45,6 @@ class UIntValue implements AnyUnsignedValue, Comparable<UIntValue> {
 	override doubleValue() { intValue }
 
 	override floatValue() { intValue }
-
-	override compareTo(UIntValue o) { Short.compareUnsigned(value, o.value) }
 
 	override equals(Object obj) { if(obj instanceof UIntValue) value == obj.value else false }
 

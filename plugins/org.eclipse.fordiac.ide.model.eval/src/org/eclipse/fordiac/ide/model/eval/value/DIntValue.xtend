@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.DintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-final class DIntValue implements AnySignedValue, Comparable<DIntValue> {
+final class DIntValue implements AnySignedValue {
 	final int value;
 
 	public static final DIntValue DEFAULT = new DIntValue(0)
@@ -45,8 +45,6 @@ final class DIntValue implements AnySignedValue, Comparable<DIntValue> {
 	override doubleValue() { value }
 
 	override floatValue() { value }
-
-	override compareTo(DIntValue o) { Integer.compare(value, o.value) }
 
 	override equals(Object obj) { if(obj instanceof DIntValue) value == obj.value else false }
 

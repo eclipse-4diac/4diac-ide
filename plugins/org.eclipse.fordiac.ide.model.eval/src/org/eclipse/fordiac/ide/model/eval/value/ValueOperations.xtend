@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.util.Objects
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DintType
@@ -57,8 +58,6 @@ final class ValueOperations {
 	def static >(Value first, Value second) { first.compareTo(second) > 0 }
 
 	def static >=(Value first, Value second) { first.compareTo(second) >= 0 }
-
-	def static <=>(Value first, Value second) { first.compareTo(second) }
 
 	def static Value abs(Value value) {
 		switch (value) {
@@ -130,7 +129,7 @@ final class ValueOperations {
 			USIntValue:
 				USIntValue.toUSIntValue((value.intValue.bitwiseNot) as byte)
 			default:
-				throw new UnsupportedOperationException('''The absolute operation is not supported for type «value.type.name»''')
+				throw new UnsupportedOperationException('''The not operation is not supported for type «value.type.name»''')
 		}
 	}
 
@@ -160,8 +159,6 @@ final class ValueOperations {
 				UIntValue.toUIntValue((first.shortValue + second.shortValue) as short)
 			UsintType:
 				USIntValue.toUSIntValue((first.byteValue + second.byteValue) as byte)
-			default:
-				throw new UnsupportedOperationException('''The add operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
 	}
 
@@ -191,8 +188,6 @@ final class ValueOperations {
 				UIntValue.toUIntValue((first.shortValue - second.shortValue) as short)
 			UsintType:
 				USIntValue.toUSIntValue((first.byteValue - second.byteValue) as byte)
-			default:
-				throw new UnsupportedOperationException('''The subtract operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
 	}
 
@@ -222,8 +217,6 @@ final class ValueOperations {
 				UIntValue.toUIntValue((first.shortValue * second.shortValue) as short)
 			UsintType:
 				USIntValue.toUSIntValue((first.byteValue * second.byteValue) as byte)
-			default:
-				throw new UnsupportedOperationException('''The multiply operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
 	}
 
@@ -253,8 +246,6 @@ final class ValueOperations {
 				UIntValue.toUIntValue(Integer.divideUnsigned(first.intValue, second.intValue) as short)
 			UsintType:
 				USIntValue.toUSIntValue(Integer.divideUnsigned(first.intValue, second.intValue) as byte)
-			default:
-				throw new UnsupportedOperationException('''The divide operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
 	}
 
@@ -284,8 +275,6 @@ final class ValueOperations {
 				UIntValue.toUIntValue(Integer.remainderUnsigned(first.intValue, second.intValue) as short)
 			UsintType:
 				USIntValue.toUSIntValue(Integer.remainderUnsigned(first.intValue, second.intValue) as byte)
-			default:
-				throw new UnsupportedOperationException('''The remainder operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
 	}
 
@@ -294,15 +283,99 @@ final class ValueOperations {
 	}
 
 	def static dispatch AnyNumValue power(AnyNumValue first, AnyNumValue second) {
-		LRealValue.toLRealValue(first.doubleValue ** second.doubleValue)
+		switch (first) {
+			RealValue:
+				RealValue.toRealValue(first.floatValue ** second.floatValue)
+			LRealValue:
+				LRealValue.toLRealValue(first.doubleValue ** second.doubleValue)
+			default:
+				throw new UnsupportedOperationException('''The power operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch Value bitwiseAnd(Value first, Value second) {
+		throw new UnsupportedOperationException('''The and operation is not supported for types «first.type.name» and «second.type.name»''')
+	}
+
+	def static dispatch AnyNumValue bitwiseAnd(AnyNumValue first, AnyNumValue second) {
+		switch (first.type.resultType(second.type)) {
+			LintType:
+				LIntValue.toLIntValue(first.longValue.bitwiseAnd(second.longValue))
+			DintType:
+				DIntValue.toDIntValue(first.intValue.bitwiseAnd(second.intValue))
+			IntType:
+				IntValue.toIntValue(first.shortValue.bitwiseAnd(second.shortValue) as short)
+			SintType:
+				SIntValue.toSIntValue(first.byteValue.bitwiseAnd(second.byteValue) as byte)
+			UlintType:
+				ULIntValue.toULIntValue(first.longValue.bitwiseAnd(second.longValue))
+			UdintType:
+				UDIntValue.toUDIntValue(first.intValue.bitwiseAnd(second.intValue))
+			UintType:
+				UIntValue.toUIntValue(first.shortValue.bitwiseAnd(second.shortValue) as short)
+			UsintType:
+				USIntValue.toUSIntValue(first.byteValue.bitwiseAnd(second.byteValue) as byte)
+			default:
+				throw new UnsupportedOperationException('''The and operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch Value bitwiseOr(Value first, Value second) {
+		throw new UnsupportedOperationException('''The or operation is not supported for types «first.type.name» and «second.type.name»''')
+	}
+
+	def static dispatch AnyNumValue bitwiseOr(AnyNumValue first, AnyNumValue second) {
+		switch (first.type.resultType(second.type)) {
+			LintType:
+				LIntValue.toLIntValue(first.longValue.bitwiseOr(second.longValue))
+			DintType:
+				DIntValue.toDIntValue(first.intValue.bitwiseOr(second.intValue))
+			IntType:
+				IntValue.toIntValue(first.shortValue.bitwiseOr(second.shortValue) as short)
+			SintType:
+				SIntValue.toSIntValue(first.byteValue.bitwiseOr(second.byteValue) as byte)
+			UlintType:
+				ULIntValue.toULIntValue(first.longValue.bitwiseOr(second.longValue))
+			UdintType:
+				UDIntValue.toUDIntValue(first.intValue.bitwiseOr(second.intValue))
+			UintType:
+				UIntValue.toUIntValue(first.shortValue.bitwiseOr(second.shortValue) as short)
+			UsintType:
+				USIntValue.toUSIntValue(first.byteValue.bitwiseOr(second.byteValue) as byte)
+			default:
+				throw new UnsupportedOperationException('''The or operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch Value bitwiseXor(Value first, Value second) {
+		throw new UnsupportedOperationException('''The xor operation is not supported for types «first.type.name» and «second.type.name»''')
+	}
+
+	def static dispatch AnyNumValue bitwiseXor(AnyNumValue first, AnyNumValue second) {
+		switch (first.type.resultType(second.type)) {
+			LintType:
+				LIntValue.toLIntValue(first.longValue.bitwiseXor(second.longValue))
+			DintType:
+				DIntValue.toDIntValue(first.intValue.bitwiseXor(second.intValue))
+			IntType:
+				IntValue.toIntValue(first.shortValue.bitwiseXor(second.shortValue) as short)
+			SintType:
+				SIntValue.toSIntValue(first.byteValue.bitwiseXor(second.byteValue) as byte)
+			UlintType:
+				ULIntValue.toULIntValue(first.longValue.bitwiseXor(second.longValue))
+			UdintType:
+				UDIntValue.toUDIntValue(first.intValue.bitwiseXor(second.intValue))
+			UintType:
+				UIntValue.toUIntValue(first.shortValue.bitwiseXor(second.shortValue) as short)
+			UsintType:
+				USIntValue.toUSIntValue(first.byteValue.bitwiseXor(second.byteValue) as byte)
+			default:
+				throw new UnsupportedOperationException('''The xor operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
 	}
 
 	def static dispatch boolean equals(Value first, Value second) {
-		throw new UnsupportedOperationException('''The equals operation is not supported for types «first.type.name» and «second.type.name»''')
-	}
-
-	def static dispatch boolean equals(BoolValue first, BoolValue second) {
-		first.boolValue == second.boolValue
+		Objects.equals(first, second)
 	}
 
 	def static dispatch boolean equals(AnyNumValue first, AnyNumValue second) {
@@ -324,7 +397,7 @@ final class ValueOperations {
 			UsintType:
 				first.byteValue == second.byteValue
 			default:
-				throw new UnsupportedOperationException('''The compare operation is not supported for types «first.type.name» and «second.type.name»''')
+				false
 		}
 	}
 
@@ -355,12 +428,14 @@ final class ValueOperations {
 			UsintType:
 				Integer.compareUnsigned(first.intValue, second.intValue)
 			default:
-				throw new UnsupportedOperationException('''The compare operation is not supported for types «first.type.name» and «second.type.name»''')
+				0
 		}
 	}
 
 	def static Value defaultValue(DataType type) {
 		switch (type) {
+			case null:
+				null
 			LrealType:
 				LRealValue.DEFAULT
 			RealType:
@@ -389,16 +464,18 @@ final class ValueOperations {
 	}
 
 	def static dispatch Value castValue(Value value, DataType type) {
-		throw new UnsupportedOperationException('''The cast operation is not supported for types «value.type.name»''')
+		if (value.type != type) {
+			throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
+		}
+		return value
 	}
 
 	def static dispatch Value castValue(Void value, DataType type) { null }
 
 	def static dispatch Value castValue(BoolValue value, DataType type) {
 		switch (type) {
+			case null,
 			case value.type:
-				value
-			BoolType:
 				value
 			default:
 				throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
@@ -407,28 +484,29 @@ final class ValueOperations {
 
 	def static dispatch Value castValue(AnyNumValue value, DataType type) {
 		switch (type) {
+			case null,
 			case value.type:
 				value
 			LrealType:
-				LRealValue.toLRealValue(value.doubleValue)
+				LRealValue.toLRealValue(value)
 			RealType:
-				RealValue.toRealValue(value.floatValue)
+				RealValue.toRealValue(value)
 			LintType:
-				LIntValue.toLIntValue(value.longValue)
+				LIntValue.toLIntValue(value)
 			DintType:
-				DIntValue.toDIntValue(value.intValue)
+				DIntValue.toDIntValue(value)
 			IntType:
-				IntValue.toIntValue(value.shortValue)
+				IntValue.toIntValue(value)
 			SintType:
-				SIntValue.toSIntValue(value.byteValue)
+				SIntValue.toSIntValue(value)
 			UlintType:
-				ULIntValue.toULIntValue(value.longValue)
+				ULIntValue.toULIntValue(value)
 			UdintType:
-				UDIntValue.toUDIntValue(value.intValue)
+				UDIntValue.toUDIntValue(value)
 			UintType:
-				UIntValue.toUIntValue(value.shortValue)
+				UIntValue.toUIntValue(value)
 			UsintType:
-				USIntValue.toUSIntValue(value.byteValue)
+				USIntValue.toUSIntValue(value)
 			default:
 				throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
 		}
@@ -439,6 +517,8 @@ final class ValueOperations {
 			type.defaultValue
 		else
 			switch (type) {
+				case null:
+					null
 				LrealType:
 					LRealValue.toLRealValue(value as Number)
 				RealType:
@@ -460,7 +540,11 @@ final class ValueOperations {
 				UsintType:
 					USIntValue.toUSIntValue(value as Number)
 				BoolType:
-					BoolValue.toBoolValue(value as Boolean)
+					BoolValue.toBoolValue(switch (value) {
+						Boolean: value.booleanValue
+						Number: value.longValue !== 0
+						default: value !== null
+					})
 				default:
 					throw new UnsupportedOperationException('''The type «type.name» is not supported''')
 			}
@@ -471,6 +555,8 @@ final class ValueOperations {
 			type.defaultValue
 		else
 			switch (type) {
+				case null:
+					null
 				LrealType:
 					LRealValue.toLRealValue(value)
 				RealType:
@@ -503,6 +589,6 @@ final class ValueOperations {
 	}
 
 	def static resultType(DataType first, DataType second) {
-		if(first.isCompatibleWith(second)) second else if(second.isCompatibleWith(first)) first else null
+		if(first.isCompatibleWith(second)) second else if(second.isCompatibleWith(first)) first
 	}
 }

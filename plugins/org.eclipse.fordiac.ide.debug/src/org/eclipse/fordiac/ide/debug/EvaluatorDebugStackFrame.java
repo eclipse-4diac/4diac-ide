@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -32,7 +32,7 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 
 	private final AtomicReference<Object> currentContext = new AtomicReference<>();
 
-	public EvaluatorDebugStackFrame(Evaluator evaluator, EvaluatorDebugThread thread) {
+	public EvaluatorDebugStackFrame(final Evaluator evaluator, final EvaluatorDebugThread thread) {
 		super(thread.getDebugTarget());
 		this.evaluator = evaluator;
 		this.thread = thread;
@@ -42,7 +42,7 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 		return this.currentContext.get();
 	}
 
-	public void setCurrentContext(Object context) {
+	public void setCurrentContext(final Object context) {
 		this.currentContext.set(context);
 	}
 
@@ -127,8 +127,8 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 
 	@Override
 	public IVariable[] getVariables() throws DebugException {
-		CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
-		List<EvaluatorDebugVariable> variables = this.evaluator.getVariables().stream()
+		final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
+		final List<EvaluatorDebugVariable> variables = this.evaluator.getVariables().values().stream()
 				.map(variable -> debugger.getVariable(variable)).sorted().collect(Collectors.toList());
 		return variables.toArray(new IVariable[variables.size()]);
 	}
@@ -140,9 +140,9 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 
 	@Override
 	public int getLineNumber() throws DebugException {
-		Object context = this.getCurrentContext();
+		final Object context = this.getCurrentContext();
 		if (context instanceof EObject) {
-			ICompositeNode node = NodeModelUtils.findActualNodeFor((EObject) context);
+			final ICompositeNode node = NodeModelUtils.findActualNodeFor((EObject) context);
 			return node.getStartLine();
 		}
 		return -1;

@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.LrealType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class LRealValue implements AnyRealValue, Comparable<LRealValue> {
+class LRealValue implements AnyRealValue {
 	final double value;
 	
 	public static final LRealValue DEFAULT = new LRealValue(0.0)
@@ -45,8 +45,6 @@ class LRealValue implements AnyRealValue, Comparable<LRealValue> {
 	override doubleValue() { value }
 
 	override floatValue() { value as float }
-
-	override compareTo(LRealValue o) { Double.compare(value, o.value) }
 
 	override equals(Object obj) { if(obj instanceof LRealValue) value == obj.value else false }
 

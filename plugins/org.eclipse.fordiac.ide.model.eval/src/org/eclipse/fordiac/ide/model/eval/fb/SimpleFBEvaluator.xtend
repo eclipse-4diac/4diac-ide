@@ -34,7 +34,7 @@ class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
 	new(SimpleFBType type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
 		super(type, queue, variables, parent)
 		algorithmEvaluator = switch (alg : type.algorithm) {
-			STAlgorithm: new StructuredTextEvaluator(alg, this.variables, this)
+			STAlgorithm: new StructuredTextEvaluator(alg, this.variables.values, this)
 			default: throw new UnsupportedOperationException('''Cannot evaluate algorithm «alg.class»''')
 		}
 	}

@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.LintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class LIntValue implements AnySignedValue, Comparable<LIntValue> {
+class LIntValue implements AnySignedValue {
 	final long value;
 
 	public static final LIntValue DEFAULT = new LIntValue(0)
@@ -45,8 +45,6 @@ class LIntValue implements AnySignedValue, Comparable<LIntValue> {
 	override doubleValue() { value }
 
 	override floatValue() { value }
-
-	override compareTo(LIntValue o) { Long.compare(value, o.value) }
 
 	override equals(Object obj) { if(obj instanceof LIntValue) value == obj.value else false }
 
