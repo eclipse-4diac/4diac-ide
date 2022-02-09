@@ -35,8 +35,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSequencer;
 import org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition;
@@ -143,11 +143,11 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_UNARY_EXPRESSION:
 				sequence_STUnaryExpression(context, (STUnaryExpression) semanticObject); 
 				return; 
+			case STCorePackage.ST_VAR_DECLARATION:
+				sequence_VarDeclaration(context, (STVarDeclaration) semanticObject); 
+				return; 
 			case STCorePackage.ST_WHILE_STATEMENT:
 				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
-				return; 
-			case STCorePackage.VAR_DECLARATION:
-				sequence_VarDeclaration(context, (VarDeclaration) semanticObject); 
 				return; 
 			case STCorePackage.VAR_DECLARATION_BLOCK:
 				if (rule == grammarAccess.getVarDeclarationBlockRule()) {

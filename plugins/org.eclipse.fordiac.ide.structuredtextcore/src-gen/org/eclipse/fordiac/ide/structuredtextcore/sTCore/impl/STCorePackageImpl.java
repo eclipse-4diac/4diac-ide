@@ -51,9 +51,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 
 /**
@@ -223,7 +223,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass varDeclarationEClass = null;
+  private EClass stVarDeclarationEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1083,9 +1083,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EClass getVarDeclaration()
+  public EClass getSTVarDeclaration()
   {
-    return varDeclarationEClass;
+    return stVarDeclarationEClass;
   }
 
   /**
@@ -1094,9 +1094,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getVarDeclaration_LocatedAt()
+  public EReference getSTVarDeclaration_LocatedAt()
   {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(0);
+    return (EReference)stVarDeclarationEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1105,9 +1105,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getVarDeclaration_Array()
+  public EAttribute getSTVarDeclaration_Array()
   {
-    return (EAttribute)varDeclarationEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)stVarDeclarationEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1116,9 +1116,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getVarDeclaration_Ranges()
+  public EReference getSTVarDeclaration_Ranges()
   {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(2);
+    return (EReference)stVarDeclarationEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1127,9 +1127,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EAttribute getVarDeclaration_Count()
+  public EAttribute getSTVarDeclaration_Count()
   {
-    return (EAttribute)varDeclarationEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)stVarDeclarationEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1138,9 +1138,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getVarDeclaration_Type()
+  public EReference getSTVarDeclaration_Type()
   {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(4);
+    return (EReference)stVarDeclarationEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -1149,9 +1149,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getVarDeclaration_MaxLength()
+  public EReference getSTVarDeclaration_MaxLength()
   {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(5);
+    return (EReference)stVarDeclarationEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -1160,9 +1160,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   @Override
-  public EReference getVarDeclaration_DefaultValue()
+  public EReference getSTVarDeclaration_DefaultValue()
   {
-    return (EReference)varDeclarationEClass.getEStructuralFeatures().get(6);
+    return (EReference)stVarDeclarationEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -1567,14 +1567,14 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEReference(stStringLiteralEClass, ST_STRING_LITERAL__TYPE);
     createEAttribute(stStringLiteralEClass, ST_STRING_LITERAL__VALUE);
 
-    varDeclarationEClass = createEClass(VAR_DECLARATION);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__LOCATED_AT);
-    createEAttribute(varDeclarationEClass, VAR_DECLARATION__ARRAY);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__RANGES);
-    createEAttribute(varDeclarationEClass, VAR_DECLARATION__COUNT);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__TYPE);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__MAX_LENGTH);
-    createEReference(varDeclarationEClass, VAR_DECLARATION__DEFAULT_VALUE);
+    stVarDeclarationEClass = createEClass(ST_VAR_DECLARATION);
+    createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__LOCATED_AT);
+    createEAttribute(stVarDeclarationEClass, ST_VAR_DECLARATION__ARRAY);
+    createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__RANGES);
+    createEAttribute(stVarDeclarationEClass, ST_VAR_DECLARATION__COUNT);
+    createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__TYPE);
+    createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__MAX_LENGTH);
+    createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__DEFAULT_VALUE);
 
     stReturnEClass = createEClass(ST_RETURN);
 
@@ -1662,7 +1662,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     stTimeOfDayLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stDateAndTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
     stStringLiteralEClass.getESuperTypes().add(this.getSTExpression());
-    varDeclarationEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
+    stVarDeclarationEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
     stReturnEClass.getESuperTypes().add(this.getSTStatement());
     stContinueEClass.getESuperTypes().add(this.getSTStatement());
     stExitEClass.getESuperTypes().add(this.getSTStatement());
@@ -1760,14 +1760,14 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEReference(getSTStringLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STStringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSTStringLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, STStringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(varDeclarationEClass, VarDeclaration.class, "VarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getVarDeclaration_LocatedAt(), theLibraryElementPackage.getINamedElement(), null, "locatedAt", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVarDeclaration_Array(), ecorePackage.getEBoolean(), "array", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclaration_Ranges(), this.getSTExpression(), null, "ranges", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVarDeclaration_Count(), ecorePackage.getEString(), "count", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclaration_Type(), theLibraryElementPackage.getLibraryElement(), null, "type", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclaration_MaxLength(), this.getSTExpression(), null, "maxLength", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVarDeclaration_DefaultValue(), this.getInitializerExpression(), null, "defaultValue", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(stVarDeclarationEClass, STVarDeclaration.class, "STVarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTVarDeclaration_LocatedAt(), theLibraryElementPackage.getINamedElement(), null, "locatedAt", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTVarDeclaration_Array(), ecorePackage.getEBoolean(), "array", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTVarDeclaration_Ranges(), this.getSTExpression(), null, "ranges", null, 0, -1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSTVarDeclaration_Count(), ecorePackage.getEString(), "count", null, 0, -1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTVarDeclaration_Type(), theLibraryElementPackage.getLibraryElement(), null, "type", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTVarDeclaration_MaxLength(), this.getSTExpression(), null, "maxLength", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTVarDeclaration_DefaultValue(), this.getInitializerExpression(), null, "defaultValue", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stReturnEClass, STReturn.class, "STReturn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

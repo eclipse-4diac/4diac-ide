@@ -35,8 +35,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
 import org.eclipse.xtext.Action;
@@ -142,11 +142,11 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ST_UNARY_EXPRESSION:
 				sequence_STUnaryExpression(context, (STUnaryExpression) semanticObject); 
 				return; 
+			case STCorePackage.ST_VAR_DECLARATION:
+				sequence_VarDeclaration(context, (STVarDeclaration) semanticObject); 
+				return; 
 			case STCorePackage.ST_WHILE_STATEMENT:
 				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
-				return; 
-			case STCorePackage.VAR_DECLARATION:
-				sequence_VarDeclaration(context, (VarDeclaration) semanticObject); 
 				return; 
 			case STCorePackage.VAR_DECLARATION_BLOCK:
 				if (rule == grammarAccess.getVarDeclarationBlockRule()) {
@@ -872,7 +872,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     VarDeclaration returns VarDeclaration
+	 *     VarDeclaration returns STVarDeclaration
 	 *
 	 * Constraint:
 	 *     (
@@ -884,7 +884,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *         defaultValue=InitializerExpression?
 	 *     )
 	 */
-	protected void sequence_VarDeclaration(ISerializationContext context, VarDeclaration semanticObject) {
+	protected void sequence_VarDeclaration(ISerializationContext context, STVarDeclaration semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

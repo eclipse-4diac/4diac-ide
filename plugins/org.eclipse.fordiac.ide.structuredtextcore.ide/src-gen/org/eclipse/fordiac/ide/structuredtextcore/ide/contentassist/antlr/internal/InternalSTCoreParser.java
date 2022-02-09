@@ -9083,7 +9083,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             // InternalSTCoreParser.g:2431:2: ()
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getVarDeclarationAccess().getVarDeclarationAction_0()); 
+               before(grammarAccess.getVarDeclarationAccess().getSTVarDeclarationAction_0()); 
             }
             // InternalSTCoreParser.g:2432:2: ()
             // InternalSTCoreParser.g:2432:3: 
@@ -9091,7 +9091,7 @@ public class InternalSTCoreParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getVarDeclarationAccess().getVarDeclarationAction_0()); 
+               after(grammarAccess.getVarDeclarationAccess().getSTVarDeclarationAction_0()); 
             }
 
             }

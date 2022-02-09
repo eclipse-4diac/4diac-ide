@@ -848,14 +848,14 @@ public interface STCorePackage extends EPackage
   int ST_STRING_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl <em>Var Declaration</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl <em>ST Var Declaration</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTVarDeclaration()
    * @generated
    */
-  int VAR_DECLARATION = 22;
+  int ST_VAR_DECLARATION = 22;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -864,7 +864,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
+  int ST_VAR_DECLARATION__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
 
   /**
    * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -873,7 +873,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
+  int ST_VAR_DECLARATION__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
 
   /**
    * The feature id for the '<em><b>Located At</b></em>' reference.
@@ -882,7 +882,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__LOCATED_AT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
+  int ST_VAR_DECLARATION__LOCATED_AT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Array</b></em>' attribute.
@@ -891,7 +891,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__ARRAY = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 1;
+  int ST_VAR_DECLARATION__ARRAY = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Ranges</b></em>' containment reference list.
@@ -900,7 +900,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__RANGES = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 2;
+  int ST_VAR_DECLARATION__RANGES = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Count</b></em>' attribute list.
@@ -909,7 +909,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 3;
+  int ST_VAR_DECLARATION__COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' reference.
@@ -918,7 +918,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__TYPE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 4;
+  int ST_VAR_DECLARATION__TYPE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Max Length</b></em>' containment reference.
@@ -927,7 +927,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__MAX_LENGTH = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 5;
+  int ST_VAR_DECLARATION__MAX_LENGTH = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Default Value</b></em>' containment reference.
@@ -936,16 +936,16 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__DEFAULT_VALUE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 6;
+  int ST_VAR_DECLARATION__DEFAULT_VALUE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 6;
 
   /**
-   * The number of structural features of the '<em>Var Declaration</em>' class.
+   * The number of structural features of the '<em>ST Var Declaration</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 7;
+  int ST_VAR_DECLARATION_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 7;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.
@@ -1957,91 +1957,91 @@ public interface STCorePackage extends EPackage
   EAttribute getSTStringLiteral_Value();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration <em>Var Declaration</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration <em>ST Var Declaration</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Var Declaration</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration
+   * @return the meta object for class '<em>ST Var Declaration</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration
    * @generated
    */
-  EClass getVarDeclaration();
+  EClass getSTVarDeclaration();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getLocatedAt <em>Located At</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getLocatedAt <em>Located At</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Located At</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getLocatedAt()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getLocatedAt()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_LocatedAt();
+  EReference getSTVarDeclaration_LocatedAt();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#isArray <em>Array</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#isArray <em>Array</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Array</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#isArray()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#isArray()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EAttribute getVarDeclaration_Array();
+  EAttribute getSTVarDeclaration_Array();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getRanges <em>Ranges</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getRanges <em>Ranges</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Ranges</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getRanges()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getRanges()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_Ranges();
+  EReference getSTVarDeclaration_Ranges();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getCount <em>Count</em>}'.
+   * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getCount <em>Count</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute list '<em>Count</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getCount()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getCount()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EAttribute getVarDeclaration_Count();
+  EAttribute getSTVarDeclaration_Count();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Type</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getType()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getType()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_Type();
+  EReference getSTVarDeclaration_Type();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getMaxLength <em>Max Length</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getMaxLength <em>Max Length</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Max Length</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getMaxLength()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getMaxLength()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_MaxLength();
+  EReference getSTVarDeclaration_MaxLength();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getDefaultValue <em>Default Value</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getDefaultValue <em>Default Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Default Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getDefaultValue()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getDefaultValue()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_DefaultValue();
+  EReference getSTVarDeclaration_DefaultValue();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn <em>ST Return</em>}'.
@@ -2888,14 +2888,14 @@ public interface STCorePackage extends EPackage
     EAttribute ST_STRING_LITERAL__VALUE = eINSTANCE.getSTStringLiteral_Value();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl <em>Var Declaration</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl <em>ST Var Declaration</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getVarDeclaration()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTVarDeclaration()
      * @generated
      */
-    EClass VAR_DECLARATION = eINSTANCE.getVarDeclaration();
+    EClass ST_VAR_DECLARATION = eINSTANCE.getSTVarDeclaration();
 
     /**
      * The meta object literal for the '<em><b>Located At</b></em>' reference feature.
@@ -2903,7 +2903,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__LOCATED_AT = eINSTANCE.getVarDeclaration_LocatedAt();
+    EReference ST_VAR_DECLARATION__LOCATED_AT = eINSTANCE.getSTVarDeclaration_LocatedAt();
 
     /**
      * The meta object literal for the '<em><b>Array</b></em>' attribute feature.
@@ -2911,7 +2911,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute VAR_DECLARATION__ARRAY = eINSTANCE.getVarDeclaration_Array();
+    EAttribute ST_VAR_DECLARATION__ARRAY = eINSTANCE.getSTVarDeclaration_Array();
 
     /**
      * The meta object literal for the '<em><b>Ranges</b></em>' containment reference list feature.
@@ -2919,7 +2919,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__RANGES = eINSTANCE.getVarDeclaration_Ranges();
+    EReference ST_VAR_DECLARATION__RANGES = eINSTANCE.getSTVarDeclaration_Ranges();
 
     /**
      * The meta object literal for the '<em><b>Count</b></em>' attribute list feature.
@@ -2927,7 +2927,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute VAR_DECLARATION__COUNT = eINSTANCE.getVarDeclaration_Count();
+    EAttribute ST_VAR_DECLARATION__COUNT = eINSTANCE.getSTVarDeclaration_Count();
 
     /**
      * The meta object literal for the '<em><b>Type</b></em>' reference feature.
@@ -2935,7 +2935,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__TYPE = eINSTANCE.getVarDeclaration_Type();
+    EReference ST_VAR_DECLARATION__TYPE = eINSTANCE.getSTVarDeclaration_Type();
 
     /**
      * The meta object literal for the '<em><b>Max Length</b></em>' containment reference feature.
@@ -2943,7 +2943,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__MAX_LENGTH = eINSTANCE.getVarDeclaration_MaxLength();
+    EReference ST_VAR_DECLARATION__MAX_LENGTH = eINSTANCE.getSTVarDeclaration_MaxLength();
 
     /**
      * The meta object literal for the '<em><b>Default Value</b></em>' containment reference feature.
@@ -2951,7 +2951,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__DEFAULT_VALUE = eINSTANCE.getVarDeclaration_DefaultValue();
+    EReference ST_VAR_DECLARATION__DEFAULT_VALUE = eINSTANCE.getSTVarDeclaration_DefaultValue();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.

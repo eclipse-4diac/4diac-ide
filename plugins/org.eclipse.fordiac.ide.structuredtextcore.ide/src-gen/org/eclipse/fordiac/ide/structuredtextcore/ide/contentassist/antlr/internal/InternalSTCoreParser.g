@@ -2428,9 +2428,9 @@ rule__VarDeclaration__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getVarDeclarationAccess().getVarDeclarationAction_0()); }
+	{ before(grammarAccess.getVarDeclarationAccess().getSTVarDeclarationAction_0()); }
 	()
-	{ after(grammarAccess.getVarDeclarationAccess().getVarDeclarationAction_0()); }
+	{ after(grammarAccess.getVarDeclarationAccess().getSTVarDeclarationAction_0()); }
 )
 ;
 finally {

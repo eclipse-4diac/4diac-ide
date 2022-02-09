@@ -249,11 +249,11 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.VAR_DECLARATION:
+      case STCorePackage.ST_VAR_DECLARATION:
       {
-        VarDeclaration varDeclaration = (VarDeclaration)theEObject;
-        T result = caseVarDeclaration(varDeclaration);
-        if (result == null) result = caseINamedElement(varDeclaration);
+        STVarDeclaration stVarDeclaration = (STVarDeclaration)theEObject;
+        T result = caseSTVarDeclaration(stVarDeclaration);
+        if (result == null) result = caseINamedElement(stVarDeclaration);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -700,17 +700,17 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Var Declaration</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Var Declaration</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Var Declaration</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Var Declaration</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseVarDeclaration(VarDeclaration object)
+  public T caseSTVarDeclaration(STVarDeclaration object)
   {
     return null;
   }

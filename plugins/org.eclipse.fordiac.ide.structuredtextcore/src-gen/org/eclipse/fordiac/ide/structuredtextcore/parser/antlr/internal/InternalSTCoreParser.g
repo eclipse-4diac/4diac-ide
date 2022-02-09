@@ -109,7 +109,7 @@ ruleVarDeclaration returns [EObject current=null]
 		(
 			{
 				$current = forceCreateModelElement(
-					grammarAccess.getVarDeclarationAccess().getVarDeclarationAction_0(),
+					grammarAccess.getVarDeclarationAccess().getSTVarDeclarationAction_0(),
 					$current);
 			}
 		)

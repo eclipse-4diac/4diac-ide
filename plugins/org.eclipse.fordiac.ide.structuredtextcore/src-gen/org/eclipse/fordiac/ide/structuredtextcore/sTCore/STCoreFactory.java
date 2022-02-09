@@ -222,13 +222,13 @@ public interface STCoreFactory extends EFactory
   STStringLiteral createSTStringLiteral();
 
   /**
-   * Returns a new object of class '<em>Var Declaration</em>'.
+   * Returns a new object of class '<em>ST Var Declaration</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Var Declaration</em>'.
+   * @return a new object of class '<em>ST Var Declaration</em>'.
    * @generated
    */
-  VarDeclaration createVarDeclaration();
+  STVarDeclaration createSTVarDeclaration();
 
   /**
    * Returns a new object of class '<em>ST Return</em>'.

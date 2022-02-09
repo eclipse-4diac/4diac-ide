@@ -88,7 +88,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ST_TIME_OF_DAY_LITERAL: return createSTTimeOfDayLiteral();
       case STCorePackage.ST_DATE_AND_TIME_LITERAL: return createSTDateAndTimeLiteral();
       case STCorePackage.ST_STRING_LITERAL: return createSTStringLiteral();
-      case STCorePackage.VAR_DECLARATION: return createVarDeclaration();
+      case STCorePackage.ST_VAR_DECLARATION: return createSTVarDeclaration();
       case STCorePackage.ST_RETURN: return createSTReturn();
       case STCorePackage.ST_CONTINUE: return createSTContinue();
       case STCorePackage.ST_EXIT: return createSTExit();
@@ -416,10 +416,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
    * @generated
    */
   @Override
-  public VarDeclaration createVarDeclaration()
+  public STVarDeclaration createSTVarDeclaration()
   {
-    VarDeclarationImpl varDeclaration = new VarDeclarationImpl();
-    return varDeclaration;
+    STVarDeclarationImpl stVarDeclaration = new STVarDeclarationImpl();
+    return stVarDeclaration;
   }
 
   /**

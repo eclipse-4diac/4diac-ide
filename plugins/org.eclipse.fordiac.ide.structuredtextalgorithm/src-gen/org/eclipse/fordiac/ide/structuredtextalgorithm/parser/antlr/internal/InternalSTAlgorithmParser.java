@@ -986,7 +986,7 @@ public class InternalSTAlgorithmParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
 
               				current = forceCreateModelElement(
-              					grammarAccess.getVarDeclarationAccess().getVarDeclarationAction_0(),
+              					grammarAccess.getVarDeclarationAccess().getSTVarDeclarationAction_0(),
               					current);
               			
             }

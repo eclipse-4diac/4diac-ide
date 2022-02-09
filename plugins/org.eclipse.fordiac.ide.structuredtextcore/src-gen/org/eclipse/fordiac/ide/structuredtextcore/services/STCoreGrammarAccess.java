@@ -215,7 +215,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class VarDeclarationElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.VarDeclaration");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cVarDeclarationAction_0 = (Action)cGroup.eContents().get(0);
+		private final Action cSTVarDeclarationAction_0 = (Action)cGroup.eContents().get(0);
 		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
@@ -262,20 +262,20 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cSemicolonKeyword_8 = (Keyword)cGroup.eContents().get(8);
 		
 		//VarDeclaration returns libraryElement::INamedElement:
-		//    {VarDeclaration}
+		//    {STVarDeclaration}
 		//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 		//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::LibraryElement]) ('[' maxLength=STExpression ']')? (':='
 		//    defaultValue=InitializerExpression)? ';';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{VarDeclaration}
+		//{STVarDeclaration}
 		//name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 		//ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::LibraryElement]) ('[' maxLength=STExpression ']')? (':='
 		//defaultValue=InitializerExpression)? ';'
 		public Group getGroup() { return cGroup; }
 		
-		//{VarDeclaration}
-		public Action getVarDeclarationAction_0() { return cVarDeclarationAction_0; }
+		//{STVarDeclaration}
+		public Action getSTVarDeclarationAction_0() { return cSTVarDeclarationAction_0; }
 		
 		//name=ID
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
@@ -2975,7 +2975,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//VarDeclaration returns libraryElement::INamedElement:
-	//    {VarDeclaration}
+	//    {STVarDeclaration}
 	//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::LibraryElement]) ('[' maxLength=STExpression ']')? (':='
 	//    defaultValue=InitializerExpression)? ';';

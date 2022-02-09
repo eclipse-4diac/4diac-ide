@@ -26,30 +26,30 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.InitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Var Declaration</b></em>'.
+ * An implementation of the model object '<em><b>ST Var Declaration</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getComment <em>Comment</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getLocatedAt <em>Located At</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#isArray <em>Array</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getRanges <em>Ranges</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getCount <em>Count</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getMaxLength <em>Max Length</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl#getDefaultValue <em>Default Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl#getLocatedAt <em>Located At</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl#isArray <em>Array</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl#getRanges <em>Ranges</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl#getCount <em>Count</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl#getMaxLength <em>Max Length</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl#getDefaultValue <em>Default Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements VarDeclaration
+public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implements STVarDeclaration
 {
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -176,7 +176,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  protected VarDeclarationImpl()
+  protected STVarDeclarationImpl()
   {
     super();
   }
@@ -189,7 +189,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
   @Override
   protected EClass eStaticClass()
   {
-    return STCorePackage.Literals.VAR_DECLARATION;
+    return STCorePackage.Literals.ST_VAR_DECLARATION;
   }
 
   /**
@@ -214,7 +214,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     String oldName = name;
     name = newName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__NAME, oldName, name));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__NAME, oldName, name));
   }
 
   /**
@@ -239,7 +239,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     String oldComment = comment;
     comment = newComment;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__COMMENT, oldComment, comment));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__COMMENT, oldComment, comment));
   }
 
   /**
@@ -257,7 +257,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
       if (locatedAt != oldLocatedAt)
       {
         if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.VAR_DECLARATION__LOCATED_AT, oldLocatedAt, locatedAt));
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_VAR_DECLARATION__LOCATED_AT, oldLocatedAt, locatedAt));
       }
     }
     return locatedAt;
@@ -284,7 +284,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     INamedElement oldLocatedAt = locatedAt;
     locatedAt = newLocatedAt;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__LOCATED_AT, oldLocatedAt, locatedAt));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__LOCATED_AT, oldLocatedAt, locatedAt));
   }
 
   /**
@@ -309,7 +309,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     boolean oldArray = array;
     array = newArray;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__ARRAY, oldArray, array));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__ARRAY, oldArray, array));
   }
 
   /**
@@ -322,7 +322,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
   {
     if (ranges == null)
     {
-      ranges = new EObjectContainmentEList<STExpression>(STExpression.class, this, STCorePackage.VAR_DECLARATION__RANGES);
+      ranges = new EObjectContainmentEList<STExpression>(STExpression.class, this, STCorePackage.ST_VAR_DECLARATION__RANGES);
     }
     return ranges;
   }
@@ -337,7 +337,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
   {
     if (count == null)
     {
-      count = new EDataTypeEList<String>(String.class, this, STCorePackage.VAR_DECLARATION__COUNT);
+      count = new EDataTypeEList<String>(String.class, this, STCorePackage.ST_VAR_DECLARATION__COUNT);
     }
     return count;
   }
@@ -357,7 +357,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
       if (type != oldType)
       {
         if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.VAR_DECLARATION__TYPE, oldType, type));
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_VAR_DECLARATION__TYPE, oldType, type));
       }
     }
     return type;
@@ -384,7 +384,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     LibraryElement oldType = type;
     type = newType;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__TYPE, oldType, type));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__TYPE, oldType, type));
   }
 
   /**
@@ -409,7 +409,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     maxLength = newMaxLength;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__MAX_LENGTH, oldMaxLength, newMaxLength);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH, oldMaxLength, newMaxLength);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -427,14 +427,14 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     {
       NotificationChain msgs = null;
       if (maxLength != null)
-        msgs = ((InternalEObject)maxLength).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.VAR_DECLARATION__MAX_LENGTH, null, msgs);
+        msgs = ((InternalEObject)maxLength).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH, null, msgs);
       if (newMaxLength != null)
-        msgs = ((InternalEObject)newMaxLength).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.VAR_DECLARATION__MAX_LENGTH, null, msgs);
+        msgs = ((InternalEObject)newMaxLength).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH, null, msgs);
       msgs = basicSetMaxLength(newMaxLength, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__MAX_LENGTH, newMaxLength, newMaxLength));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH, newMaxLength, newMaxLength));
   }
 
   /**
@@ -459,7 +459,7 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     defaultValue = newDefaultValue;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__DEFAULT_VALUE, oldDefaultValue, newDefaultValue);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE, oldDefaultValue, newDefaultValue);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -477,14 +477,14 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     {
       NotificationChain msgs = null;
       if (defaultValue != null)
-        msgs = ((InternalEObject)defaultValue).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.VAR_DECLARATION__DEFAULT_VALUE, null, msgs);
+        msgs = ((InternalEObject)defaultValue).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE, null, msgs);
       if (newDefaultValue != null)
-        msgs = ((InternalEObject)newDefaultValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.VAR_DECLARATION__DEFAULT_VALUE, null, msgs);
+        msgs = ((InternalEObject)newDefaultValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE, null, msgs);
       msgs = basicSetDefaultValue(newDefaultValue, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.VAR_DECLARATION__DEFAULT_VALUE, newDefaultValue, newDefaultValue));
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE, newDefaultValue, newDefaultValue));
   }
 
   /**
@@ -497,11 +497,11 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case STCorePackage.VAR_DECLARATION__RANGES:
+      case STCorePackage.ST_VAR_DECLARATION__RANGES:
         return ((InternalEList<?>)getRanges()).basicRemove(otherEnd, msgs);
-      case STCorePackage.VAR_DECLARATION__MAX_LENGTH:
+      case STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH:
         return basicSetMaxLength(null, msgs);
-      case STCorePackage.VAR_DECLARATION__DEFAULT_VALUE:
+      case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
         return basicSetDefaultValue(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -517,25 +517,25 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case STCorePackage.VAR_DECLARATION__NAME:
+      case STCorePackage.ST_VAR_DECLARATION__NAME:
         return getName();
-      case STCorePackage.VAR_DECLARATION__COMMENT:
+      case STCorePackage.ST_VAR_DECLARATION__COMMENT:
         return getComment();
-      case STCorePackage.VAR_DECLARATION__LOCATED_AT:
+      case STCorePackage.ST_VAR_DECLARATION__LOCATED_AT:
         if (resolve) return getLocatedAt();
         return basicGetLocatedAt();
-      case STCorePackage.VAR_DECLARATION__ARRAY:
+      case STCorePackage.ST_VAR_DECLARATION__ARRAY:
         return isArray();
-      case STCorePackage.VAR_DECLARATION__RANGES:
+      case STCorePackage.ST_VAR_DECLARATION__RANGES:
         return getRanges();
-      case STCorePackage.VAR_DECLARATION__COUNT:
+      case STCorePackage.ST_VAR_DECLARATION__COUNT:
         return getCount();
-      case STCorePackage.VAR_DECLARATION__TYPE:
+      case STCorePackage.ST_VAR_DECLARATION__TYPE:
         if (resolve) return getType();
         return basicGetType();
-      case STCorePackage.VAR_DECLARATION__MAX_LENGTH:
+      case STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH:
         return getMaxLength();
-      case STCorePackage.VAR_DECLARATION__DEFAULT_VALUE:
+      case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
         return getDefaultValue();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -552,33 +552,33 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case STCorePackage.VAR_DECLARATION__NAME:
+      case STCorePackage.ST_VAR_DECLARATION__NAME:
         setName((String)newValue);
         return;
-      case STCorePackage.VAR_DECLARATION__COMMENT:
+      case STCorePackage.ST_VAR_DECLARATION__COMMENT:
         setComment((String)newValue);
         return;
-      case STCorePackage.VAR_DECLARATION__LOCATED_AT:
+      case STCorePackage.ST_VAR_DECLARATION__LOCATED_AT:
         setLocatedAt((INamedElement)newValue);
         return;
-      case STCorePackage.VAR_DECLARATION__ARRAY:
+      case STCorePackage.ST_VAR_DECLARATION__ARRAY:
         setArray((Boolean)newValue);
         return;
-      case STCorePackage.VAR_DECLARATION__RANGES:
+      case STCorePackage.ST_VAR_DECLARATION__RANGES:
         getRanges().clear();
         getRanges().addAll((Collection<? extends STExpression>)newValue);
         return;
-      case STCorePackage.VAR_DECLARATION__COUNT:
+      case STCorePackage.ST_VAR_DECLARATION__COUNT:
         getCount().clear();
         getCount().addAll((Collection<? extends String>)newValue);
         return;
-      case STCorePackage.VAR_DECLARATION__TYPE:
+      case STCorePackage.ST_VAR_DECLARATION__TYPE:
         setType((LibraryElement)newValue);
         return;
-      case STCorePackage.VAR_DECLARATION__MAX_LENGTH:
+      case STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH:
         setMaxLength((STExpression)newValue);
         return;
-      case STCorePackage.VAR_DECLARATION__DEFAULT_VALUE:
+      case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
         setDefaultValue((InitializerExpression)newValue);
         return;
     }
@@ -595,31 +595,31 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case STCorePackage.VAR_DECLARATION__NAME:
+      case STCorePackage.ST_VAR_DECLARATION__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case STCorePackage.VAR_DECLARATION__COMMENT:
+      case STCorePackage.ST_VAR_DECLARATION__COMMENT:
         setComment(COMMENT_EDEFAULT);
         return;
-      case STCorePackage.VAR_DECLARATION__LOCATED_AT:
+      case STCorePackage.ST_VAR_DECLARATION__LOCATED_AT:
         setLocatedAt((INamedElement)null);
         return;
-      case STCorePackage.VAR_DECLARATION__ARRAY:
+      case STCorePackage.ST_VAR_DECLARATION__ARRAY:
         setArray(ARRAY_EDEFAULT);
         return;
-      case STCorePackage.VAR_DECLARATION__RANGES:
+      case STCorePackage.ST_VAR_DECLARATION__RANGES:
         getRanges().clear();
         return;
-      case STCorePackage.VAR_DECLARATION__COUNT:
+      case STCorePackage.ST_VAR_DECLARATION__COUNT:
         getCount().clear();
         return;
-      case STCorePackage.VAR_DECLARATION__TYPE:
+      case STCorePackage.ST_VAR_DECLARATION__TYPE:
         setType((LibraryElement)null);
         return;
-      case STCorePackage.VAR_DECLARATION__MAX_LENGTH:
+      case STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH:
         setMaxLength((STExpression)null);
         return;
-      case STCorePackage.VAR_DECLARATION__DEFAULT_VALUE:
+      case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
         setDefaultValue((InitializerExpression)null);
         return;
     }
@@ -636,23 +636,23 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
-      case STCorePackage.VAR_DECLARATION__NAME:
+      case STCorePackage.ST_VAR_DECLARATION__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case STCorePackage.VAR_DECLARATION__COMMENT:
+      case STCorePackage.ST_VAR_DECLARATION__COMMENT:
         return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-      case STCorePackage.VAR_DECLARATION__LOCATED_AT:
+      case STCorePackage.ST_VAR_DECLARATION__LOCATED_AT:
         return locatedAt != null;
-      case STCorePackage.VAR_DECLARATION__ARRAY:
+      case STCorePackage.ST_VAR_DECLARATION__ARRAY:
         return array != ARRAY_EDEFAULT;
-      case STCorePackage.VAR_DECLARATION__RANGES:
+      case STCorePackage.ST_VAR_DECLARATION__RANGES:
         return ranges != null && !ranges.isEmpty();
-      case STCorePackage.VAR_DECLARATION__COUNT:
+      case STCorePackage.ST_VAR_DECLARATION__COUNT:
         return count != null && !count.isEmpty();
-      case STCorePackage.VAR_DECLARATION__TYPE:
+      case STCorePackage.ST_VAR_DECLARATION__TYPE:
         return type != null;
-      case STCorePackage.VAR_DECLARATION__MAX_LENGTH:
+      case STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH:
         return maxLength != null;
-      case STCorePackage.VAR_DECLARATION__DEFAULT_VALUE:
+      case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
         return defaultValue != null;
     }
     return super.eIsSet(featureID);
@@ -681,4 +681,4 @@ public class VarDeclarationImpl extends MinimalEObjectImpl.Container implements 
     return result.toString();
   }
 
-} //VarDeclarationImpl
+} //STVarDeclarationImpl

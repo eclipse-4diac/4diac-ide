@@ -119,14 +119,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStringLiteral/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STStringLiteral/value"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//VarDeclaration">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/locatedAt"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclaration/array"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/ranges"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclaration/count"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/type"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/maxLength"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclaration/defaultValue"/>
+    <genClasses ecoreClass="STCore.ecore#//STVarDeclaration">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/locatedAt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STVarDeclaration/array"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/ranges"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STVarDeclaration/count"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/maxLength"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/defaultValue"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STReturn"/>
     <genClasses ecoreClass="STCore.ecore#//STContinue"/>

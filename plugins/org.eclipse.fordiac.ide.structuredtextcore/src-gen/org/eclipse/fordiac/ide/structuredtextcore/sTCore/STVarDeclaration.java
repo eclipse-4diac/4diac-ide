@@ -10,27 +10,27 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Var Declaration</b></em>'.
+ * A representation of the model object '<em><b>ST Var Declaration</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getLocatedAt <em>Located At</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#isArray <em>Array</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getRanges <em>Ranges</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getCount <em>Count</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getMaxLength <em>Max Length</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getDefaultValue <em>Default Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getLocatedAt <em>Located At</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#isArray <em>Array</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getRanges <em>Ranges</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getCount <em>Count</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getMaxLength <em>Max Length</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getDefaultValue <em>Default Value</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration()
+ * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTVarDeclaration()
  * @model
  * @generated
  */
-public interface VarDeclaration extends INamedElement
+public interface STVarDeclaration extends INamedElement
 {
   /**
    * Returns the value of the '<em><b>Located At</b></em>' reference.
@@ -38,14 +38,14 @@ public interface VarDeclaration extends INamedElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Located At</em>' reference.
    * @see #setLocatedAt(INamedElement)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration_LocatedAt()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTVarDeclaration_LocatedAt()
    * @model
    * @generated
    */
   INamedElement getLocatedAt();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getLocatedAt <em>Located At</em>}' reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getLocatedAt <em>Located At</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Located At</em>' reference.
@@ -60,14 +60,14 @@ public interface VarDeclaration extends INamedElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Array</em>' attribute.
    * @see #setArray(boolean)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration_Array()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTVarDeclaration_Array()
    * @model
    * @generated
    */
   boolean isArray();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#isArray <em>Array</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#isArray <em>Array</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Array</em>' attribute.
@@ -82,7 +82,7 @@ public interface VarDeclaration extends INamedElement
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ranges</em>' containment reference list.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration_Ranges()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTVarDeclaration_Ranges()
    * @model containment="true"
    * @generated
    */
@@ -94,7 +94,7 @@ public interface VarDeclaration extends INamedElement
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Count</em>' attribute list.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration_Count()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTVarDeclaration_Count()
    * @model unique="false"
    * @generated
    */
@@ -106,14 +106,14 @@ public interface VarDeclaration extends INamedElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Type</em>' reference.
    * @see #setType(LibraryElement)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration_Type()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTVarDeclaration_Type()
    * @model
    * @generated
    */
   LibraryElement getType();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getType <em>Type</em>}' reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getType <em>Type</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Type</em>' reference.
@@ -128,14 +128,14 @@ public interface VarDeclaration extends INamedElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Max Length</em>' containment reference.
    * @see #setMaxLength(STExpression)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration_MaxLength()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTVarDeclaration_MaxLength()
    * @model containment="true"
    * @generated
    */
   STExpression getMaxLength();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getMaxLength <em>Max Length</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getMaxLength <em>Max Length</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Max Length</em>' containment reference.
@@ -150,14 +150,14 @@ public interface VarDeclaration extends INamedElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Default Value</em>' containment reference.
    * @see #setDefaultValue(InitializerExpression)
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getVarDeclaration_DefaultValue()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTVarDeclaration_DefaultValue()
    * @model containment="true"
    * @generated
    */
   InitializerExpression getDefaultValue();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getDefaultValue <em>Default Value</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getDefaultValue <em>Default Value</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Default Value</em>' containment reference.
@@ -166,4 +166,4 @@ public interface VarDeclaration extends INamedElement
    */
   void setDefaultValue(InitializerExpression value);
 
-} // VarDeclaration
+} // STVarDeclaration

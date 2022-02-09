@@ -188,9 +188,9 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTStringLiteralAdapter();
       }
       @Override
-      public Adapter caseVarDeclaration(VarDeclaration object)
+      public Adapter caseSTVarDeclaration(STVarDeclaration object)
       {
-        return createVarDeclarationAdapter();
+        return createSTVarDeclarationAdapter();
       }
       @Override
       public Adapter caseSTReturn(STReturn object)
@@ -600,16 +600,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration <em>Var Declaration</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration <em>ST Var Declaration</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration
    * @generated
    */
-  public Adapter createVarDeclarationAdapter()
+  public Adapter createSTVarDeclarationAdapter()
   {
     return null;
   }
