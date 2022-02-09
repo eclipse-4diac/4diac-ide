@@ -28,22 +28,22 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 public interface STDateAndTimeLiteral extends STExpression
 {
   /**
-   * Returns the value of the '<em><b>Type</b></em>' containment reference.
+   * Returns the value of the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Type</em>' containment reference.
+   * @return the value of the '<em>Type</em>' reference.
    * @see #setType(DataType)
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTDateAndTimeLiteral_Type()
-   * @model containment="true"
+   * @model
    * @generated
    */
   DataType getType();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType <em>Type</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType <em>Type</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Type</em>' containment reference.
+   * @param value the new value of the '<em>Type</em>' reference.
    * @see #getType()
    * @generated
    */

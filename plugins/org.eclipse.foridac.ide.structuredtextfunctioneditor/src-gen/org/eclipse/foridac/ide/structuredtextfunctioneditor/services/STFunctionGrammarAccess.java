@@ -269,7 +269,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//VarDeclaration returns libraryElement::INamedElement:
 	//    {STVarDeclaration}
 	//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
-	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::LibraryElement]) ('[' maxLength=STExpression ']')? (':='
+	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 	//    defaultValue=InitializerExpression)? ';';
 	public STCoreGrammarAccess.VarDeclarationElements getVarDeclarationAccess() {
 		return gaSTCore.getVarDeclarationAccess();
@@ -693,24 +693,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTLiteralExpressionsAccess().getRule();
 	}
 	
-	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-	//STNumericLiteralType returns datatype::DataType:
-	//    'BOOL#' |
-	//    'BYTE#' |
-	//    'WORD#' |
-	//    'DWORD#' |
-	//    'LWORD#' |
-	//    'SINT#' |
-	//    'INT#' |
-	//    'DINT#' |
-	//    'LINT#' |
-	//    'USINT#' |
-	//    'UINT#' |
-	//    'UDINT#' |
-	//    'ULINT#' |
-	//    'REAL#' |
-	//    'LREAL#'
-	//;
+	//STNumericLiteralType:
+	//    STAnyBitType | STAnyNumType;
 	public STCoreGrammarAccess.STNumericLiteralTypeElements getSTNumericLiteralTypeAccess() {
 		return gaSTCore.getSTNumericLiteralTypeAccess();
 	}
@@ -720,7 +704,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STNumericLiteral:
-	//    (type=STNumericLiteralType)?
+	//    (type=[datatype::DataType|STNumericLiteralType] '#')?
 	//    value=(BoolLiteral | Number | NON_DECIMAL);
 	public STCoreGrammarAccess.STNumericLiteralElements getSTNumericLiteralAccess() {
 		return gaSTCore.getSTNumericLiteralAccess();
@@ -730,12 +714,10 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTNumericLiteralAccess().getRule();
 	}
 	
-	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-	//STDateLiteralType returns datatype::DataType:
-	//    'DATE#' |
-	//    'LDATE#' |
-	//    'D#' |
-	//    'LD#'
+	//STDateLiteralType:
+	//    STDateType |
+	//    'D' |
+	//    'LD'
 	//;
 	public STCoreGrammarAccess.STDateLiteralTypeElements getSTDateLiteralTypeAccess() {
 		return gaSTCore.getSTDateLiteralTypeAccess();
@@ -746,7 +728,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STDateLiteral:
-	//    type=STDateLiteralType value=Date;
+	//    type=[datatype::DataType|STDateLiteralType] '#' value=Date;
 	public STCoreGrammarAccess.STDateLiteralElements getSTDateLiteralAccess() {
 		return gaSTCore.getSTDateLiteralAccess();
 	}
@@ -755,12 +737,10 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTDateLiteralAccess().getRule();
 	}
 	
-	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-	//STTimeLiteralType returns datatype::DataType:
-	//    'TIME#' |
-	//    'LTIME#' |
-	//    'T#' |
-	//    'LT#'
+	//STTimeLiteralType:
+	//    STAnyDurationType |
+	//    'T' |
+	//    'LT'
 	//;
 	public STCoreGrammarAccess.STTimeLiteralTypeElements getSTTimeLiteralTypeAccess() {
 		return gaSTCore.getSTTimeLiteralTypeAccess();
@@ -771,7 +751,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STTimeLiteral:
-	//    type=STTimeLiteralType value=Time;
+	//    type=[datatype::DataType|STTimeLiteralType] '#' value=Time;
 	public STCoreGrammarAccess.STTimeLiteralElements getSTTimeLiteralAccess() {
 		return gaSTCore.getSTTimeLiteralAccess();
 	}
@@ -780,22 +760,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTTimeLiteralAccess().getRule();
 	}
 	
-	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-	//STTimeOfDayLiteralType returns datatype::DataType:
-	//    'TIME_OF_DAY#' |
-	//    'TOD#' |
-	//    'LTOD#'
-	//;
-	public STCoreGrammarAccess.STTimeOfDayLiteralTypeElements getSTTimeOfDayLiteralTypeAccess() {
-		return gaSTCore.getSTTimeOfDayLiteralTypeAccess();
-	}
-	
-	public ParserRule getSTTimeOfDayLiteralTypeRule() {
-		return getSTTimeOfDayLiteralTypeAccess().getRule();
-	}
-	
 	//STTimeOfDayLiteral:
-	//    type=STTimeOfDayLiteralType value=TimeOfDay;
+	//    type=[datatype::DataType|STTimeOfDayType] '#' value=TimeOfDay;
 	public STCoreGrammarAccess.STTimeOfDayLiteralElements getSTTimeOfDayLiteralAccess() {
 		return gaSTCore.getSTTimeOfDayLiteralAccess();
 	}
@@ -804,23 +770,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTTimeOfDayLiteralAccess().getRule();
 	}
 	
-	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-	//STDateAndTimeLiteralType returns datatype::DataType:
-	//    'DATE_AND_TIME#' |
-	//    'LDATE_AND_TIME#' |
-	//    'DT#' |
-	//    'LDT#'
-	//;
-	public STCoreGrammarAccess.STDateAndTimeLiteralTypeElements getSTDateAndTimeLiteralTypeAccess() {
-		return gaSTCore.getSTDateAndTimeLiteralTypeAccess();
-	}
-	
-	public ParserRule getSTDateAndTimeLiteralTypeRule() {
-		return getSTDateAndTimeLiteralTypeAccess().getRule();
-	}
-	
 	//STDateAndTimeLiteral:
-	//    type=STDateAndTimeLiteralType dateValue=Date '-' timeOfDayValue=TimeOfDay;
+	//    type=[datatype::DataType|STDateAndTimeType] '#' dateValue=Date '-' timeOfDayValue=TimeOfDay;
 	public STCoreGrammarAccess.STDateAndTimeLiteralElements getSTDateAndTimeLiteralAccess() {
 		return gaSTCore.getSTDateAndTimeLiteralAccess();
 	}
@@ -829,29 +780,122 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTDateAndTimeLiteralAccess().getRule();
 	}
 	
-	//// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-	//STStringLiteralType returns datatype::DataType:
-	//    'STRING#' |
-	//    'WSTRING#' |
-	//    'CHAR#' |
-	//    'WCHAR#'
-	//;
-	public STCoreGrammarAccess.STStringLiteralTypeElements getSTStringLiteralTypeAccess() {
-		return gaSTCore.getSTStringLiteralTypeAccess();
-	}
-	
-	public ParserRule getSTStringLiteralTypeRule() {
-		return getSTStringLiteralTypeAccess().getRule();
-	}
-	
 	//STStringLiteral:
-	//    (type=STStringLiteralType)? value=(STRING|WSTRING);
+	//    (type=[datatype::DataType|STAnyCharsType] '#')? value=(STRING|WSTRING);
 	public STCoreGrammarAccess.STStringLiteralElements getSTStringLiteralAccess() {
 		return gaSTCore.getSTStringLiteralAccess();
 	}
 	
 	public ParserRule getSTStringLiteralRule() {
 		return getSTStringLiteralAccess().getRule();
+	}
+	
+	//STAnyType:
+	//    ID | STAnyBuiltinType;
+	public STCoreGrammarAccess.STAnyTypeElements getSTAnyTypeAccess() {
+		return gaSTCore.getSTAnyTypeAccess();
+	}
+	
+	public ParserRule getSTAnyTypeRule() {
+		return getSTAnyTypeAccess().getRule();
+	}
+	
+	//STAnyBuiltinType:
+	//    STAnyBitType | STAnyNumType | STAnyDurationType | STAnyDateType | STAnyCharsType;
+	public STCoreGrammarAccess.STAnyBuiltinTypeElements getSTAnyBuiltinTypeAccess() {
+		return gaSTCore.getSTAnyBuiltinTypeAccess();
+	}
+	
+	public ParserRule getSTAnyBuiltinTypeRule() {
+		return getSTAnyBuiltinTypeAccess().getRule();
+	}
+	
+	//STAnyBitType:
+	//    'BOOL' | 'BYTE' | 'WORD' | 'DWORD' | 'LWORD';
+	public STCoreGrammarAccess.STAnyBitTypeElements getSTAnyBitTypeAccess() {
+		return gaSTCore.getSTAnyBitTypeAccess();
+	}
+	
+	public ParserRule getSTAnyBitTypeRule() {
+		return getSTAnyBitTypeAccess().getRule();
+	}
+	
+	//STAnyNumType:
+	//    'SINT' | 'INT' | 'DINT' | 'LINT' | 'USINT' | 'UINT' | 'UDINT' | 'ULINT' | 'REAL' | 'LREAL';
+	public STCoreGrammarAccess.STAnyNumTypeElements getSTAnyNumTypeAccess() {
+		return gaSTCore.getSTAnyNumTypeAccess();
+	}
+	
+	public ParserRule getSTAnyNumTypeRule() {
+		return getSTAnyNumTypeAccess().getRule();
+	}
+	
+	//STAnyDurationType:
+	//    'TIME' | 'LTIME';
+	public STCoreGrammarAccess.STAnyDurationTypeElements getSTAnyDurationTypeAccess() {
+		return gaSTCore.getSTAnyDurationTypeAccess();
+	}
+	
+	public ParserRule getSTAnyDurationTypeRule() {
+		return getSTAnyDurationTypeAccess().getRule();
+	}
+	
+	//STAnyDateType:
+	//    STDateType | STTimeOfDayType | STDateAndTimeType;
+	public STCoreGrammarAccess.STAnyDateTypeElements getSTAnyDateTypeAccess() {
+		return gaSTCore.getSTAnyDateTypeAccess();
+	}
+	
+	public ParserRule getSTAnyDateTypeRule() {
+		return getSTAnyDateTypeAccess().getRule();
+	}
+	
+	//STDateType:
+	//    'DATE' | 'LDATE';
+	public STCoreGrammarAccess.STDateTypeElements getSTDateTypeAccess() {
+		return gaSTCore.getSTDateTypeAccess();
+	}
+	
+	public ParserRule getSTDateTypeRule() {
+		return getSTDateTypeAccess().getRule();
+	}
+	
+	//STTimeOfDayType:
+	//    'TIME_OF_DAY' |
+	//    'LTIME_OF_DAY' |
+	//    'TOD' |
+	//    'LTOD'
+	//;
+	public STCoreGrammarAccess.STTimeOfDayTypeElements getSTTimeOfDayTypeAccess() {
+		return gaSTCore.getSTTimeOfDayTypeAccess();
+	}
+	
+	public ParserRule getSTTimeOfDayTypeRule() {
+		return getSTTimeOfDayTypeAccess().getRule();
+	}
+	
+	//STDateAndTimeType:
+	//    'DATE_AND_TIME' |
+	//    'LDATE_AND_TIME' |
+	//    'DT' |
+	//    'LDT'
+	//;
+	public STCoreGrammarAccess.STDateAndTimeTypeElements getSTDateAndTimeTypeAccess() {
+		return gaSTCore.getSTDateAndTimeTypeAccess();
+	}
+	
+	public ParserRule getSTDateAndTimeTypeRule() {
+		return getSTDateAndTimeTypeAccess().getRule();
+	}
+	
+	//STAnyCharsType:
+	//    'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR';
+	public STCoreGrammarAccess.STAnyCharsTypeElements getSTAnyCharsTypeAccess() {
+		return gaSTCore.getSTAnyCharsTypeAccess();
+	}
+	
+	public ParserRule getSTAnyCharsTypeRule() {
+		return getSTAnyCharsTypeAccess().getRule();
 	}
 	
 	//QualifiedName:

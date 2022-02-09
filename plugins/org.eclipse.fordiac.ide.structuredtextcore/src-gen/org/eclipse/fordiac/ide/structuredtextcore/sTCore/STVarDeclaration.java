@@ -6,7 +6,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.sTCore;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -105,12 +104,12 @@ public interface STVarDeclaration extends INamedElement
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Type</em>' reference.
-   * @see #setType(LibraryElement)
+   * @see #setType(INamedElement)
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage#getSTVarDeclaration_Type()
    * @model
    * @generated
    */
-  LibraryElement getType();
+  INamedElement getType();
 
   /**
    * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getType <em>Type</em>}' reference.
@@ -120,7 +119,7 @@ public interface STVarDeclaration extends INamedElement
    * @see #getType()
    * @generated
    */
-  void setType(LibraryElement value);
+  void setType(INamedElement value);
 
   /**
    * Returns the value of the '<em><b>Max Length</b></em>' containment reference.

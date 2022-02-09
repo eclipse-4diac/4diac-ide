@@ -15,7 +15,6 @@ public abstract class AbstractSTAlgorithmValidator extends STCoreValidator {
 		List<EPackage> result = new ArrayList<EPackage>(super.getEPackages());
 		result.add(org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmPackage.eINSTANCE);
 		result.add(EPackage.Registry.INSTANCE.getEPackage("org.eclipse.fordiac.ide.model.libraryElement"));
-		result.add(EPackage.Registry.INSTANCE.getEPackage("org.eclipse.fordiac.ide.model.datatype"));
 		return result;
 	}
 }

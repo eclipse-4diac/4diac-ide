@@ -96,28 +96,28 @@
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STExpression"/>
     <genClasses ecoreClass="STCore.ecore#//STNumericLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STNumericLiteral/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STNumericLiteral/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STNumericLiteral/value"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STDateLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STDateLiteral/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STDateLiteral/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STDateLiteral/value"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STTimeLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STTimeLiteral/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STTimeLiteral/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STTimeLiteral/value"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STTimeOfDayLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STTimeOfDayLiteral/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STTimeOfDayLiteral/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STTimeOfDayLiteral/value"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STDateAndTimeLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STDateAndTimeLiteral/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STDateAndTimeLiteral/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STDateAndTimeLiteral/dateValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STDateAndTimeLiteral/timeOfDayValue"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStringLiteral">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStringLiteral/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STStringLiteral/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STStringLiteral/value"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STVarDeclaration">

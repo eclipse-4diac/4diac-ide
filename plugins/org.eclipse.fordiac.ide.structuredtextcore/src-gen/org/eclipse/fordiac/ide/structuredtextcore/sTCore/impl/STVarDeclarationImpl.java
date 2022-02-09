@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.InitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
@@ -149,7 +148,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
    * @generated
    * @ordered
    */
-  protected LibraryElement type;
+  protected INamedElement type;
 
   /**
    * The cached value of the '{@link #getMaxLength() <em>Max Length</em>}' containment reference.
@@ -348,12 +347,12 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
    * @generated
    */
   @Override
-  public LibraryElement getType()
+  public INamedElement getType()
   {
     if (type != null && type.eIsProxy())
     {
       InternalEObject oldType = (InternalEObject)type;
-      type = (LibraryElement)eResolveProxy(oldType);
+      type = (INamedElement)eResolveProxy(oldType);
       if (type != oldType)
       {
         if (eNotificationRequired())
@@ -368,7 +367,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
-  public LibraryElement basicGetType()
+  public INamedElement basicGetType()
   {
     return type;
   }
@@ -379,9 +378,9 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
    * @generated
    */
   @Override
-  public void setType(LibraryElement newType)
+  public void setType(INamedElement newType)
   {
-    LibraryElement oldType = type;
+    INamedElement oldType = type;
     type = newType;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__TYPE, oldType, type));
@@ -573,7 +572,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
         getCount().addAll((Collection<? extends String>)newValue);
         return;
       case STCorePackage.ST_VAR_DECLARATION__TYPE:
-        setType((LibraryElement)newValue);
+        setType((INamedElement)newValue);
         return;
       case STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH:
         setMaxLength((STExpression)newValue);
@@ -614,7 +613,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
         getCount().clear();
         return;
       case STCorePackage.ST_VAR_DECLARATION__TYPE:
-        setType((LibraryElement)null);
+        setType((INamedElement)null);
         return;
       case STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH:
         setMaxLength((STExpression)null);

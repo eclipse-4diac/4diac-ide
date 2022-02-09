@@ -636,7 +636,7 @@ public interface STCorePackage extends EPackage
   int ST_NUMERIC_LITERAL = 16;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -673,7 +673,7 @@ public interface STCorePackage extends EPackage
   int ST_DATE_LITERAL = 17;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -710,7 +710,7 @@ public interface STCorePackage extends EPackage
   int ST_TIME_LITERAL = 18;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -747,7 +747,7 @@ public interface STCorePackage extends EPackage
   int ST_TIME_OF_DAY_LITERAL = 19;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -784,7 +784,7 @@ public interface STCorePackage extends EPackage
   int ST_DATE_AND_TIME_LITERAL = 20;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -830,7 +830,7 @@ public interface STCorePackage extends EPackage
   int ST_STRING_LITERAL = 21;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1784,10 +1784,10 @@ public interface STCorePackage extends EPackage
   EClass getSTNumericLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getType()
    * @see #getSTNumericLiteral()
    * @generated
@@ -1816,10 +1816,10 @@ public interface STCorePackage extends EPackage
   EClass getSTDateLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType()
    * @see #getSTDateLiteral()
    * @generated
@@ -1848,10 +1848,10 @@ public interface STCorePackage extends EPackage
   EClass getSTTimeLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType()
    * @see #getSTTimeLiteral()
    * @generated
@@ -1880,10 +1880,10 @@ public interface STCorePackage extends EPackage
   EClass getSTTimeOfDayLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType()
    * @see #getSTTimeOfDayLiteral()
    * @generated
@@ -1912,10 +1912,10 @@ public interface STCorePackage extends EPackage
   EClass getSTDateAndTimeLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType()
    * @see #getSTDateAndTimeLiteral()
    * @generated
@@ -1955,10 +1955,10 @@ public interface STCorePackage extends EPackage
   EClass getSTStringLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getType()
    * @see #getSTStringLiteral()
    * @generated
@@ -2762,7 +2762,7 @@ public interface STCorePackage extends EPackage
     EClass ST_NUMERIC_LITERAL = eINSTANCE.getSTNumericLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2788,7 +2788,7 @@ public interface STCorePackage extends EPackage
     EClass ST_DATE_LITERAL = eINSTANCE.getSTDateLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2814,7 +2814,7 @@ public interface STCorePackage extends EPackage
     EClass ST_TIME_LITERAL = eINSTANCE.getSTTimeLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2840,7 +2840,7 @@ public interface STCorePackage extends EPackage
     EClass ST_TIME_OF_DAY_LITERAL = eINSTANCE.getSTTimeOfDayLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2866,7 +2866,7 @@ public interface STCorePackage extends EPackage
     EClass ST_DATE_AND_TIME_LITERAL = eINSTANCE.getSTDateAndTimeLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2900,7 +2900,7 @@ public interface STCorePackage extends EPackage
     EClass ST_STRING_LITERAL = eINSTANCE.getSTStringLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

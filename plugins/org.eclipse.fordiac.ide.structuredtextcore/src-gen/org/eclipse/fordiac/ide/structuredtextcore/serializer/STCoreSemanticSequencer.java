@@ -404,7 +404,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STDateAndTimeLiteral returns STDateAndTimeLiteral
 	 *
 	 * Constraint:
-	 *     (type=STDateAndTimeLiteralType dateValue=Date timeOfDayValue=TimeOfDay)
+	 *     (type=[DataType|STDateAndTimeType] dateValue=Date timeOfDayValue=TimeOfDay)
 	 */
 	protected void sequence_STDateAndTimeLiteral(ISerializationContext context, STDateAndTimeLiteral semanticObject) {
 		if (errorAcceptor != null) {
@@ -416,9 +416,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeSTDateAndTimeLiteralTypeParserRuleCall_0_0(), semanticObject.getType());
-		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getDateValueDateParserRuleCall_1_0(), semanticObject.getDateValue());
-		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getTimeOfDayValueTimeOfDayParserRuleCall_3_0(), semanticObject.getTimeOfDayValue());
+		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeDataTypeSTDateAndTimeTypeParserRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TYPE, false));
+		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getDateValueDateParserRuleCall_2_0(), semanticObject.getDateValue());
+		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getTimeOfDayValueTimeOfDayParserRuleCall_4_0(), semanticObject.getTimeOfDayValue());
 		feeder.finish();
 	}
 	
@@ -454,7 +454,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STDateLiteral returns STDateLiteral
 	 *
 	 * Constraint:
-	 *     (type=STDateLiteralType value=Date)
+	 *     (type=[DataType|STDateLiteralType] value=Date)
 	 */
 	protected void sequence_STDateLiteral(ISerializationContext context, STDateLiteral semanticObject) {
 		if (errorAcceptor != null) {
@@ -464,8 +464,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_LITERAL__VALUE));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTDateLiteralAccess().getTypeSTDateLiteralTypeParserRuleCall_0_0(), semanticObject.getType());
-		feeder.accept(grammarAccess.getSTDateLiteralAccess().getValueDateParserRuleCall_1_0(), semanticObject.getValue());
+		feeder.accept(grammarAccess.getSTDateLiteralAccess().getTypeDataTypeSTDateLiteralTypeParserRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_DATE_LITERAL__TYPE, false));
+		feeder.accept(grammarAccess.getSTDateLiteralAccess().getValueDateParserRuleCall_2_0(), semanticObject.getValue());
 		feeder.finish();
 	}
 	
@@ -600,7 +600,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STNumericLiteral returns STNumericLiteral
 	 *
 	 * Constraint:
-	 *     (type=STNumericLiteralType? (value=BoolLiteral | value=Number | value=NON_DECIMAL))
+	 *     (type=[DataType|STNumericLiteralType]? (value=BoolLiteral | value=Number | value=NON_DECIMAL))
 	 */
 	protected void sequence_STNumericLiteral(ISerializationContext context, STNumericLiteral semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -699,7 +699,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STStringLiteral returns STStringLiteral
 	 *
 	 * Constraint:
-	 *     (type=STStringLiteralType? (value=STRING | value=WSTRING))
+	 *     (type=[DataType|STAnyCharsType]? (value=STRING | value=WSTRING))
 	 */
 	protected void sequence_STStringLiteral(ISerializationContext context, STStringLiteral semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -737,7 +737,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STTimeLiteral returns STTimeLiteral
 	 *
 	 * Constraint:
-	 *     (type=STTimeLiteralType value=Time)
+	 *     (type=[DataType|STTimeLiteralType] value=Time)
 	 */
 	protected void sequence_STTimeLiteral(ISerializationContext context, STTimeLiteral semanticObject) {
 		if (errorAcceptor != null) {
@@ -747,8 +747,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_LITERAL__VALUE));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTTimeLiteralAccess().getTypeSTTimeLiteralTypeParserRuleCall_0_0(), semanticObject.getType());
-		feeder.accept(grammarAccess.getSTTimeLiteralAccess().getValueTimeParserRuleCall_1_0(), semanticObject.getValue());
+		feeder.accept(grammarAccess.getSTTimeLiteralAccess().getTypeDataTypeSTTimeLiteralTypeParserRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_TIME_LITERAL__TYPE, false));
+		feeder.accept(grammarAccess.getSTTimeLiteralAccess().getValueTimeParserRuleCall_2_0(), semanticObject.getValue());
 		feeder.finish();
 	}
 	
@@ -784,7 +784,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STTimeOfDayLiteral returns STTimeOfDayLiteral
 	 *
 	 * Constraint:
-	 *     (type=STTimeOfDayLiteralType value=TimeOfDay)
+	 *     (type=[DataType|STTimeOfDayType] value=TimeOfDay)
 	 */
 	protected void sequence_STTimeOfDayLiteral(ISerializationContext context, STTimeOfDayLiteral semanticObject) {
 		if (errorAcceptor != null) {
@@ -794,8 +794,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__VALUE));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeSTTimeOfDayLiteralTypeParserRuleCall_0_0(), semanticObject.getType());
-		feeder.accept(grammarAccess.getSTTimeOfDayLiteralAccess().getValueTimeOfDayParserRuleCall_1_0(), semanticObject.getValue());
+		feeder.accept(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeDataTypeSTTimeOfDayTypeParserRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__TYPE, false));
+		feeder.accept(grammarAccess.getSTTimeOfDayLiteralAccess().getValueTimeOfDayParserRuleCall_2_0(), semanticObject.getValue());
 		feeder.finish();
 	}
 	
@@ -879,7 +879,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *         name=ID 
 	 *         locatedAt=[INamedElement|ID]? 
 	 *         (array?='ARRAY' ((ranges+=STExpression ranges+=STExpression*) | (count+='*' count+='*'*)))? 
-	 *         type=[LibraryElement|ID] 
+	 *         type=[INamedElement|STAnyType] 
 	 *         maxLength=STExpression? 
 	 *         defaultValue=InitializerExpression?
 	 *     )
