@@ -39,7 +39,7 @@ public interface STAlgorithmPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/foridac/ide/structuredtextalgorithm/STAlgorithm";
+  String eNS_URI = "http://www.eclipse.org/fordiac/ide/structuredtextalgorithm/STAlgorithm";
 
   /**
    * The package namespace name.
