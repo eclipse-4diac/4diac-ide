@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
@@ -40,8 +40,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSequencer;
 import org.eclipse.xtext.Action;
@@ -125,8 +125,8 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 			case STCorePackage.ST_FOR_STATEMENT:
 				sequence_STForStatement(context, (STForStatement) semanticObject); 
 				return; 
-			case STCorePackage.ST_IF_STATMENT:
-				sequence_STIfStatment(context, (STIfStatment) semanticObject); 
+			case STCorePackage.ST_IF_STATEMENT:
+				sequence_STIfStatement(context, (STIfStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_MEMBER_ACCESS_EXPRESSION:
 				sequence_STAccessExpression(context, (STMemberAccessExpression) semanticObject); 
@@ -158,11 +158,11 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 			case STCorePackage.ST_UNARY_EXPRESSION:
 				sequence_STUnaryExpression(context, (STUnaryExpression) semanticObject); 
 				return; 
+			case STCorePackage.ST_VAR_DECLARATION:
+				sequence_VarDeclaration(context, (STVarDeclaration) semanticObject); 
+				return; 
 			case STCorePackage.ST_WHILE_STATEMENT:
 				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
-				return; 
-			case STCorePackage.VAR_DECLARATION:
-				sequence_VarDeclaration(context, (VarDeclaration) semanticObject); 
 				return; 
 			case STCorePackage.VAR_DECLARATION_BLOCK:
 				if (rule == grammarAccess.getVarDeclarationBlockRule()) {

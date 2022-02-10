@@ -13,6 +13,7 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - access expressions and assignment lvalues
+ *       - literal data types
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
@@ -46,9 +47,9 @@ VarOutputDeclarationBlock returns VarDeclarationBlock:
 	'END_VAR';
 
 VarDeclaration returns libraryElement::INamedElement:
-	{VarDeclaration}
+	{STVarDeclaration}
 	name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
-	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::LibraryElement]) ('[' maxLength=STExpression ']')? (':='
+	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 	defaultValue=InitializerExpression)? ';';
 	
 InitializerExpression:
@@ -61,7 +62,7 @@ ArrayInitElement:
 	indexOrInitExpression=STExpression ('(' initExpression=STExpression ')')?;
 	
 STStatement:
-	(STIfStatment |
+	(STIfStatement |
 	STCaseStatement |
 	STForStatement |
 	STWhileStatement |
@@ -76,7 +77,7 @@ STAssignmentStatement:
 	left=STAccessExpression ':=' right=STExpression
 ;
 
-STIfStatment:
+STIfStatement:
 	'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
 
 STElseIfPart:
@@ -92,7 +93,7 @@ STElsePart:
 	{STElsePart} 'ELSE' statements+=STStatement*;
 
 STForStatement:
-	'FOR' for=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+	'FOR' variable=[STVarDeclaration] ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
 	statements+=STStatement*
 	'END_FOR';
 
@@ -175,81 +176,77 @@ STLiteralExpressions returns STExpression:
 	STDateAndTimeLiteral |
 	STStringLiteral;
 
-// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-STNumericLiteralType returns datatype::DataType:
-	'BOOL#' |
-	'BYTE#' |
-	'WORD#' |
-	'DWORD#' |
-	'LWORD#' |
-	'SINT#' |
-	'INT#' |
-	'DINT#' |
-	'LINT#' |
-	'USINT#' |
-    'UINT#' |
-    'UDINT#' |
-    'ULINT#' |
-    'REAL#' |
-    'LREAL#'
-;
-    
+STNumericLiteralType:
+	STAnyBitType | STAnyNumType;
+
 STNumericLiteral:
-	(type=STNumericLiteralType)?
+	(type=[datatype::DataType|STNumericLiteralType] '#')?
 	value=(BoolLiteral | Number | NON_DECIMAL);
 
-// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-STDateLiteralType returns datatype::DataType:
-	'DATE#' |
-	'LDATE#' |
-	'D#' |
-	'LD#'
+STDateLiteralType:
+	STDateType |
+	'D' |
+	'LD'
 ;
 
 STDateLiteral:
-	type=STDateLiteralType value=Date;
+	type=[datatype::DataType|STDateLiteralType] '#' value=Date;
 
-// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-STTimeLiteralType returns datatype::DataType:
-	'TIME#' |
-	'LTIME#' |
-	'T#' |
-	'LT#'
+STTimeLiteralType:
+	STAnyDurationType |
+	'T' |
+	'LT'
 ;
 
 STTimeLiteral:
-	type=STTimeLiteralType value=Time;
-
-// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-STTimeOfDayLiteralType returns datatype::DataType:
-	'TIME_OF_DAY#' |
-	'TOD#' |
-	'LTOD#'
-;
+	type=[datatype::DataType|STTimeLiteralType] '#' value=Time;
 
 STTimeOfDayLiteral:
-	type=STTimeOfDayLiteralType value=TimeOfDay;
+	type=[datatype::DataType|STTimeOfDayType] '#' value=TimeOfDay;
 
-// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-STDateAndTimeLiteralType returns datatype::DataType:
-	'DATE_AND_TIME#' |
-	'LDATE_AND_TIME#' |
-	'DT#' |
-	'LDT#'
-;
 STDateAndTimeLiteral:
-	type=STDateAndTimeLiteralType dateValue=Date '-' timeOfDayValue=TimeOfDay;
-
-// DataType is abstract, so no object creation! ValueConverter will provide the concrete type
-STStringLiteralType returns datatype::DataType:
-	'STRING#' |
-	'WSTRING#' |
-	'CHAR#' |
-	'WCHAR#'
-;
+	type=[datatype::DataType|STDateAndTimeType] '#' dateValue=Date '-' timeOfDayValue=TimeOfDay;
 
 STStringLiteral:
-	(type=STStringLiteralType)? value=(STRING|WSTRING);
+	(type=[datatype::DataType|STAnyCharsType] '#')? value=(STRING|WSTRING);
+
+STAnyType:
+	ID | STAnyBuiltinType;
+
+STAnyBuiltinType:
+	STAnyBitType | STAnyNumType | STAnyDurationType | STAnyDateType | STAnyCharsType;
+
+STAnyBitType:
+	'BOOL' | 'BYTE' | 'WORD' | 'DWORD' | 'LWORD';
+
+STAnyNumType:
+	'SINT' | 'INT' | 'DINT' | 'LINT' | 'USINT' | 'UINT' | 'UDINT' | 'ULINT' | 'REAL' | 'LREAL';
+
+STAnyDurationType:
+	'TIME' | 'LTIME';
+
+STAnyDateType:
+	STDateType | STTimeOfDayType | STDateAndTimeType;
+
+STDateType:
+	'DATE' | 'LDATE';
+
+STTimeOfDayType:
+	'TIME_OF_DAY' |
+	'LTIME_OF_DAY' |
+	'TOD' |
+	'LTOD'
+;
+
+STDateAndTimeType:
+	'DATE_AND_TIME' |
+	'LDATE_AND_TIME' |
+	'DT' |
+	'LDT'
+;
+
+STAnyCharsType:
+	'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR';
 
 QualifiedName:
 	ID ('.' ID)*;

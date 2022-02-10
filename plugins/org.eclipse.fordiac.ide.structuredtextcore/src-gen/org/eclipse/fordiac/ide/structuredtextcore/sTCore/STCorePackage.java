@@ -266,14 +266,14 @@ public interface STCorePackage extends EPackage
   int ST_ASSIGNMENT_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl <em>ST If Statment</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatementImpl <em>ST If Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatementImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTIfStatement()
    * @generated
    */
-  int ST_IF_STATMENT = 7;
+  int ST_IF_STATEMENT = 7;
 
   /**
    * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -282,7 +282,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__CONDITION = ST_STATEMENT_FEATURE_COUNT + 0;
+  int ST_IF_STATEMENT__CONDITION = ST_STATEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -291,7 +291,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 1;
+  int ST_IF_STATEMENT__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Elseifs</b></em>' containment reference list.
@@ -300,7 +300,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__ELSEIFS = ST_STATEMENT_FEATURE_COUNT + 2;
+  int ST_IF_STATEMENT__ELSEIFS = ST_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Else</b></em>' containment reference.
@@ -309,16 +309,16 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT__ELSE = ST_STATEMENT_FEATURE_COUNT + 3;
+  int ST_IF_STATEMENT__ELSE = ST_STATEMENT_FEATURE_COUNT + 3;
 
   /**
-   * The number of structural features of the '<em>ST If Statment</em>' class.
+   * The number of structural features of the '<em>ST If Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_IF_STATMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 4;
+  int ST_IF_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STElseIfPartImpl <em>ST Else If Part</em>}' class.
@@ -479,13 +479,22 @@ public interface STCorePackage extends EPackage
   int ST_FOR_STATEMENT = 12;
 
   /**
-   * The feature id for the '<em><b>For</b></em>' containment reference.
+   * The feature id for the '<em><b>Variable</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__FOR = ST_STATEMENT_FEATURE_COUNT + 0;
+  int ST_FOR_STATEMENT__VARIABLE = ST_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>From</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ST_FOR_STATEMENT__FROM = ST_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>To</b></em>' containment reference.
@@ -494,7 +503,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__TO = ST_STATEMENT_FEATURE_COUNT + 1;
+  int ST_FOR_STATEMENT__TO = ST_STATEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>By</b></em>' containment reference.
@@ -503,7 +512,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__BY = ST_STATEMENT_FEATURE_COUNT + 2;
+  int ST_FOR_STATEMENT__BY = ST_STATEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -512,7 +521,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 3;
+  int ST_FOR_STATEMENT__STATEMENTS = ST_STATEMENT_FEATURE_COUNT + 4;
 
   /**
    * The number of structural features of the '<em>ST For Statement</em>' class.
@@ -521,7 +530,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int ST_FOR_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 4;
+  int ST_FOR_STATEMENT_FEATURE_COUNT = ST_STATEMENT_FEATURE_COUNT + 5;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STWhileStatementImpl <em>ST While Statement</em>}' class.
@@ -627,7 +636,7 @@ public interface STCorePackage extends EPackage
   int ST_NUMERIC_LITERAL = 16;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -664,7 +673,7 @@ public interface STCorePackage extends EPackage
   int ST_DATE_LITERAL = 17;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -701,7 +710,7 @@ public interface STCorePackage extends EPackage
   int ST_TIME_LITERAL = 18;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -738,7 +747,7 @@ public interface STCorePackage extends EPackage
   int ST_TIME_OF_DAY_LITERAL = 19;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -775,7 +784,7 @@ public interface STCorePackage extends EPackage
   int ST_DATE_AND_TIME_LITERAL = 20;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -821,7 +830,7 @@ public interface STCorePackage extends EPackage
   int ST_STRING_LITERAL = 21;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -848,14 +857,14 @@ public interface STCorePackage extends EPackage
   int ST_STRING_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl <em>Var Declaration</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl <em>ST Var Declaration</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTVarDeclaration()
    * @generated
    */
-  int VAR_DECLARATION = 22;
+  int ST_VAR_DECLARATION = 22;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -864,7 +873,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
+  int ST_VAR_DECLARATION__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
 
   /**
    * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -873,7 +882,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
+  int ST_VAR_DECLARATION__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
 
   /**
    * The feature id for the '<em><b>Located At</b></em>' reference.
@@ -882,7 +891,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__LOCATED_AT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
+  int ST_VAR_DECLARATION__LOCATED_AT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Array</b></em>' attribute.
@@ -891,7 +900,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__ARRAY = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 1;
+  int ST_VAR_DECLARATION__ARRAY = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Ranges</b></em>' containment reference list.
@@ -900,7 +909,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__RANGES = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 2;
+  int ST_VAR_DECLARATION__RANGES = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Count</b></em>' attribute list.
@@ -909,7 +918,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 3;
+  int ST_VAR_DECLARATION__COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' reference.
@@ -918,7 +927,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__TYPE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 4;
+  int ST_VAR_DECLARATION__TYPE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Max Length</b></em>' containment reference.
@@ -927,7 +936,7 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__MAX_LENGTH = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 5;
+  int ST_VAR_DECLARATION__MAX_LENGTH = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Default Value</b></em>' containment reference.
@@ -936,16 +945,16 @@ public interface STCorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION__DEFAULT_VALUE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 6;
+  int ST_VAR_DECLARATION__DEFAULT_VALUE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 6;
 
   /**
-   * The number of structural features of the '<em>Var Declaration</em>' class.
+   * The number of structural features of the '<em>ST Var Declaration</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VAR_DECLARATION_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 7;
+  int ST_VAR_DECLARATION_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 7;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.
@@ -1444,58 +1453,58 @@ public interface STCorePackage extends EPackage
   EReference getSTAssignmentStatement_Right();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment <em>ST If Statment</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement <em>ST If Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>ST If Statment</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment
+   * @return the meta object for class '<em>ST If Statement</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement
    * @generated
    */
-  EClass getSTIfStatment();
+  EClass getSTIfStatement();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getCondition <em>Condition</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getCondition <em>Condition</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Condition</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getCondition()
-   * @see #getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getCondition()
+   * @see #getSTIfStatement()
    * @generated
    */
-  EReference getSTIfStatment_Condition();
+  EReference getSTIfStatement_Condition();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getStatements <em>Statements</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getStatements <em>Statements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Statements</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getStatements()
-   * @see #getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getStatements()
+   * @see #getSTIfStatement()
    * @generated
    */
-  EReference getSTIfStatment_Statements();
+  EReference getSTIfStatement_Statements();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElseifs <em>Elseifs</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElseifs <em>Elseifs</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Elseifs</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElseifs()
-   * @see #getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElseifs()
+   * @see #getSTIfStatement()
    * @generated
    */
-  EReference getSTIfStatment_Elseifs();
+  EReference getSTIfStatement_Elseifs();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElse <em>Else</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElse <em>Else</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Else</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatment#getElse()
-   * @see #getSTIfStatment()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement#getElse()
+   * @see #getSTIfStatement()
    * @generated
    */
-  EReference getSTIfStatment_Else();
+  EReference getSTIfStatement_Else();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart <em>ST Else If Part</em>}'.
@@ -1636,15 +1645,26 @@ public interface STCorePackage extends EPackage
   EClass getSTForStatement();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFor <em>For</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getVariable <em>Variable</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>For</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFor()
+   * @return the meta object for the reference '<em>Variable</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getVariable()
    * @see #getSTForStatement()
    * @generated
    */
-  EReference getSTForStatement_For();
+  EReference getSTForStatement_Variable();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFrom <em>From</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>From</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getFrom()
+   * @see #getSTForStatement()
+   * @generated
+   */
+  EReference getSTForStatement_From();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement#getTo <em>To</em>}'.
@@ -1764,10 +1784,10 @@ public interface STCorePackage extends EPackage
   EClass getSTNumericLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral#getType()
    * @see #getSTNumericLiteral()
    * @generated
@@ -1796,10 +1816,10 @@ public interface STCorePackage extends EPackage
   EClass getSTDateLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral#getType()
    * @see #getSTDateLiteral()
    * @generated
@@ -1828,10 +1848,10 @@ public interface STCorePackage extends EPackage
   EClass getSTTimeLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral#getType()
    * @see #getSTTimeLiteral()
    * @generated
@@ -1860,10 +1880,10 @@ public interface STCorePackage extends EPackage
   EClass getSTTimeOfDayLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral#getType()
    * @see #getSTTimeOfDayLiteral()
    * @generated
@@ -1892,10 +1912,10 @@ public interface STCorePackage extends EPackage
   EClass getSTDateAndTimeLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral#getType()
    * @see #getSTDateAndTimeLiteral()
    * @generated
@@ -1935,10 +1955,10 @@ public interface STCorePackage extends EPackage
   EClass getSTStringLiteral();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral#getType()
    * @see #getSTStringLiteral()
    * @generated
@@ -1957,91 +1977,91 @@ public interface STCorePackage extends EPackage
   EAttribute getSTStringLiteral_Value();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration <em>Var Declaration</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration <em>ST Var Declaration</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Var Declaration</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration
+   * @return the meta object for class '<em>ST Var Declaration</em>'.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration
    * @generated
    */
-  EClass getVarDeclaration();
+  EClass getSTVarDeclaration();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getLocatedAt <em>Located At</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getLocatedAt <em>Located At</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Located At</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getLocatedAt()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getLocatedAt()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_LocatedAt();
+  EReference getSTVarDeclaration_LocatedAt();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#isArray <em>Array</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#isArray <em>Array</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Array</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#isArray()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#isArray()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EAttribute getVarDeclaration_Array();
+  EAttribute getSTVarDeclaration_Array();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getRanges <em>Ranges</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getRanges <em>Ranges</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Ranges</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getRanges()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getRanges()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_Ranges();
+  EReference getSTVarDeclaration_Ranges();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getCount <em>Count</em>}'.
+   * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getCount <em>Count</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute list '<em>Count</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getCount()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getCount()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EAttribute getVarDeclaration_Count();
+  EAttribute getSTVarDeclaration_Count();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Type</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getType()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getType()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_Type();
+  EReference getSTVarDeclaration_Type();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getMaxLength <em>Max Length</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getMaxLength <em>Max Length</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Max Length</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getMaxLength()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getMaxLength()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_MaxLength();
+  EReference getSTVarDeclaration_MaxLength();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getDefaultValue <em>Default Value</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getDefaultValue <em>Default Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Default Value</em>'.
-   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclaration#getDefaultValue()
-   * @see #getVarDeclaration()
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration#getDefaultValue()
+   * @see #getSTVarDeclaration()
    * @generated
    */
-  EReference getVarDeclaration_DefaultValue();
+  EReference getSTVarDeclaration_DefaultValue();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn <em>ST Return</em>}'.
@@ -2474,14 +2494,14 @@ public interface STCorePackage extends EPackage
     EReference ST_ASSIGNMENT_STATEMENT__RIGHT = eINSTANCE.getSTAssignmentStatement_Right();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl <em>ST If Statment</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatementImpl <em>ST If Statement</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatmentImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTIfStatment()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STIfStatementImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTIfStatement()
      * @generated
      */
-    EClass ST_IF_STATMENT = eINSTANCE.getSTIfStatment();
+    EClass ST_IF_STATEMENT = eINSTANCE.getSTIfStatement();
 
     /**
      * The meta object literal for the '<em><b>Condition</b></em>' containment reference feature.
@@ -2489,7 +2509,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_IF_STATMENT__CONDITION = eINSTANCE.getSTIfStatment_Condition();
+    EReference ST_IF_STATEMENT__CONDITION = eINSTANCE.getSTIfStatement_Condition();
 
     /**
      * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
@@ -2497,7 +2517,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_IF_STATMENT__STATEMENTS = eINSTANCE.getSTIfStatment_Statements();
+    EReference ST_IF_STATEMENT__STATEMENTS = eINSTANCE.getSTIfStatement_Statements();
 
     /**
      * The meta object literal for the '<em><b>Elseifs</b></em>' containment reference list feature.
@@ -2505,7 +2525,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_IF_STATMENT__ELSEIFS = eINSTANCE.getSTIfStatment_Elseifs();
+    EReference ST_IF_STATEMENT__ELSEIFS = eINSTANCE.getSTIfStatement_Elseifs();
 
     /**
      * The meta object literal for the '<em><b>Else</b></em>' containment reference feature.
@@ -2513,7 +2533,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_IF_STATMENT__ELSE = eINSTANCE.getSTIfStatment_Else();
+    EReference ST_IF_STATEMENT__ELSE = eINSTANCE.getSTIfStatement_Else();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STElseIfPartImpl <em>ST Else If Part</em>}' class.
@@ -2630,12 +2650,20 @@ public interface STCorePackage extends EPackage
     EClass ST_FOR_STATEMENT = eINSTANCE.getSTForStatement();
 
     /**
-     * The meta object literal for the '<em><b>For</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Variable</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ST_FOR_STATEMENT__FOR = eINSTANCE.getSTForStatement_For();
+    EReference ST_FOR_STATEMENT__VARIABLE = eINSTANCE.getSTForStatement_Variable();
+
+    /**
+     * The meta object literal for the '<em><b>From</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ST_FOR_STATEMENT__FROM = eINSTANCE.getSTForStatement_From();
 
     /**
      * The meta object literal for the '<em><b>To</b></em>' containment reference feature.
@@ -2734,7 +2762,7 @@ public interface STCorePackage extends EPackage
     EClass ST_NUMERIC_LITERAL = eINSTANCE.getSTNumericLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2760,7 +2788,7 @@ public interface STCorePackage extends EPackage
     EClass ST_DATE_LITERAL = eINSTANCE.getSTDateLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2786,7 +2814,7 @@ public interface STCorePackage extends EPackage
     EClass ST_TIME_LITERAL = eINSTANCE.getSTTimeLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2812,7 +2840,7 @@ public interface STCorePackage extends EPackage
     EClass ST_TIME_OF_DAY_LITERAL = eINSTANCE.getSTTimeOfDayLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2838,7 +2866,7 @@ public interface STCorePackage extends EPackage
     EClass ST_DATE_AND_TIME_LITERAL = eINSTANCE.getSTDateAndTimeLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2872,7 +2900,7 @@ public interface STCorePackage extends EPackage
     EClass ST_STRING_LITERAL = eINSTANCE.getSTStringLiteral();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2888,14 +2916,14 @@ public interface STCorePackage extends EPackage
     EAttribute ST_STRING_LITERAL__VALUE = eINSTANCE.getSTStringLiteral_Value();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl <em>Var Declaration</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl <em>ST Var Declaration</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.VarDeclarationImpl
-     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getVarDeclaration()
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STVarDeclarationImpl
+     * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STCorePackageImpl#getSTVarDeclaration()
      * @generated
      */
-    EClass VAR_DECLARATION = eINSTANCE.getVarDeclaration();
+    EClass ST_VAR_DECLARATION = eINSTANCE.getSTVarDeclaration();
 
     /**
      * The meta object literal for the '<em><b>Located At</b></em>' reference feature.
@@ -2903,7 +2931,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__LOCATED_AT = eINSTANCE.getVarDeclaration_LocatedAt();
+    EReference ST_VAR_DECLARATION__LOCATED_AT = eINSTANCE.getSTVarDeclaration_LocatedAt();
 
     /**
      * The meta object literal for the '<em><b>Array</b></em>' attribute feature.
@@ -2911,7 +2939,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute VAR_DECLARATION__ARRAY = eINSTANCE.getVarDeclaration_Array();
+    EAttribute ST_VAR_DECLARATION__ARRAY = eINSTANCE.getSTVarDeclaration_Array();
 
     /**
      * The meta object literal for the '<em><b>Ranges</b></em>' containment reference list feature.
@@ -2919,7 +2947,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__RANGES = eINSTANCE.getVarDeclaration_Ranges();
+    EReference ST_VAR_DECLARATION__RANGES = eINSTANCE.getSTVarDeclaration_Ranges();
 
     /**
      * The meta object literal for the '<em><b>Count</b></em>' attribute list feature.
@@ -2927,7 +2955,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute VAR_DECLARATION__COUNT = eINSTANCE.getVarDeclaration_Count();
+    EAttribute ST_VAR_DECLARATION__COUNT = eINSTANCE.getSTVarDeclaration_Count();
 
     /**
      * The meta object literal for the '<em><b>Type</b></em>' reference feature.
@@ -2935,7 +2963,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__TYPE = eINSTANCE.getVarDeclaration_Type();
+    EReference ST_VAR_DECLARATION__TYPE = eINSTANCE.getSTVarDeclaration_Type();
 
     /**
      * The meta object literal for the '<em><b>Max Length</b></em>' containment reference feature.
@@ -2943,7 +2971,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__MAX_LENGTH = eINSTANCE.getVarDeclaration_MaxLength();
+    EReference ST_VAR_DECLARATION__MAX_LENGTH = eINSTANCE.getSTVarDeclaration_MaxLength();
 
     /**
      * The meta object literal for the '<em><b>Default Value</b></em>' containment reference feature.
@@ -2951,7 +2979,7 @@ public interface STCorePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference VAR_DECLARATION__DEFAULT_VALUE = eINSTANCE.getVarDeclaration_DefaultValue();
+    EReference ST_VAR_DECLARATION__DEFAULT_VALUE = eINSTANCE.getSTVarDeclaration_DefaultValue();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl.STReturnImpl <em>ST Return</em>}' class.

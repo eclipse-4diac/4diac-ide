@@ -126,11 +126,11 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.ST_IF_STATMENT:
+      case STCorePackage.ST_IF_STATEMENT:
       {
-        STIfStatment stIfStatment = (STIfStatment)theEObject;
-        T result = caseSTIfStatment(stIfStatment);
-        if (result == null) result = caseSTStatement(stIfStatment);
+        STIfStatement stIfStatement = (STIfStatement)theEObject;
+        T result = caseSTIfStatement(stIfStatement);
+        if (result == null) result = caseSTStatement(stIfStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -249,11 +249,11 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case STCorePackage.VAR_DECLARATION:
+      case STCorePackage.ST_VAR_DECLARATION:
       {
-        VarDeclaration varDeclaration = (VarDeclaration)theEObject;
-        T result = caseVarDeclaration(varDeclaration);
-        if (result == null) result = caseINamedElement(varDeclaration);
+        STVarDeclaration stVarDeclaration = (STVarDeclaration)theEObject;
+        T result = caseSTVarDeclaration(stVarDeclaration);
+        if (result == null) result = caseINamedElement(stVarDeclaration);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -460,17 +460,17 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>ST If Statment</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST If Statement</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>ST If Statment</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST If Statement</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSTIfStatment(STIfStatment object)
+  public T caseSTIfStatement(STIfStatement object)
   {
     return null;
   }
@@ -700,17 +700,17 @@ public class STCoreSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Var Declaration</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ST Var Declaration</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Var Declaration</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ST Var Declaration</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseVarDeclaration(VarDeclaration object)
+  public T caseSTVarDeclaration(STVarDeclaration object)
   {
     return null;
   }

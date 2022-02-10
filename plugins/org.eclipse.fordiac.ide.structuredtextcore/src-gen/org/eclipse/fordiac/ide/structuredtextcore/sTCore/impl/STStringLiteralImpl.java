@@ -4,7 +4,6 @@
 package org.eclipse.fordiac.ide.structuredtextcore.sTCore.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -33,7 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
 public class STStringLiteralImpl extends STExpressionImpl implements STStringLiteral
 {
   /**
-   * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
+   * The cached value of the '{@link #getType() <em>Type</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getType()
@@ -91,6 +90,16 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
   @Override
   public DataType getType()
   {
+    if (type != null && type.eIsProxy())
+    {
+      InternalEObject oldType = (InternalEObject)type;
+      type = (DataType)eResolveProxy(oldType);
+      if (type != oldType)
+      {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_STRING_LITERAL__TYPE, oldType, type));
+      }
+    }
     return type;
   }
 
@@ -99,16 +108,9 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetType(DataType newType, NotificationChain msgs)
+  public DataType basicGetType()
   {
-    DataType oldType = type;
-    type = newType;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STRING_LITERAL__TYPE, oldType, newType);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
+    return type;
   }
 
   /**
@@ -119,18 +121,10 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
   @Override
   public void setType(DataType newType)
   {
-    if (newType != type)
-    {
-      NotificationChain msgs = null;
-      if (type != null)
-        msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_STRING_LITERAL__TYPE, null, msgs);
-      if (newType != null)
-        msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_STRING_LITERAL__TYPE, null, msgs);
-      msgs = basicSetType(newType, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STRING_LITERAL__TYPE, newType, newType));
+    DataType oldType = type;
+    type = newType;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STRING_LITERAL__TYPE, oldType, type));
   }
 
   /**
@@ -164,28 +158,13 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
    * @generated
    */
   @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
-    switch (featureID)
-    {
-      case STCorePackage.ST_STRING_LITERAL__TYPE:
-        return basicSetType(null, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
     {
       case STCorePackage.ST_STRING_LITERAL__TYPE:
-        return getType();
+        if (resolve) return getType();
+        return basicGetType();
       case STCorePackage.ST_STRING_LITERAL__VALUE:
         return getValue();
     }

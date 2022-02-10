@@ -15,7 +15,6 @@ public abstract class AbstractSTCoreValidator extends AbstractDeclarativeValidat
 		List<EPackage> result = new ArrayList<EPackage>();
 		result.add(org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage.eINSTANCE);
 		result.add(EPackage.Registry.INSTANCE.getEPackage("org.eclipse.fordiac.ide.model.libraryElement"));
-		result.add(EPackage.Registry.INSTANCE.getEPackage("org.eclipse.fordiac.ide.model.datatype"));
 		return result;
 	}
 }
