@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2013, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2020 Johannes Kepler Universiy Linz
+ * 				 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,13 +13,13 @@
  *  Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
  *  Alois Zoitl - Changed to a per project Type and Data TypeLibrary
+ *  Martin Melik-Merkumians - Changes to reflect returned List instead of array
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -68,12 +69,12 @@ public final class DataTypeLibrary extends ResourceImpl {
 
 	/** Inits the elementary types. */
 	private void initElementaryTypes() {
-		Arrays.asList(ElementaryTypes.getAllElementaryType()).forEach(this::addToTypeMap);
+		ElementaryTypes.getAllElementaryType().forEach(this::addToTypeMap);
 	}
 
 
 	private void initGenericTypes() {
-		Arrays.asList(GenericTypes.getAllGenericTypes()).forEach(this::addToTypeMap);
+		GenericTypes.getAllGenericTypes().forEach(this::addToTypeMap);
 	}
 
 	public Map<String, DataTypePaletteEntry> getDerivedDataTypes() {
@@ -92,7 +93,7 @@ public final class DataTypeLibrary extends ResourceImpl {
 	}
 
 	public static List<DataType> getNonUserDefinedDataTypes() {
-		return Arrays.asList(IecTypes.ElementaryTypes.getAllElementaryType());
+		return IecTypes.ElementaryTypes.getAllElementaryType();
 	}
 
 	/** Gets the data types sorted alphabetically from a to z.

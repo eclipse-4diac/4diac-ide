@@ -2,6 +2,7 @@
  * Copyright (c) 2018-2020 Johannes Kepler University
  * 				 2020 Primetals Technologies Germany GmbH
  * 				 2021 Primetals Technologies Austria GmbH
+ * 				 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  * Contributors:
  *   Michael Jaeger - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - fixed isDateCompatibleWith
+ *   Martin Melik Merkumians - adds missing keyword types
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.datatype.helper;
 
@@ -26,8 +28,7 @@ public final class ElementaryDataTypeCompatibility {
 	}
 
 	public static boolean isLRealCompatibleWith(final DataType other) {
-		return (other == ElementaryTypes.LREAL || other == GenericTypes.ANY_REAL)
-				|| isAnyNumCompatibleWith(other);
+		return (other == ElementaryTypes.LREAL || other == GenericTypes.ANY_REAL) || isAnyNumCompatibleWith(other);
 	}
 
 	public static boolean isUsintCompatibleWith(final DataType other) {
@@ -110,12 +111,14 @@ public final class ElementaryDataTypeCompatibility {
 	}
 
 	public static boolean isDateAndTimeCompatibleWith(final DataType other) {
-		return other == ElementaryTypes.DATE_AND_TIME || other == ElementaryTypes.LDATE_AND_TIME
+		return other == ElementaryTypes.DATE_AND_TIME || other == ElementaryTypes.DT
+				|| other == ElementaryTypes.LDATE_AND_TIME || other == ElementaryTypes.LDT
 				|| isAnyDateCompatibleWith(other);
 	}
 
 	public static boolean isLdtCompatibleWith(final DataType other) {
-		return other == ElementaryTypes.LDT || isAnyDateCompatibleWith(other);
+		return other == ElementaryTypes.LDT || other == ElementaryTypes.LDATE_AND_TIME
+				|| isAnyDateCompatibleWith(other);
 	}
 
 	public static boolean isDateCompatibleWith(final DataType other) {
@@ -127,11 +130,11 @@ public final class ElementaryDataTypeCompatibility {
 	}
 
 	public static boolean isTimeOfDayCompatibleWith(final DataType other) {
-		return other == ElementaryTypes.TIME_OF_DAY || isAnyDateCompatibleWith(other);
+		return other == ElementaryTypes.TIME_OF_DAY || other == ElementaryTypes.TOD || isAnyDateCompatibleWith(other);
 	}
 
 	public static boolean isLtodCompatibleWith(final DataType other) {
-		return other == ElementaryTypes.LTOD || isAnyDateCompatibleWith(other);
+		return other == ElementaryTypes.LTOD || other == ElementaryTypes.LTIME_OF_DAY || isAnyDateCompatibleWith(other);
 	}
 
 	public static boolean isAnyCharsCompatibleWith(final DataType other) {

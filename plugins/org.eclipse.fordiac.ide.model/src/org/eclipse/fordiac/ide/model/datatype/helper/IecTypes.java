@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018-2021 Johannes Kepler University, Primetals Technologies Germany GmbH
- * 				 2021 Primetals Technologies Austria GmbH
+ * 				 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,8 +12,11 @@
  *   Michael Jaeger - initial API and implementation and/or initial documentation
  *   Alois Zoitl	- added ANY_STRUCT to the generic type list
  *   Martin Melik Merkumians - adds DT and TOD
+ *   Martin Melik Merkumians - changes arrays with types to immutable lists, and adds missing type keywords
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.datatype.helper;
+
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
@@ -97,12 +100,13 @@ public final class IecTypes {
 		public static final DateType DATE = DataFactory.eINSTANCE.createDateType();
 		public static final LdateType LDATE = DataFactory.eINSTANCE.createLdateType();
 		public static final DateAndTimeType DATE_AND_TIME = DataFactory.eINSTANCE.createDateAndTimeType();
-		public static final DateAndTimeType DT = DATE_AND_TIME;
+		public static final DateAndTimeType DT = DataFactory.eINSTANCE.createDateAndTimeType();
 		public static final LdtType LDATE_AND_TIME = DataFactory.eINSTANCE.createLdtType();
-		public static final LdtType LDT = LDATE_AND_TIME;
+		public static final LdtType LDT = DataFactory.eINSTANCE.createLdtType();
 		public static final TimeOfDayType TIME_OF_DAY = DataFactory.eINSTANCE.createTimeOfDayType();
-		public static final TimeOfDayType TOD = TIME_OF_DAY;
+		public static final TimeOfDayType TOD = DataFactory.eINSTANCE.createTimeOfDayType();
 		public static final LtodType LTOD = DataFactory.eINSTANCE.createLtodType();
+		public static final LtodType LTIME_OF_DAY = DataFactory.eINSTANCE.createLtodType();
 
 		static {
 			REAL.setName(FordiacKeywords.REAL);
@@ -138,26 +142,24 @@ public final class IecTypes {
 			DATE_AND_TIME.setName(FordiacKeywords.DATE_AND_TIME);
 			DT.setName(FordiacKeywords.DT);
 			LDATE_AND_TIME.setName(FordiacKeywords.LDATE_AND_TIME);
-			LDT.setName(FordiacKeywords.LDATE_AND_TIME);
+			LDT.setName(FordiacKeywords.LDT);
 			TIME_OF_DAY.setName(FordiacKeywords.TIME_OF_DAY);
 			TOD.setName(FordiacKeywords.TOD);
-			LTOD.setName(FordiacKeywords.LTIME_OF_DAY);
+			LTIME_OF_DAY.setName(FordiacKeywords.LTIME_OF_DAY);
+			LTOD.setName(FordiacKeywords.LTOD);
 		}
 
-		public static DataType[] getAllElementaryType() {
-			return new DataType[] { REAL, LREAL, USINT, UINT, UDINT, ULINT, SINT, INT, DINT, LINT, TIME, LTIME, BOOL,
-					BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE, LDATE, DATE_AND_TIME, DT,
-					LDATE_AND_TIME, LDT, TIME_OF_DAY, TOD, LTOD };
+		private static final List<DataType> ANY_ELEMENTARY_TYPES = List.of(REAL, LREAL, USINT, UINT, UDINT, ULINT, SINT,
+				INT, DINT, LINT, TIME, LTIME, BOOL, BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE, LDATE,
+				DATE_AND_TIME, DT, LDATE_AND_TIME, LDT, TIME_OF_DAY, TOD, LTIME_OF_DAY, LTOD);
+
+		public static List<DataType> getAllElementaryType() {
+			return ANY_ELEMENTARY_TYPES;
 		}
 
 		public static DataType getTypeByName(final String name) {
-			final var allElementaryTypes = getAllElementaryType();
-			for (final DataType type : allElementaryTypes) {
-				if (type.getName().equalsIgnoreCase(name)) {
-					return type;
-				}
-			}
-			return null;
+			return getAllElementaryType().stream().filter(type -> type.getName().equalsIgnoreCase(name)).findFirst()
+					.orElse(null);
 		}
 
 		private ElementaryTypes() {
@@ -218,19 +220,15 @@ public final class IecTypes {
 		}
 
 		public static boolean isAnyType(final DataType type) {
-			for (final DataType dt : getAllGenericTypes()) {
-				if (dt == type) {
-					return true;
-				}
-			}
-
-			return false;
+			return getAllGenericTypes().stream().anyMatch(datatype -> datatype == type);
 		}
 
-		public static DataType[] getAllGenericTypes() {
-			return new DataType[] { ANY, ANY_ELEMENTARY, ANY_DERIVED, ANY_MAGNITUDE, ANY_NUM, ANY_REAL, ANY_INT,
-					ANY_UNSIGNED, ANY_SIGNED, ANY_DURATION, ANY_BIT, ANY_CHARS, ANY_STRING, ANY_CHAR, ANY_DATE,
-					ANY_STRUCT };
+		private static final List<DataType> ALL_GENERIC_TYPES = List.of(ANY, ANY_ELEMENTARY, ANY_DERIVED, ANY_MAGNITUDE,
+				ANY_NUM, ANY_REAL, ANY_INT, ANY_UNSIGNED, ANY_SIGNED, ANY_DURATION, ANY_BIT, ANY_CHARS, ANY_STRING,
+				ANY_CHAR, ANY_DATE, ANY_STRUCT);
+
+		public static List<DataType> getAllGenericTypes() {
+			return ALL_GENERIC_TYPES;
 		}
 
 		private GenericTypes() {
