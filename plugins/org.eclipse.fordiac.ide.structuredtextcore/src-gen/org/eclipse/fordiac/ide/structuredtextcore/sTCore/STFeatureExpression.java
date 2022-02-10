@@ -50,7 +50,7 @@ public interface STFeatureExpression extends STExpression
 
   /**
    * Returns the value of the '<em><b>Parameters</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallArgument}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Parameters</em>' containment reference list.
@@ -58,6 +58,6 @@ public interface STFeatureExpression extends STExpression
    * @model containment="true"
    * @generated
    */
-  EList<STExpression> getParameters();
+  EList<STCallArgument> getParameters();
 
 } // STFeatureExpression

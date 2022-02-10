@@ -21,9 +21,10 @@ import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
 STFunction:
 	functions+=FunctionDefinition*;
 
-FunctionDefinition:
+FunctionDefinition returns libraryElement::INamedElement:
+	{FunctionDefinition}
 	'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
-		(varDeclarations+=VarDeclaration | varTempDeclarations+=VarTempDeclarationBlock |
+		(varDeclarations+=VarDeclarationBlock | varTempDeclarations+=VarTempDeclarationBlock |
 		varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
 		code += STStatement*
 	'END_FUNCTION';

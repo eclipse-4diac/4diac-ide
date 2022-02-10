@@ -18,6 +18,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedInputArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedOutputArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue;
@@ -94,6 +98,18 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
+				return; 
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT:
+				sequence_STCallNamedInputArgument(context, (STCallNamedInputArgument) semanticObject); 
+				return; 
+			case STCorePackage.ST_CALL_NAMED_OUTPUT_ARGUMENT:
+				sequence_STCallNamedOutputArgument(context, (STCallNamedOutputArgument) semanticObject); 
+				return; 
+			case STCorePackage.ST_CALL_STATEMENT:
+				sequence_STCallStatement(context, (STCallStatement) semanticObject); 
+				return; 
+			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT:
+				sequence_STCallUnnamedArgument(context, (STCallUnnamedArgument) semanticObject); 
 				return; 
 			case STCorePackage.ST_CASE_CASES:
 				sequence_STCaseCases(context, (STCaseCases) semanticObject); 

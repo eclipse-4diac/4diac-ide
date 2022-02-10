@@ -106,15 +106,22 @@ ruleFunctionDefinition returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		otherlv_0=FUNCTION
+		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getFunctionDefinitionAccess().getFunctionDefinitionAction_0(),
+					$current);
+			}
+		)
+		otherlv_1=FUNCTION
 		{
-			newLeafNode(otherlv_0, grammarAccess.getFunctionDefinitionAccess().getFUNCTIONKeyword_0());
+			newLeafNode(otherlv_1, grammarAccess.getFunctionDefinitionAccess().getFUNCTIONKeyword_1());
 		}
 		(
 			(
-				lv_name_1_0=RULE_ID
+				lv_name_2_0=RULE_ID
 				{
-					newLeafNode(lv_name_1_0, grammarAccess.getFunctionDefinitionAccess().getNameIDTerminalRuleCall_1_0());
+					newLeafNode(lv_name_2_0, grammarAccess.getFunctionDefinitionAccess().getNameIDTerminalRuleCall_2_0());
 				}
 				{
 					if ($current==null) {
@@ -123,15 +130,15 @@ ruleFunctionDefinition returns [EObject current=null]
 					setWithLastConsumed(
 						$current,
 						"name",
-						lv_name_1_0,
+						lv_name_2_0,
 						"org.eclipse.fordiac.ide.structuredtextcore.STCore.ID");
 				}
 			)
 		)
 		(
-			otherlv_2=Colon
+			otherlv_3=Colon
 			{
-				newLeafNode(otherlv_2, grammarAccess.getFunctionDefinitionAccess().getColonKeyword_2_0());
+				newLeafNode(otherlv_3, grammarAccess.getFunctionDefinitionAccess().getColonKeyword_3_0());
 			}
 			(
 				(
@@ -140,9 +147,9 @@ ruleFunctionDefinition returns [EObject current=null]
 							$current = createModelElement(grammarAccess.getFunctionDefinitionRule());
 						}
 					}
-					otherlv_3=RULE_ID
+					otherlv_4=RULE_ID
 					{
-						newLeafNode(otherlv_3, grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeCrossReference_2_1_0());
+						newLeafNode(otherlv_4, grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeCrossReference_3_1_0());
 					}
 				)
 			)
@@ -151,9 +158,9 @@ ruleFunctionDefinition returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getVarDeclarationsVarDeclarationParserRuleCall_3_0_0());
+						newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getVarDeclarationsVarDeclarationBlockParserRuleCall_4_0_0());
 					}
-					lv_varDeclarations_4_0=ruleVarDeclaration
+					lv_varDeclarations_5_0=ruleVarDeclarationBlock
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getFunctionDefinitionRule());
@@ -161,8 +168,8 @@ ruleFunctionDefinition returns [EObject current=null]
 						add(
 							$current,
 							"varDeclarations",
-							lv_varDeclarations_4_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.VarDeclaration");
+							lv_varDeclarations_5_0,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.VarDeclarationBlock");
 						afterParserOrEnumRuleCall();
 					}
 				)
@@ -171,9 +178,9 @@ ruleFunctionDefinition returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getVarTempDeclarationsVarTempDeclarationBlockParserRuleCall_3_1_0());
+						newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getVarTempDeclarationsVarTempDeclarationBlockParserRuleCall_4_1_0());
 					}
-					lv_varTempDeclarations_5_0=ruleVarTempDeclarationBlock
+					lv_varTempDeclarations_6_0=ruleVarTempDeclarationBlock
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getFunctionDefinitionRule());
@@ -181,7 +188,7 @@ ruleFunctionDefinition returns [EObject current=null]
 						add(
 							$current,
 							"varTempDeclarations",
-							lv_varTempDeclarations_5_0,
+							lv_varTempDeclarations_6_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.VarTempDeclarationBlock");
 						afterParserOrEnumRuleCall();
 					}
@@ -191,9 +198,9 @@ ruleFunctionDefinition returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getVarInpuDeclarationsVarInputDeclarationBlockParserRuleCall_3_2_0());
+						newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getVarInpuDeclarationsVarInputDeclarationBlockParserRuleCall_4_2_0());
 					}
-					lv_varInpuDeclarations_6_0=ruleVarInputDeclarationBlock
+					lv_varInpuDeclarations_7_0=ruleVarInputDeclarationBlock
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getFunctionDefinitionRule());
@@ -201,7 +208,7 @@ ruleFunctionDefinition returns [EObject current=null]
 						add(
 							$current,
 							"varInpuDeclarations",
-							lv_varInpuDeclarations_6_0,
+							lv_varInpuDeclarations_7_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.VarInputDeclarationBlock");
 						afterParserOrEnumRuleCall();
 					}
@@ -211,9 +218,9 @@ ruleFunctionDefinition returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_3_3_0());
+						newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_4_3_0());
 					}
-					lv_varOutputDeclarations_7_0=ruleVarOutputDeclarationBlock
+					lv_varOutputDeclarations_8_0=ruleVarOutputDeclarationBlock
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getFunctionDefinitionRule());
@@ -221,7 +228,7 @@ ruleFunctionDefinition returns [EObject current=null]
 						add(
 							$current,
 							"varOutputDeclarations",
-							lv_varOutputDeclarations_7_0,
+							lv_varOutputDeclarations_8_0,
 							"org.eclipse.fordiac.ide.structuredtextcore.STCore.VarOutputDeclarationBlock");
 						afterParserOrEnumRuleCall();
 					}
@@ -231,9 +238,9 @@ ruleFunctionDefinition returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getCodeSTStatementParserRuleCall_4_0());
+					newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getCodeSTStatementParserRuleCall_5_0());
 				}
-				lv_code_8_0=ruleSTStatement
+				lv_code_9_0=ruleSTStatement
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getFunctionDefinitionRule());
@@ -241,15 +248,82 @@ ruleFunctionDefinition returns [EObject current=null]
 					add(
 						$current,
 						"code",
-						lv_code_8_0,
+						lv_code_9_0,
 						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STStatement");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)*
-		otherlv_9=END_FUNCTION
+		otherlv_10=END_FUNCTION
 		{
-			newLeafNode(otherlv_9, grammarAccess.getFunctionDefinitionAccess().getEND_FUNCTIONKeyword_5());
+			newLeafNode(otherlv_10, grammarAccess.getFunctionDefinitionAccess().getEND_FUNCTIONKeyword_6());
+		}
+	)
+;
+
+// Entry rule entryRuleVarDeclarationBlock
+entryRuleVarDeclarationBlock returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getVarDeclarationBlockRule()); }
+	iv_ruleVarDeclarationBlock=ruleVarDeclarationBlock
+	{ $current=$iv_ruleVarDeclarationBlock.current; }
+	EOF;
+
+// Rule VarDeclarationBlock
+ruleVarDeclarationBlock returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getVarDeclarationBlockAccess().getVarDeclarationBlockAction_0(),
+					$current);
+			}
+		)
+		otherlv_1=VAR
+		{
+			newLeafNode(otherlv_1, grammarAccess.getVarDeclarationBlockAccess().getVARKeyword_1());
+		}
+		(
+			(
+				lv_constant_2_0=CONSTANT
+				{
+					newLeafNode(lv_constant_2_0, grammarAccess.getVarDeclarationBlockAccess().getConstantCONSTANTKeyword_2_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getVarDeclarationBlockRule());
+					}
+					setWithLastConsumed($current, "constant", lv_constant_2_0 != null, "CONSTANT");
+				}
+			)
+		)?
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getVarDeclarationBlockAccess().getVarDeclarationsVarDeclarationParserRuleCall_3_0());
+				}
+				lv_varDeclarations_3_0=ruleVarDeclaration
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getVarDeclarationBlockRule());
+					}
+					add(
+						$current,
+						"varDeclarations",
+						lv_varDeclarations_3_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.VarDeclaration");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)*
+		otherlv_4=END_VAR
+		{
+			newLeafNode(otherlv_4, grammarAccess.getVarDeclarationBlockAccess().getEND_VARKeyword_4());
 		}
 	)
 ;
@@ -954,12 +1028,24 @@ ruleSTStatement returns [EObject current=null]
 					afterParserOrEnumRuleCall();
 				}
 				    |
+				(
+					(ruleSTAssignmentStatement)=>
+					{
+						newCompositeNode(grammarAccess.getSTStatementAccess().getSTAssignmentStatementParserRuleCall_0_0_5());
+					}
+					this_STAssignmentStatement_5=ruleSTAssignmentStatement
+					{
+						$current = $this_STAssignmentStatement_5.current;
+						afterParserOrEnumRuleCall();
+					}
+				)
+				    |
 				{
-					newCompositeNode(grammarAccess.getSTStatementAccess().getSTAssignmentStatementParserRuleCall_0_0_5());
+					newCompositeNode(grammarAccess.getSTStatementAccess().getSTCallStatementParserRuleCall_0_0_6());
 				}
-				this_STAssignmentStatement_5=ruleSTAssignmentStatement
+				this_STCallStatement_6=ruleSTCallStatement
 				{
-					$current = $this_STAssignmentStatement_5.current;
+					$current = $this_STCallStatement_6.current;
 					afterParserOrEnumRuleCall();
 				}
 				    |
@@ -967,13 +1053,13 @@ ruleSTStatement returns [EObject current=null]
 					(
 						{
 							$current = forceCreateModelElement(
-								grammarAccess.getSTStatementAccess().getSTReturnAction_0_0_6_0(),
+								grammarAccess.getSTStatementAccess().getSTReturnAction_0_0_7_0(),
 								$current);
 						}
 					)
-					otherlv_7=RETURN
+					otherlv_8=RETURN
 					{
-						newLeafNode(otherlv_7, grammarAccess.getSTStatementAccess().getRETURNKeyword_0_0_6_1());
+						newLeafNode(otherlv_8, grammarAccess.getSTStatementAccess().getRETURNKeyword_0_0_7_1());
 					}
 				)
 				    |
@@ -981,13 +1067,13 @@ ruleSTStatement returns [EObject current=null]
 					(
 						{
 							$current = forceCreateModelElement(
-								grammarAccess.getSTStatementAccess().getSTContinueAction_0_0_7_0(),
+								grammarAccess.getSTStatementAccess().getSTContinueAction_0_0_8_0(),
 								$current);
 						}
 					)
-					otherlv_9=CONTINUE
+					otherlv_10=CONTINUE
 					{
-						newLeafNode(otherlv_9, grammarAccess.getSTStatementAccess().getCONTINUEKeyword_0_0_7_1());
+						newLeafNode(otherlv_10, grammarAccess.getSTStatementAccess().getCONTINUEKeyword_0_0_8_1());
 					}
 				)
 				    |
@@ -995,19 +1081,19 @@ ruleSTStatement returns [EObject current=null]
 					(
 						{
 							$current = forceCreateModelElement(
-								grammarAccess.getSTStatementAccess().getSTExitAction_0_0_8_0(),
+								grammarAccess.getSTStatementAccess().getSTExitAction_0_0_9_0(),
 								$current);
 						}
 					)
-					otherlv_11=EXIT
+					otherlv_12=EXIT
 					{
-						newLeafNode(otherlv_11, grammarAccess.getSTStatementAccess().getEXITKeyword_0_0_8_1());
+						newLeafNode(otherlv_12, grammarAccess.getSTStatementAccess().getEXITKeyword_0_0_9_1());
 					}
 				)
 			)
-			otherlv_12=Semicolon
+			otherlv_13=Semicolon
 			{
-				newLeafNode(otherlv_12, grammarAccess.getSTStatementAccess().getSemicolonKeyword_0_1());
+				newLeafNode(otherlv_13, grammarAccess.getSTStatementAccess().getSemicolonKeyword_0_1());
 			}
 		)
 		    |
@@ -1019,9 +1105,9 @@ ruleSTStatement returns [EObject current=null]
 						$current);
 				}
 			)
-			otherlv_14=Semicolon
+			otherlv_15=Semicolon
 			{
-				newLeafNode(otherlv_14, grammarAccess.getSTStatementAccess().getSemicolonKeyword_1_1());
+				newLeafNode(otherlv_15, grammarAccess.getSTStatementAccess().getSemicolonKeyword_1_1());
 			}
 		)
 	)
@@ -1082,6 +1168,241 @@ ruleSTAssignmentStatement returns [EObject current=null]
 						lv_right_2_0,
 						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
 					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+	)
+;
+
+// Entry rule entryRuleSTCallStatement
+entryRuleSTCallStatement returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTCallStatementRule()); }
+	iv_ruleSTCallStatement=ruleSTCallStatement
+	{ $current=$iv_ruleSTCallStatement.current; }
+	EOF;
+
+// Rule STCallStatement
+ruleSTCallStatement returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				newCompositeNode(grammarAccess.getSTCallStatementAccess().getCallSTAccessExpressionParserRuleCall_0());
+			}
+			lv_call_0_0=ruleSTAccessExpression
+			{
+				if ($current==null) {
+					$current = createModelElementForParent(grammarAccess.getSTCallStatementRule());
+				}
+				set(
+					$current,
+					"call",
+					lv_call_0_0,
+					"org.eclipse.fordiac.ide.structuredtextcore.STCore.STAccessExpression");
+				afterParserOrEnumRuleCall();
+			}
+		)
+	)
+;
+
+// Entry rule entryRuleSTCallArgument
+entryRuleSTCallArgument returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTCallArgumentRule()); }
+	iv_ruleSTCallArgument=ruleSTCallArgument
+	{ $current=$iv_ruleSTCallArgument.current; }
+	EOF;
+
+// Rule STCallArgument
+ruleSTCallArgument returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		{
+			newCompositeNode(grammarAccess.getSTCallArgumentAccess().getSTCallUnnamedArgumentParserRuleCall_0());
+		}
+		this_STCallUnnamedArgument_0=ruleSTCallUnnamedArgument
+		{
+			$current = $this_STCallUnnamedArgument_0.current;
+			afterParserOrEnumRuleCall();
+		}
+		    |
+		{
+			newCompositeNode(grammarAccess.getSTCallArgumentAccess().getSTCallNamedInputArgumentParserRuleCall_1());
+		}
+		this_STCallNamedInputArgument_1=ruleSTCallNamedInputArgument
+		{
+			$current = $this_STCallNamedInputArgument_1.current;
+			afterParserOrEnumRuleCall();
+		}
+		    |
+		{
+			newCompositeNode(grammarAccess.getSTCallArgumentAccess().getSTCallNamedOutputArgumentParserRuleCall_2());
+		}
+		this_STCallNamedOutputArgument_2=ruleSTCallNamedOutputArgument
+		{
+			$current = $this_STCallNamedOutputArgument_2.current;
+			afterParserOrEnumRuleCall();
+		}
+	)
+;
+
+// Entry rule entryRuleSTCallUnnamedArgument
+entryRuleSTCallUnnamedArgument returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTCallUnnamedArgumentRule()); }
+	iv_ruleSTCallUnnamedArgument=ruleSTCallUnnamedArgument
+	{ $current=$iv_ruleSTCallUnnamedArgument.current; }
+	EOF;
+
+// Rule STCallUnnamedArgument
+ruleSTCallUnnamedArgument returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				newCompositeNode(grammarAccess.getSTCallUnnamedArgumentAccess().getArgSTExpressionParserRuleCall_0());
+			}
+			lv_arg_0_0=ruleSTExpression
+			{
+				if ($current==null) {
+					$current = createModelElementForParent(grammarAccess.getSTCallUnnamedArgumentRule());
+				}
+				set(
+					$current,
+					"arg",
+					lv_arg_0_0,
+					"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+				afterParserOrEnumRuleCall();
+			}
+		)
+	)
+;
+
+// Entry rule entryRuleSTCallNamedInputArgument
+entryRuleSTCallNamedInputArgument returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTCallNamedInputArgumentRule()); }
+	iv_ruleSTCallNamedInputArgument=ruleSTCallNamedInputArgument
+	{ $current=$iv_ruleSTCallNamedInputArgument.current; }
+	EOF;
+
+// Rule STCallNamedInputArgument
+ruleSTCallNamedInputArgument returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			(
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTCallNamedInputArgumentRule());
+					}
+				}
+				otherlv_0=RULE_ID
+				{
+					newLeafNode(otherlv_0, grammarAccess.getSTCallNamedInputArgumentAccess().getTargetINamedElementCrossReference_0_0());
+				}
+			)
+		)
+		otherlv_1=ColonEqualsSign
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTCallNamedInputArgumentAccess().getColonEqualsSignKeyword_1());
+		}
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTCallNamedInputArgumentAccess().getSourceSTExpressionParserRuleCall_2_0());
+				}
+				lv_source_2_0=ruleSTExpression
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTCallNamedInputArgumentRule());
+					}
+					set(
+						$current,
+						"source",
+						lv_source_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+	)
+;
+
+// Entry rule entryRuleSTCallNamedOutputArgument
+entryRuleSTCallNamedOutputArgument returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTCallNamedOutputArgumentRule()); }
+	iv_ruleSTCallNamedOutputArgument=ruleSTCallNamedOutputArgument
+	{ $current=$iv_ruleSTCallNamedOutputArgument.current; }
+	EOF;
+
+// Rule STCallNamedOutputArgument
+ruleSTCallNamedOutputArgument returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			(
+				lv_not_0_0=NOT
+				{
+					newLeafNode(lv_not_0_0, grammarAccess.getSTCallNamedOutputArgumentAccess().getNotNOTKeyword_0_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTCallNamedOutputArgumentRule());
+					}
+					setWithLastConsumed($current, "not", lv_not_0_0 != null, "NOT");
+				}
+			)
+		)?
+		(
+			(
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTCallNamedOutputArgumentRule());
+					}
+				}
+				otherlv_1=RULE_ID
+				{
+					newLeafNode(otherlv_1, grammarAccess.getSTCallNamedOutputArgumentAccess().getSourceINamedElementCrossReference_1_0());
+				}
+			)
+		)
+		otherlv_2=EqualsSignGreaterThanSign
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSTCallNamedOutputArgumentAccess().getEqualsSignGreaterThanSignKeyword_2());
+		}
+		(
+			(
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTCallNamedOutputArgumentRule());
+					}
+				}
+				otherlv_3=RULE_ID
+				{
+					newLeafNode(otherlv_3, grammarAccess.getSTCallNamedOutputArgumentAccess().getTargetINamedElementCrossReference_3_0());
 				}
 			)
 		)
@@ -2790,9 +3111,9 @@ ruleSTFeatureExpression returns [EObject current=null]
 				(
 					(
 						{
-							newCompositeNode(grammarAccess.getSTFeatureExpressionAccess().getParametersSTExpressionParserRuleCall_2_1_0_0());
+							newCompositeNode(grammarAccess.getSTFeatureExpressionAccess().getParametersSTCallArgumentParserRuleCall_2_1_0_0());
 						}
-						lv_parameters_3_0=ruleSTExpression
+						lv_parameters_3_0=ruleSTCallArgument
 						{
 							if ($current==null) {
 								$current = createModelElementForParent(grammarAccess.getSTFeatureExpressionRule());
@@ -2801,7 +3122,7 @@ ruleSTFeatureExpression returns [EObject current=null]
 								$current,
 								"parameters",
 								lv_parameters_3_0,
-								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STCallArgument");
 							afterParserOrEnumRuleCall();
 						}
 					)
@@ -2814,9 +3135,9 @@ ruleSTFeatureExpression returns [EObject current=null]
 					(
 						(
 							{
-								newCompositeNode(grammarAccess.getSTFeatureExpressionAccess().getParametersSTExpressionParserRuleCall_2_1_1_1_0());
+								newCompositeNode(grammarAccess.getSTFeatureExpressionAccess().getParametersSTCallArgumentParserRuleCall_2_1_1_1_0());
 							}
-							lv_parameters_5_0=ruleSTExpression
+							lv_parameters_5_0=ruleSTCallArgument
 							{
 								if ($current==null) {
 									$current = createModelElementForParent(grammarAccess.getSTFeatureExpressionRule());
@@ -2825,7 +3146,7 @@ ruleSTFeatureExpression returns [EObject current=null]
 									$current,
 									"parameters",
 									lv_parameters_5_0,
-									"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+									"org.eclipse.fordiac.ide.structuredtextcore.STCore.STCallArgument");
 								afterParserOrEnumRuleCall();
 							}
 						)

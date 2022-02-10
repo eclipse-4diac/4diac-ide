@@ -5,8 +5,6 @@ package org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.fordiac.ide.model.data.DataType;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -23,7 +21,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition#getVarDeclarations <em>Var Declarations</em>}</li>
  *   <li>{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition#getVarTempDeclarations <em>Var Temp Declarations</em>}</li>
@@ -36,30 +33,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
  * @model
  * @generated
  */
-public interface FunctionDefinition extends EObject
+public interface FunctionDefinition extends INamedElement
 {
-  /**
-   * Returns the value of the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.STFunctionPackage#getFunctionDefinition_Name()
-   * @model
-   * @generated
-   */
-  String getName();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition#getName <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
-   * @generated
-   */
-  void setName(String value);
-
   /**
    * Returns the value of the '<em><b>Return Type</b></em>' reference.
    * <!-- begin-user-doc -->
@@ -84,7 +59,7 @@ public interface FunctionDefinition extends EObject
 
   /**
    * Returns the value of the '<em><b>Var Declarations</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Declarations</em>' containment reference list.
@@ -92,7 +67,7 @@ public interface FunctionDefinition extends EObject
    * @model containment="true"
    * @generated
    */
-  EList<INamedElement> getVarDeclarations();
+  EList<VarDeclarationBlock> getVarDeclarations();
 
   /**
    * Returns the value of the '<em><b>Var Temp Declarations</b></em>' containment reference list.

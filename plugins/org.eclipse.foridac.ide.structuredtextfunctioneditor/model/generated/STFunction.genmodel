@@ -10,7 +10,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STFunction.ecore#//STFunction/functions"/>
     </genClasses>
     <genClasses ecoreClass="STFunction.ecore#//FunctionDefinition">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STFunction.ecore#//FunctionDefinition/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STFunction.ecore#//FunctionDefinition/returnType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STFunction.ecore#//FunctionDefinition/varDeclarations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STFunction.ecore#//FunctionDefinition/varTempDeclarations"/>

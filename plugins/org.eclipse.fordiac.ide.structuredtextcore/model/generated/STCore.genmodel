@@ -57,6 +57,22 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/left"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/right"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STCallStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallStatement/call"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STCallArgument"/>
+    <genClasses ecoreClass="STCore.ecore#//STCallUnnamedArgument">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallUnnamedArgument/arg"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STCallNamedInputArgument">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/target"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/source"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STCallNamedOutputArgument">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STCallNamedOutputArgument/not"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/target"/>
+    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STIfStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STIfStatement/condition"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STIfStatement/statements"/>

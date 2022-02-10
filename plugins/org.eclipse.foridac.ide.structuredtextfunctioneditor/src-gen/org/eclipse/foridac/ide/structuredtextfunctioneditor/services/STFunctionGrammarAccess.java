@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.List;
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
+import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Alternatives;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.CrossReference;
@@ -42,102 +43,108 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	public class FunctionDefinitionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.foridac.ide.structuredtextfunctioneditor.STFunction.FunctionDefinition");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cFUNCTIONKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
-		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
-		private final Keyword cColonKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Assignment cReturnTypeAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final CrossReference cReturnTypeDataTypeCrossReference_2_1_0 = (CrossReference)cReturnTypeAssignment_2_1.eContents().get(0);
-		private final RuleCall cReturnTypeDataTypeIDTerminalRuleCall_2_1_0_1 = (RuleCall)cReturnTypeDataTypeCrossReference_2_1_0.eContents().get(1);
-		private final Alternatives cAlternatives_3 = (Alternatives)cGroup.eContents().get(3);
-		private final Assignment cVarDeclarationsAssignment_3_0 = (Assignment)cAlternatives_3.eContents().get(0);
-		private final RuleCall cVarDeclarationsVarDeclarationParserRuleCall_3_0_0 = (RuleCall)cVarDeclarationsAssignment_3_0.eContents().get(0);
-		private final Assignment cVarTempDeclarationsAssignment_3_1 = (Assignment)cAlternatives_3.eContents().get(1);
-		private final RuleCall cVarTempDeclarationsVarTempDeclarationBlockParserRuleCall_3_1_0 = (RuleCall)cVarTempDeclarationsAssignment_3_1.eContents().get(0);
-		private final Assignment cVarInpuDeclarationsAssignment_3_2 = (Assignment)cAlternatives_3.eContents().get(2);
-		private final RuleCall cVarInpuDeclarationsVarInputDeclarationBlockParserRuleCall_3_2_0 = (RuleCall)cVarInpuDeclarationsAssignment_3_2.eContents().get(0);
-		private final Assignment cVarOutputDeclarationsAssignment_3_3 = (Assignment)cAlternatives_3.eContents().get(3);
-		private final RuleCall cVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_3_3_0 = (RuleCall)cVarOutputDeclarationsAssignment_3_3.eContents().get(0);
-		private final Assignment cCodeAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cCodeSTStatementParserRuleCall_4_0 = (RuleCall)cCodeAssignment_4.eContents().get(0);
-		private final Keyword cEND_FUNCTIONKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final Action cFunctionDefinitionAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cFUNCTIONKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cNameAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cNameIDTerminalRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Keyword cColonKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final Assignment cReturnTypeAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final CrossReference cReturnTypeDataTypeCrossReference_3_1_0 = (CrossReference)cReturnTypeAssignment_3_1.eContents().get(0);
+		private final RuleCall cReturnTypeDataTypeIDTerminalRuleCall_3_1_0_1 = (RuleCall)cReturnTypeDataTypeCrossReference_3_1_0.eContents().get(1);
+		private final Alternatives cAlternatives_4 = (Alternatives)cGroup.eContents().get(4);
+		private final Assignment cVarDeclarationsAssignment_4_0 = (Assignment)cAlternatives_4.eContents().get(0);
+		private final RuleCall cVarDeclarationsVarDeclarationBlockParserRuleCall_4_0_0 = (RuleCall)cVarDeclarationsAssignment_4_0.eContents().get(0);
+		private final Assignment cVarTempDeclarationsAssignment_4_1 = (Assignment)cAlternatives_4.eContents().get(1);
+		private final RuleCall cVarTempDeclarationsVarTempDeclarationBlockParserRuleCall_4_1_0 = (RuleCall)cVarTempDeclarationsAssignment_4_1.eContents().get(0);
+		private final Assignment cVarInpuDeclarationsAssignment_4_2 = (Assignment)cAlternatives_4.eContents().get(2);
+		private final RuleCall cVarInpuDeclarationsVarInputDeclarationBlockParserRuleCall_4_2_0 = (RuleCall)cVarInpuDeclarationsAssignment_4_2.eContents().get(0);
+		private final Assignment cVarOutputDeclarationsAssignment_4_3 = (Assignment)cAlternatives_4.eContents().get(3);
+		private final RuleCall cVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_4_3_0 = (RuleCall)cVarOutputDeclarationsAssignment_4_3.eContents().get(0);
+		private final Assignment cCodeAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cCodeSTStatementParserRuleCall_5_0 = (RuleCall)cCodeAssignment_5.eContents().get(0);
+		private final Keyword cEND_FUNCTIONKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
-		//FunctionDefinition:
+		//FunctionDefinition returns libraryElement::INamedElement:
+		//    {FunctionDefinition}
 		//    'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
-		//        (varDeclarations+=VarDeclaration | varTempDeclarations+=VarTempDeclarationBlock |
+		//        (varDeclarations+=VarDeclarationBlock | varTempDeclarations+=VarTempDeclarationBlock |
 		//        varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
 		//        code += STStatement*
 		//    'END_FUNCTION';
 		@Override public ParserRule getRule() { return rule; }
 		
+		//{FunctionDefinition}
 		//'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
-		//    (varDeclarations+=VarDeclaration | varTempDeclarations+=VarTempDeclarationBlock |
+		//    (varDeclarations+=VarDeclarationBlock | varTempDeclarations+=VarTempDeclarationBlock |
 		//    varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
 		//    code += STStatement*
 		//'END_FUNCTION'
 		public Group getGroup() { return cGroup; }
 		
+		//{FunctionDefinition}
+		public Action getFunctionDefinitionAction_0() { return cFunctionDefinitionAction_0; }
+		
 		//'FUNCTION'
-		public Keyword getFUNCTIONKeyword_0() { return cFUNCTIONKeyword_0; }
+		public Keyword getFUNCTIONKeyword_1() { return cFUNCTIONKeyword_1; }
 		
 		//name=ID
-		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
+		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
 		
 		//ID
-		public RuleCall getNameIDTerminalRuleCall_1_0() { return cNameIDTerminalRuleCall_1_0; }
+		public RuleCall getNameIDTerminalRuleCall_2_0() { return cNameIDTerminalRuleCall_2_0; }
 		
 		//(':' returnType=[datatype::DataType])?
-		public Group getGroup_2() { return cGroup_2; }
+		public Group getGroup_3() { return cGroup_3; }
 		
 		//':'
-		public Keyword getColonKeyword_2_0() { return cColonKeyword_2_0; }
+		public Keyword getColonKeyword_3_0() { return cColonKeyword_3_0; }
 		
 		//returnType=[datatype::DataType]
-		public Assignment getReturnTypeAssignment_2_1() { return cReturnTypeAssignment_2_1; }
+		public Assignment getReturnTypeAssignment_3_1() { return cReturnTypeAssignment_3_1; }
 		
 		//[datatype::DataType]
-		public CrossReference getReturnTypeDataTypeCrossReference_2_1_0() { return cReturnTypeDataTypeCrossReference_2_1_0; }
+		public CrossReference getReturnTypeDataTypeCrossReference_3_1_0() { return cReturnTypeDataTypeCrossReference_3_1_0; }
 		
 		//ID
-		public RuleCall getReturnTypeDataTypeIDTerminalRuleCall_2_1_0_1() { return cReturnTypeDataTypeIDTerminalRuleCall_2_1_0_1; }
+		public RuleCall getReturnTypeDataTypeIDTerminalRuleCall_3_1_0_1() { return cReturnTypeDataTypeIDTerminalRuleCall_3_1_0_1; }
 		
-		//(varDeclarations+=VarDeclaration | varTempDeclarations+=VarTempDeclarationBlock |
+		//(varDeclarations+=VarDeclarationBlock | varTempDeclarations+=VarTempDeclarationBlock |
 		//varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
-		public Alternatives getAlternatives_3() { return cAlternatives_3; }
+		public Alternatives getAlternatives_4() { return cAlternatives_4; }
 		
-		//varDeclarations+=VarDeclaration
-		public Assignment getVarDeclarationsAssignment_3_0() { return cVarDeclarationsAssignment_3_0; }
+		//varDeclarations+=VarDeclarationBlock
+		public Assignment getVarDeclarationsAssignment_4_0() { return cVarDeclarationsAssignment_4_0; }
 		
-		//VarDeclaration
-		public RuleCall getVarDeclarationsVarDeclarationParserRuleCall_3_0_0() { return cVarDeclarationsVarDeclarationParserRuleCall_3_0_0; }
+		//VarDeclarationBlock
+		public RuleCall getVarDeclarationsVarDeclarationBlockParserRuleCall_4_0_0() { return cVarDeclarationsVarDeclarationBlockParserRuleCall_4_0_0; }
 		
 		//varTempDeclarations+=VarTempDeclarationBlock
-		public Assignment getVarTempDeclarationsAssignment_3_1() { return cVarTempDeclarationsAssignment_3_1; }
+		public Assignment getVarTempDeclarationsAssignment_4_1() { return cVarTempDeclarationsAssignment_4_1; }
 		
 		//VarTempDeclarationBlock
-		public RuleCall getVarTempDeclarationsVarTempDeclarationBlockParserRuleCall_3_1_0() { return cVarTempDeclarationsVarTempDeclarationBlockParserRuleCall_3_1_0; }
+		public RuleCall getVarTempDeclarationsVarTempDeclarationBlockParserRuleCall_4_1_0() { return cVarTempDeclarationsVarTempDeclarationBlockParserRuleCall_4_1_0; }
 		
 		//varInpuDeclarations+=VarInputDeclarationBlock
-		public Assignment getVarInpuDeclarationsAssignment_3_2() { return cVarInpuDeclarationsAssignment_3_2; }
+		public Assignment getVarInpuDeclarationsAssignment_4_2() { return cVarInpuDeclarationsAssignment_4_2; }
 		
 		//VarInputDeclarationBlock
-		public RuleCall getVarInpuDeclarationsVarInputDeclarationBlockParserRuleCall_3_2_0() { return cVarInpuDeclarationsVarInputDeclarationBlockParserRuleCall_3_2_0; }
+		public RuleCall getVarInpuDeclarationsVarInputDeclarationBlockParserRuleCall_4_2_0() { return cVarInpuDeclarationsVarInputDeclarationBlockParserRuleCall_4_2_0; }
 		
 		//varOutputDeclarations+=VarOutputDeclarationBlock
-		public Assignment getVarOutputDeclarationsAssignment_3_3() { return cVarOutputDeclarationsAssignment_3_3; }
+		public Assignment getVarOutputDeclarationsAssignment_4_3() { return cVarOutputDeclarationsAssignment_4_3; }
 		
 		//VarOutputDeclarationBlock
-		public RuleCall getVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_3_3_0() { return cVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_3_3_0; }
+		public RuleCall getVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_4_3_0() { return cVarOutputDeclarationsVarOutputDeclarationBlockParserRuleCall_4_3_0; }
 		
 		//code += STStatement*
-		public Assignment getCodeAssignment_4() { return cCodeAssignment_4; }
+		public Assignment getCodeAssignment_5() { return cCodeAssignment_5; }
 		
 		//STStatement
-		public RuleCall getCodeSTStatementParserRuleCall_4_0() { return cCodeSTStatementParserRuleCall_4_0; }
+		public RuleCall getCodeSTStatementParserRuleCall_5_0() { return cCodeSTStatementParserRuleCall_5_0; }
 		
 		//'END_FUNCTION'
-		public Keyword getEND_FUNCTIONKeyword_5() { return cEND_FUNCTIONKeyword_5; }
+		public Keyword getEND_FUNCTIONKeyword_6() { return cEND_FUNCTIONKeyword_6; }
 	}
 	
 	
@@ -194,9 +201,10 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTFunctionAccess().getRule();
 	}
 	
-	//FunctionDefinition:
+	//FunctionDefinition returns libraryElement::INamedElement:
+	//    {FunctionDefinition}
 	//    'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
-	//        (varDeclarations+=VarDeclaration | varTempDeclarations+=VarTempDeclarationBlock |
+	//        (varDeclarations+=VarDeclarationBlock | varTempDeclarations+=VarTempDeclarationBlock |
 	//        varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
 	//        code += STStatement*
 	//    'END_FUNCTION';
@@ -315,7 +323,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//    STForStatement |
 	//    STWhileStatement |
 	//    STRepeatStatement |
-	//    STAssignmentStatement |
+	//    => STAssignmentStatement |
+	//    STCallStatement |
 	//    {STReturn} 'RETURN' |
 	//    {STContinue} 'CONTINUE' |
 	//    {STExit} 'EXIT') ';' |
@@ -337,6 +346,61 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	public ParserRule getSTAssignmentStatementRule() {
 		return getSTAssignmentStatementAccess().getRule();
+	}
+	
+	//STCallStatement:
+	//    call=STAccessExpression
+	//;
+	public STCoreGrammarAccess.STCallStatementElements getSTCallStatementAccess() {
+		return gaSTCore.getSTCallStatementAccess();
+	}
+	
+	public ParserRule getSTCallStatementRule() {
+		return getSTCallStatementAccess().getRule();
+	}
+	
+	//STCallArgument:
+	//    STCallUnnamedArgument | STCallNamedInputArgument | STCallNamedOutputArgument
+	//;
+	public STCoreGrammarAccess.STCallArgumentElements getSTCallArgumentAccess() {
+		return gaSTCore.getSTCallArgumentAccess();
+	}
+	
+	public ParserRule getSTCallArgumentRule() {
+		return getSTCallArgumentAccess().getRule();
+	}
+	
+	//STCallUnnamedArgument:
+	//    arg=STExpression
+	//;
+	public STCoreGrammarAccess.STCallUnnamedArgumentElements getSTCallUnnamedArgumentAccess() {
+		return gaSTCore.getSTCallUnnamedArgumentAccess();
+	}
+	
+	public ParserRule getSTCallUnnamedArgumentRule() {
+		return getSTCallUnnamedArgumentAccess().getRule();
+	}
+	
+	//STCallNamedInputArgument:
+	//    target=[libraryElement::INamedElement] ':=' source=STExpression
+	//;
+	public STCoreGrammarAccess.STCallNamedInputArgumentElements getSTCallNamedInputArgumentAccess() {
+		return gaSTCore.getSTCallNamedInputArgumentAccess();
+	}
+	
+	public ParserRule getSTCallNamedInputArgumentRule() {
+		return getSTCallNamedInputArgumentAccess().getRule();
+	}
+	
+	//STCallNamedOutputArgument:
+	//    not?='NOT'? source=[libraryElement::INamedElement] '=>' target=[libraryElement::INamedElement]
+	//;
+	public STCoreGrammarAccess.STCallNamedOutputArgumentElements getSTCallNamedOutputArgumentAccess() {
+		return gaSTCore.getSTCallNamedOutputArgumentAccess();
+	}
+	
+	public ParserRule getSTCallNamedOutputArgumentRule() {
+		return getSTCallNamedOutputArgumentAccess().getRule();
 	}
 	
 	//STIfStatement:
@@ -649,7 +713,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STFeatureExpression returns STExpression:
-	//    {STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STExpression (',' parameters+=STExpression)* )? ')' )?;
+	//    {STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
 	public STCoreGrammarAccess.STFeatureExpressionElements getSTFeatureExpressionAccess() {
 		return gaSTCore.getSTFeatureExpressionAccess();
 	}

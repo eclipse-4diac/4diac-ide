@@ -3,10 +3,11 @@
  */
 package org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -102,7 +103,16 @@ public interface STFunctionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION__NAME = 0;
+  int FUNCTION_DEFINITION__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
+
+  /**
+   * The feature id for the '<em><b>Comment</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION_DEFINITION__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
 
   /**
    * The feature id for the '<em><b>Return Type</b></em>' reference.
@@ -111,7 +121,7 @@ public interface STFunctionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION__RETURN_TYPE = 1;
+  int FUNCTION_DEFINITION__RETURN_TYPE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
@@ -120,7 +130,7 @@ public interface STFunctionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION__VAR_DECLARATIONS = 2;
+  int FUNCTION_DEFINITION__VAR_DECLARATIONS = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Var Temp Declarations</b></em>' containment reference list.
@@ -129,7 +139,7 @@ public interface STFunctionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION__VAR_TEMP_DECLARATIONS = 3;
+  int FUNCTION_DEFINITION__VAR_TEMP_DECLARATIONS = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Var Inpu Declarations</b></em>' containment reference list.
@@ -138,7 +148,7 @@ public interface STFunctionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION__VAR_INPU_DECLARATIONS = 4;
+  int FUNCTION_DEFINITION__VAR_INPU_DECLARATIONS = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Var Output Declarations</b></em>' containment reference list.
@@ -147,7 +157,7 @@ public interface STFunctionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION__VAR_OUTPUT_DECLARATIONS = 5;
+  int FUNCTION_DEFINITION__VAR_OUTPUT_DECLARATIONS = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Code</b></em>' containment reference list.
@@ -156,7 +166,7 @@ public interface STFunctionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION__CODE = 6;
+  int FUNCTION_DEFINITION__CODE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The number of structural features of the '<em>Function Definition</em>' class.
@@ -165,7 +175,7 @@ public interface STFunctionPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION_FEATURE_COUNT = 7;
+  int FUNCTION_DEFINITION_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 6;
 
 
   /**
@@ -198,17 +208,6 @@ public interface STFunctionPackage extends EPackage
    * @generated
    */
   EClass getFunctionDefinition();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition#getName <em>Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition#getName()
-   * @see #getFunctionDefinition()
-   * @generated
-   */
-  EAttribute getFunctionDefinition_Name();
 
   /**
    * Returns the meta object for the reference '{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition#getReturnType <em>Return Type</em>}'.
@@ -326,14 +325,6 @@ public interface STFunctionPackage extends EPackage
      * @generated
      */
     EClass FUNCTION_DEFINITION = eINSTANCE.getFunctionDefinition();
-
-    /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FUNCTION_DEFINITION__NAME = eINSTANCE.getFunctionDefinition_Name();
 
     /**
      * The meta object literal for the '<em><b>Return Type</b></em>' reference feature.

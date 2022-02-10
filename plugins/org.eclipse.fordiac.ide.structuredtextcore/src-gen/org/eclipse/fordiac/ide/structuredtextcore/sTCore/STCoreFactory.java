@@ -87,6 +87,51 @@ public interface STCoreFactory extends EFactory
   STAssignmentStatement createSTAssignmentStatement();
 
   /**
+   * Returns a new object of class '<em>ST Call Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Call Statement</em>'.
+   * @generated
+   */
+  STCallStatement createSTCallStatement();
+
+  /**
+   * Returns a new object of class '<em>ST Call Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Call Argument</em>'.
+   * @generated
+   */
+  STCallArgument createSTCallArgument();
+
+  /**
+   * Returns a new object of class '<em>ST Call Unnamed Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Call Unnamed Argument</em>'.
+   * @generated
+   */
+  STCallUnnamedArgument createSTCallUnnamedArgument();
+
+  /**
+   * Returns a new object of class '<em>ST Call Named Input Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Call Named Input Argument</em>'.
+   * @generated
+   */
+  STCallNamedInputArgument createSTCallNamedInputArgument();
+
+  /**
+   * Returns a new object of class '<em>ST Call Named Output Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>ST Call Named Output Argument</em>'.
+   * @generated
+   */
+  STCallNamedOutputArgument createSTCallNamedOutputArgument();
+
+  /**
    * Returns a new object of class '<em>ST If Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

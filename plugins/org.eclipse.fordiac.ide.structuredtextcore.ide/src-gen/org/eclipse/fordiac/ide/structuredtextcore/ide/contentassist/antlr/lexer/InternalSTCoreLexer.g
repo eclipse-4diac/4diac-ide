@@ -149,6 +149,8 @@ LessThanSignEqualsSign : '<''=';
 
 LessThanSignGreaterThanSign : '<''>';
 
+EqualsSignGreaterThanSign : '=''>';
+
 GreaterThanSignEqualsSign : '>''=';
 
 AT : ('A'|'a')('T'|'t');

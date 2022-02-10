@@ -21,8 +21,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 
@@ -38,6 +36,7 @@ import org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.STFunctio
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.impl.FunctionDefinitionImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.impl.FunctionDefinitionImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.impl.FunctionDefinitionImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.impl.FunctionDefinitionImpl#getVarDeclarations <em>Var Declarations</em>}</li>
  *   <li>{@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.impl.FunctionDefinitionImpl#getVarTempDeclarations <em>Var Temp Declarations</em>}</li>
@@ -58,7 +57,7 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * @generated
    * @ordered
    */
-  protected static final String NAME_EDEFAULT = null;
+  protected static final String NAME_EDEFAULT = "";
 
   /**
    * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -69,6 +68,26 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * @ordered
    */
   protected String name = NAME_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getComment()
+   * @generated
+   * @ordered
+   */
+  protected static final String COMMENT_EDEFAULT = "";
+
+  /**
+   * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getComment()
+   * @generated
+   * @ordered
+   */
+  protected String comment = COMMENT_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' reference.
@@ -88,7 +107,7 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * @generated
    * @ordered
    */
-  protected EList<INamedElement> varDeclarations;
+  protected EList<VarDeclarationBlock> varDeclarations;
 
   /**
    * The cached value of the '{@link #getVarTempDeclarations() <em>Var Temp Declarations</em>}' containment reference list.
@@ -182,6 +201,31 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * @generated
    */
   @Override
+  public String getComment()
+  {
+    return comment;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setComment(String newComment)
+  {
+    String oldComment = comment;
+    comment = newComment;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, STFunctionPackage.FUNCTION_DEFINITION__COMMENT, oldComment, comment));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public DataType getReturnType()
   {
     if (returnType != null && returnType.eIsProxy())
@@ -227,11 +271,11 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * @generated
    */
   @Override
-  public EList<INamedElement> getVarDeclarations()
+  public EList<VarDeclarationBlock> getVarDeclarations()
   {
     if (varDeclarations == null)
     {
-      varDeclarations = new EObjectContainmentEList<INamedElement>(INamedElement.class, this, STFunctionPackage.FUNCTION_DEFINITION__VAR_DECLARATIONS);
+      varDeclarations = new EObjectContainmentEList<VarDeclarationBlock>(VarDeclarationBlock.class, this, STFunctionPackage.FUNCTION_DEFINITION__VAR_DECLARATIONS);
     }
     return varDeclarations;
   }
@@ -332,6 +376,8 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
     {
       case STFunctionPackage.FUNCTION_DEFINITION__NAME:
         return getName();
+      case STFunctionPackage.FUNCTION_DEFINITION__COMMENT:
+        return getComment();
       case STFunctionPackage.FUNCTION_DEFINITION__RETURN_TYPE:
         if (resolve) return getReturnType();
         return basicGetReturnType();
@@ -363,12 +409,15 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
       case STFunctionPackage.FUNCTION_DEFINITION__NAME:
         setName((String)newValue);
         return;
+      case STFunctionPackage.FUNCTION_DEFINITION__COMMENT:
+        setComment((String)newValue);
+        return;
       case STFunctionPackage.FUNCTION_DEFINITION__RETURN_TYPE:
         setReturnType((DataType)newValue);
         return;
       case STFunctionPackage.FUNCTION_DEFINITION__VAR_DECLARATIONS:
         getVarDeclarations().clear();
-        getVarDeclarations().addAll((Collection<? extends INamedElement>)newValue);
+        getVarDeclarations().addAll((Collection<? extends VarDeclarationBlock>)newValue);
         return;
       case STFunctionPackage.FUNCTION_DEFINITION__VAR_TEMP_DECLARATIONS:
         getVarTempDeclarations().clear();
@@ -402,6 +451,9 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
     {
       case STFunctionPackage.FUNCTION_DEFINITION__NAME:
         setName(NAME_EDEFAULT);
+        return;
+      case STFunctionPackage.FUNCTION_DEFINITION__COMMENT:
+        setComment(COMMENT_EDEFAULT);
         return;
       case STFunctionPackage.FUNCTION_DEFINITION__RETURN_TYPE:
         setReturnType((DataType)null);
@@ -437,6 +489,8 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
     {
       case STFunctionPackage.FUNCTION_DEFINITION__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case STFunctionPackage.FUNCTION_DEFINITION__COMMENT:
+        return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
       case STFunctionPackage.FUNCTION_DEFINITION__RETURN_TYPE:
         return returnType != null;
       case STFunctionPackage.FUNCTION_DEFINITION__VAR_DECLARATIONS:
@@ -466,6 +520,8 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
     StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
+    result.append(", comment: ");
+    result.append(comment);
     result.append(')');
     return result.toString();
   }

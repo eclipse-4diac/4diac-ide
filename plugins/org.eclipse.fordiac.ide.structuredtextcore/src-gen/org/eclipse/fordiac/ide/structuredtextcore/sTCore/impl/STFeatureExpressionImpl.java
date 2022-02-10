@@ -20,8 +20,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression;
 
 /**
@@ -58,7 +58,7 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
    * @generated
    * @ordered
    */
-  protected EList<STExpression> parameters;
+  protected EList<STCallArgument> parameters;
 
   /**
    * <!-- begin-user-doc -->
@@ -132,11 +132,11 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
    * @generated
    */
   @Override
-  public EList<STExpression> getParameters()
+  public EList<STCallArgument> getParameters()
   {
     if (parameters == null)
     {
-      parameters = new EObjectContainmentEList<STExpression>(STExpression.class, this, STCorePackage.ST_FEATURE_EXPRESSION__PARAMETERS);
+      parameters = new EObjectContainmentEList<STCallArgument>(STCallArgument.class, this, STCorePackage.ST_FEATURE_EXPRESSION__PARAMETERS);
     }
     return parameters;
   }
@@ -192,7 +192,7 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
         return;
       case STCorePackage.ST_FEATURE_EXPRESSION__PARAMETERS:
         getParameters().clear();
-        getParameters().addAll((Collection<? extends STExpression>)newValue);
+        getParameters().addAll((Collection<? extends STCallArgument>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

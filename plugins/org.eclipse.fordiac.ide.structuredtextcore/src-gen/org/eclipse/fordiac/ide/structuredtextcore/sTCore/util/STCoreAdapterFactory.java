@@ -113,6 +113,31 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
         return createSTAssignmentStatementAdapter();
       }
       @Override
+      public Adapter caseSTCallStatement(STCallStatement object)
+      {
+        return createSTCallStatementAdapter();
+      }
+      @Override
+      public Adapter caseSTCallArgument(STCallArgument object)
+      {
+        return createSTCallArgumentAdapter();
+      }
+      @Override
+      public Adapter caseSTCallUnnamedArgument(STCallUnnamedArgument object)
+      {
+        return createSTCallUnnamedArgumentAdapter();
+      }
+      @Override
+      public Adapter caseSTCallNamedInputArgument(STCallNamedInputArgument object)
+      {
+        return createSTCallNamedInputArgumentAdapter();
+      }
+      @Override
+      public Adapter caseSTCallNamedOutputArgument(STCallNamedOutputArgument object)
+      {
+        return createSTCallNamedOutputArgumentAdapter();
+      }
+      @Override
       public Adapter caseSTIfStatement(STIfStatement object)
       {
         return createSTIfStatementAdapter();
@@ -370,6 +395,81 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSTAssignmentStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallStatement <em>ST Call Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallStatement
+   * @generated
+   */
+  public Adapter createSTCallStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallArgument <em>ST Call Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallArgument
+   * @generated
+   */
+  public Adapter createSTCallArgumentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallUnnamedArgument <em>ST Call Unnamed Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallUnnamedArgument
+   * @generated
+   */
+  public Adapter createSTCallUnnamedArgumentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedInputArgument <em>ST Call Named Input Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedInputArgument
+   * @generated
+   */
+  public Adapter createSTCallNamedInputArgumentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedOutputArgument <em>ST Call Named Output Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedOutputArgument
+   * @generated
+   */
+  public Adapter createSTCallNamedOutputArgumentAdapter()
   {
     return null;
   }

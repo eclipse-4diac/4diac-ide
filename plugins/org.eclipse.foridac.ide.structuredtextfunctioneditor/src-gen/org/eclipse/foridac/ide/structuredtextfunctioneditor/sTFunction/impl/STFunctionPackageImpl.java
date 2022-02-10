@@ -3,7 +3,6 @@
  */
 package org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.impl;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -153,20 +152,9 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
    * @generated
    */
   @Override
-  public EAttribute getFunctionDefinition_Name()
-  {
-    return (EAttribute)functionDefinitionEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EReference getFunctionDefinition_ReturnType()
   {
-    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(1);
+    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -177,7 +165,7 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
   @Override
   public EReference getFunctionDefinition_VarDeclarations()
   {
-    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(2);
+    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -188,7 +176,7 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
   @Override
   public EReference getFunctionDefinition_VarTempDeclarations()
   {
-    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(3);
+    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -199,7 +187,7 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
   @Override
   public EReference getFunctionDefinition_VarInpuDeclarations()
   {
-    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(4);
+    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -210,7 +198,7 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
   @Override
   public EReference getFunctionDefinition_VarOutputDeclarations()
   {
-    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(5);
+    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -221,7 +209,7 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
   @Override
   public EReference getFunctionDefinition_Code()
   {
-    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(6);
+    return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -259,7 +247,6 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
     createEReference(stFunctionEClass, ST_FUNCTION__FUNCTIONS);
 
     functionDefinitionEClass = createEClass(FUNCTION_DEFINITION);
-    createEAttribute(functionDefinitionEClass, FUNCTION_DEFINITION__NAME);
     createEReference(functionDefinitionEClass, FUNCTION_DEFINITION__RETURN_TYPE);
     createEReference(functionDefinitionEClass, FUNCTION_DEFINITION__VAR_DECLARATIONS);
     createEReference(functionDefinitionEClass, FUNCTION_DEFINITION__VAR_TEMP_DECLARATIONS);
@@ -293,8 +280,8 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
     setNsURI(eNS_URI);
 
     // Obtain other dependent packages
-    DataPackage theDataPackage = (DataPackage)EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
     LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
+    DataPackage theDataPackage = (DataPackage)EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
     STCorePackage theSTCorePackage = (STCorePackage)EPackage.Registry.INSTANCE.getEPackage(STCorePackage.eNS_URI);
 
     // Create type parameters
@@ -302,15 +289,15 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
     // Set bounds for type parameters
 
     // Add supertypes to classes
+    functionDefinitionEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
 
     // Initialize classes and features; add operations and parameters
     initEClass(stFunctionEClass, STFunction.class, "STFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSTFunction_Functions(), this.getFunctionDefinition(), null, "functions", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTFunction_Functions(), theLibraryElementPackage.getINamedElement(), null, "functions", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(functionDefinitionEClass, FunctionDefinition.class, "FunctionDefinition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFunctionDefinition_Name(), ecorePackage.getEString(), "name", null, 0, 1, FunctionDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFunctionDefinition_ReturnType(), theDataPackage.getDataType(), null, "returnType", null, 0, 1, FunctionDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFunctionDefinition_VarDeclarations(), theLibraryElementPackage.getINamedElement(), null, "varDeclarations", null, 0, -1, FunctionDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFunctionDefinition_VarDeclarations(), theSTCorePackage.getVarDeclarationBlock(), null, "varDeclarations", null, 0, -1, FunctionDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFunctionDefinition_VarTempDeclarations(), theSTCorePackage.getVarDeclarationBlock(), null, "varTempDeclarations", null, 0, -1, FunctionDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFunctionDefinition_VarInpuDeclarations(), theSTCorePackage.getVarDeclarationBlock(), null, "varInpuDeclarations", null, 0, -1, FunctionDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFunctionDefinition_VarOutputDeclarations(), theSTCorePackage.getVarDeclarationBlock(), null, "varOutputDeclarations", null, 0, -1, FunctionDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

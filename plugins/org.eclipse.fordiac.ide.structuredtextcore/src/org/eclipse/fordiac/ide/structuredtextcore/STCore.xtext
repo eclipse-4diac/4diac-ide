@@ -67,7 +67,8 @@ STStatement:
 	STForStatement |
 	STWhileStatement |
 	STRepeatStatement |
-	STAssignmentStatement |
+	=> STAssignmentStatement |
+	STCallStatement |
 	{STReturn} 'RETURN' |
 	{STContinue} 'CONTINUE' |
 	{STExit} 'EXIT') ';' |
@@ -75,6 +76,26 @@ STStatement:
 
 STAssignmentStatement:
 	left=STAccessExpression ':=' right=STExpression
+;
+
+STCallStatement:
+	call=STAccessExpression
+;
+
+STCallArgument:
+	STCallUnnamedArgument | STCallNamedInputArgument | STCallNamedOutputArgument
+;
+
+STCallUnnamedArgument:
+	arg=STExpression
+;
+
+STCallNamedInputArgument:
+	target=[libraryElement::INamedElement] ':=' source=STExpression 
+;
+
+STCallNamedOutputArgument:
+	not?='NOT'? source=[libraryElement::INamedElement] '=>' target=[libraryElement::INamedElement] 
 ;
 
 STIfStatement:
@@ -160,7 +181,7 @@ STPrimaryExpression returns STExpression:
 	'(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
 
 STFeatureExpression returns STExpression:
-	{STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STExpression (',' parameters+=STExpression)* )? ')' )?;
+	{STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
 
 enum STMultiBitAccessSpecifier:
 	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';

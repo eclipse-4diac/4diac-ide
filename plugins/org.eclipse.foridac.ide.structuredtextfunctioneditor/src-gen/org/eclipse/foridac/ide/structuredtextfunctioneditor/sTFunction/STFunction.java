@@ -7,6 +7,8 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>ST Function</b></em>'.
@@ -27,7 +29,7 @@ public interface STFunction extends EObject
 {
   /**
    * Returns the value of the '<em><b>Functions</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Functions</em>' containment reference list.
@@ -35,6 +37,6 @@ public interface STFunction extends EObject
    * @model containment="true"
    * @generated
    */
-  EList<FunctionDefinition> getFunctions();
+  EList<INamedElement> getFunctions();
 
 } // STFunction

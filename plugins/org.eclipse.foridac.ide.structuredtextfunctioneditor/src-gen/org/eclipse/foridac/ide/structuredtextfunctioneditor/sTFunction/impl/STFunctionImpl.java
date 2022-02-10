@@ -17,7 +17,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 import org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.STFunction;
 import org.eclipse.foridac.ide.structuredtextfunctioneditor.sTFunction.STFunctionPackage;
 
@@ -44,7 +45,7 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
    * @generated
    * @ordered
    */
-  protected EList<FunctionDefinition> functions;
+  protected EList<INamedElement> functions;
 
   /**
    * <!-- begin-user-doc -->
@@ -73,11 +74,11 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
    * @generated
    */
   @Override
-  public EList<FunctionDefinition> getFunctions()
+  public EList<INamedElement> getFunctions()
   {
     if (functions == null)
     {
-      functions = new EObjectContainmentEList<FunctionDefinition>(FunctionDefinition.class, this, STFunctionPackage.ST_FUNCTION__FUNCTIONS);
+      functions = new EObjectContainmentEList<INamedElement>(INamedElement.class, this, STFunctionPackage.ST_FUNCTION__FUNCTIONS);
     }
     return functions;
   }
@@ -127,7 +128,7 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
     {
       case STFunctionPackage.ST_FUNCTION__FUNCTIONS:
         getFunctions().clear();
-        getFunctions().addAll((Collection<? extends FunctionDefinition>)newValue);
+        getFunctions().addAll((Collection<? extends INamedElement>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

@@ -25,6 +25,11 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.InitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedInputArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedOutputArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue;
@@ -112,6 +117,41 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
    * @generated
    */
   private EClass stAssignmentStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stCallStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stCallArgumentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stCallUnnamedArgumentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stCallNamedInputArgumentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass stCallNamedOutputArgumentEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -547,6 +587,138 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
   public EReference getSTAssignmentStatement_Right()
   {
     return (EReference)stAssignmentStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getSTCallStatement()
+  {
+    return stCallStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTCallStatement_Call()
+  {
+    return (EReference)stCallStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getSTCallArgument()
+  {
+    return stCallArgumentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getSTCallUnnamedArgument()
+  {
+    return stCallUnnamedArgumentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTCallUnnamedArgument_Arg()
+  {
+    return (EReference)stCallUnnamedArgumentEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getSTCallNamedInputArgument()
+  {
+    return stCallNamedInputArgumentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTCallNamedInputArgument_Target()
+  {
+    return (EReference)stCallNamedInputArgumentEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTCallNamedInputArgument_Source()
+  {
+    return (EReference)stCallNamedInputArgumentEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getSTCallNamedOutputArgument()
+  {
+    return stCallNamedOutputArgumentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getSTCallNamedOutputArgument_Not()
+  {
+    return (EAttribute)stCallNamedOutputArgumentEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTCallNamedOutputArgument_Source()
+  {
+    return (EReference)stCallNamedOutputArgumentEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getSTCallNamedOutputArgument_Target()
+  {
+    return (EReference)stCallNamedOutputArgumentEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1515,6 +1687,23 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__LEFT);
     createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__RIGHT);
 
+    stCallStatementEClass = createEClass(ST_CALL_STATEMENT);
+    createEReference(stCallStatementEClass, ST_CALL_STATEMENT__CALL);
+
+    stCallArgumentEClass = createEClass(ST_CALL_ARGUMENT);
+
+    stCallUnnamedArgumentEClass = createEClass(ST_CALL_UNNAMED_ARGUMENT);
+    createEReference(stCallUnnamedArgumentEClass, ST_CALL_UNNAMED_ARGUMENT__ARG);
+
+    stCallNamedInputArgumentEClass = createEClass(ST_CALL_NAMED_INPUT_ARGUMENT);
+    createEReference(stCallNamedInputArgumentEClass, ST_CALL_NAMED_INPUT_ARGUMENT__TARGET);
+    createEReference(stCallNamedInputArgumentEClass, ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE);
+
+    stCallNamedOutputArgumentEClass = createEClass(ST_CALL_NAMED_OUTPUT_ARGUMENT);
+    createEAttribute(stCallNamedOutputArgumentEClass, ST_CALL_NAMED_OUTPUT_ARGUMENT__NOT);
+    createEReference(stCallNamedOutputArgumentEClass, ST_CALL_NAMED_OUTPUT_ARGUMENT__SOURCE);
+    createEReference(stCallNamedOutputArgumentEClass, ST_CALL_NAMED_OUTPUT_ARGUMENT__TARGET);
+
     stIfStatementEClass = createEClass(ST_IF_STATEMENT);
     createEReference(stIfStatementEClass, ST_IF_STATEMENT__CONDITION);
     createEReference(stIfStatementEClass, ST_IF_STATEMENT__STATEMENTS);
@@ -1662,6 +1851,10 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     // Add supertypes to classes
     arrayInitializerExpressionEClass.getESuperTypes().add(this.getInitializerExpression());
     stAssignmentStatementEClass.getESuperTypes().add(this.getSTStatement());
+    stCallStatementEClass.getESuperTypes().add(this.getSTStatement());
+    stCallUnnamedArgumentEClass.getESuperTypes().add(this.getSTCallArgument());
+    stCallNamedInputArgumentEClass.getESuperTypes().add(this.getSTCallArgument());
+    stCallNamedOutputArgumentEClass.getESuperTypes().add(this.getSTCallArgument());
     stIfStatementEClass.getESuperTypes().add(this.getSTStatement());
     stCaseStatementEClass.getESuperTypes().add(this.getSTStatement());
     stForStatementEClass.getESuperTypes().add(this.getSTStatement());
@@ -1708,6 +1901,23 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
     initEClass(stAssignmentStatementEClass, STAssignmentStatement.class, "STAssignmentStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTAssignmentStatement_Left(), this.getSTExpression(), null, "left", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSTAssignmentStatement_Right(), this.getSTExpression(), null, "right", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(stCallStatementEClass, STCallStatement.class, "STCallStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTCallStatement_Call(), this.getSTExpression(), null, "call", null, 0, 1, STCallStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(stCallArgumentEClass, STCallArgument.class, "STCallArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(stCallUnnamedArgumentEClass, STCallUnnamedArgument.class, "STCallUnnamedArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTCallUnnamedArgument_Arg(), this.getSTExpression(), null, "arg", null, 0, 1, STCallUnnamedArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(stCallNamedInputArgumentEClass, STCallNamedInputArgument.class, "STCallNamedInputArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSTCallNamedInputArgument_Target(), theLibraryElementPackage.getINamedElement(), null, "target", null, 0, 1, STCallNamedInputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTCallNamedInputArgument_Source(), this.getSTExpression(), null, "source", null, 0, 1, STCallNamedInputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(stCallNamedOutputArgumentEClass, STCallNamedOutputArgument.class, "STCallNamedOutputArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSTCallNamedOutputArgument_Not(), ecorePackage.getEBoolean(), "not", null, 0, 1, STCallNamedOutputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTCallNamedOutputArgument_Source(), theLibraryElementPackage.getINamedElement(), null, "source", null, 0, 1, STCallNamedOutputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTCallNamedOutputArgument_Target(), theLibraryElementPackage.getINamedElement(), null, "target", null, 0, 1, STCallNamedOutputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stIfStatementEClass, STIfStatement.class, "STIfStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTIfStatement_Condition(), this.getSTExpression(), null, "condition", null, 0, 1, STIfStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1809,7 +2019,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage
 
     initEClass(stFeatureExpressionEClass, STFeatureExpression.class, "STFeatureExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSTFeatureExpression_Feature(), theLibraryElementPackage.getINamedElement(), null, "feature", null, 0, 1, STFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSTFeatureExpression_Parameters(), this.getSTExpression(), null, "parameters", null, 0, -1, STFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSTFeatureExpression_Parameters(), this.getSTCallArgument(), null, "parameters", null, 0, -1, STFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stMultibitPartialExpressionEClass, STMultibitPartialExpression.class, "STMultibitPartialExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSTMultibitPartialExpression_Specifier(), this.getSTMultiBitAccessSpecifier(), "specifier", null, 0, 1, STMultibitPartialExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -126,6 +126,45 @@ public class STCoreSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case STCorePackage.ST_CALL_STATEMENT:
+      {
+        STCallStatement stCallStatement = (STCallStatement)theEObject;
+        T result = caseSTCallStatement(stCallStatement);
+        if (result == null) result = caseSTStatement(stCallStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case STCorePackage.ST_CALL_ARGUMENT:
+      {
+        STCallArgument stCallArgument = (STCallArgument)theEObject;
+        T result = caseSTCallArgument(stCallArgument);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case STCorePackage.ST_CALL_UNNAMED_ARGUMENT:
+      {
+        STCallUnnamedArgument stCallUnnamedArgument = (STCallUnnamedArgument)theEObject;
+        T result = caseSTCallUnnamedArgument(stCallUnnamedArgument);
+        if (result == null) result = caseSTCallArgument(stCallUnnamedArgument);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT:
+      {
+        STCallNamedInputArgument stCallNamedInputArgument = (STCallNamedInputArgument)theEObject;
+        T result = caseSTCallNamedInputArgument(stCallNamedInputArgument);
+        if (result == null) result = caseSTCallArgument(stCallNamedInputArgument);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case STCorePackage.ST_CALL_NAMED_OUTPUT_ARGUMENT:
+      {
+        STCallNamedOutputArgument stCallNamedOutputArgument = (STCallNamedOutputArgument)theEObject;
+        T result = caseSTCallNamedOutputArgument(stCallNamedOutputArgument);
+        if (result == null) result = caseSTCallArgument(stCallNamedOutputArgument);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case STCorePackage.ST_IF_STATEMENT:
       {
         STIfStatement stIfStatement = (STIfStatement)theEObject;
@@ -455,6 +494,86 @@ public class STCoreSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSTAssignmentStatement(STAssignmentStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Call Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Call Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTCallStatement(STCallStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Call Argument</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Call Argument</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTCallArgument(STCallArgument object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Call Unnamed Argument</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Call Unnamed Argument</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTCallUnnamedArgument(STCallUnnamedArgument object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Call Named Input Argument</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Call Named Input Argument</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTCallNamedInputArgument(STCallNamedInputArgument object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>ST Call Named Output Argument</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>ST Call Named Output Argument</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSTCallNamedOutputArgument(STCallNamedOutputArgument object)
   {
     return null;
   }

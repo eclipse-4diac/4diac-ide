@@ -73,6 +73,11 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
       case STCorePackage.ARRAY_INIT_ELEMENT: return createArrayInitElement();
       case STCorePackage.ST_STATEMENT: return createSTStatement();
       case STCorePackage.ST_ASSIGNMENT_STATEMENT: return createSTAssignmentStatement();
+      case STCorePackage.ST_CALL_STATEMENT: return createSTCallStatement();
+      case STCorePackage.ST_CALL_ARGUMENT: return createSTCallArgument();
+      case STCorePackage.ST_CALL_UNNAMED_ARGUMENT: return createSTCallUnnamedArgument();
+      case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT: return createSTCallNamedInputArgument();
+      case STCorePackage.ST_CALL_NAMED_OUTPUT_ARGUMENT: return createSTCallNamedOutputArgument();
       case STCorePackage.ST_IF_STATEMENT: return createSTIfStatement();
       case STCorePackage.ST_ELSE_IF_PART: return createSTElseIfPart();
       case STCorePackage.ST_CASE_STATEMENT: return createSTCaseStatement();
@@ -228,6 +233,66 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory
   {
     STAssignmentStatementImpl stAssignmentStatement = new STAssignmentStatementImpl();
     return stAssignmentStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STCallStatement createSTCallStatement()
+  {
+    STCallStatementImpl stCallStatement = new STCallStatementImpl();
+    return stCallStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STCallArgument createSTCallArgument()
+  {
+    STCallArgumentImpl stCallArgument = new STCallArgumentImpl();
+    return stCallArgument;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STCallUnnamedArgument createSTCallUnnamedArgument()
+  {
+    STCallUnnamedArgumentImpl stCallUnnamedArgument = new STCallUnnamedArgumentImpl();
+    return stCallUnnamedArgument;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STCallNamedInputArgument createSTCallNamedInputArgument()
+  {
+    STCallNamedInputArgumentImpl stCallNamedInputArgument = new STCallNamedInputArgumentImpl();
+    return stCallNamedInputArgument;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public STCallNamedOutputArgument createSTCallNamedOutputArgument()
+  {
+    STCallNamedOutputArgumentImpl stCallNamedOutputArgument = new STCallNamedOutputArgumentImpl();
+    return stCallNamedOutputArgument;
   }
 
   /**

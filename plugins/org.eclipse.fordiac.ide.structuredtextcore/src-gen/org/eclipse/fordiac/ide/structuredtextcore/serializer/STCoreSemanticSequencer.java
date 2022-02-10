@@ -13,6 +13,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedInputArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedOutputArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue;
@@ -78,6 +82,18 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
+				return; 
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT:
+				sequence_STCallNamedInputArgument(context, (STCallNamedInputArgument) semanticObject); 
+				return; 
+			case STCorePackage.ST_CALL_NAMED_OUTPUT_ARGUMENT:
+				sequence_STCallNamedOutputArgument(context, (STCallNamedOutputArgument) semanticObject); 
+				return; 
+			case STCorePackage.ST_CALL_STATEMENT:
+				sequence_STCallStatement(context, (STCallStatement) semanticObject); 
+				return; 
+			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT:
+				sequence_STCallUnnamedArgument(context, (STCallUnnamedArgument) semanticObject); 
 				return; 
 			case STCorePackage.ST_CASE_CASES:
 				sequence_STCaseCases(context, (STCaseCases) semanticObject); 
@@ -350,6 +366,79 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
+	 *     STCallArgument returns STCallNamedInputArgument
+	 *     STCallNamedInputArgument returns STCallNamedInputArgument
+	 *
+	 * Constraint:
+	 *     (target=[INamedElement|ID] source=STExpression)
+	 */
+	protected void sequence_STCallNamedInputArgument(ISerializationContext context, STCallNamedInputArgument semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTCallNamedInputArgumentAccess().getTargetINamedElementIDTerminalRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET, false));
+		feeder.accept(grammarAccess.getSTCallNamedInputArgumentAccess().getSourceSTExpressionParserRuleCall_2_0(), semanticObject.getSource());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STCallArgument returns STCallNamedOutputArgument
+	 *     STCallNamedOutputArgument returns STCallNamedOutputArgument
+	 *
+	 * Constraint:
+	 *     (not?='NOT'? source=[INamedElement|ID] target=[INamedElement|ID])
+	 */
+	protected void sequence_STCallNamedOutputArgument(ISerializationContext context, STCallNamedOutputArgument semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STStatement returns STCallStatement
+	 *     STCallStatement returns STCallStatement
+	 *
+	 * Constraint:
+	 *     call=STAccessExpression
+	 */
+	protected void sequence_STCallStatement(ISerializationContext context, STCallStatement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_STATEMENT__CALL) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_STATEMENT__CALL));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTCallStatementAccess().getCallSTAccessExpressionParserRuleCall_0(), semanticObject.getCall());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STCallArgument returns STCallUnnamedArgument
+	 *     STCallUnnamedArgument returns STCallUnnamedArgument
+	 *
+	 * Constraint:
+	 *     arg=STExpression
+	 */
+	protected void sequence_STCallUnnamedArgument(ISerializationContext context, STCallUnnamedArgument semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_UNNAMED_ARGUMENT__ARG) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_UNNAMED_ARGUMENT__ARG));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTCallUnnamedArgumentAccess().getArgSTExpressionParserRuleCall_0(), semanticObject.getArg());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     STCaseCases returns STCaseCases
 	 *
 	 * Constraint:
@@ -524,7 +613,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STFeatureExpression returns STFeatureExpression
 	 *
 	 * Constraint:
-	 *     (feature=[INamedElement|ID] (parameters+=STExpression parameters+=STExpression*)?)
+	 *     (feature=[INamedElement|ID] (parameters+=STCallArgument parameters+=STCallArgument*)?)
 	 */
 	protected void sequence_STFeatureExpression(ISerializationContext context, STFeatureExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
