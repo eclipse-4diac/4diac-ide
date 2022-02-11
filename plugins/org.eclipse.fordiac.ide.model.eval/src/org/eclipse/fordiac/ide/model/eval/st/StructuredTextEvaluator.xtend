@@ -51,7 +51,7 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
-final class StructuredTextEvaluator extends AbstractEvaluator {
+class StructuredTextEvaluator extends AbstractEvaluator {
 
 	@Accessors final String name
 	final String text
@@ -158,7 +158,7 @@ final class StructuredTextEvaluator extends AbstractEvaluator {
 
 	def private dispatch void evaluateStatement(STCaseStatement stmt) {
 		val value = stmt.selector.trap.evaluateExpression;
-		(stmt.cases.findFirst[conditions.exists[evaluateExpression == value]]?.statements ?: stmt.^else?.statements)?.
+		(stmt.cases.findFirst[conditions.exists[trap.evaluateExpression == value]]?.statements ?: stmt.^else?.statements)?.
 			evaluateStatementList
 	}
 
