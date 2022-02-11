@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University
+ * 				 2022 Primetals Technologies Germany GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,6 +12,7 @@
  *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *   Michael Oberlehner - added subapp monitoring
+ *   Fabio Gandolfi - added decision remember dialog
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
@@ -51,7 +53,7 @@ import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringAdapterInterfaceEd
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -60,7 +62,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -247,7 +248,33 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		if (!Activator.getDefault().getPreferenceStore()
 				.getBoolean(PreferenceConstants.P_MONITORING_STARTMONITORINGWITHOUTASKING)) {
 
-			final EnableMonitoringDialog dialog = new EnableMonitoringDialog(shell, system);
+			final MessageDialog dialog = new MessageDialog(shell, Messages.MonitoringDialog_EnableMonitoring, null,
+					MessageFormat.format(Messages.MonitoringDialog_EnableMonitoringQuestion, system.getName()),
+					MessageDialog.QUESTION,
+					new String[] { Messages.MonitoringDialog_Enable, Messages.MonitoringDialog_No }, 0) {
+
+				@Override
+				protected Control createCustomArea(final Composite parent) {
+					final Button checkBox = new Button(parent, SWT.CHECK);
+					checkBox.setText(Messages.MonitoringPreferences_StartMonitoringWithoutAsking);
+					checkBox.addSelectionListener(new SelectionListener() {
+
+						@Override
+						public void widgetSelected(final SelectionEvent e) {
+							Activator.getDefault().getPreferenceStore().setValue(
+									PreferenceConstants.P_MONITORING_STARTMONITORINGWITHOUTASKING,
+									checkBox.getSelection());
+						}
+
+						@Override
+						public void widgetDefaultSelected(final SelectionEvent e) {
+							// Nothing to do here
+						}
+					});
+					return checkBox;
+				}
+
+			};
 
 			return dialog.open() == 0;
 		}
@@ -257,50 +284,4 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 	private static void enableMonitoring(final AutomationSystem system) {
 		MonitoringManager.getInstance().enableSystem(system);
 	}
-
-	public static class EnableMonitoringDialog extends Dialog {
-
-		private final AutomationSystem system;
-
-		public EnableMonitoringDialog(final Shell parentShell, final AutomationSystem system) {
-			super(parentShell);
-			this.system = system;
-		}
-
-		@Override
-		protected Control createDialogArea(final Composite parent) {
-			final Composite container = (Composite) super.createDialogArea(parent);
-
-			final Label dialogText = new Label(container, SWT.NONE);
-			dialogText.setText(
-					MessageFormat.format(Messages.MonitoringDialog_EnableMonitoringQuestion, system.getName()));
-
-			final Button checkBox = new Button(container, SWT.CHECK);
-			checkBox.setText(Messages.MonitoringPreferences_StartMonitoringWithoutAsking);
-			checkBox.addSelectionListener(new SelectionListener() {
-
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					Activator.getDefault().getPreferenceStore().setValue(
-							PreferenceConstants.P_MONITORING_STARTMONITORINGWITHOUTASKING,
-							checkBox.getSelection());
-				}
-
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-					// Nothing to do here
-				}
-			});
-
-			return container;
-		}
-
-		@Override
-		protected void configureShell(final Shell newShell) {
-			super.configureShell(newShell);
-			newShell.setText(Messages.MonitoringDialog_EnableMonitoring);
-		}
-
-	}
-
 }

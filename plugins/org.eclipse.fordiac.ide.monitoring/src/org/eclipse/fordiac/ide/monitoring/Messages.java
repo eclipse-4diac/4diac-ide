@@ -26,6 +26,9 @@ public final class Messages extends NLS {
 	public static String MonitoringPreferences_StartMonitoringWithoutAsking;
 	public static String MonitoringDialog_EnableMonitoring;
 	public static String MonitoringDialog_EnableMonitoringQuestion;
+	public static String MonitoringDialog_Enable;
+	public static String MonitoringDialog_No;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
