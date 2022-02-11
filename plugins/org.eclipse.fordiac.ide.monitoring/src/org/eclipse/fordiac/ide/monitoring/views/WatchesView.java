@@ -20,22 +20,21 @@ package org.eclipse.fordiac.ide.monitoring.views;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
-import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Messages;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesContentProvider;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesLabelProvider;
-import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.CellEditor;
@@ -236,44 +235,30 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		if (visible && (null != root) && (!root.isDisposed()) && selectionActive
 				&& selection instanceof StructuredSelection) {
 
-			List<FBEditPart> fbs;
+			final Collection<MonitoringBaseElement> activeElements = new ArrayList<>();
 
-			if (((IStructuredSelection) selection).size() == 1
-					&& (((IStructuredSelection) selection).getFirstElement() instanceof FBNetworkEditPart
-							|| ((IStructuredSelection) selection)
-							.getFirstElement() instanceof UISubAppNetworkEditPart
-							|| ((IStructuredSelection) selection).getFirstElement() instanceof GroupEditPart)) {
-				final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
-				final List<?> children = viewer.getContents().getChildren();
+			if (((IStructuredSelection) selection).size() > 0
+					&& ((IStructuredSelection) selection).getFirstElement() instanceof EditPart) {
 
-				if (((IStructuredSelection) selection).getFirstElement() instanceof GroupEditPart) {
-					fbs = extractEditPartsFromGroupEditParts(children);
-				} else if (((IStructuredSelection) selection).getFirstElement() instanceof GroupContentEditPart) {
-					fbs = extractEditPartsFromGroupEditParts(children);
-				} else {
-					fbs = extractEditPartsFromGroupEditParts(children);
-					fbs.addAll(getEditParts(children));
-				}
-			} else {
-				fbs = getEditParts(((IStructuredSelection) selection).toList());
-			}
+				for (final Object selectionObject : ((IStructuredSelection) selection).toList()) {
+					if (selectionObject instanceof EditPart) {
 
-			if (!fbs.isEmpty()) {
-
-				final Collection<MonitoringBaseElement> elements = MonitoringManager.getInstance()
-						.getAllElementsToMonitor();
-				final  Collection<MonitoringBaseElement> activeElements = new ArrayList<>();
-				for (final MonitoringBaseElement monitoringBaseElement : elements) {
-
-					if ((fbs.stream()
-							.anyMatch(sel -> sel.getModel().equals(monitoringBaseElement.getPort().getFb())))) {
-
-						activeElements.add(monitoringBaseElement);
+						final Object singleSelection = ((EditPart) selectionObject).getModel();
+						if (singleSelection instanceof SubApp) {
+							activeElements.addAll(getSubAppMonitoringBaseElements(singleSelection));
+						} else if (singleSelection instanceof Group) {
+							activeElements.addAll(getGroupMonitoringBaseElements(singleSelection));
+						} else if (singleSelection instanceof FB) {
+							activeElements.addAll(getFBMonitoringBaseElements(singleSelection));
+						} else if (singleSelection instanceof FBNetwork) {
+							activeElements.addAll(getFBNetworkMonitoringBaseElements(singleSelection));
+						} else {
+							// Nothing to do with connections and others...
+						}
 					}
-
-					updateWithList(activeElements);
 				}
 			}
+			updateWithList(activeElements);
 		}
 	}
 
@@ -291,29 +276,51 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		}
 	}
 
-	public static List<FBEditPart> extractEditPartsFromGroupEditParts(final List<?> input) {
-		final List<FBEditPart> fbs = new ArrayList<>();
-		for (final Object obj : input) {
-			if (obj instanceof GroupEditPart) {
-				fbs.addAll(extractEditPartsFromGroupContentEditParts(((GroupEditPart) obj).getChildren()));
+	public static Collection<MonitoringBaseElement> getGroupMonitoringBaseElements(final Object group) {
+		return findMonitoringBaseElement(((Group) group).getGroupElements());
+	}
+
+	public static Collection<MonitoringBaseElement> getSubAppMonitoringBaseElements(final Object subApp) {
+		final Collection<MonitoringBaseElement> activeElements = new ArrayList<>();
+		if (((SubApp) subApp).isUnfolded()) {
+			activeElements.addAll(findMonitoringBaseElement(((SubApp) subApp).getSubAppNetwork().getNetworkElements()));
+		}
+		activeElements.addAll(findMonitoringBaseElement(((FBNetworkElement) subApp)));
+		return activeElements;
+	}
+
+	public static Collection<MonitoringBaseElement> getFBMonitoringBaseElements(final Object fb) {
+		return findMonitoringBaseElement(((FBNetworkElement) fb));
+	}
+
+	public static Collection<MonitoringBaseElement> getFBNetworkMonitoringBaseElements(final Object fbNetwork) {
+		final Collection<MonitoringBaseElement> activeElements = new ArrayList<>();
+		for (final FBNetworkElement model : ((FBNetwork) fbNetwork).getNetworkElements()) {
+			if (model instanceof SubApp) {
+				activeElements.addAll(getSubAppMonitoringBaseElements(model));
+			} else {
+				activeElements.addAll(findMonitoringBaseElement(model));
 			}
 		}
-		return fbs;
+		return activeElements;
 	}
 
-	public static List<FBEditPart> extractEditPartsFromGroupContentEditParts(final List<?> input) {
-		final List<FBEditPart> fbs = new ArrayList<>();
-		for (final Object obj : input) {
-			if (obj instanceof GroupContentEditPart) {
-				fbs.addAll(getEditParts(((GroupContentEditPart) obj).getChildren()));
+	public static Collection<MonitoringBaseElement> findMonitoringBaseElement(final List<FBNetworkElement> models) {
+		final Collection<MonitoringBaseElement> activeElements = new ArrayList<>();
+		for (final FBNetworkElement model : models) {
+			activeElements.addAll(findMonitoringBaseElement(model));
+		}
+		return activeElements;
+	}
+
+	public static Collection<MonitoringBaseElement> findMonitoringBaseElement(final FBNetworkElement model) {
+		final Collection<MonitoringBaseElement> elements = MonitoringManager.getInstance().getAllElementsToMonitor();
+		final Collection<MonitoringBaseElement> activeElements = new ArrayList<>();
+		for (final MonitoringBaseElement monitoringBaseElement : elements) {
+			if (model.equals(monitoringBaseElement.getPort().getFb())) {
+				activeElements.add(monitoringBaseElement);
 			}
 		}
-		return fbs;
+		return activeElements;
 	}
-
-	@SuppressWarnings("unchecked")
-	public static List<FBEditPart> getEditParts(final List<?> input) {
-		return (List<FBEditPart>) input.stream().filter(sel -> sel instanceof FBEditPart).collect(Collectors.toList());
-	}
-
 }
