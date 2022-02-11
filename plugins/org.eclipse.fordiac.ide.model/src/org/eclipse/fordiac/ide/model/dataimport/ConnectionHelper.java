@@ -270,11 +270,11 @@ public final class ConnectionHelper {
 		IInterfaceElement repairIE = null;
 		// adapter check has to be first
 		if (connection instanceof AdapterDeclaration) {
-			repairIE = InterfaceListCopier.copyAdapter((AdapterDeclaration) connection);
+			repairIE = InterfaceListCopier.copyAdapter((AdapterDeclaration) connection, true);
 		} else if (connection instanceof VarDeclaration) {
-			repairIE = InterfaceListCopier.copyVar((VarDeclaration) connection, false);
+			repairIE = InterfaceListCopier.copyVar((VarDeclaration) connection, true, true);
 		} else if (connection instanceof Event) {
-			repairIE = InterfaceListCopier.copyEvent((Event) connection);
+			repairIE = InterfaceListCopier.copyEvent((Event) connection, true);
 		}
 
 		if (null != repairIE) {

@@ -58,7 +58,7 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 			final PaletteEntry entry = createPaletteEntry(targetFile);
 			final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 			entry.setType(type);
-			InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl);
+			InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl, true);
 
 			TypeManagementPreferencesHelper.setupVersionInfo(type);
 
