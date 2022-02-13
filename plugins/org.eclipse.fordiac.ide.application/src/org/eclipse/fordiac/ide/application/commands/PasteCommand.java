@@ -258,6 +258,7 @@ public class PasteCommand extends Command {
 		cmd.setSource(source);
 		cmd.setDestination(destination);
 		cmd.setArrangementConstraints(connRef.getRoutingData());
+		cmd.setVisible(connRef.isVisible());
 	}
 
 	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig, final FBNetworkElement copiedElement) {

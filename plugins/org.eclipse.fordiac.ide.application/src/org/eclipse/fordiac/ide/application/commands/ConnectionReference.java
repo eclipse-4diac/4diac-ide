@@ -28,11 +28,13 @@ public class ConnectionReference {
 	private final IInterfaceElement source;
 	private final IInterfaceElement destination;
 	private final ConnectionRoutingData routingData;
+	private final boolean visible;
 
 	public ConnectionReference(final Connection con) {
 		this.source = con.getSource();
 		this.destination = con.getDestination();
 		routingData = EcoreUtil.copy(con.getRoutingData());
+		visible = con.isVisible();
 	}
 
 	public IInterfaceElement getSource() {
@@ -53,5 +55,9 @@ public class ConnectionReference {
 
 	public ConnectionRoutingData getRoutingData() {
 		return routingData;
+	}
+
+	public boolean isVisible() {
+		return visible;
 	}
 }
