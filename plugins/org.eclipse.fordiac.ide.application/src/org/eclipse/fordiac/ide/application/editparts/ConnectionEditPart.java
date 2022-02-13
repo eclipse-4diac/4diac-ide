@@ -109,9 +109,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
-		private FBNConnectionEndpointPolicy getConnectionEndPointPolicy() {
-			return (FBNConnectionEndpointPolicy) getEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE);
-		}
 
 	}
 
@@ -353,4 +350,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	public DragTracker getDragTracker(final Request req) {
 		return new ConnectionSelectEditPartTracker(this);
 	}
+
+	public boolean isSelectionShown() {
+		return getConnectionEndPointPolicy().isSelectionFeedbackShowing();
+	}
+
+	private FBNConnectionEndpointPolicy getConnectionEndPointPolicy() {
+		return (FBNConnectionEndpointPolicy) getEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE);
+	}
+
 }
