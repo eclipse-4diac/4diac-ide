@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.fordiac.ide.structuredtextalgorithm.feature"
-      label="STAlgorithm Feature"
+      id="org.eclipse.fordiac.ide.structuredtext.feature"
+      label="Structured Text Feature"
       version="2.0.1.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
-      This feature provides a parser for IEC 61131-3 Structured Text algorithms inside IEC 61499 Function Blocks.
+      This feature provides support for IEC 61131-3 Structured Text.
    </description>
 
    <copyright>
@@ -166,9 +166,17 @@ Java and all Java-based trademarks are trademarks of Oracle Corporation in the
 United States, other countries, or both.\n
    </license>
 
-   <includes
-         id="org.eclipse.fordiac.ide.structuredtextcore.feature"
-         version="0.0.0"/>
+   <requires>
+      <import feature="org.eclipse.platform" version="4.20" match="greaterOrEqual"/>
+      <import feature="org.eclipse.gef" version="3.11" match="greaterOrEqual"/>
+      <import feature="org.eclipse.emf.common" version="2.24" match="greaterOrEqual"/>
+      <import feature="org.eclipse.emf.ecore" version="2.24" match="greaterOrEqual"/>
+      <import feature="org.eclipse.emf.edit.ui" version="2.22" match="greaterOrEqual"/>
+      <import feature="org.eclipse.xtext.redist" version="2.24" match="greaterOrEqual"/>
+      <import feature="org.eclipse.xtext.runtime" version="2.24" match="greaterOrEqual"/>
+      <import feature="org.eclipse.xtext.ui" version="2.24" match="greaterOrEqual"/>
+      <import feature="org.eclipse.fordiac.ide.workbench.feature" version="2.0" match="greaterOrEqual"/>
+   </requires>
 
    <plugin
          id="org.eclipse.fordiac.ide.structuredtextalgorithm"
@@ -200,6 +208,48 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.model.eval.st"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.structuredtextcore"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.structuredtextcore.ide"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.structuredtextcore.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.structuredtextfunctioneditor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ide"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"

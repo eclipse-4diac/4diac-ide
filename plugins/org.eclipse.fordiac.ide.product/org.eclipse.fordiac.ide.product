@@ -102,9 +102,7 @@
       <feature id="org.eclipse.jgit.gpg.bc" installMode="root"/>
       <feature id="org.eclipse.jgit.ssh.jsch" installMode="root"/>
       <feature id="org.eclipse.elk.algorithms.feature" installMode="root"/>
-      <feature id="org.eclipse.fordiac.ide.structuredtextcore.feature" installMode="root"/>
-      <feature id="org.eclipse.fordiac.ide.structuredtextalgorithm.feature" installMode="root"/>
-      <feature id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.feature" installMode="root"/>
+      <feature id="org.eclipse.fordiac.ide.structuredtext.feature" installMode="root"/>
    </features>
 
    <configurations>
