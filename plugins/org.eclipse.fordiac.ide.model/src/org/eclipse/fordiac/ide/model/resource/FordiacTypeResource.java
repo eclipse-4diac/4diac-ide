@@ -24,6 +24,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -39,7 +40,7 @@ public class FordiacTypeResource extends ResourceImpl {
 		final IFile fbtFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.uri.toPlatformString(true)));
 		final var paletteEntryForFile = TypeLibrary.getPaletteEntryForFile(fbtFile);
 		//Load the Type
-		final var lib = paletteEntryForFile.getType();
+		final var lib = EcoreUtil.copy(paletteEntryForFile.getType());
 		//Do not modify any fordiac element
 		getContents().add(lib);
 	}
