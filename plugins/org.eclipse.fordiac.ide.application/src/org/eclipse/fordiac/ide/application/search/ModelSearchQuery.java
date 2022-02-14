@@ -70,7 +70,7 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 
 		Display.getDefault()
-				.asyncExec(() -> ((SearchView) NewSearchUI.getSearchResultView()).showSearchResult(getSearchResult()));
+		.asyncExec(() -> ((SearchView) NewSearchUI.getSearchResultView()).showSearchResult(getSearchResult()));
 
 		return Status.OK_STATUS;
 	}
@@ -94,9 +94,12 @@ public class ModelSearchQuery implements ISearchQuery {
 				searchResult.addResult(fbnetworkElement);
 			}
 			if (fbnetworkElement instanceof SubApp) {
-				searchFBNetwork(((SubApp) fbnetworkElement).getSubAppNetwork());
+				final SubApp subApp = (SubApp) fbnetworkElement;
+				// for typed subapps and subapps without content (i.e., mapped subapp) don't search further
+				if (!subApp.isTyped() && subApp.getSubAppNetwork() != null) {
+					searchFBNetwork(subApp.getSubAppNetwork());
+				}
 			}
-
 			if (modelQuerySpec.isCheckedPinName()) {
 				final List<EObject> matchingPins = fbnetworkElement.getInterface().getAllInterfaceElements().stream()
 						.filter(pin -> pin.getName() != null && compareStrings(pin.getName()))
