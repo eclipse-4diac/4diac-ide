@@ -39,12 +39,14 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -146,43 +148,7 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 		final TextCellEditor fbNameEditor = new TextCellEditor(table);
 		((Text) fbNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 
-		fbTypeEditor = new NewInstanceCellEditor(table, SWT.ON_TOP, true) {
-			@Override
-			public void configureTextControl() {
-				super.configureTextControl();
-				table.addListener(SWT.MouseDown, event -> {
-
-					if (!fbTypeEditor.insideAnyEditorArea()) {
-						fbTypeEditor.focusLost();
-					}
-
-				});
-
-				table.addListener(SWT.MouseDoubleClick, event -> {
-					if (popupShell != null && !popupShell.isDisposed() && !popupShell.isVisible()) {
-						if (fbTypeEditor.insideAnyEditorArea()) {
-
-							final Point pt = new Point(event.x, event.y);
-							final TableItem item = table.getItem(pt);
-							final Point pref = getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT);
-							Point screenPos = table.toDisplay(new Point(item.getBounds().x, item.getBounds().y));
-							int itemWidth = pref.x;
-							for (int i = 0; i < table.getColumnCount(); i++) {
-								final Rectangle rect = item.getBounds(i);
-								if (rect.contains(pt)) {
-									screenPos = table.toDisplay(new Point(item.getBounds(i).x, item.getBounds(i).y));
-									itemWidth = rect.width;
-								}
-							}
-							getControl().setBounds(screenPos.x, screenPos.y, itemWidth, pref.y);
-						} else {
-							fbTypeEditor.focusLost();
-						}
-					}
-				});
-
-			}
-		};
+		fbTypeEditor = new InternalFBNewInstanceCellEditor(table, SWT.ON_TOP, true);
 		fbTypeEditor.setPalette(getPalette());
 		fbTypeEditor.getMenuButton().dispose();
 
@@ -208,6 +174,24 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 	@Override
 	protected void setInputInit() {
 		internalFbsViewer.setCellEditors(createCellEditors(internalFbsViewer.getTable()));
+	}
+
+	private static class InternalFBNewInstanceCellEditor extends NewInstanceCellEditor {
+
+		public InternalFBNewInstanceCellEditor(final Table parent, final int style, final boolean insideCell) {
+			super(parent, style, insideCell);
+		}
+
+		@Override
+		public void activate(final ColumnViewerEditorActivationEvent activationEvent) {
+			final ViewerCell cell = (ViewerCell) activationEvent.getSource();
+			final TableItem item = (TableItem) cell.getViewerRow().getItem();
+			final Rectangle rect = item.getBounds(cell.getVisualIndex());
+			final Point screenPos = item.getParent().toDisplay(new Point(rect.x, rect.y));
+			getControl().setBounds(screenPos.x, screenPos.y, rect.width, rect.height);
+			super.activate(activationEvent);
+		}
+
 	}
 
 	private final class InternalFBsCellModifier implements ICellModifier {
