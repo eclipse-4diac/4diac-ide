@@ -14,11 +14,11 @@ package org.eclipse.fordiac.ide.model.eval.fb
 
 import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.Evaluator
-import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator
+import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 
 class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
 	Evaluator algorithmEvaluator
@@ -33,9 +33,10 @@ class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
 
 	new(SimpleFBType type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
 		super(type, queue, variables, parent)
-		algorithmEvaluator = switch (alg : type.algorithm) {
-			STAlgorithm: new StructuredTextEvaluator(alg, this.variables.values, this)
-			default: throw new UnsupportedOperationException('''Cannot evaluate algorithm «alg.class»''')
+		algorithmEvaluator = EvaluatorFactory.createEvaluator(type.algorithm,
+			type.algorithm.eClass.instanceClass as Class<? extends Algorithm>, getVariables.values, this)
+		if (algorithmEvaluator === null) {
+			throw new UnsupportedOperationException('''Cannot evaluate algorithm «type.algorithm.eClass.name»''')
 		}
 	}
 

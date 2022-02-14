@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.eclipse.fordiac.ide.model.eval.factory" name="Evaluator Factory" schema="schema/factory.exsd"/>
+   <extension
+         point="org.eclipse.fordiac.ide.model.eval.factory">
+      <factory
+            class="org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType">
+         </source>
+      </factory>
+   </extension>
+</plugin>

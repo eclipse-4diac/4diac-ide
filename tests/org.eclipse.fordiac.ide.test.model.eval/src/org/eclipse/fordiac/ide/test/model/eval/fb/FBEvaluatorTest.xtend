@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.test.model.eval.fb
 
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -26,6 +27,7 @@ class FBEvaluatorTest {
 	@BeforeAll
 	def static void setupXtext() {
 		STAlgorithmStandaloneSetup.doSetup
+		StructuredTextEvaluatorFactory.register
 	}
 
 	def static newInterfaceList(Iterable<Event> events, Iterable<VarDeclaration> vars) {
