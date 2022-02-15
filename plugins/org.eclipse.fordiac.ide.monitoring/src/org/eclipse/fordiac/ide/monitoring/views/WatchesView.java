@@ -258,7 +258,9 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 					}
 				}
 			}
-			updateWithList(activeElements);
+			if (!activeElements.isEmpty()) {
+				updateWithList(activeElements);
+			}
 		}
 	}
 
