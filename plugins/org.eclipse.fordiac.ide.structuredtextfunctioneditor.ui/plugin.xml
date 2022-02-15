@@ -9,7 +9,8 @@
 			default="true"
 			extensions="stfunc"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-			name="STFunction Editor">
+			icon="fordiacimage://ICON_FUNCTION"
+			name="ST Function Editor">
 		</editor>
 	</extension>
 	<extension
