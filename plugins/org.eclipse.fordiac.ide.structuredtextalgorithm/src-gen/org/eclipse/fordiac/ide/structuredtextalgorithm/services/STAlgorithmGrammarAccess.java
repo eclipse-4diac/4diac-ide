@@ -1040,13 +1040,13 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//terminal STRING returns ecore::EString:
-	//    '"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"';
+	//    "'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
 	public TerminalRule getSTRINGRule() {
 		return gaSTCore.getSTRINGRule();
 	}
 	
 	//terminal WSTRING returns ecore::EString:
-	//    "'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
+	//    '"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"';
 	public TerminalRule getWSTRINGRule() {
 		return gaSTCore.getWSTRINGRule();
 	}

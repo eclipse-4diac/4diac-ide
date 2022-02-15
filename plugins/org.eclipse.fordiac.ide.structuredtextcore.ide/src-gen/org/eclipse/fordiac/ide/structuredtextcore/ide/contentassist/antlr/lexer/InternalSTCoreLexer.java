@@ -5702,11 +5702,11 @@ public class InternalSTCoreLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTCoreLexer.g:238:13: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' )
-            // InternalSTCoreLexer.g:238:15: '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"'
+            // InternalSTCoreLexer.g:238:13: ( '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
+            // InternalSTCoreLexer.g:238:15: '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\''
             {
-            match('\"'); 
-            // InternalSTCoreLexer.g:238:19: ( '$' . | ~ ( ( '$' | '\"' ) ) )*
+            match('\''); 
+            // InternalSTCoreLexer.g:238:20: ( '$' . | ~ ( ( '$' | '\\'' ) ) )*
             loop8:
             do {
                 int alt8=3;
@@ -5715,14 +5715,14 @@ public class InternalSTCoreLexer extends Lexer {
                 if ( (LA8_0=='$') ) {
                     alt8=1;
                 }
-                else if ( ((LA8_0>='\u0000' && LA8_0<='!')||LA8_0=='#'||(LA8_0>='%' && LA8_0<='\uFFFF')) ) {
+                else if ( ((LA8_0>='\u0000' && LA8_0<='#')||(LA8_0>='%' && LA8_0<='&')||(LA8_0>='(' && LA8_0<='\uFFFF')) ) {
                     alt8=2;
                 }
 
 
                 switch (alt8) {
             	case 1 :
-            	    // InternalSTCoreLexer.g:238:20: '$' .
+            	    // InternalSTCoreLexer.g:238:21: '$' .
             	    {
             	    match('$'); 
             	    matchAny(); 
@@ -5730,9 +5730,9 @@ public class InternalSTCoreLexer extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // InternalSTCoreLexer.g:238:26: ~ ( ( '$' | '\"' ) )
+            	    // InternalSTCoreLexer.g:238:27: ~ ( ( '$' | '\\'' ) )
             	    {
-            	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||input.LA(1)=='#'||(input.LA(1)>='%' && input.LA(1)<='\uFFFF') ) {
+            	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='#')||(input.LA(1)>='%' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
 
             	    }
@@ -5750,7 +5750,7 @@ public class InternalSTCoreLexer extends Lexer {
                 }
             } while (true);
 
-            match('\"'); 
+            match('\''); 
 
             }
 
@@ -5767,11 +5767,11 @@ public class InternalSTCoreLexer extends Lexer {
         try {
             int _type = RULE_WSTRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTCoreLexer.g:240:14: ( '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
-            // InternalSTCoreLexer.g:240:16: '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\''
+            // InternalSTCoreLexer.g:240:14: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' )
+            // InternalSTCoreLexer.g:240:16: '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"'
             {
-            match('\''); 
-            // InternalSTCoreLexer.g:240:21: ( '$' . | ~ ( ( '$' | '\\'' ) ) )*
+            match('\"'); 
+            // InternalSTCoreLexer.g:240:20: ( '$' . | ~ ( ( '$' | '\"' ) ) )*
             loop9:
             do {
                 int alt9=3;
@@ -5780,14 +5780,14 @@ public class InternalSTCoreLexer extends Lexer {
                 if ( (LA9_0=='$') ) {
                     alt9=1;
                 }
-                else if ( ((LA9_0>='\u0000' && LA9_0<='#')||(LA9_0>='%' && LA9_0<='&')||(LA9_0>='(' && LA9_0<='\uFFFF')) ) {
+                else if ( ((LA9_0>='\u0000' && LA9_0<='!')||LA9_0=='#'||(LA9_0>='%' && LA9_0<='\uFFFF')) ) {
                     alt9=2;
                 }
 
 
                 switch (alt9) {
             	case 1 :
-            	    // InternalSTCoreLexer.g:240:22: '$' .
+            	    // InternalSTCoreLexer.g:240:21: '$' .
             	    {
             	    match('$'); 
             	    matchAny(); 
@@ -5795,9 +5795,9 @@ public class InternalSTCoreLexer extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // InternalSTCoreLexer.g:240:28: ~ ( ( '$' | '\\'' ) )
+            	    // InternalSTCoreLexer.g:240:27: ~ ( ( '$' | '\"' ) )
             	    {
-            	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='#')||(input.LA(1)>='%' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='\uFFFF') ) {
+            	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||input.LA(1)=='#'||(input.LA(1)>='%' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
 
             	    }
@@ -5815,7 +5815,7 @@ public class InternalSTCoreLexer extends Lexer {
                 }
             } while (true);
 
-            match('\''); 
+            match('\"'); 
 
             }
 
@@ -6971,7 +6971,7 @@ public class InternalSTCoreLexer extends Lexer {
     static final String DFA17_specialS =
         "\1\0\54\uffff\1\1\1\2\u0163\uffff}>";
     static final String[] DFA17_transitionS = {
-            "\11\60\2\57\2\60\1\57\22\60\1\57\1\60\1\55\1\32\1\60\1\22\1\33\1\56\1\34\1\35\1\23\1\36\1\37\1\40\1\24\1\41\1\52\1\51\1\47\5\52\1\50\1\52\1\25\1\42\1\26\1\27\1\30\2\60\1\12\1\15\1\6\1\2\1\4\1\13\1\54\1\43\1\16\2\54\1\1\1\17\1\20\1\31\2\54\1\10\1\11\1\3\1\14\1\5\1\7\1\21\2\54\1\44\1\60\1\45\1\53\1\46\1\60\1\12\1\15\1\6\1\2\1\4\1\13\1\54\1\43\1\16\2\54\1\1\1\17\1\20\1\31\2\54\1\10\1\11\1\3\1\14\1\5\1\7\1\21\2\54\uff85\60",
+            "\11\60\2\57\2\60\1\57\22\60\1\57\1\60\1\56\1\32\1\60\1\22\1\33\1\55\1\34\1\35\1\23\1\36\1\37\1\40\1\24\1\41\1\52\1\51\1\47\5\52\1\50\1\52\1\25\1\42\1\26\1\27\1\30\2\60\1\12\1\15\1\6\1\2\1\4\1\13\1\54\1\43\1\16\2\54\1\1\1\17\1\20\1\31\2\54\1\10\1\11\1\3\1\14\1\5\1\7\1\21\2\54\1\44\1\60\1\45\1\53\1\46\1\60\1\12\1\15\1\6\1\2\1\4\1\13\1\54\1\43\1\16\2\54\1\1\1\17\1\20\1\31\2\54\1\10\1\11\1\3\1\14\1\5\1\7\1\21\2\54\uff85\60",
             "\1\61\4\uffff\1\65\10\uffff\1\63\1\uffff\1\62\2\uffff\1\64\14\uffff\1\61\4\uffff\1\65\10\uffff\1\63\1\uffff\1\62\2\uffff\1\64",
             "\12\66\7\uffff\1\67\7\66\1\71\5\66\1\72\4\66\1\73\2\66\1\70\3\66\4\uffff\1\66\1\uffff\1\67\7\66\1\71\5\66\1\72\4\66\1\73\2\66\1\70\3\66",
             "\12\66\7\uffff\7\66\1\76\1\75\5\66\1\100\2\66\1\77\10\66\4\uffff\1\66\1\uffff\7\66\1\76\1\75\5\66\1\100\2\66\1\77\10\66",
@@ -7503,9 +7503,9 @@ public class InternalSTCoreLexer extends Lexer {
 
                         else if ( (LA17_0=='G'||(LA17_0>='J' && LA17_0<='K')||(LA17_0>='P' && LA17_0<='Q')||(LA17_0>='Y' && LA17_0<='Z')||LA17_0=='g'||(LA17_0>='j' && LA17_0<='k')||(LA17_0>='p' && LA17_0<='q')||(LA17_0>='y' && LA17_0<='z')) ) {s = 44;}
 
-                        else if ( (LA17_0=='\"') ) {s = 45;}
+                        else if ( (LA17_0=='\'') ) {s = 45;}
 
-                        else if ( (LA17_0=='\'') ) {s = 46;}
+                        else if ( (LA17_0=='\"') ) {s = 46;}
 
                         else if ( ((LA17_0>='\t' && LA17_0<='\n')||LA17_0=='\r'||LA17_0==' ') ) {s = 47;}
 

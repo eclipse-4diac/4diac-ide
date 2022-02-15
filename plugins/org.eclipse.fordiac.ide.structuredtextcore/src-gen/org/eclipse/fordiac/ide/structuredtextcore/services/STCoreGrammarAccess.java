@@ -4092,13 +4092,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//terminal STRING returns ecore::EString:
-	//    '"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"';
+	//    "'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
 	public TerminalRule getSTRINGRule() {
 		return tSTRING;
 	}
 	
 	//terminal WSTRING returns ecore::EString:
-	//    "'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
+	//    '"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"';
 	public TerminalRule getWSTRINGRule() {
 		return tWSTRING;
 	}
