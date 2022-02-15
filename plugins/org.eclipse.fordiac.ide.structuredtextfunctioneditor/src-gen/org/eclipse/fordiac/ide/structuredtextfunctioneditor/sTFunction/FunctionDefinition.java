@@ -9,8 +9,8 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock;
 
 /**
  * <!-- begin-user-doc -->
@@ -59,7 +59,7 @@ public interface FunctionDefinition extends INamedElement
 
   /**
    * Returns the value of the '<em><b>Var Declarations</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Declarations</em>' containment reference list.
@@ -71,7 +71,7 @@ public interface FunctionDefinition extends INamedElement
 
   /**
    * Returns the value of the '<em><b>Var Temp Declarations</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Temp Declarations</em>' containment reference list.
@@ -83,7 +83,7 @@ public interface FunctionDefinition extends INamedElement
 
   /**
    * Returns the value of the '<em><b>Var Inpu Declarations</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Inpu Declarations</em>' containment reference list.
@@ -95,7 +95,7 @@ public interface FunctionDefinition extends INamedElement
 
   /**
    * Returns the value of the '<em><b>Var Output Declarations</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Output Declarations</em>' containment reference list.
@@ -107,7 +107,7 @@ public interface FunctionDefinition extends INamedElement
 
   /**
    * Returns the value of the '<em><b>Code</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Code</em>' containment reference list.

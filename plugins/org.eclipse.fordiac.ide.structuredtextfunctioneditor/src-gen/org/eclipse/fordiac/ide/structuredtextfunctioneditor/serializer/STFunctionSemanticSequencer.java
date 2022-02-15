@@ -7,42 +7,42 @@ import com.google.inject.Inject;
 import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitElement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.Code;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STArrayAccessExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedInputArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallNamedOutputArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCallUnnamedArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseCases;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateAndTimeLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STDateLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElseIfPart;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STElsePart;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMemberAccessExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STMultibitPartialExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNop;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStringLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STTimeOfDayLiteral;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSequencer;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.Code;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunction;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunctionPackage;
@@ -64,7 +64,16 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 		ParserRule rule = context.getParserRule();
 		Action action = context.getAssignedAction();
 		Set<Parameter> parameters = context.getEnabledBooleanParameters();
-		if (epackage == STCorePackage.eINSTANCE)
+		if (epackage == STFunctionPackage.eINSTANCE)
+			switch (semanticObject.eClass().getClassifierID()) {
+			case STFunctionPackage.FUNCTION_DEFINITION:
+				sequence_FunctionDefinition(context, (FunctionDefinition) semanticObject); 
+				return; 
+			case STFunctionPackage.ST_FUNCTION:
+				sequence_STFunction(context, (STFunction) semanticObject); 
+				return; 
+			}
+		else if (epackage == STCorePackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
 			case STCorePackage.ARRAY_INIT_ELEMENT:
 				sequence_ArrayInitElement(context, (ArrayInitElement) semanticObject); 
@@ -183,15 +192,6 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 					return; 
 				}
 				else break;
-			}
-		else if (epackage == STFunctionPackage.eINSTANCE)
-			switch (semanticObject.eClass().getClassifierID()) {
-			case STFunctionPackage.FUNCTION_DEFINITION:
-				sequence_FunctionDefinition(context, (FunctionDefinition) semanticObject); 
-				return; 
-			case STFunctionPackage.ST_FUNCTION:
-				sequence_STFunction(context, (STFunction) semanticObject); 
-				return; 
 			}
 		if (errorAcceptor != null)
 			errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));

@@ -15,7 +15,7 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunction;

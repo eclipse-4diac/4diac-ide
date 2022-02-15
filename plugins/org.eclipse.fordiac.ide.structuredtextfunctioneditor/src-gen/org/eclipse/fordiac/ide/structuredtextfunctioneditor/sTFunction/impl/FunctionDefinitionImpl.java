@@ -21,8 +21,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock;
 
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunctionPackage;

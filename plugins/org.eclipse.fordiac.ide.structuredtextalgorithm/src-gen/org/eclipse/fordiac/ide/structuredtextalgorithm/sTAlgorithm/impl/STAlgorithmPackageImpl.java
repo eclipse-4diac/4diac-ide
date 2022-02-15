@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmFa
 import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithms;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 
 /**
  * <!-- begin-user-doc -->

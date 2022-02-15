@@ -10,18 +10,18 @@
   <eClassifiers xsi:type="ecore:EClass" name="FunctionDefinition" eSuperTypes="platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclarations" upperBound="-1"
-        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.ecore#//VarDeclarationBlock"
+        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//VarDeclarationBlock"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varTempDeclarations" upperBound="-1"
-        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.ecore#//VarDeclarationBlock"
+        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//VarDeclarationBlock"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varInpuDeclarations" upperBound="-1"
-        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.ecore#//VarDeclarationBlock"
+        eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//VarDeclarationBlock"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varOutputDeclarations"
-        upperBound="-1" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.ecore#//VarDeclarationBlock"
+        upperBound="-1" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//VarDeclarationBlock"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="code" upperBound="-1" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.ecore#//STStatement"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="code" upperBound="-1" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//STStatement"
         containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

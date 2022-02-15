@@ -20,8 +20,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmBody;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmPackage;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock;
 
 /**
  * <!-- begin-user-doc -->

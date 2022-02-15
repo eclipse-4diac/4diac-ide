@@ -44,7 +44,7 @@ Workflow {
 			name = "org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
 			fileExtensions = "stalg"
 			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel"
-			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.genmodel"
+			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel"
 
 	        fragment = grammarAccess.GrammarAccessFragment2 {}
 	        fragment = ecore.EMFGeneratorFragment2 {}

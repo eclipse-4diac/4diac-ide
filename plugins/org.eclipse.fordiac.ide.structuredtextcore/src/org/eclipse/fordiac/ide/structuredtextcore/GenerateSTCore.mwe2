@@ -34,6 +34,7 @@ Workflow {
 			name = "org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			fileExtensions = "stcore"
 			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel"
+			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel"
 			serializer = {
 				generateStub = false
 			}

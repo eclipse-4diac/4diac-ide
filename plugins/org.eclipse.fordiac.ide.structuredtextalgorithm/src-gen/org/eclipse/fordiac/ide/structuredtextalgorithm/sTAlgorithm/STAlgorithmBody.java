@@ -7,8 +7,8 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +31,7 @@ public interface STAlgorithmBody extends EObject
 {
   /**
    * Returns the value of the '<em><b>Var Temp Declarations</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.VarDeclarationBlock}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Temp Declarations</em>' containment reference list.
@@ -43,7 +43,7 @@ public interface STAlgorithmBody extends EObject
 
   /**
    * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement}.
+   * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Statements</em>' containment reference list.

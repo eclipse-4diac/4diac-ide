@@ -34,7 +34,7 @@ Workflow {
 			name = "org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
 			fileExtensions = "stfunc"
 			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel"
-			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.structuredtextcore/model/generated/STCore.genmodel"
+			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel"
 			serializer = {
 				generateStub = false
 			}
