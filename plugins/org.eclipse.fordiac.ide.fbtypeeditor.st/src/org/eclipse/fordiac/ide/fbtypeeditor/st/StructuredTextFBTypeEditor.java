@@ -27,6 +27,8 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
 public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEditorPart {
@@ -50,6 +52,30 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 		super.doSetInput(input);
 		setPartName(FordiacMessages.Algorithm);
 		setTitleImage(FordiacImage.ICON_ALGORITHM.getImage());
+	}
+
+	@Override
+	public void reveal(final int offset, final int length) {
+		revealEditor();
+		super.reveal(offset, length);
+	}
+
+	@Override
+	protected void selectAndReveal(final int selectionStart, final int selectionLength, final int revealStart,
+			final int revealLength) {
+		revealEditor();
+		super.selectAndReveal(selectionStart, selectionLength, revealStart, revealLength);
+	}
+
+	protected void revealEditor() {
+		final IEditorSite editorSite = getEditorSite();
+		if (editorSite instanceof MultiPageEditorSite) {
+			final MultiPageEditorSite multiPageEditorSite = (MultiPageEditorSite) editorSite;
+			final MultiPageEditorPart multiPageEditor = multiPageEditorSite.getMultiPageEditor();
+			if (multiPageEditor.getSelectedPage() != this) {
+				multiPageEditor.setActiveEditor(this);
+			}
+		}
 	}
 
 	@Override

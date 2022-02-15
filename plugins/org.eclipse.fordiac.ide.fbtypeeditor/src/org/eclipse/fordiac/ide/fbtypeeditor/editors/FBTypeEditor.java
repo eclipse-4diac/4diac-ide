@@ -23,11 +23,13 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -349,7 +351,12 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		if (adapter == IGotoMarker.class) {
 			return adapter.cast(this);
 		}
-		return super.getAdapter(adapter);
+		T result = super.getAdapter(adapter);
+		if (result == null) {
+			result = editors.stream().map(innerEditor -> Adapters.adapt(innerEditor, adapter)).filter(Objects::nonNull)
+					.findFirst().orElse(null);
+		}
+		return result;
 	}
 
 	public void handleContentOutlineSelection(final ISelection selection) {
