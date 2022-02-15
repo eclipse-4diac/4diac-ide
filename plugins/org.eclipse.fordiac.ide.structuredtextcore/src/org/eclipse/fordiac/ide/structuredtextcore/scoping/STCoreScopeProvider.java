@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies GmbH,
+ * Copyright (c) 2021, 2022 Primetals Technologies GmbH,
  *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,8 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - literal data types
+ *   Martin Melik Merkumians
+ *       - added scope for struct in struct
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.scoping;
 
@@ -77,7 +79,12 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 				return ((STVarDeclaration) feature).getType();
 			} else if (feature instanceof VarDeclaration) {
 				return ((VarDeclaration) feature).getType();
-			} // TODO function return type
+			}
+			// TODO function return type
+
+		} else if (expression instanceof STMemberAccessExpression) {
+			final STExpression memberExpression = ((STMemberAccessExpression) expression).getMember();
+			return getExpressionType(memberExpression);
 		} else if (expression instanceof STBinaryExpression) {
 			// ...
 		}
