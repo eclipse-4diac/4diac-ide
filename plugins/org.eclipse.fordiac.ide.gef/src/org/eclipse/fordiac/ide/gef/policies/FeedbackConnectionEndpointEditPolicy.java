@@ -70,7 +70,7 @@ implements PropertyChangeListener {
 	}
 
 	@Override
-	protected void showSelection() {
+	public void showSelection() {
 		super.showSelection();
 		getConnectionFigure().setLineWidth(ConnectionPreferenceValues.SELECTED_LINE_WIDTH);
 		removeHoverFigure();
@@ -80,7 +80,7 @@ implements PropertyChangeListener {
 	}
 
 	@Override
-	protected void hideSelection() {
+	public void hideSelection() {
 		removeSelectionFigure();
 		getConnectionFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		super.hideSelection();
@@ -165,6 +165,10 @@ implements PropertyChangeListener {
 			addSelectionFeedbackFigure();
 		}
 
+	}
+
+	public boolean isSelectionFeedbackShowing() {
+		return selectionFeedback != null;
 	}
 
 }

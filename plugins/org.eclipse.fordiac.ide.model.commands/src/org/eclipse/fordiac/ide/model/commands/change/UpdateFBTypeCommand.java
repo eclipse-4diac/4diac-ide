@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
@@ -62,6 +63,17 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		newElement.setName(oldElement.getName());
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
 		createValues();
+		transferInstanceComments();
+	}
+
+	private void transferInstanceComments() {
+		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
+				.forEach(ie -> {
+					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
+					if (newIE != null) {
+						newIE.setComment(ie.getComment());
+					}
+				});
 	}
 
 	public void setInterface() {

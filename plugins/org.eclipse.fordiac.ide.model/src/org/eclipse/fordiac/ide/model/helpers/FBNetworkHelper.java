@@ -93,7 +93,7 @@ public final class FBNetworkHelper {
 		copy.setPaletteEntry(srcFb.getPaletteEntry());
 		copy.setName(srcFb.getName()); // name should be last so that checks
 		// are working correctly
-		final InterfaceList interfaceList = InterfaceListCopier.copy(srcFb.getInterface(), true);
+		final InterfaceList interfaceList = InterfaceListCopier.copy(srcFb.getInterface(), true, false);
 		copy.setInterface(interfaceList);
 		copy.setPosition(EcoreUtil.copy(srcFb.getPosition()));
 	}

@@ -16,7 +16,9 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
@@ -27,6 +29,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.widgets.Display;
@@ -34,6 +37,7 @@ import org.eclipse.swt.widgets.Display;
 public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
 	private Adapter adapter;
+	private final Map<IInterfaceElement, CommentTypeField> commentTypeFieldCache = new HashMap<>();
 
 	@Override
 	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
@@ -98,8 +102,9 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		children.add(getModel());
 
 		getModel().getInterfaceList().getAllInterfaceElements().forEach(interfaceElement -> {
-			final CommentTypeField field = new CommentTypeField(interfaceElement);
-			children.add(field);
+			final CommentTypeField commentTypeField = commentTypeFieldCache.computeIfAbsent(interfaceElement,
+					CommentTypeField::new);
+			children.add(commentTypeField);
 		});
 		return children;
 	}

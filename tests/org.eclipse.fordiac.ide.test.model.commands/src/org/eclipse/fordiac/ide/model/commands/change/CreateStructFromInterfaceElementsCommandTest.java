@@ -113,7 +113,7 @@ extends CommandTestBase<CreateStructFromInterfaceElementsCommandTest.State> {
 		final StructuredType structuredType = DataFactory.eINSTANCE.createStructuredType();
 		structuredType.setName(SET_STRUCT_NAME);
 		final List<VarDeclaration> dataInputList = List.of(dataInput);
-		InterfaceListCopier.copyVarList(structuredType.getMemberVariables(), dataInputList);
+		InterfaceListCopier.copyVarList(structuredType.getMemberVariables(), dataInputList, true);
 
 		state.setCommand(new CreateStructFromInterfaceElementsCommand(dataInputList, structuredType));
 

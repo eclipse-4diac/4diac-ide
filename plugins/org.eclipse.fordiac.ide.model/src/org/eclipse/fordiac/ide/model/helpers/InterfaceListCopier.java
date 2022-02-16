@@ -32,36 +32,35 @@ public final class InterfaceListCopier {
 	 * @param src        source interface list
 	 * @param copyValues flag indicating if initial values should be copied or not
 	 * @return */
-	public static InterfaceList copy(final InterfaceList src, final boolean copyValues) {
+	public static InterfaceList copy(final InterfaceList src, final boolean copyValues, final boolean copyComments) {
 		final InterfaceList copy = LibraryElementFactory.eINSTANCE.createInterfaceList();
 
 		// variables will be copied before the events so that the event copy can used
 		// the copied vars for the with creation
-		copyVarList(copy.getInputVars(), src.getInputVars(), copyValues);
-		copyVarList(copy.getOutputVars(), src.getOutputVars(), copyValues);
+		copyVarList(copy.getInputVars(), src.getInputVars(), copyValues, copyComments);
+		copyVarList(copy.getOutputVars(), src.getOutputVars(), copyValues, copyComments);
 
-		copyEventList(copy.getEventInputs(), copy.getInputVars(), src.getEventInputs(), src.getInputVars());
-		copyEventList(copy.getEventOutputs(), copy.getOutputVars(), src.getEventOutputs(), src.getOutputVars());
+		copyEventList(copy.getEventInputs(), copy.getInputVars(), src.getEventInputs(), src.getInputVars(),
+				copyComments);
+		copyEventList(copy.getEventOutputs(), copy.getOutputVars(), src.getEventOutputs(), src.getOutputVars(),
+				copyComments);
 
-		copyAdapterList(copy.getPlugs(), src.getPlugs());
-		copyAdapterList(copy.getSockets(), src.getSockets());
+		copyAdapterList(copy.getPlugs(), src.getPlugs(), copyComments);
+		copyAdapterList(copy.getSockets(), src.getSockets(), copyComments);
 
-		copyErrorMarkerList(copy.getErrorMarker(), src.getErrorMarker(), copyValues);
+		copyErrorMarkerList(copy.getErrorMarker(), src.getErrorMarker(), copyValues, copyComments);
 
 		return copy;
 	}
 
 	private static void copyErrorMarkerList(final EList<IInterfaceElement> copy, final EList<IInterfaceElement> src,
-			final boolean copyValues) {
-		src.forEach(c -> copy.add(copyMarker((ErrorMarkerInterface) c)));
+			final boolean copyValues, final boolean copyComments) {
+		src.forEach(c -> copy.add(copyMarker((ErrorMarkerInterface) c, copyComments)));
 	}
 
-	private static ErrorMarkerInterface copyMarker(final ErrorMarkerInterface src) {
+	private static ErrorMarkerInterface copyMarker(final ErrorMarkerInterface src, final boolean copyComments) {
 		final ErrorMarkerInterface copy = LibraryElementFactory.eINSTANCE.createErrorMarkerInterface();
-		copy.setComment(src.getComment());
-		copy.setName(src.getName());
-		copy.setIsInput(src.isIsInput());
-		copy.setType(src.getType());
+		copyInterfaceElement(src, copy, copyComments);
 		final IInterfaceElement repairedEndpoint = copy.getRepairedEndpoint();
 		if (repairedEndpoint != null) {
 			copy.setRepairedEndpoint(repairedEndpoint);
@@ -71,26 +70,25 @@ public final class InterfaceListCopier {
 	}
 
 	public static InterfaceList copy(final InterfaceList src) {
-		return copy(src, false);
+		return copy(src, false, false);
 	}
 
-	public static void copyVarList(final Collection<VarDeclaration> destVars, final Collection<VarDeclaration> srcVars) {
-		srcVars.forEach(variable -> destVars.add(copyVar(variable, false)));
+	public static void copyVarList(final Collection<VarDeclaration> destVars, final Collection<VarDeclaration> srcVars,
+			final boolean copyComments) {
+		srcVars.forEach(variable -> destVars.add(copyVar(variable, false, copyComments)));
 	}
 
 	private static void copyVarList(final EList<VarDeclaration> destVars, final EList<VarDeclaration> srcVars,
-			final boolean copyValues) {
-		srcVars.forEach(variable -> destVars.add(copyVar(variable, copyValues)));
+			final boolean copyValues, final boolean copyComments) {
+		srcVars.forEach(variable -> destVars.add(copyVar(variable, copyValues, copyComments)));
 	}
 
-	public static VarDeclaration copyVar(final VarDeclaration variable, final boolean copyValues) {
+	public static VarDeclaration copyVar(final VarDeclaration variable, final boolean copyValues,
+			final boolean copyComments) {
 		final VarDeclaration copy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		copy.setArraySize(variable.getArraySize());
-		copy.setComment(variable.getComment());
-		copy.setIsInput(variable.isIsInput());
-		copy.setName(variable.getName());
-		copy.setType(variable.getType());
-		copy.setTypeName(variable.getTypeName());
+
+		copyInterfaceElement(variable, copy, copyComments);
 
 		final Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
 		if ((copyValues) && (null != variable.getValue())) {
@@ -101,6 +99,17 @@ public final class InterfaceListCopier {
 		return copy;
 	}
 
+	private static void copyInterfaceElement(final IInterfaceElement src, final IInterfaceElement dst,
+			final boolean copyComments) {
+		if (copyComments) {
+			dst.setComment(src.getComment());
+		}
+		dst.setIsInput(src.isIsInput());
+		dst.setName(src.getName());
+		dst.setType(src.getType());
+		dst.setTypeName(src.getTypeName());
+	}
+
 	/** copy a list of events with the associated with constructs
 	 *
 	 * @param destEvents the list of the copied events
@@ -108,22 +117,21 @@ public final class InterfaceListCopier {
 	 * @param srcEvents  the source event list
 	 * @param srcVars    the source vars used in the withs */
 	private static void copyEventList(final EList<Event> destEvents, final EList<VarDeclaration> copyVars,
-			final EList<Event> srcEvents, final EList<VarDeclaration> srcVars) {
+			final EList<Event> srcEvents, final EList<VarDeclaration> srcVars, final boolean copyComments) {
 		srcEvents.forEach(srcEvent -> {
-			final Event copy = copyEvent(srcEvent);
+			final Event copy = copyEvent(srcEvent, copyComments);
 			copyWiths(copy, srcEvent, copyVars, srcVars);
 			destEvents.add(copy);
 		});
 
 	}
 
-	public static Event copyEvent(final Event srcEvent) {
+	public static Event copyEvent(final Event srcEvent, final boolean copyComments) {
 		final Event copy = LibraryElementFactory.eINSTANCE.createEvent();
-		copy.setComment(srcEvent.getComment());
-		copy.setIsInput(srcEvent.isIsInput());
-		copy.setName(srcEvent.getName());
-		copy.setType(srcEvent.getType());
-		copy.setTypeName(srcEvent.getTypeName());
+		copyInterfaceElement(srcEvent, copy, copyComments);
+		if (copyComments) {
+			copy.setComment(srcEvent.getComment());
+		}
 		return copy;
 	}
 
@@ -137,22 +145,14 @@ public final class InterfaceListCopier {
 	}
 
 	private static void copyAdapterList(final EList<AdapterDeclaration> destAdapters,
-			final EList<AdapterDeclaration> srcAdapters) {
-		srcAdapters.forEach(adapter -> {
-			final AdapterDeclaration copy = copyAdapter(adapter);
-			destAdapters.add(copy);
-		});
-
+			final EList<AdapterDeclaration> srcAdapters, final boolean copyComments) {
+		srcAdapters.forEach(adapter -> destAdapters.add(copyAdapter(adapter, copyComments)));
 	}
 
-	public static AdapterDeclaration copyAdapter(final AdapterDeclaration adapter) {
+	public static AdapterDeclaration copyAdapter(final AdapterDeclaration adapter, final boolean copyComments) {
 		final AdapterDeclaration copy = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
-		copy.setComment(adapter.getComment());
-		copy.setIsInput(adapter.isIsInput());
-		copy.setName(adapter.getName());
+		copyInterfaceElement(adapter, copy, copyComments);
 		copy.setPaletteEntry(adapter.getPaletteEntry());
-		copy.setType(adapter.getType());
-		copy.setTypeName(adapter.getTypeName());
 		return copy;
 	}
 

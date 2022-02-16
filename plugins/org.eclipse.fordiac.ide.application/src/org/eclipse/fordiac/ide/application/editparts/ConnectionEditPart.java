@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
+ * Copyright (c) 2008 - 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
  * 							 Johannes Kepler University Linz,
  * 							 Primetals Technologies Germany GmbH,
  *                           Primetals Technologies Austria GmbH
@@ -20,6 +20,7 @@
  *   Lukas Wais	 - reworked connection colors
  *   Michael Oberlehner - added support for hidden connections
  *   Alois Zoitl - extracted FBNConnectionEndPointHandle to own java file
+ *               - update selection on visibilty toggling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -65,6 +66,52 @@ import org.eclipse.swt.graphics.Color;
 
 public class ConnectionEditPart extends AbstractConnectionEditPart {
 
+	private class ConnectionContentAdapter extends EContentAdapter {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
+			refreshVisuals();
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
+				refreshComment();
+			}
+			if (LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
+				addSourceAdapters();
+			}
+			if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
+				addDestinationAdapters();
+				setConnectionColor(getFigure());
+				// reset the line width so that any to struct connections have the right width
+				getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+			}
+
+			if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)) {
+				// the hidden property was changed inform source and destination so that all labels are updated
+				handleVisibilityUpdate();
+			}
+		}
+
+		private void handleVisibilityUpdate() {
+			getModel().getSource()
+			.eNotify(new ENotificationImpl((InternalEObject) getModel().getSource(), Notification.SET,
+					LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections(), getModel(),
+					getModel()));
+			getModel().getDestination()
+			.eNotify(new ENotificationImpl((InternalEObject) getModel().getDestination(), Notification.SET,
+					LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections(), getModel(),
+					getModel()));
+			final FBNConnectionEndpointPolicy conEPPolicy = getConnectionEndPointPolicy();
+			if (conEPPolicy.isSelectionFeedbackShowing()) {
+				// redraw selection to update to new connection figure
+				conEPPolicy.hideSelection();
+				conEPPolicy.showSelection();
+			}
+		}
+
+
+	}
+
 	private final class SrcDstAdapter extends AdapterImpl {
 		@Override
 		public void notifyChanged(final Notification notification) {
@@ -76,8 +123,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 	}
-
-
 
 	private static final float[] BROKEN_CONNECTION_DASH_PATTERN = new float[] { 5.0f, 5.0f };
 
@@ -185,7 +230,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		if (null != refElement) {
 			final DataType dataType = refElement.getType();
-			//check if source is not of type for which we can determine the color
+			// check if source is not of type for which we can determine the color
 			if (!isColoredDataype(dataType) && (refElement == getModel().getSource())) {
 				// if source is of a non defined color type the connection should be colored the other way
 				// take destination for determining the color
@@ -260,41 +305,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 	private Adapter getContentAdapter() {
 		if (contentAdapter == null) {
-			contentAdapter = new EContentAdapter() {
-				@Override
-				public void notifyChanged(final Notification notification) {
-					final Object feature = notification.getFeature();
-					refreshVisuals();
-					if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
-							|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
-							|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
-						refreshComment();
-					}
-					if (LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
-						addSourceAdapters();
-					}
-					if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
-						addDestinationAdapters();
-						setConnectionColor(getFigure());
-						// reset the line width so that any to struct connections have the right width
-						getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
-					}
-
-					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)) {
-						// the hidden property was changed inform source and destination so that all labels are updated
-						getModel().getSource()
-						.eNotify(new ENotificationImpl((InternalEObject) getModel().getSource(),
-								Notification.SET,
-								LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections(),
-								getModel(), getModel()));
-						getModel().getDestination()
-						.eNotify(new ENotificationImpl((InternalEObject) getModel().getDestination(),
-								Notification.SET,
-								LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections(),
-								getModel(), getModel()));
-					}
-				}
-			};
+			contentAdapter = new ConnectionContentAdapter();
 		}
 		return contentAdapter;
 	}
@@ -339,4 +350,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	public DragTracker getDragTracker(final Request req) {
 		return new ConnectionSelectEditPartTracker(this);
 	}
+
+	public boolean isSelectionShown() {
+		return getConnectionEndPointPolicy().isSelectionFeedbackShowing();
+	}
+
+	private FBNConnectionEndpointPolicy getConnectionEndPointPolicy() {
+		return (FBNConnectionEndpointPolicy) getEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE);
+	}
+
 }

@@ -233,14 +233,14 @@ public class InterfaceElementSection extends AbstractSection {
 			} else { // e.g., IP address of device
 				infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
 			}
-			typeCommentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			typeCommentText.setText(getTypeComment());
 			String itype = ""; //$NON-NLS-1$
 
 			openEditorButton.setEnabled(
 					(getType().getType() instanceof StructuredType && !"ANY_STRUCT".equals(getType().getType().getName()))
 					|| (getType().getType() instanceof AdapterType));
 
-			instanceCommentText.setText(getType().getComment());
+			instanceCommentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 
 			if (getType() instanceof VarDeclaration) {
 				itype = setParameterAndType();
@@ -257,6 +257,18 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 
 		commandStack = commandStackBuffer;
+	}
+
+	private String getTypeComment() {
+		final FBNetworkElement fb = getType().getFBNetworkElement();
+		if (fb != null && fb.getType() != null) {
+			final IInterfaceElement interfaceElement = fb.getType().getInterfaceList()
+					.getInterfaceElement(getType().getName());
+			if (interfaceElement != null) {
+				return interfaceElement.getComment() != null ? interfaceElement.getComment() : ""; //$NON-NLS-1$
+			}
+		}
+		return "";   //$NON-NLS-1$
 	}
 
 	private Object getPinName() {

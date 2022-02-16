@@ -12,12 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import java.util.List;
+
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.handles.FBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.application.handles.HiddenFBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
@@ -25,6 +28,9 @@ import org.eclipse.fordiac.ide.gef.figures.HideableConnection.ConnectionLabel;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.handles.ConnectionEndpointHandle;
 
 public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditPolicy {
@@ -49,6 +55,48 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 		}
 		return createHiddenConnectionSelectionFeedbackFigure(con);
 
+	}
+
+	@Override
+	public ConnectionEditPart getHost() {
+		return (ConnectionEditPart) super.getHost();
+	}
+
+	@Override
+	public void showSelection() {
+		super.showSelection();
+		setAssociatedConnectionsWidth(ConnectionPreferenceValues.HIGHLIGTHED_LINE_WIDTH);
+	}
+
+	@Override
+	public void hideSelection() {
+		super.hideSelection();
+		setAssociatedConnectionsWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+	}
+
+	private void setAssociatedConnectionsWidth(final int width) {
+		final EditPart source = getHost().getSource();
+		if (source instanceof AbstractGraphicalEditPart) {
+			setConnectionsWidth(((AbstractGraphicalEditPart) source).getSourceConnections(), width);
+		}
+		final EditPart destination = getHost().getTarget();
+		if (destination instanceof AbstractGraphicalEditPart) {
+			setConnectionsWidth(((AbstractGraphicalEditPart) destination).getTargetConnections(), width);
+		}
+	}
+
+	private void setConnectionsWidth(final List<Object> list, final int width) {
+		list.forEach(ep -> {
+			if (ep instanceof ConnectionEditPart) {
+				setConnectionWidth((ConnectionEditPart) ep, width);
+			}
+		});
+	}
+
+	private void setConnectionWidth(final ConnectionEditPart ep, final int width) {
+		if (ep != getHost() && !ep.isSelectionShown()) {
+			ep.getConnectionFigure().setLineWidth(width);
+		}
 	}
 
 	private static Figure createHiddenConnectionSelectionFeedbackFigure(final HideableConnection con) {
