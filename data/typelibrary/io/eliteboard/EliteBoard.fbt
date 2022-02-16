@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="EliteBoard" Comment="Service Interface Function Block Type">
+	<Identification Standard="61499-2" Description="Copyright (c) 2021, 2022 Jonathan Lainer&#10;&#10; This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="Jonathan Lainer" Date="2021-02-22" Remarks="Initial Contribution">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="MAP" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="MAPO" Type="Event" Comment="">
+			</Event>
+		</EventOutputs>
+		<Plugs>
+			<AdapterDeclaration Name="PortA" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortB" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortC" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortD" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortE" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortF" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortG" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortH" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortI" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortJ" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortK" Type="PortAdapter" Comment=""/>
+		</Plugs>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+		<ServiceSequence Name="normal_establishment" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="unsuccessful_establishment" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_confirm" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="request" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF+" Parameters="RD"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_inhibited" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ-" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_error" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="request" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="indication_response" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="IND+" Parameters="RD"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="RSP" Parameters="QI,SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="response" Parameters="QI,SD"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="indication_inhibited" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD,QI=FALSE"/>
+				<OutputPrimitive Interface="RESOURCE" Event="inhibited"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="error_indication" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="error" Parameters="STATUS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="IND-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="application_initiated_termination" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT-"/>
+				<OutputPrimitive Interface="RESOURCE" Event="terminate"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="resource_initiated_termination" Comment="">
+			<ServiceTransaction>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+</FBType>
