@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseClause
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ContinueStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseClause
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseIfClause
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement
@@ -495,7 +496,7 @@ class STAlgorithmFilter {
 				searchItem = container
 			}
 			
-			if(container instanceof ElseClause){
+			if(container instanceof ElseClause || container instanceof ElseIfClause){
 				container = container.eContainer
 			}
 			else{
