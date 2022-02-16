@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Call
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseClause
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ContinueStatement
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseClause
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement
@@ -73,7 +74,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.model.structuredtext.util.StructuredTextParseUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseClause
 
 class STAlgorithmFilter {
 
@@ -547,10 +547,6 @@ class STAlgorithmFilter {
 
 	def protected generateBinaryOperator(BinaryOperator op) {
 		switch (op) {
-			case OR: '''||'''
-			case XOR: '''^'''
-			case AND: '''&&'''
-			case AMPERSAND: '''&&'''
 			case EQ: '''=='''
 			case NE: '''!='''
 			case LT: '''<'''
@@ -578,6 +574,12 @@ class STAlgorithmFilter {
 	def protected dispatch CharSequence generateExpression(InArgument arg) {
 		arg.expr.generateExpression
 	}
+	
+	enum BinaryOperatorType{
+		NUMERIC_OPERATOR,
+		BINARY_OPERATOR,
+		OTHER_OPERATOR
+	}
 
 	def protected dispatch CharSequence generateExpression(BinaryExpression expr) {
 		switch (expr.operator) {
@@ -586,7 +588,26 @@ class STAlgorithmFilter {
 			case SUB: '''SUB(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 			case DIV: '''DIV(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 			case MUL: '''MUL(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case OR: '''OR(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case XOR: '''XOR(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case AND: '''AND(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case AMPERSAND: '''AND(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 			default: '''(«expr.left.generateExpression» «expr.operator.generateBinaryOperator» «expr.right.generateExpression»)'''
+		}
+	}
+	
+	def protected operatorType(BinaryOperator operator) {
+		switch(operator) {
+			case POWER: BinaryOperatorType::NUMERIC_OPERATOR
+			case ADD: BinaryOperatorType::NUMERIC_OPERATOR
+			case SUB: BinaryOperatorType::NUMERIC_OPERATOR
+			case DIV: BinaryOperatorType::NUMERIC_OPERATOR
+			case MUL: BinaryOperatorType::NUMERIC_OPERATOR
+			case OR: BinaryOperatorType::BINARY_OPERATOR
+			case XOR: BinaryOperatorType::BINARY_OPERATOR
+			case AND: BinaryOperatorType::BINARY_OPERATOR
+			case AMPERSAND: BinaryOperatorType::BINARY_OPERATOR
+			default: BinaryOperatorType::OTHER_OPERATOR
 		}
 	}
 
@@ -597,9 +618,37 @@ class STAlgorithmFilter {
 	def protected dispatch CharSequence generateExpression(
 		UnaryExpression expr) '''(«expr.operator.generateUnaryOperator» «expr.expression.generateExpression»)'''
 
-	def protected dispatch CharSequence generateExpression(BoolLiteral expr) '''«expr.value.toString»'''
-
-	def protected dispatch CharSequence generateExpression(IntLiteral expr) '''«expr.value.toString»'''
+	def protected dispatch CharSequence generateExpression(BoolLiteral expr) {
+		var BinaryOperatorType type = BinaryOperatorType::OTHER_OPERATOR;
+		if (expr.eContainer instanceof BinaryExpression) {
+			val binaryExpression = expr.eContainer as BinaryExpression
+			type = binaryExpression.operator.operatorType 
+		}
+		switch(type) {
+			case BinaryOperatorType::BINARY_OPERATOR: '''CIEC_BOOL(«expr.value.toString»)'''
+			default: '''«expr.value.toString»'''
+					
+		} 
+	}
+	
+	def protected dispatch CharSequence generateExpression(IntLiteral expr)  {
+		var BinaryOperatorType type = BinaryOperatorType::OTHER_OPERATOR;
+		if (expr.eContainer instanceof BinaryExpression) {
+			val binaryExpression = expr.eContainer as BinaryExpression
+			type = binaryExpression.operator.operatorType 
+		}
+		
+		if(type == BinaryOperatorType::BINARY_OPERATOR) {
+			switch expr.value {
+			case expr.value == 0 || expr.value == 1: return '''CIEC_BOOL(«expr.value.toString»)'''
+			case Long.compareUnsigned(expr.value, 256) == -1: return '''CIEC_BYTE(«expr.value.toString»)'''
+			case Long.compareUnsigned(expr.value, 65536) == -1: return '''CIEC_WORD(«expr.value.toString»)'''
+			case Long.compareUnsigned(expr.value, Long.parseUnsignedLong("4294967296")) == -1: return '''CIEC_DWORD(«expr.value.toString»)'''
+			default: return '''CIEC_LWORD(«expr.value.toString»)'''
+			}
+		}
+		return expr.value.toString
+	}
 
 	def protected dispatch CharSequence generateExpression(RealLiteral expr) '''«expr.value.toString»'''
 
