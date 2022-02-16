@@ -29,20 +29,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Messages;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesCommentLabelProvider;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesContentProvider;
-import org.eclipse.fordiac.ide.monitoring.provider.WatchesLabelProvider;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesNameLabelProvider;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesTypeLabelProvider;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueLabelProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -103,7 +102,8 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		root.setLayout(new GridLayout());
 		final PatternFilter patternFilter = new PatternFilter();
 
-		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL, patternFilter, true, true);
+		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION, patternFilter, true,
+				true);
 
 		final GridData treeGridData = new GridData();
 		treeGridData.grabExcessHorizontalSpace = true;
@@ -116,51 +116,28 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		final TreeViewerColumn column1 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
 		column1.getColumn().setText("Watched Element");
 		column1.getColumn().setWidth(340);
+		column1.setLabelProvider(new WatchesNameLabelProvider());
+
 		final TreeViewerColumn column2 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
-		column2.getColumn().setText("Value");
+		column2.getColumn().setText("Type");
 		column2.getColumn().setWidth(100);
-		column2.setEditingSupport(new EditingSupport(column2.getViewer()) {
+		column2.setLabelProvider(new WatchesTypeLabelProvider());
 
-			@Override
-			protected void setValue(final Object element, final Object value) {
-				if (element instanceof WatchValueTreeNode) {
-					final MonitoringBaseElement monitoringBaseElement = ((WatchValueTreeNode) element)
-							.getMonitoringBaseElement();
-					MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement,
-							(String) value);
-				}
+		final TreeViewerColumn column3 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		column3.getColumn().setText("Value");
+		column3.getColumn().setWidth(100);
+		column3.setLabelProvider(new WatchesValueLabelProvider());
 
-			}
-
-			@Override
-			protected Object getValue(final Object element) {
-				if (element instanceof WatchValueTreeNode) {
-					return ((WatchValueTreeNode) element).getValue();
-				}
-				return ""; //$NON-NLS-1$
-			}
-
-			@Override
-			protected CellEditor getCellEditor(final Object element) {
-				return new TextCellEditor(filteredTree.getViewer().getTree());
-			}
-
-			@Override
-			protected boolean canEdit(final Object element) {
-				// TODO REMOVE that check after forcing is possible
-				if (element instanceof WatchValueTreeNode && ((WatchValueTreeNode) element).isStructNode()) {
-					return ((WatchValueTreeNode) element).isStructRootNode();
-				}
-				return true;
-			}
-		});
+		final TreeViewerColumn column4 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		column4.getColumn().setText("Comment");
+		column4.getColumn().setWidth(340);
+		column4.setLabelProvider(new WatchesCommentLabelProvider());
 
 		filteredTree.getViewer().getTree().setHeaderVisible(true);
 		filteredTree.getViewer().getTree().setLinesVisible(true);
 
 		filteredTree.getViewer().setContentProvider(provider);
 
-		filteredTree.getViewer().setLabelProvider(new WatchesLabelProvider());
 		filteredTree.getViewer().setInput(new Object());
 
 		contributeToActionBars();
@@ -187,6 +164,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		addWatchesAdapters();
 
 	}
+
 
 	private void addWatchesAdapters() {
 		MonitoringManager.getInstance().addMonitoringListener(listener);
