@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-module org.eclipse.fordiac.ide.structuredtextalgorithm.GenerateSTAlgorithm
+module org.eclipse.fordiac.ide.structuredtext.mwe.GenerateSTAlgorithm
 
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.generator.model.project.*

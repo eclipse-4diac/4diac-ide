@@ -1,4 +1,4 @@
-module org.eclipse.fordiac.ide.structuredtextfunctioneditor.GenerateSTFunction
+module org.eclipse.fordiac.ide.structuredtext.mwe.GenerateSTCore
 
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.generator.model.project.*
@@ -6,20 +6,20 @@ import org.eclipse.xtext.xtext.generator.model.project.*
 var rootPath = ".."
 
 Workflow {
-	
+
 	component = XtextGenerator {
 		configuration = {
 			project = StandardProjectConfig {
-				baseName = "org.eclipse.fordiac.ide.structuredtextfunctioneditor"
+				baseName = "org.eclipse.fordiac.ide.structuredtextcore"
 				rootPath = rootPath
 				runtimeTest = {
-					enabled = true
+					enabled = false
 				}
 				eclipsePlugin = {
 					enabled = true
 				}
 				eclipsePluginTest = {
-					enabled = true
+					enabled = false
 				}
 				createEclipseMetaData = true
 			}
@@ -31,16 +31,16 @@ Workflow {
 			}
 		}
 		language = StandardLanguage {
-			name = "org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-			fileExtensions = "stfunc"
+			name = "org.eclipse.fordiac.ide.structuredtextcore.STCore"
+			fileExtensions = "stcore"
 			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel"
 			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel"
 			serializer = {
 				generateStub = false
 			}
 			validator = {
-				// composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
-				// Generates checks for @Deprecated grammar annotations, an IssueProvider and a corresponding PropertyPage
+			// composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
+			// Generates checks for @Deprecated grammar annotations, an IssueProvider and a corresponding PropertyPage
 				generateDeprecationValidation = true
 			}
 			scopeProvider = {
