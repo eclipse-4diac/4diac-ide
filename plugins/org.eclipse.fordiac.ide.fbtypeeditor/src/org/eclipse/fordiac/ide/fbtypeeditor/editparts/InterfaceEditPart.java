@@ -136,6 +136,25 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return (IInterfaceElement) getModel();
 	}
 
+	@Override
+	public void activate() {
+		super.activate();
+		final FBTypeRootEditPart typeRootEP = getFBTypeRootEP();
+		if (typeRootEP != null) {
+			// tell the root edipart that we are here and that it should add the type comment children
+			typeRootEP.refresh();
+		}
+	}
+
+	private FBTypeRootEditPart getFBTypeRootEP() {
+		for (final Object part : getRoot().getChildren()) {
+			if (part instanceof FBTypeRootEditPart) {
+				return (FBTypeRootEditPart) part;
+			}
+		}
+		return null;
+	}
+
 	public void setInOutConnectionsWith(final int with) {
 		for (final Object element : getSourceConnections()) {
 			final ConnectionEditPart cep = (ConnectionEditPart) element;
@@ -202,11 +221,11 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		final Event event = (Event) with.eContainer();
 		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		if (null != interfaceList) {
-				return getnumEventwith( isInput?interfaceList.getEventInputs():interfaceList.getEventOutputs(), event);
+			return getnumEventwith( isInput?interfaceList.getEventInputs():interfaceList.getEventOutputs(), event);
 		}
 		return 0;
 	}
-	
+
 	protected static int getnumEventwith(final EList<Event> eList, final Event event) {
 		int nrOfEventWITH = 0;
 		for (final Event ele : eList) {
