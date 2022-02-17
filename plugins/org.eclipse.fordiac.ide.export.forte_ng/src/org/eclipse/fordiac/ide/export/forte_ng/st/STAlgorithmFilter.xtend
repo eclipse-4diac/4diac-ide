@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2019, 2021 fortiss GmbH, Johannes Kepler University Linz,
  * 				 			Primetals Technologies Austria GmbH
+ *               2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,10 @@
  *   Ernst Blecha - expose abstract syntax tree after parsing
  *   Martin Melik Merkumians - fixes partial access and changes type resolution from
  * 							   String information to object comparison
+ *   Martin Melik Merkumians - fixed generation of for loop vars for several loops
+ *   Ulzii Jargalsaikhan - fixed NPE for FOR loops in ELSE parts
+ *   Martin Melik Merkumians - fixed NPE for FOR loops in ELSIF parts
+ * Martin Melik Merkumians - fixed/added Array access and Array assignment 
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.export.forte_ng.st
@@ -168,7 +173,7 @@ class STAlgorithmFilter {
 	}
 
 	def protected generateArrayDeclLocal(LocalVariable variable) '''
-		CIEC_«variable.type.name» «EXPORT_PREFIX»«variable.name»[«variable.arraySize»]«variable.generateLocalVariableInitializer»;
+		CIEC_ARRAY «EXPORT_PREFIX»«variable.name»(«variable.arraySize» , g_nStringId«variable.type.name»);
 	'''
 
 	def protected generateVariableDeclLocated(LocalVariable variable) {
@@ -603,6 +608,7 @@ class STAlgorithmFilter {
 			case ADD: BinaryOperatorType::NUMERIC_OPERATOR
 			case SUB: BinaryOperatorType::NUMERIC_OPERATOR
 			case DIV: BinaryOperatorType::NUMERIC_OPERATOR
+			case MOD: BinaryOperatorType::NUMERIC_OPERATOR
 			case MUL: BinaryOperatorType::NUMERIC_OPERATOR
 			case OR: BinaryOperatorType::BINARY_OPERATOR
 			case XOR: BinaryOperatorType::BINARY_OPERATOR
@@ -655,20 +661,61 @@ class STAlgorithmFilter {
 
 	def protected dispatch CharSequence generateExpression(StringLiteral expr) '''"«expr.value.convertToJavaString»"'''
 
-	def protected dispatch CharSequence generateExpression(ArrayVariable expr) '''
-		«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»
-	'''
+	def protected boolean islocatedVariable(ArrayVariable expr) {
+		val arrayVariable = expr.array
+		if(arrayVariable instanceof PrimaryVariable){
+			val localVariable = arrayVariable.^var
+			if (localVariable instanceof LocalVariable) {
+				return localVariable.located
+			}
+		}
+		return false 
+	}
+	
+	def protected dispatch CharSequence generateExpression(ArrayVariable expr) {
+		if (expr.islocatedVariable) {
+			'''
+				«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»
+			'''
+		} else {
+			'''
+				static_cast<CIEC_«expr.extractTypeInformation»*>((«expr.array.generateExpression»)«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»)
+			'''
+		}
+
+	}
 
 	def protected dispatch CharSequence generateExpression(
 		AdapterVariable expr) '''«expr.curr.generateExpression».«expr.^var.name»()«if(!(expr.eContainer instanceof AdapterVariable))expr.generateBitaccess»'''
 
-	def protected dispatch CharSequence generateExpression(AdapterRoot expr) '''«expr.adapter.generateVarAccess»'''
+	def protected dispatch CharSequence generateExpression(AdapterRoot expr)
+	'''«expr.adapter.generateVarAccess»'''
 
-	def generateStructAdapterVarAccess(
-		EList<VarDeclaration> list) '''«FOR variable : list BEFORE '.' SEPARATOR '.'»«variable.name»()«ENDFOR»'''
+	def generateStructAdapterVarAccess(EList<VarDeclaration> list)
+	'''«FOR variable : list BEFORE '.' SEPARATOR '.'»«variable.name»()«ENDFOR»'''
 
-	def protected dispatch CharSequence generateExpression(
-		PrimaryVariable expr) '''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
+	def protected dispatch CharSequence generateExpression(PrimaryVariable expr) {
+		val variable = expr.^var
+		val fbType = variable.fbType
+		if(variable instanceof LocalVariable) {
+			return variable.generateVarAccessLocal
+		}
+		if (variable.array) {
+			'''*static_cast<CIEC_ARRAY*>(«fbType.generateGetVariable(variable.name)»)'''
+		} else {
+			'''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
+		}
+	}
+	
+	def fbType(VarDeclaration declaration) {
+		if(declaration?.eContainer instanceof FBType) {
+			return declaration.eContainer as FBType
+		}
+		if(declaration?.eContainer?.eContainer instanceof FBType) {
+			return declaration.eContainer.eContainer as FBType
+		}
+		return null
+	}
 
 	def protected generateVarAccessLocal(LocalVariable variable) '''«EXPORT_PREFIX»«variable.name»'''
 
@@ -757,6 +804,13 @@ class STAlgorithmFilter {
 
 	def protected dispatch extractTypeInformation(VarDeclaration variable) {
 		variable.type.name
+	}
+	
+	def protected dispatch extractTypeInformation(ArrayVariable variable) {
+		if(variable.array instanceof PrimaryVariable) {
+			return (variable.array as PrimaryVariable).^var.type.name
+		} 
+		return ""
 	}
 	
 	def protected dispatch extractTypeInformation(AdapterVariable variable) {

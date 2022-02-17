@@ -39,7 +39,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
-		CIEC_DWORD «EXPORTED_VARIABLE_NAME»[32];
+		CIEC_ARRAY «EXPORTED_VARIABLE_NAME»(32 , g_nStringIdDWORD);
 		'''.toString(), generatedCode.toString())
 	}
 

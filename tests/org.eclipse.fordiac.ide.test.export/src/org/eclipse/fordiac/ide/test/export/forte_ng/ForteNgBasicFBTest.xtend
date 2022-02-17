@@ -135,7 +135,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 					};
 
 					void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-					  CIEC_DWORD «EXPORTED_VARIABLE_NAME»[32];
+					  CIEC_ARRAY «EXPORTED_VARIABLE_NAME»(32 , g_nStringIdDWORD);
 					}
 
 
