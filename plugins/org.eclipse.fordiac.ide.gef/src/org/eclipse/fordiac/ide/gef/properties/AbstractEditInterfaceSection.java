@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
@@ -129,9 +128,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 		setFocusListeners();
 		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
-
-		inputsViewer.addDoubleClickListener(ElementSelector::jumpToPinFromDoubleClickEvent);
-		outputsViewer.addDoubleClickListener(ElementSelector::jumpToPinFromDoubleClickEvent);
 
 		createContextMenu(getInputsViewer());
 		createContextMenu(getOutputsViewer());
