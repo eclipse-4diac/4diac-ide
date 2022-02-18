@@ -146,6 +146,15 @@ class FBNetworkImporter extends CommonElementImporter {
 		readNameCommentAttributes(group);
 		getXandY(group);
 
+		final String width = getAttributeValue(LibraryElementTags.WIDTH_ATTRIBUTE);
+		if (width != null) {
+			group.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(width));
+		}
+		final String height = getAttributeValue(LibraryElementTags.HEIGHT_ATTRIBUTE);
+		if (height != null) {
+			group.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(height));
+		}
+
 		// add FB to FBnetwork so that parameter parsing can create error markers correctly.
 		fbNetwork.getNetworkElements().add(group);
 		fbNetworkElementMap.put(group.getName(), group);
@@ -275,14 +284,12 @@ class FBNetworkImporter extends CommonElementImporter {
 	public <T extends Connection> void parseAttributes(final T connection)
 			throws XMLStreamException, TypeImportException {
 		processChildren(LibraryElementTags.CONNECTION_ELEMENT, tag -> {
-			switch (tag) {
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(tag)) {
 				parseGenericAttributeNode(connection);
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 				return true;
-			default:
-				return false;
 			}
+			return false;
 		});
 	}
 

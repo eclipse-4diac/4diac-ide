@@ -14,13 +14,16 @@
 package org.eclipse.fordiac.ide.model;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+				"org.eclipse.fordiac.ide.model");//$NON-NLS-1$
 		store.setDefault(PreferenceConstants.P_ALLOCATION_SIZE, PreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE);
 	}
 }

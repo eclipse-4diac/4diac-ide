@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
@@ -36,7 +35,7 @@ import org.eclipse.ui.actions.BaseSelectionListenerAction;
 
 public class Open4DIACElementAction extends BaseSelectionListenerAction {
 
-	public static final String ID = Activator.PLUGIN_ID + ".OpenAction";//$NON-NLS-1$
+	public static final String ID = "org.eclipse.fordiac.ide.model.ui.OpenAction";//$NON-NLS-1$
 
 	public Open4DIACElementAction(final IWorkbenchPart part) {
 		super(Messages.OpenEditorAction_text);

@@ -5,3 +5,7 @@
 **/*java._trace
 /.sonarlint/
 **/*.orig
+**/xtend-gen/*
+**/.antlr-*.jar
+!.gitignore
+!.gitkeep

@@ -33,10 +33,12 @@ import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
+import org.eclipse.gef.requests.LocationRequest;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -123,7 +125,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(final DirectEditRequest request) {
 		final Object value = request.getCellEditor().getValue();
-		final Point refPoint = getInsertPos(request);
+		final Point refPoint = getInsertPos(request, getViewer(), getZoomManager().getZoom());
 		if (value instanceof FBTypePaletteEntry) {
 			return new FBCreateCommand((FBTypePaletteEntry) value, fbNetwork, refPoint.x, refPoint.y);
 		}
@@ -134,14 +136,15 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		return null;
 	}
 
-	private Point getInsertPos(final DirectEditRequest request) {
+	public static Point getInsertPos(final LocationRequest request, final EditPartViewer viewer,
+			final double zoom) {
 		final org.eclipse.draw2d.geometry.Point location = request.getLocation();
-		final FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
+		final FigureCanvas figureCanvas = (FigureCanvas) viewer.getControl();
 		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
 		location.x += viewLocation.x;
 		location.y += viewLocation.y;
 		final org.eclipse.draw2d.geometry.Point insertPos = new org.eclipse.draw2d.geometry.Point(location.x, location.y)
-				.scale(1.0 / getZoomManager().getZoom());
+				.scale(1.0 / zoom);
 		return new Point(insertPos.x, insertPos.y);
 	}
 

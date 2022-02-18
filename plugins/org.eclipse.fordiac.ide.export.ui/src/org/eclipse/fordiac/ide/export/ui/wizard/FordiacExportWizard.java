@@ -29,7 +29,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
-import org.eclipse.fordiac.ide.export.ui.Activator;
 import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -46,7 +45,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 /**
  * The Class FordiacExportWizard.
@@ -62,7 +64,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	public void init(final IWorkbench workbench, final IStructuredSelection currentSelection) {
 		final List<IResource> selectedResources = IDE.computeSelectedResources(currentSelection);
 		this.selection = new StructuredSelection(selectedResources);
-		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
+		final Bundle bundle = FrameworkUtil.getBundle(getClass());
+		final IDialogSettings settings = PlatformUI.getDialogSettingsProvider(bundle).getDialogSettings();
 
 		if (null == settings.getSection(FORDIAC_EXPORT_SECTION)) {
 			// section does not exist create a section

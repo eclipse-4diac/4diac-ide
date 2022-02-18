@@ -17,12 +17,14 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -38,6 +40,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.GroupImpl#getGroupElements <em>Group Elements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.GroupImpl#getWidth <em>Width</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.GroupImpl#getHeight <em>Height</em>}</li>
  * </ul>
  *
  * @generated
@@ -52,6 +56,43 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	 * @ordered
 	 */
 	protected EList<FBNetworkElement> groupElements;
+
+	/**
+	 * The default value of the '{@link #getWidth() <em>Width</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWidth()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int WIDTH_EDEFAULT = 200;
+	/**
+	 * The cached value of the '{@link #getWidth() <em>Width</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWidth()
+	 * @generated
+	 * @ordered
+	 */
+	protected int width = WIDTH_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getHeight() <em>Height</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeight()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEIGHT_EDEFAULT = 100;
+	/**
+	 * The cached value of the '{@link #getHeight() <em>Height</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeight()
+	 * @generated
+	 * @ordered
+	 */
+	protected int height = HEIGHT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -83,6 +124,52 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 			groupElements = new EObjectWithInverseEList<FBNetworkElement>(FBNetworkElement.class, this, LibraryElementPackage.GROUP__GROUP_ELEMENTS, LibraryElementPackage.FB_NETWORK_ELEMENT__GROUP);
 		}
 		return groupElements;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getWidth() {
+		return width;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setWidth(int newWidth) {
+		int oldWidth = width;
+		width = newWidth;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.GROUP__WIDTH, oldWidth, width));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getHeight() {
+		return height;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHeight(int newHeight) {
+		int oldHeight = height;
+		height = newHeight;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.GROUP__HEIGHT, oldHeight, height));
 	}
 
 	/**
@@ -126,6 +213,10 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 		switch (featureID) {
 			case LibraryElementPackage.GROUP__GROUP_ELEMENTS:
 				return getGroupElements();
+			case LibraryElementPackage.GROUP__WIDTH:
+				return getWidth();
+			case LibraryElementPackage.GROUP__HEIGHT:
+				return getHeight();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -144,6 +235,12 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 				getGroupElements().clear();
 				getGroupElements().addAll((Collection<? extends FBNetworkElement>)newValue);
 				return;
+			case LibraryElementPackage.GROUP__WIDTH:
+				setWidth((Integer)newValue);
+				return;
+			case LibraryElementPackage.GROUP__HEIGHT:
+				setHeight((Integer)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -161,6 +258,12 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 			case LibraryElementPackage.GROUP__GROUP_ELEMENTS:
 				getGroupElements().clear();
 				return;
+			case LibraryElementPackage.GROUP__WIDTH:
+				setWidth(WIDTH_EDEFAULT);
+				return;
+			case LibraryElementPackage.GROUP__HEIGHT:
+				setHeight(HEIGHT_EDEFAULT);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -177,9 +280,31 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 		switch (featureID) {
 			case LibraryElementPackage.GROUP__GROUP_ELEMENTS:
 				return groupElements != null && !groupElements.isEmpty();
+			case LibraryElementPackage.GROUP__WIDTH:
+				return width != WIDTH_EDEFAULT;
+			case LibraryElementPackage.GROUP__HEIGHT:
+				return height != HEIGHT_EDEFAULT;
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (width: "); //$NON-NLS-1$
+		result.append(width);
+		result.append(", height: "); //$NON-NLS-1$
+		result.append(height);
+		result.append(')');
+		return result.toString();
 	}
 
 } //GroupImpl

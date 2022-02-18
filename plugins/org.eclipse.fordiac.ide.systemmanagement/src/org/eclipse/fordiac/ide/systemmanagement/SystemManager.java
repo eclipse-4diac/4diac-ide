@@ -17,6 +17,8 @@
  *   Alois Zoitl - Refactored class hierarchy of xml exporters
  *               - New Project Explorer layout
  *               - Added support for project renameing
+ *   Martin Jobst
+ *     - add Xtext nature and builder
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
@@ -25,7 +27,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -57,6 +62,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.xtext.ui.XtextProjectHelper;
 
 /** The Class SystemManager.
  *
@@ -64,6 +70,8 @@ import org.eclipse.ui.IEditorPart;
 public enum SystemManager {
 
 	INSTANCE;
+
+	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.systemmanagement"; //$NON-NLS-1$
 
 	public static final String FORDIAC_PROJECT_NATURE_ID = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
 	public static final String OLD_DISTRIBUTED_PROJECT_NATURE_ID = "org.fordiac.systemManagement.DistributedNature"; //$NON-NLS-1$
@@ -112,6 +120,13 @@ public enum SystemManager {
 		}
 
 		description.setNatureIds(getNatureIDs());
+
+		final List<ICommand> commands = Stream.of(getBuilderIDs()).map(builder -> {
+			final ICommand command = description.newCommand();
+			command.setBuilderName(builder);
+			return command;
+		}).collect(Collectors.toList());
+		description.setBuildSpec(commands.toArray(new ICommand[commands.size()]));
 
 		project.create(description, monitor);
 		project.open(monitor);
@@ -270,8 +285,7 @@ public enum SystemManager {
 		final ArrayList<ITagProvider> providers = getTagProviderList(project);
 		if (project.exists()) {
 			final IExtensionRegistry registry = Platform.getExtensionRegistry();
-			final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
-					"tagProvider"); //$NON-NLS-1$
+			final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID, "tagProvider"); //$NON-NLS-1$
 			for (final IConfigurationElement element : elems) {
 				try {
 					final Object object = element.createExecutableExtension("Interface"); //$NON-NLS-1$
@@ -318,7 +332,11 @@ public enum SystemManager {
 	}
 
 	private static String[] getNatureIDs() {
-		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID };
+		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID, XtextProjectHelper.NATURE_ID };
+	}
+
+	private static String[] getBuilderIDs() {
+		return new String[] { XtextProjectHelper.BUILDER_ID };
 	}
 
 	private static void closeAllSystemEditors(final AutomationSystem refSystem) {

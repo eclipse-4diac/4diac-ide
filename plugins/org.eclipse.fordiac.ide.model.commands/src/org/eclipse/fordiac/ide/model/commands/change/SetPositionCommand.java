@@ -15,62 +15,61 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 public class SetPositionCommand extends Command {
-	private final Rectangle newBounds;
-	private Rectangle oldBounds;
-	private final ChangeBoundsRequest request;
 	private final PositionableElement positionableElement;
+	private final int dx;
+	private final int dy;
+	private Position oldPos;
+	private Position newPos;
 
 	public PositionableElement getPositionableElement() {
 		return positionableElement;
 	}
 
-	public SetPositionCommand(final PositionableElement positionableElement, final ChangeBoundsRequest req,
-			final Rectangle newBounds) {
+	public SetPositionCommand(final PositionableElement positionableElement, final int dx, final int dy) {
 		this.positionableElement = positionableElement;
-		this.request = req;
-		this.newBounds = newBounds.getCopy();
+		this.dx = dx;
+		this.dy = dy;
 		setLabel(Messages.ViewSetPositionCommand_LABEL_Move);
 	}
 
 	@Override
 	public boolean canExecute() {
-		final Object type = request.getType();
-		// make sure the Request is of a type we support: (Move or
-		// Move_Children)
-		// e.g. a FB moves within an application
-		return RequestConstants.REQ_MOVE.equals(type) || RequestConstants.REQ_MOVE_CHILDREN.equals(type)
-				|| RequestConstants.REQ_ALIGN_CHILDREN.equals(type);
+		return positionableElement != null;
 	}
 
-	/**
-	 * Sets the new Position of the affected UIFB.
-	 */
 	@Override
 	public void execute() {
-		oldBounds = new Rectangle(positionableElement.getPosition().getX(), positionableElement.getPosition().getY(),
-				-1, -1);
-		setPosition(newBounds);
+		oldPos = getPositionableElement().getPosition();
+		newPos = createNewPosition();
+		setPosition(newPos);
 	}
 
 	@Override
 	public void redo() {
-		setPosition(newBounds);
+		setPosition(newPos);
 	}
 
 	@Override
 	public void undo() {
-		setPosition(oldBounds);
+		setPosition(oldPos);
 	}
 
-	protected void setPosition(final Rectangle bounds) {
-		positionableElement.updatePosition(bounds.getTopLeft());
+	private Position createNewPosition() {
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(oldPos.getX() + dx);
+		pos.setY(oldPos.getY() + dy);
+		return pos;
+	}
+
+	protected void setPosition(final Position pos) {
+		positionableElement.setPosition(pos);
 	}
 }
+

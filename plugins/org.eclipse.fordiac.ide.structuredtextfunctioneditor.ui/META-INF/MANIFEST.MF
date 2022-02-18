@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui
+Bundle-ManifestVersion: 2
+Bundle-Name: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui;singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.ide,
+ org.eclipse.xtext.ui,
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
+ org.eclipse.ui,
+ org.eclipse.compare,
+ org.eclipse.xtext.builder,
+ org.eclipse.fordiac.ide.structuredtextcore,
+ org.eclipse.fordiac.ide.structuredtextcore.ui
+Import-Package: org.apache.log4j
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.contentassist,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.internal,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.quickfix
+Bundle-Activator: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.internal.StructuredtextfunctioneditorActivator

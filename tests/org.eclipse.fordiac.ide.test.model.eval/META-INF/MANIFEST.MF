@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Evaluator Tests
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model.eval
+Bundle-Version: 2.0.1.qualifier
+Fragment-Host: org.eclipse.fordiac.ide.model.eval
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.model.eval
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Vendor: Eclipse 4diac
+Import-Package: org.junit.jupiter.api,
+ org.junit.jupiter.api.function,
+ org.junit.jupiter.params,
+ org.junit.jupiter.params.provider,
+ org.opentest4j
+Require-Bundle: org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.model.eval.st,
+ org.eclipse.fordiac.ide.structuredtextalgorithm

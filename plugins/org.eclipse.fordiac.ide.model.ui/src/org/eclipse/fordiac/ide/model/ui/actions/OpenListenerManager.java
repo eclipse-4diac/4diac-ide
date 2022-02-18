@@ -25,12 +25,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
@@ -44,6 +45,8 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public enum OpenListenerManager {
 	INSTANCE;
+
+	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model.ui"; //$NON-NLS-1$
 
 	private List<IOpenListener> openListeners = null;
 
@@ -79,8 +82,8 @@ public enum OpenListenerManager {
 	 * @param id         the id
 	 */
 	public static void setDefaultOpenListener(final Class<? extends EObject> libElement, final String id) {
-		final IPreferenceStore ps = Activator.getDefault().getPreferenceStore();
-		ps.setValue(libElement.getName(), id);
+		final IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(PLUGIN_ID);
+		preferences.put(libElement.getName(), id);
 	}
 
 	/**
@@ -92,10 +95,10 @@ public enum OpenListenerManager {
 	 * @return the default open listener
 	 */
 	public IOpenListener getDefaultOpenListener(final EObject elementToOpen) {
-		final IPreferenceStore ps = Activator.getDefault().getPreferenceStore();
+		final IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(PLUGIN_ID);
 		for (final IOpenListener openListener : getOpenListeners()) {
 			if (listenerSupportsElement(openListener, elementToOpen)) {
-				final String value = ps.getString(openListener.getHandledClass().getName());
+				final String value = preferences.get(openListener.getHandledClass().getName(), ""); //$NON-NLS-1$
 				openListener.selectionChanged(null, new StructuredSelection(elementToOpen));
 				if (("".equals(value))  //$NON-NLS-1$
 						|| (value.equals(openListener.getOpenListenerID()))) {
@@ -135,7 +138,7 @@ public enum OpenListenerManager {
 				checkBreadCrumb(part, element);
 				return part;
 			} catch (final PartInitException e) {
-				Activator.getDefault().getLog().error(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 		return null;
@@ -155,7 +158,7 @@ public enum OpenListenerManager {
 		openListeners = new ArrayList<>();
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final IConfigurationElement[] elems = registry
-				.getConfigurationElementsFor(Activator.PLUGIN_ID, "openListener"); //$NON-NLS-1$
+				.getConfigurationElementsFor(PLUGIN_ID, "openListener"); //$NON-NLS-1$
 		for (final IConfigurationElement element : elems) {
 			try {
 				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
@@ -163,7 +166,7 @@ public enum OpenListenerManager {
 					openListeners.add((IOpenListener) object);
 				}
 			} catch (final CoreException corex) {
-				Activator.getDefault().getLog().error(corex.getMessage(), corex);
+				FordiacLogHelper.logError(corex.getMessage(), corex);
 			}
 		}
 

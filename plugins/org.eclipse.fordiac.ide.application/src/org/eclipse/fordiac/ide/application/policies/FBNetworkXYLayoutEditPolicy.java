@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2022 Profactor GmbH, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Michael Hofmann, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - implemented group resizing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
@@ -28,8 +31,10 @@ import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
@@ -37,11 +42,13 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
@@ -52,22 +59,58 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
+		if (child.getModel() instanceof Group) {
+			return new GroupResizePolicy();
+		}
 		return new ModifiedNonResizeableEditPolicy();
-
 	}
 
 	@Override
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
-		// return a command that can move a "ViewEditPart"
-		if ((child.getModel() instanceof PositionableElement) && (constraint instanceof Rectangle)) {
-			if (child.getModel() instanceof FBNetworkElement) {
-				return new FBNetworkElementSetPositionCommand((FBNetworkElement) child.getModel(), request,
-						(Rectangle) constraint);
-			}
-			return new SetPositionCommand((PositionableElement) child.getModel(), request, (Rectangle) constraint);
+		if (child.getModel() instanceof Group && RequestUtil.isResizeRequest(request)) {
+			return createChangeGroupSizeCommand((Group) child.getModel(), request);
+		}
+		if ((child.getModel() instanceof PositionableElement) && (RequestUtil.isMoveRequest(request))) {
+			return createMoveCommand((PositionableElement) child.getModel(), request);
 		}
 		return null;
+	}
+
+	private Command createChangeGroupSizeCommand(final Group group, final ChangeBoundsRequest request) {
+		final Dimension sizeDelta = request.getSizeDelta().getScaled(1.0 / getZoomManager().getZoom());
+		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
+			// we hit the min size and we are just moving, return a set position command
+			return createMoveCommand(group, request);
+		}
+		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		final ChangeGroupBoundsCommand changeGroupBoundsCommand = new ChangeGroupBoundsCommand(group, moveDelta.x,
+				moveDelta.y, sizeDelta.width, sizeDelta.height);
+
+		if (isMoveWithResizing(sizeDelta, moveDelta)) {
+			// we have a move resize situation where we have to re-compensate FB positions
+			final int dx = moveDelta.x + sizeDelta.width;
+			final int dy = moveDelta.y + sizeDelta.height;
+			final CompoundCommand cmd = new CompoundCommand();
+			cmd.add(changeGroupBoundsCommand);
+			group.getGroupElements().forEach(el -> cmd.add(new SetPositionCommand(el, dx, dy)));
+			return cmd;
+		}
+
+		return changeGroupBoundsCommand;
+	}
+
+	private static boolean isMoveWithResizing(final Dimension sizeDelta, final Point moveDelta) {
+		return (moveDelta.x != 0 && (moveDelta.x + sizeDelta.width) != 0)
+				|| (moveDelta.y != 0 && (moveDelta.y + sizeDelta.height) != 0);
+	}
+
+	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request) {
+		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		if (model instanceof FBNetworkElement) {
+			return new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y);
+		}
+		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
 	}
 
 	@Override
@@ -100,6 +143,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
+
 	protected ZoomManager getZoomManager() {
 		return ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
 	}
@@ -107,14 +151,24 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	private Command handleDragToRootRequest(final ChangeBoundsRequest request) {
 		final List<EditPart> editParts = request.getEditParts();
 		final Point destination = getTranslatedAndZoomedPoint(request);
-		List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
+		final List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
 		if (!fbEls.isEmpty()) {
 			return new MoveElementsFromSubAppCommand(fbEls,
 					new org.eclipse.swt.graphics.Point(destination.x, destination.y));
 		}
-		fbEls = collectFromGroupDraggedFBs(editParts);
-		if (!fbEls.isEmpty()) {
-			return new RemoveElementsFromGroup(fbEls, new org.eclipse.swt.graphics.Point(destination.x, destination.y));
+		return createRemoveFromGroup(editParts, request);
+	}
+
+	private Command createRemoveFromGroup(final List<EditPart> editParts, final ChangeBoundsRequest request) {
+		final GroupContentEditPart groupContent = getGroupContentEditPart(editParts);
+		if (groupContent != null) {
+			final List<FBNetworkElement> fbEls = collectFromGroupDraggedFBs(editParts);
+			if (!fbEls.isEmpty()) {
+				final Point topLeft = groupContent.getFigure().getBounds().getTopLeft();
+				final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+				topLeft.translate(moveDelta.x, moveDelta.y);
+				return new RemoveElementsFromGroup(fbEls, topLeft);
+			}
 		}
 		return null;
 	}
@@ -131,8 +185,13 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
 				.map(ep -> (FBNetworkElement) ep.getModel()).filter(FBNetworkElement::isNestedInSubApp)
 				.filter(el -> !el.getFbNetwork().equals(fbNetwork))   // only take fbentworkelements that are not in the
-																	   // same subapp
+				// same subapp
 				.collect(Collectors.toList());
+	}
+
+	private static GroupContentEditPart getGroupContentEditPart(final List<EditPart> editParts) {
+		return (GroupContentEditPart) editParts.stream().filter(ep -> ep.getParent() instanceof GroupContentEditPart)
+				.map(EditPart::getParent).findFirst().orElse(null);
 	}
 
 	private static List<FBNetworkElement> collectFromGroupDraggedFBs(final List<EditPart> editParts) {

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -34,6 +33,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RepeatStateme
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.util.StructuredTextParseUtil;
 
 public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 
@@ -102,10 +102,8 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 			return Double.NaN;
 		}
 
-		final STAlgorithmFilter filter = new STAlgorithmFilter();
-		final List<String> errors = new ArrayList<>();
-		final var ast = filter.parse((STAlgorithm) alg, errors);
-		return errors.isEmpty() ? //
+		final var ast = StructuredTextParseUtil.parse((STAlgorithm) alg, null);
+		return ast != null ? //
 				countStatements(ast.getStatements()) + //
 				countLocalVariables(ast.getLocalVariables()) //
 				: Double.NaN;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,10 +32,11 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
+import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
@@ -53,9 +54,13 @@ public class FordiacLayoutFactory {
 		return graph;
 	}
 
-	public static ElkNode createFordiacLayoutNode(final AbstractFBNElementEditPart editPart, final ElkNode parent) {
+	public static ElkNode createFordiacLayoutNode(final AbstractPositionableElementEditPart editPart, final ElkNode parent) {
 		final ElkNode node = ElkGraphUtil.createNode(parent);
 		configureNode(node);
+		if (editPart instanceof GroupEditPart) {
+			node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FREE); // dummy ports can move freely
+			node.setProperty(CoreOptions.PADDING, new ElkPadding(50.0, 50.0));
+		}
 		if (editPart instanceof SubAppForFBNetworkEditPart) {
 			if (((SubAppForFBNetworkEditPart) editPart).getModel().isUnfolded()) {
 				configureUnfoldedSubapp(node);

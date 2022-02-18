@@ -14,8 +14,9 @@
 package org.eclipse.fordiac.ide.typemanagement.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.fordiac.ide.typemanagement.Activator;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * Class used to initialize default preference values.
@@ -30,7 +31,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+				PreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
 		store.setDefault(PreferenceConstants.P_STANDARD, "");//$NON-NLS-1$
 		store.setDefault(PreferenceConstants.P_CLASSIFICATION, ""); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.P_APPLICATION_DOMAIN, ""); //$NON-NLS-1$

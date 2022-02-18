@@ -45,7 +45,7 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 							Messages.RunServiceSequenceHandler_SequenceMatchesECC);
 
 				} catch (final Exception e) {
-					FordiacLogHelper.logError("Service Sequence was inconsistent"); //$NON-NLS-1$
+					FordiacLogHelper.logError("Service Sequence was inconsistent", e); //$NON-NLS-1$
 					MessageDialog.openError(HandlerUtil.getActiveShell(event), Messages.RunServiceSequenceHandler_InconsistencyDetected,
 							Messages.RunServiceSequenceHandler_SequenceDoesNotMatchECC);
 				}

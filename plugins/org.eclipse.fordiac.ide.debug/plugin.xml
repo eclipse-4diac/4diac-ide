@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.eclipse.fordiac.ide.debug.simple.SimpleFBLaunchConfigurationDelegate"
+            delegateName="Evaluate Simple FB"
+            id="org.eclipse.fordiac.ide.debug.simpleFBLaunch"
+            modes="run, debug"
+            name="Evaluate Simple FB"
+            sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.sourceLocators">
+      <sourceLocator
+            class="org.eclipse.fordiac.ide.debug.EvaluatorSourceLocator"
+            id="org.eclipse.fordiac.ide.debug.sourceLocator"
+            name="Evaluator Source Locator">
+      </sourceLocator>
+   </extension>
+
+</plugin>

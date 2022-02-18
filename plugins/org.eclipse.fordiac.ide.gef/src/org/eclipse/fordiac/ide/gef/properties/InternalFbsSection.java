@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2021, 2022 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,9 +10,11 @@
  * Contributors:
  *   Martin Melik Merkumians
  *     - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - added NewInstanceCellEditor in "Type" cell
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import org.eclipse.fordiac.ide.gef.editors.NewInstanceCellEditor;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFbTypeCommand;
@@ -37,13 +39,17 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -59,6 +65,7 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 	private static final String FB_COMMENT = "COMMENT"; //$NON-NLS-1$
 
 	private TableViewer internalFbsViewer;
+	private NewInstanceCellEditor fbTypeEditor;
 
 	@Override
 	protected BaseFBType getType() {
@@ -131,17 +138,20 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
 		column3.setText(FordiacMessages.Comment);
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnWeightData(2, 30));
-		layout.addColumnData(new ColumnWeightData(2, 30));
-		layout.addColumnData(new ColumnWeightData(1, 20));
+		layout.addColumnData(new ColumnWeightData(2, 30, true));
+		layout.addColumnData(new ColumnWeightData(2, 30, true));
+		layout.addColumnData(new ColumnWeightData(1, 20, true));
 		table.setLayout(layout);
 	}
 
-	private static CellEditor[] createCellEditors(final Table table) {
+	private CellEditor[] createCellEditors(final Table table) {
 		final TextCellEditor fbNameEditor = new TextCellEditor(table);
 		((Text) fbNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		final TextCellEditor fbTypeEditor = new TextCellEditor(table);
-		((Text) fbTypeEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
+
+		fbTypeEditor = new InternalFBNewInstanceCellEditor(table, SWT.ON_TOP, true);
+		fbTypeEditor.setPalette(getPalette());
+		fbTypeEditor.getMenuButton().dispose();
+
 		return new CellEditor[] { fbNameEditor, fbTypeEditor, new TextCellEditor(table), new TextCellEditor(table),
 				new TextCellEditor(table) };
 	}
@@ -164,6 +174,24 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 	@Override
 	protected void setInputInit() {
 		internalFbsViewer.setCellEditors(createCellEditors(internalFbsViewer.getTable()));
+	}
+
+	private static class InternalFBNewInstanceCellEditor extends NewInstanceCellEditor {
+
+		public InternalFBNewInstanceCellEditor(final Table parent, final int style, final boolean insideCell) {
+			super(parent, style, insideCell);
+		}
+
+		@Override
+		public void activate(final ColumnViewerEditorActivationEvent activationEvent) {
+			final ViewerCell cell = (ViewerCell) activationEvent.getSource();
+			final TableItem item = (TableItem) cell.getViewerRow().getItem();
+			final Rectangle rect = item.getBounds(cell.getVisualIndex());
+			final Point screenPos = item.getParent().toDisplay(new Point(rect.x, rect.y));
+			getControl().setBounds(screenPos.x, screenPos.y, rect.width, rect.height);
+			super.activate(activationEvent);
+		}
+
 	}
 
 	private final class InternalFBsCellModifier implements ICellModifier {
@@ -197,7 +225,7 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 				cmd = new ChangeNameCommand(fb, value.toString());
 				break;
 			case FB_TYPE:
-				final FBTypePaletteEntry fbTypeEntry = getPalette().getFBTypeEntry(value.toString());
+				final FBTypePaletteEntry fbTypeEntry = (FBTypePaletteEntry) value;
 				if (null == fbTypeEntry) {
 					return;
 				}

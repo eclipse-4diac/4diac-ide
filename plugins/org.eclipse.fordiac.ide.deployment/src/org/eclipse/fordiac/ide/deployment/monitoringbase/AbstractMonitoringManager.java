@@ -24,13 +24,13 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractMonitoringManager {
 
+	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.deployment"; //$NON-NLS-1$
 	private static AbstractMonitoringManager monitoringManager = null;
 
 	private static final AbstractMonitoringManager dummyMonitoringManager = new AbstractMonitoringManager() {
@@ -72,7 +72,7 @@ public abstract class AbstractMonitoringManager {
 
 	private static AbstractMonitoringManager createMonitoringManager() {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID, "monitoringmanager"); //$NON-NLS-1$
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID, "monitoringmanager"); //$NON-NLS-1$
 		for (final IConfigurationElement element : elems) {
 			try {
 				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$

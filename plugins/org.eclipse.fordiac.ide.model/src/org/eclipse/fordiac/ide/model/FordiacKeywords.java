@@ -110,8 +110,6 @@ public final class FordiacKeywords {
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String LTOD = "LTOD"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
-	public static final String LDT = "LDT";//$NON-NLS-1$
-	@Keyword(KeywordTypes.DATATYPE)
 	public static final String DATE = "DATE"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String LDATE = "LDATE"; //$NON-NLS-1$
@@ -121,6 +119,8 @@ public final class FordiacKeywords {
 	public static final String DT = "DT"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String LDATE_AND_TIME = "LDATE_AND_TIME"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE)
+	public static final String LDT = "LDT";//$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String BOOL = "BOOL"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)

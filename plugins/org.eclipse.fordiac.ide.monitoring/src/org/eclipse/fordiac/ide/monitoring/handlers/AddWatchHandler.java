@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University
+ * 				 2022 Primetals Technologies Germany GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,6 +12,7 @@
  *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *   Michael Oberlehner - added subapp monitoring
+ *   Fabio Gandolfi - added decision remember dialog
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
@@ -43,16 +45,23 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 import org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
+import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.Messages;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringAdapterInterfaceEditPart;
+import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -224,7 +233,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		if (!foundElements.isEmpty()) {
 			final AutomationSystem system = getAutomationSystem(foundElements.iterator().next());
 			if ((system != null) && !MonitoringManager.getInstance().isSystemMonitored(system)
-					&& shouldEnableMonitring(system, shell)) {
+					&& shouldEnableMonitoring(system, shell)) {
 				enableMonitoring(system);
 			}
 		}
@@ -235,16 +244,44 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		return (root instanceof AutomationSystem) ? (AutomationSystem) root : null;
 	}
 
-	private static boolean shouldEnableMonitring(final AutomationSystem system, final Shell shell) {
-		final int result = MessageDialog.open(MessageDialog.QUESTION, shell, "Enable Monitoring?",
-				MessageFormat.format("System \"{0}\" currently not monitored. Do you want to monitor it?",
-						system.getName()),
-				SWT.NONE, "Enable", "No");
-		return result == 0;
+	private static boolean shouldEnableMonitoring(final AutomationSystem system, final Shell shell) {
+		if (!Activator.getDefault().getPreferenceStore()
+				.getBoolean(PreferenceConstants.P_MONITORING_STARTMONITORINGWITHOUTASKING)) {
+
+			final MessageDialog dialog = new MessageDialog(shell, Messages.MonitoringDialog_EnableMonitoring, null,
+					MessageFormat.format(Messages.MonitoringDialog_EnableMonitoringQuestion, system.getName()),
+					MessageDialog.QUESTION,
+					new String[] { Messages.MonitoringDialog_Enable, Messages.MonitoringDialog_No }, 0) {
+
+				@Override
+				protected Control createCustomArea(final Composite parent) {
+					final Button checkBox = new Button(parent, SWT.CHECK);
+					checkBox.setText(Messages.MonitoringPreferences_StartMonitoringWithoutAsking);
+					checkBox.addSelectionListener(new SelectionListener() {
+
+						@Override
+						public void widgetSelected(final SelectionEvent e) {
+							Activator.getDefault().getPreferenceStore().setValue(
+									PreferenceConstants.P_MONITORING_STARTMONITORINGWITHOUTASKING,
+									checkBox.getSelection());
+						}
+
+						@Override
+						public void widgetDefaultSelected(final SelectionEvent e) {
+							// Nothing to do here
+						}
+					});
+					return checkBox;
+				}
+
+			};
+
+			return dialog.open() == 0;
+		}
+		return true;
 	}
 
 	private static void enableMonitoring(final AutomationSystem system) {
 		MonitoringManager.getInstance().enableSystem(system);
 	}
-
 }

@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.ui
+Bundle-ManifestVersion: 2
+Bundle-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.ui
+Bundle-Vendor: Eclipse 4diac
+Bundle-Version: 2.0.1.qualifier
+Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextalgorithm.ui; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.fordiac.ide.structuredtextalgorithm,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ide,
+ org.eclipse.xtext.ui,
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
+ org.eclipse.ui,
+ org.eclipse.compare,
+ org.eclipse.xtext.builder,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.structuredtextcore,
+ org.eclipse.fordiac.ide.structuredtextcore.ui,
+ org.eclipse.xtend.lib;bundle-version="2.14.0"
+Import-Package: org.apache.log4j
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui.contentassist,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui.internal,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui.labeling,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui.quickfix,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource
+Bundle-Activator: org.eclipse.fordiac.ide.structuredtextalgorithm.ui.internal.StructuredtextalgorithmActivator

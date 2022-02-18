@@ -577,4 +577,14 @@
          </command>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.eclipse.fordiac.ide.typemanagement.util.FBTypePropertyTester"
+            id="org.eclipse.fordiac.ide.typemanagement.fbType"
+            namespace="org.eclipse.fordiac.ide.typemanagement"
+            properties="fbType"
+            type="org.eclipse.core.resources.IResource">
+      </propertyTester>
+   </extension>
 </plugin>

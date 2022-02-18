@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
  * 				 2020 Primetals Technologies Germany GmbH
- * 				 2021 Primetals Technologies Austria GmbH
+ * 				 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,11 +16,14 @@
 
 package org.eclipse.fordiac.ide.elk.commands;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
@@ -28,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -35,22 +39,17 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class LayoutCommand extends Command {
-
-	private final Map<FBNetworkElement, Position> positions;
-	private final Map<Connection, PointList> connPoints;
-	private final Map<IInterfaceElement, Integer> pins;
+	
+	private final FordiacLayoutData data;
 
 	private final Map<FBNetworkElement, Position> oldPositions = new HashMap<>();
 	private final Map<Connection, ConnectionRoutingData> oldRoutingData = new HashMap<>();
+	private final Map<Group, Entry<Integer, Integer>> oldGroupSizes = new HashMap<>();
 
 	private final CompoundCommand pinPositionAttrCommand = new CompoundCommand();
 
-	public LayoutCommand(final Map<FBNetworkElement, Position> positions, final Map<Connection, PointList> connPoints,
-			final Map<IInterfaceElement, Integer> pins) {
-		super();
-		this.positions = positions;
-		this.connPoints = connPoints;
-		this.pins = pins;
+	public LayoutCommand(final FordiacLayoutData data) {
+		this.data = data;
 	}
 
 	@Override
@@ -74,23 +73,31 @@ public class LayoutCommand extends Command {
 	public void undo() {
 		oldPositions.forEach(FBNetworkElement::setPosition);
 		oldRoutingData.forEach(Connection::setRoutingData);
+		oldGroupSizes.forEach(LayoutCommand::setGroupSize);
 		if (pinPositionAttrCommand.canExecute()) {
 			pinPositionAttrCommand.undo();
 		}
 	}
 
 	private void saveDataForUndo() {
-		positions.keySet().forEach(elem -> oldPositions.put(elem, EcoreUtil.copy(elem.getPosition())));
-		connPoints.keySet().forEach(conn -> oldRoutingData.put(conn, EcoreUtil.copy(conn.getRoutingData())));
+		data.getPositions().keySet().forEach(elem -> oldPositions.put(elem, EcoreUtil.copy(elem.getPosition())));
+		data.getConnectionPoints().keySet().forEach(conn -> oldRoutingData.put(conn, EcoreUtil.copy(conn.getRoutingData())));
+		data.getGroups().keySet().forEach(group -> oldGroupSizes.put(group, new SimpleEntry<>(Integer.valueOf(group.getHeight()), Integer.valueOf(group.getWidth()))));
 	}
 
 	private void updateModelElements() {
-		positions.forEach(FBNetworkElement::setPosition);
-		connPoints.forEach(LayoutCommand::updateModel);
+		data.getPositions().forEach(FBNetworkElement::setPosition);
+		data.getConnectionPoints().forEach(LayoutCommand::updateModel);
+		data.getGroups().forEach(LayoutCommand::setGroupSize);
 	}
 
 	private void updatePositionAttributes() {
-		pins.forEach(this::updatePositionAttribute);
+		data.getPins().forEach(this::updatePositionAttribute);
+	}
+	
+	private static void setGroupSize(final Group group, final Entry<Integer, Integer> size) {
+		group.setHeight(size.getKey().intValue());
+		group.setWidth(size.getValue().intValue());
 	}
 
 	private void updatePositionAttribute(final IInterfaceElement ie, final Integer y) {

@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,9 +9,10 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 /** <!-- begin-user-doc --> A representation of the model object '<em><b>Connection</b></em>'. <!-- end-user-doc -->
@@ -32,13 +34,8 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model abstract="true"
  * @generated */
 public interface Connection extends ConfigurableObject, ErrorMarkerRef {
-
-	/** Returns the value of the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Res Type Connection</em>' attribute isn't clear, there really should be more of a
-	 * description here...
-	 * </p>
-	 * <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @return the value of the '<em>Res Type Connection</em>' attribute.
 	 * @see #setResTypeConnection(boolean)
@@ -55,55 +52,8 @@ public interface Connection extends ConfigurableObject, ErrorMarkerRef {
 	 * @generated */
 	void setResTypeConnection(boolean value);
 
-	/** <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Resource Connection</em>' attribute isn't clear, there really should be more of a
-	 * description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" required="true"
-	 * @generated */
-	boolean isResourceConnection();
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" required="true"
-	 * @generated */
-	FBNetwork getFBNetwork();
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model
-	 * @generated */
-	void checkIfConnectionBroken();
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model dx1DataType="org.eclipse.emf.ecore.xml.type.Int" dx1Required="true"
-	 *        dyDataType="org.eclipse.emf.ecore.xml.type.Int" dyRequired="true"
-	 *        dx2DataType="org.eclipse.emf.ecore.xml.type.Int" dx2Required="true"
-	 * @generated */
-	void updateRoutingData(int dx1, int dy, int dx2);
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model visibleDataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated */
-	void setVisible(boolean visible);
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation"
-	 * @generated */
-	boolean isVisible();
-
-	/** Returns the value of the '<em><b>Broken Connection</b></em>' attribute. <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Broken Connection</em>' attribute isn't clear, there really should be more of a
-	 * description here...
-	 * </p>
-	 * <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Broken Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @return the value of the '<em>Broken Connection</em>' attribute.
 	 * @see #setBrokenConnection(boolean)
@@ -188,5 +138,49 @@ public interface Connection extends ConfigurableObject, ErrorMarkerRef {
 	 * @model kind="operation" required="true"
 	 * @generated */
 	FBNetworkElement getDestinationElement();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" required="true"
+	 * @generated */
+	boolean isResourceConnection();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" required="true"
+	 * @generated */
+	FBNetwork getFBNetwork();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model
+	 * @generated */
+	void checkIfConnectionBroken();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model dx1DataType="org.eclipse.emf.ecore.xml.type.Int" dx1Required="true"
+	 *        dyDataType="org.eclipse.emf.ecore.xml.type.Int" dyRequired="true"
+	 *        dx2DataType="org.eclipse.emf.ecore.xml.type.Int" dx2Required="true"
+	 * @generated */
+	void updateRoutingData(int dx1, int dy, int dx2);
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model visibleDataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated */
+	void setVisible(boolean visible);
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated */
+	boolean isVisible();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" required="true"
+	 * @generated */
+	boolean isInterfaceConnection();
 
 } // Connection

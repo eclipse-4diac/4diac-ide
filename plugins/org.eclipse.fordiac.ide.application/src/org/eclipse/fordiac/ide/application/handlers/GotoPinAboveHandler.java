@@ -18,8 +18,5 @@ public class GotoPinAboveHandler extends AbstractGoToPinHandler {
 
 	public GotoPinAboveHandler() {
 		super(ABOVE);
-
 	}
-
-
 }

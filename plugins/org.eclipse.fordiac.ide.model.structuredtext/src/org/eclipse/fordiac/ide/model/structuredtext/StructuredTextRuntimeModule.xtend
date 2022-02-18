@@ -14,12 +14,17 @@
 package org.eclipse.fordiac.ide.model.structuredtext
 
 import com.google.inject.Binder
-import org.eclipse.xtext.resource.impl.SimpleResourceDescriptionsBasedContainerManager
-import org.eclipse.xtext.scoping.IgnoreCaseLinking
-import org.eclipse.xtext.scoping.impl.DefaultGlobalScopeProvider
+import com.google.inject.name.Names
 import org.eclipse.fordiac.ide.model.structuredtext.converter.StructuredTextValueConverterService
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource
 import org.eclipse.fordiac.ide.model.structuredtext.scoping.StructuredTextScopeProvider
+import org.eclipse.xtext.resource.impl.SimpleResourceDescriptionsBasedContainerManager
+import org.eclipse.xtext.scoping.IScopeProvider
+import org.eclipse.xtext.scoping.IgnoreCaseLinking
+import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
+import org.eclipse.xtext.scoping.impl.DefaultGlobalScopeProvider
+import org.eclipse.xtext.scoping.impl.SimpleLocalScopeProvider
+import org.eclipse.xtext.validation.CompositeEValidator
 
 /** 
  * Use this class to register components to be used at runtime / without the
@@ -51,11 +56,16 @@ class StructuredTextRuntimeModule extends AbstractStructuredTextRuntimeModule {
 	}
 	
 	def void configureIScopeProviderDelegate(Binder binder) {
-		binder.bind(org.eclipse.xtext.scoping.IScopeProvider).annotatedWith(com.google.inject.name.Names.named(org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider.NAMED_DELEGATE)).to(org.eclipse.xtext.scoping.impl.SimpleLocalScopeProvider);
+		binder.bind(IScopeProvider).annotatedWith(Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE)).to(SimpleLocalScopeProvider);
 	}
 
 	def void configureIgnoreCaseLinking(Binder binder) {
 		binder.bindConstant().annotatedWith(IgnoreCaseLinking).to(true)
 	}
 
+	@SuppressWarnings("static-method")
+	def void configureCompositeEValidator(Binder binder) {
+		// ignore dangling reference errors (until Palette vs. Resource issues have been addressed)
+		binder.bindConstant().annotatedWith(Names.named(CompositeEValidator.USE_EOBJECT_VALIDATOR)).to(false);
+	}
 }

@@ -225,6 +225,8 @@ public final class ValidationHelper {
 				builder.append(
 						"Transition X:" + transition.getPosition().getX() + " Y:" + transition.getPosition().getY()); //$NON-NLS-1$ //$NON-NLS-2$
 				return builder.toString();
+			} else if (object == null) {
+				return "NULL"; //$NON-NLS-1$
 			} else {
 				return object.toString();
 			}
@@ -244,7 +246,7 @@ public final class ValidationHelper {
 			}
 			int lastIndex = builder.length();
 			lastIndex = lastIndex == 0 ? 0 : lastIndex - 1;
-			if (builder.charAt(lastIndex) == '.') {
+			if (builder.length() > 0 && builder.charAt(lastIndex) == '.') {
 				builder.deleteCharAt(lastIndex);
 			}
 			return builder.toString();

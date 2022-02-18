@@ -26,14 +26,15 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -50,9 +51,9 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 
 		final CommandStack cmdstack = activeEditor.getAdapter(CommandStack.class);
 		final FBNetwork network = getFBNetwork(selection, event);
-		final Point pos = getInsertPos(viewer, selection);
+		final Rectangle posSizeRef = getPosSizeRef(viewer, selection);
 		final AbstractCreateFBNetworkElementCommand cmd = createContainerCreationCommand(selection.toList(), network,
-				pos);
+				posSizeRef);
 		cmdstack.execute(cmd);
 		selectElement(cmd.getElement(), viewer);
 
@@ -60,7 +61,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 	}
 
 	protected abstract AbstractCreateFBNetworkElementCommand createContainerCreationCommand(
-			final List<?> selection, final FBNetwork network, final Point pos);
+			final List<?> selection, final FBNetwork network, final Rectangle posSizeRef);
 
 	private static FBNetwork getFBNetwork(final StructuredSelection selection, final ExecutionEvent event) {
 		if (createNewEmptyContainerElement(selection)) {
@@ -77,13 +78,26 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		return null;
 	}
 
-	public static Point getInsertPos(final EditPartViewer viewer, final StructuredSelection selection) {
+	public static Rectangle getPosSizeRef(final EditPartViewer viewer, final StructuredSelection selection) {
 		if (createNewEmptyContainerElement(selection)) {
 			// new empty subapp at mouse cursor location
-			return ((FBNetworkContextMenuProvider) viewer.getContextMenu()).getTranslatedAndZoomedPoint();
+			return new Rectangle(((FBNetworkContextMenuProvider) viewer.getContextMenu()).getTranslatedAndZoomedPoint(),
+					new Dimension(200, 100));
 		}
-		final org.eclipse.swt.graphics.Point swtPos1 = FBNetworkHelper.getTopLeftCornerOfFBNetwork(selection.toList());
-		return new Point(swtPos1.x, swtPos1.y);
+		Rectangle selectionExtend = null;
+		for (final Object selElem : selection.toList()) {
+			if (selElem instanceof GraphicalEditPart
+					&& ((GraphicalEditPart) selElem).getModel() instanceof FBNetworkElement) {
+				// only consider the selected FBNetworkElements
+				final Rectangle fbBounds = ((GraphicalEditPart) selElem).getFigure().getBounds();
+				if (selectionExtend == null) {
+					selectionExtend = fbBounds.getCopy();
+				} else {
+					selectionExtend.union(fbBounds);
+				}
+			}
+		}
+		return selectionExtend;
 	}
 
 	private static boolean createNewEmptyContainerElement(final StructuredSelection selection) {

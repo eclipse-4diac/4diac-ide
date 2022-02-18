@@ -81,8 +81,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		final Object part = getViewer().getEditPartRegistry().get(getModel().getVarDeclaration());
 		if (part instanceof InterfaceEditPart) {
 			parentPart = (InterfaceEditPart) part;
-			final IFigure f = parentPart.getFigure();
-			f.addAncestorListener(new AncestorListener() {
+			final IFigure parentFigure = parentPart.getFigure();
+			parentFigure.addAncestorListener(new AncestorListener() {
 
 				@Override
 				public void ancestorRemoved(final IFigure ancestor) {
@@ -91,7 +91,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 				@Override
 				public void ancestorMoved(final IFigure ancestor) {
-					refreshVisuals();
+					if (parentFigure == ancestor) {
+						refreshVisuals();
+					}
 				}
 
 				@Override

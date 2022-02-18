@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2013, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2020 Johannes Kepler Universiy Linz
+ * 				 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,11 +13,13 @@
  *  Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
  *  Alois Zoitl - Changed to a per project Type and Data TypeLibrary
+ *  Martin Melik-Merkumians - Changes to reflect returned List instead of array
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,23 +27,28 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public final class DataTypeLibrary {
+public final class DataTypeLibrary extends ResourceImpl {
 
+	private static final String DATA_LIB = "data.lib"; //$NON-NLS-1$
 	private final Map<String, DataType> typeMap = new HashMap<>();
 	private final Map<String, DataTypePaletteEntry> derivedTypeMap = new HashMap<>();
 
 	/** Instantiates a new data type library. */
 	public DataTypeLibrary() {
+		setURI(URI.createURI(DATA_LIB));
 		initElementaryTypes();
 		initGenericTypes();
 	}
@@ -54,13 +62,19 @@ public final class DataTypeLibrary {
 		derivedTypeMap.remove(entry.getLabel());
 	}
 
-	/** Inits the elementary types. */
-	private void initElementaryTypes() {
-		Arrays.asList(ElementaryTypes.getAllElementaryType()).forEach(type -> typeMap.put(type.getName(), type));
+	private void addToTypeMap(final DataType type) {
+		typeMap.put(type.getName(), type);
+		getContents().add(type);
 	}
 
+	/** Inits the elementary types. */
+	private void initElementaryTypes() {
+		ElementaryTypes.getAllElementaryType().forEach(this::addToTypeMap);
+	}
+
+
 	private void initGenericTypes() {
-		Arrays.asList(GenericTypes.getAllGenericTypes()).forEach(type -> typeMap.put(type.getName(), type));
+		GenericTypes.getAllGenericTypes().forEach(this::addToTypeMap);
 	}
 
 	public Map<String, DataTypePaletteEntry> getDerivedDataTypes() {
@@ -76,6 +90,10 @@ public final class DataTypeLibrary {
 		dataTypes.addAll(derivedTypeMap.values().stream().map(DataTypePaletteEntry::getType).filter(Objects::nonNull)
 				.collect(Collectors.toList()));
 		return dataTypes;
+	}
+
+	public static List<DataType> getNonUserDefinedDataTypes() {
+		return IecTypes.ElementaryTypes.getAllElementaryType();
 	}
 
 	/** Gets the data types sorted alphabetically from a to z.
@@ -150,6 +168,11 @@ public final class DataTypeLibrary {
 		}
 		return (StructuredType) typeMap.get(FordiacKeywords.ANY_STRUCT);
 
+	}
+
+	@Override
+	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
+		// currently we do not need to do anything here
 	}
 
 }

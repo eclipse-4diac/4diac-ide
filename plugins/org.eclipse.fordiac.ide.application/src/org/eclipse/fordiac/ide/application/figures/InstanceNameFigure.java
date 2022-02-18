@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.application.figures;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.fordiac.ide.gef.figures.FBShapeShadowBorder;
+import org.eclipse.fordiac.ide.gef.figures.AbstractShadowBorder;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.resource.JFaceResources;
@@ -27,7 +27,7 @@ public class InstanceNameFigure extends Label implements IFontUpdateListener {
 		setFont();
 		setTextAlignment(PositionConstants.CENTER);
 		setLabelAlignment(PositionConstants.CENTER);
-		setBorder(new MarginBorder(0, 0, FBShapeShadowBorder.SHADOW_INSETS.top + 2, 0));
+		setBorder(new MarginBorder(0, 0, AbstractShadowBorder.SHADOW_INSETS.top + 2, 0));
 	}
 
 	private void setFont() {

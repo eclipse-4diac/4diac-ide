@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
@@ -35,6 +34,8 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 public enum FordiacImage {
 	// @formatter:off
@@ -50,8 +51,18 @@ public enum FordiacImage {
 	ICON_DATA_OUTPUT, ICON_DELETE_RESOURCE, ICON_DEPLOYMENT_CONSOLE, ICON_DEPLOYMENT_PERSPECTIVE, ICON_DEVICE,
 	ICON_DISCOVER, ICON_DOWNLOAD, ICON_EC_ACTION, ICON_ECC, ICON_EC_STATE,
 	ICON_EVENT, ICON_EVENT_INPUT, ICON_EVENT_OUTPUT, ICON_EXPAND_ALL, ICON_EXPORT, ICON_FB, ICON_FB_TYPE,
-	ICON_FB_NETWORK, ICON_FB_TESTER, ICON_FIRMWARE_RESOURCE, ICON_FMU, ICON_FORCE_VALUE, ICON_HIDE_DATA,
-	ICON_HIDE_EVENT, ICON_INTERFACE_EDITOR, ICON_INTERFACE_LIST, ICON_KILL_DEVICE, ICON_RUNTIME_LAUNCHER,
+	ICON_FB_NETWORK,
+	ICON_FB_TESTER,
+	ICON_FIRMWARE_RESOURCE,
+	ICON_FMU,
+	ICON_FORCE_VALUE,
+	ICON_FUNCTION,
+	ICON_HIDE_DATA,
+	ICON_HIDE_EVENT,
+	ICON_INTERFACE_EDITOR,
+	ICON_INTERFACE_LIST,
+	ICON_KILL_DEVICE,
+	ICON_RUNTIME_LAUNCHER,
 	ICON_LEFT_INPUT_PRIMITIVE, ICON_LEFT_OUTPUT_PRIMITIVE, ICON_LINK_OUTPUT, ICON_LINK_INPUT, ICON_LOCKED_STATE,
 	ICON_MONITORING_DECORATOR, ICON_MONITORING_PERSPECTIVE, ICON_NEW_4DIAC_PROJECT, ICON_NEW_APPLICATION,
 	ICON_NEW_FUNCTIONBLOCK, ICON_NEW_SYSTEM, ICON_OK, ICON_PLUGS, ICON_PROPERTIES, ICON_REFRESH, ICON_REMOVE_WATCH,
@@ -78,7 +89,8 @@ public enum FordiacImage {
 
 	private static final String IMAGES_DIRECTORY = "images"; //$NON-NLS-1$
 	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages"; //$NON-NLS-1$
-	private static ResourceBundle foridacImageProperties = getFordiacImageProperties();
+	private static ResourceBundle fordiacImageProperties = getFordiacImageProperties();
+	private static Bundle bundle = null;
 
 	private static final ResourceBundle getFordiacImageProperties() {
 		try {
@@ -92,6 +104,13 @@ public enum FordiacImage {
 				}
 			};
 		}
+	}
+
+	private static synchronized Bundle getBundle() {
+		if (bundle == null) {
+			bundle = FrameworkUtil.getBundle(FordiacImage.class);
+		}
+		return bundle;
 	}
 
 	private static Map<Image, Image> errorImages = new HashMap<>();
@@ -160,9 +179,8 @@ public enum FordiacImage {
 	}
 
 	private static URL getImageURL(final String name) {
-		final String fileName = foridacImageProperties.getString(name);
-		return FileLocator.find(UIPlugin.getDefault().getBundle(),
-				new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
+		final String fileName = fordiacImageProperties.getString(name);
+		return FileLocator.find(getBundle(), new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
 	}
 
 	private static Image getErrorImage() {

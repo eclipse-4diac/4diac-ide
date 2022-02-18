@@ -25,7 +25,7 @@ public class SystemFactory implements Factory {
 	}
 	
 	@Override
-	public Resource createResource(URI uri) {
+	public Resource createResource(final URI uri) {
 		return new SystemResource(uri);
 	}
 }

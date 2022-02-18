@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
@@ -23,7 +24,7 @@ public class EventPermitTest extends AbstractInterpreterTest {
 	@Override
 	public void test() {
 		final BasicFBType fb = loadFBType("E_PERMIT"); //$NON-NLS-1$
-		fb.setService(createEmptyServiceModel());
+		fb.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		// input PERMIT is default 0, no output event sent
@@ -32,7 +33,7 @@ public class EventPermitTest extends AbstractInterpreterTest {
 
 		// set input PERMIT to 1, event goes through
 		fb.getService().getServiceSequence().clear();
-		final ServiceSequence seq2 = addServiceSequence(fb.getService());
+		final ServiceSequence seq2 = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PERMIT", "1"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq2, new FBTransaction("EI", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 

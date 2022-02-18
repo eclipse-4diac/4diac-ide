@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmend�a, Bianca Wiesmayr
+ *   Antonio Garmenda, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -42,7 +43,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -52,8 +52,6 @@ import org.eclipse.fordiac.ide.test.fb.interpreter.ModelSerializer;
 import org.junit.Test;
 
 public abstract class AbstractInterpreterTest {
-	private static final String EXTERNAL_INTERFACE = "external"; //$NON-NLS-1$
-	private static final String INTERNAL_INTERFACE = "internal"; //$NON-NLS-1$
 	public static final String START_STATE = "START"; //$NON-NLS-1$
 
 	static final ModelDeserializer deserializer = new ModelDeserializer();
@@ -67,32 +65,15 @@ public abstract class AbstractInterpreterTest {
 	}
 
 	protected static BasicFBType loadFBType(final String name, final boolean emptyService) {
+		//TODO First, implement the load of Fordiac projects for unit testing
+		//final BasicFBType fbt = (BasicFBType) deserializer
+		//			.loadModel("inputmodelsfbt/" + name + ".fbt"); //$NON-NLS-1$ //$NON-NLS-2$
 		final BasicFBType fbt = (BasicFBType) deserializer
 				.loadModel("inputmodels/" + name + ".xmi"); //$NON-NLS-1$ //$NON-NLS-2$
 		if (emptyService) {
-			fbt.setService(createEmptyServiceModel());
+			fbt.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		}
 		return fbt;
-	}
-
-
-	public static Service createEmptyServiceModel() {
-		final Service s = LibraryElementFactory.eINSTANCE.createService();
-		final ServiceInterface left = LibraryElementFactory.eINSTANCE.createServiceInterface();
-		left.setName(EXTERNAL_INTERFACE);
-		final ServiceInterface right = LibraryElementFactory.eINSTANCE.createServiceInterface();
-		right.setName(INTERNAL_INTERFACE);
-		s.setLeftInterface(left);
-		s.setRightInterface(right);
-		addServiceSequence(s);
-		return s;
-	}
-
-	protected static ServiceSequence addServiceSequence(final org.eclipse.fordiac.ide.model.libraryElement.Service s) {
-		final ServiceSequence seq = LibraryElementFactory.eINSTANCE.createServiceSequence();
-		seq.setName("Test" + s.getServiceSequence().size()); //$NON-NLS-1$
-		s.getServiceSequence().add(seq);
-		return seq;
 	}
 
 	protected static ServiceTransaction addTransaction(final ServiceSequence seq, final FBTransaction fbtrans) {
@@ -232,7 +213,9 @@ public abstract class AbstractInterpreterTest {
 
 		// no unwanted output event occurrences
 		final long outputEvents = expectedResult.getOutputPrimitive().stream()
-				.filter(p -> !p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)).count();
+				.filter(p -> !p.getInterface().getName().toLowerCase()
+						.contains(ServiceSequenceUtils.INTERNAL_INTERFACE))
+				.count();
 		if (outputEvents != result.getOutputEventOccurences().size()) {
 			throw new IllegalArgumentException("Unwanted output event occurrence"); //$NON-NLS-1$
 		}
@@ -245,7 +228,7 @@ public abstract class AbstractInterpreterTest {
 	}
 
 	private static void checkOutputPrimitive(final Transaction result, final int j, final OutputPrimitive p) {
-		if (!p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)) {
+		if (!p.getInterface().getName().toLowerCase().contains(ServiceSequenceUtils.INTERNAL_INTERFACE)) {
 			// generated output event is correct
 			if (!p.getEvent().equals(result.getOutputEventOccurences().get(j).getEvent().getName())) {
 				throw new IllegalArgumentException("Generated output event is incorrect"); //$NON-NLS-1$
@@ -319,3 +302,4 @@ public abstract class AbstractInterpreterTest {
 		return false;
 	}
 }
+

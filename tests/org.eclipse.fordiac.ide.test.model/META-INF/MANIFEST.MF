@@ -11,3 +11,4 @@ Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.params,
  org.junit.jupiter.params.provider,
  org.opentest4j
+Require-Bundle: org.eclipse.fordiac.ide.systemmanagement

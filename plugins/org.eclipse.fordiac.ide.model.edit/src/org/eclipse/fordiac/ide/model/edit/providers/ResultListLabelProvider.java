@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
+ * 				 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - added search highlighting
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.edit.providers;
@@ -29,6 +31,16 @@ import org.eclipse.swt.graphics.Image;
 
 public class ResultListLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
+	private String[] searchString;
+
+	public ResultListLabelProvider(final String searchString) {
+		setSearchString(searchString);
+	}
+
+	public ResultListLabelProvider() {
+		setSearchString(""); //$NON-NLS-1$
+	}
+
 	@Override
 	public StyledString getStyledText(final Object element) {
 		StyledString styledString = null;
@@ -37,6 +49,16 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 			styledString = new StyledString(entry.getLabel());
 			styledString.append(" - " + entry.getType().getComment(), //$NON-NLS-1$
 					StyledString.QUALIFIER_STYLER);
+
+			int lastIndex = 0;
+			for (final String searchStringElement : searchString) {
+				int offset = styledString.toString().toUpperCase().indexOf((searchStringElement.toUpperCase()), lastIndex);
+				if (offset >= 0) {
+					styledString.setStyle(offset, searchStringElement.length(), BoldStyler.INSTANCE_DEFAULT);
+					lastIndex = offset + searchStringElement.length();
+				}
+			}
+
 		} else {
 			styledString = new StyledString(element.toString());
 		}
@@ -74,6 +96,18 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	public String getText(final Object element) {
 		return (element instanceof PaletteEntry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
 				((PaletteEntry) element).getFile().getFullPath()) : "-"; //$NON-NLS-1$
+	}
+
+	public void setSearchString(final String searchString) {
+		this.searchString = new String[] { searchString };
+		validateSearchString();
+	}
+
+	private void validateSearchString() {
+		searchString = searchString[0].split("[\\*\\?]+", -1); //$NON-NLS-1$
+		for (int i = 0; i < searchString.length; i++) {
+			searchString[i] = searchString[i].replaceAll("[^a-zA-Z0-9_]", "");  //$NON-NLS-1$//$NON-NLS-2$
+		}
 	}
 
 }

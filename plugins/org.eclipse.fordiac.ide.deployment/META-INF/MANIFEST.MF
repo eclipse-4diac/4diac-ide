@@ -23,7 +23,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
-Bundle-Activator: org.eclipse.fordiac.ide.deployment.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment

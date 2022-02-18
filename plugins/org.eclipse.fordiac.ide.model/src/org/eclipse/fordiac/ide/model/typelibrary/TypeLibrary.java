@@ -49,6 +49,8 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class TypeLibrary implements TypeLibraryTags {
 
+	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
+
 	// !> Holds type libraries of all open 4diac IDE projects
 	private static Map<IProject, TypeLibrary> typeLibraryList = new HashMap<>();
 
@@ -249,8 +251,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	 */
 	private static void setPaletteCreators() {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry
-				.getConfigurationElementsFor(org.eclipse.fordiac.ide.model.Activator.PLUGIN_ID, "PaletteEntryCreator"); //$NON-NLS-1$
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID, "PaletteEntryCreator"); //$NON-NLS-1$
 		int countPaletteCreater = 0;
 		paletteCreators = new IPaletteEntryCreator[elems.length];
 

@@ -18,13 +18,14 @@ Export-Package: org.eclipse.fordiac.ide.model.structuredtext,
  org.eclipse.fordiac.ide.model.structuredtext.converter,
  org.eclipse.fordiac.ide.model.structuredtext.parser.antlr,
  org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.internal,
+ org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.lexer,
  org.eclipse.fordiac.ide.model.structuredtext.resource,
  org.eclipse.fordiac.ide.model.structuredtext.scoping,
  org.eclipse.fordiac.ide.model.structuredtext.services,
  org.eclipse.fordiac.ide.model.structuredtext.structuredText,
  org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl,
  org.eclipse.fordiac.ide.model.structuredtext.structuredText.util,
- org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.lexer,
+ org.eclipse.fordiac.ide.model.structuredtext.util,
  org.eclipse.fordiac.ide.model.structuredtext.validation
 Import-Package: org.apache.log4j
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.structuredtext

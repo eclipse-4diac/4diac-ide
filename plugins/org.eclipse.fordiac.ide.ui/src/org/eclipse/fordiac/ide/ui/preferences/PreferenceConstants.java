@@ -24,6 +24,8 @@ package org.eclipse.fordiac.ide.ui.preferences;
  */
 public final class PreferenceConstants {
 
+	public static final String FORDIAC_UI_PREFERENCES_ID = "org.eclipse.fordiac.ide.ui"; //$NON-NLS-1$
+
 	/** The Constant P_EVENT_CONNECTOR_COLOR. */
 	public static final String P_EVENT_CONNECTOR_COLOR = "EventConnectionConnectorColor"; //$NON-NLS-1$
 

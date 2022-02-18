@@ -42,6 +42,8 @@ public interface LibraryElementTags {
 	String DY_ATTRIBUTE = "dy"; //$NON-NLS-1$
 	String X_ATTRIBUTE = "x"; //$NON-NLS-1$
 	String Y_ATTRIBUTE = "y"; //$NON-NLS-1$
+	String WIDTH_ATTRIBUTE = "width"; //$NON-NLS-1$
+	String HEIGHT_ATTRIBUTE = "height"; //$NON-NLS-1$
 
 	String CONNECTION_ELEMENT = "Connection"; //$NON-NLS-1$
 	String CONNECTION_VISIBLE = "Visible"; //$NON-NLS-1$

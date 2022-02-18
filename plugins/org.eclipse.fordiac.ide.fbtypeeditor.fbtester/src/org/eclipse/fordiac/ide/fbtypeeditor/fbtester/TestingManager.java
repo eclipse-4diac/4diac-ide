@@ -46,8 +46,8 @@ public final class TestingManager {
 	public void addTriggerElement(final TestElement element) {
 		triggerElements.put(generateElementString(element), element);
 	}
-	
-	public void deleteTriggerElement(TestElement element) {
+
+	public void deleteTriggerElement(final TestElement element) {
 		triggerElements.remove(generateElementString(element));
 	}
 
@@ -67,10 +67,10 @@ public final class TestingManager {
 	}
 
 	public void addTestElement(final TestElement element) {
-		testElements.put(generateElementString(element), element); 
+		testElements.put(generateElementString(element), element);
 	}
-	
-	public void deleteTestElement(TestElement element) {
+
+	public void deleteTestElement(final TestElement element) {
 		testElements.remove(generateElementString(element));
 	}
 
@@ -79,7 +79,7 @@ public final class TestingManager {
 		final Map<String, TestElement> elements = new HashMap<>();
 		for (final Entry<String, TestElement> entry : testElements.entrySet()) {
 			final TestElement element = entry.getValue();
-			if (element.getFb().getType().getName() ==  type.getName()) {
+			if (element.getFb().getType().getName().equals(type.getName())) {
 				element.addSetValueListener(valueListener);
 				element.addTriggerEventListener(eventListener);
 				if ((element.getInterfaceElement() instanceof VarDeclaration)

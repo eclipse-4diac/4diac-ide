@@ -17,7 +17,6 @@
 
 package org.eclipse.fordiac.ide.metrics.handlers;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +26,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.metrics.analyzers.AbstractCodeMetricAnalyzer;
 import org.eclipse.fordiac.ide.metrics.analyzers.MetricResult;
+import org.eclipse.fordiac.ide.metrics.providers.MetricsResultLabelProvider;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -38,13 +38,10 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -54,30 +51,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public abstract class AbstractCodeMetricHandler extends AbstractHandler {
-	public static class MetricsResultLabelProvider extends LabelProvider implements ITableLabelProvider {
-		private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00"); //$NON-NLS-1$
 
-		@Override
-		public Image getColumnImage(final Object element, final int columnIndex) {
-			return null;
-		}
-
-		@Override
-		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof MetricResult) {
-				switch (columnIndex) {
-				case 0:
-					return ((MetricResult) element).getName();
-				case 1:
-					return decimalFormat.format(((MetricResult) element).getValue());
-				default:
-					break;
-				}
-			}
-			return element.toString();
-		}
-
-	}
 
 	private static class MetricsResultDialog extends MessageDialog {
 

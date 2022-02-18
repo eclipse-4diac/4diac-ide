@@ -509,6 +509,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		return org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.isVisible(this);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isInterfaceConnection() {
+		return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);
+	}
+
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */

@@ -55,9 +55,6 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			refresh();
-			if (getParent() != null && getParent().getParent() != null) {
-				getParent().getParent().refresh();
-			}
 			super.notifyChanged(notification);
 		}
 	};

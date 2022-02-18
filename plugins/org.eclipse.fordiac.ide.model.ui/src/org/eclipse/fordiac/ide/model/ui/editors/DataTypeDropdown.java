@@ -68,7 +68,7 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private ContentProposalAdapter adapter;
 	private Text textControl;
-	private ITypeSelectionContentProvider contentProvider;
+	private final ITypeSelectionContentProvider contentProvider;
 	private SimpleContentProposalProvider provider;
 	private List<DataType> types;
 	private String[] elementaryTypes;
@@ -394,8 +394,8 @@ public class DataTypeDropdown extends TextCellEditor {
 					return structures.getChildren().toArray();
 				} else if (structures.children.isEmpty()) {
 					return elementaries.getChildren().toArray();
-				} 
-				
+				}
+
 				return new TypeNode[] { elementaries, structures };
 			}
 
