@@ -17,7 +17,6 @@ import java.util.Map
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
-import org.eclipse.fordiac.ide.model.eval.EvaluatorExitException
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
@@ -125,7 +124,7 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		alg.varTempDeclarations.flatMap[varDeclarations].filter(STVarDeclaration).forEach[evaluateLocalVariable]
 		try {
 			alg.statements.evaluateStatementList
-		} catch (ReturnException e) {
+		} catch (StructuredTextException e) {
 			// return
 		}
 	}
@@ -182,55 +181,69 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		val by = stmt.by?.evaluateExpression ?: 1.wrapValue(variable.type)
 		// direction?
 		if (by >= variable.type.defaultValue) {
-			while (variable.value <= to) {
-				try {
-					stmt.statements.evaluateStatementList
-				} catch (ContinueException e) {
-					// continue
+			try {
+				while (variable.value <= to) {
+					try {
+						stmt.statements.evaluateStatementList
+					} catch (ContinueException e) {
+						// continue
+					}
+					(stmt.by ?: stmt.from).trap
+					variable.value = variable.value + by
 				}
-				(stmt.by ?: stmt.from).trap
-				variable.value = variable.value + by
+			} catch (ExitException e) {
+				// break
 			}
 		} else {
-			while (variable.value >= to) {
-				try {
-					stmt.statements.evaluateStatementList
-				} catch (ContinueException e) {
-					// continue
+			try {
+				while (variable.value >= to) {
+					try {
+						stmt.statements.evaluateStatementList
+					} catch (ContinueException e) {
+						// continue
+					}
+					stmt.by.trap
+					variable.value = variable.value + by
 				}
-				stmt.by.trap
-				variable.value = variable.value + by
+			} catch (ExitException e) {
+				// break
 			}
 		}
 	}
 
 	def private dispatch void evaluateStatement(STWhileStatement stmt) {
-		while (stmt.condition.trap.evaluateExpression.asBoolean) {
-			try {
-				stmt.statements.evaluateStatementList
-			} catch (ContinueException e) {
-				// continue
+		try {
+			while (stmt.condition.trap.evaluateExpression.asBoolean) {
+				try {
+					stmt.statements.evaluateStatementList
+				} catch (ContinueException e) {
+					// continue
+				}
 			}
+		} catch (ExitException e) {
+			// break
 		}
 	}
 
 	def private dispatch void evaluateStatement(STRepeatStatement stmt) {
-		do {
-			try {
-				stmt.statements.evaluateStatementList
-			} catch (ContinueException e) {
-				// continue
-			}
-		} while (!stmt.condition.trap.evaluateExpression.asBoolean);
+		try {
+			do {
+				try {
+					stmt.statements.evaluateStatementList
+				} catch (ContinueException e) {
+					// continue
+				}
+			} while (!stmt.condition.trap.evaluateExpression.asBoolean);
+		} catch (ExitException e) {
+			// break
+		}
 	}
 
 	def private dispatch void evaluateStatement(STContinue stmt) { throw new ContinueException(stmt.trap) }
 
 	def private dispatch void evaluateStatement(STReturn stmt) { throw new ReturnException(stmt.trap) }
 
-	def private dispatch void evaluateStatement(STExit stmt) {
-		throw new StructuredTextExitException(stmt.trap, this)
-	}
+	def private dispatch void evaluateStatement(STExit stmt) { throw new ExitException(stmt.trap) }
 
 	def private dispatch Value evaluateExpression(STExpression expr) {
 		error('''The expression «expr.eClass.name» is not supported''')
@@ -359,9 +372,9 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	static class StructuredTextExitException extends EvaluatorExitException {
-		new(STStatement statement, Evaluator evaluator) {
-			super(evaluator)
+	static class ExitException extends StructuredTextException {
+		new(STStatement statement) {
+			super(statement)
 		}
 	}
 }

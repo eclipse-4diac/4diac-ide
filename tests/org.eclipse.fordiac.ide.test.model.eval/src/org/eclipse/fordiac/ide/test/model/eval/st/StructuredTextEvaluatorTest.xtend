@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator
-import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator.StructuredTextExitException
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -38,6 +37,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmBo
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue
+import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn
@@ -413,6 +413,26 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testForWithExitStatement() {
+		21.toIntValue.assertTrace(
+			#[STAlgorithmBody, STNumericLiteral] + (STBinaryExpression.repeat(2) + #[STNumericLiteral]).repeat(4) +
+				#[STBinaryExpression, STExit, STBinaryExpression], '''
+				VAR_TEMP
+					test: INT := INT#16;
+					i: INT;
+				END_VAR
+				
+				FOR i := INT#0 TO INT#7 DO
+					IF i = INT#4 THEN
+						EXIT;
+					END_IF;
+					test := test + INT#1;
+				END_FOR;
+				test := test + INT#1;
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testForWithReturnStatement() {
 		21.toIntValue.assertTrace(
 			#[STAlgorithmBody, STNumericLiteral] + (STBinaryExpression.repeat(2) + #[STNumericLiteral]).repeat(4) +
@@ -427,6 +447,92 @@ class StructuredTextEvaluatorTest {
 						RETURN;
 					END_IF;
 					test := test + INT#1;
+				END_FOR;
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testNestedForStatement() {
+		21.toIntValue.assertTrace(#[STAlgorithmBody, STNumericLiteral] +
+			(#[STNumericLiteral] + #[STBinaryExpression, STNumericLiteral].repeat(2) + #[STNumericLiteral]).repeat(2),
+			'''
+				VAR_TEMP
+					test: INT := INT#17;
+					i: INT;
+					j: INT;
+				END_VAR
+				
+				FOR i := INT#0 TO INT#1 DO
+					FOR j := INT#0 TO INT#1 DO
+						test := test + INT#1;
+					END_FOR;
+				END_FOR;
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testNestedForWithContinueStatement() {
+		21.toIntValue.assertTrace(#[STAlgorithmBody, STNumericLiteral] +
+			(#[STNumericLiteral] + #[STBinaryExpression, STContinue, STNumericLiteral, // if taken 
+			STBinaryExpression, STBinaryExpression, STNumericLiteral].repeat(4) + #[STNumericLiteral]).repeat(3), '''
+			VAR_TEMP
+				test: INT := INT#9;
+				i: INT;
+				j: INT;
+			END_VAR
+			
+			FOR i := INT#0 TO INT#2 DO
+				FOR j := INT#0 TO INT#7 DO
+					IF j MOD INT#2 = INT#0 THEN
+						CONTINUE;
+					END_IF;
+					test := test + INT#1;
+				END_FOR;
+			END_FOR;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testNestedForWithExitStatement() {
+		21.toIntValue.assertTrace(#[STAlgorithmBody, STNumericLiteral] +
+			(#[STNumericLiteral] + (STBinaryExpression.repeat(2) + #[STNumericLiteral]).repeat(4) +
+				#[STBinaryExpression, STExit, STBinaryExpression, STNumericLiteral]).repeat(3), '''
+			VAR_TEMP
+				test: INT := INT#6;
+				i: INT;
+				j: INT;
+			END_VAR
+			
+			FOR i := INT#0 TO INT#2 DO
+				FOR j := INT#0 TO INT#7 DO
+					IF j = INT#4 THEN
+						EXIT;
+					END_IF;
+					test := test + INT#1;
+				END_FOR;
+				test := test + INT#1;
+			END_FOR;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testNestedForWithReturnStatement() {
+		21.toIntValue.assertTrace(
+			#[STAlgorithmBody] + STNumericLiteral.repeat(2) +
+				(STBinaryExpression.repeat(2) + #[STNumericLiteral]).repeat(4) + #[STBinaryExpression, STReturn], '''
+				VAR_TEMP
+					test: INT := INT#17;
+					i: INT;
+					j: INT;
+				END_VAR
+				
+				FOR i := INT#0 TO INT#7 DO
+					FOR j := INT#0 TO INT#7 DO
+						IF j = INT#4 THEN
+							RETURN;
+						END_IF;
+						test := test + INT#1;
+					END_FOR;
 				END_FOR;
 			'''.evaluateAlgorithm)
 	}
@@ -478,6 +584,27 @@ class StructuredTextEvaluatorTest {
 				test := test + INT#1;
 			END_FOR;
 		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testForWithNegativeByAndExitStatement() {
+		21.toIntValue.assertTrace(
+			#[STAlgorithmBody, STNumericLiteral] +
+				#[STBinaryExpression, STBinaryExpression, STNumericLiteral].repeat(4) +
+				#[STBinaryExpression, STExit, STBinaryExpression], '''
+				VAR_TEMP
+					test: INT := INT#16;
+					i: INT;
+				END_VAR
+				
+				FOR i := INT#7 TO INT#0 BY INT#-1 DO
+					IF i = INT#3 THEN
+						EXIT;
+					END_IF;
+					test := test + INT#1;
+				END_FOR;
+				test := test + INT#1;
+			'''.evaluateAlgorithm)
 	}
 
 	@Test
@@ -535,6 +662,26 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testWhileWithExitStatement() {
+		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(19) + #[STExit, STBinaryExpression],
+			'''
+				VAR_TEMP
+					test: INT := INT#16;
+					i: INT := INT#0;
+				END_VAR
+				
+				WHILE i < INT#8 DO
+					i := i + INT#1;
+					IF i = INT#5 THEN
+						EXIT;
+					END_IF;
+					test := test + INT#1;
+				END_WHILE;
+				test := test + INT#1;
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testWhileWithReturnStatement() {
 		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(19) + #[STReturn], '''
 			VAR_TEMP
@@ -589,6 +736,27 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testRepeatWithExitStatement() {
+		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(18) + #[STExit, STBinaryExpression],
+			'''
+				VAR_TEMP
+					test: INT := INT#16;
+					i: INT := INT#0;
+				END_VAR
+				
+				REPEAT
+					i := i + INT#1;
+					IF i = INT#5 THEN
+						EXIT;
+					END_IF;
+					test := test + INT#1;
+				UNTIL i = INT#8
+				END_REPEAT;
+				test := test + INT#1;
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testRepeatWithReturnStatement() {
 		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(18) + #[STReturn], '''
 			VAR_TEMP
@@ -618,11 +786,6 @@ class StructuredTextEvaluatorTest {
 			RETURN;
 			test := INT#0;
 		'''.evaluateAlgorithm)
-	}
-
-	@Test
-	def void testExitStatement() {
-		StructuredTextExitException.assertThrows["EXIT;".evaluateAlgorithm]
 	}
 
 	def static evaluateExpression(CharSequence expression) {
