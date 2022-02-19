@@ -10,5 +10,15 @@
             sortIndex="10">
       </ExportFilter>
    </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.export.language.supportFactory">
+      <factory
+            class="org.eclipse.fordiac.ide.export.forte_ng.algorithm.OtherAlgorithmSupportFactory"
+            filter="forte_ng">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm">
+         </source>
+      </factory>
+   </extension>
 
 </plugin>

@@ -58,6 +58,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 					#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
 
 					#include "basicfb.h"
+					#include "forte_array.h"
 					#include "forte_array_at.h"
 
 

@@ -109,7 +109,7 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 		«IF !type.internalFbs.isEmpty»
 		#include "typelib.h"
 		«ENDIF»
-		«(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).generateTypeIncludes»
+		«(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).map[getType].generateTypeIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
 
 		«type.compilerInfo?.header»

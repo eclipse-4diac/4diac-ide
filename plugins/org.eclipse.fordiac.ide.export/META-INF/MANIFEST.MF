@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.export,
+ org.eclipse.fordiac.ide.export.language,
  org.eclipse.fordiac.ide.export.utils
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -15,3 +16,4 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.export
+Bundle-Activator: org.eclipse.fordiac.ide.export.plugin.ExportPlugin

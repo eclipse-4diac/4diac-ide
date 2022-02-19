@@ -5,7 +5,7 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  * 
  * Contributors:
@@ -17,6 +17,15 @@ package org.eclipse.fordiac.ide.export.forte_ng
 import java.nio.file.Path
 import java.util.List
 import org.eclipse.fordiac.ide.export.ExportTemplate
+import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.DateAndTimeType
+import org.eclipse.fordiac.ide.model.data.DateType
+import org.eclipse.fordiac.ide.model.data.LdateType
+import org.eclipse.fordiac.ide.model.data.LdtType
+import org.eclipse.fordiac.ide.model.data.LtimeType
+import org.eclipse.fordiac.ide.model.data.LtodType
+import org.eclipse.fordiac.ide.model.data.TimeOfDayType
+import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -26,11 +35,10 @@ abstract class ForteLibraryElementTemplate extends ExportTemplate {
 	public static final CharSequence EXPORT_PREFIX = "st_"
 
 	new(String name, Path prefix) {
-		super(name, prefix) 
+		super(name, prefix)
 	}
 
 	def protected LibraryElement getType()
-
 
 	def protected getExportPrefix() {
 		return EXPORT_PREFIX
@@ -60,18 +68,27 @@ abstract class ForteLibraryElementTemplate extends ExportTemplate {
 		#endif // _«type.name.toUpperCase»_H_
 	'''
 
-	def protected generateTypeIncludes(Iterable<VarDeclaration> vars) '''
-		«FOR include : vars.map[it.typeName].sort.toSet»
-			#include "forte_«include.toLowerCase».h"
-			«IF include.startsWith("ANY")»
-				#error type contains variables of type ANY. Please check the usage of these variables as we can not gurantee correct usage on export!
-			«ENDIF»
+	def protected generateTypeIncludes(Iterable<DataType> types) '''
+		«FOR include : types.map[generateTypeInclude].toSet»
+			#include "«include»"
 		«ENDFOR»
-		«IF vars.exists[array]»
-			#include "forte_array.h"
-		«ENDIF»
+		#include "forte_array.h"
 		#include "forte_array_at.h"
 	'''
+
+	def protected generateTypeInclude(DataType type) {
+		switch (type) {
+			TimeType,
+			LtimeType: "forte_time.h"
+			DateType,
+			LdateType: "forte_date.h"
+			TimeOfDayType,
+			LtodType: "forte_time_of_day.h"
+			DateAndTimeType,
+			LdtType: "forte_date_and_time.h"
+			default: '''forte_«type.name.toLowerCase».h'''
+		}
+	}
 
 	def protected generateAccessors(List<VarDeclaration> vars, String function) '''
 		«FOR v : vars»

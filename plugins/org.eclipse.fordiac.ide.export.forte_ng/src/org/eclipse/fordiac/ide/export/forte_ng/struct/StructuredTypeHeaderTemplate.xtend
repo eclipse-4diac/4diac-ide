@@ -54,7 +54,7 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 	def protected generateHeaderIncludes() '''
 		#include "forte_struct.h"
 		
-		«type.memberVariables.generateTypeIncludes»
+		«type.memberVariables.map[type].generateTypeIncludes»
 		
 		«type.compilerInfo?.header»
 	'''
