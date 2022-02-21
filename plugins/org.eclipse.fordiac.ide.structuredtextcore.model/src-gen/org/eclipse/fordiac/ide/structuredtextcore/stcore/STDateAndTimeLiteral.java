@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -30,8 +31,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getDateValue <em>Date Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getTimeOfDayValue <em>Time Of Day Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTDateAndTimeLiteral()
@@ -62,47 +62,25 @@ public interface STDateAndTimeLiteral extends STExpression {
 	void setType(DataType value);
 
 	/**
-	 * Returns the value of the '<em><b>Date Value</b></em>' attribute.
+	 * Returns the value of the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Date Value</em>' attribute.
-	 * @see #setDateValue(Date)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTDateAndTimeLiteral_DateValue()
-	 * @model
+	 * @return the value of the '<em>Value</em>' attribute.
+	 * @see #setValue(LocalDateTime)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTDateAndTimeLiteral_Value()
+	 * @model dataType="org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTime"
 	 * @generated
 	 */
-	Date getDateValue();
+	LocalDateTime getValue();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getDateValue <em>Date Value</em>}' attribute.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getValue <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Date Value</em>' attribute.
-	 * @see #getDateValue()
+	 * @param value the new value of the '<em>Value</em>' attribute.
+	 * @see #getValue()
 	 * @generated
 	 */
-	void setDateValue(Date value);
-
-	/**
-	 * Returns the value of the '<em><b>Time Of Day Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Time Of Day Value</em>' attribute.
-	 * @see #setTimeOfDayValue(String)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTDateAndTimeLiteral_TimeOfDayValue()
-	 * @model
-	 * @generated
-	 */
-	String getTimeOfDayValue();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getTimeOfDayValue <em>Time Of Day Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Time Of Day Value</em>' attribute.
-	 * @see #getTimeOfDayValue()
-	 * @generated
-	 */
-	void setTimeOfDayValue(String value);
+	void setValue(LocalDateTime value);
 
 } // STDateAndTimeLiteral

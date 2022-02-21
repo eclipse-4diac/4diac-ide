@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
+import java.time.LocalTime;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -61,7 +62,7 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VALUE_EDEFAULT = null;
+	protected static final LocalTime VALUE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -71,7 +72,7 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
 	 * @generated
 	 * @ordered
 	 */
-	protected String value = VALUE_EDEFAULT;
+	protected LocalTime value = VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -138,7 +139,7 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
 	 * @generated
 	 */
 	@Override
-	public String getValue() {
+	public LocalTime getValue() {
 		return value;
 	}
 
@@ -148,8 +149,8 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
 	 * @generated
 	 */
 	@Override
-	public void setValue(String newValue) {
-		String oldValue = value;
+	public void setValue(LocalTime newValue) {
+		LocalTime oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TIME_OF_DAY_LITERAL__VALUE, oldValue, value));
@@ -185,7 +186,7 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
 				setType((DataType)newValue);
 				return;
 			case STCorePackage.ST_TIME_OF_DAY_LITERAL__VALUE:
-				setValue((String)newValue);
+				setValue((LocalTime)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);

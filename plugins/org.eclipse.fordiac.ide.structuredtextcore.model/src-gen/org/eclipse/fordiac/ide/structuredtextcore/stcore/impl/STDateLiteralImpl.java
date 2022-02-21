@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -63,7 +64,7 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date VALUE_EDEFAULT = null;
+	protected static final LocalDate VALUE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -73,7 +74,7 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
 	 * @generated
 	 * @ordered
 	 */
-	protected Date value = VALUE_EDEFAULT;
+	protected LocalDate value = VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -140,7 +141,7 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
 	 * @generated
 	 */
 	@Override
-	public Date getValue() {
+	public LocalDate getValue() {
 		return value;
 	}
 
@@ -150,8 +151,8 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
 	 * @generated
 	 */
 	@Override
-	public void setValue(Date newValue) {
-		Date oldValue = value;
+	public void setValue(LocalDate newValue) {
+		LocalDate oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_DATE_LITERAL__VALUE, oldValue, value));
@@ -187,7 +188,7 @@ public class STDateLiteralImpl extends STExpressionImpl implements STDateLiteral
 				setType((DataType)newValue);
 				return;
 			case STCorePackage.ST_DATE_LITERAL__VALUE:
-				setValue((Date)newValue);
+				setValue((LocalDate)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);

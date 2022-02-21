@@ -144,20 +144,19 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STDateLiteral" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//STDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STTimeLiteral" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//STTime"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STTimeOfDayLiteral" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//STTimeOfDay"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STDateAndTimeLiteral" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeOfDayValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//STDateAndTime"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STStringLiteral" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
@@ -213,4 +212,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="specifier" eType="#//STMultiBitAccessSpecifier"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="STDate" instanceClassName="java.time.LocalDate"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="STTime" instanceClassName="java.time.Duration"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="STTimeOfDay" instanceClassName="java.time.LocalTime"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="STDateAndTime" instanceClassName="java.time.LocalDateTime"/>
 </ecore:EPackage>

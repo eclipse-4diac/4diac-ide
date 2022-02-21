@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -963,22 +964,13 @@ public interface STCorePackage extends EPackage {
 	int ST_DATE_AND_TIME_LITERAL__TYPE = ST_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Date Value</b></em>' attribute.
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_DATE_AND_TIME_LITERAL__DATE_VALUE = ST_EXPRESSION_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Time Of Day Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE = ST_EXPRESSION_FEATURE_COUNT + 2;
+	int ST_DATE_AND_TIME_LITERAL__VALUE = ST_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>ST Date And Time Literal</em>' class.
@@ -987,7 +979,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_DATE_AND_TIME_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
+	int ST_DATE_AND_TIME_LITERAL_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStringLiteralImpl <em>ST String Literal</em>}' class.
@@ -1462,6 +1454,47 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	int ST_MULTI_BIT_ACCESS_SPECIFIER = 40;
+
+
+	/**
+	 * The meta object id for the '<em>ST Date</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.time.LocalDate
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDate()
+	 * @generated
+	 */
+	int ST_DATE = 41;
+
+	/**
+	 * The meta object id for the '<em>ST Time</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.time.Duration
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTime()
+	 * @generated
+	 */
+	int ST_TIME = 42;
+
+	/**
+	 * The meta object id for the '<em>ST Time Of Day</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.time.LocalTime
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDay()
+	 * @generated
+	 */
+	int ST_TIME_OF_DAY = 43;
+
+	/**
+	 * The meta object id for the '<em>ST Date And Time</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.time.LocalDateTime
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTime()
+	 * @generated
+	 */
+	int ST_DATE_AND_TIME = 44;
 
 
 	/**
@@ -2220,26 +2253,15 @@ public interface STCorePackage extends EPackage {
 	EReference getSTDateAndTimeLiteral_Type();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getDateValue <em>Date Value</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Date Value</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getDateValue()
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getValue()
 	 * @see #getSTDateAndTimeLiteral()
 	 * @generated
 	 */
-	EAttribute getSTDateAndTimeLiteral_DateValue();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getTimeOfDayValue <em>Time Of Day Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Time Of Day Value</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral#getTimeOfDayValue()
-	 * @see #getSTDateAndTimeLiteral()
-	 * @generated
-	 */
-	EAttribute getSTDateAndTimeLiteral_TimeOfDayValue();
+	EAttribute getSTDateAndTimeLiteral_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral <em>ST String Literal</em>}'.
@@ -2632,6 +2654,50 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getSTMultiBitAccessSpecifier();
+
+	/**
+	 * Returns the meta object for data type '{@link java.time.LocalDate <em>ST Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>ST Date</em>'.
+	 * @see java.time.LocalDate
+	 * @model instanceClass="java.time.LocalDate"
+	 * @generated
+	 */
+	EDataType getSTDate();
+
+	/**
+	 * Returns the meta object for data type '{@link java.time.Duration <em>ST Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>ST Time</em>'.
+	 * @see java.time.Duration
+	 * @model instanceClass="java.time.Duration"
+	 * @generated
+	 */
+	EDataType getSTTime();
+
+	/**
+	 * Returns the meta object for data type '{@link java.time.LocalTime <em>ST Time Of Day</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>ST Time Of Day</em>'.
+	 * @see java.time.LocalTime
+	 * @model instanceClass="java.time.LocalTime"
+	 * @generated
+	 */
+	EDataType getSTTimeOfDay();
+
+	/**
+	 * Returns the meta object for data type '{@link java.time.LocalDateTime <em>ST Date And Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>ST Date And Time</em>'.
+	 * @see java.time.LocalDateTime
+	 * @model instanceClass="java.time.LocalDateTime"
+	 * @generated
+	 */
+	EDataType getSTDateAndTime();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -3276,20 +3342,12 @@ public interface STCorePackage extends EPackage {
 		EReference ST_DATE_AND_TIME_LITERAL__TYPE = eINSTANCE.getSTDateAndTimeLiteral_Type();
 
 		/**
-		 * The meta object literal for the '<em><b>Date Value</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute ST_DATE_AND_TIME_LITERAL__DATE_VALUE = eINSTANCE.getSTDateAndTimeLiteral_DateValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Time Of Day Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE = eINSTANCE.getSTDateAndTimeLiteral_TimeOfDayValue();
+		EAttribute ST_DATE_AND_TIME_LITERAL__VALUE = eINSTANCE.getSTDateAndTimeLiteral_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStringLiteralImpl <em>ST String Literal</em>}' class.
@@ -3616,6 +3674,46 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EEnum ST_MULTI_BIT_ACCESS_SPECIFIER = eINSTANCE.getSTMultiBitAccessSpecifier();
+
+		/**
+		 * The meta object literal for the '<em>ST Date</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.time.LocalDate
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDate()
+		 * @generated
+		 */
+		EDataType ST_DATE = eINSTANCE.getSTDate();
+
+		/**
+		 * The meta object literal for the '<em>ST Time</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.time.Duration
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTime()
+		 * @generated
+		 */
+		EDataType ST_TIME = eINSTANCE.getSTTime();
+
+		/**
+		 * The meta object literal for the '<em>ST Time Of Day</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.time.LocalTime
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDay()
+		 * @generated
+		 */
+		EDataType ST_TIME_OF_DAY = eINSTANCE.getSTTimeOfDay();
+
+		/**
+		 * The meta object literal for the '<em>ST Date And Time</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.time.LocalDateTime
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTime()
+		 * @generated
+		 */
+		EDataType ST_DATE_AND_TIME = eINSTANCE.getSTDateAndTime();
 
 	}
 

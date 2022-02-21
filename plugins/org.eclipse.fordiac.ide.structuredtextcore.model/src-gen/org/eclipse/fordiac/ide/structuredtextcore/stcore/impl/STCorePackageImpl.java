@@ -16,8 +16,13 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -367,6 +372,34 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EEnum stMultiBitAccessSpecifierEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType stDateEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType stTimeEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType stTimeOfDayEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType stDateAndTimeEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1150,18 +1183,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSTDateAndTimeLiteral_DateValue() {
+	public EAttribute getSTDateAndTimeLiteral_Value() {
 		return (EAttribute)stDateAndTimeLiteralEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSTDateAndTimeLiteral_TimeOfDayValue() {
-		return (EAttribute)stDateAndTimeLiteralEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1540,6 +1563,46 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EDataType getSTDate() {
+		return stDateEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EDataType getSTTime() {
+		return stTimeEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EDataType getSTTimeOfDay() {
+		return stTimeOfDayEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EDataType getSTDateAndTime() {
+		return stDateAndTimeEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public STCoreFactory getSTCoreFactory() {
 		return (STCoreFactory)getEFactoryInstance();
 	}
@@ -1659,8 +1722,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		stDateAndTimeLiteralEClass = createEClass(ST_DATE_AND_TIME_LITERAL);
 		createEReference(stDateAndTimeLiteralEClass, ST_DATE_AND_TIME_LITERAL__TYPE);
-		createEAttribute(stDateAndTimeLiteralEClass, ST_DATE_AND_TIME_LITERAL__DATE_VALUE);
-		createEAttribute(stDateAndTimeLiteralEClass, ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE);
+		createEAttribute(stDateAndTimeLiteralEClass, ST_DATE_AND_TIME_LITERAL__VALUE);
 
 		stStringLiteralEClass = createEClass(ST_STRING_LITERAL);
 		createEReference(stStringLiteralEClass, ST_STRING_LITERAL__TYPE);
@@ -1712,6 +1774,12 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		binaryOperatorEEnum = createEEnum(BINARY_OPERATOR);
 		unaryOperatorEEnum = createEEnum(UNARY_OPERATOR);
 		stMultiBitAccessSpecifierEEnum = createEEnum(ST_MULTI_BIT_ACCESS_SPECIFIER);
+
+		// Create data types
+		stDateEDataType = createEDataType(ST_DATE);
+		stTimeEDataType = createEDataType(ST_TIME);
+		stTimeOfDayEDataType = createEDataType(ST_TIME_OF_DAY);
+		stDateAndTimeEDataType = createEDataType(ST_DATE_AND_TIME);
 	}
 
 	/**
@@ -1861,20 +1929,19 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		initEClass(stDateLiteralEClass, STDateLiteral.class, "STDateLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTDateLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STDateLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getSTDateLiteral_Value(), ecorePackage.getEDate(), "value", null, 0, 1, STDateLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTDateLiteral_Value(), this.getSTDate(), "value", null, 0, 1, STDateLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stTimeLiteralEClass, STTimeLiteral.class, "STTimeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTTimeLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getSTTimeLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, STTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTTimeLiteral_Value(), this.getSTTime(), "value", null, 0, 1, STTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stTimeOfDayLiteralEClass, STTimeOfDayLiteral.class, "STTimeOfDayLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTTimeOfDayLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STTimeOfDayLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getSTTimeOfDayLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, STTimeOfDayLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTTimeOfDayLiteral_Value(), this.getSTTimeOfDay(), "value", null, 0, 1, STTimeOfDayLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stDateAndTimeLiteralEClass, STDateAndTimeLiteral.class, "STDateAndTimeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTDateAndTimeLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STDateAndTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getSTDateAndTimeLiteral_DateValue(), ecorePackage.getEDate(), "dateValue", null, 0, 1, STDateAndTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getSTDateAndTimeLiteral_TimeOfDayValue(), ecorePackage.getEString(), "timeOfDayValue", null, 0, 1, STDateAndTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTDateAndTimeLiteral_Value(), this.getSTDateAndTime(), "value", null, 0, 1, STDateAndTimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stStringLiteralEClass, STStringLiteral.class, "STStringLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTStringLiteral_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, STStringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -1953,6 +2020,12 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.W);
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.B);
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.X);
+
+		// Initialize data types
+		initEDataType(stDateEDataType, LocalDate.class, "STDate", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(stTimeEDataType, Duration.class, "STTime", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(stTimeOfDayEDataType, LocalTime.class, "STTimeOfDay", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(stDateAndTimeEDataType, LocalDateTime.class, "STDateAndTime", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

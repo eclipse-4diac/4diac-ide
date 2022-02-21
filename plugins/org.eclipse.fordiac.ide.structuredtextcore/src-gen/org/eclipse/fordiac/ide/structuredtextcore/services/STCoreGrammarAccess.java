@@ -2161,17 +2161,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final CrossReference cTypeDataTypeCrossReference_0_0 = (CrossReference)cTypeAssignment_0.eContents().get(0);
 		private final RuleCall cTypeDataTypeSTDateAndTimeTypeParserRuleCall_0_0_1 = (RuleCall)cTypeDataTypeCrossReference_0_0.eContents().get(1);
 		private final Keyword cNumberSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cDateValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cDateValueDateParserRuleCall_2_0 = (RuleCall)cDateValueAssignment_2.eContents().get(0);
-		private final Keyword cHyphenMinusKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cTimeOfDayValueAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cTimeOfDayValueTimeOfDayParserRuleCall_4_0 = (RuleCall)cTimeOfDayValueAssignment_4.eContents().get(0);
+		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cValueDateAndTimeParserRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
 		
 		//STDateAndTimeLiteral:
-		//    type=[datatype::DataType|STDateAndTimeType] '#' dateValue=Date '-' timeOfDayValue=TimeOfDay;
+		//    type=[datatype::DataType|STDateAndTimeType] '#' value=DateAndTime;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//type=[datatype::DataType|STDateAndTimeType] '#' dateValue=Date '-' timeOfDayValue=TimeOfDay
+		//type=[datatype::DataType|STDateAndTimeType] '#' value=DateAndTime
 		public Group getGroup() { return cGroup; }
 		
 		//type=[datatype::DataType|STDateAndTimeType]
@@ -2186,20 +2183,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'#'
 		public Keyword getNumberSignKeyword_1() { return cNumberSignKeyword_1; }
 		
-		//dateValue=Date
-		public Assignment getDateValueAssignment_2() { return cDateValueAssignment_2; }
+		//value=DateAndTime
+		public Assignment getValueAssignment_2() { return cValueAssignment_2; }
 		
-		//Date
-		public RuleCall getDateValueDateParserRuleCall_2_0() { return cDateValueDateParserRuleCall_2_0; }
-		
-		//'-'
-		public Keyword getHyphenMinusKeyword_3() { return cHyphenMinusKeyword_3; }
-		
-		//timeOfDayValue=TimeOfDay
-		public Assignment getTimeOfDayValueAssignment_4() { return cTimeOfDayValueAssignment_4; }
-		
-		//TimeOfDay
-		public RuleCall getTimeOfDayValueTimeOfDayParserRuleCall_4_0() { return cTimeOfDayValueTimeOfDayParserRuleCall_4_0; }
+		//DateAndTime
+		public RuleCall getValueDateAndTimeParserRuleCall_2_0() { return cValueDateAndTimeParserRuleCall_2_0; }
 	}
 	public class STStringLiteralElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStringLiteral");
@@ -2640,7 +2628,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cHyphenMinusKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		private final RuleCall cINTTerminalRuleCall_4 = (RuleCall)cGroup.eContents().get(4);
 		
-		//Date returns ecore::EDate:
+		//Date returns STDate:
 		//    INT '-' INT '-' INT;
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -2662,6 +2650,73 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//INT
 		public RuleCall getINTTerminalRuleCall_4() { return cINTTerminalRuleCall_4; }
 	}
+	public class DateAndTimeElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.DateAndTime");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cINTTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Keyword cHyphenMinusKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final RuleCall cINTTerminalRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
+		private final Keyword cHyphenMinusKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final RuleCall cINTTerminalRuleCall_4 = (RuleCall)cGroup.eContents().get(4);
+		private final Keyword cHyphenMinusKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final RuleCall cINTTerminalRuleCall_6 = (RuleCall)cGroup.eContents().get(6);
+		private final Keyword cColonKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final RuleCall cINTTerminalRuleCall_8 = (RuleCall)cGroup.eContents().get(8);
+		private final Keyword cColonKeyword_9 = (Keyword)cGroup.eContents().get(9);
+		private final RuleCall cINTTerminalRuleCall_10 = (RuleCall)cGroup.eContents().get(10);
+		private final Group cGroup_11 = (Group)cGroup.eContents().get(11);
+		private final Keyword cFullStopKeyword_11_0 = (Keyword)cGroup_11.eContents().get(0);
+		private final RuleCall cINTTerminalRuleCall_11_1 = (RuleCall)cGroup_11.eContents().get(1);
+		
+		//DateAndTime returns STDateAndTime:
+		//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=> '.' INT)?;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//INT '-' INT '-' INT '-' INT ':' INT ':' INT (=> '.' INT)?
+		public Group getGroup() { return cGroup; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_0() { return cINTTerminalRuleCall_0; }
+		
+		//'-'
+		public Keyword getHyphenMinusKeyword_1() { return cHyphenMinusKeyword_1; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_2() { return cINTTerminalRuleCall_2; }
+		
+		//'-'
+		public Keyword getHyphenMinusKeyword_3() { return cHyphenMinusKeyword_3; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_4() { return cINTTerminalRuleCall_4; }
+		
+		//'-'
+		public Keyword getHyphenMinusKeyword_5() { return cHyphenMinusKeyword_5; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_6() { return cINTTerminalRuleCall_6; }
+		
+		//':'
+		public Keyword getColonKeyword_7() { return cColonKeyword_7; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_8() { return cINTTerminalRuleCall_8; }
+		
+		//':'
+		public Keyword getColonKeyword_9() { return cColonKeyword_9; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_10() { return cINTTerminalRuleCall_10; }
+		
+		//(=> '.' INT)?
+		public Group getGroup_11() { return cGroup_11; }
+		
+		//=> '.'
+		public Keyword getFullStopKeyword_11_0() { return cFullStopKeyword_11_0; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_11_1() { return cINTTerminalRuleCall_11_1; }
+	}
 	public class TimeOfDayElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TimeOfDay");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -2674,7 +2729,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cFullStopKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
 		private final RuleCall cINTTerminalRuleCall_5_1 = (RuleCall)cGroup_5.eContents().get(1);
 		
-		//TimeOfDay:
+		//TimeOfDay returns STTimeOfDay:
 		//    INT ':' INT ':' INT (=> '.' INT)?;
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -2719,7 +2774,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cNSKeyword_1_6 = (Keyword)cAlternatives_1.eContents().get(6);
 		private final Keyword c_Keyword_2 = (Keyword)cGroup.eContents().get(2);
 		
-		//Time:
+		//Time returns STTime:
 		//    (Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -3122,6 +3177,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final BoolLiteralElements pBoolLiteral;
 	private final NumberElements pNumber;
 	private final DateElements pDate;
+	private final DateAndTimeElements pDateAndTime;
 	private final TimeOfDayElements pTimeOfDay;
 	private final TimeElements pTime;
 	private final TerminalRule tHEX_DIGIT;
@@ -3215,6 +3271,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pBoolLiteral = new BoolLiteralElements();
 		this.pNumber = new NumberElements();
 		this.pDate = new DateElements();
+		this.pDateAndTime = new DateAndTimeElements();
 		this.pTimeOfDay = new TimeOfDayElements();
 		this.pTime = new TimeElements();
 		this.tHEX_DIGIT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.HEX_DIGIT");
@@ -3872,7 +3929,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STDateAndTimeLiteral:
-	//    type=[datatype::DataType|STDateAndTimeType] '#' dateValue=Date '-' timeOfDayValue=TimeOfDay;
+	//    type=[datatype::DataType|STDateAndTimeType] '#' value=DateAndTime;
 	public STDateAndTimeLiteralElements getSTDateAndTimeLiteralAccess() {
 		return pSTDateAndTimeLiteral;
 	}
@@ -4031,7 +4088,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getNumberAccess().getRule();
 	}
 	
-	//Date returns ecore::EDate:
+	//Date returns STDate:
 	//    INT '-' INT '-' INT;
 	public DateElements getDateAccess() {
 		return pDate;
@@ -4041,7 +4098,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getDateAccess().getRule();
 	}
 	
-	//TimeOfDay:
+	//DateAndTime returns STDateAndTime:
+	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=> '.' INT)?;
+	public DateAndTimeElements getDateAndTimeAccess() {
+		return pDateAndTime;
+	}
+	
+	public ParserRule getDateAndTimeRule() {
+		return getDateAndTimeAccess().getRule();
+	}
+	
+	//TimeOfDay returns STTimeOfDay:
 	//    INT ':' INT ':' INT (=> '.' INT)?;
 	public TimeOfDayElements getTimeOfDayAccess() {
 		return pTimeOfDay;
@@ -4051,7 +4118,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getTimeOfDayAccess().getRule();
 	}
 	
-	//Time:
+	//Time returns STTime:
 	//    (Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
 	public TimeElements getTimeAccess() {
 		return pTime;

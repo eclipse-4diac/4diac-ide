@@ -15,6 +15,10 @@ package org.eclipse.fordiac.ide.structuredtextcore.converter
 
 import com.google.inject.Inject
 import java.math.BigDecimal
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import org.eclipse.xtext.conversion.IValueConverter
 import org.eclipse.xtext.conversion.ValueConverter
 import org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService
@@ -27,6 +31,18 @@ class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	@Inject
 	NonDecimalValueConverter nonDecimalValueConverter
 	
+	@Inject
+	STTimeValueConverter timeValueConverter
+	
+	@Inject
+	STDateValueConverter dateValueConverter
+	
+	@Inject
+	STTimeOfDayValueConverter timeOfDayValueConverter
+	
+	@Inject
+	STDateAndTimeValueConverter dateAndTimeValueConverter
+	
 	@ValueConverter(rule="BoolLiteral")
 	def IValueConverter<BigDecimal> BOOL_LITERAL() {
 		return boolLiteralValueConverter;
@@ -35,5 +51,25 @@ class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	@ValueConverter(rule="NON_DECIMAL")
 	def IValueConverter<BigDecimal> NON_DECIMAL() {
 		return nonDecimalValueConverter;
+	}
+	
+	@ValueConverter(rule="Time")
+	def IValueConverter<Duration> Time() {
+		return timeValueConverter;
+	}
+	
+	@ValueConverter(rule="Date")
+	def IValueConverter<LocalDate> Date() {
+		return dateValueConverter;
+	}
+	
+	@ValueConverter(rule="TimeOfDay")
+	def IValueConverter<LocalTime> TimeOfDay() {
+		return timeOfDayValueConverter;
+	}
+
+	@ValueConverter(rule="DateAndTime")
+	def IValueConverter<LocalDateTime> DateAndTime() {
+		return dateAndTimeValueConverter;
 	}
 }

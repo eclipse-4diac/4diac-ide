@@ -44,6 +44,10 @@
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/B"/>
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/X"/>
     </genEnums>
+    <genDataTypes ecoreDataType="STCore.ecore#//STDate"/>
+    <genDataTypes ecoreDataType="STCore.ecore#//STTime"/>
+    <genDataTypes ecoreDataType="STCore.ecore#//STTimeOfDay"/>
+    <genDataTypes ecoreDataType="STCore.ecore#//STDateAndTime"/>
     <genClasses ecoreClass="STCore.ecore#//Code">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//Code/statements"/>
     </genClasses>
@@ -136,8 +140,7 @@
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STDateAndTimeLiteral">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STDateAndTimeLiteral/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STDateAndTimeLiteral/dateValue"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STDateAndTimeLiteral/timeOfDayValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STDateAndTimeLiteral/value"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStringLiteral">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STStringLiteral/type"/>

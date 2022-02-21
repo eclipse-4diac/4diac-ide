@@ -226,7 +226,7 @@ STTimeOfDayLiteral:
 	type=[datatype::DataType|STTimeOfDayType] '#' value=TimeOfDay;
 
 STDateAndTimeLiteral:
-	type=[datatype::DataType|STDateAndTimeType] '#' dateValue=Date '-' timeOfDayValue=TimeOfDay;
+	type=[datatype::DataType|STDateAndTimeType] '#' value=DateAndTime;
 
 STStringLiteral:
 	(type=[datatype::DataType|STAnyCharsType] '#')? value=(STRING|WSTRING);
@@ -280,13 +280,16 @@ BoolLiteral returns ecore::EBigDecimal:
 Number returns ecore::EBigDecimal:
 	('+' | '-')? INT (=> '.' (EXT_INT | INT))?;
 
-Date returns ecore::EDate:
+Date returns STDate:
 	INT '-' INT '-' INT;
 
-TimeOfDay:
+DateAndTime returns STDateAndTime:
+	INT '-' INT '-' INT '-' INT ':' INT ':' INT (=> '.' INT)?;
+
+TimeOfDay returns STTimeOfDay:
 	INT ':' INT ':' INT (=> '.' INT)?;
 
-Time:
+Time returns STTime:
 	(Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
 
 terminal fragment HEX_DIGIT:

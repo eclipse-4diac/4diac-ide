@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -65,12 +66,12 @@ public interface STDateLiteral extends STExpression {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Value</em>' attribute.
-	 * @see #setValue(Date)
+	 * @see #setValue(LocalDate)
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTDateLiteral_Value()
-	 * @model
+	 * @model dataType="org.eclipse.fordiac.ide.structuredtextcore.stcore.STDate"
 	 * @generated
 	 */
-	Date getValue();
+	LocalDate getValue();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral#getValue <em>Value</em>}' attribute.
@@ -80,6 +81,6 @@ public interface STDateLiteral extends STExpression {
 	 * @see #getValue()
 	 * @generated
 	 */
-	void setValue(Date value);
+	void setValue(LocalDate value);
 
 } // STDateLiteral

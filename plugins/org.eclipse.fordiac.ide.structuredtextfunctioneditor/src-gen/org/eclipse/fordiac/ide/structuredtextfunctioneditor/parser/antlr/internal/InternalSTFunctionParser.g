@@ -3724,41 +3724,18 @@ ruleSTDateAndTimeLiteral returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTDateAndTimeLiteralAccess().getDateValueDateParserRuleCall_2_0());
+					newCompositeNode(grammarAccess.getSTDateAndTimeLiteralAccess().getValueDateAndTimeParserRuleCall_2_0());
 				}
-				lv_dateValue_2_0=ruleDate
+				lv_value_2_0=ruleDateAndTime
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTDateAndTimeLiteralRule());
 					}
 					set(
 						$current,
-						"dateValue",
-						lv_dateValue_2_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.Date");
-					afterParserOrEnumRuleCall();
-				}
-			)
-		)
-		otherlv_3=HyphenMinus
-		{
-			newLeafNode(otherlv_3, grammarAccess.getSTDateAndTimeLiteralAccess().getHyphenMinusKeyword_3());
-		}
-		(
-			(
-				{
-					newCompositeNode(grammarAccess.getSTDateAndTimeLiteralAccess().getTimeOfDayValueTimeOfDayParserRuleCall_4_0());
-				}
-				lv_timeOfDayValue_4_0=ruleTimeOfDay
-				{
-					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getSTDateAndTimeLiteralRule());
-					}
-					set(
-						$current,
-						"timeOfDayValue",
-						lv_timeOfDayValue_4_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.TimeOfDay");
+						"value",
+						lv_value_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.DateAndTime");
 					afterParserOrEnumRuleCall();
 				}
 			)
@@ -4458,6 +4435,109 @@ ruleDate returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 		{
 			newLeafNode(this_INT_4, grammarAccess.getDateAccess().getINTTerminalRuleCall_4());
 		}
+	)
+;
+
+// Entry rule entryRuleDateAndTime
+entryRuleDateAndTime returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getDateAndTimeRule()); }
+	iv_ruleDateAndTime=ruleDateAndTime
+	{ $current=$iv_ruleDateAndTime.current.getText(); }
+	EOF;
+
+// Rule DateAndTime
+ruleDateAndTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		this_INT_0=RULE_INT
+		{
+			$current.merge(this_INT_0);
+		}
+		{
+			newLeafNode(this_INT_0, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_0());
+		}
+		kw=HyphenMinus
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getHyphenMinusKeyword_1());
+		}
+		this_INT_2=RULE_INT
+		{
+			$current.merge(this_INT_2);
+		}
+		{
+			newLeafNode(this_INT_2, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_2());
+		}
+		kw=HyphenMinus
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getHyphenMinusKeyword_3());
+		}
+		this_INT_4=RULE_INT
+		{
+			$current.merge(this_INT_4);
+		}
+		{
+			newLeafNode(this_INT_4, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_4());
+		}
+		kw=HyphenMinus
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getHyphenMinusKeyword_5());
+		}
+		this_INT_6=RULE_INT
+		{
+			$current.merge(this_INT_6);
+		}
+		{
+			newLeafNode(this_INT_6, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_6());
+		}
+		kw=Colon
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getColonKeyword_7());
+		}
+		this_INT_8=RULE_INT
+		{
+			$current.merge(this_INT_8);
+		}
+		{
+			newLeafNode(this_INT_8, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_8());
+		}
+		kw=Colon
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getColonKeyword_9());
+		}
+		this_INT_10=RULE_INT
+		{
+			$current.merge(this_INT_10);
+		}
+		{
+			newLeafNode(this_INT_10, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_10());
+		}
+		(
+			(
+				(FullStop)=>
+				kw=FullStop
+				{
+					$current.merge(kw);
+					newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getFullStopKeyword_11_0());
+				}
+			)
+			this_INT_12=RULE_INT
+			{
+				$current.merge(this_INT_12);
+			}
+			{
+				newLeafNode(this_INT_12, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_11_1());
+			}
+		)?
 	)
 ;
 

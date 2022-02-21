@@ -493,21 +493,18 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STDateAndTimeLiteral returns STDateAndTimeLiteral
 	 *
 	 * Constraint:
-	 *     (type=[DataType|STDateAndTimeType] dateValue=Date timeOfDayValue=TimeOfDay)
+	 *     (type=[DataType|STDateAndTimeType] value=DateAndTime)
 	 */
 	protected void sequence_STDateAndTimeLiteral(ISerializationContext context, STDateAndTimeLiteral semanticObject) {
 		if (errorAcceptor != null) {
 			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TYPE) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TYPE));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__DATE_VALUE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__DATE_VALUE));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__VALUE));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeDataTypeSTDateAndTimeTypeParserRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TYPE, false));
-		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getDateValueDateParserRuleCall_2_0(), semanticObject.getDateValue());
-		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getTimeOfDayValueTimeOfDayParserRuleCall_4_0(), semanticObject.getTimeOfDayValue());
+		feeder.accept(grammarAccess.getSTDateAndTimeLiteralAccess().getValueDateAndTimeParserRuleCall_2_0(), semanticObject.getValue());
 		feeder.finish();
 	}
 	

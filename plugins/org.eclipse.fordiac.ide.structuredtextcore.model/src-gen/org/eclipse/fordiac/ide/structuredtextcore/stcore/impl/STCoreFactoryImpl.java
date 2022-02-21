@@ -16,6 +16,10 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -128,6 +132,14 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return createUnaryOperatorFromString(eDataType, initialValue);
 			case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
 				return createSTMultiBitAccessSpecifierFromString(eDataType, initialValue);
+			case STCorePackage.ST_DATE:
+				return createSTDateFromString(eDataType, initialValue);
+			case STCorePackage.ST_TIME:
+				return createSTTimeFromString(eDataType, initialValue);
+			case STCorePackage.ST_TIME_OF_DAY:
+				return createSTTimeOfDayFromString(eDataType, initialValue);
+			case STCorePackage.ST_DATE_AND_TIME:
+				return createSTDateAndTimeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -147,6 +159,14 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return convertUnaryOperatorToString(eDataType, instanceValue);
 			case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
 				return convertSTMultiBitAccessSpecifierToString(eDataType, instanceValue);
+			case STCorePackage.ST_DATE:
+				return convertSTDateToString(eDataType, instanceValue);
+			case STCorePackage.ST_TIME:
+				return convertSTTimeToString(eDataType, instanceValue);
+			case STCorePackage.ST_TIME_OF_DAY:
+				return convertSTTimeOfDayToString(eDataType, instanceValue);
+			case STCorePackage.ST_DATE_AND_TIME:
+				return convertSTDateAndTimeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -628,6 +648,78 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 */
 	public String convertSTMultiBitAccessSpecifierToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate createSTDateFromString(EDataType eDataType, String initialValue) {
+		return (LocalDate)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSTDateToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Duration createSTTimeFromString(EDataType eDataType, String initialValue) {
+		return (Duration)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSTTimeToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalTime createSTTimeOfDayFromString(EDataType eDataType, String initialValue) {
+		return (LocalTime)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSTTimeOfDayToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDateTime createSTDateAndTimeFromString(EDataType eDataType, String initialValue) {
+		return (LocalDateTime)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSTDateAndTimeToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

@@ -835,7 +835,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STDateAndTimeLiteral:
-	//    type=[datatype::DataType|STDateAndTimeType] '#' dateValue=Date '-' timeOfDayValue=TimeOfDay;
+	//    type=[datatype::DataType|STDateAndTimeType] '#' value=DateAndTime;
 	public STCoreGrammarAccess.STDateAndTimeLiteralElements getSTDateAndTimeLiteralAccess() {
 		return gaSTCore.getSTDateAndTimeLiteralAccess();
 	}
@@ -994,7 +994,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getNumberAccess().getRule();
 	}
 	
-	//Date returns ecore::EDate:
+	//Date returns STDate:
 	//    INT '-' INT '-' INT;
 	public STCoreGrammarAccess.DateElements getDateAccess() {
 		return gaSTCore.getDateAccess();
@@ -1004,7 +1004,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getDateAccess().getRule();
 	}
 	
-	//TimeOfDay:
+	//DateAndTime returns STDateAndTime:
+	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=> '.' INT)?;
+	public STCoreGrammarAccess.DateAndTimeElements getDateAndTimeAccess() {
+		return gaSTCore.getDateAndTimeAccess();
+	}
+	
+	public ParserRule getDateAndTimeRule() {
+		return getDateAndTimeAccess().getRule();
+	}
+	
+	//TimeOfDay returns STTimeOfDay:
 	//    INT ':' INT ':' INT (=> '.' INT)?;
 	public STCoreGrammarAccess.TimeOfDayElements getTimeOfDayAccess() {
 		return gaSTCore.getTimeOfDayAccess();
@@ -1014,7 +1024,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getTimeOfDayAccess().getRule();
 	}
 	
-	//Time:
+	//Time returns STTime:
 	//    (Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
 	public STCoreGrammarAccess.TimeElements getTimeAccess() {
 		return gaSTCore.getTimeAccess();

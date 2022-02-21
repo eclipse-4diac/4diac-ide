@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -39,8 +40,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STDateAndTimeLiteralImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STDateAndTimeLiteralImpl#getDateValue <em>Date Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STDateAndTimeLiteralImpl#getTimeOfDayValue <em>Time Of Day Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STDateAndTimeLiteralImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -57,44 +57,24 @@ public class STDateAndTimeLiteralImpl extends STExpressionImpl implements STDate
 	protected DataType type;
 
 	/**
-	 * The default value of the '{@link #getDateValue() <em>Date Value</em>}' attribute.
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDateValue()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date DATE_VALUE_EDEFAULT = null;
+	protected static final LocalDateTime VALUE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getDateValue() <em>Date Value</em>}' attribute.
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDateValue()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected Date dateValue = DATE_VALUE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getTimeOfDayValue() <em>Time Of Day Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTimeOfDayValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TIME_OF_DAY_VALUE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTimeOfDayValue() <em>Time Of Day Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTimeOfDayValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected String timeOfDayValue = TIME_OF_DAY_VALUE_EDEFAULT;
+	protected LocalDateTime value = VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -161,8 +141,8 @@ public class STDateAndTimeLiteralImpl extends STExpressionImpl implements STDate
 	 * @generated
 	 */
 	@Override
-	public Date getDateValue() {
-		return dateValue;
+	public LocalDateTime getValue() {
+		return value;
 	}
 
 	/**
@@ -171,34 +151,11 @@ public class STDateAndTimeLiteralImpl extends STExpressionImpl implements STDate
 	 * @generated
 	 */
 	@Override
-	public void setDateValue(Date newDateValue) {
-		Date oldDateValue = dateValue;
-		dateValue = newDateValue;
+	public void setValue(LocalDateTime newValue) {
+		LocalDateTime oldValue = value;
+		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_DATE_AND_TIME_LITERAL__DATE_VALUE, oldDateValue, dateValue));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getTimeOfDayValue() {
-		return timeOfDayValue;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTimeOfDayValue(String newTimeOfDayValue) {
-		String oldTimeOfDayValue = timeOfDayValue;
-		timeOfDayValue = newTimeOfDayValue;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE, oldTimeOfDayValue, timeOfDayValue));
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_DATE_AND_TIME_LITERAL__VALUE, oldValue, value));
 	}
 
 	/**
@@ -212,10 +169,8 @@ public class STDateAndTimeLiteralImpl extends STExpressionImpl implements STDate
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case STCorePackage.ST_DATE_AND_TIME_LITERAL__DATE_VALUE:
-				return getDateValue();
-			case STCorePackage.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE:
-				return getTimeOfDayValue();
+			case STCorePackage.ST_DATE_AND_TIME_LITERAL__VALUE:
+				return getValue();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -232,11 +187,8 @@ public class STDateAndTimeLiteralImpl extends STExpressionImpl implements STDate
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL__TYPE:
 				setType((DataType)newValue);
 				return;
-			case STCorePackage.ST_DATE_AND_TIME_LITERAL__DATE_VALUE:
-				setDateValue((Date)newValue);
-				return;
-			case STCorePackage.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE:
-				setTimeOfDayValue((String)newValue);
+			case STCorePackage.ST_DATE_AND_TIME_LITERAL__VALUE:
+				setValue((LocalDateTime)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -255,11 +207,8 @@ public class STDateAndTimeLiteralImpl extends STExpressionImpl implements STDate
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL__TYPE:
 				setType((DataType)null);
 				return;
-			case STCorePackage.ST_DATE_AND_TIME_LITERAL__DATE_VALUE:
-				setDateValue(DATE_VALUE_EDEFAULT);
-				return;
-			case STCorePackage.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE:
-				setTimeOfDayValue(TIME_OF_DAY_VALUE_EDEFAULT);
+			case STCorePackage.ST_DATE_AND_TIME_LITERAL__VALUE:
+				setValue(VALUE_EDEFAULT);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -277,10 +226,8 @@ public class STDateAndTimeLiteralImpl extends STExpressionImpl implements STDate
 		switch (featureID) {
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL__TYPE:
 				return type != null;
-			case STCorePackage.ST_DATE_AND_TIME_LITERAL__DATE_VALUE:
-				return DATE_VALUE_EDEFAULT == null ? dateValue != null : !DATE_VALUE_EDEFAULT.equals(dateValue);
-			case STCorePackage.ST_DATE_AND_TIME_LITERAL__TIME_OF_DAY_VALUE:
-				return TIME_OF_DAY_VALUE_EDEFAULT == null ? timeOfDayValue != null : !TIME_OF_DAY_VALUE_EDEFAULT.equals(timeOfDayValue);
+			case STCorePackage.ST_DATE_AND_TIME_LITERAL__VALUE:
+				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -296,10 +243,8 @@ public class STDateAndTimeLiteralImpl extends STExpressionImpl implements STDate
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (dateValue: "); //$NON-NLS-1$
-		result.append(dateValue);
-		result.append(", timeOfDayValue: "); //$NON-NLS-1$
-		result.append(timeOfDayValue);
+		result.append(" (value: "); //$NON-NLS-1$
+		result.append(value);
 		result.append(')');
 		return result.toString();
 	}

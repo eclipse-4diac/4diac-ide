@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
+import java.time.Duration;
 import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
@@ -63,12 +64,12 @@ public interface STTimeLiteral extends STExpression {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Value</em>' attribute.
-	 * @see #setValue(String)
+	 * @see #setValue(Duration)
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTTimeLiteral_Value()
-	 * @model
+	 * @model dataType="org.eclipse.fordiac.ide.structuredtextcore.stcore.STTime"
 	 * @generated
 	 */
-	String getValue();
+	Duration getValue();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral#getValue <em>Value</em>}' attribute.
@@ -78,6 +79,6 @@ public interface STTimeLiteral extends STExpression {
 	 * @see #getValue()
 	 * @generated
 	 */
-	void setValue(String value);
+	void setValue(Duration value);
 
 } // STTimeLiteral

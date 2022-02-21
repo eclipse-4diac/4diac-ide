@@ -156,6 +156,8 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getNumberAccess().getGroup(), "rule__Number__Group__0");
 			builder.put(grammarAccess.getNumberAccess().getGroup_2(), "rule__Number__Group_2__0");
 			builder.put(grammarAccess.getDateAccess().getGroup(), "rule__Date__Group__0");
+			builder.put(grammarAccess.getDateAndTimeAccess().getGroup(), "rule__DateAndTime__Group__0");
+			builder.put(grammarAccess.getDateAndTimeAccess().getGroup_11(), "rule__DateAndTime__Group_11__0");
 			builder.put(grammarAccess.getTimeOfDayAccess().getGroup(), "rule__TimeOfDay__Group__0");
 			builder.put(grammarAccess.getTimeOfDayAccess().getGroup_5(), "rule__TimeOfDay__Group_5__0");
 			builder.put(grammarAccess.getTimeAccess().getGroup(), "rule__Time__Group__0");
@@ -258,8 +260,7 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeAssignment_0(), "rule__STTimeOfDayLiteral__TypeAssignment_0");
 			builder.put(grammarAccess.getSTTimeOfDayLiteralAccess().getValueAssignment_2(), "rule__STTimeOfDayLiteral__ValueAssignment_2");
 			builder.put(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeAssignment_0(), "rule__STDateAndTimeLiteral__TypeAssignment_0");
-			builder.put(grammarAccess.getSTDateAndTimeLiteralAccess().getDateValueAssignment_2(), "rule__STDateAndTimeLiteral__DateValueAssignment_2");
-			builder.put(grammarAccess.getSTDateAndTimeLiteralAccess().getTimeOfDayValueAssignment_4(), "rule__STDateAndTimeLiteral__TimeOfDayValueAssignment_4");
+			builder.put(grammarAccess.getSTDateAndTimeLiteralAccess().getValueAssignment_2(), "rule__STDateAndTimeLiteral__ValueAssignment_2");
 			builder.put(grammarAccess.getSTStringLiteralAccess().getTypeAssignment_0_0(), "rule__STStringLiteral__TypeAssignment_0_0");
 			builder.put(grammarAccess.getSTStringLiteralAccess().getValueAssignment_1(), "rule__STStringLiteral__ValueAssignment_1");
 		}
