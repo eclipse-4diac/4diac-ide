@@ -64,13 +64,35 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class FordiacResourceChangeListener implements IResourceChangeListener {
 
+	private static class FileToRenameEntry {
+
+		private final IFile filetoRename;
+		private final PaletteEntry existingPaletteEntry;
+
+		public FileToRenameEntry(final IFile filetoRename, final PaletteEntry existingPaletteEntry) {
+			super();
+			this.filetoRename = filetoRename;
+			this.existingPaletteEntry = existingPaletteEntry;
+		}
+
+		public PaletteEntry getPaletteEntry() {
+			return existingPaletteEntry;
+		}
+
+		public IFile getFile() {
+			return filetoRename;
+		}
+	}
+
 	/** The instance. */
 	private final SystemManager systemManager;
 	private final Collection<PaletteEntry> changedFiles;
+	private final Collection<FileToRenameEntry> filesToRename;
 
 	public FordiacResourceChangeListener(final SystemManager systemManager) {
 		this.systemManager = systemManager;
 		this.changedFiles = new HashSet<>();
+		this.filesToRename = new HashSet<>();
 	}
 
 	@Override
@@ -82,6 +104,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				rootDelta.accept(visitor);
 				if (!changedFiles.isEmpty()) {
 					handleChangedFiles();
+				}
+				if (!filesToRename.isEmpty()) {
+					handleFilesToRename();
 				}
 
 			} catch (final CoreException e) {
@@ -100,6 +125,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			handleFileRefreshWIzards(editorListener);
 		});
 
+	}
+
+	private void handleFilesToRename() {
+		filesToRename.forEach(FordiacResourceChangeListener::autoRenameExistingType);
+		filesToRename.clear();
 	}
 
 	private static void handleFileRefreshWIzards(final List<IEditorFileChangeListener> editorListener) {
@@ -292,7 +322,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleFileDelete(final IResourceDelta delta) {
 		final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
-		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
+		final IFile file = (IFile) delta.getResource();
 
 		if (isSystemFile(file)) {
 			systemManager.removeSystem(file);
@@ -300,9 +330,21 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 			if (null != entry) {
 				closeAllEditorsForFile(file);
-				typeLib.removePaletteEntry(entry);
+				final FileToRenameEntry rnEntry = getFileRenameEntry(entry);
+				if(rnEntry != null) {
+					// the file was moved to a new location update the palette entry and do not remove it from the
+					// rename list
+					entry.setFile(rnEntry.getFile());
+					filesToRename.remove(rnEntry);
+				} else {
+					typeLib.removePaletteEntry(entry);
+				}
 			}
 		}
+	}
+
+	private FileToRenameEntry getFileRenameEntry(final PaletteEntry palEntry) {
+		return filesToRename.stream().filter(entry -> entry.getPaletteEntry().equals(palEntry)).findAny().orElse(null);
 	}
 
 	private void handleFileCopy(final IResourceDelta delta) {
@@ -323,38 +365,39 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					}
 				} else if (!file.equals(paletteEntryForFile.getFile())) {
 					// After a file has been copied and the copied file is not the same as the founded palette entry
-					// the file and the resulting type must be renamed with a unique name
-					autoRenameExistingType(file, paletteEntryForFile);
+					// the file and the resulting type must be renamed with a unique name put it in the rename list
+					filesToRename.add(new FileToRenameEntry(file, paletteEntryForFile));
 				}
 
 			}
 		}
 	}
 
-	protected static void autoRenameExistingType(final IFile file, final PaletteEntry paletteEntryForFile) {
+	protected static void autoRenameExistingType(final FileToRenameEntry entry) {
 
-		final WorkspaceJob job = new WorkspaceJob(Messages.FordiacResourceChangeListener_4 + file.getName()) {
+		final WorkspaceJob job = new WorkspaceJob(
+				Messages.FordiacResourceChangeListener_4 + entry.getFile().getName()) {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				final LibraryElement type = paletteEntryForFile.getType();
+				final LibraryElement type = entry.getPaletteEntry().getType();
 				final String oldName = type.getName();
 				final String newName = NameRepository.createUniqueTypeName(type);
 				if (newName == null || newName.equals(oldName)) {
 					return Status.CANCEL_STATUS;
 				}
-				final String oldPath = file.getFullPath().toOSString();
+				final String oldPath = entry.getFile().getFullPath().toOSString();
 				final String newPath = replaceLast(oldPath, oldName, newName);
 
 				try {// this will trigger handleFileMove() and further handleFileRename(). file.move() is a workaround
 					// to rename a file
-					file.move(new Path(newPath), true, new NullProgressMonitor());
+					entry.getFile().move(new Path(newPath), true, new NullProgressMonitor());
 				} catch (final CoreException e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 				return Status.OK_STATUS;
 			}
 		};
-		job.setRule(file.getProject());
+		job.setRule(entry.getFile().getProject());
 		job.schedule();
 	}
 
@@ -401,11 +444,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleFileMove(final IResourceDelta delta) {
 		final IFile src = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedFromPath());
+		final IFile dst = (IFile) delta.getResource();
 
-		if (src.getParent().equals(delta.getResource().getParent())) {
-			handleFileRename(delta, src);
+		if (src.getParent().equals(dst.getParent())) {
+			handleFileRename(dst, src);
 		} else {
-			final IFile dst = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 			if (!src.getProject().equals(dst.getProject())) {
 				if (src.getProject().exists()) {
 					handleFileMoveBetweenProjects(src, dst);
@@ -455,18 +498,17 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	}
 
-	private void handleFileRename(final IResourceDelta delta, final IFile src) {
-		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath()); // targetFile
-		if (isSystemFile(file)) {
-			renameSystemFile(file);
+	private void handleFileRename(final IFile dst, final IFile src) {
+		if (isSystemFile(dst)) {
+			renameSystemFile(dst);
 		} else {
-			handleTypeRename(delta, src, file);
+			handleTypeRename(src, dst);
 		}
 		systemManager.notifyListeners();
 	}
 
-	private static void handleTypeRename(final IResourceDelta delta, final IFile src, final IFile file) {
-		final TypeLibrary typeLibrary = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
+	private static void handleTypeRename(final IFile src, final IFile file) {
+		final TypeLibrary typeLibrary = TypeLibrary.getTypeLibrary(file.getProject());
 		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
 		if (entry != null && src.equals(entry.getFile())) {
 			updatePaletteEntry(file, entry);

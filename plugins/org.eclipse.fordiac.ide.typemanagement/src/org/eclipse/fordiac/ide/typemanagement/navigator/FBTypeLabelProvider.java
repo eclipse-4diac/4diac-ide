@@ -46,7 +46,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof IFile) {
+		if (element instanceof IFile && ((IFile) element).exists()) {
 			return getImageForFile((IFile) element);
 		}
 		return super.getImage(element);
