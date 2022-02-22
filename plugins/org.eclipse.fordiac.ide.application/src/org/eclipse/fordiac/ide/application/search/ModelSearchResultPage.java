@@ -22,12 +22,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -179,7 +182,25 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 				}
 				return super.getText(element);
 			}
+
 		});
+
+
+		viewer.addDoubleClickListener(ModelSearchResultPage::jumpToBlock);
+	}
+
+	// Double click to access the element we looked for
+	private static void jumpToBlock(final DoubleClickEvent doubleClick) {
+		final StructuredSelection selectionList = (StructuredSelection) doubleClick.getSelection();
+		if (!selectionList.isEmpty()) {
+			final Object selection = selectionList.getFirstElement();
+			if (selection instanceof FBNetworkElement) {
+				final FBNetworkElement fbSelection = (FBNetworkElement) selection;
+				final IEditorPart editor = OpenListenerManager.openEditor(fbSelection.eContainer().eContainer());
+				HandlerHelper.selectElement(selection, HandlerHelper.getViewer(editor));
+			}
+
+		}
 
 	}
 
