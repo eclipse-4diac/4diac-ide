@@ -10,7 +10,8 @@
  * Contributors:
  *   Bianca Wiesmayr
  *     - initial API and implementation and/or initial documentation
- *
+ *   Dunja Životin
+ *     - length checks of the selection
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.ui.widgets;
@@ -49,11 +50,12 @@ public final class OpenStructMenu {
 			@Override
 			public void menuShown(final MenuEvent e) {
 				final Item[] selection = viewer.getTable().getSelection();
-				if (!(selection[0].getData() instanceof Event)
+				if (selection.length > 0 && !(selection[0].getData() instanceof Event)
 						&& !(selection[0].getData() instanceof AdapterDeclaration)) {
 					final StructuredType type = getSelectedStructuredType(selection);
 					openItem.setEnabled((type != null) && (type != IecTypes.GenericTypes.ANY_STRUCT));
 				} else {
+					openItem.setEnabled(false);
 					menu.setVisible(false);
 				}
 			}
@@ -89,7 +91,7 @@ public final class OpenStructMenu {
 	}
 
 	private static StructuredType getSelectedStructuredType(final Item[] selected) {
-		if (selected[0].getData() instanceof VarDeclaration) {
+		if (selected.length > 0 && selected[0].getData() instanceof VarDeclaration) {
 			final VarDeclaration varDecl = (VarDeclaration) selected[0].getData();
 			if (varDecl.getType() instanceof StructuredType) {
 				return (StructuredType) varDecl.getType();
