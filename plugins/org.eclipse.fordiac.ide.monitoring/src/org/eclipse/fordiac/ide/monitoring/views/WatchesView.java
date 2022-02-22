@@ -209,6 +209,9 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 				toggleSelection.setChecked(selectionActive);
 				if (!selectionActive) {
 					update();
+				} else {
+					selectionChanged(getSite().getPart(), getSite().getPage().getActiveEditor().getEditorSite()
+							.getSelectionProvider().getSelection());
 				}
 			}
 		};
