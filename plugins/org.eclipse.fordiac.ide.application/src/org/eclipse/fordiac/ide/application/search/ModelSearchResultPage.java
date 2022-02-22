@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.application.search;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -48,6 +49,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	private static final int TYPE_COLUMN_WIDTH = 100;
 	private static final int NAME_COMMENT_COLUMN_WIDTH = 200;
+	private static final int FULL_HIERARCHICAL_NAME_COLUMN_WIDTH = 300;
+
+	private static final String FULL_NAME_COLUMN = "Full Hierarchical Name";
 
 	public ModelSearchResultPage() {
 		super(AbstractTextSearchViewPage.FLAG_LAYOUT_FLAT); // FLAG_LAYOUT_FLAT = table layout
@@ -165,6 +169,18 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			}
 		});
 
+		final TableViewerColumn fullHierarchicalName = new TableViewerColumn(viewer, SWT.LEAD);
+		fullHierarchicalName.getColumn().setText(FULL_NAME_COLUMN);
+		fullHierarchicalName.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof FBNetworkElement) {
+					return FBNetworkHelper.getFullHierarchicalName((FBNetworkElement) element);
+				}
+				return super.getText(element);
+			}
+		});
+
 	}
 
 	protected static TableLayout createTableLayout(final Table table) {
@@ -173,6 +189,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TYPE_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(FULL_HIERARCHICAL_NAME_COLUMN_WIDTH));
 		return layout;
 	}
 
