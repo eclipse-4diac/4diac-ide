@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
+import org.eclipse.fordiac.ide.monitoring.Messages;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -39,6 +40,11 @@ public class ForceHandler extends AbstractMonitoringHandler {
 		super.execute(event);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final VarDeclaration variable = getVariable(selection.getFirstElement());
+		showDialogAndProcess(variable);
+		return null;
+	}
+
+	public static void showDialogAndProcess(final VarDeclaration variable) {
 		if (null != variable) {
 			final MonitoringManager manager = MonitoringManager.getInstance();
 			final MonitoringBaseElement element = manager.getMonitoringElement(variable);
@@ -46,7 +52,9 @@ public class ForceHandler extends AbstractMonitoringHandler {
 				final MonitoringElement monitoringElement = (MonitoringElement) element;
 				final DataType type = monitoringElement.getPort().getInterfaceElement().getType();
 
-				final InputDialog input = new InputDialog(Display.getDefault().getActiveShell(), "Force Value", "Value",
+				final InputDialog input = new InputDialog(Display.getDefault().getActiveShell(),
+						Messages.MonitoringWatchesView_ForceValue,
+						Messages.MonitoringWatchesView_Value,
 						monitoringElement.isForce() ? monitoringElement.getForceValue() : "", //$NON-NLS-1$
 								newValue -> ForceHandler.validateForceInput(type, newValue));
 				final int ret = input.open();
@@ -55,7 +63,6 @@ public class ForceHandler extends AbstractMonitoringHandler {
 				}
 			}
 		}
-		return null;
 	}
 
 	private static String validateForceInput(final DataType type, final String newValue) {

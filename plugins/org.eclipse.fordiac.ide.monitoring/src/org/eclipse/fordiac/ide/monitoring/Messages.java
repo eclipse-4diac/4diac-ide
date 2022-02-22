@@ -32,6 +32,14 @@ public final class Messages extends NLS {
 	public static String MonitoringDialog_Enable;
 	public static String MonitoringDialog_No;
 
+	public static String MonitoringWatchesView_WatchedElement;
+	public static String MonitoringWatchesView_Type;
+	public static String MonitoringWatchesView_Value;
+	public static String MonitoringWatchesView_Comment;
+	public static String MonitoringWatchesView_Force;
+	public static String MonitoringWatchesView_ForceValue;
+	public static String MonitoringWatchesView_TriggerEvent;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
