@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -81,5 +83,13 @@ public interface STUnaryExpression extends STExpression {
 	 * @generated
 	 */
 	void setExpression(STExpression value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
 
 } // STUnaryExpression

@@ -6,9 +6,12 @@ Bundle-Vendor: Eclipse 4diac
 Bundle-Version: 2.0.1.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextcore.model; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.fordiac.ide.model,
+Require-Bundle: org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
  org.eclipse.emf.ecore,
- org.eclipse.emf.common
+ org.eclipse.emf.common,
+ org.eclipse.fordiac.ide.model
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: 
  org.eclipse.fordiac.ide.structuredtextcore.stcore,

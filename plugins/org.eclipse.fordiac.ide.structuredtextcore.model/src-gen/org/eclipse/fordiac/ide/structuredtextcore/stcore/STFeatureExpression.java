@@ -72,4 +72,12 @@ public interface STFeatureExpression extends STExpression {
 	 */
 	EList<STCallArgument> getParameters();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
+
 } // STFeatureExpression

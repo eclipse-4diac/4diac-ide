@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
@@ -146,6 +147,16 @@ public class STMultibitPartialExpressionImpl extends STExpressionImpl implements
 		index = newIndex;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX, oldIndex, index));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public INamedElement getResultType() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);
 	}
 
 	/**

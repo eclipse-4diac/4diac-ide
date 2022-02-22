@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -69,5 +70,13 @@ public interface STArrayAccessExpression extends STExpression {
 	 * @generated
 	 */
 	EList<STExpression> getIndex();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
 
 } // STArrayAccessExpression

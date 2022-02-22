@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import java.time.LocalTime;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -80,5 +81,13 @@ public interface STTimeOfDayLiteral extends STExpression {
 	 * @generated
 	 */
 	void setValue(LocalTime value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
 
 } // STTimeOfDayLiteral

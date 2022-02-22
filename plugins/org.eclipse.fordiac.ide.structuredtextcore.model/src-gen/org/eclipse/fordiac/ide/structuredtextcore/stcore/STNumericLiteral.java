@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 import java.math.BigDecimal;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -81,5 +82,13 @@ public interface STNumericLiteral extends STExpression {
 	 * @generated
 	 */
 	void setValue(BigDecimal value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
 
 } // STNumericLiteral

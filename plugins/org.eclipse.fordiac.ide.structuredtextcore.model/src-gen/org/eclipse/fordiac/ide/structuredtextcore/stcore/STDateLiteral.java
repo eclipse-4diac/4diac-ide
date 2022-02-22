@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -82,5 +83,13 @@ public interface STDateLiteral extends STExpression {
 	 * @generated
 	 */
 	void setValue(LocalDate value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
 
 } // STDateLiteral

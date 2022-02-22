@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import java.math.BigInteger;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -82,5 +83,13 @@ public interface STMultibitPartialExpression extends STExpression {
 	 * @generated
 	 */
 	void setIndex(BigInteger value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
 
 } // STMultibitPartialExpression

@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -104,5 +106,13 @@ public interface STBinaryExpression extends STExpression {
 	 * @generated
 	 */
 	void setRight(STExpression value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
 
 } // STBinaryExpression

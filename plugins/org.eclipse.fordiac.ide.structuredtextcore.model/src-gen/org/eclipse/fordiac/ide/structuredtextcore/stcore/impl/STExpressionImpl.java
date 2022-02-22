@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 
@@ -46,6 +47,16 @@ public class STExpressionImpl extends InitializerExpressionImpl implements STExp
 	@Override
 	protected EClass eStaticClass() {
 		return STCorePackage.Literals.ST_EXPRESSION;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public INamedElement getResultType() {
+		return null;
 	}
 
 } //STExpressionImpl

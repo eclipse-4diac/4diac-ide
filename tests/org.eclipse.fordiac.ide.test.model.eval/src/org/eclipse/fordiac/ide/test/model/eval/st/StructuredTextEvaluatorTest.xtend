@@ -63,6 +63,7 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.UIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ULIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.USIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.junit.jupiter.api.Assertions.*
 
 class StructuredTextEvaluatorTest {
@@ -838,44 +839,6 @@ class StructuredTextEvaluatorTest {
 		override protected <T> T trap(T context) {
 			trace.add(context)
 			return super.trap(context)
-		}
-	}
-
-	def static boolean isArithmetic(BinaryOperator operator) {
-		switch (operator) {
-			case ADD,
-			case SUB,
-			case MUL,
-			case DIV,
-			case MOD,
-			case POWER,
-			case AMPERSAND,
-			case AND,
-			case OR,
-			case XOR: true
-			default: false
-		}
-	}
-
-	def static boolean isComparison(BinaryOperator operator) {
-		switch (operator) {
-			case EQ,
-			case NE,
-			case GE,
-			case GT,
-			case LE,
-			case LT: true
-			default: false
-		}
-	}
-
-	def static boolean isLogical(BinaryOperator operator) {
-		switch (operator) {
-			case AMPERSAND,
-			case AND,
-			case OR,
-			case XOR: true
-			default: false
 		}
 	}
 }
