@@ -13,6 +13,7 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - literal data types
+ *       - add scope for adapter variables
  *   Martin Melik Merkumians
  *       - added scope for struct in struct
  *******************************************************************************/
@@ -27,6 +28,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
@@ -38,6 +40,8 @@ import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.SimpleScope;
 import org.eclipse.xtext.util.SimpleAttributeResolver;
+
+import com.google.common.collect.Iterables;
 
 /** This class contains custom scoping description.
  *
@@ -79,6 +83,15 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 					if (receiverType instanceof StructuredType) {
 						final var structuredVarType = (StructuredType) receiverType;
 						return Scopes.scopeFor(structuredVarType.getMemberVariables());
+					} else if (receiverType instanceof AdapterType) {
+						final var adapterType = (AdapterType) receiverType;
+						final var adapterFBType = adapterType.getAdapterFBType();
+						if (adapterFBType != null) {
+							final var interfaceList = adapterFBType.getInterfaceList();
+							return new SimpleScope(Scopes.scopedElementsFor(
+									Iterables.concat(interfaceList.getInputVars(), interfaceList.getOutputVars())),
+									true);
+						}
 					}
 					return IScope.NULLSCOPE; // If its an elementary type, no scope is needed
 				}
