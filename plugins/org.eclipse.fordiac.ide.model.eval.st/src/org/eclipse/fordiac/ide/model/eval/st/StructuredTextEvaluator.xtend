@@ -320,7 +320,7 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def private dispatch Value evaluateExpression(STNumericLiteral expr) {
-		expr.value.wrapValue(expr.type)
+		expr.value.wrapValue(expr.resultType as DataType)
 	}
 
 	def private dispatch Value evaluateExpression(STFeatureExpression expr) {
