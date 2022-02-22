@@ -122,6 +122,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_FEATURE_EXPRESSION: return createSTFeatureExpression();
 			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION: return createSTMultibitPartialExpression();
 			case STCorePackage.ST_STANDARD_FUNCTION: return createSTStandardFunction();
+			case STCorePackage.ST_COMMENT: return createSTComment();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -143,6 +144,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return createSTMultiBitAccessSpecifierFromString(eDataType, initialValue);
 			case STCorePackage.ST_ACCESS_SPECIFIER:
 				return createSTAccessSpecifierFromString(eDataType, initialValue);
+			case STCorePackage.ST_COMMENT_POSITION:
+				return createSTCommentPositionFromString(eDataType, initialValue);
 			case STCorePackage.ST_DATE:
 				return createSTDateFromString(eDataType, initialValue);
 			case STCorePackage.ST_TIME:
@@ -174,6 +177,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return convertSTMultiBitAccessSpecifierToString(eDataType, instanceValue);
 			case STCorePackage.ST_ACCESS_SPECIFIER:
 				return convertSTAccessSpecifierToString(eDataType, instanceValue);
+			case STCorePackage.ST_COMMENT_POSITION:
+				return convertSTCommentPositionToString(eDataType, instanceValue);
 			case STCorePackage.ST_DATE:
 				return convertSTDateToString(eDataType, instanceValue);
 			case STCorePackage.ST_TIME:
@@ -700,6 +705,17 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public STComment createSTComment() {
+		STCommentImpl stComment = new STCommentImpl();
+		return stComment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public STBinaryOperator createSTBinaryOperatorFromString(EDataType eDataType, String initialValue) {
 		STBinaryOperator result = STBinaryOperator.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -772,6 +788,26 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	public String convertSTAccessSpecifierToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public STCommentPosition createSTCommentPositionFromString(EDataType eDataType, String initialValue) {
+		STCommentPosition result = STCommentPosition.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSTCommentPositionToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

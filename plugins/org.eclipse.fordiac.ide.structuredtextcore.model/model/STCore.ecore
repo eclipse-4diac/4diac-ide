@@ -2,7 +2,10 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="stcore" nsURI="http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore"
     nsPrefix="stcore">
-  <eClassifiers xsi:type="ecore:EClass" name="STSource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STSource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="comments" upperBound="-1"
+        eType="#//STComment" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STCoreSource" eSuperTypes="#//STSource">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//STStatement" containment="true"/>
@@ -491,5 +494,16 @@
     <eLiterals name="PROTECTED"/>
     <eLiterals name="PRIVATE"/>
     <eLiterals name="INTERNAL"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STComment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="position" eType="#//STCommentPosition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="STCommentPosition">
+    <eLiterals name="UNKNOWN"/>
+    <eLiterals name="BEFORE" value="1"/>
+    <eLiterals name="AFTER" value="2"/>
+    <eLiterals name="INNER" value="3"/>
   </eClassifiers>
 </ecore:EPackage>

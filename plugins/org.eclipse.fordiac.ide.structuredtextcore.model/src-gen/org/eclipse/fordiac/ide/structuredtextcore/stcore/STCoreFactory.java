@@ -450,6 +450,15 @@ public interface STCoreFactory extends EFactory {
 	STStandardFunction createSTStandardFunction();
 
 	/**
+	 * Returns a new object of class '<em>ST Comment</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Comment</em>'.
+	 * @generated
+	 */
+	STComment createSTComment();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

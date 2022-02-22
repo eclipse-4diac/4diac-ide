@@ -269,6 +269,10 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTStandardFunctionAdapter();
 			}
 			@Override
+			public Adapter caseSTComment(STComment object) {
+				return createSTCommentAdapter();
+			}
+			@Override
 			public Adapter caseINamedElement(INamedElement object) {
 				return createINamedElementAdapter();
 			}
@@ -937,6 +941,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTStandardFunctionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment <em>ST Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment
+	 * @generated
+	 */
+	public Adapter createSTCommentAdapter() {
 		return null;
 	}
 

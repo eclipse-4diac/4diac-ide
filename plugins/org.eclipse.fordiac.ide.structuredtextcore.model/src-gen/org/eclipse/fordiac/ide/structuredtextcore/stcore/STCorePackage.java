@@ -84,13 +84,22 @@ public interface STCorePackage extends EPackage {
 	int ST_SOURCE = 0;
 
 	/**
+	 * The feature id for the '<em><b>Comments</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_SOURCE__COMMENTS = 0;
+
+	/**
 	 * The number of structural features of the '<em>ST Source</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_SOURCE_FEATURE_COUNT = 0;
+	int ST_SOURCE_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCoreSourceImpl <em>Source</em>}' class.
@@ -101,6 +110,15 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	int ST_CORE_SOURCE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Comments</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_CORE_SOURCE__COMMENTS = ST_SOURCE__COMMENTS;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -1767,6 +1785,52 @@ public interface STCorePackage extends EPackage {
 	int ST_STANDARD_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 5;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCommentImpl <em>ST Comment</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCommentImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTComment()
+	 * @generated
+	 */
+	int ST_COMMENT = 46;
+
+	/**
+	 * The feature id for the '<em><b>Context</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_COMMENT__CONTEXT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_COMMENT__TEXT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Position</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_COMMENT__POSITION = 2;
+
+	/**
+	 * The number of structural features of the '<em>ST Comment</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_COMMENT_FEATURE_COUNT = 3;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1774,7 +1838,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBinaryOperator()
 	 * @generated
 	 */
-	int ST_BINARY_OPERATOR = 46;
+	int ST_BINARY_OPERATOR = 47;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator <em>ST Unary Operator</em>}' enum.
@@ -1784,7 +1848,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTUnaryOperator()
 	 * @generated
 	 */
-	int ST_UNARY_OPERATOR = 47;
+	int ST_UNARY_OPERATOR = 48;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier <em>ST Multi Bit Access Specifier</em>}' enum.
@@ -1794,7 +1858,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMultiBitAccessSpecifier()
 	 * @generated
 	 */
-	int ST_MULTI_BIT_ACCESS_SPECIFIER = 48;
+	int ST_MULTI_BIT_ACCESS_SPECIFIER = 49;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier <em>ST Access Specifier</em>}' enum.
@@ -1804,7 +1868,17 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTAccessSpecifier()
 	 * @generated
 	 */
-	int ST_ACCESS_SPECIFIER = 49;
+	int ST_ACCESS_SPECIFIER = 50;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition <em>ST Comment Position</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCommentPosition()
+	 * @generated
+	 */
+	int ST_COMMENT_POSITION = 51;
 
 	/**
 	 * The meta object id for the '<em>ST Date</em>' data type.
@@ -1814,7 +1888,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDate()
 	 * @generated
 	 */
-	int ST_DATE = 50;
+	int ST_DATE = 52;
 
 	/**
 	 * The meta object id for the '<em>ST Time</em>' data type.
@@ -1824,7 +1898,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTime()
 	 * @generated
 	 */
-	int ST_TIME = 51;
+	int ST_TIME = 53;
 
 	/**
 	 * The meta object id for the '<em>ST Time Of Day</em>' data type.
@@ -1834,7 +1908,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDay()
 	 * @generated
 	 */
-	int ST_TIME_OF_DAY = 52;
+	int ST_TIME_OF_DAY = 54;
 
 	/**
 	 * The meta object id for the '<em>ST Date And Time</em>' data type.
@@ -1844,7 +1918,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTime()
 	 * @generated
 	 */
-	int ST_DATE_AND_TIME = 53;
+	int ST_DATE_AND_TIME = 55;
 
 	/**
 	 * The meta object id for the '<em>ST String</em>' data type.
@@ -1854,7 +1928,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTString()
 	 * @generated
 	 */
-	int ST_STRING = 54;
+	int ST_STRING = 56;
 
 
 	/**
@@ -1866,6 +1940,17 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSTSource();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource#getComments <em>Comments</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Comments</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource#getComments()
+	 * @see #getSTSource()
+	 * @generated
+	 */
+	EReference getSTSource_Comments();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource <em>Source</em>}'.
@@ -3165,6 +3250,49 @@ public interface STCorePackage extends EPackage {
 	EAttribute getSTStandardFunction_OnlySupportedBy();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment <em>ST Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Comment</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment
+	 * @generated
+	 */
+	EClass getSTComment();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment#getContext <em>Context</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Context</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment#getContext()
+	 * @see #getSTComment()
+	 * @generated
+	 */
+	EReference getSTComment_Context();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment#getText <em>Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Text</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment#getText()
+	 * @see #getSTComment()
+	 * @generated
+	 */
+	EAttribute getSTComment_Text();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment#getPosition <em>Position</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Position</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment#getPosition()
+	 * @see #getSTComment()
+	 * @generated
+	 */
+	EAttribute getSTComment_Position();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3203,6 +3331,16 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getSTAccessSpecifier();
+
+	/**
+	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition <em>ST Comment Position</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>ST Comment Position</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition
+	 * @generated
+	 */
+	EEnum getSTCommentPosition();
 
 	/**
 	 * Returns the meta object for data type '{@link java.time.LocalDate <em>ST Date</em>}'.
@@ -3290,6 +3428,14 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_SOURCE = eINSTANCE.getSTSource();
+
+		/**
+		 * The meta object literal for the '<em><b>Comments</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_SOURCE__COMMENTS = eINSTANCE.getSTSource_Comments();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCoreSourceImpl <em>Source</em>}' class.
@@ -4358,6 +4504,40 @@ public interface STCorePackage extends EPackage {
 		EAttribute ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY = eINSTANCE.getSTStandardFunction_OnlySupportedBy();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCommentImpl <em>ST Comment</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCommentImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTComment()
+		 * @generated
+		 */
+		EClass ST_COMMENT = eINSTANCE.getSTComment();
+
+		/**
+		 * The meta object literal for the '<em><b>Context</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_COMMENT__CONTEXT = eINSTANCE.getSTComment_Context();
+
+		/**
+		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_COMMENT__TEXT = eINSTANCE.getSTComment_Text();
+
+		/**
+		 * The meta object literal for the '<em><b>Position</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_COMMENT__POSITION = eINSTANCE.getSTComment_Position();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4396,6 +4576,16 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EEnum ST_ACCESS_SPECIFIER = eINSTANCE.getSTAccessSpecifier();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition <em>ST Comment Position</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCommentPosition()
+		 * @generated
+		 */
+		EEnum ST_COMMENT_POSITION = eINSTANCE.getSTCommentPosition();
 
 		/**
 		 * The meta object literal for the '<em>ST Date</em>' data type.

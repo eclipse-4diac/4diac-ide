@@ -50,12 +50,20 @@
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STAccessSpecifier/PRIVATE"/>
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STAccessSpecifier/INTERNAL"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STCommentPosition">
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STCommentPosition/UNKNOWN"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STCommentPosition/BEFORE"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STCommentPosition/AFTER"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STCommentPosition/INNER"/>
+    </genEnums>
     <genDataTypes ecoreDataType="STCore.ecore#//STDate"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STTime"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STTimeOfDay"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STDateAndTime"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STString"/>
-    <genClasses ecoreClass="STCore.ecore#//STSource"/>
+    <genClasses ecoreClass="STCore.ecore#//STSource">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSource/comments"/>
+    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STCoreSource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCoreSource/statements"/>
     </genClasses>
@@ -299,6 +307,11 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStandardFunction/outputParameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStandardFunction/inOutParameters"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STStandardFunction/onlySupportedBy"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STComment">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STComment/context"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STComment/text"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STComment/position"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

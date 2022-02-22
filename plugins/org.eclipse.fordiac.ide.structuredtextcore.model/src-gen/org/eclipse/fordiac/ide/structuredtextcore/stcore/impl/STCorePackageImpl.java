@@ -50,6 +50,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
@@ -424,6 +426,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass stCommentEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum stBinaryOperatorEEnum = null;
 
 	/**
@@ -446,6 +455,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EEnum stAccessSpecifierEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum stCommentPositionEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -555,6 +571,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	@Override
 	public EClass getSTSource() {
 		return stSourceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTSource_Comments() {
+		return (EReference)stSourceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1783,6 +1809,46 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getSTComment() {
+		return stCommentEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTComment_Context() {
+		return (EReference)stCommentEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTComment_Text() {
+		return (EAttribute)stCommentEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTComment_Position() {
+		return (EAttribute)stCommentEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getSTBinaryOperator() {
 		return stBinaryOperatorEEnum;
 	}
@@ -1815,6 +1881,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	@Override
 	public EEnum getSTAccessSpecifier() {
 		return stAccessSpecifierEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getSTCommentPosition() {
+		return stCommentPositionEEnum;
 	}
 
 	/**
@@ -1897,6 +1973,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		// Create classes and their features
 		stSourceEClass = createEClass(ST_SOURCE);
+		createEReference(stSourceEClass, ST_SOURCE__COMMENTS);
 
 		stCoreSourceEClass = createEClass(ST_CORE_SOURCE);
 		createEReference(stCoreSourceEClass, ST_CORE_SOURCE__STATEMENTS);
@@ -2065,11 +2142,17 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS);
 		createEAttribute(stStandardFunctionEClass, ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY);
 
+		stCommentEClass = createEClass(ST_COMMENT);
+		createEReference(stCommentEClass, ST_COMMENT__CONTEXT);
+		createEAttribute(stCommentEClass, ST_COMMENT__TEXT);
+		createEAttribute(stCommentEClass, ST_COMMENT__POSITION);
+
 		// Create enums
 		stBinaryOperatorEEnum = createEEnum(ST_BINARY_OPERATOR);
 		stUnaryOperatorEEnum = createEEnum(ST_UNARY_OPERATOR);
 		stMultiBitAccessSpecifierEEnum = createEEnum(ST_MULTI_BIT_ACCESS_SPECIFIER);
 		stAccessSpecifierEEnum = createEEnum(ST_ACCESS_SPECIFIER);
+		stCommentPositionEEnum = createEEnum(ST_COMMENT_POSITION);
 
 		// Create data types
 		stDateEDataType = createEDataType(ST_DATE);
@@ -2150,6 +2233,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(stSourceEClass, STSource.class, "STSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTSource_Comments(), this.getSTComment(), null, "comments", null, 0, -1, STSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stCoreSourceEClass, STCoreSource.class, "STCoreSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTCoreSource_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STCoreSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -2426,6 +2510,11 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEReference(getSTStandardFunction_InOutParameters(), theLibraryElementPackage.getINamedElement(), null, "inOutParameters", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getSTStandardFunction_OnlySupportedBy(), ecorePackage.getEString(), "onlySupportedBy", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(stCommentEClass, STComment.class, "STComment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTComment_Context(), ecorePackage.getEObject(), null, "context", null, 0, 1, STComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTComment_Text(), ecorePackage.getEString(), "text", null, 0, 1, STComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTComment_Position(), this.getSTCommentPosition(), "position", null, 0, 1, STComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
 		// Initialize enums and add enum literals
 		initEEnum(stBinaryOperatorEEnum, STBinaryOperator.class, "STBinaryOperator"); //$NON-NLS-1$
 		addEEnumLiteral(stBinaryOperatorEEnum, STBinaryOperator.RANGE);
@@ -2463,6 +2552,12 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		addEEnumLiteral(stAccessSpecifierEEnum, STAccessSpecifier.PROTECTED);
 		addEEnumLiteral(stAccessSpecifierEEnum, STAccessSpecifier.PRIVATE);
 		addEEnumLiteral(stAccessSpecifierEEnum, STAccessSpecifier.INTERNAL);
+
+		initEEnum(stCommentPositionEEnum, STCommentPosition.class, "STCommentPosition"); //$NON-NLS-1$
+		addEEnumLiteral(stCommentPositionEEnum, STCommentPosition.UNKNOWN);
+		addEEnumLiteral(stCommentPositionEEnum, STCommentPosition.BEFORE);
+		addEEnumLiteral(stCommentPositionEEnum, STCommentPosition.AFTER);
+		addEEnumLiteral(stCommentPositionEEnum, STCommentPosition.INNER);
 
 		// Initialize data types
 		initEDataType(stDateEDataType, LocalDate.class, "STDate", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
