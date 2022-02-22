@@ -27,15 +27,11 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.EObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
@@ -63,34 +59,6 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 				|| reference == STCorePackage.Literals.ST_STRING_LITERAL__TYPE);
 	}
 
-	private STExpression getReceiver(final EObject context) {
-		if (context instanceof STFeatureExpression) {
-			return getReceiver(context.eContainer());
-		} else if (context instanceof STMemberAccessExpression) {
-			return ((STMemberAccessExpression) context).getReceiver();
-		}
-		return null;
-	}
-
-	private static INamedElement getExpressionType(final STExpression expression) {
-		if (expression instanceof STFeatureExpression) {
-			final INamedElement feature = ((STFeatureExpression) expression).getFeature();
-			if (feature instanceof STVarDeclaration) {
-				return ((STVarDeclaration) feature).getType();
-			} else if (feature instanceof VarDeclaration) {
-				return ((VarDeclaration) feature).getType();
-			}
-			// TODO function return type
-
-		} else if (expression instanceof STMemberAccessExpression) {
-			final STExpression memberExpression = ((STMemberAccessExpression) expression).getMember();
-			return getExpressionType(memberExpression);
-		} else if (expression instanceof STBinaryExpression) {
-			// ...
-		}
-		return null;
-	}
-
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
 		if (reference == STCorePackage.Literals.ST_VAR_DECLARATION__TYPE) {
@@ -102,22 +70,30 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 					StreamSupport.stream(Scopes.scopedElementsFor(DataTypeLibrary.getNonUserDefinedDataTypes(),
 							QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)).spliterator(), false),
 					Stream.of(ADDITIONAL_LITERAL_TYPES)).collect(Collectors.toList()), true);
-		}
-
-		final var receiver = getReceiver(context);
-		// if there is a receiver, which is not the same EObject as the context
-		if (receiver != null && receiver != context) {
-			final var receiverType = getExpressionType(receiver);
-			if (receiverType != null) {
-				if (receiverType instanceof StructuredType) {
-					final var structuredVarType = (StructuredType) receiverType;
-					return Scopes.scopeFor(structuredVarType.getMemberVariables());
+		} else if (reference == STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE) {
+			final var receiver = getReceiver(context);
+			// if there is a receiver, which is not the same EObject as the context
+			if (receiver != null && receiver != context) {
+				final var receiverType = receiver.getResultType();
+				if (receiverType != null) {
+					if (receiverType instanceof StructuredType) {
+						final var structuredVarType = (StructuredType) receiverType;
+						return Scopes.scopeFor(structuredVarType.getMemberVariables());
+					}
+					return IScope.NULLSCOPE; // If its an elementary type, no scope is needed
 				}
-				return IScope.NULLSCOPE; // If its an elementary type, no scope is needed
 			}
 		}
-
 		return super.getScope(context, reference);
+	}
+
+	private STExpression getReceiver(final EObject context) {
+		if (context instanceof STFeatureExpression) {
+			return getReceiver(context.eContainer());
+		} else if (context instanceof STMemberAccessExpression) {
+			return ((STMemberAccessExpression) context).getReceiver();
+		}
+		return null;
 	}
 
 	private static EObjectDescription descriptionForType(final String name, final DataType type) {
