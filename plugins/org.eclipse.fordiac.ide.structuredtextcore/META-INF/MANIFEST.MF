@@ -26,5 +26,6 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextcore,
  org.eclipse.fordiac.ide.structuredtextcore.scoping,
  org.eclipse.fordiac.ide.structuredtextcore.serializer,
  org.eclipse.fordiac.ide.structuredtextcore.services,
- org.eclipse.fordiac.ide.structuredtextcore.validation
+ org.eclipse.fordiac.ide.structuredtextcore.validation,
+ org.eclipse.fordiac.ide.structuredtextcore.formatting2
 Import-Package: org.apache.log4j

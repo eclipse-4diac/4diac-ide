@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm
 
+import com.google.inject.Injector
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage
 
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
@@ -21,4 +23,10 @@ class STAlgorithmStandaloneSetup extends STAlgorithmStandaloneSetupGenerated {
 	def static void doSetup() {
 		new STAlgorithmStandaloneSetup().createInjectorAndDoEMFRegistration()
 	}
+	
+	override register(Injector injector) {
+		STAlgorithmPackage.eINSTANCE.eClass();
+		super.register(injector)
+	}
+	
 }

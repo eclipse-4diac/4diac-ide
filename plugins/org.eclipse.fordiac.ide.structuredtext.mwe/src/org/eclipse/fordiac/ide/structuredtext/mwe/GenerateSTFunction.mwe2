@@ -55,6 +55,10 @@ Workflow {
 			generator = {
 				generateXtendStub = true
 			}
+			formatter = {
+				generateStub = true
+ 				generateXtendStub = true
+ 			}
 			junitSupport = {
 				junitVersion = "5"
 			}

@@ -21,13 +21,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
 import org.junit.jupiter.api.BeforeAll
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage
 
 class FBEvaluatorTest {
 
 	@BeforeAll
 	def static void setupXtext() {
-		STAlgorithmPackage.eINSTANCE.eClass
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
 	}

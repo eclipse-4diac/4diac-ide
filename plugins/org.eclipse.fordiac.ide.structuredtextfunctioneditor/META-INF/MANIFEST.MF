@@ -9,6 +9,7 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext,
  org.eclipse.xtext.xbase,
  org.eclipse.equinox.common,
+ org.eclipse.fordiac.ide.structuredtextcore;visibility:=reexport,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
  org.eclipse.xtext.util,
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
@@ -20,6 +21,7 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.model;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.formatting2,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.generator,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.parser.antlr,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.parser.antlr.internal,
