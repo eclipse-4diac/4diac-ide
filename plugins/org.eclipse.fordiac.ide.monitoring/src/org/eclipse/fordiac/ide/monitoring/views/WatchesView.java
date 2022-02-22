@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.monitoring.provider.WatchesCommentLabelProvider;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesContentProvider;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesNameLabelProvider;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesTypeLabelProvider;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueEditingSupport;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueLabelProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.action.Action;
@@ -127,6 +128,8 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		column3.getColumn().setText("Value");
 		column3.getColumn().setWidth(100);
 		column3.setLabelProvider(new WatchesValueLabelProvider());
+		column3.setEditingSupport(
+				new WatchesValueEditingSupport(column3.getViewer(), filteredTree.getViewer().getTree()));
 
 		final TreeViewerColumn column4 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
 		column4.getColumn().setText("Comment");
