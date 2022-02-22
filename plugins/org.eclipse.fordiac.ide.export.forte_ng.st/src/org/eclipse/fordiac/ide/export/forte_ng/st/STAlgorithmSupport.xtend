@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
+import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
@@ -29,7 +30,7 @@ class STAlgorithmSupport extends StructuredTextSupport {
 
 	IParseResult parseResult
 
-	override prepare() {
+	override prepare(Map<?, ?> options) {
 		if (parseResult === null && errors.empty) {
 			parseResult = algorithm.text.parse(false, algorithm.name,
 				switch (root : algorithm.rootContainer) { FBType: root }, errors)
@@ -37,8 +38,8 @@ class STAlgorithmSupport extends StructuredTextSupport {
 		return parseResult !== null
 	}
 
-	override generate() throws ExportException {
-		prepare()
+	override generate(Map<?, ?> options) throws ExportException {
+		prepare(options)
 		(parseResult?.rootASTElement as STAlgorithmBody)?.generateStructuredTextAlgorithm
 	}
 
@@ -48,8 +49,8 @@ class STAlgorithmSupport extends StructuredTextSupport {
 		«alg.statements.generateStatementList»
 	'''
 
-	override getDependencies() {
-		prepare()
+	override getDependencies(Map<?, ?> options) {
+		prepare(options)
 		val root = parseResult?.rootASTElement
 		if (root instanceof STAlgorithmBody)
 			root.varTempDeclarations.flatMap[varDeclarations].filter(STVarDeclaration).map[type].toSet

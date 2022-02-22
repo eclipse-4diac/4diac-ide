@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.export.forte_lua
 
 import java.util.Collections
 import org.eclipse.core.resources.IFile
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.IExportFilter
 import org.eclipse.fordiac.ide.export.forte_lua.filter.AdapterFilter
@@ -36,7 +37,7 @@ class ForteLuaExportFilter implements IExportFilter {
 		throw new UnsupportedOperationException("Require a library element to work on")
 	}
 
-	override export(IFile typeFile, String destination, boolean forceOverwrite, LibraryElement type) throws ExportException {
+	override export(IFile typeFile, String destination, boolean forceOverwrite, EObject type) throws ExportException {
 		switch (type) {
 			BasicFBType: FordiacLogHelper.logInfo(type.lua)
 			CompositeFBType: FordiacLogHelper.logInfo(type.lua)

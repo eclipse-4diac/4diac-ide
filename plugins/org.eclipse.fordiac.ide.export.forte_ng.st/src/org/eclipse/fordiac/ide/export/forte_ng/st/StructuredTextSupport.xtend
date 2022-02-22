@@ -18,6 +18,8 @@ import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import java.util.List
+import java.util.Set
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
@@ -65,8 +67,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition
 import org.eclipse.xtend.lib.annotations.Accessors
 
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
@@ -277,6 +281,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''st_«feature.name»'''
 
+	def protected dispatch CharSequence generateFeatureName(FunctionDefinition feature) '''st_func_«feature.name»'''
+
 	def protected CharSequence generateTypeName(STVarDeclaration variable) {
 		if (variable.locatedAt !== null && variable.array) {
 			return '''ARRAY_AT<«(variable.type as DataType).generateTypeName», «((variable.locatedAt as STVarDeclaration).type as DataType).generateTypeName», «variable.ranges.head.generateTemplateExpression»>'''
@@ -306,6 +312,23 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		} catch (Exception e) {
 			errors.add("Not a constant integer expression")
 			1
+		}
+	}
+	
+	def protected Set<INamedElement> getContainedDependencies(EObject object) {
+		object.<EObject>getAllProperContents(true).toIterable.flatMap[dependencies].toSet
+	}
+	
+	def protected Iterable<INamedElement> getDependencies(EObject object) {
+		switch(object) {
+			STVarDeclaration: #[object.type]
+			STNumericLiteral: #[object.resultType]
+			STStringLiteral: #[object.resultType]
+			STDateLiteral: #[object.type]
+			STTimeLiteral: #[object.type]
+			STTimeOfDayLiteral: #[object.type]
+			STDateAndTimeLiteral: #[object.type]
+			default: emptySet
 		}
 	}
 }

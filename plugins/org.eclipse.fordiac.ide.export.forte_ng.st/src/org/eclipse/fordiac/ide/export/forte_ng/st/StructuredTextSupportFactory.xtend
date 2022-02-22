@@ -14,12 +14,15 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunction
 
 class StructuredTextSupportFactory implements ILanguageSupportFactory {
 
 	override createLanguageSupport(Object source) {
 		if (source instanceof STAlgorithm) {
 			new STAlgorithmSupport(source)
+		} else if (source instanceof STFunction) {
+			new STFunctionSupport(source)
 		}
 	}
 }

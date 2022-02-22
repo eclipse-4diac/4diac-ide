@@ -16,21 +16,11 @@ package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
-import org.eclipse.fordiac.ide.export.ExportTemplate
-import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.data.DateAndTimeType
-import org.eclipse.fordiac.ide.model.data.DateType
-import org.eclipse.fordiac.ide.model.data.LdateType
-import org.eclipse.fordiac.ide.model.data.LdtType
-import org.eclipse.fordiac.ide.model.data.LtimeType
-import org.eclipse.fordiac.ide.model.data.LtodType
-import org.eclipse.fordiac.ide.model.data.TimeOfDayType
-import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
-abstract class ForteLibraryElementTemplate extends ExportTemplate {
+abstract class ForteLibraryElementTemplate extends ForteNgExportTemplate {
 
 	public static final CharSequence EXPORT_PREFIX = "st_"
 
@@ -67,28 +57,6 @@ abstract class ForteLibraryElementTemplate extends ExportTemplate {
 	def protected generateIncludeGuardEnd() '''
 		#endif // _«type.name.toUpperCase»_H_
 	'''
-
-	def protected generateTypeIncludes(Iterable<DataType> types) '''
-		«FOR include : types.map[generateTypeInclude].toSet»
-			#include "«include»"
-		«ENDFOR»
-		#include "forte_array.h"
-		#include "forte_array_at.h"
-	'''
-
-	def protected generateTypeInclude(DataType type) {
-		switch (type) {
-			TimeType,
-			LtimeType: "forte_time.h"
-			DateType,
-			LdateType: "forte_date.h"
-			TimeOfDayType,
-			LtodType: "forte_time_of_day.h"
-			DateAndTimeType,
-			LdtType: "forte_date_and_time.h"
-			default: '''forte_«type.name.toLowerCase».h'''
-		}
-	}
 
 	def protected generateAccessors(List<VarDeclaration> vars, String function) '''
 		«FOR v : vars»

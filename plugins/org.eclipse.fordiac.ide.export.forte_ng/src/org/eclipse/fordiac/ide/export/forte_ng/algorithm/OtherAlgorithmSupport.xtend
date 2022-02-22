@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.algorithm
 
+import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
@@ -21,15 +22,15 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 class OtherAlgorithmSupport implements ILanguageSupport {
 	final OtherAlgorithm algorithm
 	
-	override prepare() { true }
+	override prepare(Map<?, ?> options) { true }
 	
-	override generate() throws ExportException '''
+	override generate(Map<?, ?> options) throws ExportException '''
 		#pragma GCC warning "Algorithm of type: '«algorithm.language»' may lead to unexpected results!"
 		#pragma message ("warning Algorithm of type: '«algorithm.language»' may lead to unexpected results!")
 		«algorithm.text»
 	'''
 	
-	override getDependencies() { emptySet }
+	override getDependencies(Map<?, ?> options) { emptySet }
 	
 	override getErrors() { emptyList }
 	

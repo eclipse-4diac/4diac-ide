@@ -75,13 +75,13 @@ class SimpleFBImplTemplate extends ForteFBTemplate {
 
 	def protected generateAlgorithm(Algorithm alg) '''
 		void «FBClassName»::alg_«alg.name»(void) {
-		  «languageSupport?.generate ?: ""»
+		  «languageSupport?.generate(emptyMap) ?: ""»
 		}
 	'''
 
 	override protected generateImplIncludes() '''
 		«super.generateImplIncludes»
-		«IF languageSupport !== null»«languageSupport.dependencies.filter(DataType).generateImplTypeIncludes»«ENDIF»
+		«IF languageSupport !== null»«languageSupport.getDependencies(emptyMap).filter(DataType).generateImplTypeIncludes»«ENDIF»
 	'''
 
 	override getErrors() {

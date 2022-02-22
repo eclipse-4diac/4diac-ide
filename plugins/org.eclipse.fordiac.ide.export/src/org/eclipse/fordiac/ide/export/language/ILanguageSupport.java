@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.export.language;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.export.ExportException;
@@ -21,13 +22,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 public interface ILanguageSupport {
 
 	/** Prepare for export */
-	boolean prepare();
+	boolean prepare(Map<?, ?> options);
 
 	/** Generate the template contents. */
-	CharSequence generate() throws ExportException;
+	CharSequence generate(Map<?, ?> options) throws ExportException;
 
 	/** Get the required dependencies */
-	Set<INamedElement> getDependencies();
+	Set<INamedElement> getDependencies(Map<?, ?> options);
 
 	/** Return the errors. */
 	List<String> getErrors();

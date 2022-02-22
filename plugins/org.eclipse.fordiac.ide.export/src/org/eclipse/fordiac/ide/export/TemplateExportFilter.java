@@ -2,6 +2,7 @@
  * Copyright (c) 2019 fortiss GmbH
  * 				 2020 Andrea Zoitl
  *               2020 Johannes Kepler University Linz
+ *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *     - refactor for arbitrary types in export
  *   Andrea Zoitl
  *     - externalized all translatable strings
  *   Ernst Blecha
@@ -28,10 +30,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.export.utils.CompareEditorOpenerUtil;
 import org.eclipse.fordiac.ide.export.utils.DelayedFiles;
 import org.eclipse.fordiac.ide.export.utils.DelayedFiles.StoredFiles;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogLabelKeys;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -56,17 +63,18 @@ public abstract class TemplateExportFilter extends ExportFilter {
 	protected TemplateExportFilter() {
 	}
 
-	private static List<String> reformat(final LibraryElement type, final List<String> messages) {
-		return messages.stream().map(
-				v -> (null != type)
-				? (MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
-						type.getName(), v))
-						: v)
-				.collect(Collectors.toList());
+	private static List<String> reformat(final String name, final List<String> messages) {
+		return name != null
+				? messages.stream()
+						.map(v -> MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
+								name, v))
+						.collect(Collectors.toList())
+						: messages;
 	}
 
 	@Override
-	public final void export(final IFile typeFile, final String destination, final boolean forceOverwrite) throws ExportException {
+	public final void export(final IFile typeFile, final String destination, final boolean forceOverwrite)
+			throws ExportException {
 		this.export(typeFile, destination, forceOverwrite, null);
 	}
 
@@ -76,21 +84,37 @@ public abstract class TemplateExportFilter extends ExportFilter {
 		if (list.size() == 1) {
 			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_ONE_ELEMENT, list.get(0));
 		} else if (list.size() == 2) {
-			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_TWO_ELEMENTS, list.get(0), list.get(1));
+			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_TWO_ELEMENTS, list.get(0),
+					list.get(1));
 		} else if (list.size() == 3) {
-			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_THREE_ELEMENTS, list.get(0), list.get(1), list.get(2));
+			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_THREE_ELEMENTS, list.get(0),
+					list.get(1), list.get(2));
 		} else if (list.size() > 3) {
-			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_FOUR_OR_MORE_ELEMENTS, list.get(0), list.get(1), list.get(2));
+			textualList = MessageFormat.format(Messages.TemplateExportFilter_LIST_FOUR_OR_MORE_ELEMENTS, list.get(0),
+					list.get(1), list.get(2));
 		}
 		return textualList;
 	}
 
 	@Override
-	public void export(final IFile typeFile, final String destination, final boolean forceOverwrite, final LibraryElement type)
+	public void export(final IFile typeFile, final String destination, final boolean forceOverwrite, EObject source)
 			throws ExportException {
 		try {
+			if (source == null && typeFile != null) {
+				final ResourceSet resourceSet = new ResourceSetImpl();
+				final Resource resource = resourceSet
+						.getResource(URI.createPlatformResourceURI(typeFile.getFullPath().toString(), true), true);
+				source = resource.getContents().get(0);
+			}
 
-			final DelayedFiles files = generateFileContent(destination, type);
+			String name = "anonymous"; //$NON-NLS-1$
+			if (source instanceof INamedElement) {
+				name = ((INamedElement) source).getName();
+			} else if (typeFile != null) {
+				name = typeFile.getFullPath().removeFileExtension().lastSegment();
+			}
+
+			final DelayedFiles files = generateFileContent(destination, name, source);
 
 			// set a default value for the result of the MessageDialog that does not
 			// conflict with the current state
@@ -101,11 +125,11 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 			if (!forceOverwrite && filesExisted) {
 				// create a message dialog to ask about merging if forceOverwrite is not set
-				final String msg = MessageFormat.format(
-						Messages.TemplateExportFilter_OVERWRITE_REQUEST,
+				final String msg = MessageFormat.format(Messages.TemplateExportFilter_OVERWRITE_REQUEST,
 						stringsToTextualList(files.getFilenames()));
-				final MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(), Messages.TemplateExportFilter_FILE_EXISTS, null,
-						msg, MessageDialog.QUESTION_WITH_CANCEL, BUTTON_LABELS, 0);
+				final MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(),
+						Messages.TemplateExportFilter_FILE_EXISTS, null, msg, MessageDialog.QUESTION_WITH_CANCEL,
+						BUTTON_LABELS, 0);
 
 				res = msgDiag.open();
 			}
@@ -130,16 +154,17 @@ public abstract class TemplateExportFilter extends ExportFilter {
 		}
 	}
 
-	private DelayedFiles generateFileContent(final String destination, final LibraryElement type) throws ExportException {
+	private DelayedFiles generateFileContent(final String destination, final String name, final EObject source)
+			throws ExportException {
 		final DelayedFiles files = new DelayedFiles();
 
 		final Path destinationPath = Paths.get(destination);
-		final Set<? extends IExportTemplate> templates = this.getTemplates(type);
+		final Set<? extends IExportTemplate> templates = this.getTemplates(name, source);
 		for (final IExportTemplate template : templates) {
 			final CharSequence content = template.generate();
-			getErrors().addAll(reformat(type, template.getErrors()));
-			getWarnings().addAll(reformat(type, template.getWarnings()));
-			getInfos().addAll(reformat(type, template.getInfos()));
+			getErrors().addAll(reformat(name, template.getErrors()));
+			getWarnings().addAll(reformat(name, template.getWarnings()));
+			getInfos().addAll(reformat(name, template.getInfos()));
 			if (template.getErrors().isEmpty()) {
 				final Path templatePath = destinationPath.resolve(template.getPath());
 				files.write(templatePath, content);
@@ -172,11 +197,12 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 		if (!diffs) {
 			// there were no differences - inform the user
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(), Messages.TemplateExportFilter_NO_DIFFERENCES_TITLE,
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					Messages.TemplateExportFilter_NO_DIFFERENCES_TITLE,
 					Messages.TemplateExportFilter_NO_DIFFERENCES_MESSAGE);
 		}
 	}
 
-	protected abstract Set<IExportTemplate> getTemplates(LibraryElement type);
+	protected abstract Set<IExportTemplate> getTemplates(String name, EObject source);
 
 }

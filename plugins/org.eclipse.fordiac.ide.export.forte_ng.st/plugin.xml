@@ -9,6 +9,9 @@
          <source
                type="org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm">
          </source>
+         <source
+               type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunction">
+         </source>
       </factory>
    </extension>
 
