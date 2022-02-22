@@ -10661,9 +10661,9 @@ rule__FunctionDefinition__ReturnTypeAssignment_3_1
 	(
 		{ before(grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeCrossReference_3_1_0()); }
 		(
-			{ before(grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeIDTerminalRuleCall_3_1_0_1()); }
-			RULE_ID
-			{ after(grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeIDTerminalRuleCall_3_1_0_1()); }
+			{ before(grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeSTAnyTypeParserRuleCall_3_1_0_1()); }
+			ruleSTAnyType
+			{ after(grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeSTAnyTypeParserRuleCall_3_1_0_1()); }
 		)
 		{ after(grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeCrossReference_3_1_0()); }
 	)

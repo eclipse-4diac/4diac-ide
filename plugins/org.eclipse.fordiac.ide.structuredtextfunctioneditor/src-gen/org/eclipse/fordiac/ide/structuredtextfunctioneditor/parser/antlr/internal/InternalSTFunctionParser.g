@@ -147,9 +147,12 @@ ruleFunctionDefinition returns [EObject current=null]
 							$current = createModelElement(grammarAccess.getFunctionDefinitionRule());
 						}
 					}
-					otherlv_4=RULE_ID
 					{
-						newLeafNode(otherlv_4, grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeCrossReference_3_1_0());
+						newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getReturnTypeDataTypeCrossReference_3_1_0());
+					}
+					ruleSTAnyType
+					{
+						afterParserOrEnumRuleCall();
 					}
 				)
 			)

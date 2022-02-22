@@ -204,7 +204,7 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 	 * Constraint:
 	 *     (
 	 *         name=ID 
-	 *         returnType=[DataType|ID]? 
+	 *         returnType=[DataType|STAnyType]? 
 	 *         (
 	 *             varDeclarations+=VarDeclarationBlock | 
 	 *             varTempDeclarations+=VarTempDeclarationBlock | 

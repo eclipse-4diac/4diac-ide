@@ -51,7 +51,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		private final Keyword cColonKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
 		private final Assignment cReturnTypeAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
 		private final CrossReference cReturnTypeDataTypeCrossReference_3_1_0 = (CrossReference)cReturnTypeAssignment_3_1.eContents().get(0);
-		private final RuleCall cReturnTypeDataTypeIDTerminalRuleCall_3_1_0_1 = (RuleCall)cReturnTypeDataTypeCrossReference_3_1_0.eContents().get(1);
+		private final RuleCall cReturnTypeDataTypeSTAnyTypeParserRuleCall_3_1_0_1 = (RuleCall)cReturnTypeDataTypeCrossReference_3_1_0.eContents().get(1);
 		private final Alternatives cAlternatives_4 = (Alternatives)cGroup.eContents().get(4);
 		private final Assignment cVarDeclarationsAssignment_4_0 = (Assignment)cAlternatives_4.eContents().get(0);
 		private final RuleCall cVarDeclarationsVarDeclarationBlockParserRuleCall_4_0_0 = (RuleCall)cVarDeclarationsAssignment_4_0.eContents().get(0);
@@ -67,7 +67,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		
 		//FunctionDefinition returns libraryElement::INamedElement:
 		//    {FunctionDefinition}
-		//    'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
+		//    'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
 		//        (varDeclarations+=VarDeclarationBlock | varTempDeclarations+=VarTempDeclarationBlock |
 		//        varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
 		//        code += STStatement*
@@ -75,7 +75,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{FunctionDefinition}
-		//'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
+		//'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
 		//    (varDeclarations+=VarDeclarationBlock | varTempDeclarations+=VarTempDeclarationBlock |
 		//    varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
 		//    code += STStatement*
@@ -94,20 +94,20 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		//ID
 		public RuleCall getNameIDTerminalRuleCall_2_0() { return cNameIDTerminalRuleCall_2_0; }
 		
-		//(':' returnType=[datatype::DataType])?
+		//(':' returnType=[datatype::DataType|STAnyType])?
 		public Group getGroup_3() { return cGroup_3; }
 		
 		//':'
 		public Keyword getColonKeyword_3_0() { return cColonKeyword_3_0; }
 		
-		//returnType=[datatype::DataType]
+		//returnType=[datatype::DataType|STAnyType]
 		public Assignment getReturnTypeAssignment_3_1() { return cReturnTypeAssignment_3_1; }
 		
-		//[datatype::DataType]
+		//[datatype::DataType|STAnyType]
 		public CrossReference getReturnTypeDataTypeCrossReference_3_1_0() { return cReturnTypeDataTypeCrossReference_3_1_0; }
 		
-		//ID
-		public RuleCall getReturnTypeDataTypeIDTerminalRuleCall_3_1_0_1() { return cReturnTypeDataTypeIDTerminalRuleCall_3_1_0_1; }
+		//STAnyType
+		public RuleCall getReturnTypeDataTypeSTAnyTypeParserRuleCall_3_1_0_1() { return cReturnTypeDataTypeSTAnyTypeParserRuleCall_3_1_0_1; }
 		
 		//(varDeclarations+=VarDeclarationBlock | varTempDeclarations+=VarTempDeclarationBlock |
 		//varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
@@ -203,7 +203,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	//FunctionDefinition returns libraryElement::INamedElement:
 	//    {FunctionDefinition}
-	//    'FUNCTION' name=ID (':' returnType=[datatype::DataType])?
+	//    'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
 	//        (varDeclarations+=VarDeclarationBlock | varTempDeclarations+=VarTempDeclarationBlock |
 	//        varInpuDeclarations+=VarInputDeclarationBlock | varOutputDeclarations+=VarOutputDeclarationBlock)*
 	//        code += STStatement*
