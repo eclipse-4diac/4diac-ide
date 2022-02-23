@@ -8,10 +8,9 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.Code;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
@@ -22,8 +21,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
@@ -41,8 +42,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock;
 import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Parameter;
 import org.eclipse.xtext.ParserRule;
@@ -65,17 +66,14 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 		Set<Parameter> parameters = context.getEnabledBooleanParameters();
 		if (epackage == STCorePackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
-			case STCorePackage.ARRAY_INIT_ELEMENT:
-				sequence_ArrayInitElement(context, (ArrayInitElement) semanticObject); 
-				return; 
-			case STCorePackage.ARRAY_INITIALIZER_EXPRESSION:
-				sequence_ArrayInitializerExpression(context, (ArrayInitializerExpression) semanticObject); 
-				return; 
-			case STCorePackage.CODE:
-				sequence_Code(context, (Code) semanticObject); 
-				return; 
 			case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION:
 				sequence_STAccessExpression(context, (STArrayAccessExpression) semanticObject); 
+				return; 
+			case STCorePackage.ST_ARRAY_INIT_ELEMENT:
+				sequence_STArrayInitElement(context, (STArrayInitElement) semanticObject); 
+				return; 
+			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION:
+				sequence_STArrayInitializerExpression(context, (STArrayInitializerExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_ASSIGNMENT_STATEMENT:
 				sequence_STAssignmentStatement(context, (STAssignmentStatement) semanticObject); 
@@ -104,11 +102,17 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ST_CONTINUE:
 				sequence_STStatement(context, (STContinue) semanticObject); 
 				return; 
+			case STCorePackage.ST_CORE_SOURCE:
+				sequence_STCoreSource(context, (STCoreSource) semanticObject); 
+				return; 
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL:
 				sequence_STDateAndTimeLiteral(context, (STDateAndTimeLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_DATE_LITERAL:
 				sequence_STDateLiteral(context, (STDateLiteral) semanticObject); 
+				return; 
+			case STCorePackage.ST_ELEMENTARY_INITIALIZER_EXPRESSION:
+				sequence_STElementaryInitializerExpression(context, (STElementaryInitializerExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_ELSE_IF_PART:
 				sequence_STElseIfPart(context, (STElseIfPart) semanticObject); 
@@ -159,29 +163,29 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				sequence_STUnaryExpression(context, (STUnaryExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_VAR_DECLARATION:
-				sequence_VarDeclaration(context, (STVarDeclaration) semanticObject); 
+				sequence_STVarDeclaration(context, (STVarDeclaration) semanticObject); 
 				return; 
-			case STCorePackage.ST_WHILE_STATEMENT:
-				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
-				return; 
-			case STCorePackage.VAR_DECLARATION_BLOCK:
-				if (rule == grammarAccess.getVarDeclarationBlockRule()) {
-					sequence_VarDeclarationBlock(context, (VarDeclarationBlock) semanticObject); 
+			case STCorePackage.ST_VAR_DECLARATION_BLOCK:
+				if (rule == grammarAccess.getSTVarDeclarationBlockRule()) {
+					sequence_STVarDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
 					return; 
 				}
-				else if (rule == grammarAccess.getVarInputDeclarationBlockRule()) {
-					sequence_VarInputDeclarationBlock(context, (VarDeclarationBlock) semanticObject); 
+				else if (rule == grammarAccess.getSTVarInputDeclarationBlockRule()) {
+					sequence_STVarInputDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
 					return; 
 				}
-				else if (rule == grammarAccess.getVarOutputDeclarationBlockRule()) {
-					sequence_VarOutputDeclarationBlock(context, (VarDeclarationBlock) semanticObject); 
+				else if (rule == grammarAccess.getSTVarOutputDeclarationBlockRule()) {
+					sequence_STVarOutputDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
 					return; 
 				}
-				else if (rule == grammarAccess.getVarTempDeclarationBlockRule()) {
-					sequence_VarTempDeclarationBlock(context, (VarDeclarationBlock) semanticObject); 
+				else if (rule == grammarAccess.getSTVarTempDeclarationBlockRule()) {
+					sequence_STVarTempDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
 					return; 
 				}
 				else break;
+			case STCorePackage.ST_WHILE_STATEMENT:
+				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
+				return; 
 			}
 		if (errorAcceptor != null)
 			errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
@@ -189,44 +193,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     ArrayInitElement returns ArrayInitElement
-	 *
-	 * Constraint:
-	 *     (indexOrInitExpression=STExpression initExpression=STExpression?)
-	 */
-	protected void sequence_ArrayInitElement(ISerializationContext context, ArrayInitElement semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns ArrayInitializerExpression
-	 *     ArrayInitializerExpression returns ArrayInitializerExpression
-	 *
-	 * Constraint:
-	 *     (values+=ArrayInitElement values+=ArrayInitElement*)
-	 */
-	protected void sequence_ArrayInitializerExpression(ISerializationContext context, ArrayInitializerExpression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     Code returns Code
-	 *
-	 * Constraint:
-	 *     statements+=STStatement+
-	 */
-	protected void sequence_Code(ISerializationContext context, Code semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     InitializerExpression returns STArrayAccessExpression
 	 *     STExpression returns STArrayAccessExpression
 	 *     STSubrangeExpression returns STArrayAccessExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STArrayAccessExpression
@@ -262,7 +228,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STMemberAccessExpression
 	 *     STExpression returns STMemberAccessExpression
 	 *     STSubrangeExpression returns STMemberAccessExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STMemberAccessExpression
@@ -298,7 +263,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STBinaryExpression
 	 *     STExpression returns STBinaryExpression
 	 *     STSubrangeExpression returns STBinaryExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
@@ -338,6 +302,31 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     )
 	 */
 	protected void sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(ISerializationContext context, STBinaryExpression semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STArrayInitElement returns STArrayInitElement
+	 *
+	 * Constraint:
+	 *     (indexOrInitExpression=STExpression (initExpressions+=STExpression initExpressions+=STExpression*)?)
+	 */
+	protected void sequence_STArrayInitElement(ISerializationContext context, STArrayInitElement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STInitializerExpression returns STArrayInitializerExpression
+	 *     STArrayInitializerExpression returns STArrayInitializerExpression
+	 *
+	 * Constraint:
+	 *     (values+=STArrayInitElement values+=STArrayInitElement*)
+	 */
+	protected void sequence_STArrayInitializerExpression(ISerializationContext context, STArrayInitializerExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -464,7 +453,18 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STDateAndTimeLiteral
+	 *     STCoreSource returns STCoreSource
+	 *
+	 * Constraint:
+	 *     statements+=STStatement*
+	 */
+	protected void sequence_STCoreSource(ISerializationContext context, STCoreSource semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     STExpression returns STDateAndTimeLiteral
 	 *     STSubrangeExpression returns STDateAndTimeLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
@@ -511,7 +511,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STDateLiteral
 	 *     STExpression returns STDateLiteral
 	 *     STSubrangeExpression returns STDateLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateLiteral
@@ -558,6 +557,25 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
+	 *     STInitializerExpression returns STElementaryInitializerExpression
+	 *     STElementaryInitializerExpression returns STElementaryInitializerExpression
+	 *
+	 * Constraint:
+	 *     value=STExpression
+	 */
+	protected void sequence_STElementaryInitializerExpression(ISerializationContext context, STElementaryInitializerExpression semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ELEMENTARY_INITIALIZER_EXPRESSION__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ELEMENTARY_INITIALIZER_EXPRESSION__VALUE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTElementaryInitializerExpressionAccess().getValueSTExpressionParserRuleCall_0(), semanticObject.getValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     STElseIfPart returns STElseIfPart
 	 *
 	 * Constraint:
@@ -582,7 +600,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STFeatureExpression
 	 *     STExpression returns STFeatureExpression
 	 *     STSubrangeExpression returns STFeatureExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STFeatureExpression
@@ -657,7 +674,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STNumericLiteral
 	 *     STExpression returns STNumericLiteral
 	 *     STSubrangeExpression returns STNumericLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
@@ -756,7 +772,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STStringLiteral
 	 *     STExpression returns STStringLiteral
 	 *     STSubrangeExpression returns STStringLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STStringLiteral
@@ -794,7 +809,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STTimeLiteral
 	 *     STExpression returns STTimeLiteral
 	 *     STSubrangeExpression returns STTimeLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
@@ -841,7 +855,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STTimeOfDayLiteral
 	 *     STExpression returns STTimeOfDayLiteral
 	 *     STSubrangeExpression returns STTimeOfDayLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
@@ -888,7 +901,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     InitializerExpression returns STUnaryExpression
 	 *     STExpression returns STUnaryExpression
 	 *     STSubrangeExpression returns STUnaryExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STUnaryExpression
@@ -933,32 +945,19 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	
 	/**
 	 * Contexts:
-	 *     STStatement returns STWhileStatement
-	 *     STWhileStatement returns STWhileStatement
+	 *     STVarDeclarationBlock returns STVarDeclarationBlock
 	 *
 	 * Constraint:
-	 *     (condition=STExpression statements+=STStatement*)
+	 *     (constant?='CONSTANT'? varDeclarations+=STVarDeclaration*)
 	 */
-	protected void sequence_STWhileStatement(ISerializationContext context, STWhileStatement semanticObject) {
+	protected void sequence_STVarDeclarationBlock(ISerializationContext context, STVarDeclarationBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
-	 *     VarDeclarationBlock returns VarDeclarationBlock
-	 *
-	 * Constraint:
-	 *     (constant?='CONSTANT'? varDeclarations+=VarDeclaration*)
-	 */
-	protected void sequence_VarDeclarationBlock(ISerializationContext context, VarDeclarationBlock semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     VarDeclaration returns STVarDeclaration
+	 *     STVarDeclaration returns STVarDeclaration
 	 *
 	 * Constraint:
 	 *     (
@@ -967,46 +966,59 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *         (array?='ARRAY' ((ranges+=STExpression ranges+=STExpression*) | (count+='*' count+='*'*)))? 
 	 *         type=[INamedElement|STAnyType] 
 	 *         maxLength=STExpression? 
-	 *         defaultValue=InitializerExpression?
+	 *         defaultValue=STInitializerExpression?
 	 *     )
 	 */
-	protected void sequence_VarDeclaration(ISerializationContext context, STVarDeclaration semanticObject) {
+	protected void sequence_STVarDeclaration(ISerializationContext context, STVarDeclaration semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
-	 *     VarInputDeclarationBlock returns VarDeclarationBlock
+	 *     STVarInputDeclarationBlock returns STVarDeclarationBlock
 	 *
 	 * Constraint:
-	 *     (constant?='CONSTANT'? varDeclarations+=VarDeclaration*)
+	 *     (constant?='CONSTANT'? varDeclarations+=STVarDeclaration*)
 	 */
-	protected void sequence_VarInputDeclarationBlock(ISerializationContext context, VarDeclarationBlock semanticObject) {
+	protected void sequence_STVarInputDeclarationBlock(ISerializationContext context, STVarDeclarationBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
-	 *     VarOutputDeclarationBlock returns VarDeclarationBlock
+	 *     STVarOutputDeclarationBlock returns STVarDeclarationBlock
 	 *
 	 * Constraint:
-	 *     (constant?='CONSTANT'? varDeclarations+=VarDeclaration*)
+	 *     (constant?='CONSTANT'? varDeclarations+=STVarDeclaration*)
 	 */
-	protected void sequence_VarOutputDeclarationBlock(ISerializationContext context, VarDeclarationBlock semanticObject) {
+	protected void sequence_STVarOutputDeclarationBlock(ISerializationContext context, STVarDeclarationBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
-	 *     VarTempDeclarationBlock returns VarDeclarationBlock
+	 *     STVarTempDeclarationBlock returns STVarDeclarationBlock
 	 *
 	 * Constraint:
-	 *     (constant?='CONSTANT'? varDeclarations+=VarDeclaration*)
+	 *     (constant?='CONSTANT'? varDeclarations+=STVarDeclaration*)
 	 */
-	protected void sequence_VarTempDeclarationBlock(ISerializationContext context, VarDeclarationBlock semanticObject) {
+	protected void sequence_STVarTempDeclarationBlock(ISerializationContext context, STVarDeclarationBlock semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STStatement returns STWhileStatement
+	 *     STWhileStatement returns STWhileStatement
+	 *
+	 * Constraint:
+	 *     (condition=STExpression statements+=STStatement*)
+	 */
+	protected void sequence_STWhileStatement(ISerializationContext context, STWhileStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

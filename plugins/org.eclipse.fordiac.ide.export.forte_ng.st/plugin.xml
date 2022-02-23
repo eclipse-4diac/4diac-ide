@@ -10,7 +10,7 @@
                type="org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm">
          </source>
          <source
-               type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunction">
+               type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource">
          </source>
       </factory>
    </extension>

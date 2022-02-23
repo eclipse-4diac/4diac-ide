@@ -160,12 +160,12 @@ public interface STVarDeclaration extends INamedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Default Value</em>' containment reference.
-	 * @see #setDefaultValue(InitializerExpression)
+	 * @see #setDefaultValue(STInitializerExpression)
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTVarDeclaration_DefaultValue()
 	 * @model containment="true"
 	 * @generated
 	 */
-	InitializerExpression getDefaultValue();
+	STInitializerExpression getDefaultValue();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration#getDefaultValue <em>Default Value</em>}' containment reference.
@@ -175,6 +175,6 @@ public interface STVarDeclaration extends INamedElement {
 	 * @see #getDefaultValue()
 	 * @generated
 	 */
-	void setDefaultValue(InitializerExpression value);
+	void setDefaultValue(STInitializerExpression value);
 
 } // STVarDeclaration

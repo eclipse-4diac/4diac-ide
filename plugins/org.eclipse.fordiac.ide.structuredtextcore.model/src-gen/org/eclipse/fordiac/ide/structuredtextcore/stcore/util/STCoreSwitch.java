@@ -82,34 +82,48 @@ public class STCoreSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case STCorePackage.CODE: {
-				Code code = (Code)theEObject;
-				T result = caseCode(code);
+			case STCorePackage.ST_SOURCE: {
+				STSource stSource = (STSource)theEObject;
+				T result = caseSTSource(stSource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case STCorePackage.VAR_DECLARATION_BLOCK: {
-				VarDeclarationBlock varDeclarationBlock = (VarDeclarationBlock)theEObject;
-				T result = caseVarDeclarationBlock(varDeclarationBlock);
+			case STCorePackage.ST_CORE_SOURCE: {
+				STCoreSource stCoreSource = (STCoreSource)theEObject;
+				T result = caseSTCoreSource(stCoreSource);
+				if (result == null) result = caseSTSource(stCoreSource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case STCorePackage.INITIALIZER_EXPRESSION: {
-				InitializerExpression initializerExpression = (InitializerExpression)theEObject;
-				T result = caseInitializerExpression(initializerExpression);
+			case STCorePackage.ST_VAR_DECLARATION_BLOCK: {
+				STVarDeclarationBlock stVarDeclarationBlock = (STVarDeclarationBlock)theEObject;
+				T result = caseSTVarDeclarationBlock(stVarDeclarationBlock);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case STCorePackage.ARRAY_INITIALIZER_EXPRESSION: {
-				ArrayInitializerExpression arrayInitializerExpression = (ArrayInitializerExpression)theEObject;
-				T result = caseArrayInitializerExpression(arrayInitializerExpression);
-				if (result == null) result = caseInitializerExpression(arrayInitializerExpression);
+			case STCorePackage.ST_INITIALIZER_EXPRESSION: {
+				STInitializerExpression stInitializerExpression = (STInitializerExpression)theEObject;
+				T result = caseSTInitializerExpression(stInitializerExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case STCorePackage.ARRAY_INIT_ELEMENT: {
-				ArrayInitElement arrayInitElement = (ArrayInitElement)theEObject;
-				T result = caseArrayInitElement(arrayInitElement);
+			case STCorePackage.ST_ELEMENTARY_INITIALIZER_EXPRESSION: {
+				STElementaryInitializerExpression stElementaryInitializerExpression = (STElementaryInitializerExpression)theEObject;
+				T result = caseSTElementaryInitializerExpression(stElementaryInitializerExpression);
+				if (result == null) result = caseSTInitializerExpression(stElementaryInitializerExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION: {
+				STArrayInitializerExpression stArrayInitializerExpression = (STArrayInitializerExpression)theEObject;
+				T result = caseSTArrayInitializerExpression(stArrayInitializerExpression);
+				if (result == null) result = caseSTInitializerExpression(stArrayInitializerExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STCorePackage.ST_ARRAY_INIT_ELEMENT: {
+				STArrayInitElement stArrayInitElement = (STArrayInitElement)theEObject;
+				T result = caseSTArrayInitElement(stArrayInitElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -216,7 +230,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 			case STCorePackage.ST_EXPRESSION: {
 				STExpression stExpression = (STExpression)theEObject;
 				T result = caseSTExpression(stExpression);
-				if (result == null) result = caseInitializerExpression(stExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -224,7 +237,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STNumericLiteral stNumericLiteral = (STNumericLiteral)theEObject;
 				T result = caseSTNumericLiteral(stNumericLiteral);
 				if (result == null) result = caseSTExpression(stNumericLiteral);
-				if (result == null) result = caseInitializerExpression(stNumericLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -232,7 +244,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STDateLiteral stDateLiteral = (STDateLiteral)theEObject;
 				T result = caseSTDateLiteral(stDateLiteral);
 				if (result == null) result = caseSTExpression(stDateLiteral);
-				if (result == null) result = caseInitializerExpression(stDateLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -240,7 +251,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STTimeLiteral stTimeLiteral = (STTimeLiteral)theEObject;
 				T result = caseSTTimeLiteral(stTimeLiteral);
 				if (result == null) result = caseSTExpression(stTimeLiteral);
-				if (result == null) result = caseInitializerExpression(stTimeLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -248,7 +258,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STTimeOfDayLiteral stTimeOfDayLiteral = (STTimeOfDayLiteral)theEObject;
 				T result = caseSTTimeOfDayLiteral(stTimeOfDayLiteral);
 				if (result == null) result = caseSTExpression(stTimeOfDayLiteral);
-				if (result == null) result = caseInitializerExpression(stTimeOfDayLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -256,7 +265,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STDateAndTimeLiteral stDateAndTimeLiteral = (STDateAndTimeLiteral)theEObject;
 				T result = caseSTDateAndTimeLiteral(stDateAndTimeLiteral);
 				if (result == null) result = caseSTExpression(stDateAndTimeLiteral);
-				if (result == null) result = caseInitializerExpression(stDateAndTimeLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -264,7 +272,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STStringLiteral stStringLiteral = (STStringLiteral)theEObject;
 				T result = caseSTStringLiteral(stStringLiteral);
 				if (result == null) result = caseSTExpression(stStringLiteral);
-				if (result == null) result = caseInitializerExpression(stStringLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -307,7 +314,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STBinaryExpression stBinaryExpression = (STBinaryExpression)theEObject;
 				T result = caseSTBinaryExpression(stBinaryExpression);
 				if (result == null) result = caseSTExpression(stBinaryExpression);
-				if (result == null) result = caseInitializerExpression(stBinaryExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -315,7 +321,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STUnaryExpression stUnaryExpression = (STUnaryExpression)theEObject;
 				T result = caseSTUnaryExpression(stUnaryExpression);
 				if (result == null) result = caseSTExpression(stUnaryExpression);
-				if (result == null) result = caseInitializerExpression(stUnaryExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -323,7 +328,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STMemberAccessExpression stMemberAccessExpression = (STMemberAccessExpression)theEObject;
 				T result = caseSTMemberAccessExpression(stMemberAccessExpression);
 				if (result == null) result = caseSTExpression(stMemberAccessExpression);
-				if (result == null) result = caseInitializerExpression(stMemberAccessExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -331,7 +335,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STArrayAccessExpression stArrayAccessExpression = (STArrayAccessExpression)theEObject;
 				T result = caseSTArrayAccessExpression(stArrayAccessExpression);
 				if (result == null) result = caseSTExpression(stArrayAccessExpression);
-				if (result == null) result = caseInitializerExpression(stArrayAccessExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -339,7 +342,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STFeatureExpression stFeatureExpression = (STFeatureExpression)theEObject;
 				T result = caseSTFeatureExpression(stFeatureExpression);
 				if (result == null) result = caseSTExpression(stFeatureExpression);
-				if (result == null) result = caseInitializerExpression(stFeatureExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -347,7 +349,6 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STMultibitPartialExpression stMultibitPartialExpression = (STMultibitPartialExpression)theEObject;
 				T result = caseSTMultibitPartialExpression(stMultibitPartialExpression);
 				if (result == null) result = caseSTExpression(stMultibitPartialExpression);
-				if (result == null) result = caseInitializerExpression(stMultibitPartialExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -356,77 +357,107 @@ public class STCoreSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Code</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>ST Source</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Code</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>ST Source</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCode(Code object) {
+	public T caseSTSource(STSource object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Var Declaration Block</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Source</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Var Declaration Block</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Source</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseVarDeclarationBlock(VarDeclarationBlock object) {
+	public T caseSTCoreSource(STCoreSource object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Initializer Expression</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>ST Var Declaration Block</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Initializer Expression</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>ST Var Declaration Block</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseInitializerExpression(InitializerExpression object) {
+	public T caseSTVarDeclarationBlock(STVarDeclarationBlock object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Array Initializer Expression</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>ST Initializer Expression</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Array Initializer Expression</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>ST Initializer Expression</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseArrayInitializerExpression(ArrayInitializerExpression object) {
+	public T caseSTInitializerExpression(STInitializerExpression object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Array Init Element</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>ST Elementary Initializer Expression</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Array Init Element</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>ST Elementary Initializer Expression</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseArrayInitElement(ArrayInitElement object) {
+	public T caseSTElementaryInitializerExpression(STElementaryInitializerExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Array Initializer Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Array Initializer Expression</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTArrayInitializerExpression(STArrayInitializerExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Array Init Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Array Init Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTArrayInitElement(STArrayInitElement object) {
 		return null;
 	}
 

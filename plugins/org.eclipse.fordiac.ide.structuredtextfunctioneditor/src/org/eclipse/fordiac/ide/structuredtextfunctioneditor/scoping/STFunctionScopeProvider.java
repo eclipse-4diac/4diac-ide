@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.scoping;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunctionPackage;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.SimpleScope;
@@ -33,7 +33,7 @@ import org.eclipse.xtext.scoping.impl.SimpleScope;
 public class STFunctionScopeProvider extends AbstractSTFunctionScopeProvider {
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
-		if (reference == STFunctionPackage.Literals.FUNCTION_DEFINITION__RETURN_TYPE) {
+		if (reference == STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE) {
 			final IScope globalScope = super.getScope(context, reference);
 			return new SimpleScope(globalScope, Scopes.scopedElementsFor(DataTypeLibrary.getNonUserDefinedDataTypes()),
 					true);

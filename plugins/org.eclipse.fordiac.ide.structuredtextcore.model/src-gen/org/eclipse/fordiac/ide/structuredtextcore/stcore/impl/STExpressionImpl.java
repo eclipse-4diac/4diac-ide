@@ -18,7 +18,10 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 
@@ -29,7 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
  *
  * @generated
  */
-public class STExpressionImpl extends InitializerExpressionImpl implements STExpression {
+public class STExpressionImpl extends MinimalEObjectImpl.Container implements STExpression {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

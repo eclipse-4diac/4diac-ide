@@ -2,26 +2,30 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="stcore" nsURI="http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore"
     nsPrefix="stcore">
-  <eClassifiers xsi:type="ecore:EClass" name="Code">
+  <eClassifiers xsi:type="ecore:EClass" name="STSource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STCoreSource" eSuperTypes="#//STSource">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//STStatement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VarDeclarationBlock">
+  <eClassifiers xsi:type="ecore:EClass" name="STVarDeclarationBlock">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclarations" upperBound="-1"
-        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"
+        eType="#//STVarDeclaration" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STInitializerExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STElementaryInitializerExpression" eSuperTypes="#//STInitializerExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="InitializerExpression"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ArrayInitializerExpression" eSuperTypes="#//InitializerExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="STArrayInitializerExpression" eSuperTypes="#//STInitializerExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
-        eType="#//ArrayInitElement" containment="true"/>
+        eType="#//STArrayInitElement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ArrayInitElement">
+  <eClassifiers xsi:type="ecore:EClass" name="STArrayInitElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="indexOrInitExpression"
         eType="#//STExpression" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" eType="#//STExpression"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initExpressions" upperBound="-1"
+        eType="#//STExpression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STAssignmentStatement" eSuperTypes="#//STStatement">
@@ -106,14 +110,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STExpression" eSuperTypes="#//InitializerExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="STExpression">
     <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return null;"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="BinaryOperator">
+  <eClassifiers xsi:type="ecore:EEnum" name="STBinaryOperator">
     <eLiterals name="Range" literal=".."/>
     <eLiterals name="OR" value="1" literal="OR"/>
     <eLiterals name="XOR" value="2" literal="XOR"/>
@@ -132,7 +136,7 @@
     <eLiterals name="MOD" value="15" literal="MOD"/>
     <eLiterals name="POWER" value="16" literal="**"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="UnaryOperator">
+  <eClassifiers xsi:type="ecore:EEnum" name="STUnaryOperator">
     <eLiterals name="MINUS" literal="-"/>
     <eLiterals name="PLUS" value="1" literal="+"/>
     <eLiterals name="NOT" value="2" literal="NOT"/>
@@ -208,7 +212,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="maxLength" eType="#//STExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" eType="#//InitializerExpression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" eType="#//STInitializerExpression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STReturn" eSuperTypes="#//STStatement"/>
@@ -223,7 +227,7 @@
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//BinaryOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//STBinaryOperator"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
@@ -233,7 +237,7 @@
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//UnaryOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//STUnaryOperator"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>

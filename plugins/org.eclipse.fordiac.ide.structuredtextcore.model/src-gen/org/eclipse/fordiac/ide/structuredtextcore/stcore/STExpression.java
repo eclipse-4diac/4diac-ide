@@ -16,8 +16,9 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,8 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * @model
  * @generated
  */
-public interface STExpression extends InitializerExpression {
-
+public interface STExpression extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -38,4 +38,5 @@ public interface STExpression extends InitializerExpression {
 	 * @generated
 	 */
 	INamedElement getResultType();
+
 } // STExpression

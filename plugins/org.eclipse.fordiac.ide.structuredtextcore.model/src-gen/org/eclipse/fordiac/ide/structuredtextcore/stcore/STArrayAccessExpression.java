@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**

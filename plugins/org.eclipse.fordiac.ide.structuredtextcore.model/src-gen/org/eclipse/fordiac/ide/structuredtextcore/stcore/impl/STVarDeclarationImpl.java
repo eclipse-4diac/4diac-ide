@@ -35,9 +35,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.InitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 
 /**
@@ -180,7 +180,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 * @ordered
 	 */
-	protected InitializerExpression defaultValue;
+	protected STInitializerExpression defaultValue;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -427,7 +427,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
-	public InitializerExpression getDefaultValue() {
+	public STInitializerExpression getDefaultValue() {
 		return defaultValue;
 	}
 
@@ -436,8 +436,8 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetDefaultValue(InitializerExpression newDefaultValue, NotificationChain msgs) {
-		InitializerExpression oldDefaultValue = defaultValue;
+	public NotificationChain basicSetDefaultValue(STInitializerExpression newDefaultValue, NotificationChain msgs) {
+		STInitializerExpression oldDefaultValue = defaultValue;
 		defaultValue = newDefaultValue;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE, oldDefaultValue, newDefaultValue);
@@ -452,7 +452,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
-	public void setDefaultValue(InitializerExpression newDefaultValue) {
+	public void setDefaultValue(STInitializerExpression newDefaultValue) {
 		if (newDefaultValue != defaultValue) {
 			NotificationChain msgs = null;
 			if (defaultValue != null)
@@ -554,7 +554,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 				setMaxLength((STExpression)newValue);
 				return;
 			case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
-				setDefaultValue((InitializerExpression)newValue);
+				setDefaultValue((STInitializerExpression)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -595,7 +595,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 				setMaxLength((STExpression)null);
 				return;
 			case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
-				setDefaultValue((InitializerExpression)null);
+				setDefaultValue((STInitializerExpression)null);
 				return;
 			default:
 				super.eUnset(featureID);

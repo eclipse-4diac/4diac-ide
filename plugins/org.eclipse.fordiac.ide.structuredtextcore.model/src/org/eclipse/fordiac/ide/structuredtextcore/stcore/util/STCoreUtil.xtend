@@ -12,14 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 
 final class STCoreUtil {
 
 	private new() {
 	}
 
-	def static boolean isArithmetic(BinaryOperator operator) {
+	def static boolean isArithmetic(STBinaryOperator operator) {
 		switch (operator) {
 			case ADD,
 			case SUB,
@@ -35,7 +35,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static boolean isComparison(BinaryOperator operator) {
+	def static boolean isComparison(STBinaryOperator operator) {
 		switch (operator) {
 			case EQ,
 			case NE,
@@ -47,7 +47,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static boolean isLogical(BinaryOperator operator) {
+	def static boolean isLogical(STBinaryOperator operator) {
 		switch (operator) {
 			case AMPERSAND,
 			case AND,

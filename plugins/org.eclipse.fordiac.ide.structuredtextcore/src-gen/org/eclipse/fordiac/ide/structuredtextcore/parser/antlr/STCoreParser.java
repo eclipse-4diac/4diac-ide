@@ -27,7 +27,7 @@ public class STCoreParser extends AbstractAntlrParser {
 
 	@Override 
 	protected String getDefaultRuleName() {
-		return "Code";
+		return "STCoreSource";
 	}
 
 	public STCoreGrammarAccess getGrammarAccess() {

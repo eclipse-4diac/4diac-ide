@@ -33,15 +33,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
-import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmBody
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -169,7 +169,7 @@ class StructuredTextEvaluatorTest {
 
 	@ParameterizedTest(name="{index}: {0} {1}#{2}")
 	@MethodSource("testUnaryExpressionArgumentsProvider")
-	def void testUnaryExpression(UnaryOperator operator, String typeName, BigDecimal value) {
+	def void testUnaryExpression(STUnaryOperator operator, String typeName, BigDecimal value) {
 		val type = ElementaryTypes.getTypeByName(typeName)
 		switch (operator) {
 			case PLUS: value.abs
@@ -186,9 +186,9 @@ class StructuredTextEvaluatorTest {
 				#["0", "1", "-1", "17", "-4"].reject [
 					(type instanceof AnyUnsignedType && contains('-')) || (type instanceof BoolType && length > 1)
 				].flatMap [ value |
-					UnaryOperator.VALUES.reject [
-						(type instanceof AnyRealType && it == UnaryOperator.NOT) ||
-							(type instanceof BoolType && it != UnaryOperator.NOT)
+					STUnaryOperator.VALUES.reject [
+						(type instanceof AnyRealType && it == STUnaryOperator.NOT) ||
+							(type instanceof BoolType && it != STUnaryOperator.NOT)
 					].map [ operator |
 						arguments(operator, type.name, value)
 					]
@@ -209,7 +209,7 @@ class StructuredTextEvaluatorTest {
 
 	@ParameterizedTest(name="{index}: {1}#{2} {0} {1}#{3}")
 	@MethodSource("testBinaryExpressionArgumentsProvider")
-	def void testBinaryExpression(BinaryOperator operator, String typeName, BigDecimal first, BigDecimal second) {
+	def void testBinaryExpression(STBinaryOperator operator, String typeName, BigDecimal first, BigDecimal second) {
 		val type = ElementaryTypes.getTypeByName(typeName)
 		val resultType = if(operator.isComparison) ElementaryTypes.BOOL else type
 		switch (operator) {
@@ -263,8 +263,8 @@ class StructuredTextEvaluatorTest {
 				#["0", "1", "-1", "17", "-4"].reject [
 					(type instanceof AnyUnsignedType && contains('-')) || (type instanceof BoolType && length > 1)
 				].flatMap [ value |
-					BinaryOperator.VALUES.reject [
-						it == BinaryOperator.RANGE || (type instanceof AnyIntType && it == BinaryOperator.POWER) ||
+					STBinaryOperator.VALUES.reject [
+						it == STBinaryOperator.RANGE || (type instanceof AnyIntType && it == STBinaryOperator.POWER) ||
 							(type instanceof AnyRealType && isLogical) || (type instanceof BoolType && !isLogical)
 					].flatMap [ operator |
 						#[

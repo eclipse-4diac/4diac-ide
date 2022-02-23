@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>ST Unary Expression</b></em>'.
@@ -39,28 +38,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 public interface STUnaryExpression extends STExpression {
 	/**
 	 * Returns the value of the '<em><b>Op</b></em>' attribute.
-	 * The literals are from the enumeration {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator}.
+	 * The literals are from the enumeration {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Op</em>' attribute.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator
-	 * @see #setOp(UnaryOperator)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
+	 * @see #setOp(STUnaryOperator)
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTUnaryExpression_Op()
 	 * @model
 	 * @generated
 	 */
-	UnaryOperator getOp();
+	STUnaryOperator getOp();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression#getOp <em>Op</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Op</em>' attribute.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 	 * @see #getOp()
 	 * @generated
 	 */
-	void setOp(UnaryOperator value);
+	void setOp(STUnaryOperator value);
 
 	/**
 	 * Returns the value of the '<em><b>Expression</b></em>' containment reference.

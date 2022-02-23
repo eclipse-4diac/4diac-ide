@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>ST Binary Expression</b></em>'.
@@ -62,28 +61,28 @@ public interface STBinaryExpression extends STExpression {
 
 	/**
 	 * Returns the value of the '<em><b>Op</b></em>' attribute.
-	 * The literals are from the enumeration {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator}.
+	 * The literals are from the enumeration {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Op</em>' attribute.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator
-	 * @see #setOp(BinaryOperator)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+	 * @see #setOp(STBinaryOperator)
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTBinaryExpression_Op()
 	 * @model
 	 * @generated
 	 */
-	BinaryOperator getOp();
+	STBinaryOperator getOp();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression#getOp <em>Op</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Op</em>' attribute.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 	 * @see #getOp()
 	 * @generated
 	 */
-	void setOp(BinaryOperator value);
+	void setOp(STBinaryOperator value);
 
 	/**
 	 * Returns the value of the '<em><b>Right</b></em>' containment reference.

@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -75,11 +76,13 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case STCorePackage.CODE: return createCode();
-			case STCorePackage.VAR_DECLARATION_BLOCK: return createVarDeclarationBlock();
-			case STCorePackage.INITIALIZER_EXPRESSION: return createInitializerExpression();
-			case STCorePackage.ARRAY_INITIALIZER_EXPRESSION: return createArrayInitializerExpression();
-			case STCorePackage.ARRAY_INIT_ELEMENT: return createArrayInitElement();
+			case STCorePackage.ST_SOURCE: return createSTSource();
+			case STCorePackage.ST_CORE_SOURCE: return createSTCoreSource();
+			case STCorePackage.ST_VAR_DECLARATION_BLOCK: return createSTVarDeclarationBlock();
+			case STCorePackage.ST_INITIALIZER_EXPRESSION: return createSTInitializerExpression();
+			case STCorePackage.ST_ELEMENTARY_INITIALIZER_EXPRESSION: return createSTElementaryInitializerExpression();
+			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION: return createSTArrayInitializerExpression();
+			case STCorePackage.ST_ARRAY_INIT_ELEMENT: return createSTArrayInitElement();
 			case STCorePackage.ST_STATEMENT: return createSTStatement();
 			case STCorePackage.ST_ASSIGNMENT_STATEMENT: return createSTAssignmentStatement();
 			case STCorePackage.ST_CALL_STATEMENT: return createSTCallStatement();
@@ -126,10 +129,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case STCorePackage.BINARY_OPERATOR:
-				return createBinaryOperatorFromString(eDataType, initialValue);
-			case STCorePackage.UNARY_OPERATOR:
-				return createUnaryOperatorFromString(eDataType, initialValue);
+			case STCorePackage.ST_BINARY_OPERATOR:
+				return createSTBinaryOperatorFromString(eDataType, initialValue);
+			case STCorePackage.ST_UNARY_OPERATOR:
+				return createSTUnaryOperatorFromString(eDataType, initialValue);
 			case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
 				return createSTMultiBitAccessSpecifierFromString(eDataType, initialValue);
 			case STCorePackage.ST_DATE:
@@ -153,10 +156,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case STCorePackage.BINARY_OPERATOR:
-				return convertBinaryOperatorToString(eDataType, instanceValue);
-			case STCorePackage.UNARY_OPERATOR:
-				return convertUnaryOperatorToString(eDataType, instanceValue);
+			case STCorePackage.ST_BINARY_OPERATOR:
+				return convertSTBinaryOperatorToString(eDataType, instanceValue);
+			case STCorePackage.ST_UNARY_OPERATOR:
+				return convertSTUnaryOperatorToString(eDataType, instanceValue);
 			case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
 				return convertSTMultiBitAccessSpecifierToString(eDataType, instanceValue);
 			case STCorePackage.ST_DATE:
@@ -178,9 +181,9 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	@Override
-	public Code createCode() {
-		CodeImpl code = new CodeImpl();
-		return code;
+	public STSource createSTSource() {
+		STSourceImpl stSource = new STSourceImpl();
+		return stSource;
 	}
 
 	/**
@@ -189,9 +192,9 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	@Override
-	public VarDeclarationBlock createVarDeclarationBlock() {
-		VarDeclarationBlockImpl varDeclarationBlock = new VarDeclarationBlockImpl();
-		return varDeclarationBlock;
+	public STCoreSource createSTCoreSource() {
+		STCoreSourceImpl stCoreSource = new STCoreSourceImpl();
+		return stCoreSource;
 	}
 
 	/**
@@ -200,9 +203,9 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	@Override
-	public InitializerExpression createInitializerExpression() {
-		InitializerExpressionImpl initializerExpression = new InitializerExpressionImpl();
-		return initializerExpression;
+	public STVarDeclarationBlock createSTVarDeclarationBlock() {
+		STVarDeclarationBlockImpl stVarDeclarationBlock = new STVarDeclarationBlockImpl();
+		return stVarDeclarationBlock;
 	}
 
 	/**
@@ -211,9 +214,9 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	@Override
-	public ArrayInitializerExpression createArrayInitializerExpression() {
-		ArrayInitializerExpressionImpl arrayInitializerExpression = new ArrayInitializerExpressionImpl();
-		return arrayInitializerExpression;
+	public STInitializerExpression createSTInitializerExpression() {
+		STInitializerExpressionImpl stInitializerExpression = new STInitializerExpressionImpl();
+		return stInitializerExpression;
 	}
 
 	/**
@@ -222,9 +225,31 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	@Override
-	public ArrayInitElement createArrayInitElement() {
-		ArrayInitElementImpl arrayInitElement = new ArrayInitElementImpl();
-		return arrayInitElement;
+	public STElementaryInitializerExpression createSTElementaryInitializerExpression() {
+		STElementaryInitializerExpressionImpl stElementaryInitializerExpression = new STElementaryInitializerExpressionImpl();
+		return stElementaryInitializerExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STArrayInitializerExpression createSTArrayInitializerExpression() {
+		STArrayInitializerExpressionImpl stArrayInitializerExpression = new STArrayInitializerExpressionImpl();
+		return stArrayInitializerExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STArrayInitElement createSTArrayInitElement() {
+		STArrayInitElementImpl stArrayInitElement = new STArrayInitElementImpl();
+		return stArrayInitElement;
 	}
 
 	/**
@@ -595,8 +620,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public BinaryOperator createBinaryOperatorFromString(EDataType eDataType, String initialValue) {
-		BinaryOperator result = BinaryOperator.get(initialValue);
+	public STBinaryOperator createSTBinaryOperatorFromString(EDataType eDataType, String initialValue) {
+		STBinaryOperator result = STBinaryOperator.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
@@ -606,7 +631,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertBinaryOperatorToString(EDataType eDataType, Object instanceValue) {
+	public String convertSTBinaryOperatorToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
@@ -615,8 +640,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public UnaryOperator createUnaryOperatorFromString(EDataType eDataType, String initialValue) {
-		UnaryOperator result = UnaryOperator.get(initialValue);
+	public STUnaryOperator createSTUnaryOperatorFromString(EDataType eDataType, String initialValue) {
+		STUnaryOperator result = STUnaryOperator.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
@@ -626,7 +651,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertUnaryOperatorToString(EDataType eDataType, Object instanceValue) {
+	public String convertSTUnaryOperatorToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

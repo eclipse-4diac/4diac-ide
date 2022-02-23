@@ -33,9 +33,9 @@ import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
@@ -65,9 +66,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
@@ -81,13 +82,13 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	override getWarnings() { emptyList }
 
-	def protected CharSequence generateLocalVariables(List<VarDeclarationBlock> blocks, boolean temp) '''
+	def protected CharSequence generateLocalVariables(List<STVarDeclarationBlock> blocks, boolean temp) '''
 		«FOR block : blocks»
 			«block.generateLocalVariableBlock(temp)»
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateLocalVariableBlock(VarDeclarationBlock block, boolean temp) '''
+	def protected CharSequence generateLocalVariableBlock(STVarDeclarationBlock block, boolean temp) '''
 		«FOR variable : block.varDeclarations.filter(STVarDeclaration)»
 			«variable.generateLocalVariable(temp, block.constant)»
 		«ENDFOR»
@@ -100,15 +101,18 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			'''«IF !temp»static «ENDIF»«IF const»const «ENDIF»«variable.generateTypeName» «variable.generateFeatureName»«IF variable.defaultValue !== null» = «variable.defaultValue.generateInitializerExpression»«ENDIF»;'''
 	}
 
-	def protected dispatch CharSequence generateInitializerExpression(STExpression expr) {
-		expr.generateExpression
+	def protected dispatch CharSequence generateInitializerExpression(STElementaryInitializerExpression expr) {
+		expr.value.generateExpression
 	}
 
-	def protected dispatch CharSequence generateInitializerExpression(ArrayInitializerExpression expr) //
+	def protected dispatch CharSequence generateInitializerExpression(STArrayInitializerExpression expr) //
 	'''{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
 
-	def protected CharSequence generateArrayInitElement(ArrayInitElement elem) //
-	'''«IF elem.initExpression === null»«elem.indexOrInitExpression.generateExpression»«ELSE»«FOR i : 0..<elem.indexOrInitExpression.integerFromConstantExpression SEPARATOR ", "»«elem.initExpression.generateExpression»«ENDFOR»«ENDIF»'''
+	def protected CharSequence generateArrayInitElement(STArrayInitElement elem) //
+	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
+
+	def protected CharSequence generateMultiArrayInitElement(STArrayInitElement elem) //
+	'''«FOR i : 0..<elem.indexOrInitExpression.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateExpression»«ENDFOR»«ENDFOR»'''
 
 	def protected CharSequence generateStatementList(List<STStatement> statements) '''
 		«FOR statement : statements»
@@ -281,7 +285,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''st_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(FunctionDefinition feature) '''st_func_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''st_func_«feature.name»'''
 
 	def protected CharSequence generateTypeName(STVarDeclaration variable) {
 		if (variable.locatedAt !== null && variable.array) {

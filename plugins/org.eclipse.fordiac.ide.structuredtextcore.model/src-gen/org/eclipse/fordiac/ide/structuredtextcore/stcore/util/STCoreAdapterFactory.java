@@ -84,24 +84,32 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	protected STCoreSwitch<Adapter> modelSwitch =
 		new STCoreSwitch<Adapter>() {
 			@Override
-			public Adapter caseCode(Code object) {
-				return createCodeAdapter();
+			public Adapter caseSTSource(STSource object) {
+				return createSTSourceAdapter();
 			}
 			@Override
-			public Adapter caseVarDeclarationBlock(VarDeclarationBlock object) {
-				return createVarDeclarationBlockAdapter();
+			public Adapter caseSTCoreSource(STCoreSource object) {
+				return createSTCoreSourceAdapter();
 			}
 			@Override
-			public Adapter caseInitializerExpression(InitializerExpression object) {
-				return createInitializerExpressionAdapter();
+			public Adapter caseSTVarDeclarationBlock(STVarDeclarationBlock object) {
+				return createSTVarDeclarationBlockAdapter();
 			}
 			@Override
-			public Adapter caseArrayInitializerExpression(ArrayInitializerExpression object) {
-				return createArrayInitializerExpressionAdapter();
+			public Adapter caseSTInitializerExpression(STInitializerExpression object) {
+				return createSTInitializerExpressionAdapter();
 			}
 			@Override
-			public Adapter caseArrayInitElement(ArrayInitElement object) {
-				return createArrayInitElementAdapter();
+			public Adapter caseSTElementaryInitializerExpression(STElementaryInitializerExpression object) {
+				return createSTElementaryInitializerExpressionAdapter();
+			}
+			@Override
+			public Adapter caseSTArrayInitializerExpression(STArrayInitializerExpression object) {
+				return createSTArrayInitializerExpressionAdapter();
+			}
+			@Override
+			public Adapter caseSTArrayInitElement(STArrayInitElement object) {
+				return createSTArrayInitElementAdapter();
 			}
 			@Override
 			public Adapter caseSTStatement(STStatement object) {
@@ -260,72 +268,100 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.Code <em>Code</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource <em>ST Source</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.Code
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource
 	 * @generated
 	 */
-	public Adapter createCodeAdapter() {
+	public Adapter createSTSourceAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock <em>Var Declaration Block</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource <em>Source</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource
 	 * @generated
 	 */
-	public Adapter createVarDeclarationBlockAdapter() {
+	public Adapter createSTCoreSourceAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.InitializerExpression <em>Initializer Expression</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock <em>ST Var Declaration Block</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.InitializerExpression
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
 	 * @generated
 	 */
-	public Adapter createInitializerExpressionAdapter() {
+	public Adapter createSTVarDeclarationBlockAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression <em>Array Initializer Expression</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression <em>ST Initializer Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 	 * @generated
 	 */
-	public Adapter createArrayInitializerExpressionAdapter() {
+	public Adapter createSTInitializerExpressionAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement <em>Array Init Element</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression <em>ST Elementary Initializer Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
 	 * @generated
 	 */
-	public Adapter createArrayInitElementAdapter() {
+	public Adapter createSTElementaryInitializerExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression <em>ST Array Initializer Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
+	 * @generated
+	 */
+	public Adapter createSTArrayInitializerExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement <em>ST Array Init Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
+	 * @generated
+	 */
+	public Adapter createSTArrayInitElementAdapter() {
 		return null;
 	}
 

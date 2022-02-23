@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>ST Member Access Expression</b></em>'.

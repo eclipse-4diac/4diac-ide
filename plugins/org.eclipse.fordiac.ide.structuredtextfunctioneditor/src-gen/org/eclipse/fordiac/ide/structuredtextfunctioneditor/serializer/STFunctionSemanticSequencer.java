@@ -8,10 +8,9 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSequencer;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.Code;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
@@ -22,8 +21,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
@@ -41,12 +42,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock;
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition;
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunction;
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunctionPackage;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionGrammarAccess;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Parameter;
 import org.eclipse.xtext.ParserRule;
@@ -64,28 +65,16 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 		ParserRule rule = context.getParserRule();
 		Action action = context.getAssignedAction();
 		Set<Parameter> parameters = context.getEnabledBooleanParameters();
-		if (epackage == STFunctionPackage.eINSTANCE)
+		if (epackage == STCorePackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
-			case STFunctionPackage.FUNCTION_DEFINITION:
-				sequence_FunctionDefinition(context, (FunctionDefinition) semanticObject); 
-				return; 
-			case STFunctionPackage.ST_FUNCTION:
-				sequence_STFunction(context, (STFunction) semanticObject); 
-				return; 
-			}
-		else if (epackage == STCorePackage.eINSTANCE)
-			switch (semanticObject.eClass().getClassifierID()) {
-			case STCorePackage.ARRAY_INIT_ELEMENT:
-				sequence_ArrayInitElement(context, (ArrayInitElement) semanticObject); 
-				return; 
-			case STCorePackage.ARRAY_INITIALIZER_EXPRESSION:
-				sequence_ArrayInitializerExpression(context, (ArrayInitializerExpression) semanticObject); 
-				return; 
-			case STCorePackage.CODE:
-				sequence_Code(context, (Code) semanticObject); 
-				return; 
 			case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION:
 				sequence_STAccessExpression(context, (STArrayAccessExpression) semanticObject); 
+				return; 
+			case STCorePackage.ST_ARRAY_INIT_ELEMENT:
+				sequence_STArrayInitElement(context, (STArrayInitElement) semanticObject); 
+				return; 
+			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION:
+				sequence_STArrayInitializerExpression(context, (STArrayInitializerExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_ASSIGNMENT_STATEMENT:
 				sequence_STAssignmentStatement(context, (STAssignmentStatement) semanticObject); 
@@ -114,11 +103,17 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_CONTINUE:
 				sequence_STStatement(context, (STContinue) semanticObject); 
 				return; 
+			case STCorePackage.ST_CORE_SOURCE:
+				sequence_STCoreSource(context, (STCoreSource) semanticObject); 
+				return; 
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL:
 				sequence_STDateAndTimeLiteral(context, (STDateAndTimeLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_DATE_LITERAL:
 				sequence_STDateLiteral(context, (STDateLiteral) semanticObject); 
+				return; 
+			case STCorePackage.ST_ELEMENTARY_INITIALIZER_EXPRESSION:
+				sequence_STElementaryInitializerExpression(context, (STElementaryInitializerExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_ELSE_IF_PART:
 				sequence_STElseIfPart(context, (STElseIfPart) semanticObject); 
@@ -169,29 +164,38 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				sequence_STUnaryExpression(context, (STUnaryExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_VAR_DECLARATION:
-				sequence_VarDeclaration(context, (STVarDeclaration) semanticObject); 
+				sequence_STVarDeclaration(context, (STVarDeclaration) semanticObject); 
 				return; 
-			case STCorePackage.ST_WHILE_STATEMENT:
-				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
-				return; 
-			case STCorePackage.VAR_DECLARATION_BLOCK:
-				if (rule == grammarAccess.getVarDeclarationBlockRule()) {
-					sequence_VarDeclarationBlock(context, (VarDeclarationBlock) semanticObject); 
+			case STCorePackage.ST_VAR_DECLARATION_BLOCK:
+				if (rule == grammarAccess.getSTVarDeclarationBlockRule()) {
+					sequence_STVarDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
 					return; 
 				}
-				else if (rule == grammarAccess.getVarInputDeclarationBlockRule()) {
-					sequence_VarInputDeclarationBlock(context, (VarDeclarationBlock) semanticObject); 
+				else if (rule == grammarAccess.getSTVarInputDeclarationBlockRule()) {
+					sequence_STVarInputDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
 					return; 
 				}
-				else if (rule == grammarAccess.getVarOutputDeclarationBlockRule()) {
-					sequence_VarOutputDeclarationBlock(context, (VarDeclarationBlock) semanticObject); 
+				else if (rule == grammarAccess.getSTVarOutputDeclarationBlockRule()) {
+					sequence_STVarOutputDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
 					return; 
 				}
-				else if (rule == grammarAccess.getVarTempDeclarationBlockRule()) {
-					sequence_VarTempDeclarationBlock(context, (VarDeclarationBlock) semanticObject); 
+				else if (rule == grammarAccess.getSTVarTempDeclarationBlockRule()) {
+					sequence_STVarTempDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
 					return; 
 				}
 				else break;
+			case STCorePackage.ST_WHILE_STATEMENT:
+				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
+				return; 
+			}
+		else if (epackage == STFunctionPackage.eINSTANCE)
+			switch (semanticObject.eClass().getClassifierID()) {
+			case STFunctionPackage.ST_FUNCTION:
+				sequence_STFunction(context, (STFunction) semanticObject); 
+				return; 
+			case STFunctionPackage.ST_FUNCTION_SOURCE:
+				sequence_STFunctionSource(context, (STFunctionSource) semanticObject); 
+				return; 
 			}
 		if (errorAcceptor != null)
 			errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
@@ -199,22 +203,12 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 	
 	/**
 	 * Contexts:
-	 *     FunctionDefinition returns FunctionDefinition
+	 *     STFunctionSource returns STFunctionSource
 	 *
 	 * Constraint:
-	 *     (
-	 *         name=ID 
-	 *         returnType=[DataType|STAnyType]? 
-	 *         (
-	 *             varDeclarations+=VarDeclarationBlock | 
-	 *             varTempDeclarations+=VarTempDeclarationBlock | 
-	 *             varInpuDeclarations+=VarInputDeclarationBlock | 
-	 *             varOutputDeclarations+=VarOutputDeclarationBlock
-	 *         )* 
-	 *         code+=STStatement*
-	 *     )
+	 *     functions+=STFunction*
 	 */
-	protected void sequence_FunctionDefinition(ISerializationContext context, FunctionDefinition semanticObject) {
+	protected void sequence_STFunctionSource(ISerializationContext context, STFunctionSource semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -224,7 +218,17 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 	 *     STFunction returns STFunction
 	 *
 	 * Constraint:
-	 *     functions+=FunctionDefinition+
+	 *     (
+	 *         name=ID 
+	 *         returnType=[DataType|STAnyType]? 
+	 *         (
+	 *             varDeclarations+=STVarDeclarationBlock | 
+	 *             varTempDeclarations+=STVarTempDeclarationBlock | 
+	 *             varInputDeclarations+=STVarInputDeclarationBlock | 
+	 *             varOutputDeclarations+=STVarOutputDeclarationBlock
+	 *         )* 
+	 *         code+=STStatement*
+	 *     )
 	 */
 	protected void sequence_STFunction(ISerializationContext context, STFunction semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

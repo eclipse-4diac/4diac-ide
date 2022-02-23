@@ -25,8 +25,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator;
+
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 
@@ -64,7 +65,7 @@ public class STBinaryExpressionImpl extends STExpressionImpl implements STBinary
 	 * @generated
 	 * @ordered
 	 */
-	protected static final BinaryOperator OP_EDEFAULT = BinaryOperator.RANGE;
+	protected static final STBinaryOperator OP_EDEFAULT = STBinaryOperator.RANGE;
 
 	/**
 	 * The cached value of the '{@link #getOp() <em>Op</em>}' attribute.
@@ -74,7 +75,7 @@ public class STBinaryExpressionImpl extends STExpressionImpl implements STBinary
 	 * @generated
 	 * @ordered
 	 */
-	protected BinaryOperator op = OP_EDEFAULT;
+	protected STBinaryOperator op = OP_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getRight() <em>Right</em>}' containment reference.
@@ -156,7 +157,7 @@ public class STBinaryExpressionImpl extends STExpressionImpl implements STBinary
 	 * @generated
 	 */
 	@Override
-	public BinaryOperator getOp() {
+	public STBinaryOperator getOp() {
 		return op;
 	}
 
@@ -166,8 +167,8 @@ public class STBinaryExpressionImpl extends STExpressionImpl implements STBinary
 	 * @generated
 	 */
 	@Override
-	public void setOp(BinaryOperator newOp) {
-		BinaryOperator oldOp = op;
+	public void setOp(STBinaryOperator newOp) {
+		STBinaryOperator oldOp = op;
 		op = newOp == null ? OP_EDEFAULT : newOp;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_BINARY_EXPRESSION__OP, oldOp, op));
@@ -276,7 +277,7 @@ public class STBinaryExpressionImpl extends STExpressionImpl implements STBinary
 				setLeft((STExpression)newValue);
 				return;
 			case STCorePackage.ST_BINARY_EXPRESSION__OP:
-				setOp((BinaryOperator)newValue);
+				setOp((STBinaryOperator)newValue);
 				return;
 			case STCorePackage.ST_BINARY_EXPRESSION__RIGHT:
 				setRight((STExpression)newValue);

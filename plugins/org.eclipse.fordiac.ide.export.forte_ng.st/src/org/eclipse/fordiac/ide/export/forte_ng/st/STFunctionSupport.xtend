@@ -16,13 +16,13 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.FunctionDefinition
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunction
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 @FinalFieldsConstructor
 class STFunctionSupport extends StructuredTextSupport {
-	final STFunction function
+	final STFunctionSource function
 
 	override prepare(Map<?, ?> options) {
 		return true
@@ -36,31 +36,31 @@ class STFunctionSupport extends StructuredTextSupport {
 			function.generateStructuredTextFunctionImpl
 	}
 
-	def private CharSequence generateStructuredTextFunctionHeader(STFunction func) '''
-		«FOR definition : func.functions.filter(FunctionDefinition)»
+	def private CharSequence generateStructuredTextFunctionHeader(STFunctionSource func) '''
+		«FOR definition : func.functions.filter(STFunction)»
 			«definition.generateStructuredTextFunctionDeclaration»;
 			
 		«ENDFOR»
 	'''
 
-	def private CharSequence generateStructuredTextFunctionImpl(STFunction func) '''
-		«FOR definition : func.functions.filter(FunctionDefinition)»
+	def private CharSequence generateStructuredTextFunctionImpl(STFunctionSource func) '''
+		«FOR definition : func.functions.filter(STFunction)»
 			«definition.generateStructuredTextFunctionDeclaration» {
 			  «definition.generateStructuredTextFunctionBody»
 			}
 		«ENDFOR»
 	'''
 
-	def private CharSequence generateStructuredTextFunctionDeclaration(FunctionDefinition func) //
+	def private CharSequence generateStructuredTextFunctionDeclaration(STFunction func) //
 	'''«func.returnType?.generateTypeName ?: "void"» «func.generateFeatureName»(«func.generateStructuredTextFunctionInputs»«func.generateStructuredTextFunctionOutputs»)'''
 
-	def private CharSequence generateStructuredTextFunctionInputs(FunctionDefinition func) //
-	'''«FOR param : func.varInpuDeclarations.flatMap[varDeclarations].filter(STVarDeclaration) SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
+	def private CharSequence generateStructuredTextFunctionInputs(STFunction func) //
+	'''«FOR param : func.varInputDeclarations.flatMap[varDeclarations].filter(STVarDeclaration) SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
 
-	def private CharSequence generateStructuredTextFunctionOutputs(FunctionDefinition func) //
+	def private CharSequence generateStructuredTextFunctionOutputs(STFunction func) //
 	'''«FOR param : func.varOutputDeclarations.flatMap[varDeclarations].filter(STVarDeclaration) BEFORE "," SEPARATOR ", "»«param.generateTypeName» &«param.generateFeatureName»«ENDFOR»'''
 
-	def private CharSequence generateStructuredTextFunctionBody(FunctionDefinition func) '''
+	def private CharSequence generateStructuredTextFunctionBody(STFunction func) '''
 		«func.varDeclarations.generateLocalVariables(false)»
 		«func.varTempDeclarations.generateLocalVariables(true)»
 		

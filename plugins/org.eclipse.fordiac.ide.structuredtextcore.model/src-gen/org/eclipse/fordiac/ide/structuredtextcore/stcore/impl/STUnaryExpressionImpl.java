@@ -25,10 +25,11 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator;
 
 /**
  * <!-- begin-user-doc -->
@@ -53,7 +54,7 @@ public class STUnaryExpressionImpl extends STExpressionImpl implements STUnaryEx
 	 * @generated
 	 * @ordered
 	 */
-	protected static final UnaryOperator OP_EDEFAULT = UnaryOperator.MINUS;
+	protected static final STUnaryOperator OP_EDEFAULT = STUnaryOperator.MINUS;
 
 	/**
 	 * The cached value of the '{@link #getOp() <em>Op</em>}' attribute.
@@ -63,7 +64,7 @@ public class STUnaryExpressionImpl extends STExpressionImpl implements STUnaryEx
 	 * @generated
 	 * @ordered
 	 */
-	protected UnaryOperator op = OP_EDEFAULT;
+	protected STUnaryOperator op = OP_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
@@ -100,7 +101,7 @@ public class STUnaryExpressionImpl extends STExpressionImpl implements STUnaryEx
 	 * @generated
 	 */
 	@Override
-	public UnaryOperator getOp() {
+	public STUnaryOperator getOp() {
 		return op;
 	}
 
@@ -110,8 +111,8 @@ public class STUnaryExpressionImpl extends STExpressionImpl implements STUnaryEx
 	 * @generated
 	 */
 	@Override
-	public void setOp(UnaryOperator newOp) {
-		UnaryOperator oldOp = op;
+	public void setOp(STUnaryOperator newOp) {
+		STUnaryOperator oldOp = op;
 		op = newOp == null ? OP_EDEFAULT : newOp;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_UNARY_EXPRESSION__OP, oldOp, op));
@@ -213,7 +214,7 @@ public class STUnaryExpressionImpl extends STExpressionImpl implements STUnaryEx
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case STCorePackage.ST_UNARY_EXPRESSION__OP:
-				setOp((UnaryOperator)newValue);
+				setOp((STUnaryOperator)newValue);
 				return;
 			case STCorePackage.ST_UNARY_EXPRESSION__EXPRESSION:
 				setExpression((STExpression)newValue);

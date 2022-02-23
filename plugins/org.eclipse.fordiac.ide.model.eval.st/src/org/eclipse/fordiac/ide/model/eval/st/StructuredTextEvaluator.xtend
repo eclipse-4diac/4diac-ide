@@ -25,12 +25,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmBody
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
@@ -135,11 +136,11 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 				variable.defaultValue?.evaluateInitializerExpression))
 	}
 
-	def private dispatch Value evaluateInitializerExpression(STExpression expression) {
-		expression.evaluateExpression
+	def private dispatch Value evaluateInitializerExpression(STElementaryInitializerExpression expression) {
+		expression.value.evaluateExpression
 	}
 
-	def private dispatch Value evaluateInitializerExpression(ArrayInitializerExpression expression) {
+	def private dispatch Value evaluateInitializerExpression(STArrayInitializerExpression expression) {
 		throw new UnsupportedOperationException
 	}
 

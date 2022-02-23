@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import java.math.BigInteger;
+
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**

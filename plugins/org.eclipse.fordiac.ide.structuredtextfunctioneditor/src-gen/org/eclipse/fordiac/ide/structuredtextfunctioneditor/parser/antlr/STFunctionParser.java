@@ -27,7 +27,7 @@ public class STFunctionParser extends AbstractAntlrParser {
 
 	@Override 
 	protected String getDefaultRuleName() {
-		return "STFunction";
+		return "STFunctionSource";
 	}
 
 	public STFunctionGrammarAccess getGrammarAccess() {

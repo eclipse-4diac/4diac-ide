@@ -17,9 +17,9 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**

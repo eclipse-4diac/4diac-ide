@@ -13,29 +13,29 @@
     usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette">
   <genPackages prefix="STCore" basePackage="org.eclipse.fordiac.ide.structuredtextcore"
       disposableProviderFactory="true" fileExtensions="stcore" ecorePackage="STCore.ecore#/">
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//BinaryOperator">
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/Range"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/OR"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/XOR"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/AND"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/AMPERSAND"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/EQ"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/NE"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/LT"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/LE"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/GT"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/GE"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/ADD"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/SUB"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/MUL"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/DIV"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/MOD"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//BinaryOperator/POWER"/>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STBinaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/Range"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/OR"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/XOR"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/AMPERSAND"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/EQ"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/NE"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/LT"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/LE"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/GT"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/GE"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/ADD"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/SUB"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/MUL"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/DIV"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/MOD"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBinaryOperator/POWER"/>
     </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//UnaryOperator">
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//UnaryOperator/MINUS"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//UnaryOperator/PLUS"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//UnaryOperator/NOT"/>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STUnaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STUnaryOperator/MINUS"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STUnaryOperator/PLUS"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STUnaryOperator/NOT"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STMultiBitAccessSpecifier">
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/L"/>
@@ -48,20 +48,24 @@
     <genDataTypes ecoreDataType="STCore.ecore#//STTime"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STTimeOfDay"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STDateAndTime"/>
-    <genClasses ecoreClass="STCore.ecore#//Code">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//Code/statements"/>
+    <genClasses ecoreClass="STCore.ecore#//STSource"/>
+    <genClasses ecoreClass="STCore.ecore#//STCoreSource">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCoreSource/statements"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//VarDeclarationBlock">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//VarDeclarationBlock/constant"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//VarDeclarationBlock/varDeclarations"/>
+    <genClasses ecoreClass="STCore.ecore#//STVarDeclarationBlock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STVarDeclarationBlock/constant"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclarationBlock/varDeclarations"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//InitializerExpression"/>
-    <genClasses ecoreClass="STCore.ecore#//ArrayInitializerExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//ArrayInitializerExpression/values"/>
+    <genClasses ecoreClass="STCore.ecore#//STInitializerExpression"/>
+    <genClasses ecoreClass="STCore.ecore#//STElementaryInitializerExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STElementaryInitializerExpression/value"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//ArrayInitElement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//ArrayInitElement/indexOrInitExpression"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//ArrayInitElement/initExpression"/>
+    <genClasses ecoreClass="STCore.ecore#//STArrayInitializerExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayInitializerExpression/values"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STArrayInitElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayInitElement/indexOrInitExpression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayInitElement/initExpressions"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStatement"/>
     <genClasses ecoreClass="STCore.ecore#//STAssignmentStatement">

@@ -74,14 +74,33 @@ public interface STCorePackage extends EPackage {
 	STCorePackage eINSTANCE = org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.CodeImpl <em>Code</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl <em>ST Source</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.CodeImpl
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getCode()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTSource()
 	 * @generated
 	 */
-	int CODE = 0;
+	int ST_SOURCE = 0;
+
+	/**
+	 * The number of structural features of the '<em>ST Source</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_SOURCE_FEATURE_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCoreSourceImpl <em>Source</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCoreSourceImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCoreSource()
+	 * @generated
+	 */
+	int ST_CORE_SOURCE = 1;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -90,26 +109,26 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CODE__STATEMENTS = 0;
+	int ST_CORE_SOURCE__STATEMENTS = ST_SOURCE_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Code</em>' class.
+	 * The number of structural features of the '<em>Source</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CODE_FEATURE_COUNT = 1;
+	int ST_CORE_SOURCE_FEATURE_COUNT = ST_SOURCE_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.VarDeclarationBlockImpl <em>Var Declaration Block</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationBlockImpl <em>ST Var Declaration Block</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.VarDeclarationBlockImpl
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getVarDeclarationBlock()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationBlockImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarDeclarationBlock()
 	 * @generated
 	 */
-	int VAR_DECLARATION_BLOCK = 1;
+	int ST_VAR_DECLARATION_BLOCK = 2;
 
 	/**
 	 * The feature id for the '<em><b>Constant</b></em>' attribute.
@@ -118,7 +137,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VAR_DECLARATION_BLOCK__CONSTANT = 0;
+	int ST_VAR_DECLARATION_BLOCK__CONSTANT = 0;
 
 	/**
 	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
@@ -127,45 +146,73 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VAR_DECLARATION_BLOCK__VAR_DECLARATIONS = 1;
+	int ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS = 1;
 
 	/**
-	 * The number of structural features of the '<em>Var Declaration Block</em>' class.
+	 * The number of structural features of the '<em>ST Var Declaration Block</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VAR_DECLARATION_BLOCK_FEATURE_COUNT = 2;
+	int ST_VAR_DECLARATION_BLOCK_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.InitializerExpressionImpl <em>Initializer Expression</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STInitializerExpressionImpl <em>ST Initializer Expression</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.InitializerExpressionImpl
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getInitializerExpression()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STInitializerExpressionImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTInitializerExpression()
 	 * @generated
 	 */
-	int INITIALIZER_EXPRESSION = 2;
+	int ST_INITIALIZER_EXPRESSION = 3;
 
 	/**
-	 * The number of structural features of the '<em>Initializer Expression</em>' class.
+	 * The number of structural features of the '<em>ST Initializer Expression</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INITIALIZER_EXPRESSION_FEATURE_COUNT = 0;
+	int ST_INITIALIZER_EXPRESSION_FEATURE_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ArrayInitializerExpressionImpl <em>Array Initializer Expression</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STElementaryInitializerExpressionImpl <em>ST Elementary Initializer Expression</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ArrayInitializerExpressionImpl
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getArrayInitializerExpression()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STElementaryInitializerExpressionImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTElementaryInitializerExpression()
 	 * @generated
 	 */
-	int ARRAY_INITIALIZER_EXPRESSION = 3;
+	int ST_ELEMENTARY_INITIALIZER_EXPRESSION = 4;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_ELEMENTARY_INITIALIZER_EXPRESSION__VALUE = ST_INITIALIZER_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>ST Elementary Initializer Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_ELEMENTARY_INITIALIZER_EXPRESSION_FEATURE_COUNT = ST_INITIALIZER_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitializerExpressionImpl <em>ST Array Initializer Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitializerExpressionImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTArrayInitializerExpression()
+	 * @generated
+	 */
+	int ST_ARRAY_INITIALIZER_EXPRESSION = 5;
 
 	/**
 	 * The feature id for the '<em><b>Values</b></em>' containment reference list.
@@ -174,26 +221,26 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_INITIALIZER_EXPRESSION__VALUES = INITIALIZER_EXPRESSION_FEATURE_COUNT + 0;
+	int ST_ARRAY_INITIALIZER_EXPRESSION__VALUES = ST_INITIALIZER_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Array Initializer Expression</em>' class.
+	 * The number of structural features of the '<em>ST Array Initializer Expression</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_INITIALIZER_EXPRESSION_FEATURE_COUNT = INITIALIZER_EXPRESSION_FEATURE_COUNT + 1;
+	int ST_ARRAY_INITIALIZER_EXPRESSION_FEATURE_COUNT = ST_INITIALIZER_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ArrayInitElementImpl <em>Array Init Element</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitElementImpl <em>ST Array Init Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ArrayInitElementImpl
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getArrayInitElement()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitElementImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTArrayInitElement()
 	 * @generated
 	 */
-	int ARRAY_INIT_ELEMENT = 4;
+	int ST_ARRAY_INIT_ELEMENT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Index Or Init Expression</b></em>' containment reference.
@@ -202,25 +249,25 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION = 0;
+	int ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION = 0;
 
 	/**
-	 * The feature id for the '<em><b>Init Expression</b></em>' containment reference.
+	 * The feature id for the '<em><b>Init Expressions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_INIT_ELEMENT__INIT_EXPRESSION = 1;
+	int ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS = 1;
 
 	/**
-	 * The number of structural features of the '<em>Array Init Element</em>' class.
+	 * The number of structural features of the '<em>ST Array Init Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_INIT_ELEMENT_FEATURE_COUNT = 2;
+	int ST_ARRAY_INIT_ELEMENT_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStatementImpl <em>ST Statement</em>}' class.
@@ -230,7 +277,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTStatement()
 	 * @generated
 	 */
-	int ST_STATEMENT = 5;
+	int ST_STATEMENT = 7;
 
 	/**
 	 * The number of structural features of the '<em>ST Statement</em>' class.
@@ -249,7 +296,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTAssignmentStatement()
 	 * @generated
 	 */
-	int ST_ASSIGNMENT_STATEMENT = 6;
+	int ST_ASSIGNMENT_STATEMENT = 8;
 
 	/**
 	 * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -286,7 +333,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallStatement()
 	 * @generated
 	 */
-	int ST_CALL_STATEMENT = 7;
+	int ST_CALL_STATEMENT = 9;
 
 	/**
 	 * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -314,7 +361,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallArgument()
 	 * @generated
 	 */
-	int ST_CALL_ARGUMENT = 8;
+	int ST_CALL_ARGUMENT = 10;
 
 	/**
 	 * The number of structural features of the '<em>ST Call Argument</em>' class.
@@ -333,7 +380,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallUnnamedArgument()
 	 * @generated
 	 */
-	int ST_CALL_UNNAMED_ARGUMENT = 9;
+	int ST_CALL_UNNAMED_ARGUMENT = 11;
 
 	/**
 	 * The feature id for the '<em><b>Arg</b></em>' containment reference.
@@ -361,7 +408,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallNamedInputArgument()
 	 * @generated
 	 */
-	int ST_CALL_NAMED_INPUT_ARGUMENT = 10;
+	int ST_CALL_NAMED_INPUT_ARGUMENT = 12;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -398,7 +445,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallNamedOutputArgument()
 	 * @generated
 	 */
-	int ST_CALL_NAMED_OUTPUT_ARGUMENT = 11;
+	int ST_CALL_NAMED_OUTPUT_ARGUMENT = 13;
 
 	/**
 	 * The feature id for the '<em><b>Not</b></em>' attribute.
@@ -444,7 +491,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTIfStatement()
 	 * @generated
 	 */
-	int ST_IF_STATEMENT = 12;
+	int ST_IF_STATEMENT = 14;
 
 	/**
 	 * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -499,7 +546,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTElseIfPart()
 	 * @generated
 	 */
-	int ST_ELSE_IF_PART = 13;
+	int ST_ELSE_IF_PART = 15;
 
 	/**
 	 * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -536,7 +583,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCaseStatement()
 	 * @generated
 	 */
-	int ST_CASE_STATEMENT = 14;
+	int ST_CASE_STATEMENT = 16;
 
 	/**
 	 * The feature id for the '<em><b>Selector</b></em>' containment reference.
@@ -582,7 +629,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCaseCases()
 	 * @generated
 	 */
-	int ST_CASE_CASES = 15;
+	int ST_CASE_CASES = 17;
 
 	/**
 	 * The feature id for the '<em><b>Conditions</b></em>' containment reference list.
@@ -619,7 +666,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTElsePart()
 	 * @generated
 	 */
-	int ST_ELSE_PART = 16;
+	int ST_ELSE_PART = 18;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -647,7 +694,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTForStatement()
 	 * @generated
 	 */
-	int ST_FOR_STATEMENT = 17;
+	int ST_FOR_STATEMENT = 19;
 
 	/**
 	 * The feature id for the '<em><b>Variable</b></em>' reference.
@@ -711,7 +758,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTWhileStatement()
 	 * @generated
 	 */
-	int ST_WHILE_STATEMENT = 18;
+	int ST_WHILE_STATEMENT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -748,7 +795,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTRepeatStatement()
 	 * @generated
 	 */
-	int ST_REPEAT_STATEMENT = 19;
+	int ST_REPEAT_STATEMENT = 21;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -785,7 +832,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTExpression()
 	 * @generated
 	 */
-	int ST_EXPRESSION = 20;
+	int ST_EXPRESSION = 22;
 
 	/**
 	 * The number of structural features of the '<em>ST Expression</em>' class.
@@ -794,7 +841,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_EXPRESSION_FEATURE_COUNT = INITIALIZER_EXPRESSION_FEATURE_COUNT + 0;
+	int ST_EXPRESSION_FEATURE_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STNumericLiteralImpl <em>ST Numeric Literal</em>}' class.
@@ -804,7 +851,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTNumericLiteral()
 	 * @generated
 	 */
-	int ST_NUMERIC_LITERAL = 21;
+	int ST_NUMERIC_LITERAL = 23;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -841,7 +888,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateLiteral()
 	 * @generated
 	 */
-	int ST_DATE_LITERAL = 22;
+	int ST_DATE_LITERAL = 24;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -878,7 +925,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeLiteral()
 	 * @generated
 	 */
-	int ST_TIME_LITERAL = 23;
+	int ST_TIME_LITERAL = 25;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -915,7 +962,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDayLiteral()
 	 * @generated
 	 */
-	int ST_TIME_OF_DAY_LITERAL = 24;
+	int ST_TIME_OF_DAY_LITERAL = 26;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -952,7 +999,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTimeLiteral()
 	 * @generated
 	 */
-	int ST_DATE_AND_TIME_LITERAL = 25;
+	int ST_DATE_AND_TIME_LITERAL = 27;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -989,7 +1036,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTStringLiteral()
 	 * @generated
 	 */
-	int ST_STRING_LITERAL = 26;
+	int ST_STRING_LITERAL = 28;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -1026,7 +1073,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarDeclaration()
 	 * @generated
 	 */
-	int ST_VAR_DECLARATION = 27;
+	int ST_VAR_DECLARATION = 29;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1126,7 +1173,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTReturn()
 	 * @generated
 	 */
-	int ST_RETURN = 28;
+	int ST_RETURN = 30;
 
 	/**
 	 * The number of structural features of the '<em>ST Return</em>' class.
@@ -1145,7 +1192,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTContinue()
 	 * @generated
 	 */
-	int ST_CONTINUE = 29;
+	int ST_CONTINUE = 31;
 
 	/**
 	 * The number of structural features of the '<em>ST Continue</em>' class.
@@ -1164,7 +1211,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTExit()
 	 * @generated
 	 */
-	int ST_EXIT = 30;
+	int ST_EXIT = 32;
 
 	/**
 	 * The number of structural features of the '<em>ST Exit</em>' class.
@@ -1183,7 +1230,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTNop()
 	 * @generated
 	 */
-	int ST_NOP = 31;
+	int ST_NOP = 33;
 
 	/**
 	 * The number of structural features of the '<em>ST Nop</em>' class.
@@ -1202,7 +1249,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBinaryExpression()
 	 * @generated
 	 */
-	int ST_BINARY_EXPRESSION = 32;
+	int ST_BINARY_EXPRESSION = 34;
 
 	/**
 	 * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1248,7 +1295,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTUnaryExpression()
 	 * @generated
 	 */
-	int ST_UNARY_EXPRESSION = 33;
+	int ST_UNARY_EXPRESSION = 35;
 
 	/**
 	 * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1285,7 +1332,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMemberAccessExpression()
 	 * @generated
 	 */
-	int ST_MEMBER_ACCESS_EXPRESSION = 34;
+	int ST_MEMBER_ACCESS_EXPRESSION = 36;
 
 	/**
 	 * The feature id for the '<em><b>Receiver</b></em>' containment reference.
@@ -1322,7 +1369,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTArrayAccessExpression()
 	 * @generated
 	 */
-	int ST_ARRAY_ACCESS_EXPRESSION = 35;
+	int ST_ARRAY_ACCESS_EXPRESSION = 37;
 
 	/**
 	 * The feature id for the '<em><b>Receiver</b></em>' containment reference.
@@ -1359,7 +1406,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTFeatureExpression()
 	 * @generated
 	 */
-	int ST_FEATURE_EXPRESSION = 36;
+	int ST_FEATURE_EXPRESSION = 38;
 
 	/**
 	 * The feature id for the '<em><b>Feature</b></em>' reference.
@@ -1396,7 +1443,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMultibitPartialExpression()
 	 * @generated
 	 */
-	int ST_MULTIBIT_PARTIAL_EXPRESSION = 37;
+	int ST_MULTIBIT_PARTIAL_EXPRESSION = 39;
 
 	/**
 	 * The feature id for the '<em><b>Specifier</b></em>' attribute.
@@ -1435,24 +1482,24 @@ public interface STCorePackage extends EPackage {
 	int ST_MULTIBIT_PARTIAL_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator <em>Binary Operator</em>}' enum.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getBinaryOperator()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBinaryOperator()
 	 * @generated
 	 */
-	int BINARY_OPERATOR = 38;
+	int ST_BINARY_OPERATOR = 40;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator <em>Unary Operator</em>}' enum.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator <em>ST Unary Operator</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getUnaryOperator()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTUnaryOperator()
 	 * @generated
 	 */
-	int UNARY_OPERATOR = 39;
+	int ST_UNARY_OPERATOR = 41;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier <em>ST Multi Bit Access Specifier</em>}' enum.
@@ -1462,8 +1509,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMultiBitAccessSpecifier()
 	 * @generated
 	 */
-	int ST_MULTI_BIT_ACCESS_SPECIFIER = 40;
-
+	int ST_MULTI_BIT_ACCESS_SPECIFIER = 42;
 
 	/**
 	 * The meta object id for the '<em>ST Date</em>' data type.
@@ -1473,7 +1519,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDate()
 	 * @generated
 	 */
-	int ST_DATE = 41;
+	int ST_DATE = 43;
 
 	/**
 	 * The meta object id for the '<em>ST Time</em>' data type.
@@ -1483,7 +1529,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTime()
 	 * @generated
 	 */
-	int ST_TIME = 42;
+	int ST_TIME = 44;
 
 	/**
 	 * The meta object id for the '<em>ST Time Of Day</em>' data type.
@@ -1493,7 +1539,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDay()
 	 * @generated
 	 */
-	int ST_TIME_OF_DAY = 43;
+	int ST_TIME_OF_DAY = 45;
 
 	/**
 	 * The meta object id for the '<em>ST Date And Time</em>' data type.
@@ -1503,124 +1549,155 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTime()
 	 * @generated
 	 */
-	int ST_DATE_AND_TIME = 44;
+	int ST_DATE_AND_TIME = 46;
 
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.Code <em>Code</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource <em>ST Source</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Code</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.Code
+	 * @return the meta object for class '<em>ST Source</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource
 	 * @generated
 	 */
-	EClass getCode();
+	EClass getSTSource();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.Code#getStatements <em>Statements</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource <em>Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Source</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource
+	 * @generated
+	 */
+	EClass getSTCoreSource();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource#getStatements <em>Statements</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Statements</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.Code#getStatements()
-	 * @see #getCode()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource#getStatements()
+	 * @see #getSTCoreSource()
 	 * @generated
 	 */
-	EReference getCode_Statements();
+	EReference getSTCoreSource_Statements();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock <em>Var Declaration Block</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock <em>ST Var Declaration Block</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Var Declaration Block</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock
+	 * @return the meta object for class '<em>ST Var Declaration Block</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
 	 * @generated
 	 */
-	EClass getVarDeclarationBlock();
+	EClass getSTVarDeclarationBlock();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock#isConstant <em>Constant</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock#isConstant <em>Constant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Constant</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock#isConstant()
-	 * @see #getVarDeclarationBlock()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock#isConstant()
+	 * @see #getSTVarDeclarationBlock()
 	 * @generated
 	 */
-	EAttribute getVarDeclarationBlock_Constant();
+	EAttribute getSTVarDeclarationBlock_Constant();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock#getVarDeclarations <em>Var Declarations</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock#getVarDeclarations <em>Var Declarations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Var Declarations</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.VarDeclarationBlock#getVarDeclarations()
-	 * @see #getVarDeclarationBlock()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock#getVarDeclarations()
+	 * @see #getSTVarDeclarationBlock()
 	 * @generated
 	 */
-	EReference getVarDeclarationBlock_VarDeclarations();
+	EReference getSTVarDeclarationBlock_VarDeclarations();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.InitializerExpression <em>Initializer Expression</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression <em>ST Initializer Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Initializer Expression</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.InitializerExpression
+	 * @return the meta object for class '<em>ST Initializer Expression</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 	 * @generated
 	 */
-	EClass getInitializerExpression();
+	EClass getSTInitializerExpression();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression <em>Array Initializer Expression</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression <em>ST Elementary Initializer Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Array Initializer Expression</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression
+	 * @return the meta object for class '<em>ST Elementary Initializer Expression</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
 	 * @generated
 	 */
-	EClass getArrayInitializerExpression();
+	EClass getSTElementaryInitializerExpression();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression#getValues <em>Values</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression#getValue()
+	 * @see #getSTElementaryInitializerExpression()
+	 * @generated
+	 */
+	EReference getSTElementaryInitializerExpression_Value();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression <em>ST Array Initializer Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Array Initializer Expression</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
+	 * @generated
+	 */
+	EClass getSTArrayInitializerExpression();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression#getValues <em>Values</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Values</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitializerExpression#getValues()
-	 * @see #getArrayInitializerExpression()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression#getValues()
+	 * @see #getSTArrayInitializerExpression()
 	 * @generated
 	 */
-	EReference getArrayInitializerExpression_Values();
+	EReference getSTArrayInitializerExpression_Values();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement <em>Array Init Element</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement <em>ST Array Init Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Array Init Element</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement
+	 * @return the meta object for class '<em>ST Array Init Element</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 	 * @generated
 	 */
-	EClass getArrayInitElement();
+	EClass getSTArrayInitElement();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement#getIndexOrInitExpression <em>Index Or Init Expression</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement#getIndexOrInitExpression <em>Index Or Init Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Index Or Init Expression</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement#getIndexOrInitExpression()
-	 * @see #getArrayInitElement()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement#getIndexOrInitExpression()
+	 * @see #getSTArrayInitElement()
 	 * @generated
 	 */
-	EReference getArrayInitElement_IndexOrInitExpression();
+	EReference getSTArrayInitElement_IndexOrInitExpression();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement#getInitExpression <em>Init Expression</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement#getInitExpressions <em>Init Expressions</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Init Expression</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.ArrayInitElement#getInitExpression()
-	 * @see #getArrayInitElement()
+	 * @return the meta object for the containment reference list '<em>Init Expressions</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement#getInitExpressions()
+	 * @see #getSTArrayInitElement()
 	 * @generated
 	 */
-	EReference getArrayInitElement_InitExpression();
+	EReference getSTArrayInitElement_InitExpressions();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement <em>ST Statement</em>}'.
@@ -2646,24 +2723,24 @@ public interface STCorePackage extends EPackage {
 	EReference getSTMultibitPartialExpression_Expression();
 
 	/**
-	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator <em>Binary Operator</em>}'.
+	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Binary Operator</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator
+	 * @return the meta object for enum '<em>ST Binary Operator</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 	 * @generated
 	 */
-	EEnum getBinaryOperator();
+	EEnum getSTBinaryOperator();
 
 	/**
-	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator <em>Unary Operator</em>}'.
+	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator <em>ST Unary Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Unary Operator</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator
+	 * @return the meta object for enum '<em>ST Unary Operator</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 	 * @generated
 	 */
-	EEnum getUnaryOperator();
+	EEnum getSTUnaryOperator();
 
 	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier <em>ST Multi Bit Access Specifier</em>}'.
@@ -2742,14 +2819,24 @@ public interface STCorePackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.CodeImpl <em>Code</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl <em>ST Source</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.CodeImpl
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getCode()
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTSource()
 		 * @generated
 		 */
-		EClass CODE = eINSTANCE.getCode();
+		EClass ST_SOURCE = eINSTANCE.getSTSource();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCoreSourceImpl <em>Source</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCoreSourceImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCoreSource()
+		 * @generated
+		 */
+		EClass ST_CORE_SOURCE = eINSTANCE.getSTCoreSource();
 
 		/**
 		 * The meta object literal for the '<em><b>Statements</b></em>' containment reference list feature.
@@ -2757,17 +2844,17 @@ public interface STCorePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CODE__STATEMENTS = eINSTANCE.getCode_Statements();
+		EReference ST_CORE_SOURCE__STATEMENTS = eINSTANCE.getSTCoreSource_Statements();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.VarDeclarationBlockImpl <em>Var Declaration Block</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationBlockImpl <em>ST Var Declaration Block</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.VarDeclarationBlockImpl
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getVarDeclarationBlock()
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationBlockImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarDeclarationBlock()
 		 * @generated
 		 */
-		EClass VAR_DECLARATION_BLOCK = eINSTANCE.getVarDeclarationBlock();
+		EClass ST_VAR_DECLARATION_BLOCK = eINSTANCE.getSTVarDeclarationBlock();
 
 		/**
 		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
@@ -2775,7 +2862,7 @@ public interface STCorePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VAR_DECLARATION_BLOCK__CONSTANT = eINSTANCE.getVarDeclarationBlock_Constant();
+		EAttribute ST_VAR_DECLARATION_BLOCK__CONSTANT = eINSTANCE.getSTVarDeclarationBlock_Constant();
 
 		/**
 		 * The meta object literal for the '<em><b>Var Declarations</b></em>' containment reference list feature.
@@ -2783,27 +2870,45 @@ public interface STCorePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VAR_DECLARATION_BLOCK__VAR_DECLARATIONS = eINSTANCE.getVarDeclarationBlock_VarDeclarations();
+		EReference ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS = eINSTANCE.getSTVarDeclarationBlock_VarDeclarations();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.InitializerExpressionImpl <em>Initializer Expression</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STInitializerExpressionImpl <em>ST Initializer Expression</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.InitializerExpressionImpl
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getInitializerExpression()
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STInitializerExpressionImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTInitializerExpression()
 		 * @generated
 		 */
-		EClass INITIALIZER_EXPRESSION = eINSTANCE.getInitializerExpression();
+		EClass ST_INITIALIZER_EXPRESSION = eINSTANCE.getSTInitializerExpression();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ArrayInitializerExpressionImpl <em>Array Initializer Expression</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STElementaryInitializerExpressionImpl <em>ST Elementary Initializer Expression</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ArrayInitializerExpressionImpl
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getArrayInitializerExpression()
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STElementaryInitializerExpressionImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTElementaryInitializerExpression()
 		 * @generated
 		 */
-		EClass ARRAY_INITIALIZER_EXPRESSION = eINSTANCE.getArrayInitializerExpression();
+		EClass ST_ELEMENTARY_INITIALIZER_EXPRESSION = eINSTANCE.getSTElementaryInitializerExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_ELEMENTARY_INITIALIZER_EXPRESSION__VALUE = eINSTANCE.getSTElementaryInitializerExpression_Value();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitializerExpressionImpl <em>ST Array Initializer Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitializerExpressionImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTArrayInitializerExpression()
+		 * @generated
+		 */
+		EClass ST_ARRAY_INITIALIZER_EXPRESSION = eINSTANCE.getSTArrayInitializerExpression();
 
 		/**
 		 * The meta object literal for the '<em><b>Values</b></em>' containment reference list feature.
@@ -2811,17 +2916,17 @@ public interface STCorePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ARRAY_INITIALIZER_EXPRESSION__VALUES = eINSTANCE.getArrayInitializerExpression_Values();
+		EReference ST_ARRAY_INITIALIZER_EXPRESSION__VALUES = eINSTANCE.getSTArrayInitializerExpression_Values();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ArrayInitElementImpl <em>Array Init Element</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitElementImpl <em>ST Array Init Element</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ArrayInitElementImpl
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getArrayInitElement()
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitElementImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTArrayInitElement()
 		 * @generated
 		 */
-		EClass ARRAY_INIT_ELEMENT = eINSTANCE.getArrayInitElement();
+		EClass ST_ARRAY_INIT_ELEMENT = eINSTANCE.getSTArrayInitElement();
 
 		/**
 		 * The meta object literal for the '<em><b>Index Or Init Expression</b></em>' containment reference feature.
@@ -2829,15 +2934,15 @@ public interface STCorePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION = eINSTANCE.getArrayInitElement_IndexOrInitExpression();
+		EReference ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION = eINSTANCE.getSTArrayInitElement_IndexOrInitExpression();
 
 		/**
-		 * The meta object literal for the '<em><b>Init Expression</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Init Expressions</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ARRAY_INIT_ELEMENT__INIT_EXPRESSION = eINSTANCE.getArrayInitElement_InitExpression();
+		EReference ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS = eINSTANCE.getSTArrayInitElement_InitExpressions();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStatementImpl <em>ST Statement</em>}' class.
@@ -3674,24 +3779,24 @@ public interface STCorePackage extends EPackage {
 		EReference ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION = eINSTANCE.getSTMultibitPartialExpression_Expression();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator <em>Binary Operator</em>}' enum.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getBinaryOperator()
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBinaryOperator()
 		 * @generated
 		 */
-		EEnum BINARY_OPERATOR = eINSTANCE.getBinaryOperator();
+		EEnum ST_BINARY_OPERATOR = eINSTANCE.getSTBinaryOperator();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator <em>Unary Operator</em>}' enum.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator <em>ST Unary Operator</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.UnaryOperator
-		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getUnaryOperator()
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTUnaryOperator()
 		 * @generated
 		 */
-		EEnum UNARY_OPERATOR = eINSTANCE.getUnaryOperator();
+		EEnum ST_UNARY_OPERATOR = eINSTANCE.getSTUnaryOperator();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier <em>ST Multi Bit Access Specifier</em>}' enum.

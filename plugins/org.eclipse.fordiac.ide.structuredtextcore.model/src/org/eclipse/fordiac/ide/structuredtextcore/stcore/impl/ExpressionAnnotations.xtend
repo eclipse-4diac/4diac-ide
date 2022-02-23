@@ -20,9 +20,9 @@ import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
@@ -99,7 +99,7 @@ final package class ExpressionAnnotations {
 
 	def private static Subrange toSubrange(STExpression expr) {
 		switch (expr) {
-			STBinaryExpression case expr.op === BinaryOperator.RANGE:
+			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
 				newSubrange(expr.left.asConstantInt, expr.right.asConstantInt)
 			default:
 				newSubrange(0, expr.asConstantInt)

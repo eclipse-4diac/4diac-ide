@@ -36,49 +36,67 @@ public interface STCoreFactory extends EFactory {
 	STCoreFactory eINSTANCE = org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCoreFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Code</em>'.
+	 * Returns a new object of class '<em>ST Source</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Code</em>'.
+	 * @return a new object of class '<em>ST Source</em>'.
 	 * @generated
 	 */
-	Code createCode();
+	STSource createSTSource();
 
 	/**
-	 * Returns a new object of class '<em>Var Declaration Block</em>'.
+	 * Returns a new object of class '<em>Source</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Var Declaration Block</em>'.
+	 * @return a new object of class '<em>Source</em>'.
 	 * @generated
 	 */
-	VarDeclarationBlock createVarDeclarationBlock();
+	STCoreSource createSTCoreSource();
 
 	/**
-	 * Returns a new object of class '<em>Initializer Expression</em>'.
+	 * Returns a new object of class '<em>ST Var Declaration Block</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Initializer Expression</em>'.
+	 * @return a new object of class '<em>ST Var Declaration Block</em>'.
 	 * @generated
 	 */
-	InitializerExpression createInitializerExpression();
+	STVarDeclarationBlock createSTVarDeclarationBlock();
 
 	/**
-	 * Returns a new object of class '<em>Array Initializer Expression</em>'.
+	 * Returns a new object of class '<em>ST Initializer Expression</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Array Initializer Expression</em>'.
+	 * @return a new object of class '<em>ST Initializer Expression</em>'.
 	 * @generated
 	 */
-	ArrayInitializerExpression createArrayInitializerExpression();
+	STInitializerExpression createSTInitializerExpression();
 
 	/**
-	 * Returns a new object of class '<em>Array Init Element</em>'.
+	 * Returns a new object of class '<em>ST Elementary Initializer Expression</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Array Init Element</em>'.
+	 * @return a new object of class '<em>ST Elementary Initializer Expression</em>'.
 	 * @generated
 	 */
-	ArrayInitElement createArrayInitElement();
+	STElementaryInitializerExpression createSTElementaryInitializerExpression();
+
+	/**
+	 * Returns a new object of class '<em>ST Array Initializer Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Array Initializer Expression</em>'.
+	 * @generated
+	 */
+	STArrayInitializerExpression createSTArrayInitializerExpression();
+
+	/**
+	 * Returns a new object of class '<em>ST Array Init Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Array Init Element</em>'.
+	 * @generated
+	 */
+	STArrayInitElement createSTArrayInitElement();
 
 	/**
 	 * Returns a new object of class '<em>ST Statement</em>'.
