@@ -12,9 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.widgets;
 
+import java.util.function.Consumer;
+
+import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -22,7 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class PinInfoBasicWidget {
+public class PinInfoBasicWidget implements CommandExecutor {
 
 	private Text nameText;
 	private Text commentText;
@@ -31,22 +37,25 @@ public class PinInfoBasicWidget {
 
 	protected final TabbedPropertySheetWidgetFactory widgetFactory;
 
+	private Consumer<Command> commandExecutor;
+
 	public PinInfoBasicWidget(final Composite parent, final TabbedPropertySheetWidgetFactory widgetFactory) {
 		this.widgetFactory = widgetFactory;
 		createWidget(parent);
 	}
 
 	protected void createWidget(final Composite parent) {
-		// TODO: add modify listeners
+
 		GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(parent);
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createText(parent);
 		nameText.addVerifyListener(new IdentifierVerifyListener());
-
+		nameText.addModifyListener(e -> executeCommand(new ChangeNameCommand(type, nameText.getText())));
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createText(parent);
+		commentText.addModifyListener(e -> executeCommand(new ChangeCommentCommand(type, commentText.getText())));
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeSelectionWidget = new TypeSelectionWidget(widgetFactory);
@@ -67,11 +76,30 @@ public class PinInfoBasicWidget {
 
 	}
 
-	public void refresh(final IInterfaceElement type) {
+	public void refresh() {
+		if (type != null) {
+			final Consumer<Command> commandExecutorBuffer = commandExecutor;
+			commandExecutor = null;
+			if (null != type.getName() && null != type.getComment()) {
+				nameText.setText(type.getName());
+				commentText.setText(type.getComment());
+				typeSelectionWidget.refresh();
+			}
+			commandExecutor = commandExecutorBuffer;
+		}
+
+	}
+
+	public void initialize(final IInterfaceElement type, final Consumer<Command> commandExecutor) {
 		this.type = type;
-		nameText.setText(type.getName() != null ? type.getName() : ""); //$NON-NLS-1$
-		commentText.setText(type.getComment() != null ? type.getComment() : ""); //$NON-NLS-1$
-		typeSelectionWidget.refresh();
+		this.commandExecutor = commandExecutor;
+	}
+
+	@Override
+	public void executeCommand(final Command cmd) {
+		if (commandExecutor != null) {
+			commandExecutor.accept(cmd);
+		}
 	}
 
 	public Text getNameText() {
@@ -101,6 +129,7 @@ public class PinInfoBasicWidget {
 	public void setTypeSelectionWidget(final TypeSelectionWidget typeSelectionWidget) {
 		this.typeSelectionWidget = typeSelectionWidget;
 	}
+
 
 
 

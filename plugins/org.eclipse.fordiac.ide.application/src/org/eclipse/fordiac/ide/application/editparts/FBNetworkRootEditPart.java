@@ -55,10 +55,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 			final Collection<EditPart> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
 			// only report connections and fbelements, isMarqueeslectable can not be used
 			// for that as it affects connection selection in the wrong way
-			return marqueeSelectedEditParts.stream()
-					.filter(ep -> (ep instanceof ConnectionEditPart && ep.isSelectable())
-							|| (ep.getModel() instanceof FBNetworkElement))
-					.collect(Collectors.toSet());
+			return marqueeSelectedEditParts.stream().filter(ep -> ep instanceof ConnectionEditPart && ep.isSelectable()
+					|| ep.getModel() instanceof FBNetworkElement).collect(Collectors.toSet());
 		}
 
 	}
@@ -85,8 +83,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if (((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
-				|| (request.getType() == RequestConstants.REQ_OPEN)) && (request instanceof SelectionRequest)) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN)
+				&& request instanceof SelectionRequest) {
 			performDirectEdit((SelectionRequest) request);
 		} else {
 			super.performRequest(request);
@@ -137,17 +135,23 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		return null;
 	}
 
-	public static Point getInsertPos(final LocationRequest request, final EditPartViewer viewer,
-			final double zoom) {
+	public static Point getInsertPos(final LocationRequest request, final EditPartViewer viewer, final double zoom) {
 		final org.eclipse.draw2d.geometry.Point location = request.getLocation();
 		final FigureCanvas figureCanvas = (FigureCanvas) viewer.getControl();
 		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
 		location.x += viewLocation.x;
 		location.y += viewLocation.y;
-		final org.eclipse.draw2d.geometry.Point insertPos = new org.eclipse.draw2d.geometry.Point(location.x, location.y)
-				.scale(1.0 / zoom);
+		final org.eclipse.draw2d.geometry.Point insertPos = new org.eclipse.draw2d.geometry.Point(location.x,
+				location.y).scale(1.0 / zoom);
 		return new Point(insertPos.x, insertPos.y);
 	}
 
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (adapter == FBNetwork.class) {
+			return fbNetwork;
+		}
+		return super.getAdapter(adapter);
+	}
 
 }

@@ -10,7 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.properties;
+package org.eclipse.fordiac.ide.gef.sections;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +39,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class PinEventInfoSection extends AbstractSection {
+public class NestedUntypedSubAppSection extends AbstractSection {
 
 	protected PinInfoBasicWidget pinInfo;
 	private ConnectionDisplayWidget inConnections;
@@ -71,8 +71,6 @@ public class PinEventInfoSection extends AbstractSection {
 		rightComposite = createSmallComposite(getRightComposite());
 
 		pinInfoCreation();
-		inConnections = new ConnectionDisplayWidget(widgetFactory, middleComposite, this);
-		outConnections = new InternalConnectionsViewer(widgetFactory, rightComposite, this);
 
 	}
 
@@ -88,7 +86,7 @@ public class PinEventInfoSection extends AbstractSection {
 	@Override
 	protected Object getInputType(final Object input) {
 		if (input instanceof EditPart) {
-			type = (IInterfaceElement) ((EditPart) input).getModel(); // Changed from UntypedSubAppEditPart
+			type = (IInterfaceElement) ((EditPart) input).getModel();
 			return type;
 		}
 		return null;
@@ -150,7 +148,6 @@ public class PinEventInfoSection extends AbstractSection {
 		}
 	}
 
-
 	private Composite createSmallComposite(final Composite parent) {
 		final Composite composite = widgetFactory.createComposite(parent);
 		composite.setLayout(new GridLayout());
@@ -161,7 +158,6 @@ public class PinEventInfoSection extends AbstractSection {
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
 		return new TypeSelectionWidgetContentProvider();
 	}
-
 
 	private class TypeSelectionWidgetContentProvider implements ITypeSelectionContentProvider {
 		@Override

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 fortiss GmbH
- * 				 2020        Johannes Kepler University Linz
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,21 +8,26 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Monika Wenger
- *     - initial API and implementation and/or initial documentation
- *   Virendra Ashiwal
- *     - extracted selectable objects to an seperate final class with
- *       static method (getSelectableObject)
+ *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.properties;
+package org.eclipse.fordiac.ide.gef.filters;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IFilter;
 
-public class AdapterInterfaceFilter implements IFilter {
+public class PinAdapterSubAppFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		return (InterfaceFilterSelection.getSelectableObject(toTest) instanceof AdapterDeclaration);
+		if (toTest instanceof EditPart) {
+			final Object type = ((EditPart) toTest).getModel();
+			if (type instanceof AdapterDeclaration) { // change the VAr
+				System.err.println("In the PinAdapterSubAppFilter and it is and adapter declaration");
+				return true;
+			}
+		}
+		return false;
 	}
+
 }

@@ -14,13 +14,12 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoDataWidget;
 
-/** Here only because it's relevant for the filtering of the PinInfos */
-
-public class PinDataInfoSection extends PinEventInfoSection {
+public class PinAdapterInfoSection extends PinEventInfoSection {
 
 
 	@Override
 	protected void pinInfoCreation() {
 		pinInfo = new PinInfoDataWidget(leftComposite, widgetFactory);
+		((PinInfoDataWidget) pinInfo).setAdapterVisibility(false);
 	}
 }

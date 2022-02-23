@@ -256,15 +256,21 @@
       </propertySection>
       
       <propertySection class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"
-                   id="org.eclipse.fordiac.ide.application.properties.PinEventSection"
+                   id="org.eclipse.fordiac.ide.application.pins.PinEventSection"
                    tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
-                   filter="org.eclipse.fordiac.ide.application.properties.PinEventInfoFilter">
+                   filter="org.eclipse.fordiac.ide.gef.filters.PinEventInfoFilter">
       </propertySection>
         
 	<propertySection class="org.eclipse.fordiac.ide.application.properties.PinDataInfoSection"
-                   id="org.eclipse.fordiac.ide.application.properties.PinDataSection"
+                   id="org.eclipse.fordiac.ide.application.pins.PinDataSection"
                    tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
-                   filter="org.eclipse.fordiac.ide.application.properties.PinDataInfoFilter">
+                   filter="org.eclipse.fordiac.ide.gef.filters.PinDataInfoFilter">
+      </propertySection>
+      
+      <propertySection class="org.eclipse.fordiac.ide.application.properties.PinAdapterInfoSection"
+                   id="org.eclipse.fordiac.ide.application.pins.PinAdapterSection"
+                   tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   filter="org.eclipse.fordiac.ide.gef.filters.PinAdapterInfoFilter">
       </propertySection>
       
     </propertySections>

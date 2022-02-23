@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.widgets;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
@@ -22,6 +23,9 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 	private Text arraySizeText;
 	private Text initValueText;
 
+	private CLabel arraySizeLabel;
+	private CLabel initValueLabel;
+
 	public PinInfoDataWidget(final Composite parent, final TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(parent, widgetFactory);
 	}
@@ -29,11 +33,19 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 	@Override
 	protected void createWidget(final Composite parent) {
 		super.createWidget(parent);
-		widgetFactory.createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
+		arraySizeLabel = widgetFactory.createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
 		arraySizeText = createText(parent);
 
-		widgetFactory.createCLabel(parent, FordiacMessages.InitialValue + ":");// $NON-NLS-1$
+		initValueLabel = widgetFactory.createCLabel(parent, FordiacMessages.InitialValue + ":");// $NON-NLS-1$
 		initValueText = createText(parent);
+	}
+
+	public void setAdapterVisibility(final boolean visible) {
+		arraySizeText.setVisible(visible);
+		initValueText.setVisible(visible);
+
+		arraySizeLabel.setVisible(visible);
+		initValueLabel.setVisible(visible);
 	}
 
 	public Text getArraySizeText() {

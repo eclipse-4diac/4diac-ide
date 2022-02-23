@@ -10,12 +10,11 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.properties;
+package org.eclipse.fordiac.ide.gef.filters;
 
-import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.RootEditPart;
 import org.eclipse.jface.viewers.IFilter;
 
 /** Filter that checks whether the toTest object is data or event - for the pin info sections. */
@@ -24,12 +23,11 @@ public class PinEventInfoFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		if (toTest instanceof UntypedSubAppInterfaceElementEditPart) {
-			final IInterfaceElement type = ((UntypedSubAppInterfaceElementEditPart) toTest).getModel();
-			if (type instanceof VarDeclaration) {
-				return false;
-			} else if (type instanceof Event) {
-				return true; // True --> render the PinEventInfoSection
+		if (toTest instanceof EditPart) {
+			final RootEditPart rootEP = ((EditPart) toTest).getRoot();
+			if (rootEP.getAdapter(FBNetwork.class) != null) {
+				final Object type = ((EditPart) toTest).getModel();
+				return FilterProperties.isEventPin(type) && FilterProperties.isUntypedSubappPin(type);
 			}
 		}
 		return false;

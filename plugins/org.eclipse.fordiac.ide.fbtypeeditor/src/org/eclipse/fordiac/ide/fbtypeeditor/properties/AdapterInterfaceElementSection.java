@@ -75,8 +75,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected void setInputCode() {
-		pinInfoBasicWidget.getNameText().setEnabled(false);
-		pinInfoBasicWidget.getCommentText().setEnabled(false);
+		pinInfoBasicWidget.disableAllFields();
 	}
 
 	@Override
@@ -84,7 +83,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type && pinInfoBasicWidget != null) {
-			pinInfoBasicWidget.refresh(getType());
+			pinInfoBasicWidget.refresh();
 		}
 		commandStack = commandStackBuffer;
 	}
@@ -114,7 +113,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-		// nothing to be done here
+		// pinInfoBasicWidget.getTypeSelectionWidget().initialize(getType(), this::executeCommand);
 	}
 
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
