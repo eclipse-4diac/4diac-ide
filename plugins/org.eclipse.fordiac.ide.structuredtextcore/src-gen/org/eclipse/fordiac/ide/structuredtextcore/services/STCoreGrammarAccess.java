@@ -1851,14 +1851,20 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Action cSTMultibitPartialExpressionAction_0 = (Action)cGroup.eContents().get(0);
 		private final Assignment cSpecifierAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cSpecifierSTMultiBitAccessSpecifierEnumRuleCall_1_0 = (RuleCall)cSpecifierAssignment_1.eContents().get(0);
-		private final Assignment cIndexAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cIndexINTTerminalRuleCall_2_0 = (RuleCall)cIndexAssignment_2.eContents().get(0);
+		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
+		private final Assignment cIndexAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
+		private final RuleCall cIndexINTTerminalRuleCall_2_0_0 = (RuleCall)cIndexAssignment_2_0.eContents().get(0);
+		private final Group cGroup_2_1 = (Group)cAlternatives_2.eContents().get(1);
+		private final Keyword cLeftParenthesisKeyword_2_1_0 = (Keyword)cGroup_2_1.eContents().get(0);
+		private final Assignment cExpressionAssignment_2_1_1 = (Assignment)cGroup_2_1.eContents().get(1);
+		private final RuleCall cExpressionSTExpressionParserRuleCall_2_1_1_0 = (RuleCall)cExpressionAssignment_2_1_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_2_1_2 = (Keyword)cGroup_2_1.eContents().get(2);
 		
 		//STMultibitPartialExpression returns STExpression:
-		//    {STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? index=INT;
+		//    {STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? (index=INT | ('(' expression=STExpression ')'));
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? index=INT
+		//{STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? (index=INT | ('(' expression=STExpression ')'))
 		public Group getGroup() { return cGroup; }
 		
 		//{STMultibitPartialExpression}
@@ -1870,11 +1876,29 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STMultiBitAccessSpecifier
 		public RuleCall getSpecifierSTMultiBitAccessSpecifierEnumRuleCall_1_0() { return cSpecifierSTMultiBitAccessSpecifierEnumRuleCall_1_0; }
 		
+		//(index=INT | ('(' expression=STExpression ')'))
+		public Alternatives getAlternatives_2() { return cAlternatives_2; }
+		
 		//index=INT
-		public Assignment getIndexAssignment_2() { return cIndexAssignment_2; }
+		public Assignment getIndexAssignment_2_0() { return cIndexAssignment_2_0; }
 		
 		//INT
-		public RuleCall getIndexINTTerminalRuleCall_2_0() { return cIndexINTTerminalRuleCall_2_0; }
+		public RuleCall getIndexINTTerminalRuleCall_2_0_0() { return cIndexINTTerminalRuleCall_2_0_0; }
+		
+		//('(' expression=STExpression ')')
+		public Group getGroup_2_1() { return cGroup_2_1; }
+		
+		//'('
+		public Keyword getLeftParenthesisKeyword_2_1_0() { return cLeftParenthesisKeyword_2_1_0; }
+		
+		//expression=STExpression
+		public Assignment getExpressionAssignment_2_1_1() { return cExpressionAssignment_2_1_1; }
+		
+		//STExpression
+		public RuleCall getExpressionSTExpressionParserRuleCall_2_1_1_0() { return cExpressionSTExpressionParserRuleCall_2_1_1_0; }
+		
+		//')'
+		public Keyword getRightParenthesisKeyword_2_1_2() { return cRightParenthesisKeyword_2_1_2; }
 	}
 	public class STLiteralExpressionsElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STLiteralExpressions");
@@ -3827,7 +3851,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STMultibitPartialExpression returns STExpression:
-	//    {STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? index=INT;
+	//    {STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? (index=INT | ('(' expression=STExpression ')'));
 	public STMultibitPartialExpressionElements getSTMultibitPartialExpressionAccess() {
 		return pSTMultibitPartialExpression;
 	}

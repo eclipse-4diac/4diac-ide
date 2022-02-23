@@ -20,12 +20,15 @@ import java.math.BigInteger;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 
@@ -39,6 +42,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpres
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STMultibitPartialExpressionImpl#getSpecifier <em>Specifier</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STMultibitPartialExpressionImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STMultibitPartialExpressionImpl#getExpression <em>Expression</em>}</li>
  * </ul>
  *
  * @generated
@@ -83,6 +87,16 @@ public class STMultibitPartialExpressionImpl extends STExpressionImpl implements
 	 * @ordered
 	 */
 	protected BigInteger index = INDEX_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected STExpression expression;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -155,8 +169,68 @@ public class STMultibitPartialExpressionImpl extends STExpressionImpl implements
 	 * @generated
 	 */
 	@Override
+	public STExpression getExpression() {
+		return expression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetExpression(STExpression newExpression, NotificationChain msgs) {
+		STExpression oldExpression = expression;
+		expression = newExpression;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION, oldExpression, newExpression);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setExpression(STExpression newExpression) {
+		if (newExpression != expression) {
+			NotificationChain msgs = null;
+			if (expression != null)
+				msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION, null, msgs);
+			if (newExpression != null)
+				msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION, null, msgs);
+			msgs = basicSetExpression(newExpression, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION, newExpression, newExpression));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public INamedElement getResultType() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION:
+				return basicSetExpression(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**
@@ -171,6 +245,8 @@ public class STMultibitPartialExpressionImpl extends STExpressionImpl implements
 				return getSpecifier();
 			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX:
 				return getIndex();
+			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION:
+				return getExpression();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -189,6 +265,9 @@ public class STMultibitPartialExpressionImpl extends STExpressionImpl implements
 				return;
 			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX:
 				setIndex((BigInteger)newValue);
+				return;
+			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION:
+				setExpression((STExpression)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -210,6 +289,9 @@ public class STMultibitPartialExpressionImpl extends STExpressionImpl implements
 			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX:
 				setIndex(INDEX_EDEFAULT);
 				return;
+			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION:
+				setExpression((STExpression)null);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -228,6 +310,8 @@ public class STMultibitPartialExpressionImpl extends STExpressionImpl implements
 				return specifier != SPECIFIER_EDEFAULT;
 			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX:
 				return INDEX_EDEFAULT == null ? index != null : !INDEX_EDEFAULT.equals(index);
+			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION:
+				return expression != null;
 			default:
 				return super.eIsSet(featureID);
 		}

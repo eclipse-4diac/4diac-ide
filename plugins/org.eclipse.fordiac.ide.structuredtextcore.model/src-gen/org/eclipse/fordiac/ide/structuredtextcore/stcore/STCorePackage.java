@@ -1417,13 +1417,22 @@ public interface STCorePackage extends EPackage {
 	int ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX = ST_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION = ST_EXPRESSION_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>ST Multibit Partial Expression</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_MULTIBIT_PARTIAL_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
+	int ST_MULTIBIT_PARTIAL_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator <em>Binary Operator</em>}' enum.
@@ -2626,6 +2635,17 @@ public interface STCorePackage extends EPackage {
 	EAttribute getSTMultibitPartialExpression_Index();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression#getExpression <em>Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Expression</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression#getExpression()
+	 * @see #getSTMultibitPartialExpression()
+	 * @generated
+	 */
+	EReference getSTMultibitPartialExpression_Expression();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator <em>Binary Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3644,6 +3664,14 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX = eINSTANCE.getSTMultibitPartialExpression_Index();
+
+		/**
+		 * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION = eINSTANCE.getSTMultibitPartialExpression_Expression();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.BinaryOperator <em>Binary Operator</em>}' enum.

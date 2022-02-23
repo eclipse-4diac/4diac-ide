@@ -223,7 +223,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''«IF arg.not»ST_NOT_ARG(«ENDIF»«arg.target.generateFeatureName»«IF arg.not»)«ENDIF»'''
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
-	'''partial<«expr.specifier.generateMultiBitAccessSpecifier», «expr.index»>()'''
+	'''partial<«expr.specifier.generateMultiBitAccessSpecifier»>(«IF expr.expression !== null»«expr.expression.generateExpression»«ELSE»«expr.index»«ENDIF»)'''
 
 	def protected CharSequence generateMultiBitAccessSpecifier(STMultiBitAccessSpecifier spec) {
 		switch (spec) {

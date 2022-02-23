@@ -205,6 +205,7 @@
     <genClasses ecoreClass="STCore.ecore#//STMultibitPartialExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMultibitPartialExpression/specifier"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMultibitPartialExpression/index"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STMultibitPartialExpression/expression"/>
       <genOperations ecoreOperation="STCore.ecore#//STMultibitPartialExpression/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
     </genClasses>

@@ -2766,19 +2766,51 @@ ruleSTMultibitPartialExpression returns [EObject current=null]
 		)?
 		(
 			(
-				lv_index_2_0=RULE_INT
-				{
-					newLeafNode(lv_index_2_0, grammarAccess.getSTMultibitPartialExpressionAccess().getIndexINTTerminalRuleCall_2_0());
-				}
-				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getSTMultibitPartialExpressionRule());
+				(
+					lv_index_2_0=RULE_INT
+					{
+						newLeafNode(lv_index_2_0, grammarAccess.getSTMultibitPartialExpressionAccess().getIndexINTTerminalRuleCall_2_0_0());
 					}
-					setWithLastConsumed(
-						$current,
-						"index",
-						lv_index_2_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.INT");
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getSTMultibitPartialExpressionRule());
+						}
+						setWithLastConsumed(
+							$current,
+							"index",
+							lv_index_2_0,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.INT");
+					}
+				)
+			)
+			    |
+			(
+				otherlv_3=LeftParenthesis
+				{
+					newLeafNode(otherlv_3, grammarAccess.getSTMultibitPartialExpressionAccess().getLeftParenthesisKeyword_2_1_0());
+				}
+				(
+					(
+						{
+							newCompositeNode(grammarAccess.getSTMultibitPartialExpressionAccess().getExpressionSTExpressionParserRuleCall_2_1_1_0());
+						}
+						lv_expression_4_0=ruleSTExpression
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getSTMultibitPartialExpressionRule());
+							}
+							set(
+								$current,
+								"expression",
+								lv_expression_4_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+							afterParserOrEnumRuleCall();
+						}
+					)
+				)
+				otherlv_5=RightParenthesis
+				{
+					newLeafNode(otherlv_5, grammarAccess.getSTMultibitPartialExpressionAccess().getRightParenthesisKeyword_2_1_2());
 				}
 			)
 		)

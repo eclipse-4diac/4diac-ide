@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression#getSpecifier <em>Specifier</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression#getIndex <em>Index</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression#getExpression <em>Expression</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTMultibitPartialExpression()
@@ -83,6 +84,28 @@ public interface STMultibitPartialExpression extends STExpression {
 	 * @generated
 	 */
 	void setIndex(BigInteger value);
+
+	/**
+	 * Returns the value of the '<em><b>Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Expression</em>' containment reference.
+	 * @see #setExpression(STExpression)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTMultibitPartialExpression_Expression()
+	 * @model containment="true"
+	 * @generated
+	 */
+	STExpression getExpression();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression#getExpression <em>Expression</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Expression</em>' containment reference.
+	 * @see #getExpression()
+	 * @generated
+	 */
+	void setExpression(STExpression value);
 
 	/**
 	 * <!-- begin-user-doc -->

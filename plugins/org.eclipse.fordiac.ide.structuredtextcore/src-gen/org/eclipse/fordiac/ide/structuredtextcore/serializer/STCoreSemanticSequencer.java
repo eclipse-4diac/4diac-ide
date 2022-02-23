@@ -648,7 +648,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STMultibitPartialExpression returns STMultibitPartialExpression
 	 *
 	 * Constraint:
-	 *     (specifier=STMultiBitAccessSpecifier? index=INT)
+	 *     (specifier=STMultiBitAccessSpecifier? (index=INT | expression=STExpression))
 	 */
 	protected void sequence_STMultibitPartialExpression(ISerializationContext context, STMultibitPartialExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
