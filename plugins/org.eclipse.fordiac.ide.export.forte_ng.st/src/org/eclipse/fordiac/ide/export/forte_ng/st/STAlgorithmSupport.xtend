@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.parser.IParseResult
 
@@ -51,10 +50,6 @@ class STAlgorithmSupport extends StructuredTextSupport {
 
 	override getDependencies(Map<?, ?> options) {
 		prepare(options)
-		val root = parseResult?.rootASTElement
-		if (root instanceof STAlgorithmBody)
-			root.varTempDeclarations.flatMap[varDeclarations].filter(STVarDeclaration).map[type].toSet
-		else
-			emptySet
+		parseResult?.rootASTElement?.containedDependencies ?: emptySet
 	}
 }

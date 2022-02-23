@@ -81,7 +81,7 @@ class SimpleFBImplTemplate extends ForteFBTemplate {
 
 	override protected generateImplIncludes() '''
 		«super.generateImplIncludes»
-		«IF languageSupport !== null»«languageSupport.getDependencies(emptyMap).filter(DataType).generateImplTypeIncludes»«ENDIF»
+		«IF languageSupport !== null»«languageSupport.getDependencies(emptyMap).generateDependencyIncludes»«ENDIF»
 	'''
 
 	override getErrors() {

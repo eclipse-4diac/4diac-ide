@@ -23,12 +23,20 @@ import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.LtodType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 abstract class ForteNgExportTemplate extends ExportTemplate {
 
 	protected new(String name, Path prefix) {
 		super(name, prefix)
 	}
+
+	def protected generateDependencyIncludes(Iterable<INamedElement> dependencies) '''
+		«dependencies.filter(DataType).generateTypeIncludes»
+		«FOR include : dependencies.reject(DataType).map[name].toSet»
+			#include "«include».h"
+		«ENDFOR»
+	'''
 
 	def protected generateTypeIncludes(Iterable<DataType> types) '''
 		«FOR include : types.map[generateTypeInclude].toSet»

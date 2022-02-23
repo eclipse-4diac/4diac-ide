@@ -54,7 +54,7 @@ class LanguageImplTemplate extends ForteNgExportTemplate {
 		#endif
 
 		#include "iec61131_functions.h"
-		«IF languageSupport !== null»«languageSupport.getDependencies(emptyMap).filter(DataType).generateTypeIncludes»«ENDIF»
+		«IF languageSupport !== null»«languageSupport.getDependencies(emptyMap).generateDependencyIncludes»«ENDIF»
 	'''
 
 	override getErrors() {

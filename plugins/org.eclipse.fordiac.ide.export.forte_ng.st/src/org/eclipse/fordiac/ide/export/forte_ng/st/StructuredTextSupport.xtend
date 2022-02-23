@@ -71,9 +71,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtend.lib.annotations.Accessors
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
+import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
@@ -318,21 +319,35 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			1
 		}
 	}
-	
+
 	def protected Set<INamedElement> getContainedDependencies(EObject object) {
 		object.<EObject>getAllProperContents(true).toIterable.flatMap[dependencies].toSet
 	}
-	
+
 	def protected Iterable<INamedElement> getDependencies(EObject object) {
-		switch(object) {
-			STVarDeclaration: #[object.type]
-			STNumericLiteral: #[object.resultType]
-			STStringLiteral: #[object.resultType]
-			STDateLiteral: #[object.type]
-			STTimeLiteral: #[object.type]
-			STTimeOfDayLiteral: #[object.type]
-			STDateAndTimeLiteral: #[object.type]
-			default: emptySet
+		switch (object) {
+			STVarDeclaration:
+				#[object.type]
+			STNumericLiteral:
+				#[object.resultType]
+			STStringLiteral:
+				#[object.resultType]
+			STDateLiteral:
+				#[object.type]
+			STTimeLiteral:
+				#[object.type]
+			STTimeOfDayLiteral:
+				#[object.type]
+			STDateAndTimeLiteral:
+				#[object.type]
+			STFeatureExpression:
+				object.feature.dependencies
+			STFunction:
+				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+					name = object.sourceName
+				]]
+			default:
+				emptySet
 		}
 	}
 }
