@@ -12,11 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocument
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentProvider
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceForIEditorInputFactory
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.resource.IContainer
 import org.eclipse.xtext.resource.containers.StateBasedContainerManager
+import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider
 import org.eclipse.xtext.ui.shared.Access
 
@@ -31,6 +33,10 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	override provideIAllContainersState() {
 		return Access::getWorkspaceProjectsState
+	}
+
+	def Class<? extends XtextDocument> bindXtextDocument() {
+		return STAlgorithmDocument
 	}
 
 	def Class<? extends XtextDocumentProvider> bindXtextDocumentProvider() {
