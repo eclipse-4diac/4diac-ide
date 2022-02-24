@@ -48,6 +48,7 @@
     <genDataTypes ecoreDataType="STCore.ecore#//STTime"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STTimeOfDay"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STDateAndTime"/>
+    <genDataTypes ecoreDataType="STCore.ecore#//STString"/>
     <genClasses ecoreClass="STCore.ecore#//STSource"/>
     <genClasses ecoreClass="STCore.ecore#//STCoreSource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCoreSource/statements"/>

@@ -2261,15 +2261,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cTypeDataTypeSTAnyCharsTypeParserRuleCall_0_0_0_1 = (RuleCall)cTypeDataTypeCrossReference_0_0_0.eContents().get(1);
 		private final Keyword cNumberSignKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Assignment cValueAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final Alternatives cValueAlternatives_1_0 = (Alternatives)cValueAssignment_1.eContents().get(0);
-		private final RuleCall cValueSTRINGTerminalRuleCall_1_0_0 = (RuleCall)cValueAlternatives_1_0.eContents().get(0);
-		private final RuleCall cValueWSTRINGTerminalRuleCall_1_0_1 = (RuleCall)cValueAlternatives_1_0.eContents().get(1);
+		private final RuleCall cValueSTRINGTerminalRuleCall_1_0 = (RuleCall)cValueAssignment_1.eContents().get(0);
 		
 		//STStringLiteral:
-		//    (type=[datatype::DataType|STAnyCharsType] '#')? value=(STRING|WSTRING);
+		//    (type=[datatype::DataType|STAnyCharsType] '#')? value=STRING;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(type=[datatype::DataType|STAnyCharsType] '#')? value=(STRING|WSTRING)
+		//(type=[datatype::DataType|STAnyCharsType] '#')? value=STRING
 		public Group getGroup() { return cGroup; }
 		
 		//(type=[datatype::DataType|STAnyCharsType] '#')?
@@ -2287,17 +2285,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'#'
 		public Keyword getNumberSignKeyword_0_1() { return cNumberSignKeyword_0_1; }
 		
-		//value=(STRING|WSTRING)
+		//value=STRING
 		public Assignment getValueAssignment_1() { return cValueAssignment_1; }
 		
-		//(STRING|WSTRING)
-		public Alternatives getValueAlternatives_1_0() { return cValueAlternatives_1_0; }
-		
 		//STRING
-		public RuleCall getValueSTRINGTerminalRuleCall_1_0_0() { return cValueSTRINGTerminalRuleCall_1_0_0; }
-		
-		//WSTRING
-		public RuleCall getValueWSTRINGTerminalRuleCall_1_0_1() { return cValueWSTRINGTerminalRuleCall_1_0_1; }
+		public RuleCall getValueSTRINGTerminalRuleCall_1_0() { return cValueSTRINGTerminalRuleCall_1_0; }
 	}
 	public class STAnyTypeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STAnyType");
@@ -3250,7 +3242,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final TerminalRule tINT;
 	private final TerminalRule tID;
 	private final TerminalRule tSTRING;
-	private final TerminalRule tWSTRING;
 	private final TerminalRule tML_COMMENT;
 	private final TerminalRule tSL_COMMENT;
 	private final TerminalRule tWS;
@@ -3345,7 +3336,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.tINT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.INT");
 		this.tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.ID");
 		this.tSTRING = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STRING");
-		this.tWSTRING = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.WSTRING");
 		this.tML_COMMENT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.ML_COMMENT");
 		this.tSL_COMMENT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.SL_COMMENT");
 		this.tWS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.WS");
@@ -4014,7 +4004,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STStringLiteral:
-	//    (type=[datatype::DataType|STAnyCharsType] '#')? value=(STRING|WSTRING);
+	//    (type=[datatype::DataType|STAnyCharsType] '#')? value=STRING;
 	public STStringLiteralElements getSTStringLiteralAccess() {
 		return pSTStringLiteral;
 	}
@@ -4233,16 +4223,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return tID;
 	}
 	
-	//terminal STRING returns ecore::EString:
+	//terminal STRING returns STString:
+	//    '"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"' |
 	//    "'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
 	public TerminalRule getSTRINGRule() {
 		return tSTRING;
-	}
-	
-	//terminal WSTRING returns ecore::EString:
-	//    '"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"';
-	public TerminalRule getWSTRINGRule() {
-		return tWSTRING;
 	}
 	
 	//terminal ML_COMMENT:

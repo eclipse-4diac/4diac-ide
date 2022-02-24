@@ -172,5 +172,11 @@ final package class ExpressionAnnotations {
 
 	def package static INamedElement getResultType(STDateAndTimeLiteral expr) { expr.type }
 
-	def package static INamedElement getResultType(STStringLiteral expr) { ElementaryTypes.WSTRING }
+	def package static INamedElement getResultType(STStringLiteral expr) {
+		expr.type ?: if (expr.value.length == 1) {
+			if(expr.value.wide) ElementaryTypes.WCHAR else ElementaryTypes.CHAR
+		} else {
+			if(expr.value.wide) ElementaryTypes.WSTRING else ElementaryTypes.STRING
+		}
+	}
 }

@@ -143,6 +143,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return createSTTimeOfDayFromString(eDataType, initialValue);
 			case STCorePackage.ST_DATE_AND_TIME:
 				return createSTDateAndTimeFromString(eDataType, initialValue);
+			case STCorePackage.ST_STRING:
+				return createSTStringFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -170,6 +172,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return convertSTTimeOfDayToString(eDataType, instanceValue);
 			case STCorePackage.ST_DATE_AND_TIME:
 				return convertSTDateAndTimeToString(eDataType, instanceValue);
+			case STCorePackage.ST_STRING:
+				return convertSTStringToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -744,6 +748,24 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	public String convertSTDateAndTimeToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public STString createSTStringFromString(EDataType eDataType, String initialValue) {
+		return (STString)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSTStringToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

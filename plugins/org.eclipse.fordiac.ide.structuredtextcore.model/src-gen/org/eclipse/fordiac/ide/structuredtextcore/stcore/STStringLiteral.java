@@ -65,12 +65,12 @@ public interface STStringLiteral extends STExpression {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Value</em>' attribute.
-	 * @see #setValue(String)
+	 * @see #setValue(STString)
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTStringLiteral_Value()
-	 * @model
+	 * @model dataType="org.eclipse.fordiac.ide.structuredtextcore.stcore.STString"
 	 * @generated
 	 */
-	String getValue();
+	STString getValue();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral#getValue <em>Value</em>}' attribute.
@@ -80,7 +80,7 @@ public interface STStringLiteral extends STExpression {
 	 * @see #getValue()
 	 * @generated
 	 */
-	void setValue(String value);
+	void setValue(STString value);
 
 	/**
 	 * <!-- begin-user-doc -->

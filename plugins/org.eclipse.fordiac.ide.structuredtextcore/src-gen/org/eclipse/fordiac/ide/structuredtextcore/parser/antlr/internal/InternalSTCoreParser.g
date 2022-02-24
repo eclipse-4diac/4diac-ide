@@ -3446,37 +3446,20 @@ ruleSTStringLiteral returns [EObject current=null]
 		)?
 		(
 			(
-				(
-					lv_value_2_1=RULE_STRING
-					{
-						newLeafNode(lv_value_2_1, grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0_0());
+				lv_value_2_0=RULE_STRING
+				{
+					newLeafNode(lv_value_2_0, grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTStringLiteralRule());
 					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getSTStringLiteralRule());
-						}
-						setWithLastConsumed(
-							$current,
-							"value",
-							lv_value_2_1,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STRING");
-					}
-					    |
-					lv_value_2_2=RULE_WSTRING
-					{
-						newLeafNode(lv_value_2_2, grammarAccess.getSTStringLiteralAccess().getValueWSTRINGTerminalRuleCall_1_0_1());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getSTStringLiteralRule());
-						}
-						setWithLastConsumed(
-							$current,
-							"value",
-							lv_value_2_2,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.WSTRING");
-					}
-				)
+					setWithLastConsumed(
+						$current,
+						"value",
+						lv_value_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STRING");
+				}
 			)
 		)
 	)

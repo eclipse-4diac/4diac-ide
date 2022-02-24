@@ -800,7 +800,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STStringLiteral returns STStringLiteral
 	 *
 	 * Constraint:
-	 *     (type=[DataType|STAnyCharsType]? (value=STRING | value=WSTRING))
+	 *     (type=[DataType|STAnyCharsType]? value=STRING)
 	 */
 	protected void sequence_STStringLiteral(ISerializationContext context, STStringLiteral semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

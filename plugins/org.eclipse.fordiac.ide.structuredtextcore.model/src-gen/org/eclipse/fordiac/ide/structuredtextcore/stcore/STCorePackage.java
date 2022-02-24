@@ -1553,6 +1553,17 @@ public interface STCorePackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '<em>ST String</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTString()
+	 * @generated
+	 */
+	int ST_STRING = 47;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource <em>ST Source</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2797,6 +2808,17 @@ public interface STCorePackage extends EPackage {
 	EDataType getSTDateAndTime();
 
 	/**
+	 * Returns the meta object for data type '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STString <em>ST String</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>ST String</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
+	 * @model instanceClass="org.eclipse.fordiac.ide.structuredtextcore.stcore.STString"
+	 * @generated
+	 */
+	EDataType getSTString();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3847,6 +3869,16 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EDataType ST_DATE_AND_TIME = eINSTANCE.getSTDateAndTime();
+
+		/**
+		 * The meta object literal for the '<em>ST String</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTString()
+		 * @generated
+		 */
+		EDataType ST_STRING = eINSTANCE.getSTString();
 
 	}
 

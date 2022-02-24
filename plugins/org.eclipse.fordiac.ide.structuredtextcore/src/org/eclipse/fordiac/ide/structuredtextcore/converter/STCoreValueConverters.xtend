@@ -22,6 +22,7 @@ import java.time.LocalTime
 import org.eclipse.xtext.conversion.IValueConverter
 import org.eclipse.xtext.conversion.ValueConverter
 import org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
 
 class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	
@@ -42,6 +43,9 @@ class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	
 	@Inject
 	STDateAndTimeValueConverter dateAndTimeValueConverter
+	
+	@Inject
+	STStringValueConverter stringValueConverter
 	
 	@ValueConverter(rule="BoolLiteral")
 	def IValueConverter<BigDecimal> BOOL_LITERAL() {
@@ -71,5 +75,10 @@ class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	@ValueConverter(rule="DateAndTime")
 	def IValueConverter<LocalDateTime> DateAndTime() {
 		return dateAndTimeValueConverter;
+	}
+
+	@ValueConverter(rule="STRING")
+	def IValueConverter<STString> STRING() {
+		return stringValueConverter;
 	}
 }

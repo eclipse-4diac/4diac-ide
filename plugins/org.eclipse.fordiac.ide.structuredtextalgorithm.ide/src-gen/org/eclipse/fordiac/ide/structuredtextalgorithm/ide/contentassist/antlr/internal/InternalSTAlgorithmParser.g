@@ -2386,27 +2386,6 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__STStringLiteral__ValueAlternatives_1_0
-	@init {
-		int stackSize = keepStackSize();
-	}
-:
-	(
-		{ before(grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0_0()); }
-		RULE_STRING
-		{ after(grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0_0()); }
-	)
-	|
-	(
-		{ before(grammarAccess.getSTStringLiteralAccess().getValueWSTRINGTerminalRuleCall_1_0_1()); }
-		RULE_WSTRING
-		{ after(grammarAccess.getSTStringLiteralAccess().getValueWSTRINGTerminalRuleCall_1_0_1()); }
-	)
-;
-finally {
-	restoreStackSize(stackSize);
-}
-
 rule__STAnyType__Alternatives
 	@init {
 		int stackSize = keepStackSize();
@@ -11831,9 +11810,9 @@ rule__STStringLiteral__ValueAssignment_1
 	}
 :
 	(
-		{ before(grammarAccess.getSTStringLiteralAccess().getValueAlternatives_1_0()); }
-		(rule__STStringLiteral__ValueAlternatives_1_0)
-		{ after(grammarAccess.getSTStringLiteralAccess().getValueAlternatives_1_0()); }
+		{ before(grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0()); }
+		RULE_STRING
+		{ after(grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0()); }
 	)
 ;
 finally {

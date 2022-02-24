@@ -233,7 +233,7 @@ STDateAndTimeLiteral:
 	type=[datatype::DataType|STDateAndTimeType] '#' value=DateAndTime;
 
 STStringLiteral:
-	(type=[datatype::DataType|STAnyCharsType] '#')? value=(STRING|WSTRING);
+	(type=[datatype::DataType|STAnyCharsType] '#')? value=STRING;
 
 STAnyType:
 	ID | STAnyBuiltinType;
@@ -311,11 +311,9 @@ terminal INT returns ecore::EBigInteger:
 terminal ID:
 	'^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 
-terminal STRING returns ecore::EString:
+terminal STRING returns STString:
+	'"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"' |
 	"'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
-
-terminal WSTRING returns ecore::EString:
-	'"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"';
 
 terminal ML_COMMENT:
 	'/*'->'*/' | '(*'->'*)';

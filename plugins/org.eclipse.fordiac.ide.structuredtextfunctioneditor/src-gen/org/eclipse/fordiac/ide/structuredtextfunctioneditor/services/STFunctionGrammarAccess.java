@@ -863,7 +863,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STStringLiteral:
-	//    (type=[datatype::DataType|STAnyCharsType] '#')? value=(STRING|WSTRING);
+	//    (type=[datatype::DataType|STAnyCharsType] '#')? value=STRING;
 	public STCoreGrammarAccess.STStringLiteralElements getSTStringLiteralAccess() {
 		return gaSTCore.getSTStringLiteralAccess();
 	}
@@ -1082,16 +1082,11 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return gaSTCore.getIDRule();
 	}
 	
-	//terminal STRING returns ecore::EString:
+	//terminal STRING returns STString:
+	//    '"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"' |
 	//    "'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
 	public TerminalRule getSTRINGRule() {
 		return gaSTCore.getSTRINGRule();
-	}
-	
-	//terminal WSTRING returns ecore::EString:
-	//    '"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"';
-	public TerminalRule getWSTRINGRule() {
-		return gaSTCore.getWSTRINGRule();
 	}
 	
 	//terminal ML_COMMENT:

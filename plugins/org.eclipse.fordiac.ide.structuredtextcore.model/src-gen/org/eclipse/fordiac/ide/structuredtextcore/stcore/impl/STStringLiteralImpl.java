@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 
 /**
@@ -63,7 +64,7 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VALUE_EDEFAULT = null;
+	protected static final STString VALUE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -73,7 +74,7 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
 	 * @generated
 	 * @ordered
 	 */
-	protected String value = VALUE_EDEFAULT;
+	protected STString value = VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -140,7 +141,7 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
 	 * @generated
 	 */
 	@Override
-	public String getValue() {
+	public STString getValue() {
 		return value;
 	}
 
@@ -150,8 +151,8 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
 	 * @generated
 	 */
 	@Override
-	public void setValue(String newValue) {
-		String oldValue = value;
+	public void setValue(STString newValue) {
+		STString oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STRING_LITERAL__VALUE, oldValue, value));
@@ -197,7 +198,7 @@ public class STStringLiteralImpl extends STExpressionImpl implements STStringLit
 				setType((DataType)newValue);
 				return;
 			case STCorePackage.ST_STRING_LITERAL__VALUE:
-				setValue((String)newValue);
+				setValue((STString)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);

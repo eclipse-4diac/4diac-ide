@@ -83,7 +83,6 @@ public class STFunctionSyntacticSequencer extends AbstractSyntacticSequencer {
 	 *     (rule start) (ambiguity) value=NON_DECIMAL
 	 *     (rule start) (ambiguity) value=Number
 	 *     (rule start) (ambiguity) value=STRING
-	 *     (rule start) (ambiguity) value=WSTRING
 	 *     (rule start) (ambiguity) {STArrayAccessExpression.receiver=}
 	 *     (rule start) (ambiguity) {STBinaryExpression.left=}
 	 *     (rule start) (ambiguity) {STMemberAccessExpression.receiver=}

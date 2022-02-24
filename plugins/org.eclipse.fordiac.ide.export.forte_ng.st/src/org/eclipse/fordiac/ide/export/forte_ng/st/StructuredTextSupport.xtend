@@ -249,7 +249,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''«(expr.resultType as DataType).generateTypeName»(«expr.value»)'''
 
 	def protected dispatch CharSequence generateExpression(STStringLiteral expr) //
-	'''«(expr.resultType as DataType).generateTypeName»("«expr.value.convertToJavaString»")'''
+	'''«(expr.resultType as DataType).generateTypeName»("«expr.value.toString.convertToJavaString»")'''
 
 	def protected dispatch CharSequence generateExpression(STDateLiteral expr) //
 	'''CIEC_DATE(«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»)'''
