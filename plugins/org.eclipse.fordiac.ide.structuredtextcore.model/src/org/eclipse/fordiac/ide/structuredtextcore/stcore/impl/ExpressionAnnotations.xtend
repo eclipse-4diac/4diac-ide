@@ -13,16 +13,22 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl
 
 import java.math.BigDecimal
+import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
@@ -36,6 +42,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
+import static extension org.eclipse.emf.common.util.ECollections.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 final package class ExpressionAnnotations {
@@ -178,5 +185,27 @@ final package class ExpressionAnnotations {
 		} else {
 			if(expr.value.wide) ElementaryTypes.WSTRING else ElementaryTypes.STRING
 		}
+	}
+
+	def package static EList<STCallArgument> getMappedInputArguments(STFeatureExpression expr) {
+		val feature = expr.feature
+		if (feature instanceof ICallable) {
+			val parameters = feature.inputParameters
+			val namedArguments = expr.parameters.filter(STCallNamedInputArgument).toMap[target]
+			val unnamedArguments = expr.parameters.filter(STCallUnnamedArgument).iterator
+			parameters.map[namedArguments.get(it) ?: if(unnamedArguments.hasNext) unnamedArguments.next else null].
+				newBasicEList.unmodifiableEList
+		} else
+			emptyEList
+	}
+
+	def package static EList<STCallArgument> getMappedOutputArguments(STFeatureExpression expr) {
+		val feature = expr.feature
+		if (feature instanceof ICallable) {
+			val parameters = feature.outputParameters
+			val namedArguments = expr.parameters.filter(STCallNamedOutputArgument).toMap[source]
+			parameters.map[namedArguments.get(it)].newBasicEList.unmodifiableEList
+		} else
+			emptyEList
 	}
 }

@@ -206,6 +206,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STFeatureExpression/parameters"/>
       <genOperations ecoreOperation="STCore.ecore#//STFeatureExpression/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STFeatureExpression/getMappedInputArguments"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInputArguments(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STFeatureExpression/getMappedOutputArguments"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedOutputArguments(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STMultibitPartialExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMultibitPartialExpression/specifier"/>

@@ -160,6 +160,26 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 	 * @generated
 	 */
 	@Override
+	public EList<STCallArgument> getMappedInputArguments() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInputArguments(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<STCallArgument> getMappedOutputArguments() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedOutputArguments(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case STCorePackage.ST_FEATURE_EXPRESSION__PARAMETERS:

@@ -29,7 +29,10 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
@@ -96,6 +99,18 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 					return IScope.NULLSCOPE; // If its an elementary type, no scope is needed
 				}
 			}
+		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET) {
+			final var feature = getFeature(context);
+			if (feature instanceof ICallable) {
+				return Scopes.scopeFor(((ICallable) feature).getInputParameters());
+			}
+			return IScope.NULLSCOPE;
+		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__SOURCE) {
+			final var feature = getFeature(context);
+			if (feature instanceof ICallable) {
+				return Scopes.scopeFor(((ICallable) feature).getOutputParameters());
+			}
+			return IScope.NULLSCOPE;
 		}
 		return super.getScope(context, reference);
 	}
@@ -105,6 +120,15 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			return getReceiver(context.eContainer());
 		} else if (context instanceof STMemberAccessExpression) {
 			return ((STMemberAccessExpression) context).getReceiver();
+		}
+		return null;
+	}
+
+	private INamedElement getFeature(final EObject context) {
+		if (context instanceof STCallArgument) {
+			return getFeature(context.eContainer());
+		} else if (context instanceof STFeatureExpression) {
+			return ((STFeatureExpression) context).getFeature();
 		}
 		return null;
 	}

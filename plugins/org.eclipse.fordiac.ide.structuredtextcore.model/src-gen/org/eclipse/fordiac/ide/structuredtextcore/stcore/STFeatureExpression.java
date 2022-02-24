@@ -80,4 +80,20 @@ public interface STFeatureExpression extends STExpression {
 	 */
 	INamedElement getResultType();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<STCallArgument> getMappedInputArguments();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<STCallArgument> getMappedOutputArguments();
+
 } // STFeatureExpression

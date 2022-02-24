@@ -32,12 +32,14 @@ import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
@@ -72,9 +74,8 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
-import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
+import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
@@ -216,13 +217,17 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''«expr.receiver.generateExpression»«FOR index : expr.index»[«index.generateExpression»]«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) //
-	'''«expr.feature.generateFeatureName»«FOR param : expr.transformedCallArguments BEFORE "(" SEPARATOR ", " AFTER ")"»«param.generateCallArgument»«ENDFOR»'''
+	'''«expr.feature.generateFeatureName»«FOR param : expr.mappedArguments BEFORE "(" SEPARATOR ", " AFTER ")"»«param.generateCallArgument»«ENDFOR»'''
 
-	def protected getTransformedCallArguments(STFeatureExpression expr) {
-		expr.parameters // TODO match named arguments to parameters
+	def protected Iterable<STCallArgument> getMappedArguments(STFeatureExpression expr) {
+		expr.mappedInputArguments + expr.mappedOutputArguments
 	}
 
-	def protected dispatch CharSequence generateCallArgument(STCallUnnamedArgument arg) { arg.arg.generateExpression }
+	def protected dispatch CharSequence generateCallArgument(Void arg) { "0" }
+
+	def protected dispatch CharSequence generateCallArgument(STCallUnnamedArgument arg) {
+		arg.arg.generateExpression
+	}
 
 	def protected dispatch CharSequence generateCallArgument(STCallNamedInputArgument arg) {
 		arg.source.generateExpression
