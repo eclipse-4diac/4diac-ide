@@ -21,8 +21,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.policies.GroupResizePolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.ISelection;
@@ -40,9 +39,10 @@ public class TrimGroupHandler extends AbstractHandler {
 		if (groupEditPart != null && editor != null) {
 			final GraphicalEditPart groupContentEP = GroupResizePolicy.getGroupContent(groupEditPart);
 			if(groupContentEP != null) {
-				final Rectangle groupContentContainerBounds = getGroupAreaBounds(groupEditPart, groupContentEP);
+				final Rectangle groupContentContainerBounds = GroupXYLayoutPolicy.getGroupAreaBounds(groupEditPart,
+						groupContentEP);
 				final Rectangle groupContentBounds = GroupResizePolicy.getGroupContentBounds(groupContentEP);
-				final Command cmd = createChangeGroupBoundsCommand(groupEditPart.getModel(),
+				final Command cmd = GroupXYLayoutPolicy.createChangeGroupBoundsCommand(groupEditPart.getModel(),
 						groupContentContainerBounds, groupContentBounds);
 				getCommandStack(editor).execute(cmd);
 			}
@@ -67,28 +67,5 @@ public class TrimGroupHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static Rectangle getGroupAreaBounds(final GraphicalEditPart groupEP,
-			final GraphicalEditPart groupContentEP) {
-		final Rectangle groupContentBounds = groupContentEP.getFigure().getBounds().getCopy();
-		final Rectangle groupBounds = groupEP.getFigure().getBounds();
-		final int borderSize = groupContentBounds.x - groupBounds.x;
-		if (groupBounds.width < groupContentBounds.width) {
-			groupContentBounds.width = groupBounds.width - borderSize;
-		}
-		final int dy = groupContentBounds.y - groupBounds.y;
-		if ((groupBounds.height - dy) < groupContentBounds.height) {
-			groupContentBounds.height = groupBounds.height - dy - borderSize;
-		}
-		return groupContentBounds;
-	}
-
-	public static ChangeGroupBoundsCommand createChangeGroupBoundsCommand(final Group group,
-			final Rectangle groupContentContainerBounds, final Rectangle groupContentBounds) {
-		final int dx = groupContentBounds.x - groupContentContainerBounds.x;
-		final int dy = groupContentBounds.y - groupContentContainerBounds.y;
-		final int dw = groupContentBounds.width - groupContentContainerBounds.width;
-		final int dh = groupContentBounds.height - groupContentContainerBounds.height;
-		return new ChangeGroupBoundsCommand(group, dx, dy, dw, dh);
-	}
 
 }
