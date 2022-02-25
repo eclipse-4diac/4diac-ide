@@ -19,7 +19,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
@@ -50,13 +49,18 @@ public class ForceHandler extends AbstractMonitoringHandler {
 			final MonitoringBaseElement element = manager.getMonitoringElement(variable);
 			if (element instanceof MonitoringElement) {
 				final MonitoringElement monitoringElement = (MonitoringElement) element;
-				final DataType type = monitoringElement.getPort().getInterfaceElement().getType();
+				final IInterfaceElement interfaceElement = monitoringElement.getPort().getInterfaceElement();
 
 				final InputDialog input = new InputDialog(Display.getDefault().getActiveShell(),
 						Messages.MonitoringWatchesView_ForceValue,
 						Messages.MonitoringWatchesView_Value,
 						monitoringElement.isForce() ? monitoringElement.getForceValue() : "", //$NON-NLS-1$
-								newValue -> ForceHandler.validateForceInput(type, newValue));
+								(newValue -> {
+									if (interfaceElement instanceof VarDeclaration) {
+										return ForceHandler.validateForceInput((VarDeclaration) interfaceElement, newValue);
+									}
+									return null;
+								}));
 				final int ret = input.open();
 				if (ret == org.eclipse.jface.window.Window.OK) {
 					manager.forceValue(monitoringElement, input.getValue());
@@ -65,9 +69,9 @@ public class ForceHandler extends AbstractMonitoringHandler {
 		}
 	}
 
-	private static String validateForceInput(final DataType type, final String newValue) {
+	private static String validateForceInput(final VarDeclaration varDeclaration, final String newValue) {
 		if (!newValue.isBlank()) {
-			final String validationMsg = ValueValidator.validateValue(type, newValue);
+			final String validationMsg = ValueValidator.validateValue(varDeclaration, newValue);
 			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
 				return validationMsg;
 			}

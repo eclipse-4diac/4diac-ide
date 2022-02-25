@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,8 +9,8 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *   Martin Melik Merkumians - filling in the implementation
- *   Martin Melik Merkumians - fixes handling for ANY types
+ *   Martin Melik Merkumians - filling in the implementation,
+ *    fixes handling for ANY types, fixes handling of Arrays
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.validation;
 
@@ -19,8 +19,12 @@ import static java.util.Map.entry;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -47,6 +51,7 @@ import org.eclipse.fordiac.ide.model.data.TimeType;
 import org.eclipse.fordiac.ide.model.data.WcharType;
 import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class ValueValidator {
 
@@ -93,8 +98,8 @@ public final class ValueValidator {
 
 	private static final String[] timeNames = { "d", "h", "m", "s", "ms", "us", "ns" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 	private static final int[] timesMaxs = { 365, 24, 60, 60, 1000, 1000, 1000 };
-	
-	private static final String REGEX_VIRTUAL_DNS_ENTRY = "(%)(.)*(%)" ; 
+
+	private static final String REGEX_VIRTUAL_DNS_ENTRY = "(%)(.)*(%)" ;
 
 	private static final String TIME_SHORT_FORM = "T"; //$NON-NLS-1$
 	private static final String LONG_TIME_SHORT_FORM = "LT"; //$NON-NLS-1$
@@ -237,6 +242,82 @@ public final class ValueValidator {
 		return errorString;
 	}
 
+	public static String validateValue(final VarDeclaration varDeclaration) {
+		final var varDeclarationValue = varDeclaration.getValue().getValue();
+		return validateValue(varDeclaration, varDeclarationValue);
+	}
+
+	public static String validateValue(final VarDeclaration varDeclaration, final String valueString) {
+		if (varDeclaration.isArray()) {
+			final var trimmedString = valueString.trim();
+			// Check if the Array is delimited by []
+			if (!(trimmedString.charAt(0) == '[' && trimmedString.charAt(trimmedString.length() - 1) == ']')) {
+				return Messages.VALIDATOR_ARRAY_MISSES_BRACKETS;
+			}
+			final var onlyValuesString = trimmedString.substring(1, trimmedString.length() - 1);
+			if (onlyValuesString.isEmpty()) {
+				return EMPTY_STRING;
+			}
+			if (onlyValuesString.charAt(0) == ',') {
+				return Messages.VALIDATOR_ARRAY_STARTS_WITH_VALUE_DELIMITER;
+			}
+			// split array at "," but Strings can also include "," so String split does not work
+			final var splitArrayLiteralString = splitArrayValueString(onlyValuesString, varDeclaration.getType());
+			final StringBuilder stringBuilder = new StringBuilder();
+			int index = 0;
+			for(final var literalString : splitArrayLiteralString) {
+				final var errorString = validateValue(varDeclaration.getType(), literalString);
+				if (!errorString.isBlank()) {
+					if (stringBuilder.length() != 0) {
+						stringBuilder.append(", "); //$NON-NLS-1$
+					}
+					stringBuilder.append(Messages.VALIDATOR_INDEX);
+					stringBuilder.append(" "); //$NON-NLS-1$
+					stringBuilder.append(index);
+					stringBuilder.append(": "); //$NON-NLS-1$
+					stringBuilder.append(errorString);
+				}
+				index++;
+			}
+			return stringBuilder.toString();
+		}
+		return validateValue(varDeclaration.getType(), valueString);
+	}
+
+	private static List<String> splitArrayValueString(final String onlyValuesString, final DataType type) {
+
+		if (!(type instanceof AnyCharsType)) {
+			return Arrays.stream(onlyValuesString.split(",")).map(String::trim).collect(Collectors.toList()); //$NON-NLS-1$
+		}
+		return splitIECStringArray(onlyValuesString, type).stream().map(String::trim).collect(Collectors.toList());
+	}
+
+	private static List<String> splitIECStringArray(final String onlyValuesString, final DataType stringType) {
+		final char arrayValueDelimiter = ',';
+		char stringDelimiter = 0;
+		final List<String> splitString = new ArrayList<>();
+		if (stringType instanceof CharType || stringType instanceof StringType) {
+			stringDelimiter = '\'';
+		} else if (stringType instanceof WcharType || stringType instanceof WstringType) {
+			stringDelimiter = '"';
+		}
+
+		int startIndex = 0;
+		boolean insideString = (onlyValuesString.charAt(startIndex) == stringDelimiter);
+		for (int i = 1; i < onlyValuesString.length(); i++) {
+			if (onlyValuesString.charAt(i) == stringDelimiter && onlyValuesString.charAt(i - 1) != '$') {
+				insideString = !insideString;
+			}
+			if (!insideString && onlyValuesString.charAt(i) == arrayValueDelimiter) {
+				splitString.add(onlyValuesString.substring(startIndex, i));
+				startIndex = i + 1; // We are at the ',' which delimits the values but is not part of them
+			}
+		}
+		// The last entry is not delimited by a ","
+		splitString.add(onlyValuesString.substring(startIndex, onlyValuesString.length()));
+		return splitString;
+	}
+
 	/**
 	 * Check the given value if it is valid literal for the data type
 	 *
@@ -245,59 +326,19 @@ public final class ValueValidator {
 	 * @return empty string if the literal is valid, otherwise an error message what
 	 *         is wrong with the literal
 	 */
-	public static String validateValue(final DataType type, final String value) { 
+	public static String validateValue(final DataType type, final String value) {
+
+		final String virtualDNSMessage = checkVirtualDNS(value);
+		if (virtualDNSMessage != null) {
+			return virtualDNSMessage;
+		}
+
 		final var pattern = Pattern.compile(REGEX_LITERAL_SPLITTER);
 		final var matcher = pattern.matcher(value);
-		
-		final var virtualDNSPattern = Pattern.compile(REGEX_VIRTUAL_DNS_ENTRY);
-		final var virtualDNSmatcher = virtualDNSPattern.matcher(value);
-		
-		// check if literal is a virtual DNS entry
-		if (virtualDNSmatcher.find()) {
-			boolean outbound = !(value.charAt(0) == '%' && value.charAt(value.length()-1) == '%');
-			boolean inbound = false;
-			
-			int counter = 0;
-			// true if % is followed by %
-			boolean followUp = false;
-			
-			for(int i = 0; i < value.length(); ++i) {
-				
-				if(value.charAt(i) == '%') {
-					counter++;
-					if(i < value.length()-1 && counter % 2 == 0) {
-						followUp = value.charAt(i+1) == '%';
-					}
-				}
-				
-			}
-			
-			// true if literal is a single virtual DNS entry
-			boolean single = counter == 2;
-			
-			inbound = counter % 2 == 1;
-			
-			if(outbound && inbound) {
-				return Messages.VALIDATOR_VIRTUAL_DNS_ILLEGAL_FORMAT;
-			}
-			
-			if(inbound && !outbound) {
-				return Messages.VALIDATOR_VIRTUAL_DNS_MULTIPLE_BOUNDING_CHARACTERS; 
-			}
-			
- 			if(outbound && !inbound || (!followUp && !single)) {
-				return Messages.VALIDATOR_VIRTUAL_DNS_CHARACTERS_OUT_OF_BOUNDS; 
-			}	
-			
-			return EMPTY_STRING; 
-		}
-		
 		// check if literal matches the general literal structure (<type>#)?(<radix>#)?<value>
 		if (!matcher.find()) {
 			return Messages.VALIDATOR_UNKOWN_LITERAL_ERROR_PLEASE_CHECK_SANENESS_OF_LITERAL;
 		}
-		
-		
 
 		// First group contains the type specifier if present
 		var typeSpecifier = matcher.group(1);
@@ -318,7 +359,7 @@ public final class ValueValidator {
 			// no base information available, so base 10 is implicitly selected
 			baseSpecifier = EMPTY_STRING;
 		}
-		
+
 
 		DataType literalType = null;
 
@@ -366,6 +407,49 @@ public final class ValueValidator {
 		}
 
 		return EMPTY_STRING;
+	}
+
+	private static String checkVirtualDNS(final String value) {
+		final var virtualDNSPattern = Pattern.compile(REGEX_VIRTUAL_DNS_ENTRY);
+		final var virtualDNSmatcher = virtualDNSPattern.matcher(value);
+		// check if literal is a virtual DNS entry
+		if (virtualDNSmatcher.find()) {
+			final boolean outbound = !(value.charAt(0) == '%' && value.charAt(value.length() - 1) == '%');
+			boolean inbound = false;
+
+			int counter = 0;
+			// true if % is followed by %
+			boolean followUp = false;
+
+			for (int i = 0; i < value.length(); ++i) {
+				if (value.charAt(i) == '%') {
+					counter++;
+					if (i < value.length() - 1 && counter % 2 == 0) {
+						followUp = value.charAt(i + 1) == '%';
+					}
+				}
+
+			}
+
+			// true if literal is a single virtual DNS entry
+
+			inbound = counter % 2 == 1;
+
+			if(outbound && inbound) {
+				return Messages.VALIDATOR_VIRTUAL_DNS_ILLEGAL_FORMAT;
+			}
+
+			if(inbound && !outbound) {
+				return Messages.VALIDATOR_VIRTUAL_DNS_MULTIPLE_BOUNDING_CHARACTERS;
+			}
+
+			final boolean single = (counter == 2);
+			if(outbound && !inbound || (!followUp && !single)) {
+				return Messages.VALIDATOR_VIRTUAL_DNS_CHARACTERS_OUT_OF_BOUNDS;
+			}
+			return EMPTY_STRING;
+		}
+		return null;
 	}
 
 	private static String checkAnyCharsLiteral(final DataType type, final String baseSpecifier, final String literalValue) {

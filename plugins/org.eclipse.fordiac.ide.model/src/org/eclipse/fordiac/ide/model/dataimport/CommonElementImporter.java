@@ -619,7 +619,7 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void validateValue(final VarDeclaration vInput) {
-		final String validation = ValueValidator.validateValue(vInput.getType(), vInput.getValue().getValue());
+		final String validation = ValueValidator.validateValue(vInput);
 		if ((validation != null) && (!validation.trim().isEmpty())) {
 			final ErrorMarkerBuilder e = FordiacMarkerHelper.createValueErrorMarkerBuilder(validation,
 					vInput.getValue(), getLineNumber());

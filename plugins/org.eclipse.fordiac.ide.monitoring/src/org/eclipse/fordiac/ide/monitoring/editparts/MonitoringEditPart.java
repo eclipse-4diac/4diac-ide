@@ -78,7 +78,9 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			if (!newValue.isBlank()) {
 				final MonitoringEditPart editPart = (MonitoringEditPart) getHost();
 				final IInterfaceElement ie = editPart.getModel().getPort().getInterfaceElement();
-				final String validationMsg = ValueValidator.validateValue(ie.getType(), newValue);
+				final String validationMsg = (ie instanceof VarDeclaration)
+						? ValueValidator.validateValue((VarDeclaration) ie, newValue)
+						: null;
 				if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
 					ErrorMessenger.popUpErrorMessage(validationMsg);
 					return false;

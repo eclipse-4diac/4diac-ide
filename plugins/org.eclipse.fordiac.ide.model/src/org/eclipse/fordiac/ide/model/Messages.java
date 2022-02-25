@@ -252,6 +252,9 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_VIRTUAL_DNS_CHARACTERS_OUT_OF_BOUNDS;
 	public static String VALIDATOR_VIRTUAL_DNS_MULTIPLE_BOUNDING_CHARACTERS;
 	public static String VALIDATOR_VIRTUAL_DNS_ILLEGAL_FORMAT;
+	public static String VALIDATOR_ARRAY_MISSES_BRACKETS;
+	public static String VALIDATOR_ARRAY_STARTS_WITH_VALUE_DELIMITER;
+	public static String VALIDATOR_INDEX;
 
 	public static String Error_SelfInsertion;
 	public static String Error_RecursiveType;
