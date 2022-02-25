@@ -43,10 +43,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -154,6 +157,23 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 	}
 
 	@Override
+	public void performRequest(final Request request) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN)
+				&& (request instanceof SelectionRequest)) {
+			// if it is direct edit request and inside of the content area forward request to there so we are creating
+			// fbs inside
+			final Point location = ((SelectionRequest) request).getLocation().getCopy();
+			getFigure().translateToRelative(location);
+			final GroupContentEditPart groupContentEP = getGroupContentEP();
+			if ((groupContentEP != null) && (groupContentEP.getFigure().getBounds().contains(location))) {
+				groupContentEP.performRequest(request);
+				return;
+			}
+		}
+		super.performRequest(request);
+	}
+
+	@Override
 	protected void performDirectEdit() {
 		new TextDirectEditManager(this, new FigureCellEditorLocator(commentFigure)) {
 			@Override
@@ -198,6 +218,11 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 
 	private Dimension getGroupSize() {
 		return new Dimension(getModel().getWidth(), getModel().getHeight());
+	}
+
+	private GroupContentEditPart getGroupContentEP() {
+		return (GroupContentEditPart) getChildren().stream().filter(GroupContentEditPart.class::isInstance).findAny()
+				.orElse(null);
 	}
 
 	private GroupContentNetwork getSubappContents() {

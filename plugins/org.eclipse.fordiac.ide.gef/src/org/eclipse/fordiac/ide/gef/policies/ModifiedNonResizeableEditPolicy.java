@@ -26,6 +26,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
@@ -81,7 +82,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 
 		if (isFeedbackRequest(request) && (null == selectionFeedback) && (null == handles)) {
 			// we don't have already a feedback showing and we are not selected
-			selectionFeedback = createSelectionFeedbackFigure();
+			selectionFeedback = createSelectionFeedbackFigure(getHost(), arc);
 			if (null != selectionFeedback) {
 				addFeedback(selectionFeedback);
 			}
@@ -100,9 +101,9 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 						|| REQ_CONNECTION_END.equals(request.getType()));
 	}
 
-	private RoundedRectangle createSelectionFeedbackFigure() {
-		if (getHost() instanceof GraphicalEditPart) {
-			final GraphicalEditPart ep = ((GraphicalEditPart) getHost());
+	public static RoundedRectangle createSelectionFeedbackFigure(final EditPart editPart, final int arc) {
+		if (editPart instanceof GraphicalEditPart) {
+			final GraphicalEditPart ep = ((GraphicalEditPart) editPart);
 			final RoundedRectangle newSelFeedbackFigure = new RoundedRectangle();
 			newSelFeedbackFigure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 			newSelFeedbackFigure.setOutline(false);
