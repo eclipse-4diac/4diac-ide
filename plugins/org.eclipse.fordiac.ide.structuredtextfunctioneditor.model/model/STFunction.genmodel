@@ -22,6 +22,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STFunction.ecore#//STFunction/varInputDeclarations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STFunction.ecore#//STFunction/varOutputDeclarations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STFunction.ecore#//STFunction/code"/>
+      <genOperations ecoreOperation="STFunction.ecore#//STFunction/getInputParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getInputParameters(this);"/>
+      <genOperations ecoreOperation="STFunction.ecore#//STFunction/getOutputParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getOutputParameters(this);"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

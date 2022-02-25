@@ -1,6 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -79,6 +80,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
@@ -698,6 +700,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass groupEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass iCallableEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3244,6 +3253,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getICallable() {
+		return iCallableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getLanguage() {
 		return languageEEnum;
 	}
@@ -3641,6 +3660,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(groupEClass, GROUP__WIDTH);
 		createEAttribute(groupEClass, GROUP__HEIGHT);
 
+		iCallableEClass = createEClass(ICALLABLE);
+
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -3686,7 +3707,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Add supertypes to classes
 		adapterDeclarationEClass.getESuperTypes().add(this.getVarDeclaration());
 		adapterTypeEClass.getESuperTypes().add(theDataPackage.getDataType());
-		algorithmEClass.getESuperTypes().add(this.getINamedElement());
+		algorithmEClass.getESuperTypes().add(this.getICallable());
 		applicationEClass.getESuperTypes().add(this.getConfigurableObject());
 		basicFBTypeEClass.getESuperTypes().add(this.getBaseFBType());
 		connectionEClass.getESuperTypes().add(this.getConfigurableObject());
@@ -3705,6 +3726,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		fbNetworkElementEClass.getESuperTypes().add(this.getPositionableElement());
 		subAppEClass.getESuperTypes().add(this.getFBNetworkElement());
 		fbTypeEClass.getESuperTypes().add(this.getCompilableType());
+		fbTypeEClass.getESuperTypes().add(this.getICallable());
 		inputPrimitiveEClass.getESuperTypes().add(this.getPrimitive());
 		linkEClass.getESuperTypes().add(this.getConfigurableObject());
 		otherAlgorithmEClass.getESuperTypes().add(this.getTextAlgorithm());
@@ -3754,6 +3776,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		errorMarkerInterfaceEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		cfbInstanceEClass.getESuperTypes().add(this.getFB());
 		groupEClass.getESuperTypes().add(this.getFBNetworkElement());
+		iCallableEClass.getESuperTypes().add(this.getINamedElement());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -3772,6 +3795,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(adapterTypeEClass, this.getAdapterFBType(), "getSocketType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(algorithmEClass, Algorithm.class, "Algorithm", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		addEOperation(algorithmEClass, this.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(algorithmEClass, this.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(applicationEClass, Application.class, "Application", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getApplication_FBNetwork(), this.getFBNetwork(), null, "fBNetwork", null, 1, 1, Application.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -3946,6 +3973,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(fbTypeEClass, FBType.class, "FBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getFBType_InterfaceList(), this.getInterfaceList(), null, "interfaceList", null, 1, 1, FBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getFBType_Service(), this.getService(), null, "service", null, 1, 1, FBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(fbTypeEClass, this.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(fbTypeEClass, this.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(identificationEClass, Identification.class, "Identification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getIdentification_ApplicationDomain(), theXMLTypePackage.getString(), "applicationDomain", null, 0, 1, Identification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -4331,6 +4362,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getGroup_GroupElements(), this.getFBNetworkElement(), this.getFBNetworkElement_Group(), "groupElements", null, 0, -1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getGroup_Width(), theXMLTypePackage.getInt(), "width", "200", 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getGroup_Height(), theXMLTypePackage.getInt(), "height", "100", 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+
+		initEClass(iCallableEClass, ICallable.class, "ICallable", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		addEOperation(iCallableEClass, this.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(iCallableEClass, this.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$

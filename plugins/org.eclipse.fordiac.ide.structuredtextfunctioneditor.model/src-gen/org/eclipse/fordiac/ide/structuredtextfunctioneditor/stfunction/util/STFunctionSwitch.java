@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
@@ -94,6 +95,7 @@ public class STFunctionSwitch<T> extends Switch<T> {
 			case STFunctionPackage.ST_FUNCTION: {
 				STFunction stFunction = (STFunction)theEObject;
 				T result = caseSTFunction(stFunction);
+				if (result == null) result = caseICallable(stFunction);
 				if (result == null) result = caseINamedElement(stFunction);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -159,6 +161,21 @@ public class STFunctionSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseINamedElement(INamedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseICallable(ICallable object) {
 		return null;
 	}
 

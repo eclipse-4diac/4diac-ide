@@ -288,7 +288,7 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
 
 		// Add supertypes to classes
 		stFunctionSourceEClass.getESuperTypes().add(theSTCorePackage.getSTSource());
-		stFunctionEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
+		stFunctionEClass.getESuperTypes().add(theLibraryElementPackage.getICallable());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(stFunctionSourceEClass, STFunctionSource.class, "STFunctionSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -301,6 +301,10 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
 		initEReference(getSTFunction_VarInputDeclarations(), theSTCorePackage.getSTVarDeclarationBlock(), null, "varInputDeclarations", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTFunction_VarOutputDeclarations(), theSTCorePackage.getSTVarDeclarationBlock(), null, "varOutputDeclarations", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTFunction_Code(), theSTCorePackage.getSTStatement(), null, "code", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stFunctionEClass, theLibraryElementPackage.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stFunctionEClass, theLibraryElementPackage.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

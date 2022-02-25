@@ -1,6 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -62,6 +63,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
@@ -183,6 +185,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.ALGORITHM: {
 				Algorithm algorithm = (Algorithm)theEObject;
 				T result = caseAlgorithm(algorithm);
+				if (result == null) result = caseICallable(algorithm);
 				if (result == null) result = caseINamedElement(algorithm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -201,6 +204,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseBaseFBType(basicFBType);
 				if (result == null) result = caseFBType(basicFBType);
 				if (result == null) result = caseCompilableType(basicFBType);
+				if (result == null) result = caseICallable(basicFBType);
 				if (result == null) result = caseLibraryElement(basicFBType);
 				if (result == null) result = caseINamedElement(basicFBType);
 				if (result == null) result = defaultCase(theEObject);
@@ -326,6 +330,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				FBType fbType = (FBType)theEObject;
 				T result = caseFBType(fbType);
 				if (result == null) result = caseCompilableType(fbType);
+				if (result == null) result = caseICallable(fbType);
 				if (result == null) result = caseLibraryElement(fbType);
 				if (result == null) result = caseINamedElement(fbType);
 				if (result == null) result = defaultCase(theEObject);
@@ -369,6 +374,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseOtherAlgorithm(otherAlgorithm);
 				if (result == null) result = caseTextAlgorithm(otherAlgorithm);
 				if (result == null) result = caseAlgorithm(otherAlgorithm);
+				if (result == null) result = caseICallable(otherAlgorithm);
 				if (result == null) result = caseINamedElement(otherAlgorithm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -442,6 +448,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseServiceInterfaceFBType(serviceInterfaceFBType);
 				if (result == null) result = caseFBType(serviceInterfaceFBType);
 				if (result == null) result = caseCompilableType(serviceInterfaceFBType);
+				if (result == null) result = caseICallable(serviceInterfaceFBType);
 				if (result == null) result = caseLibraryElement(serviceInterfaceFBType);
 				if (result == null) result = caseINamedElement(serviceInterfaceFBType);
 				if (result == null) result = defaultCase(theEObject);
@@ -452,6 +459,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseSTAlgorithm(stAlgorithm);
 				if (result == null) result = caseTextAlgorithm(stAlgorithm);
 				if (result == null) result = caseAlgorithm(stAlgorithm);
+				if (result == null) result = caseICallable(stAlgorithm);
 				if (result == null) result = caseINamedElement(stAlgorithm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -468,6 +476,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseCompositeFBType(subAppType);
 				if (result == null) result = caseFBType(subAppType);
 				if (result == null) result = caseCompilableType(subAppType);
+				if (result == null) result = caseICallable(subAppType);
 				if (result == null) result = caseLibraryElement(subAppType);
 				if (result == null) result = caseINamedElement(subAppType);
 				if (result == null) result = defaultCase(theEObject);
@@ -529,6 +538,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseCompositeFBType(compositeFBType);
 				if (result == null) result = caseFBType(compositeFBType);
 				if (result == null) result = caseCompilableType(compositeFBType);
+				if (result == null) result = caseICallable(compositeFBType);
 				if (result == null) result = caseLibraryElement(compositeFBType);
 				if (result == null) result = caseINamedElement(compositeFBType);
 				if (result == null) result = defaultCase(theEObject);
@@ -538,6 +548,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				TextAlgorithm textAlgorithm = (TextAlgorithm)theEObject;
 				T result = caseTextAlgorithm(textAlgorithm);
 				if (result == null) result = caseAlgorithm(textAlgorithm);
+				if (result == null) result = caseICallable(textAlgorithm);
 				if (result == null) result = caseINamedElement(textAlgorithm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -632,6 +643,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseAdapterFBType(adapterFBType);
 				if (result == null) result = caseFBType(adapterFBType);
 				if (result == null) result = caseCompilableType(adapterFBType);
+				if (result == null) result = caseICallable(adapterFBType);
 				if (result == null) result = caseLibraryElement(adapterFBType);
 				if (result == null) result = caseINamedElement(adapterFBType);
 				if (result == null) result = defaultCase(theEObject);
@@ -729,6 +741,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseBaseFBType(simpleFBType);
 				if (result == null) result = caseFBType(simpleFBType);
 				if (result == null) result = caseCompilableType(simpleFBType);
+				if (result == null) result = caseICallable(simpleFBType);
 				if (result == null) result = caseLibraryElement(simpleFBType);
 				if (result == null) result = caseINamedElement(simpleFBType);
 				if (result == null) result = defaultCase(theEObject);
@@ -739,6 +752,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseBaseFBType(baseFBType);
 				if (result == null) result = caseFBType(baseFBType);
 				if (result == null) result = caseCompilableType(baseFBType);
+				if (result == null) result = caseICallable(baseFBType);
 				if (result == null) result = caseLibraryElement(baseFBType);
 				if (result == null) result = caseINamedElement(baseFBType);
 				if (result == null) result = defaultCase(theEObject);
@@ -840,6 +854,13 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = casePositionableElement(group);
 				if (result == null) result = caseConfigurableObject(group);
 				if (result == null) result = caseINamedElement(group);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ICALLABLE: {
+				ICallable iCallable = (ICallable)theEObject;
+				T result = caseICallable(iCallable);
+				if (result == null) result = caseINamedElement(iCallable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -2059,6 +2080,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseGroup(Group object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseICallable(ICallable object) {
 		return null;
 	}
 

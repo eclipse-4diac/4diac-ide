@@ -20,15 +20,15 @@ import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Algorithm</b></em>'.
+ * A representation of the model object '<em><b>ICallable</b></em>'.
  * <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAlgorithm()
- * @model abstract="true"
+ * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getICallable()
+ * @model interface="true" abstract="true"
  * @generated
  */
-public interface Algorithm extends ICallable {
+public interface ICallable extends INamedElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -45,4 +45,4 @@ public interface Algorithm extends ICallable {
 	 */
 	EList<INamedElement> getOutputParameters();
 
-} // Algorithm
+} // ICallable

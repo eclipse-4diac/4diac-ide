@@ -23,6 +23,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
@@ -102,6 +103,10 @@ public class STFunctionAdapterFactory extends AdapterFactoryImpl {
 				return createINamedElementAdapter();
 			}
 			@Override
+			public Adapter caseICallable(ICallable object) {
+				return createICallableAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -174,6 +179,20 @@ public class STFunctionAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createINamedElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ICallable
+	 * @generated
+	 */
+	public Adapter createICallableAdapter() {
 		return null;
 	}
 

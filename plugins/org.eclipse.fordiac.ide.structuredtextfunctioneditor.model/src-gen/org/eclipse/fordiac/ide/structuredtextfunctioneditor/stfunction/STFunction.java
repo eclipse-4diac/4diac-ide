@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
@@ -46,7 +47,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
  * @model
  * @generated
  */
-public interface STFunction extends INamedElement {
+public interface STFunction extends ICallable {
 	/**
 	 * Returns the value of the '<em><b>Return Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -128,5 +129,21 @@ public interface STFunction extends INamedElement {
 	 * @generated
 	 */
 	EList<STStatement> getCode();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<INamedElement> getInputParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<INamedElement> getOutputParameters();
 
 } // STFunction

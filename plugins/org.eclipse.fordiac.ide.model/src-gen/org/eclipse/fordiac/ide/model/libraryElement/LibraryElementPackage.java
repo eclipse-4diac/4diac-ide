@@ -1,6 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -648,33 +649,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ALGORITHM = 2;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALGORITHM__NAME = INAMED_ELEMENT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALGORITHM__COMMENT = INAMED_ELEMENT__COMMENT;
-
-	/**
-	 * The number of structural features of the '<em>Algorithm</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALGORITHM_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl <em>Application</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -683,6 +657,790 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	int APPLICATION = 3;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl <em>Compilable Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompilableType()
+	 * @generated
+	 */
+	int COMPILABLE_TYPE = 43;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBType()
+	 * @generated
+	 */
+	int FB_TYPE = 19;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl <em>Base FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBaseFBType()
+	 * @generated
+	 */
+	int BASE_FB_TYPE = 71;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBasicFBType()
+	 * @generated
+	 */
+	int BASIC_FB_TYPE = 4;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl <em>Compiler Info</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompilerInfo()
+	 * @generated
+	 */
+	int COMPILER_INFO = 5;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl <em>Compiler</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompiler()
+	 * @generated
+	 */
+	int COMPILER = 6;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl <em>Connection</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConnection()
+	 * @generated
+	 */
+	int CONNECTION = 7;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl <em>Connection Routing Data</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConnectionRoutingData()
+	 * @generated
+	 */
+	int CONNECTION_ROUTING_DATA = 8;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl <em>Typed Configureable Object</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedConfigureableObject()
+	 * @generated
+	 */
+	int TYPED_CONFIGUREABLE_OBJECT = 60;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl <em>Device</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDevice()
+	 * @generated
+	 */
+	int DEVICE = 9;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl <em>Device Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeviceType()
+	 * @generated
+	 */
+	int DEVICE_TYPE = 10;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl <em>EC Action</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECAction()
+	 * @generated
+	 */
+	int EC_ACTION = 11;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl <em>ECC</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECC()
+	 * @generated
+	 */
+	int ECC = 12;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl <em>EC State</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECState()
+	 * @generated
+	 */
+	int EC_STATE = 13;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl <em>Positionable Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPositionableElement()
+	 * @generated
+	 */
+	int POSITIONABLE_ELEMENT = 63;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl <em>EC Transition</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECTransition()
+	 * @generated
+	 */
+	int EC_TRANSITION = 14;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl <em>Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEvent()
+	 * @generated
+	 */
+	int EVENT = 15;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl <em>FB Network Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetworkElement()
+	 * @generated
+	 */
+	int FB_NETWORK_ELEMENT = 17;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl <em>FB</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFB()
+	 * @generated
+	 */
+	int FB = 16;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl <em>Sub App</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubApp()
+	 * @generated
+	 */
+	int SUB_APP = 18;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl <em>Identification</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIdentification()
+	 * @generated
+	 */
+	int IDENTIFICATION = 20;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl <em>Primitive</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPrimitive()
+	 * @generated
+	 */
+	int PRIMITIVE = 62;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl <em>Input Primitive</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInputPrimitive()
+	 * @generated
+	 */
+	int INPUT_PRIMITIVE = 21;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl <em>Interface List</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceList()
+	 * @generated
+	 */
+	int INTERFACE_LIST = 22;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl <em>Link</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLink()
+	 * @generated
+	 */
+	int LINK = 23;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl <em>Mapping</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMapping()
+	 * @generated
+	 */
+	int MAPPING = 24;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl <em>Text Algorithm</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextAlgorithm()
+	 * @generated
+	 */
+	int TEXT_ALGORITHM = 46;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl <em>Other Algorithm</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherAlgorithm()
+	 * @generated
+	 */
+	int OTHER_ALGORITHM = 25;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl <em>Output Primitive</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOutputPrimitive()
+	 * @generated
+	 */
+	int OUTPUT_PRIMITIVE = 26;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl <em>Attribute</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAttribute()
+	 * @generated
+	 */
+	int ATTRIBUTE = 27;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl <em>Resource</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResource()
+	 * @generated
+	 */
+	int RESOURCE = 28;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl <em>Resource Type Name</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeName()
+	 * @generated
+	 */
+	int RESOURCE_TYPE_NAME = 29;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl <em>Resource Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceType()
+	 * @generated
+	 */
+	int RESOURCE_TYPE = 30;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl <em>Segment</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegment()
+	 * @generated
+	 */
+	int SEGMENT = 31;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl <em>Service Sequence</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceSequence()
+	 * @generated
+	 */
+	int SERVICE_SEQUENCE = 32;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service Transaction</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceTransaction()
+	 * @generated
+	 */
+	int SERVICE_TRANSACTION = 33;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl <em>Service Interface FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterfaceFBType()
+	 * @generated
+	 */
+	int SERVICE_INTERFACE_FB_TYPE = 34;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl <em>ST Algorithm</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTAlgorithm()
+	 * @generated
+	 */
+	int ST_ALGORITHM = 35;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl <em>FB Network</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetwork()
+	 * @generated
+	 */
+	int FB_NETWORK = 36;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl <em>Composite FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompositeFBType()
+	 * @generated
+	 */
+	int COMPOSITE_FB_TYPE = 45;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl <em>Sub App Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubAppType()
+	 * @generated
+	 */
+	int SUB_APP_TYPE = 37;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl <em>Automation System</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAutomationSystem()
+	 * @generated
+	 */
+	int AUTOMATION_SYSTEM = 38;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl <em>Version Info</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVersionInfo()
+	 * @generated
+	 */
+	int VERSION_INFO = 40;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl <em>With</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getWith()
+	 * @generated
+	 */
+	int WITH = 41;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DataConnectionImpl <em>Data Connection</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DataConnectionImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDataConnection()
+	 * @generated
+	 */
+	int DATA_CONNECTION = 47;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventConnectionImpl <em>Event Connection</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.EventConnectionImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEventConnection()
+	 * @generated
+	 */
+	int EVENT_CONNECTION = 48;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl <em>Adapter Connection</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterConnection()
+	 * @generated
+	 */
+	int ADAPTER_CONNECTION = 49;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl <em>Service Interface</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterface()
+	 * @generated
+	 */
+	int SERVICE_INTERFACE = 50;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl <em>Error Marker Ref</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerRef()
+	 * @generated
+	 */
+	int ERROR_MARKER_REF = 79;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl <em>Value</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getValue()
+	 * @generated
+	 */
+	int VALUE = 52;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl <em>System Configuration</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSystemConfiguration()
+	 * @generated
+	 */
+	int SYSTEM_CONFIGURATION = 53;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeFBImpl <em>Resource Type FB</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeFBImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeFB()
+	 * @generated
+	 */
+	int RESOURCE_TYPE_FB = 55;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl <em>Segment Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegmentType()
+	 * @generated
+	 */
+	int SEGMENT_TYPE = 56;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl <em>Adapter FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFBType()
+	 * @generated
+	 */
+	int ADAPTER_FB_TYPE = 57;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl <em>Adapter Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterEvent()
+	 * @generated
+	 */
+	int ADAPTER_EVENT = 58;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl <em>Service</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getService()
+	 * @generated
+	 */
+	int SERVICE = 59;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl <em>Adapter FB</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFB()
+	 * @generated
+	 */
+	int ADAPTER_FB = 61;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionImpl <em>Position</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PositionImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPosition()
+	 * @generated
+	 */
+	int POSITION = 64;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl <em>Color</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColor()
+	 * @generated
+	 */
+	int COLOR = 65;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl <em>Colorizable Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColorizableElement()
+	 * @generated
+	 */
+	int COLORIZABLE_ELEMENT = 66;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.IVarElement
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIVarElement()
+	 * @generated
+	 */
+	int IVAR_ELEMENT = 67;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl <em>Attribute Declaration</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAttributeDeclaration()
+	 * @generated
+	 */
+	int ATTRIBUTE_DECLARATION = 68;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedElement
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedElement()
+	 * @generated
+	 */
+	int TYPED_ELEMENT = 69;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl <em>Simple FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleFBType()
+	 * @generated
+	 */
+	int SIMPLE_FB_TYPE = 70;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl <em>Struct Manipulator</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
+	 * @generated
+	 */
+	int STRUCT_MANIPULATOR = 72;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl <em>Demultiplexer</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDemultiplexer()
+	 * @generated
+	 */
+	int DEMULTIPLEXER = 73;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl <em>Multiplexer</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
+	 * @generated
+	 */
+	int MULTIPLEXER = 74;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl <em>Local Variable</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
+	 * @generated
+	 */
+	int LOCAL_VARIABLE = 75;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl <em>Error Marker FBN Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerFBNElement()
+	 * @generated
+	 */
+	int ERROR_MARKER_FBN_ELEMENT = 76;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl <em>Error Marker Interface</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerInterface()
+	 * @generated
+	 */
+	int ERROR_MARKER_INTERFACE = 77;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB Instance</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCFBInstance()
+	 * @generated
+	 */
+	int CFB_INSTANCE = 78;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.GroupImpl <em>Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.GroupImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getGroup()
+	 * @generated
+	 */
+	int GROUP = 80;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ICallable
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getICallable()
+	 * @generated
+	 */
+	int ICALLABLE = 81;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ICALLABLE__NAME = INAMED_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ICALLABLE__COMMENT = INAMED_ELEMENT__COMMENT;
+
+	/**
+	 * The number of structural features of the '<em>ICallable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ICALLABLE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALGORITHM__NAME = ICALLABLE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALGORITHM__COMMENT = ICALLABLE__COMMENT;
+
+	/**
+	 * The number of structural features of the '<em>Algorithm</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALGORITHM_FEATURE_COUNT = ICALLABLE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -728,16 +1486,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int APPLICATION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl <em>Compilable Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompilableType()
-	 * @generated
-	 */
-	int COMPILABLE_TYPE = 43;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -801,16 +1549,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPILABLE_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBType()
-	 * @generated
-	 */
-	int FB_TYPE = 19;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -892,16 +1630,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl <em>Base FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBaseFBType()
-	 * @generated
-	 */
-	int BASE_FB_TYPE = 71;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1001,16 +1729,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBasicFBType()
-	 * @generated
-	 */
-	int BASIC_FB_TYPE = 4;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1130,16 +1848,6 @@ public interface LibraryElementPackage extends EPackage {
 	int BASIC_FB_TYPE_FEATURE_COUNT = BASE_FB_TYPE_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl <em>Compiler Info</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompilerInfo()
-	 * @generated
-	 */
-	int COMPILER_INFO = 5;
-
-	/**
 	 * The feature id for the '<em><b>Compiler</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1174,16 +1882,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPILER_INFO_FEATURE_COUNT = 3;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl <em>Compiler</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompiler()
-	 * @generated
-	 */
-	int COMPILER = 6;
 
 	/**
 	 * The feature id for the '<em><b>Language</b></em>' attribute.
@@ -1229,16 +1927,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPILER_FEATURE_COUNT = 4;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl <em>Connection</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConnection()
-	 * @generated
-	 */
-	int CONNECTION = 7;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1340,16 +2028,6 @@ public interface LibraryElementPackage extends EPackage {
 	int CONNECTION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 7;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl <em>Connection Routing Data</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConnectionRoutingData()
-	 * @generated
-	 */
-	int CONNECTION_ROUTING_DATA = 8;
-
-	/**
 	 * The feature id for the '<em><b>Dx1</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1395,16 +2073,6 @@ public interface LibraryElementPackage extends EPackage {
 	int CONNECTION_ROUTING_DATA_FEATURE_COUNT = 4;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl <em>Typed Configureable Object</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedConfigureableObject()
-	 * @generated
-	 */
-	int TYPED_CONFIGUREABLE_OBJECT = 60;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1448,16 +2116,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl <em>Device</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDevice()
-	 * @generated
-	 */
-	int DEVICE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1557,16 +2215,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int DEVICE_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl <em>Device Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeviceType()
-	 * @generated
-	 */
-	int DEVICE_TYPE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1686,16 +2334,6 @@ public interface LibraryElementPackage extends EPackage {
 	int DEVICE_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 6;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl <em>EC Action</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECAction()
-	 * @generated
-	 */
-	int EC_ACTION = 11;
-
-	/**
 	 * The feature id for the '<em><b>Algorithm</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1730,16 +2368,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int EC_ACTION_FEATURE_COUNT = 3;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl <em>ECC</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECC()
-	 * @generated
-	 */
-	int ECC = 12;
 
 	/**
 	 * The feature id for the '<em><b>EC State</b></em>' containment reference list.
@@ -1785,16 +2413,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ECC_FEATURE_COUNT = 4;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl <em>EC State</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECState()
-	 * @generated
-	 */
-	int EC_STATE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1869,16 +2487,6 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_STATE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl <em>Positionable Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPositionableElement()
-	 * @generated
-	 */
-	int POSITIONABLE_ELEMENT = 63;
-
-	/**
 	 * The feature id for the '<em><b>Position</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1895,16 +2503,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int POSITIONABLE_ELEMENT_FEATURE_COUNT = 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl <em>EC Transition</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECTransition()
-	 * @generated
-	 */
-	int EC_TRANSITION = 14;
 
 	/**
 	 * The feature id for the '<em><b>Position</b></em>' containment reference.
@@ -1977,16 +2575,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int EC_TRANSITION_FEATURE_COUNT = POSITIONABLE_ELEMENT_FEATURE_COUNT + 6;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl <em>Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEvent()
-	 * @generated
-	 */
-	int EVENT = 15;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2079,16 +2667,6 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl <em>FB Network Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetworkElement()
-	 * @generated
-	 */
-	int FB_NETWORK_ELEMENT = 17;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2170,16 +2748,6 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl <em>FB</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFB()
-	 * @generated
-	 */
-	int FB = 16;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2259,16 +2827,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl <em>Sub App</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubApp()
-	 * @generated
-	 */
-	int SUB_APP = 18;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2361,16 +2919,6 @@ public interface LibraryElementPackage extends EPackage {
 	int SUB_APP_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl <em>Identification</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIdentification()
-	 * @generated
-	 */
-	int IDENTIFICATION = 20;
-
-	/**
 	 * The feature id for the '<em><b>Application Domain</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2434,16 +2982,6 @@ public interface LibraryElementPackage extends EPackage {
 	int IDENTIFICATION_FEATURE_COUNT = 6;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl <em>Primitive</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPrimitive()
-	 * @generated
-	 */
-	int PRIMITIVE = 62;
-
-	/**
 	 * The feature id for the '<em><b>Event</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2480,16 +3018,6 @@ public interface LibraryElementPackage extends EPackage {
 	int PRIMITIVE_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl <em>Input Primitive</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInputPrimitive()
-	 * @generated
-	 */
-	int INPUT_PRIMITIVE = 21;
-
-	/**
 	 * The feature id for the '<em><b>Event</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2524,16 +3052,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int INPUT_PRIMITIVE_FEATURE_COUNT = PRIMITIVE_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl <em>Interface List</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceList()
-	 * @generated
-	 */
-	int INTERFACE_LIST = 22;
 
 	/**
 	 * The feature id for the '<em><b>Plugs</b></em>' containment reference list.
@@ -2608,16 +3126,6 @@ public interface LibraryElementPackage extends EPackage {
 	int INTERFACE_LIST_FEATURE_COUNT = 7;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl <em>Link</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLink()
-	 * @generated
-	 */
-	int LINK = 23;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2672,16 +3180,6 @@ public interface LibraryElementPackage extends EPackage {
 	int LINK_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl <em>Mapping</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMapping()
-	 * @generated
-	 */
-	int MAPPING = 24;
-
-	/**
 	 * The feature id for the '<em><b>From</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2707,16 +3205,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAPPING_FEATURE_COUNT = 2;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl <em>Text Algorithm</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextAlgorithm()
-	 * @generated
-	 */
-	int TEXT_ALGORITHM = 46;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2753,16 +3241,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEXT_ALGORITHM_FEATURE_COUNT = ALGORITHM_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl <em>Other Algorithm</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherAlgorithm()
-	 * @generated
-	 */
-	int OTHER_ALGORITHM = 25;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2810,16 +3288,6 @@ public interface LibraryElementPackage extends EPackage {
 	int OTHER_ALGORITHM_FEATURE_COUNT = TEXT_ALGORITHM_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl <em>Output Primitive</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOutputPrimitive()
-	 * @generated
-	 */
-	int OUTPUT_PRIMITIVE = 26;
-
-	/**
 	 * The feature id for the '<em><b>Event</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2854,16 +3322,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int OUTPUT_PRIMITIVE_FEATURE_COUNT = PRIMITIVE_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl <em>Attribute</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAttribute()
-	 * @generated
-	 */
-	int ATTRIBUTE = 27;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2918,16 +3376,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ATTRIBUTE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl <em>Resource</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResource()
-	 * @generated
-	 */
-	int RESOURCE = 28;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3029,16 +3477,6 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 6;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl <em>Resource Type Name</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeName()
-	 * @generated
-	 */
-	int RESOURCE_TYPE_NAME = 29;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3055,16 +3493,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE_TYPE_NAME_FEATURE_COUNT = 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl <em>Resource Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceType()
-	 * @generated
-	 */
-	int RESOURCE_TYPE = 30;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3157,16 +3585,6 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl <em>Segment</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegment()
-	 * @generated
-	 */
-	int SEGMENT = 31;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3257,16 +3675,6 @@ public interface LibraryElementPackage extends EPackage {
 	int SEGMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl <em>Service Sequence</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceSequence()
-	 * @generated
-	 */
-	int SERVICE_SEQUENCE = 32;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3303,16 +3711,6 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_SEQUENCE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service Transaction</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceTransaction()
-	 * @generated
-	 */
-	int SERVICE_TRANSACTION = 33;
-
-	/**
 	 * The feature id for the '<em><b>Input Primitive</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3338,16 +3736,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SERVICE_TRANSACTION_FEATURE_COUNT = 2;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl <em>Service Interface FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterfaceFBType()
-	 * @generated
-	 */
-	int SERVICE_INTERFACE_FB_TYPE = 34;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3431,16 +3819,6 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_INTERFACE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl <em>ST Algorithm</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTAlgorithm()
-	 * @generated
-	 */
-	int ST_ALGORITHM = 35;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3475,16 +3853,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ST_ALGORITHM_FEATURE_COUNT = TEXT_ALGORITHM_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl <em>FB Network</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetwork()
-	 * @generated
-	 */
-	int FB_NETWORK = 36;
 
 	/**
 	 * The feature id for the '<em><b>Network Elements</b></em>' containment reference list.
@@ -3530,16 +3898,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_NETWORK_FEATURE_COUNT = 4;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl <em>Composite FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompositeFBType()
-	 * @generated
-	 */
-	int COMPOSITE_FB_TYPE = 45;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3632,16 +3990,6 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPOSITE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl <em>Sub App Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubAppType()
-	 * @generated
-	 */
-	int SUB_APP_TYPE = 37;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3730,16 +4078,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SUB_APP_TYPE_FEATURE_COUNT = COMPOSITE_FB_TYPE_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl <em>Automation System</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAutomationSystem()
-	 * @generated
-	 */
-	int AUTOMATION_SYSTEM = 38;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3850,16 +4188,6 @@ public interface LibraryElementPackage extends EPackage {
 	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl <em>Version Info</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVersionInfo()
-	 * @generated
-	 */
-	int VERSION_INFO = 40;
-
-	/**
 	 * The feature id for the '<em><b>Author</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3914,16 +4242,6 @@ public interface LibraryElementPackage extends EPackage {
 	int VERSION_INFO_FEATURE_COUNT = 5;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl <em>With</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getWith()
-	 * @generated
-	 */
-	int WITH = 41;
-
-	/**
 	 * The feature id for the '<em><b>Variables</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3940,16 +4258,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int WITH_FEATURE_COUNT = 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DataConnectionImpl <em>Data Connection</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DataConnectionImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDataConnection()
-	 * @generated
-	 */
-	int DATA_CONNECTION = 47;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4051,16 +4359,6 @@ public interface LibraryElementPackage extends EPackage {
 	int DATA_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventConnectionImpl <em>Event Connection</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.EventConnectionImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEventConnection()
-	 * @generated
-	 */
-	int EVENT_CONNECTION = 48;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4158,16 +4456,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int EVENT_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl <em>Adapter Connection</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterConnection()
-	 * @generated
-	 */
-	int ADAPTER_CONNECTION = 49;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4269,16 +4557,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl <em>Service Interface</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterface()
-	 * @generated
-	 */
-	int SERVICE_INTERFACE = 50;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4306,16 +4584,6 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_INTERFACE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl <em>Error Marker Ref</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerRef()
-	 * @generated
-	 */
-	int ERROR_MARKER_REF = 79;
-
-	/**
 	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4341,16 +4609,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ERROR_MARKER_REF_FEATURE_COUNT = 2;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl <em>Value</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getValue()
-	 * @generated
-	 */
-	int VALUE = 52;
 
 	/**
 	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
@@ -4389,16 +4647,6 @@ public interface LibraryElementPackage extends EPackage {
 	int VALUE_FEATURE_COUNT = ERROR_MARKER_REF_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl <em>System Configuration</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSystemConfiguration()
-	 * @generated
-	 */
-	int SYSTEM_CONFIGURATION = 53;
-
-	/**
 	 * The feature id for the '<em><b>Devices</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4433,16 +4681,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SYSTEM_CONFIGURATION_FEATURE_COUNT = 3;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeFBImpl <em>Resource Type FB</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeFBImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeFB()
-	 * @generated
-	 */
-	int RESOURCE_TYPE_FB = 55;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4526,16 +4764,6 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_FB_FEATURE_COUNT = FB_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl <em>Segment Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegmentType()
-	 * @generated
-	 */
-	int SEGMENT_TYPE = 56;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4606,16 +4834,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SEGMENT_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl <em>Adapter FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFBType()
-	 * @generated
-	 */
-	int ADAPTER_FB_TYPE = 57;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4706,16 +4924,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl <em>Adapter Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterEvent()
-	 * @generated
-	 */
-	int ADAPTER_EVENT = 58;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4817,16 +5025,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl <em>Service</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getService()
-	 * @generated
-	 */
-	int SERVICE = 59;
-
-	/**
 	 * The feature id for the '<em><b>Right Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4861,16 +5059,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SERVICE_FEATURE_COUNT = 3;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl <em>Adapter FB</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFB()
-	 * @generated
-	 */
-	int ADAPTER_FB = 61;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4963,16 +5151,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_FB_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionImpl <em>Position</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PositionImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPosition()
-	 * @generated
-	 */
-	int POSITION = 64;
-
-	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4998,16 +5176,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int POSITION_FEATURE_COUNT = 2;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl <em>Color</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColor()
-	 * @generated
-	 */
-	int COLOR = 65;
 
 	/**
 	 * The feature id for the '<em><b>Red</b></em>' attribute.
@@ -5046,16 +5214,6 @@ public interface LibraryElementPackage extends EPackage {
 	int COLOR_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl <em>Colorizable Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColorizableElement()
-	 * @generated
-	 */
-	int COLORIZABLE_ELEMENT = 66;
-
-	/**
 	 * The feature id for the '<em><b>Color</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5074,16 +5232,6 @@ public interface LibraryElementPackage extends EPackage {
 	int COLORIZABLE_ELEMENT_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.IVarElement
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIVarElement()
-	 * @generated
-	 */
-	int IVAR_ELEMENT = 67;
-
-	/**
 	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5100,16 +5248,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int IVAR_ELEMENT_FEATURE_COUNT = 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl <em>Attribute Declaration</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAttributeDeclaration()
-	 * @generated
-	 */
-	int ATTRIBUTE_DECLARATION = 68;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5157,16 +5295,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ATTRIBUTE_DECLARATION_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedElement
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedElement()
-	 * @generated
-	 */
-	int TYPED_ELEMENT = 69;
-
-	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5183,16 +5311,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int TYPED_ELEMENT_FEATURE_COUNT = 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl <em>Simple FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleFBType()
-	 * @generated
-	 */
-	int SIMPLE_FB_TYPE = 70;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5303,16 +5421,6 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_FB_TYPE_FEATURE_COUNT = BASE_FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl <em>Struct Manipulator</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
-	 * @generated
-	 */
-	int STRUCT_MANIPULATOR = 72;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5401,16 +5509,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int STRUCT_MANIPULATOR_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl <em>Demultiplexer</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDemultiplexer()
-	 * @generated
-	 */
-	int DEMULTIPLEXER = 73;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5503,16 +5601,6 @@ public interface LibraryElementPackage extends EPackage {
 	int DEMULTIPLEXER_FEATURE_COUNT = STRUCT_MANIPULATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl <em>Multiplexer</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
-	 * @generated
-	 */
-	int MULTIPLEXER = 74;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5601,16 +5689,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int MULTIPLEXER_FEATURE_COUNT = STRUCT_MANIPULATOR_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl <em>Local Variable</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
-	 * @generated
-	 */
-	int LOCAL_VARIABLE = 75;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5739,16 +5817,6 @@ public interface LibraryElementPackage extends EPackage {
 	int LOCAL_VARIABLE_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl <em>Error Marker FBN Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerFBNElement()
-	 * @generated
-	 */
-	int ERROR_MARKER_FBN_ELEMENT = 76;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5855,16 +5923,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl <em>Error Marker Interface</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerInterface()
-	 * @generated
-	 */
-	int ERROR_MARKER_INTERFACE = 77;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5975,16 +6033,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB Instance</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCFBInstance()
-	 * @generated
-	 */
-	int CFB_INSTANCE = 78;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6073,16 +6121,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int CFB_INSTANCE_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.GroupImpl <em>Group</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.GroupImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getGroup()
-	 * @generated
-	 */
-	int GROUP = 80;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6200,7 +6238,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 81;
+	int LANGUAGE = 82;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -6210,7 +6248,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 82;
+	int IPROJECT = 83;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -6220,7 +6258,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 83;
+	int IFILE = 84;
 
 	/**
 	 * The meta object id for the '<em>Command Stack</em>' data type.
@@ -6230,7 +6268,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 	 * @generated
 	 */
-	int COMMAND_STACK = 84;
+	int COMMAND_STACK = 85;
 
 	/**
 	 * The meta object id for the '<em>Point</em>' data type.
@@ -6240,7 +6278,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 85;
+	int POINT = 86;
 
 
 	/**
@@ -8836,6 +8874,16 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getGroup_Height();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ICallable</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ICallable
+	 * @generated
+	 */
+	EClass getICallable();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11016,6 +11064,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute GROUP__HEIGHT = eINSTANCE.getGroup_Height();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.ICallable
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getICallable()
+		 * @generated
+		 */
+		EClass ICALLABLE = eINSTANCE.getICallable();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.

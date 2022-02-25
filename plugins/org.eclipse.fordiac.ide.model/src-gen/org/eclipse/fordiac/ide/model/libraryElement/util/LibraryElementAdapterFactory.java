@@ -1,6 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -64,6 +65,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
@@ -485,6 +487,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseGroup(Group object) {
 				return createGroupAdapter();
+			}
+			@Override
+			public Adapter caseICallable(ICallable object) {
+				return createICallableAdapter();
 			}
 			@Override
 			public Adapter caseDataType(DataType object) {
@@ -1641,6 +1647,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createGroupAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ICallable
+	 * @generated
+	 */
+	public Adapter createICallableAdapter() {
 		return null;
 	}
 

@@ -117,7 +117,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
+	int ST_FUNCTION__NAME = LibraryElementPackage.ICALLABLE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -126,7 +126,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
+	int ST_FUNCTION__COMMENT = LibraryElementPackage.ICALLABLE__COMMENT;
 
 	/**
 	 * The feature id for the '<em><b>Return Type</b></em>' reference.
@@ -135,7 +135,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION__RETURN_TYPE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ST_FUNCTION__RETURN_TYPE = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
@@ -144,7 +144,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION__VAR_DECLARATIONS = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 1;
+	int ST_FUNCTION__VAR_DECLARATIONS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Var Temp Declarations</b></em>' containment reference list.
@@ -153,7 +153,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION__VAR_TEMP_DECLARATIONS = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 2;
+	int ST_FUNCTION__VAR_TEMP_DECLARATIONS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Var Input Declarations</b></em>' containment reference list.
@@ -162,7 +162,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION__VAR_INPUT_DECLARATIONS = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 3;
+	int ST_FUNCTION__VAR_INPUT_DECLARATIONS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Var Output Declarations</b></em>' containment reference list.
@@ -171,7 +171,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION__VAR_OUTPUT_DECLARATIONS = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 4;
+	int ST_FUNCTION__VAR_OUTPUT_DECLARATIONS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Code</b></em>' containment reference list.
@@ -180,7 +180,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION__CODE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 5;
+	int ST_FUNCTION__CODE = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>ST Function</em>' class.
@@ -189,7 +189,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 6;
+	int ST_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 6;
 
 
 	/**

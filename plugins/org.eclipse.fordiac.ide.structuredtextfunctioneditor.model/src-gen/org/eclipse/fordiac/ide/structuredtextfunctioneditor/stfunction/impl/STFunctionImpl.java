@@ -34,6 +34,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 
@@ -329,6 +331,26 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 			code = new EObjectContainmentEList<STStatement>(STStatement.class, this, STFunctionPackage.ST_FUNCTION__CODE);
 		}
 		return code;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<INamedElement> getInputParameters() {
+		return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getInputParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<INamedElement> getOutputParameters() {
+		return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getOutputParameters(this);
 	}
 
 	/**
