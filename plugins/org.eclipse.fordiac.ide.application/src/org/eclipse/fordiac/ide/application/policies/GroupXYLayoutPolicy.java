@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.geometry.Point;
@@ -130,11 +132,10 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 		return groupContentBounds;
 	}
 
-	private static Rectangle getNewContentBounds(final List<EditPart> editParts) {
+	private Rectangle getNewContentBounds(final List<EditPart> editParts) {
 		Rectangle selectionExtend = null;
 		for (final EditPart selElem : editParts) {
-			if (selElem instanceof GraphicalEditPart
-					&& ((GraphicalEditPart) selElem).getModel() instanceof FBNetworkElement) {
+			if (selElem instanceof GraphicalEditPart && selElem.getModel() instanceof FBNetworkElement) {
 				// only consider the selected FBNetworkElements
 				final Rectangle fbBounds = ((GraphicalEditPart) selElem).getFigure().getBounds();
 				if (selectionExtend == null) {
@@ -142,9 +143,17 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 				} else {
 					selectionExtend.union(fbBounds);
 				}
+				addValueBounds((FBNetworkElement) selElem.getModel(), selectionExtend);
 			}
 		}
 		return (selectionExtend != null) ? selectionExtend : new Rectangle();
+	}
+
+	private void addValueBounds(final FBNetworkElement model, final Rectangle selectionExtend) {
+		final Map<Object, Object> editPartRegistry = getHost().getViewer().getEditPartRegistry();
+		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
+		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+		.forEach(ep -> selectionExtend.union(((GraphicalEditPart) ep).getFigure().getBounds()));
 	}
 
 	private static Command createAddGroupAndResizeCommand(final Group dropGroup,
