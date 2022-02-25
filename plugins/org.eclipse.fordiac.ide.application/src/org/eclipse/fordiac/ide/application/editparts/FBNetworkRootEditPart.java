@@ -48,7 +48,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 
 public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
-	private class FBNetworkMarqueeDragTracker extends AdvancedMarqueeDragTracker {
+	public static class FBNetworkMarqueeDragTracker extends AdvancedMarqueeDragTracker {
 
 		@Override
 		protected Collection<EditPart> calculateMarqueeSelectedEditParts() {

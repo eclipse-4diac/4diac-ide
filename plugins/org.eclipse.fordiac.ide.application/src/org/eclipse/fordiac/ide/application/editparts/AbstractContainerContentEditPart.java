@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH,
+ * Copyright (c) 2020, 2022 Primetals Technologies Germany GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.draw2d.Figure;
@@ -28,17 +29,48 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart.FBNetworkMarqueeDragTracker;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentXYLayoutPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
+import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.swt.graphics.Point;
 
 public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart {
+	private class ContainerMarqueeDragTracker extends FBNetworkRootEditPart.FBNetworkMarqueeDragTracker {
+		private boolean dragStarted = false;
+
+		@Override
+		protected boolean handleButtonDown(final int button) {
+			dragStarted = false;
+			return super.handleButtonDown(button);
+		}
+
+		@Override
+		protected boolean handleDragStarted() {
+			dragStarted = true;
+			return super.handleDragStarted();
+		}
+
+		@Override
+		protected Collection<EditPart> calculateMarqueeSelectedEditParts() {
+			if (!dragStarted) {
+				// we had just a click without drag provide the parent to make it feel like a background click selection
+				final ArrayList<EditPart> list = new ArrayList<>(1);
+				list.add(getParent());
+				return list;
+			}
+			return super.calculateMarqueeSelectedEditParts();
+		}
+	}
+
 	private int childrenNumber = 0;
 	protected Point p = new Point(0, 0);
 
@@ -137,6 +169,13 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		figure.setOpaque(true);
 		figure.setLayoutManager(new XYLayout());
 		return figure;
+	}
+
+	@Override
+	public DragTracker getDragTracker(final Request request) {
+		final FBNetworkMarqueeDragTracker dragTracker = new ContainerMarqueeDragTracker();
+		dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
+		return dragTracker;
 	}
 
 }
