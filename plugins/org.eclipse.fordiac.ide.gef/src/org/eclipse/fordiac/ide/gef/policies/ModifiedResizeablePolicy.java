@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.gef.policies;
 
 import java.util.List;
 
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.GraphicalEditPart;
@@ -26,5 +28,17 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 	@Override
 	protected void createMoveHandle(final List handles) {
 		handles.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), insets, DiagramPreferences.CORNER_DIM));
+	}
+
+	@Override
+	protected IFigure createDragSourceFeedbackFigure() {
+		final RectangleFigure figure = (RectangleFigure) super.createDragSourceFeedbackFigure();
+		figure.setFillXOR(false);
+		figure.setOutlineXOR(false);
+		figure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
+		figure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
+		figure.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
+		figure.setLineWidth(ModifiedMoveHandle.SELECTION_BORDER_WIDTH);
+		return figure;
 	}
 }
