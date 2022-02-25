@@ -27,7 +27,7 @@ public class ChangeAlgorithmTypeCommandSimpleFB extends AbstractChangeAlgorithmT
 
 	@Override
 	protected void changeAlgorithm(final Algorithm oldAlg, final Algorithm newAlg) {
-		getType().getAlgorithm().set(0, newAlg);
+		getType().getCallables().set(0, newAlg);
 	}
 
 	@Override

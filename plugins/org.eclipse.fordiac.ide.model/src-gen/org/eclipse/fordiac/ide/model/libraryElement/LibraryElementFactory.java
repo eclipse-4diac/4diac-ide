@@ -692,6 +692,24 @@ public interface LibraryElementFactory extends EFactory {
 	Group createGroup();
 
 	/**
+	 * Returns a new object of class '<em>Other Method</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Other Method</em>'.
+	 * @generated
+	 */
+	OtherMethod createOtherMethod();
+
+	/**
+	 * Returns a new object of class '<em>ST Method</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Method</em>'.
+	 * @generated
+	 */
+	STMethod createSTMethod();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

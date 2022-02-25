@@ -56,11 +56,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
@@ -68,6 +71,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -430,13 +434,19 @@ public class FBTImporter extends TypeImporter {
 			case LibraryElementTags.ALGORITHM_ELEMENT:
 				final Algorithm alg = parseAlgorithm();
 				if (null != alg) {
-					type.getAlgorithm().add(alg);
+					type.getCallables().add(alg);
 					final List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
 					if (null != list) {
 						for (final ECAction action : list) {
 							action.setAlgorithm(alg);
 						}
 					}
+				}
+				break;
+			case LibraryElementTags.METHOD_ELEMENT:
+				final Method method = parseMethod();
+				if (null != method) {
+					type.getCallables().add(method);
 				}
 				break;
 			default:
@@ -464,7 +474,13 @@ public class FBTImporter extends TypeImporter {
 			case LibraryElementTags.ALGORITHM_ELEMENT:
 				final Algorithm alg = parseAlgorithm();
 				if (null != alg) {
-					type.getAlgorithm().add(alg);
+					type.getCallables().add(alg);
+				}
+				break;
+			case LibraryElementTags.METHOD_ELEMENT:
+				final Method method = parseMethod();
+				if (null != method) {
+					type.getCallables().add(method);
 				}
 				break;
 			default:
@@ -570,14 +586,113 @@ public class FBTImporter extends TypeImporter {
 		}
 	}
 
-	/**
-	 * This method parses an ECC.
+	/** This method parses a Method.
+	 *
+	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException */
+	private Method parseMethod() throws TypeImportException, XMLStreamException {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+
+		Method retVal = null;
+		while (getReader().hasNext()) {
+			final int event = getReader().next();
+			if (XMLStreamConstants.START_ELEMENT == event) {
+
+				switch (getReader().getLocalName()) {
+				case LibraryElementTags.FBD_ELEMENT:
+					throw new TypeImportException("Method: Unsupported type (only ST and Other possible)!");
+				case LibraryElementTags.ST_ELEMENT:
+					retVal = LibraryElementFactory.eINSTANCE.createSTMethod();
+					parseSTMethod((STMethod) retVal);
+					break;
+				case LibraryElementTags.LD_ELEMENT:
+					throw new TypeImportException("Method: Unsupported type (only ST and Other possible)!");
+				case LibraryElementTags.OTHER_ELEMENT:
+					retVal = LibraryElementFactory.eINSTANCE.createOtherMethod();
+					parseOtherMethod((OtherMethod) retVal);
+					break;
+				case LibraryElementTags.VAR_DECLARATION_ELEMENT:
+					if (retVal instanceof TextMethod) {
+						final VarDeclaration declaration = parseVarDeclaration();
+						if (declaration.isIsInput()) {
+							((TextMethod) retVal).getInputParameters().add(declaration);
+						} else {
+							((TextMethod) retVal).getOutputParameters().add(declaration);
+						}
+						break;
+					}
+					//$FALL-THROUGH$
+				default:
+					throw new XMLStreamException("Unexpected xml child (" + getReader().getLocalName() + ") found!"); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+
+			} else if (XMLStreamConstants.END_ELEMENT == event) {
+				if (!getReader().getLocalName().equals(LibraryElementTags.METHOD_ELEMENT)) {
+					throw new XMLStreamException("Unexpected xml end tag found in " //$NON-NLS-1$
+							+ LibraryElementTags.METHOD_ELEMENT + ": " + getReader().getLocalName()); //$NON-NLS-1$
+				}
+				// we came to the end
+				break;
+			}
+		}
+
+		if (null != retVal) {
+			retVal.setName(name);
+			retVal.setComment(comment);
+		}
+		return retVal;
+	}
+
+	/** Parses the other method.
+	 *
+	 * @param method the other
+	 *
+	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException */
+	private void parseOtherMethod(final OtherMethod method) throws TypeImportException, XMLStreamException {
+		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
+		if (null != language) {
+			method.setLanguage(language);
+		} else {
+			throw new TypeImportException(Messages.FBTImporter_OTHER_METHOD_MISSING_LANG_EXCEPTION);
+		}
+
+		parseMethodText(method);
+		proceedToEndElementNamed(LibraryElementTags.OTHER_ELEMENT);
+	}
+
+	/** This method parses a STMethod.
+	 *
+	 * @param st - the STMethod being parsed
+	 *
+	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException */
+	private void parseSTMethod(final STMethod method) throws XMLStreamException {
+		parseMethodText(method);
+		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
+	}
+
+	private void parseMethodText(final TextMethod method) throws XMLStreamException {
+		final String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
+		if (null != text) {
+			method.setText(text);
+		} else {
+			final StringBuilder algText = new StringBuilder();
+			// the parser my split the content of several parts therefore this while loop
+			while ((getReader().hasNext()) && (XMLStreamConstants.CHARACTERS == getReader().next())) {
+				algText.append(getReader().getText());
+			}
+			method.setText(algText.toString());
+		}
+	}
+
+	/** This method parses an ECC.
 	 *
 	 * @param type - the BasicFBType containing the ECC being parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseECC(final BasicFBType type) throws TypeImportException, XMLStreamException {
 		final ECC ecc = LibraryElementFactory.eINSTANCE.createECC();
 

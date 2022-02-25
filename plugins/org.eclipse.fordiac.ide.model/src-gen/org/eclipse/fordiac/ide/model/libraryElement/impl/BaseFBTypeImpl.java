@@ -31,7 +31,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
@@ -45,6 +47,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getInternalVars <em>Internal Vars</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getInternalFbs <em>Internal Fbs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getAlgorithm <em>Algorithm</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getMethods <em>Methods</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getCallables <em>Callables</em>}</li>
  * </ul>
  *
  * @generated
@@ -71,14 +75,14 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 	protected EList<FB> internalFbs;
 
 	/**
-	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' containment reference list.
+	 * The cached value of the '{@link #getCallables() <em>Callables</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAlgorithm()
+	 * @see #getCallables()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Algorithm> algorithm;
+	protected EList<ICallable> callables;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -132,10 +136,30 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 	 */
 	@Override
 	public EList<Algorithm> getAlgorithm() {
-		if (algorithm == null) {
-			algorithm = new EObjectContainmentEList<Algorithm>(Algorithm.class, this, LibraryElementPackage.BASE_FB_TYPE__ALGORITHM);
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getAlgorithm(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<Method> getMethods() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getMethods(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<ICallable> getCallables() {
+		if (callables == null) {
+			callables = new EObjectContainmentEList<ICallable>(ICallable.class, this, LibraryElementPackage.BASE_FB_TYPE__CALLABLES);
 		}
-		return algorithm;
+		return callables;
 	}
 
 	/**
@@ -160,8 +184,8 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 				return ((InternalEList<?>)getInternalVars()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 				return ((InternalEList<?>)getInternalFbs()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
-				return ((InternalEList<?>)getAlgorithm()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.BASE_FB_TYPE__CALLABLES:
+				return ((InternalEList<?>)getCallables()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -181,6 +205,10 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 				return getInternalFbs();
 			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
 				return getAlgorithm();
+			case LibraryElementPackage.BASE_FB_TYPE__METHODS:
+				return getMethods();
+			case LibraryElementPackage.BASE_FB_TYPE__CALLABLES:
+				return getCallables();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -203,9 +231,9 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 				getInternalFbs().clear();
 				getInternalFbs().addAll((Collection<? extends FB>)newValue);
 				return;
-			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
-				getAlgorithm().clear();
-				getAlgorithm().addAll((Collection<? extends Algorithm>)newValue);
+			case LibraryElementPackage.BASE_FB_TYPE__CALLABLES:
+				getCallables().clear();
+				getCallables().addAll((Collection<? extends ICallable>)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -227,8 +255,8 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 				getInternalFbs().clear();
 				return;
-			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
-				getAlgorithm().clear();
+			case LibraryElementPackage.BASE_FB_TYPE__CALLABLES:
+				getCallables().clear();
 				return;
 			default:
 				super.eUnset(featureID);
@@ -249,7 +277,11 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 				return internalFbs != null && !internalFbs.isEmpty();
 			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
-				return algorithm != null && !algorithm.isEmpty();
+				return !getAlgorithm().isEmpty();
+			case LibraryElementPackage.BASE_FB_TYPE__METHODS:
+				return !getMethods().isEmpty();
+			case LibraryElementPackage.BASE_FB_TYPE__CALLABLES:
+				return callables != null && !callables.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}

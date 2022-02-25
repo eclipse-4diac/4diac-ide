@@ -110,6 +110,8 @@ public final class Messages extends NLS {
 	/** The FBT importer_ othe r_ al g_ missin g_ tex t_ exception. */
 	public static String FBTImporter_OTHER_ALG_MISSING_TEXT_EXCEPTION;
 
+	public static String FBTImporter_OTHER_METHOD_MISSING_LANG_EXCEPTION;
+
 	/** The FBT importer_ outpu t_ primitiv e_ even t_ exception. */
 	public static String FBTImporter_OUTPUT_PRIMITIVE_EVENT_EXCEPTION;
 

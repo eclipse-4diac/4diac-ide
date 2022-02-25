@@ -127,8 +127,8 @@ public class AlgorithmList implements CommandExecutor {
 		buttons.bindToTableViewer(algorithmViewer, this,
 				ref -> new CreateAlgorithmCommand(type, getInsertingIndex(), getName()),
 				ref -> new DeleteAlgorithmCommand(type, (Algorithm) ref),
-				ref -> new ChangeAlgorithmOrderCommand(type.getAlgorithm(), (Algorithm) ref, true),
-				ref -> new ChangeAlgorithmOrderCommand(type.getAlgorithm(), (Algorithm) ref, false));
+				ref -> new ChangeAlgorithmOrderCommand(type.getCallables(), (Algorithm) ref, true),
+				ref -> new ChangeAlgorithmOrderCommand(type.getCallables(), (Algorithm) ref, false));
 	}
 
 	private Algorithm getLastSelectedAlgorithm() {
@@ -142,9 +142,9 @@ public class AlgorithmList implements CommandExecutor {
 	private int getInsertingIndex() {
 		final Algorithm alg = getLastSelectedAlgorithm();
 		if (null == alg) {
-			return type.getAlgorithm().size();
+			return type.getCallables().size();
 		}
-		return type.getAlgorithm().indexOf(alg) + 1;
+		return type.getCallables().indexOf(alg) + 1;
 	}
 
 	private String getName() {

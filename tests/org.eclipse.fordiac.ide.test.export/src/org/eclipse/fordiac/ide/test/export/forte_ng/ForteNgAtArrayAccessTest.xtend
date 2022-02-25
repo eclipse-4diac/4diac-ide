@@ -85,7 +85,7 @@ class ForteNgAtArrayAccessTest extends ExporterTestBasicFBTypeBase {
 	@ParameterizedTest(name = "{index}: {0}->{1}[{5}]={6} valid->{7}")
 	@MethodSource("testCases")
 	def locatedArrayAtAccess(String sourceType, String accessType, String accessor, int arrayStart, int arrayStop, int index, String value, boolean isValid) {
-		getFunctionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		getFunctionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : «sourceType»;
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [«arrayStart»..«arrayStop»] OF «accessType»;

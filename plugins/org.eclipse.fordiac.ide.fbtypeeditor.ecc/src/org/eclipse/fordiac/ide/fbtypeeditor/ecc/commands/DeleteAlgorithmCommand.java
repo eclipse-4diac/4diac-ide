@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -26,19 +26,19 @@ public class DeleteAlgorithmCommand extends Command {
 
 	private final BasicFBType fbType;
 
-	private Algorithm algorithm;
+	private final Algorithm algorithm;
 
-	private List<ECAction> actions = new ArrayList<>();
+	private final List<ECAction> actions = new ArrayList<>();
 
-	public DeleteAlgorithmCommand(final BasicFBType fbType, Algorithm algorithm) {
+	public DeleteAlgorithmCommand(final BasicFBType fbType, final Algorithm algorithm) {
 		this.fbType = fbType;
 		this.algorithm = algorithm;
 	}
 
 	@Override
 	public void execute() {
-		for (ECState state : fbType.getECC().getECState()) {
-			for (ECAction ecAction : state.getECAction()) {
+		for (final ECState state : fbType.getECC().getECState()) {
+			for (final ECAction ecAction : state.getECAction()) {
 				if (ecAction.getAlgorithm() != null && ecAction.getAlgorithm().equals(algorithm)) {
 					actions.add(ecAction);
 				}
@@ -50,18 +50,18 @@ public class DeleteAlgorithmCommand extends Command {
 
 	@Override
 	public void undo() {
-		for (ECAction action : actions) {
+		for (final ECAction action : actions) {
 			action.setAlgorithm(algorithm);
 		}
-		fbType.getAlgorithm().add(algorithm);
+		fbType.getCallables().add(algorithm);
 	}
 
 	@Override
 	public void redo() {
-		for (ECAction action : actions) {
+		for (final ECAction action : actions) {
 			action.setAlgorithm(null);
 		}
-		fbType.getAlgorithm().remove(algorithm);
+		fbType.getCallables().remove(algorithm);
 	}
 
 }

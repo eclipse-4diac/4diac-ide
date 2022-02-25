@@ -12,14 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 
+import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod
+
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
 class STAlgorithmReconciler {
 
-	def void reconcile(EList<Algorithm> dest, EList<Algorithm> source) {
+	def void reconcile(EList<ICallable> dest, EList<? extends ICallable> source) {
 		// check duplicates in source or dest (very bad)
 		if (checkDuplicates(source) || checkDuplicates(dest)) {
 			return; // don't even try to attempt this or risk screwing dest up
@@ -47,7 +51,17 @@ class STAlgorithmReconciler {
 		true
 	}
 
-	def protected boolean checkDuplicates(EList<Algorithm> list) {
+	def protected dispatch boolean merge(STMethod dest, STMethod source) {
+		dest => [
+			comment = source.comment
+			text = source.text
+			ECollections.setEList(inputParameters, source.inputParameters.map[copy].toList)
+			ECollections.setEList(outputParameters, source.outputParameters.map[copy].toList)
+		]
+		true
+	}
+
+	def protected boolean checkDuplicates(EList<? extends ICallable> list) {
 		list.exists[algorithm|list.exists[it !== algorithm && name == algorithm.name]]
 	}
 }

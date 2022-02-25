@@ -67,7 +67,7 @@ abstract class AbstractCognitiveComplexityTest {
 		stAlg.setName(algorithmName);
 		stAlg.setText(algorithmText);
 
-		functionBlock.getAlgorithm().add(stAlg);
+		functionBlock.getCallables().add(stAlg);
 
 		return stAlg;
 	}

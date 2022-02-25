@@ -29,7 +29,7 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 	@Test
 	def void validCaseStatement() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		CASE variable OF
 			0: «VARIABLE_NAME» := «VARIABLE_NAME» + 1;
 			1: «VARIABLE_NAME» := «VARIABLE_NAME» + 1;
@@ -62,7 +62,7 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 	@Test
 	def void validCaseStatementWithList() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		CASE variable OF
 			0, 1, 2: «VARIABLE_NAME» := «VARIABLE_NAME» + 1;
 			255: «VARIABLE_NAME» := 0;
@@ -87,7 +87,7 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 	@Test
 	def void validCaseStatementWithElse() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		CASE variable OF
 			0: «VARIABLE_NAME» := «VARIABLE_NAME» + 1;
 			255: «VARIABLE_NAME» := 0;
@@ -117,7 +117,7 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 	@Test
 	def void validCaseStatementWithIfInside() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		CASE variable OF
 			0:
 				IF «VARIABLE_NAME» < 20 THEN
@@ -157,7 +157,7 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 	@Test
 	def void invalidCaseStatementNoEnd() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		CASE «VARIABLE_NAME» OF
 			0:
 				IF «VARIABLE_NAME» < 20 THEN

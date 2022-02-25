@@ -64,7 +64,7 @@ class ForteNgAtArrayDeclarationTest extends ExporterTestBasicFBTypeBase {
 	@ParameterizedTest(name = "{index}: {0}->{1}[{2}..{3}]")
 	@MethodSource("testCases")
 	def LocatedArrayDeclaration(String sourceType, String accessType, int arrayStart, int arrayStop, boolean isValid) {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : «sourceType»;
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [«arrayStart»..«arrayStop»] OF «accessType»;

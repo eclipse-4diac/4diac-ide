@@ -74,7 +74,7 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 			val partition = document.partition
 			monitor.worked(1)
 			monitor.subTask("Reconciling")
-			element.algorithm.reconcile(partition)
+			element.callables.reconcile(partition)
 		} catch (Exception e) {
 			Platform.getLog(class).error("Error saving algorithms to FB type", e)
 		} finally {

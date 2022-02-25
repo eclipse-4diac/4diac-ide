@@ -52,7 +52,7 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 		fbType.interfaceList = newInterfaceList(#[inputEvent, outputEvent], variables.map [
 			newVarDeclaration(name, type, true)
 		] + #[output])
-		fbType.algorithm.addAll(algorithm)
+		fbType.callables.addAll(algorithm)
 		val queue = new ArrayBlockingQueue(1000)
 		val eval = new SimpleFBEvaluator(fbType, queue, variables, null)
 		queue.add(inputEvent)

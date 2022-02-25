@@ -29,7 +29,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void generatedDWORDArrayDeclaration() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : ARRAY [0..31] OF DWORD;
 		END_VAR'''))
@@ -45,7 +45,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void generatedDWORDArrayDeclarationWithInitializer() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : ARRAY [0..31] OF DWORD := 0;
 		END_VAR'''))
@@ -60,7 +60,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void generatedDWORDLocatedArrayDeclarationWithInitializer() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : DWORD;
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [0..31] OF DWORD := 0;
@@ -76,7 +76,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void generatedDWORDArrayDeclarationStartNot0() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : ARRAY [5..31] OF DWORD;
 		END_VAR'''))
@@ -91,7 +91,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void generatedDWORDArrayDeclarationNotIncrementing() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : ARRAY [0..0] OF DWORD;
 		END_VAR'''))
@@ -106,7 +106,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void generatedDWORDArrayDeclarationAtDWORD() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : DWORD;
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [0..31] OF DWORD;
@@ -122,7 +122,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void generatedRelocatedDWORD() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : DWORD;
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : DWORD;
@@ -140,7 +140,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void generatedRelocatedDINT() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : DINT;
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : DINT;
@@ -158,7 +158,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void generatedRelocatedDINTincorrectTypes() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : DINT;
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : INT;
