@@ -144,10 +144,7 @@ public class GroupResizePolicy extends ModifiedResizeablePolicy {
 	}
 
 	private static Rectangle getBoundsForEditPart(final GraphicalEditPart ep) {
-		final Rectangle bounds = ep.getFigure().getBounds().getCopy();
-		ep.getFigure().invalidate();
-		bounds.setSize(ep.getFigure().getPreferredSize());
-		return bounds;
+		return ep.getFigure().getBounds().getCopy();
 	}
 
 	private static Rectangle getDefaultGroupContentBounds() {
