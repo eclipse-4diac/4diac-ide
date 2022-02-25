@@ -212,10 +212,6 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//BasicFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/eCC"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/algorithm"/>
-      <genOperations ecoreOperation="lib.ecore#//BasicFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//BasicFBType/getAlgorithmNamed/name"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompilerInfo">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilerInfo/compiler"/>
@@ -677,12 +673,14 @@
     <genClasses image="false" ecoreClass="lib.ecore#//TypedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedElement/type"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//SimpleFBType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleFBType/algorithm"/>
-    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//SimpleFBType"/>
     <genClasses ecoreClass="lib.ecore#//BaseFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalVars"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalFbs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/algorithm"/>
+      <genOperations ecoreOperation="lib.ecore#//BaseFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//BaseFBType/getAlgorithmNamed/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>

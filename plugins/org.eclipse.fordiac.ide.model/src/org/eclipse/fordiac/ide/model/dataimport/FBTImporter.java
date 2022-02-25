@@ -462,7 +462,10 @@ public class FBTImporter extends TypeImporter {
 				parseInternalVars(type);
 				break;
 			case LibraryElementTags.ALGORITHM_ELEMENT:
-				type.setAlgorithm(parseAlgorithm());
+				final Algorithm alg = parseAlgorithm();
+				if (null != alg) {
+					type.getAlgorithm().add(alg);
+				}
 				break;
 			default:
 				return false;

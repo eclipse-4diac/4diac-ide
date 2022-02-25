@@ -33,10 +33,10 @@ class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
 
 	new(SimpleFBType type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
 		super(type, queue, variables, parent)
-		algorithmEvaluator = EvaluatorFactory.createEvaluator(type.algorithm,
-			type.algorithm.eClass.instanceClass as Class<? extends Algorithm>, getVariables.values, this)
+		algorithmEvaluator = EvaluatorFactory.createEvaluator(type.algorithm.head,
+			type.algorithm.head.eClass.instanceClass as Class<? extends Algorithm>, getVariables.values, this)
 		if (algorithmEvaluator === null) {
-			throw new UnsupportedOperationException('''Cannot evaluate algorithm «type.algorithm.eClass.name»''')
+			throw new UnsupportedOperationException('''Cannot evaluate algorithm «type.algorithm.head.eClass.name»''')
 		}
 	}
 

@@ -161,8 +161,14 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	protected MetricData analyzeSFB(final SimpleFBType simpleFBType) {
 		final ComplexityData data = new ComplexityData();
 
-		data.cc += analyzeAlgorithm(simpleFBType.getAlgorithm());
-		metrics.add(new MetricResult(formatResultName(simpleFBType.getName()), data.cc));
+		double ccfb = 0;
+
+		for (final Algorithm algorithm : simpleFBType.getAlgorithm()) {
+			ccfb += analyzeAlgorithm(algorithm);
+		}
+
+		data.cc += ccfb;
+		metrics.add(new MetricResult(formatResultName(simpleFBType.getName()), ccfb));
 		return data;
 	}
 

@@ -233,7 +233,9 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	private void addSimpleFB(final SimpleFBType type) throws XMLStreamException {
 		addStartElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
-		addAlgorithm(type.getAlgorithm());
+		for (final Algorithm alg : type.getAlgorithm()) {
+			addAlgorithm(alg);
+		}
 		addEndElement();
 	}
 

@@ -92,7 +92,7 @@ class ExportXMIHandler extends AbstractHandler {
 		val fbFile = selection?.firstElement as IFile
 		val entry = TypeLibrary::getPaletteEntryForFile(fbFile)
 		val simpleType = entry?.getType() as SimpleFBType
-		val algorithmText = (simpleType?.algorithm as STAlgorithm)?.getText()
+		val algorithmText = (simpleType?.algorithm.head as STAlgorithm)?.getText()
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		createFBResource(resourceSet, simpleType)
 		// create resource for algorithm

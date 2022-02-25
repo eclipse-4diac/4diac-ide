@@ -30,7 +30,7 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 			if (paletteEntry !== null) {
 				val libraryElement = paletteEntry.typeEditable
 				if (libraryElement instanceof SimpleFBType) {
-					val algorithm = libraryElement.algorithm
+					val algorithm = libraryElement.algorithm.head
 					if (algorithm instanceof STAlgorithm) {
 						document.set(algorithm.text)
 						result = true
@@ -50,7 +50,7 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 			if (paletteEntry !== null) {
 				val libraryElement = paletteEntry.typeEditable
 				if (libraryElement instanceof SimpleFBType) {
-					val algorithm = libraryElement.algorithm
+					val algorithm = libraryElement.algorithm.head
 					if (algorithm instanceof STAlgorithm) {
 						algorithm.text = document.get
 					}

@@ -39,7 +39,7 @@ class SimpleFBImplTemplate extends ForteFBTemplate {
 	new(SimpleFBType type, String name, Path prefix) {
 		super(name, prefix, "CSimpleFB")
 		this.type = type
-		this.languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", type.algorithm)
+		this.languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", type.algorithm.head)
 	}
 
 	override generate() '''
@@ -70,7 +70,7 @@ class SimpleFBImplTemplate extends ForteFBTemplate {
 	'''
 
 	def protected generateAlgorithms() '''
-		«type.algorithm.generateAlgorithm»
+		«type.algorithm.head.generateAlgorithm»
 	'''
 
 	def protected generateAlgorithm(Algorithm alg) '''

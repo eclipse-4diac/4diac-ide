@@ -34,27 +34,19 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	}
 
 	def static evaluateSimpleFB(CharSequence algorithm, Iterable<Variable> variables, VarDeclaration output) {
-		val inputEvent = "REQ".newEvent(true)
+		val inputEvent = "TEST".newEvent(true)
 		val outputEvent = "CNF".newEvent(false)
 		val fbType = LibraryElementFactory.eINSTANCE.createSimpleFBType
 		fbType.name = "Test"
 		fbType.interfaceList = newInterfaceList(#[inputEvent, outputEvent], variables.map [
 			newVarDeclaration(name, type, true)
 		] + #[output])
-		fbType.algorithm = newSTAlgorithm(algorithm)
+		fbType.algorithm += newSTAlgorithm(algorithm)
 		val queue = new ArrayBlockingQueue(1000)
 		val eval = new SimpleFBEvaluator(fbType, queue, variables, null)
 		queue.add(inputEvent)
 		eval.evaluate
 		#[outputEvent].assertIterableEquals(queue)
 		return eval
-	}
-
-	def static newSimpleFBType(CharSequence algorithm, Iterable<VarDeclaration> vars) {
-		val fbType = LibraryElementFactory.eINSTANCE.createSimpleFBType
-		fbType.name = "Test"
-		fbType.interfaceList = newInterfaceList(#["REQ".newEvent(true)], vars)
-		fbType.algorithm = newSTAlgorithm(algorithm)
-		return fbType
 	}
 }
