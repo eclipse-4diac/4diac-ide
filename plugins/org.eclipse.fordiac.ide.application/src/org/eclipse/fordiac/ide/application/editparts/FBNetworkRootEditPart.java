@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElem
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
@@ -56,7 +57,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 			// for that as it affects connection selection in the wrong way
 			return marqueeSelectedEditParts.stream()
 					.filter(ep -> (ep instanceof ConnectionEditPart && ep.isSelectable())
-							|| (ep instanceof AbstractFBNElementEditPart))
+							|| (ep.getModel() instanceof FBNetworkElement))
 					.collect(Collectors.toSet());
 		}
 
