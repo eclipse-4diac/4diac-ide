@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2019, 2022 Johannes Kepler University Linz,
+ *                          Primetals Technologies Germany GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.handles;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -23,6 +27,7 @@ import org.eclipse.fordiac.ide.gef.tools.ScrollingConnectionEndpointTracker;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.handles.ConnectionEndpointHandle;
@@ -59,24 +64,34 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 	}
 
 	@Override
+	protected ConnectionEditPart getOwner() {
+		return (ConnectionEditPart) super.getOwner();
+	}
+
+	@Override
 	protected DragTracker createDragTracker() {
 		if (isFixed()) {
 			return null;
 		}
-		ConnectionEndpointTracker tracker;
-		tracker = createConnectionEndPointTracker((ConnectionEditPart) getOwner());
+		final List<ConnectionEditPart> coSelectedConnections = getCoSelectedConnections();
+		final ConnectionEndpointTracker tracker = createConnectionEndPointTracker(coSelectedConnections);
+		configureConnTracker(tracker);
+		return tracker;
+	}
+
+	private void configureConnTracker(final ConnectionEndpointTracker tracker) {
 		if (getEndPoint() == ConnectionLocator.SOURCE) {
 			tracker.setCommandName(RequestConstants.REQ_RECONNECT_SOURCE);
 		} else {
 			tracker.setCommandName(RequestConstants.REQ_RECONNECT_TARGET);
 		}
 		tracker.setDefaultCursor(getCursor());
-		return tracker;
 	}
 
 	@SuppressWarnings("static-method")  // allow sub-classes to provide special versions
-	protected ConnectionEndpointTracker createConnectionEndPointTracker(final ConnectionEditPart connectionEditPart) {
-		return new ScrollingConnectionEndpointTracker(connectionEditPart);
+	protected ConnectionEndpointTracker createConnectionEndPointTracker(
+			final List<ConnectionEditPart> coSelectedConnections) {
+		return new ScrollingConnectionEndpointTracker(coSelectedConnections.get(0));
 	}
 
 	@Override
@@ -116,5 +131,25 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 			shrinkVal = (int) (2 / getZoomFactor());
 		}
 		return shrinkVal;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<ConnectionEditPart> getCoSelectedConnections() {
+		final EditPart refEndPoint = getEndPoint(getOwner());
+		final List<Object> selectedEditParts = getOwner().getViewer().getSelectedEditParts();
+		final List coSelectedConnections = selectedEditParts.stream()
+				.filter(ConnectionEditPart.class::isInstance)
+				.filter(ep -> sameTarget((ConnectionEditPart) ep, refEndPoint)).collect(Collectors.toList());
+		return coSelectedConnections;
+
+	}
+
+	private boolean sameTarget(final ConnectionEditPart ep, final EditPart refEndPoint) {
+		final EditPart endPoint = getEndPoint(ep);
+		return endPoint == refEndPoint;
+	}
+
+	private EditPart getEndPoint(final ConnectionEditPart ep) {
+		return (getEndPoint() == ConnectionLocator.SOURCE) ? ep.getSource() : ep.getTarget();
 	}
 }
