@@ -54,9 +54,9 @@ class FBEvaluatorTest {
 		return decl
 	}
 
-	def static newSTAlgorithm(CharSequence text) {
+	def static newSTAlgorithm(CharSequence text, String name) {
 		val alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm
-		alg.name = "TEST"
+		alg.name = name
 		alg.text = text.toString
 		return alg
 	}
