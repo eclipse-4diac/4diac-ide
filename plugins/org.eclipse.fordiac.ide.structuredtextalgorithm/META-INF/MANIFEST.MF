@@ -28,5 +28,6 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextalgorithm.serializer,
  org.eclipse.fordiac.ide.structuredtextalgorithm.services,
  org.eclipse.fordiac.ide.structuredtextalgorithm.util,
- org.eclipse.fordiac.ide.structuredtextalgorithm.validation
+ org.eclipse.fordiac.ide.structuredtextalgorithm.validation,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.formatting2
 Import-Package: org.apache.log4j
