@@ -14,32 +14,28 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
-import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.eclipse.xtext.parser.IParseResult
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
 @FinalFieldsConstructor
 class STAlgorithmSupport extends StructuredTextSupport {
 	final STAlgorithm algorithm
 
-	IParseResult parseResult
+	STAlgorithmBody parseResult
 
 	override prepare(Map<?, ?> options) {
 		if (parseResult === null && errors.empty) {
-			parseResult = algorithm.text.parse(false, algorithm.name,
-				switch (root : algorithm.rootContainer) { FBType: root }, errors)
+			parseResult = algorithm.parse(errors)
 		}
 		return parseResult !== null
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
 		prepare(options)
-		(parseResult?.rootASTElement as STAlgorithmBody)?.generateStructuredTextAlgorithm
+		parseResult?.generateStructuredTextAlgorithm
 	}
 
 	def private CharSequence generateStructuredTextAlgorithm(STAlgorithmBody alg) '''
@@ -50,6 +46,6 @@ class STAlgorithmSupport extends StructuredTextSupport {
 
 	override getDependencies(Map<?, ?> options) {
 		prepare(options)
-		parseResult?.rootASTElement?.containedDependencies ?: emptySet
+		parseResult?.containedDependencies ?: emptySet
 	}
 }
