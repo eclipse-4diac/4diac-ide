@@ -126,27 +126,10 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 		filteredTree.setLayoutData(treeGridData);
 
-		final TreeViewerColumn column1 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
-		column1.getColumn().setText(Messages.MonitoringWatchesView_WatchedElement);
-		column1.getColumn().setWidth(340);
-		column1.setLabelProvider(new WatchesNameLabelProvider());
-
-		final TreeViewerColumn column2 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
-		column2.getColumn().setText(Messages.MonitoringWatchesView_Type);
-		column2.getColumn().setWidth(100);
-		column2.setLabelProvider(new WatchesTypeLabelProvider());
-
-		final TreeViewerColumn column3 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
-		column3.getColumn().setText(Messages.MonitoringWatchesView_Value);
-		column3.getColumn().setWidth(100);
-		column3.setLabelProvider(new WatchesValueLabelProvider());
-		column3.setEditingSupport(
-				new WatchesValueEditingSupport(column3.getViewer(), filteredTree.getViewer().getTree()));
-
-		final TreeViewerColumn column4 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
-		column4.getColumn().setText(Messages.MonitoringWatchesView_Comment);
-		column4.getColumn().setWidth(340);
-		column4.setLabelProvider(new WatchesCommentLabelProvider());
+		createNameColumn();
+		createValueColumn();
+		createTypeColumn();
+		createCommentColumn();
 
 		filteredTree.getViewer().getTree().setHeaderVisible(true);
 		filteredTree.getViewer().getTree().setLinesVisible(true);
@@ -180,7 +163,36 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		});
 
 		addWatchesAdapters();
+	}
 
+	private void createNameColumn() {
+		final TreeViewerColumn nameColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		nameColumn.getColumn().setText(Messages.MonitoringWatchesView_WatchedElement);
+		nameColumn.getColumn().setWidth(340);
+		nameColumn.setLabelProvider(new WatchesNameLabelProvider());
+	}
+
+	private void createValueColumn() {
+		final TreeViewerColumn valueColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		valueColumn.getColumn().setText(Messages.MonitoringWatchesView_Value);
+		valueColumn.getColumn().setWidth(100);
+		valueColumn.setLabelProvider(new WatchesValueLabelProvider());
+		valueColumn.setEditingSupport(
+				new WatchesValueEditingSupport(valueColumn.getViewer(), filteredTree.getViewer().getTree()));
+	}
+
+	private void createTypeColumn() {
+		final TreeViewerColumn typeColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		typeColumn.getColumn().setText(Messages.MonitoringWatchesView_Type);
+		typeColumn.getColumn().setWidth(100);
+		typeColumn.setLabelProvider(new WatchesTypeLabelProvider());
+	}
+
+	private void createCommentColumn() {
+		final TreeViewerColumn commentColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		commentColumn.getColumn().setText(Messages.MonitoringWatchesView_Comment);
+		commentColumn.getColumn().setWidth(340);
+		commentColumn.setLabelProvider(new WatchesCommentLabelProvider());
 	}
 
 
