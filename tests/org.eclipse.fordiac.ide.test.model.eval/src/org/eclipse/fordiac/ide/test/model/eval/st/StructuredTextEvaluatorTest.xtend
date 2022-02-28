@@ -25,10 +25,10 @@ import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
-import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator
+import org.eclipse.fordiac.ide.model.eval.st.ECTransitionEvaluator
+import org.eclipse.fordiac.ide.model.eval.st.STAlgorithmEvaluator
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
@@ -798,7 +798,9 @@ class StructuredTextEvaluatorTest {
 	}
 
 	def static evaluateExpression(CharSequence expression, Collection<Variable> variables) {
-		new StructuredTextEvaluator(expression.toString, variables, null, null).evaluate
+		val transition = LibraryElementFactory.eINSTANCE.createECTransition
+		transition.conditionExpression = expression.toString
+		new ECTransitionEvaluator(transition, variables, null).evaluate
 	}
 
 	def static evaluateAlgorithm(CharSequence algorithm) {
@@ -824,16 +826,12 @@ class StructuredTextEvaluatorTest {
 		(0 ..< repeat).map[clazz].flatten
 	}
 
-	static class TracingStructuredTextEvaluator extends StructuredTextEvaluator {
+	static class TracingStructuredTextEvaluator extends STAlgorithmEvaluator {
 		@Accessors
 		final Queue<Object> trace = new ArrayBlockingQueue(1000)
 
 		new(STAlgorithm alg, Collection<Variable> variables, Evaluator parent) {
 			super(alg, variables, parent)
-		}
-
-		new(String text, Collection<Variable> variables, BaseFBType fbType, Evaluator parent) {
-			super(text, variables, fbType, parent)
 		}
 
 		override protected <T> T trap(T context) {

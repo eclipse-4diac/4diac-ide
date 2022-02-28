@@ -21,9 +21,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 	override createEvaluator(Object source, Iterable<Variable> variables, Evaluator parent) {
 		if (source instanceof STAlgorithm) {
-			new StructuredTextEvaluator(source, variables, parent)
+			new STAlgorithmEvaluator(source, variables, parent)
 		} else if (source instanceof ECTransition) {
-			new StructuredTextEvaluator(source, variables, parent)
+			new ECTransitionEvaluator(source, variables, parent)
 		}
 	}
 

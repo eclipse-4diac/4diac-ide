@@ -40,6 +40,10 @@ class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
 		}
 	}
 
+	override prepare() {
+		algorithmEvaluator.prepare
+	}
+
 	override evaluate(Event event) {
 		if (event === null || type.interfaceList.eventInputs.contains(event)) {
 			algorithmEvaluator.evaluate

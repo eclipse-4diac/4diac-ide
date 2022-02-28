@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 import java.util.List
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser
@@ -42,7 +41,7 @@ class StructuredTextParseUtil {
 	}
 
 	def static STAlgorithmBody parse(STAlgorithm algorithm, List<String> errors) {
-		algorithm.text.parse(false, algorithm.name, algorithm.rootContainer as BaseFBType, errors)?.
+		algorithm.text.parse(false, algorithm.name, switch (root : algorithm.rootContainer) { FBType: root }, errors)?.
 			rootASTElement as STAlgorithmBody
 	}
 

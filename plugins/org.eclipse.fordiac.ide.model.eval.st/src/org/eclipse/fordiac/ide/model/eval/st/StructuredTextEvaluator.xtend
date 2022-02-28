@@ -21,9 +21,6 @@ import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
-import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
@@ -45,46 +42,17 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.xtext.parser.IParseResult
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
-import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
-class StructuredTextEvaluator extends AbstractEvaluator {
+abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	@Accessors final String name
-	final String text
-	final BaseFBType fbType
-	final boolean singleExpression
 	final Map<String, Variable> variables
 
-	new(STAlgorithm alg, Iterable<Variable> variables, Evaluator parent) {
+	new(String name, Iterable<Variable> variables, Evaluator parent) {
 		super(parent)
-		val root = alg.rootContainer
-		this.fbType = if(root instanceof BaseFBType) root else null
-		this.name = '''«IF fbType !== null»«fbType.name».«ENDIF»«alg.name»'''
-		this.text = alg.text
-		this.singleExpression = false
-		this.variables = variables.toMap[getName]
-	}
-
-	new(ECTransition transition, Iterable<Variable> variables, Evaluator parent) {
-		super(parent)
-		this.name = "anonymous"
-		this.text = transition.conditionExpression
-		val root = transition.rootContainer
-		this.fbType = if(root instanceof BaseFBType) root else null
-		this.singleExpression = true
-		this.variables = variables.toMap[getName]
-	}
-
-	new(String text, Iterable<Variable> variables, BaseFBType fbType, Evaluator parent) {
-		super(parent)
-		this.name = "anonymous"
-		this.text = text
-		this.fbType = fbType
-		this.singleExpression = true
+		this.name = name
 		this.variables = variables.toMap[getName]
 	}
 
@@ -92,33 +60,13 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		variables.unmodifiableView
 	}
 
-	override getSourceElement() {
-		this.fbType
-	}
-
-	override Value evaluate() {
-		val parseResult = parse()
-		val root = parseResult.rootASTElement
-		root.evaluate
-	}
-
-	def private dispatch Value evaluate(STAlgorithmBody alg) {
+	def protected dispatch Value evaluate(STAlgorithmBody alg) {
 		alg.trap.evaluateStructuredTextAlgorithm
 		null
 	}
 
-	def private dispatch Value evaluate(STExpression expr) {
+	def protected dispatch Value evaluate(STExpression expr) {
 		expr.trap.evaluateExpression
-	}
-
-	def private IParseResult parse() {
-		val errors = newArrayList
-		val parseResult = text.parse(singleExpression, name, fbType, errors)
-		if (parseResult === null) {
-			errors.forEach[error("Parse error: " + it)]
-			throw new Exception("Parse error: " + errors.join(", "))
-		}
-		return parseResult
 	}
 
 	def private evaluateStructuredTextAlgorithm(STAlgorithmBody alg) {

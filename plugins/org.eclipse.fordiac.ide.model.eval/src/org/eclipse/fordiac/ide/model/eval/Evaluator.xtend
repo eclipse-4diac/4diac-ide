@@ -17,6 +17,8 @@ import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 
 interface Evaluator {
+	def void prepare()
+	
 	def Value evaluate() throws EvaluatorException, InterruptedException
 	
 	def String getName()
