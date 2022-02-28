@@ -37,6 +37,7 @@ public final class Messages extends NLS {
 	public static String MonitoringWatchesView_Value;
 	public static String MonitoringWatchesView_Comment;
 	public static String MonitoringWatchesView_Force;
+	public static String MonitoringWatchesView_ClearForce;
 	public static String MonitoringWatchesView_ForceValue;
 	public static String MonitoringWatchesView_TriggerEvent;
 

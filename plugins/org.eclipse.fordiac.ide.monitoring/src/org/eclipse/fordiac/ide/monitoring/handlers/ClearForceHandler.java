@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016, 2018 fortiss GmbH, Johannes Kepler University 
+ * Copyright (c) 2015, 2016, 2018 fortiss GmbH, Johannes Kepler University
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,7 +8,7 @@
  *
  * Contributors:
  *   Gerd Kainz, Alois Zoitl - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Harmonized deployment and monitoring   
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
@@ -25,35 +25,38 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class ClearForceHandler extends AbstractMonitoringHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
-		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		VarDeclaration variable = ForceHandler.getVariable(selection.getFirstElement());
+		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
+		final VarDeclaration variable = ForceHandler.getVariable(selection.getFirstElement());
+		processHandler(variable);
+		return null;
+	}
+
+	public static void processHandler(final VarDeclaration variable) {
 		if (null != variable) {
-			MonitoringManager manager = MonitoringManager.getInstance();
-			MonitoringBaseElement element = manager.getMonitoringElement(variable);
+			final MonitoringManager manager = MonitoringManager.getInstance();
+			final MonitoringBaseElement element = manager.getMonitoringElement(variable);
 			if (element instanceof MonitoringElement) {
 				manager.forceValue((MonitoringElement) element, ""); //$NON-NLS-1$
 			}
 		}
-
-		return null;
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		boolean needToAdd = false;
-		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
 		if (selection instanceof StructuredSelection) {
-			StructuredSelection sel = (StructuredSelection) selection;
-			MonitoringManager manager = MonitoringManager.getInstance();
+			final StructuredSelection sel = (StructuredSelection) selection;
+			final MonitoringManager manager = MonitoringManager.getInstance();
 
 			if (1 == sel.size()) {
 				// only allow to force a value if only one element is selected
-				VarDeclaration variable = ForceHandler.getVariable(sel.getFirstElement());
+				final VarDeclaration variable = ForceHandler.getVariable(sel.getFirstElement());
 				if (null != variable) {
-					MonitoringBaseElement element = manager.getMonitoringElement(variable);
+					final MonitoringBaseElement element = manager.getMonitoringElement(variable);
 					needToAdd = (element instanceof MonitoringElement && ((MonitoringElement) element).isForce());
 				}
 			}

@@ -13,9 +13,16 @@
 package org.eclipse.fordiac.ide.monitoring.provider;
 
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.monitoring.Activator;
+import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNode;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNodeUtils;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 
 public class WatchesValueLabelProvider extends ColumnLabelProvider {
 	@Override
@@ -38,5 +45,19 @@ public class WatchesValueLabelProvider extends ColumnLabelProvider {
 		}
 
 		return ""; //$NON-NLS-1$
+	}
+
+	@Override
+	public Color getBackground(final Object element) {
+		if (element instanceof WatchValueTreeNode) {
+			final MonitoringElement monitoringElement = (MonitoringElement) MonitoringManager.getInstance()
+					.getMonitoringElement(
+							((WatchValueTreeNode) element).getMonitoringBaseElement().getPort().getInterfaceElement());
+			if (monitoringElement.isForce()) {
+				return PreferenceGetter.getColor(Activator.getDefault().getPreferenceStore(),
+						org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_FORCE_COLOR);
+			}
+		}
+		return Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
 	}
 }
