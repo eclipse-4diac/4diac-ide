@@ -131,8 +131,10 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		«ENDIF»'''
 
 	def protected generateEventConstants(List<Event> events) '''«FOR event : events»
-			static const TEventID scm_nEvent«event.name»ID = «events.indexOf(event)»;
+			static const TEventID «event.generateEventName» = «events.indexOf(event)»;
 		«ENDFOR»'''
+	
+	def protected generateEventName(Event event) '''scm_nEvent«event.name»ID'''
 
 	def protected generateFBInterfaceDefinition() {
 		val inputWith = newArrayList
