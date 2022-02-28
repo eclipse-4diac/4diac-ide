@@ -2,6 +2,7 @@
  * Copyright (c) 2019 fortiss GmbH
  *               2020 Johannes Kepler University
  *               2020 TU Wien/ACIN
+ *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *     - adopt new ST language support
  *   Alois Zoitl
  *     - Add internal var generation
  *   Ernst Blecha
@@ -21,118 +23,20 @@
 package org.eclipse.fordiac.ide.export.forte_ng.basic
 
 import java.nio.file.Path
-import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
+import org.eclipse.fordiac.ide.export.forte_ng.base.BaseFBHeaderTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECState
-import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
-import org.eclipse.xtend.lib.annotations.Accessors
 
-class BasicFBHeaderTemplate extends ForteFBTemplate {
-
-	@Accessors(PROTECTED_GETTER) BasicFBType type
-
+class BasicFBHeaderTemplate extends BaseFBHeaderTemplate<BasicFBType> {
 	new(BasicFBType type, String name, Path prefix) {
-		super(name, prefix, "CBasicFB")
-		this.type = type
-		
+		super(type, name, prefix, "CBasicFB")
 	}
 
-	override generate() '''
-		«generateHeader»
-
-		«generateIncludeGuardStart»
-
-		«generateHeaderIncludes»
-		
-		«generateFBClassHeader»
-		  «generateFBDeclaration»
-
-		private:
-		  «generateFBInterfaceDeclaration»
-
-		  «generateFBInterfaceSpecDeclaration»
-		
-		«IF !type.internalFbs.empty»
-		  static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
-		  «generateInternalFbDefinition»
-		  
-		«ENDIF»
-		«IF !type.internalVars.isEmpty»
-		  «generateInternalVarDelcaration(type)»
-        «ENDIF»
-        «IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
-		  «generateInitialValueAssignmentDeclaration»
-		«ENDIF»
-		  «type.interfaceList.inputVars.generateAccessors("getDI")»
-		  «type.interfaceList.outputVars.generateAccessors("getDO")»
-		  «type.internalVars.generateAccessors("getVarInternal")»
-		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
-
-		  «generateAlgorithms»
-
-		  «generateStates»
-
-		  virtual void executeEvent(int pa_nEIID);
-
-		  «type.generateBasicFBDataArray»
-
-		public:
-		  «IF type.internalFbs.empty»
-		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		      «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
-		  «ELSE»
-		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		      «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData, scmInternalFBs, csmAmountOfInternalFBs) {
-		  «ENDIF»
-		  };
-		
-		  «IF !type.internalFbs.empty»
-		  virtual ~«FBClassName»() {
-		    for(size_t i = 0; i < csmAmountOfInternalFBs; ++i){
-		      delete mInternalFBs[i];
-		    }
-		    delete[] mInternalFBs;
-		  };
-		  «ELSE»
-		  virtual ~«FBClassName»() = default;
-		  «ENDIF»
-		};
-
-		«generateIncludeGuardEnd»
-
+	override generateAdditionalDeclarations() '''
+		«generateStates»
 	'''
-
-	override protected generateHeaderIncludes() '''
-		#include "basicfb.h"
-		«IF !type.internalFbs.isEmpty»
-		#include "typelib.h"
-		«ENDIF»
-		«(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).map[getType].generateTypeIncludes»
-		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
-
-		«type.compilerInfo?.header»
-	'''
-
-	def protected generateAlgorithms() '''
-		«FOR alg : type.algorithm»
-			«alg.generateAlgorithm»
-		«ENDFOR»
-	'''
-
-	def protected dispatch generateAlgorithm(Algorithm alg) {
-		errors.add('''Cannot export algorithm «alg.class»''')
-		return ""
-	}
-
-	def protected dispatch generateAlgorithm(OtherAlgorithm alg) '''
-		void alg_«alg.name»(void);
-	'''
-
-	def protected dispatch generateAlgorithm(STAlgorithm alg) '''
-		void alg_«alg.name»(void);
-	'''
+	
+	override generateClassInclude() '''#include "basicfb.h"'''
 
 	def protected generateStates() '''
 		«FOR state : type.ECC.ECState»

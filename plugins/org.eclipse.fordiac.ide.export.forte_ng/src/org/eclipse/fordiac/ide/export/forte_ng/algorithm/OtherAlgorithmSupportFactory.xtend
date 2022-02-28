@@ -21,4 +21,9 @@ class OtherAlgorithmSupportFactory implements ILanguageSupportFactory {
 			new OtherAlgorithmSupport(source)
 		}
 	}
+
+	def static void register() {
+		val factory = new OtherAlgorithmSupportFactory
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", OtherAlgorithm, factory)
+	}
 }

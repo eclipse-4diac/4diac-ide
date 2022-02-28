@@ -29,7 +29,9 @@ import org.eclipse.fordiac.ide.export.IExportTemplate;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter;
+import org.eclipse.fordiac.ide.export.forte_ng.algorithm.OtherAlgorithmSupportFactory;
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
+import org.eclipse.fordiac.ide.export.forte_ng.st.StructuredTextSupportFactory;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -49,6 +51,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -56,7 +59,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class ExporterTestBase<T extends FBType> {
 
-	protected static final String ALGORITHM_NAME = "algorithm"; //$NON-NLS-1$
+	protected static final String ALGORITHM_NAME = "ALG"; //$NON-NLS-1$
 
 	protected static final String EXPORTED_ALGORITHM_NAME = "alg_" + ALGORITHM_NAME; //$NON-NLS-1$
 
@@ -97,6 +100,15 @@ public abstract class ExporterTestBase<T extends FBType> {
 	protected VarDeclaration inputData;
 	protected VarDeclaration outputData;
 	private List<String> errors;
+
+	@SuppressWarnings("unused")
+	@BeforeAll
+	public static void setup() {
+		new DataTypeLibrary();
+		STAlgorithmStandaloneSetup.doSetup();
+		OtherAlgorithmSupportFactory.register();
+		StructuredTextSupportFactory.register();
+	}
 
 	/** generate code from an algorithm stored in a function block
 	 *

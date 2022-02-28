@@ -15,6 +15,9 @@
          <source
                type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource">
          </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.ECTransition">
+         </source>
       </factory>
    </extension>
 

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University
- *
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
@@ -28,8 +28,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def emptyExpression() {
-		var generatedCode = generateExpression(functionBlock, "", errors) //$NON-NLS-1$
-
+		var generatedCode = generateExpression(functionBlock, "", errors) // $NON-NLS-1$
 		assertErrors(errors) // Expression can not be empty
 		assertNull(generatedCode)
 	}
@@ -38,8 +37,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 	def assignmentExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, BOOL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» := 1''', errors) //$NON-NLS-1$
-
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» := 1''', errors) // $NON-NLS-1$
 		assertErrors(errors) // Expression can not be an assignment
 		assertNull(generatedCode)
 	}
@@ -47,26 +45,23 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 	@Test
 	def simpleAssignmentAlgorithm() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, BOOL))
-		functionBlock.callables
-				.add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := 1;''')) //$NON-NLS-1$
-
+		functionBlock.callables.add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := 1;''')) // $NON-NLS-1$
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
 		assertEquals('''«EXPORTED_VARIABLE_NAME»() = 1;
-		'''.toString(), generatedCode.toString()) //$NON-NLS-1$
+		'''.toString(), generatedCode.toString()) // $NON-NLS-1$
 	}
 
 	@Test
 	def functionSQRTExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''SQRT(«VARIABLE_NAME»)''', errors) //$NON-NLS-1$
-
+		var generatedCode = generateExpression(functionBlock, '''SQRT(«VARIABLE_NAME»)''', errors) // $NON-NLS-1$
 		assertNoErrors(errors) // Expression can not be an assignment
 		assertNotNull(generatedCode)
-		assertEquals('''SQRT(«EXPORTED_VARIABLE_NAME»())'''.toString(), generatedCode.toString()) //$NON-NLS-1$
+		assertEquals('''SQRT(«EXPORTED_VARIABLE_NAME»())'''.toString(), generatedCode.toString()) // $NON-NLS-1$
 	}
 
 	@Test
@@ -74,17 +69,16 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» ** «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
-
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» ** «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
 		assertNoErrors(errors); // Expression can not be an assignment
 		assertNotNull(generatedCode);
-		assertEquals('''EXPT(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+		assertEquals('''EXPT(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		generatedCode.toString())
 	}
 
 	@Test
 	def timeAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TIME"))//$NON-NLS-1$
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TIME")) // $NON-NLS-1$
 		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TIME#1m;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
@@ -97,7 +91,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def dateAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DATE"))//$NON-NLS-1$
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DATE")) // $NON-NLS-1$
 		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := D#1996-08-12;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
@@ -110,7 +104,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def todAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TOD"))//$NON-NLS-1$
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TOD")) // $NON-NLS-1$
 		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TOD#06:06:59;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
@@ -123,8 +117,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def datetimeAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DT"))//$NON-NLS-1$
-		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := DT#1989-06-15-13:56:14.77;'''))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DT")) // $NON-NLS-1$
+		functionBlock.getCallables().add(
+			createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := DT#1989-06-15-13:56:14.77;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
@@ -139,57 +134,53 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» + «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
-
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» + «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
 		assertNoErrors(errors); // Expression can not be an assignment
 		assertNotNull(generatedCode);
-		assertEquals('''ADD(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+		assertEquals('''ADD(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		generatedCode.toString())
 	}
-	
+
 	@Test
 	def subExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» - «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
-
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» - «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
 		assertNoErrors(errors); // Expression can not be an assignment
 		assertNotNull(generatedCode);
-		assertEquals('''SUB(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+		assertEquals('''SUB(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		generatedCode.toString())
 	}
-	
+
 	@Test
 	def divExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» / «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
-
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» / «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
 		assertNoErrors(errors); // Expression can not be an assignment
 		assertNotNull(generatedCode);
-		assertEquals('''DIV(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+		assertEquals('''DIV(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		generatedCode.toString())
 	}
-	
+
 	@Test
 	def mulExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
-
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
 		assertNoErrors(errors); // Expression can not be an assignment
 		assertNotNull(generatedCode);
-		assertEquals('''MUL(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+		assertEquals('''MUL(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		generatedCode.toString())
 	}
 
 	@Test
 	def void otherAlgorithmBasic() {
 		val ALGORITHM_TEXT = '''int i = 0; i++;'''
-		
+
 		functionBlock.callables.add(createOtherAlgorithm(ALGORITHM_NAME, ALGORITHM_TEXT, "C++"))
 
 		val exports = generateFunctionBlock(functionBlock);
@@ -201,58 +192,59 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 			switch export.getName() {
 				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h''': {
 					headerfileFound = true
-					
+
 					assertEquals('''
-					/*************************************************************************
-					 *** FORTE Library Element
-					 ***
-					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
-					 ***
-					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-					 *** Description: 
-					 *** Version:
-					 *************************************************************************/
-
-					#ifndef _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-					#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-
-					#include "basicfb.h"
-					#include "forte_array_common.h"
-					#include "forte_array.h"
-					#include "forte_array_fixed.h"
-					#include "forte_array_variable.h"
-
-
-					class «EXPORTED_FUNCTIONBLOCK_NAME»: public CBasicFB {
-					  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
-
-					private:
-					  
-					  
-					  
-					  
-
-					  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
-
-
-					  void «EXPORTED_ALGORITHM_NAME»(void);
-
-					  
-
-					  virtual void executeEvent(int pa_nEIID);
-
-					  FORTE_BASIC_FB_DATA_ARRAY(0, 0, 0, 0, 0);
-
-					public:
-					  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-					      CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
-					  };
-
-					  virtual ~«EXPORTED_FUNCTIONBLOCK_NAME»() = default;
-					};
-
-					#endif // _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-
+						/*************************************************************************
+						 *** FORTE Library Element
+						 ***
+						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+						 ***
+						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
+						 *** Description: 
+						 *** Version:
+						 *************************************************************************/
+						
+						#ifndef _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+						#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+						
+						#include "basicfb.h"
+						#include "forte_array_common.h"
+						#include "forte_array.h"
+						#include "forte_array_fixed.h"
+						#include "forte_array_variable.h"
+						
+						
+						class «EXPORTED_FUNCTIONBLOCK_NAME»: public CBasicFB {
+						  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
+						
+						private:
+						  
+						  
+						  
+						  
+						
+						  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
+						  void «EXPORTED_ALGORITHM_NAME»(void);
+						  static const TForteInt16 scm_nStateINIT = 0;
+						  
+						  void enterStateINIT(void);
+						
+						  virtual void executeEvent(int pa_nEIID);
+						
+						  FORTE_BASIC_FB_DATA_ARRAY(0, 0, 0, 0, 0);
+						
+						public:
+						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+						      CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
+						  };
+						
+						  virtual ~«EXPORTED_FUNCTIONBLOCK_NAME»() = default;
+						
+						
+						};
+						
+						#endif // _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 					assertNoErrors(export.warnings)
@@ -260,61 +252,70 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 				}
 				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».cpp''': {
 					cppfileFound = true
-					
-					assertEquals('''
-					/*************************************************************************
-					 *** FORTE Library Element
-					 ***
-					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
-					 ***
-					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-					 *** Description: 
-					 *** Version:
-					 *************************************************************************/
-					
-					#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h"
-					#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-					#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
-					#endif
-					
-					
-					DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringIdfunctionblock)
-					
-					
-					
-					
-					
-					
-					const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scm_stFBInterfaceSpec = {
-					  0, nullptr, nullptr, nullptr,
-					  0, nullptr, nullptr, nullptr,
-					  0, nullptr, nullptr,
-					  0, nullptr, nullptr,
-					  0, nullptr
-					};
-					
-					void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-					  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
-					  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
-					  «ALGORITHM_TEXT»
-					}
-					
-					
-					
-					void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(int pa_nEIID){
-					  bool bTransitionCleared;
-					  do {
-					    bTransitionCleared = true;
-					    switch(m_nECCState) {
-					      default:
-					        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 0.", m_nECCState.operator TForteUInt16 ());
-					        m_nECCState = 0; // 0 is always the initial state
-					        break;
-					    }
-					    pa_nEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
-					  } while(bTransitionCleared);
-					}
 
+					assertEquals('''
+						/*************************************************************************
+						 *** FORTE Library Element
+						 ***
+						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+						 ***
+						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
+						 *** Description: 
+						 *** Version:
+						 *************************************************************************/
+						
+						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h"
+						#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
+						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
+						#endif
+						
+						#include "forte_array_common.h"
+						#include "forte_array.h"
+						#include "forte_array_fixed.h"
+						#include "forte_array_variable.h"
+						
+						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringIdfunctionblock)
+						
+						
+						
+						
+						
+						
+						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scm_stFBInterfaceSpec = {
+						  0, nullptr, nullptr, nullptr,
+						  0, nullptr, nullptr, nullptr,
+						  0, nullptr, nullptr,
+						  0, nullptr, nullptr,
+						  0, nullptr
+						};
+						
+						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+						  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
+						  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
+						  «ALGORITHM_TEXT»
+						}
+						
+						
+						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(int pa_nEIID){
+						  do {
+						    switch(m_nECCState) {
+						      case scm_nStateINIT:
+						        return; //no transition cleared
+						      default:
+						        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", m_nECCState.operator TForteUInt16 ());
+						        m_nECCState = 0; // 0 is always the initial state
+						        return;
+						    }
+						    pa_nEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+						  } while(true);
+						}
+						
+						
+						void FORTE_functionblock::enterStateINIT(void) {
+						  m_nECCState = scm_nStateINIT;
+						}
+						
+						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 					assertNoErrors(export.warnings)
