@@ -20,7 +20,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.elk.core.service.DiagramLayoutEngine;
-import org.eclipse.fordiac.ide.elk.FordiacLayoutFactory;
+import org.eclipse.fordiac.ide.elk.helpers.FordiacLayoutFactory;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;

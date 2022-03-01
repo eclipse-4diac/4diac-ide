@@ -12,7 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.elk;
+package org.eclipse.fordiac.ide.elk.helpers;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.elk.alg.layered.options.CrossingMinimizationStrategy;
