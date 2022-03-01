@@ -17,8 +17,10 @@ package org.eclipse.fordiac.ide.model.Palette.impl;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -29,6 +31,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
@@ -273,7 +276,19 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	public void setType(final LibraryElement newType) {
 		setTypeGen(newType);
 		if (newType != null) {
+			encloseInResource(newType);
 			newType.setPaletteEntry(this);
+		}
+	}
+
+	private void encloseInResource(final LibraryElement newType) {
+		final IFile file = getFile();
+		if (file != null) {
+			final IPath path = file.getFullPath();
+			if (path != null) {
+				new FordiacTypeResource(URI.createPlatformResourceURI(path.toString(), true)).getContents()
+				.add(newType);
+			}
 		}
 	}
 
@@ -355,6 +370,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	public void setTypeEditable(final LibraryElement newTypeEditable) {
 		setTypeEditableGen(newTypeEditable);
 		if (newTypeEditable != null) {
+			encloseInResource(newTypeEditable);
 			newTypeEditable.setPaletteEntry(this);
 		}
 	}

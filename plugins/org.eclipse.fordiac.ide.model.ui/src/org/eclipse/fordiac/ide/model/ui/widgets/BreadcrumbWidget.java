@@ -122,11 +122,11 @@ public class BreadcrumbWidget implements ISelectionProvider {
 	public BreadcrumbItem getActiveItem() {
 		return items.get(items.size() - 1);
 	}
-	
+
 	public String serializePath() {
 		return items.stream()
-			.map(item -> "/" + item.getText())
-			.collect(Collectors.joining());
+				.map(item -> "/" + item.getText())
+				.collect(Collectors.joining());
 	}
 
 	public boolean openPath(final String path, final AutomationSystem system) {
@@ -170,7 +170,7 @@ public class BreadcrumbWidget implements ISelectionProvider {
 	}
 
 	private Object getMatchingPathChild(final Object current, final String token) {
-		Object[] children = contentProvider.getChildren(current);
+		final Object[] children = contentProvider.getChildren(current);
 		for (final Object child : children) {
 			if (labelProvider.getText(child).equals(token)) {
 				return child;
@@ -181,7 +181,7 @@ public class BreadcrumbWidget implements ISelectionProvider {
 
 	// recursive function for collecting parent objects
 	private void createItems(final Object input, final ArrayList<Object> parentObjects) {
-		if (input == null) {
+		if (input == null || (input instanceof org.eclipse.emf.ecore.resource.Resource)) {
 			return;
 		}
 
