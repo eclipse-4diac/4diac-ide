@@ -12,18 +12,27 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.base
 
-import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import java.nio.file.Path
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import java.util.Map
+import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Method
+import org.eclipse.xtend.lib.annotations.Accessors
 
 abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) final T type
+	final Map<Method, ILanguageSupport> methodLanguageSupport
 
 	new(T type, String name, Path prefix, String baseClass) {
 		super(name, prefix, baseClass)
 		this.type = type
+		methodLanguageSupport = type.methods.toInvertedMap [
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
+		]
 	}
 
 	override generate() '''
@@ -57,6 +66,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  «type.internalVars.generateAccessors("getVarInternal")»
 		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
 		  «generateAlgorithms»
+		  «generateMethods»
 		  «generateAdditionalDeclarations»
 		
 		  virtual void executeEvent(int pa_nEIID);
@@ -112,5 +122,11 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 
 	def protected generateAlgorithm(Algorithm alg) '''
 		void alg_«alg.name»(void);
+	'''
+
+	def protected generateMethods() '''
+		«FOR method : type.methods»
+			«methodLanguageSupport.get(method)?.generate(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})»
+		«ENDFOR»
 	'''
 }

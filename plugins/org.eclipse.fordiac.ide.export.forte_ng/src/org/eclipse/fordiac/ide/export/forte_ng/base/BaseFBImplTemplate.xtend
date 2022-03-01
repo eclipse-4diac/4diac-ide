@@ -12,25 +12,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.base
 
-import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import java.nio.file.Path
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
-import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import java.util.Map
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.Method
+import org.eclipse.xtend.lib.annotations.Accessors
 
 abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) final T type
 	final Map<Algorithm, ILanguageSupport> algorithmLanguageSupport
+	final Map<Method, ILanguageSupport> methodLanguageSupport
 
 	new(T type, String name, Path prefix, String baseClass) {
 		super(name, prefix, baseClass)
 		this.type = type
 		algorithmLanguageSupport = type.algorithm.toInvertedMap [
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
+		]
+		methodLanguageSupport = type.methods.toInvertedMap [
 			ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
 		]
 	}
@@ -60,6 +65,8 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate 
 		«ENDIF»
 		«generateAlgorithms»
 		
+		«generateMethods»
+		
 		«generateExecuteEvent»
 		
 	'''
@@ -86,6 +93,12 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate 
 		void «FBClassName»::«alg.generateAlgorithmName»(void) {
 		  «algorithmLanguageSupport.get(alg)?.generate(emptyMap)»
 		}
+	'''
+
+	def protected generateMethods() '''
+		«FOR method : type.methods»
+			«methodLanguageSupport.get(method)?.generate(emptyMap)»
+		«ENDFOR»
 	'''
 
 	def protected generateAlgorithmName(Algorithm alg) '''alg_«alg.name»'''

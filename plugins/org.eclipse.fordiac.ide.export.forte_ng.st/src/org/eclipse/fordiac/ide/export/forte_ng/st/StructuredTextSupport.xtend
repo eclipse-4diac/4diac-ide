@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
@@ -84,7 +85,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	override getWarnings() { emptyList }
 
-	def protected CharSequence generateLocalVariables(List<? extends STVarDeclarationBlock> blocks, boolean temp) '''
+	def protected CharSequence generateLocalVariables(Iterable<? extends STVarDeclarationBlock> blocks, boolean temp) '''
 		«FOR block : blocks»
 			«block.generateLocalVariableBlock(temp)»
 		«ENDFOR»
@@ -291,7 +292,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''st_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''st_func_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
+
+	def protected dispatch CharSequence generateFeatureName(STMethod feature) '''method_«feature.name»'''
 
 	def protected CharSequence generateTypeName(STVarDeclaration variable) {
 		if (variable.locatedAt !== null && variable.array) {
