@@ -29,37 +29,36 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Body</b></em>'.
+ * An implementation of the model object '<em><b>ST Method Body</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmBodyImpl#getVarTempDeclarations <em>Var Temp Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmBodyImpl#getStatements <em>Statements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STMethodBodyImpl#getVarDeclarations <em>Var Declarations</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STMethodBodyImpl#getStatements <em>Statements</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements STAlgorithmBody {
+public class STMethodBodyImpl extends MinimalEObjectImpl.Container implements STMethodBody {
 	/**
-	 * The cached value of the '{@link #getVarTempDeclarations() <em>Var Temp Declarations</em>}' containment reference list.
+	 * The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVarTempDeclarations()
+	 * @see #getVarDeclarations()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<STVarTempDeclarationBlock> varTempDeclarations;
+	protected EList<STVarDeclarationBlock> varDeclarations;
 
 	/**
 	 * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference list.
@@ -76,7 +75,7 @@ public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected STAlgorithmBodyImpl() {
+	protected STMethodBodyImpl() {
 		super();
 	}
 
@@ -87,7 +86,7 @@ public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return STAlgorithmPackage.Literals.ST_ALGORITHM_BODY;
+		return STAlgorithmPackage.Literals.ST_METHOD_BODY;
 	}
 
 	/**
@@ -96,11 +95,11 @@ public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public EList<STVarTempDeclarationBlock> getVarTempDeclarations() {
-		if (varTempDeclarations == null) {
-			varTempDeclarations = new EObjectContainmentEList<STVarTempDeclarationBlock>(STVarTempDeclarationBlock.class, this, STAlgorithmPackage.ST_ALGORITHM_BODY__VAR_TEMP_DECLARATIONS);
+	public EList<STVarDeclarationBlock> getVarDeclarations() {
+		if (varDeclarations == null) {
+			varDeclarations = new EObjectContainmentEList<STVarDeclarationBlock>(STVarDeclarationBlock.class, this, STAlgorithmPackage.ST_METHOD_BODY__VAR_DECLARATIONS);
 		}
-		return varTempDeclarations;
+		return varDeclarations;
 	}
 
 	/**
@@ -111,7 +110,7 @@ public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public EList<STStatement> getStatements() {
 		if (statements == null) {
-			statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STAlgorithmPackage.ST_ALGORITHM_BODY__STATEMENTS);
+			statements = new EObjectContainmentEList<STStatement>(STStatement.class, this, STAlgorithmPackage.ST_METHOD_BODY__STATEMENTS);
 		}
 		return statements;
 	}
@@ -124,9 +123,9 @@ public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__VAR_TEMP_DECLARATIONS:
-				return ((InternalEList<?>)getVarTempDeclarations()).basicRemove(otherEnd, msgs);
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__STATEMENTS:
+			case STAlgorithmPackage.ST_METHOD_BODY__VAR_DECLARATIONS:
+				return ((InternalEList<?>)getVarDeclarations()).basicRemove(otherEnd, msgs);
+			case STAlgorithmPackage.ST_METHOD_BODY__STATEMENTS:
 				return ((InternalEList<?>)getStatements()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -141,9 +140,9 @@ public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__VAR_TEMP_DECLARATIONS:
-				return getVarTempDeclarations();
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__STATEMENTS:
+			case STAlgorithmPackage.ST_METHOD_BODY__VAR_DECLARATIONS:
+				return getVarDeclarations();
+			case STAlgorithmPackage.ST_METHOD_BODY__STATEMENTS:
 				return getStatements();
 			default:
 				return super.eGet(featureID, resolve, coreType);
@@ -159,11 +158,11 @@ public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__VAR_TEMP_DECLARATIONS:
-				getVarTempDeclarations().clear();
-				getVarTempDeclarations().addAll((Collection<? extends STVarTempDeclarationBlock>)newValue);
+			case STAlgorithmPackage.ST_METHOD_BODY__VAR_DECLARATIONS:
+				getVarDeclarations().clear();
+				getVarDeclarations().addAll((Collection<? extends STVarDeclarationBlock>)newValue);
 				return;
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__STATEMENTS:
+			case STAlgorithmPackage.ST_METHOD_BODY__STATEMENTS:
 				getStatements().clear();
 				getStatements().addAll((Collection<? extends STStatement>)newValue);
 				return;
@@ -181,10 +180,10 @@ public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__VAR_TEMP_DECLARATIONS:
-				getVarTempDeclarations().clear();
+			case STAlgorithmPackage.ST_METHOD_BODY__VAR_DECLARATIONS:
+				getVarDeclarations().clear();
 				return;
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__STATEMENTS:
+			case STAlgorithmPackage.ST_METHOD_BODY__STATEMENTS:
 				getStatements().clear();
 				return;
 			default:
@@ -201,13 +200,13 @@ public class STAlgorithmBodyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__VAR_TEMP_DECLARATIONS:
-				return varTempDeclarations != null && !varTempDeclarations.isEmpty();
-			case STAlgorithmPackage.ST_ALGORITHM_BODY__STATEMENTS:
+			case STAlgorithmPackage.ST_METHOD_BODY__VAR_DECLARATIONS:
+				return varDeclarations != null && !varDeclarations.isEmpty();
+			case STAlgorithmPackage.ST_METHOD_BODY__STATEMENTS:
 				return statements != null && !statements.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}
 	}
 
-} //STAlgorithmBodyImpl
+} //STMethodBodyImpl

@@ -35,6 +35,7 @@ import org.eclipse.xtext.validation.CheckMode
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod
 
 class StructuredTextParseUtil {
 	static final String SYNTHETIC_URI = "__synthetic.stalg"
@@ -51,10 +52,30 @@ class StructuredTextParseUtil {
 		switch (root : algorithm.rootContainer) {
 			BaseFBType:
 				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors)?.
-					rootASTElement as STAlgorithmSource)?.algorithms?.findFirst[name == algorithm.name]?.body
+					rootASTElement as STAlgorithmSource)?.elements.filter(
+					org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm)?.findFirst [
+					name == algorithm.name
+				]?.body
 			default:
-				(algorithm.toSTAlgorithmText.parse(parser.grammarAccess.STAlgorithmRule, algorithm.name, null, errors)?.
+				(algorithm.toSTText.parse(parser.grammarAccess.STAlgorithmRule, algorithm.name, null, errors)?.
 					rootASTElement as org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm)?.body
+		}
+	}
+
+	def static org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod parse(STMethod method,
+		List<String> errors) {
+		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
+		switch (root : method.rootContainer) {
+			BaseFBType:
+				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors)?.
+					rootASTElement as STAlgorithmSource)?.elements.filter(
+					org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod)?.findFirst [
+					name == method.name
+				]
+			default:
+				(method.toSTText.parse(parser.grammarAccess.STAlgorithmRule, method.name, null, errors)?.
+					rootASTElement as org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod)
 		}
 	}
 

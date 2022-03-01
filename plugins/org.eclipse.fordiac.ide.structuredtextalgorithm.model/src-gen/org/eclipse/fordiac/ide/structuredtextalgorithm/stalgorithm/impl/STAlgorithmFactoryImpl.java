@@ -72,6 +72,9 @@ public class STAlgorithmFactoryImpl extends EFactoryImpl implements STAlgorithmF
 			case STAlgorithmPackage.ST_ALGORITHM: return createSTAlgorithm();
 			case STAlgorithmPackage.ST_ALGORITHM_BODY: return createSTAlgorithmBody();
 			case STAlgorithmPackage.ST_ALGORITHM_SOURCE: return createSTAlgorithmSource();
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE_ELEMENT: return createSTAlgorithmSourceElement();
+			case STAlgorithmPackage.ST_METHOD: return createSTMethod();
+			case STAlgorithmPackage.ST_METHOD_BODY: return createSTMethodBody();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -108,6 +111,39 @@ public class STAlgorithmFactoryImpl extends EFactoryImpl implements STAlgorithmF
 	public STAlgorithmSource createSTAlgorithmSource() {
 		STAlgorithmSourceImpl stAlgorithmSource = new STAlgorithmSourceImpl();
 		return stAlgorithmSource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STAlgorithmSourceElement createSTAlgorithmSourceElement() {
+		STAlgorithmSourceElementImpl stAlgorithmSourceElement = new STAlgorithmSourceElementImpl();
+		return stAlgorithmSourceElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STMethod createSTMethod() {
+		STMethodImpl stMethod = new STMethodImpl();
+		return stMethod;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STMethodBody createSTMethodBody() {
+		STMethodBodyImpl stMethodBody = new STMethodBodyImpl();
+		return stMethodBody;
 	}
 
 	/**

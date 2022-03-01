@@ -62,6 +62,33 @@ public interface STAlgorithmFactory extends EFactory {
 	STAlgorithmSource createSTAlgorithmSource();
 
 	/**
+	 * Returns a new object of class '<em>Source Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Source Element</em>'.
+	 * @generated
+	 */
+	STAlgorithmSourceElement createSTAlgorithmSourceElement();
+
+	/**
+	 * Returns a new object of class '<em>ST Method</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Method</em>'.
+	 * @generated
+	 */
+	STMethod createSTMethod();
+
+	/**
+	 * Returns a new object of class '<em>ST Method Body</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Method Body</em>'.
+	 * @generated
+	 */
+	STMethodBody createSTMethodBody();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

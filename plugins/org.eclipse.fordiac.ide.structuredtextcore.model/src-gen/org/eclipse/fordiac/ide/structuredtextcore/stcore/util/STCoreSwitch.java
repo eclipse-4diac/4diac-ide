@@ -101,6 +101,34 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case STCorePackage.ST_VAR_PLAIN_DECLARATION_BLOCK: {
+				STVarPlainDeclarationBlock stVarPlainDeclarationBlock = (STVarPlainDeclarationBlock)theEObject;
+				T result = caseSTVarPlainDeclarationBlock(stVarPlainDeclarationBlock);
+				if (result == null) result = caseSTVarDeclarationBlock(stVarPlainDeclarationBlock);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STCorePackage.ST_VAR_INPUT_DECLARATION_BLOCK: {
+				STVarInputDeclarationBlock stVarInputDeclarationBlock = (STVarInputDeclarationBlock)theEObject;
+				T result = caseSTVarInputDeclarationBlock(stVarInputDeclarationBlock);
+				if (result == null) result = caseSTVarDeclarationBlock(stVarInputDeclarationBlock);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STCorePackage.ST_VAR_OUTPUT_DECLARATION_BLOCK: {
+				STVarOutputDeclarationBlock stVarOutputDeclarationBlock = (STVarOutputDeclarationBlock)theEObject;
+				T result = caseSTVarOutputDeclarationBlock(stVarOutputDeclarationBlock);
+				if (result == null) result = caseSTVarDeclarationBlock(stVarOutputDeclarationBlock);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STCorePackage.ST_VAR_TEMP_DECLARATION_BLOCK: {
+				STVarTempDeclarationBlock stVarTempDeclarationBlock = (STVarTempDeclarationBlock)theEObject;
+				T result = caseSTVarTempDeclarationBlock(stVarTempDeclarationBlock);
+				if (result == null) result = caseSTVarDeclarationBlock(stVarTempDeclarationBlock);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case STCorePackage.ST_INITIALIZER_EXPRESSION: {
 				STInitializerExpression stInitializerExpression = (STInitializerExpression)theEObject;
 				T result = caseSTInitializerExpression(stInitializerExpression);
@@ -398,6 +426,66 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTVarDeclarationBlock(STVarDeclarationBlock object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Var Plain Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Var Plain Declaration Block</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTVarPlainDeclarationBlock(STVarPlainDeclarationBlock object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Var Input Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Var Input Declaration Block</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTVarInputDeclarationBlock(STVarInputDeclarationBlock object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Var Output Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Var Output Declaration Block</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTVarOutputDeclarationBlock(STVarOutputDeclarationBlock object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Var Temp Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Var Temp Declaration Block</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTVarTempDeclarationBlock(STVarTempDeclarationBlock object) {
 		return null;
 	}
 

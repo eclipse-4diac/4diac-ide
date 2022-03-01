@@ -22,6 +22,8 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.*;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 
@@ -94,6 +96,26 @@ public class STAlgorithmAdapterFactory extends AdapterFactoryImpl {
 				return createSTAlgorithmSourceAdapter();
 			}
 			@Override
+			public Adapter caseSTAlgorithmSourceElement(STAlgorithmSourceElement object) {
+				return createSTAlgorithmSourceElementAdapter();
+			}
+			@Override
+			public Adapter caseSTMethod(STMethod object) {
+				return createSTMethodAdapter();
+			}
+			@Override
+			public Adapter caseSTMethodBody(STMethodBody object) {
+				return createSTMethodBodyAdapter();
+			}
+			@Override
+			public Adapter caseINamedElement(INamedElement object) {
+				return createINamedElementAdapter();
+			}
+			@Override
+			public Adapter caseICallable(ICallable object) {
+				return createICallableAdapter();
+			}
+			@Override
 			public Adapter caseSTSource(STSource object) {
 				return createSTSourceAdapter();
 			}
@@ -156,6 +178,76 @@ public class STAlgorithmAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTAlgorithmSourceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement <em>Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement
+	 * @generated
+	 */
+	public Adapter createSTAlgorithmSourceElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod <em>ST Method</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+	 * @generated
+	 */
+	public Adapter createSTMethodAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody <em>ST Method Body</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody
+	 * @generated
+	 */
+	public Adapter createSTMethodBodyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+	 * @generated
+	 */
+	public Adapter createINamedElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ICallable
+	 * @generated
+	 */
+	public Adapter createICallableAdapter() {
 		return null;
 	}
 

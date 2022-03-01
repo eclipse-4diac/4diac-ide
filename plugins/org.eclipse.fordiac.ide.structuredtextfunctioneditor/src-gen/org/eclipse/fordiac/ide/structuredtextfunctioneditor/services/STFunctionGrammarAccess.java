@@ -234,8 +234,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTCoreSourceAccess().getRule();
 	}
 	
-	//STVarDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR' (constant?='CONSTANT')?
+	//STVarDeclarationBlock returns STVarPlainDeclarationBlock:
+	//    {STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STCoreGrammarAccess.STVarDeclarationBlockElements getSTVarDeclarationBlockAccess() {
@@ -246,8 +246,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTVarDeclarationBlockAccess().getRule();
 	}
 	
-	//STVarTempDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
+	//STVarTempDeclarationBlock returns STVarTempDeclarationBlock:
+	//    {STVarTempDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STCoreGrammarAccess.STVarTempDeclarationBlockElements getSTVarTempDeclarationBlockAccess() {
@@ -258,8 +258,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTVarTempDeclarationBlockAccess().getRule();
 	}
 	
-	//STVarInputDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
+	//STVarInputDeclarationBlock returns STVarInputDeclarationBlock:
+	//    {STVarInputDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STCoreGrammarAccess.STVarInputDeclarationBlockElements getSTVarInputDeclarationBlockAccess() {
@@ -270,8 +270,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTVarInputDeclarationBlockAccess().getRule();
 	}
 	
-	//STVarOutputDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+	//STVarOutputDeclarationBlock returns STVarOutputDeclarationBlock:
+	//    {STVarOutputDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STCoreGrammarAccess.STVarOutputDeclarationBlockElements getSTVarOutputDeclarationBlockAccess() {

@@ -79,6 +79,10 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_SOURCE: return createSTSource();
 			case STCorePackage.ST_CORE_SOURCE: return createSTCoreSource();
 			case STCorePackage.ST_VAR_DECLARATION_BLOCK: return createSTVarDeclarationBlock();
+			case STCorePackage.ST_VAR_PLAIN_DECLARATION_BLOCK: return createSTVarPlainDeclarationBlock();
+			case STCorePackage.ST_VAR_INPUT_DECLARATION_BLOCK: return createSTVarInputDeclarationBlock();
+			case STCorePackage.ST_VAR_OUTPUT_DECLARATION_BLOCK: return createSTVarOutputDeclarationBlock();
+			case STCorePackage.ST_VAR_TEMP_DECLARATION_BLOCK: return createSTVarTempDeclarationBlock();
 			case STCorePackage.ST_INITIALIZER_EXPRESSION: return createSTInitializerExpression();
 			case STCorePackage.ST_ELEMENTARY_INITIALIZER_EXPRESSION: return createSTElementaryInitializerExpression();
 			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION: return createSTArrayInitializerExpression();
@@ -210,6 +214,50 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STVarDeclarationBlock createSTVarDeclarationBlock() {
 		STVarDeclarationBlockImpl stVarDeclarationBlock = new STVarDeclarationBlockImpl();
 		return stVarDeclarationBlock;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STVarPlainDeclarationBlock createSTVarPlainDeclarationBlock() {
+		STVarPlainDeclarationBlockImpl stVarPlainDeclarationBlock = new STVarPlainDeclarationBlockImpl();
+		return stVarPlainDeclarationBlock;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STVarInputDeclarationBlock createSTVarInputDeclarationBlock() {
+		STVarInputDeclarationBlockImpl stVarInputDeclarationBlock = new STVarInputDeclarationBlockImpl();
+		return stVarInputDeclarationBlock;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STVarOutputDeclarationBlock createSTVarOutputDeclarationBlock() {
+		STVarOutputDeclarationBlockImpl stVarOutputDeclarationBlock = new STVarOutputDeclarationBlockImpl();
+		return stVarOutputDeclarationBlock;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STVarTempDeclarationBlock createSTVarTempDeclarationBlock() {
+		STVarTempDeclarationBlockImpl stVarTempDeclarationBlock = new STVarTempDeclarationBlockImpl();
+		return stVarTempDeclarationBlock;
 	}
 
 	/**

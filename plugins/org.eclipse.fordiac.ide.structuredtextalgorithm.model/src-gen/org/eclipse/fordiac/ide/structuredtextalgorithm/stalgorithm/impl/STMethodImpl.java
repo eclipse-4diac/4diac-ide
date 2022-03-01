@@ -19,31 +19,43 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody;
+
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Algorithm</b></em>'.
+ * An implementation of the model object '<em><b>ST Method</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmImpl#getBody <em>Body</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STMethodImpl#getReturnType <em>Return Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STMethodImpl#getBody <em>Body</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STAlgorithm {
+public class STMethodImpl extends STAlgorithmSourceElementImpl implements STMethod {
+	/**
+	 * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReturnType()
+	 * @generated
+	 * @ordered
+	 */
+	protected DataType returnType;
 	/**
 	 * The cached value of the '{@link #getBody() <em>Body</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -52,14 +64,14 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	 * @generated
 	 * @ordered
 	 */
-	protected STAlgorithmBody body;
+	protected STMethodBody body;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected STAlgorithmImpl() {
+	protected STMethodImpl() {
 		super();
 	}
 
@@ -70,7 +82,7 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return STAlgorithmPackage.Literals.ST_ALGORITHM;
+		return STAlgorithmPackage.Literals.ST_METHOD;
 	}
 
 	/**
@@ -79,7 +91,47 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	 * @generated
 	 */
 	@Override
-	public STAlgorithmBody getBody() {
+	public DataType getReturnType() {
+		if (returnType != null && returnType.eIsProxy()) {
+			InternalEObject oldReturnType = (InternalEObject)returnType;
+			returnType = (DataType)eResolveProxy(oldReturnType);
+			if (returnType != oldReturnType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, STAlgorithmPackage.ST_METHOD__RETURN_TYPE, oldReturnType, returnType));
+			}
+		}
+		return returnType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DataType basicGetReturnType() {
+		return returnType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setReturnType(DataType newReturnType) {
+		DataType oldReturnType = returnType;
+		returnType = newReturnType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STAlgorithmPackage.ST_METHOD__RETURN_TYPE, oldReturnType, returnType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STMethodBody getBody() {
 		return body;
 	}
 
@@ -88,11 +140,11 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetBody(STAlgorithmBody newBody, NotificationChain msgs) {
-		STAlgorithmBody oldBody = body;
+	public NotificationChain basicSetBody(STMethodBody newBody, NotificationChain msgs) {
+		STMethodBody oldBody = body;
 		body = newBody;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STAlgorithmPackage.ST_ALGORITHM__BODY, oldBody, newBody);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STAlgorithmPackage.ST_METHOD__BODY, oldBody, newBody);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -104,18 +156,18 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	 * @generated
 	 */
 	@Override
-	public void setBody(STAlgorithmBody newBody) {
+	public void setBody(STMethodBody newBody) {
 		if (newBody != body) {
 			NotificationChain msgs = null;
 			if (body != null)
-				msgs = ((InternalEObject)body).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STAlgorithmPackage.ST_ALGORITHM__BODY, null, msgs);
+				msgs = ((InternalEObject)body).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STAlgorithmPackage.ST_METHOD__BODY, null, msgs);
 			if (newBody != null)
-				msgs = ((InternalEObject)newBody).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STAlgorithmPackage.ST_ALGORITHM__BODY, null, msgs);
+				msgs = ((InternalEObject)newBody).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STAlgorithmPackage.ST_METHOD__BODY, null, msgs);
 			msgs = basicSetBody(newBody, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STAlgorithmPackage.ST_ALGORITHM__BODY, newBody, newBody));
+			eNotify(new ENotificationImpl(this, Notification.SET, STAlgorithmPackage.ST_METHOD__BODY, newBody, newBody));
 	}
 
 	/**
@@ -146,7 +198,7 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM__BODY:
+			case STAlgorithmPackage.ST_METHOD__BODY:
 				return basicSetBody(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -161,7 +213,10 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM__BODY:
+			case STAlgorithmPackage.ST_METHOD__RETURN_TYPE:
+				if (resolve) return getReturnType();
+				return basicGetReturnType();
+			case STAlgorithmPackage.ST_METHOD__BODY:
 				return getBody();
 			default:
 				return super.eGet(featureID, resolve, coreType);
@@ -176,8 +231,11 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM__BODY:
-				setBody((STAlgorithmBody)newValue);
+			case STAlgorithmPackage.ST_METHOD__RETURN_TYPE:
+				setReturnType((DataType)newValue);
+				return;
+			case STAlgorithmPackage.ST_METHOD__BODY:
+				setBody((STMethodBody)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -193,8 +251,11 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM__BODY:
-				setBody((STAlgorithmBody)null);
+			case STAlgorithmPackage.ST_METHOD__RETURN_TYPE:
+				setReturnType((DataType)null);
+				return;
+			case STAlgorithmPackage.ST_METHOD__BODY:
+				setBody((STMethodBody)null);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -210,11 +271,13 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM__BODY:
+			case STAlgorithmPackage.ST_METHOD__RETURN_TYPE:
+				return returnType != null;
+			case STAlgorithmPackage.ST_METHOD__BODY:
 				return body != null;
 			default:
 				return super.eIsSet(featureID);
 		}
 	}
 
-} //STAlgorithmImpl
+} //STMethodImpl

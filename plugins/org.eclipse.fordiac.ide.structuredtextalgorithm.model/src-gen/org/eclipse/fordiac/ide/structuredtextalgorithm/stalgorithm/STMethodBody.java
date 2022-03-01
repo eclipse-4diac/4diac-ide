@@ -21,37 +21,36 @@ import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Body</b></em>'.
+ * A representation of the model object '<em><b>ST Method Body</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody#getVarTempDeclarations <em>Var Temp Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody#getStatements <em>Statements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody#getVarDeclarations <em>Var Declarations</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody#getStatements <em>Statements</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTAlgorithmBody()
+ * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTMethodBody()
  * @model
  * @generated
  */
-public interface STAlgorithmBody extends EObject {
+public interface STMethodBody extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Var Temp Declarations</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock}.
+	 * Returns the value of the '<em><b>Var Declarations</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Var Temp Declarations</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTAlgorithmBody_VarTempDeclarations()
+	 * @return the value of the '<em>Var Declarations</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTMethodBody_VarDeclarations()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<STVarTempDeclarationBlock> getVarTempDeclarations();
+	EList<STVarDeclarationBlock> getVarDeclarations();
 
 	/**
 	 * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
@@ -59,10 +58,10 @@ public interface STAlgorithmBody extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Statements</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTAlgorithmBody_Statements()
+	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTMethodBody_Statements()
 	 * @model containment="true"
 	 * @generated
 	 */
 	EList<STStatement> getStatements();
 
-} // STAlgorithmBody
+} // STMethodBody

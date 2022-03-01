@@ -15,12 +15,19 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 import com.google.inject.Inject
 import java.io.ByteArrayOutputStream
 import org.eclipse.emf.common.util.EList
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
+import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.xtext.nodemodel.ICompositeNode
 import org.eclipse.xtext.resource.XtextResource
 
@@ -28,28 +35,32 @@ import static extension org.eclipse.emf.common.util.ECollections.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
 
 class STAlgorithmPartitioner {
-	
+	final static String LOST_AND_FOUND_NAME = "LOST_AND_FOUND"
+
 	@Inject
 	extension STAlgorithmGrammarAccess grammarAccess
 
 	def String combine(BaseFBType fbType) {
-		fbType.algorithm.combine
+		fbType.callables.combine
 	}
 
-	def String combine(EList<? extends Algorithm> algorithms) {
-		algorithms.filter(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm).map[toSTAlgorithmText].join + "\n"
+	def String combine(EList<? extends ICallable> callables) {
+		callables.map[toSTText].join + "\n"
 	}
 
-	def String toSTAlgorithmText(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm) {
+	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm) {
 		val text = algorithm.text
-		if (text.contains(STAlgorithmAccess.ALGORITHMKeyword_0.value) || text.contains(STAlgorithmAccess.END_ALGORITHMKeyword_3.value)) {
+		if (text.contains(STAlgorithmAccess.ALGORITHMKeyword_0.value) ||
+			text.contains(STAlgorithmAccess.END_ALGORITHMKeyword_3.value)) {
 			text
 		} else {
 			algorithm.generateAlgorithmDefinition
 		}
 	}
 
-	def EList<Algorithm> partition(XtextResource resource) {
+	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.STMethod method) { method.text }
+
+	def EList<ICallable> partition(XtextResource resource) {
 		val source = resource.contents.get(0)
 		if (source instanceof STAlgorithmSource) {
 			source.partition
@@ -58,7 +69,7 @@ class STAlgorithmPartitioner {
 		}
 	}
 
-	def protected EList<Algorithm> getEmergencyPartition(XtextResource resource) {
+	def protected EList<ICallable> getEmergencyPartition(XtextResource resource) {
 		val stream = new ByteArrayOutputStream
 		resource.save(stream, emptyMap)
 		val text = new String(stream.toByteArray, resource.encoding)
@@ -68,9 +79,9 @@ class STAlgorithmPartitioner {
 		newBasicEList(text.newLostAndFound(0))
 	}
 
-	def EList<Algorithm> partition(STAlgorithmSource source) {
+	def EList<ICallable> partition(STAlgorithmSource source) {
 		try {
-			val result = source.algorithms.map[convertSTAlgorithm].filterNull.<Algorithm>newBasicEList
+			val result = source.elements.map[convertSourceElement].filterNull.<ICallable>newBasicEList
 			source.handleLostAndFound(result) // salvage unclaimed content
 			result.handleDuplicates // handle duplicate names
 			result
@@ -79,7 +90,7 @@ class STAlgorithmPartitioner {
 		}
 	}
 
-	def protected EList<Algorithm> getEmergencyPartition(STAlgorithmSource source) {
+	def protected EList<ICallable> getEmergencyPartition(STAlgorithmSource source) {
 		val text = source.node?.rootNode?.text
 		if (text.nullOrEmpty) {
 			throw new IllegalStateException("Cannot get text from root node")
@@ -87,26 +98,62 @@ class STAlgorithmPartitioner {
 		newBasicEList(text.newLostAndFound(0))
 	}
 
-	def protected convertSTAlgorithm(STAlgorithm algorithm) {
-		if (algorithm.name.nullOrEmpty) {
-			return null
-		}
+	def protected dispatch convertSourceElement(STAlgorithm algorithm) {
 		val node = algorithm.findActualNodeFor
 		if (node === null || node.text.nullOrEmpty) {
 			return null
 		}
 		LibraryElementFactory.eINSTANCE.createSTAlgorithm => [
-			name = algorithm.name
+			name = algorithm.name ?: LOST_AND_FOUND_NAME
 			comment = node.extractComments
 			text = node.text
 		]
+	}
+
+	def protected dispatch convertSourceElement(STMethod method) {
+		val node = method.findActualNodeFor
+		if (node === null || node.text.nullOrEmpty) {
+			return null
+		}
+		LibraryElementFactory.eINSTANCE.createSTMethod => [
+			name = method.name ?: LOST_AND_FOUND_NAME
+			comment = node.extractComments
+			inputParameters.addAll(method.inputParameters.filter(STVarDeclaration).map[convertParameter(true)])
+			outputParameters.addAll(method.outputParameters.filter(STVarDeclaration).map[convertParameter(false)])
+			text = node.text
+		]
+	}
+
+	def protected convertParameter(STVarDeclaration declaration, boolean input) {
+		if (declaration.name.nullOrEmpty) {
+			return null
+		}
+		LibraryElementFactory.eINSTANCE.createVarDeclaration => [
+			name = declaration.name
+			type = declaration.type as DataType
+			if (declaration.array) {
+				arraySize = declaration.ranges.head.convertArrayRange
+			}
+			isInput = input
+		]
+	}
+
+	def protected int convertArrayRange(STExpression expression) {
+		switch (expression) {
+			STBinaryExpression case expression.op == STBinaryOperator.RANGE:
+				expression.right.convertArrayRange - expression.left.convertArrayRange
+			STNumericLiteral:
+				expression.value.intValueExact
+			default:
+				throw new IllegalArgumentException("Unsupported array range expression")
+		}
 	}
 
 	def protected extractComments(ICompositeNode node) {
 		node.rootNode.text.substring(node.totalOffset, node.offset).trim
 	}
 
-	def protected handleDuplicates(EList<Algorithm> result) {
+	def protected handleDuplicates(EList<ICallable> result) {
 		result.forEach [ algorithm, index |
 			var count = 0
 			var original = algorithm.name
@@ -118,25 +165,24 @@ class STAlgorithmPartitioner {
 
 	def protected String generateDuplicateName(String name, int count) '''«name»_«count»'''
 
-	def protected handleLostAndFound(STAlgorithmSource source, EList<Algorithm> result) {
+	def protected handleLostAndFound(STAlgorithmSource source, EList<ICallable> result) {
 		var lastOffset = 0;
-		var lostAndFoundIndex = 0;
-		for (algorithm : source.algorithms) {
-			val node = algorithm.findActualNodeFor
+		for (element : source.elements) {
+			val node = element.findActualNodeFor
 			val totalOffset = node.totalOffset
 			if (totalOffset > lastOffset) {
-				source.handleLostAndFound(lostAndFoundIndex++, lastOffset, totalOffset, result)
+				source.handleLostAndFound(result.size, lastOffset, totalOffset, result)
 			}
 			lastOffset = node.totalEndOffset
 		}
 		val totalEndOffset = source.node.rootNode.totalEndOffset
 		if (totalEndOffset > lastOffset) {
-			source.handleLostAndFound(lostAndFoundIndex++, lastOffset, totalEndOffset, result)
+			source.handleLostAndFound(result.size, lastOffset, totalEndOffset, result)
 		}
 	}
 
 	def protected void handleLostAndFound(STAlgorithmSource source, int index, int start, int end,
-		EList<Algorithm> result) {
+		EList<ICallable> result) {
 		val text = source.node.rootNode.text.substring(start, end)
 		if (!text.trim.empty) {
 			result.add(text.newLostAndFound(index))
@@ -144,14 +190,14 @@ class STAlgorithmPartitioner {
 	}
 
 	def protected newLostAndFound(String content, int index) {
-		LibraryElementFactory.eINSTANCE.createSTAlgorithm => [
+		LibraryElementFactory.eINSTANCE.createSTMethod => [
 			name = index.generateLostAndFoundName
 			comment = index.generateLostAndFoundComment
 			text = content
 		]
 	}
 
-	def protected String generateLostAndFoundName(int index) '''LOST_AND_FOUND_«index»'''
+	def protected String generateLostAndFoundName(int index) '''«LOST_AND_FOUND_NAME»_«index»'''
 
 	def protected String generateLostAndFoundComment(int index) '''// lost+found «index»'''
 

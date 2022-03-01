@@ -8,7 +8,9 @@ import com.google.inject.Singleton;
 import java.util.List;
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
 import org.eclipse.xtext.Action;
+import org.eclipse.xtext.Alternatives;
 import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.CrossReference;
 import org.eclipse.xtext.EnumRule;
 import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.GrammarUtil;
@@ -27,24 +29,43 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.STAlgorithmSource");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Action cSTAlgorithmSourceAction_0 = (Action)cGroup.eContents().get(0);
-		private final Assignment cAlgorithmsAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cAlgorithmsSTAlgorithmParserRuleCall_1_0 = (RuleCall)cAlgorithmsAssignment_1.eContents().get(0);
+		private final Assignment cElementsAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cElementsSTAlgorithmSourceElementParserRuleCall_1_0 = (RuleCall)cElementsAssignment_1.eContents().get(0);
 		
 		//STAlgorithmSource returns stcore::STSource:
-		//    {STAlgorithmSource} algorithms+=STAlgorithm*;
+		//    {STAlgorithmSource} elements+=STAlgorithmSourceElement*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STAlgorithmSource} algorithms+=STAlgorithm*
+		//{STAlgorithmSource} elements+=STAlgorithmSourceElement*
 		public Group getGroup() { return cGroup; }
 		
 		//{STAlgorithmSource}
 		public Action getSTAlgorithmSourceAction_0() { return cSTAlgorithmSourceAction_0; }
 		
-		//algorithms+=STAlgorithm*
-		public Assignment getAlgorithmsAssignment_1() { return cAlgorithmsAssignment_1; }
+		//elements+=STAlgorithmSourceElement*
+		public Assignment getElementsAssignment_1() { return cElementsAssignment_1; }
+		
+		//STAlgorithmSourceElement
+		public RuleCall getElementsSTAlgorithmSourceElementParserRuleCall_1_0() { return cElementsSTAlgorithmSourceElementParserRuleCall_1_0; }
+	}
+	public class STAlgorithmSourceElementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.STAlgorithmSourceElement");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cSTAlgorithmParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final RuleCall cSTMethodParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		
+		//STAlgorithmSourceElement returns STAlgorithmSourceElement:
+		//    STAlgorithm | STMethod;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//STAlgorithm | STMethod
+		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//STAlgorithm
-		public RuleCall getAlgorithmsSTAlgorithmParserRuleCall_1_0() { return cAlgorithmsSTAlgorithmParserRuleCall_1_0; }
+		public RuleCall getSTAlgorithmParserRuleCall_0() { return cSTAlgorithmParserRuleCall_0; }
+		
+		//STMethod
+		public RuleCall getSTMethodParserRuleCall_1() { return cSTMethodParserRuleCall_1; }
 	}
 	public class STAlgorithmElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.STAlgorithm");
@@ -120,11 +141,120 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		//STStatement
 		public RuleCall getStatementsSTStatementParserRuleCall_2_0() { return cStatementsSTStatementParserRuleCall_2_0; }
 	}
+	public class STMethodElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.STMethod");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cMETHODKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cColonKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cReturnTypeAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final CrossReference cReturnTypeDataTypeCrossReference_2_1_0 = (CrossReference)cReturnTypeAssignment_2_1.eContents().get(0);
+		private final RuleCall cReturnTypeDataTypeSTAnyTypeParserRuleCall_2_1_0_1 = (RuleCall)cReturnTypeDataTypeCrossReference_2_1_0.eContents().get(1);
+		private final Assignment cBodyAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cBodySTMethodBodyParserRuleCall_3_0 = (RuleCall)cBodyAssignment_3.eContents().get(0);
+		private final Keyword cEND_METHODKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		
+		//STMethod:
+		//    'METHOD' name=ID (':' returnType=[datatype::DataType|STAnyType])?
+		//    body=STMethodBody
+		//    'END_METHOD';
+		@Override public ParserRule getRule() { return rule; }
+		
+		//'METHOD' name=ID (':' returnType=[datatype::DataType|STAnyType])?
+		//body=STMethodBody
+		//'END_METHOD'
+		public Group getGroup() { return cGroup; }
+		
+		//'METHOD'
+		public Keyword getMETHODKeyword_0() { return cMETHODKeyword_0; }
+		
+		//name=ID
+		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
+		
+		//ID
+		public RuleCall getNameIDTerminalRuleCall_1_0() { return cNameIDTerminalRuleCall_1_0; }
+		
+		//(':' returnType=[datatype::DataType|STAnyType])?
+		public Group getGroup_2() { return cGroup_2; }
+		
+		//':'
+		public Keyword getColonKeyword_2_0() { return cColonKeyword_2_0; }
+		
+		//returnType=[datatype::DataType|STAnyType]
+		public Assignment getReturnTypeAssignment_2_1() { return cReturnTypeAssignment_2_1; }
+		
+		//[datatype::DataType|STAnyType]
+		public CrossReference getReturnTypeDataTypeCrossReference_2_1_0() { return cReturnTypeDataTypeCrossReference_2_1_0; }
+		
+		//STAnyType
+		public RuleCall getReturnTypeDataTypeSTAnyTypeParserRuleCall_2_1_0_1() { return cReturnTypeDataTypeSTAnyTypeParserRuleCall_2_1_0_1; }
+		
+		//body=STMethodBody
+		public Assignment getBodyAssignment_3() { return cBodyAssignment_3; }
+		
+		//STMethodBody
+		public RuleCall getBodySTMethodBodyParserRuleCall_3_0() { return cBodySTMethodBodyParserRuleCall_3_0; }
+		
+		//'END_METHOD'
+		public Keyword getEND_METHODKeyword_4() { return cEND_METHODKeyword_4; }
+	}
+	public class STMethodBodyElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.STMethodBody");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cSTMethodBodyAction_0 = (Action)cGroup.eContents().get(0);
+		private final Assignment cVarDeclarationsAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final Alternatives cVarDeclarationsAlternatives_1_0 = (Alternatives)cVarDeclarationsAssignment_1.eContents().get(0);
+		private final RuleCall cVarDeclarationsSTVarTempDeclarationBlockParserRuleCall_1_0_0 = (RuleCall)cVarDeclarationsAlternatives_1_0.eContents().get(0);
+		private final RuleCall cVarDeclarationsSTVarInputDeclarationBlockParserRuleCall_1_0_1 = (RuleCall)cVarDeclarationsAlternatives_1_0.eContents().get(1);
+		private final RuleCall cVarDeclarationsSTVarOutputDeclarationBlockParserRuleCall_1_0_2 = (RuleCall)cVarDeclarationsAlternatives_1_0.eContents().get(2);
+		private final Assignment cStatementsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cStatementsSTStatementParserRuleCall_2_0 = (RuleCall)cStatementsAssignment_2.eContents().get(0);
+		
+		//STMethodBody:
+		//    {STMethodBody}
+		//    varDeclarations+=(STVarTempDeclarationBlock | STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
+		//    statements+=STStatement*;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//{STMethodBody}
+		//varDeclarations+=(STVarTempDeclarationBlock | STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
+		//statements+=STStatement*
+		public Group getGroup() { return cGroup; }
+		
+		//{STMethodBody}
+		public Action getSTMethodBodyAction_0() { return cSTMethodBodyAction_0; }
+		
+		//varDeclarations+=(STVarTempDeclarationBlock | STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
+		public Assignment getVarDeclarationsAssignment_1() { return cVarDeclarationsAssignment_1; }
+		
+		//(STVarTempDeclarationBlock | STVarInputDeclarationBlock | STVarOutputDeclarationBlock)
+		public Alternatives getVarDeclarationsAlternatives_1_0() { return cVarDeclarationsAlternatives_1_0; }
+		
+		//STVarTempDeclarationBlock
+		public RuleCall getVarDeclarationsSTVarTempDeclarationBlockParserRuleCall_1_0_0() { return cVarDeclarationsSTVarTempDeclarationBlockParserRuleCall_1_0_0; }
+		
+		//STVarInputDeclarationBlock
+		public RuleCall getVarDeclarationsSTVarInputDeclarationBlockParserRuleCall_1_0_1() { return cVarDeclarationsSTVarInputDeclarationBlockParserRuleCall_1_0_1; }
+		
+		//STVarOutputDeclarationBlock
+		public RuleCall getVarDeclarationsSTVarOutputDeclarationBlockParserRuleCall_1_0_2() { return cVarDeclarationsSTVarOutputDeclarationBlockParserRuleCall_1_0_2; }
+		
+		//statements+=STStatement*
+		public Assignment getStatementsAssignment_2() { return cStatementsAssignment_2; }
+		
+		//STStatement
+		public RuleCall getStatementsSTStatementParserRuleCall_2_0() { return cStatementsSTStatementParserRuleCall_2_0; }
+	}
 	
 	
 	private final STAlgorithmSourceElements pSTAlgorithmSource;
+	private final STAlgorithmSourceElementElements pSTAlgorithmSourceElement;
 	private final STAlgorithmElements pSTAlgorithm;
 	private final STAlgorithmBodyElements pSTAlgorithmBody;
+	private final STMethodElements pSTMethod;
+	private final STMethodBodyElements pSTMethodBody;
 	
 	private final Grammar grammar;
 	
@@ -136,8 +266,11 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		this.grammar = internalFindGrammar(grammarProvider);
 		this.gaSTCore = gaSTCore;
 		this.pSTAlgorithmSource = new STAlgorithmSourceElements();
+		this.pSTAlgorithmSourceElement = new STAlgorithmSourceElementElements();
 		this.pSTAlgorithm = new STAlgorithmElements();
 		this.pSTAlgorithmBody = new STAlgorithmBodyElements();
+		this.pSTMethod = new STMethodElements();
+		this.pSTMethodBody = new STMethodBodyElements();
 	}
 	
 	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
@@ -168,13 +301,23 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 
 	
 	//STAlgorithmSource returns stcore::STSource:
-	//    {STAlgorithmSource} algorithms+=STAlgorithm*;
+	//    {STAlgorithmSource} elements+=STAlgorithmSourceElement*;
 	public STAlgorithmSourceElements getSTAlgorithmSourceAccess() {
 		return pSTAlgorithmSource;
 	}
 	
 	public ParserRule getSTAlgorithmSourceRule() {
 		return getSTAlgorithmSourceAccess().getRule();
+	}
+	
+	//STAlgorithmSourceElement returns STAlgorithmSourceElement:
+	//    STAlgorithm | STMethod;
+	public STAlgorithmSourceElementElements getSTAlgorithmSourceElementAccess() {
+		return pSTAlgorithmSourceElement;
+	}
+	
+	public ParserRule getSTAlgorithmSourceElementRule() {
+		return getSTAlgorithmSourceElementAccess().getRule();
 	}
 	
 	//STAlgorithm:
@@ -201,6 +344,30 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTAlgorithmBodyAccess().getRule();
 	}
 	
+	//STMethod:
+	//    'METHOD' name=ID (':' returnType=[datatype::DataType|STAnyType])?
+	//    body=STMethodBody
+	//    'END_METHOD';
+	public STMethodElements getSTMethodAccess() {
+		return pSTMethod;
+	}
+	
+	public ParserRule getSTMethodRule() {
+		return getSTMethodAccess().getRule();
+	}
+	
+	//STMethodBody:
+	//    {STMethodBody}
+	//    varDeclarations+=(STVarTempDeclarationBlock | STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
+	//    statements+=STStatement*;
+	public STMethodBodyElements getSTMethodBodyAccess() {
+		return pSTMethodBody;
+	}
+	
+	public ParserRule getSTMethodBodyRule() {
+		return getSTMethodBodyAccess().getRule();
+	}
+	
 	//STCoreSource returns STSource:
 	//    {STCoreSource} statements+=STStatement*;
 	public STCoreGrammarAccess.STCoreSourceElements getSTCoreSourceAccess() {
@@ -211,8 +378,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTCoreSourceAccess().getRule();
 	}
 	
-	//STVarDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR' (constant?='CONSTANT')?
+	//STVarDeclarationBlock returns STVarPlainDeclarationBlock:
+	//    {STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STCoreGrammarAccess.STVarDeclarationBlockElements getSTVarDeclarationBlockAccess() {
@@ -223,8 +390,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTVarDeclarationBlockAccess().getRule();
 	}
 	
-	//STVarTempDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
+	//STVarTempDeclarationBlock returns STVarTempDeclarationBlock:
+	//    {STVarTempDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STCoreGrammarAccess.STVarTempDeclarationBlockElements getSTVarTempDeclarationBlockAccess() {
@@ -235,8 +402,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTVarTempDeclarationBlockAccess().getRule();
 	}
 	
-	//STVarInputDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
+	//STVarInputDeclarationBlock returns STVarInputDeclarationBlock:
+	//    {STVarInputDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STCoreGrammarAccess.STVarInputDeclarationBlockElements getSTVarInputDeclarationBlockAccess() {
@@ -247,8 +414,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTVarInputDeclarationBlockAccess().getRule();
 	}
 	
-	//STVarOutputDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+	//STVarOutputDeclarationBlock returns STVarOutputDeclarationBlock:
+	//    {STVarOutputDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STCoreGrammarAccess.STVarOutputDeclarationBlockElements getSTVarOutputDeclarationBlockAccess() {

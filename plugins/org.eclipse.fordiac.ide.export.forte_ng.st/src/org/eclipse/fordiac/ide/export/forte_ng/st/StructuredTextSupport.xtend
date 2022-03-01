@@ -84,7 +84,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	override getWarnings() { emptyList }
 
-	def protected CharSequence generateLocalVariables(List<STVarDeclarationBlock> blocks, boolean temp) '''
+	def protected CharSequence generateLocalVariables(List<? extends STVarDeclarationBlock> blocks, boolean temp) '''
 		«FOR block : blocks»
 			«block.generateLocalVariableBlock(temp)»
 		«ENDFOR»

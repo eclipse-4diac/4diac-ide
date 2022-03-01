@@ -12,6 +12,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclarations" upperBound="-1"
         eType="#//STVarDeclaration" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STVarPlainDeclarationBlock" eSuperTypes="#//STVarDeclarationBlock"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STVarInputDeclarationBlock" eSuperTypes="#//STVarDeclarationBlock"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STVarOutputDeclarationBlock" eSuperTypes="#//STVarDeclarationBlock"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STVarTempDeclarationBlock" eSuperTypes="#//STVarDeclarationBlock"/>
   <eClassifiers xsi:type="ecore:EClass" name="STInitializerExpression"/>
   <eClassifiers xsi:type="ecore:EClass" name="STElementaryInitializerExpression" eSuperTypes="#//STInitializerExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//STExpression"

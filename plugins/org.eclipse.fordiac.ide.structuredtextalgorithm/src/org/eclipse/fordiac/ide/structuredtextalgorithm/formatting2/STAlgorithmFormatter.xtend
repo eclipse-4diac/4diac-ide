@@ -25,8 +25,8 @@ class STAlgorithmFormatter extends STCoreFormatter {
 
 	def dispatch void format(STAlgorithmSource sTAlgorithmSource, extension IFormattableDocument document) {
 		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
-		for (sTAlgorithm : sTAlgorithmSource.algorithms) {
-			sTAlgorithm.format
+		for (element : sTAlgorithmSource.elements) {
+			element.format
 		}
 	}
 

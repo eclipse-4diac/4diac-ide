@@ -858,7 +858,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
 
               				current = forceCreateModelElement(
-              					grammarAccess.getSTVarDeclarationBlockAccess().getSTVarDeclarationBlockAction_0(),
+              					grammarAccess.getSTVarDeclarationBlockAccess().getSTVarPlainDeclarationBlockAction_0(),
               					current);
               			
             }
@@ -1058,7 +1058,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
 
               				current = forceCreateModelElement(
-              					grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarDeclarationBlockAction_0(),
+              					grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarTempDeclarationBlockAction_0(),
               					current);
               			
             }
@@ -1258,7 +1258,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
 
               				current = forceCreateModelElement(
-              					grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0(),
+              					grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarInputDeclarationBlockAction_0(),
               					current);
               			
             }
@@ -1458,7 +1458,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
 
               				current = forceCreateModelElement(
-              					grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0(),
+              					grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarOutputDeclarationBlockAction_0(),
               					current);
               			
             }

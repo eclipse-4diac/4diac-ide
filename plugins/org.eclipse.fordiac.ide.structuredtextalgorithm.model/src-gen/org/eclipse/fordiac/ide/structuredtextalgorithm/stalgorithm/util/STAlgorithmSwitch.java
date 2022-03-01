@@ -20,6 +20,8 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.*;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 
@@ -83,6 +85,9 @@ public class STAlgorithmSwitch<T> extends Switch<T> {
 			case STAlgorithmPackage.ST_ALGORITHM: {
 				STAlgorithm stAlgorithm = (STAlgorithm)theEObject;
 				T result = caseSTAlgorithm(stAlgorithm);
+				if (result == null) result = caseSTAlgorithmSourceElement(stAlgorithm);
+				if (result == null) result = caseICallable(stAlgorithm);
+				if (result == null) result = caseINamedElement(stAlgorithm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -96,6 +101,28 @@ public class STAlgorithmSwitch<T> extends Switch<T> {
 				STAlgorithmSource stAlgorithmSource = (STAlgorithmSource)theEObject;
 				T result = caseSTAlgorithmSource(stAlgorithmSource);
 				if (result == null) result = caseSTSource(stAlgorithmSource);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE_ELEMENT: {
+				STAlgorithmSourceElement stAlgorithmSourceElement = (STAlgorithmSourceElement)theEObject;
+				T result = caseSTAlgorithmSourceElement(stAlgorithmSourceElement);
+				if (result == null) result = caseINamedElement(stAlgorithmSourceElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STAlgorithmPackage.ST_METHOD: {
+				STMethod stMethod = (STMethod)theEObject;
+				T result = caseSTMethod(stMethod);
+				if (result == null) result = caseSTAlgorithmSourceElement(stMethod);
+				if (result == null) result = caseICallable(stMethod);
+				if (result == null) result = caseINamedElement(stMethod);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STAlgorithmPackage.ST_METHOD_BODY: {
+				STMethodBody stMethodBody = (STMethodBody)theEObject;
+				T result = caseSTMethodBody(stMethodBody);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -145,6 +172,81 @@ public class STAlgorithmSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTAlgorithmSource(STAlgorithmSource object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Source Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Source Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTAlgorithmSourceElement(STAlgorithmSourceElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Method</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Method</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTMethod(STMethod object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Method Body</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Method Body</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTMethodBody(STMethodBody object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>INamed Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>INamed Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseINamedElement(INamedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseICallable(ICallable object) {
 		return null;
 	}
 

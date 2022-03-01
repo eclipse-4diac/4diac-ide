@@ -292,7 +292,7 @@ ruleSTVarDeclarationBlock returns [EObject current=null]
 		(
 			{
 				$current = forceCreateModelElement(
-					grammarAccess.getSTVarDeclarationBlockAccess().getSTVarDeclarationBlockAction_0(),
+					grammarAccess.getSTVarDeclarationBlockAccess().getSTVarPlainDeclarationBlockAction_0(),
 					$current);
 			}
 		)
@@ -359,7 +359,7 @@ ruleSTVarTempDeclarationBlock returns [EObject current=null]
 		(
 			{
 				$current = forceCreateModelElement(
-					grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarDeclarationBlockAction_0(),
+					grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarTempDeclarationBlockAction_0(),
 					$current);
 			}
 		)
@@ -426,7 +426,7 @@ ruleSTVarInputDeclarationBlock returns [EObject current=null]
 		(
 			{
 				$current = forceCreateModelElement(
-					grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0(),
+					grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarInputDeclarationBlockAction_0(),
 					$current);
 			}
 		)
@@ -493,7 +493,7 @@ ruleSTVarOutputDeclarationBlock returns [EObject current=null]
 		(
 			{
 				$current = forceCreateModelElement(
-					grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0(),
+					grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarOutputDeclarationBlockAction_0(),
 					$current);
 			}
 		)

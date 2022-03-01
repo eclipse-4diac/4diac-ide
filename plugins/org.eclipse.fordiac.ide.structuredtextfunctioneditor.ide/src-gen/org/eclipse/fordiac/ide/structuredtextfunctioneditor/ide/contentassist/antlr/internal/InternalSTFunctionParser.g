@@ -3423,9 +3423,9 @@ rule__STVarDeclarationBlock__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getSTVarDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); }
+	{ before(grammarAccess.getSTVarDeclarationBlockAccess().getSTVarPlainDeclarationBlockAction_0()); }
 	()
-	{ after(grammarAccess.getSTVarDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); }
+	{ after(grammarAccess.getSTVarDeclarationBlockAccess().getSTVarPlainDeclarationBlockAction_0()); }
 )
 ;
 finally {
@@ -3558,9 +3558,9 @@ rule__STVarTempDeclarationBlock__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); }
+	{ before(grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarTempDeclarationBlockAction_0()); }
 	()
-	{ after(grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); }
+	{ after(grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarTempDeclarationBlockAction_0()); }
 )
 ;
 finally {
@@ -3693,9 +3693,9 @@ rule__STVarInputDeclarationBlock__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); }
+	{ before(grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarInputDeclarationBlockAction_0()); }
 	()
-	{ after(grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); }
+	{ after(grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarInputDeclarationBlockAction_0()); }
 )
 ;
 finally {
@@ -3828,9 +3828,9 @@ rule__STVarOutputDeclarationBlock__Group__0__Impl
 	}
 :
 (
-	{ before(grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); }
+	{ before(grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarOutputDeclarationBlockAction_0()); }
 	()
-	{ after(grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); }
+	{ after(grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarOutputDeclarationBlockAction_0()); }
 )
 ;
 finally {

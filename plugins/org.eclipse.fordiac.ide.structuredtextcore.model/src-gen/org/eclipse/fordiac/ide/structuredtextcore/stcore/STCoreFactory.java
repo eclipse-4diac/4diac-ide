@@ -63,6 +63,42 @@ public interface STCoreFactory extends EFactory {
 	STVarDeclarationBlock createSTVarDeclarationBlock();
 
 	/**
+	 * Returns a new object of class '<em>ST Var Plain Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Var Plain Declaration Block</em>'.
+	 * @generated
+	 */
+	STVarPlainDeclarationBlock createSTVarPlainDeclarationBlock();
+
+	/**
+	 * Returns a new object of class '<em>ST Var Input Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Var Input Declaration Block</em>'.
+	 * @generated
+	 */
+	STVarInputDeclarationBlock createSTVarInputDeclarationBlock();
+
+	/**
+	 * Returns a new object of class '<em>ST Var Output Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Var Output Declaration Block</em>'.
+	 * @generated
+	 */
+	STVarOutputDeclarationBlock createSTVarOutputDeclarationBlock();
+
+	/**
+	 * Returns a new object of class '<em>ST Var Temp Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Var Temp Declaration Block</em>'.
+	 * @generated
+	 */
+	STVarTempDeclarationBlock createSTVarTempDeclarationBlock();
+
+	/**
 	 * Returns a new object of class '<em>ST Initializer Expression</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

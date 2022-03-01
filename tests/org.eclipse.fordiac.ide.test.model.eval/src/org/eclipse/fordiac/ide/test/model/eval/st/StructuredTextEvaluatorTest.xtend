@@ -805,7 +805,7 @@ class StructuredTextEvaluatorTest {
 
 	def static evaluateAlgorithm(CharSequence algorithm) {
 		val alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm
-		alg.name = "TEST"
+		alg.name = "TEST_ALGORITHM"
 		alg.text = algorithm.toString
 		val eval = new TracingStructuredTextEvaluator(alg, emptyList, null)
 		eval.evaluate

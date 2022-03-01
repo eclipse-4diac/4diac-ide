@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document
 
 import org.eclipse.emf.common.util.EList
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner
 import org.eclipse.xtext.resource.XtextResource
@@ -23,7 +23,7 @@ import static org.eclipse.emf.common.util.ECollections.*
 
 class STAlgorithmDocumentPartitioner extends STAlgorithmPartitioner {
 
-	def EList<Algorithm> partition(XtextDocument document) {
+	def EList<ICallable> partition(XtextDocument document) {
 		try {
 			document.readOnly[partition]
 		} catch (Exception e) {
@@ -31,15 +31,15 @@ class STAlgorithmDocumentPartitioner extends STAlgorithmPartitioner {
 		}
 	}
 
-	def protected EList<Algorithm> getEmergencyPartition(XtextDocument document) {
+	def protected EList<ICallable> getEmergencyPartition(XtextDocument document) {
 		newBasicEList(document.get.newLostAndFound(0))
 	}
 
-	override EList<Algorithm> getEmergencyPartition(XtextResource resource) {
+	override getEmergencyPartition(XtextResource resource) {
 		throw new UnsupportedOperationException // don't try to serialize the document but get it from the document instead
 	}
 
-	override EList<Algorithm> getEmergencyPartition(STAlgorithmSource source) {
+	override getEmergencyPartition(STAlgorithmSource source) {
 		throw new UnsupportedOperationException // don't try to use the node model but get it from the document instead
 	}
 }

@@ -81,6 +81,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
 
 /**
@@ -110,6 +114,34 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EClass stVarDeclarationBlockEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stVarPlainDeclarationBlockEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stVarInputDeclarationBlockEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stVarOutputDeclarationBlockEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stVarTempDeclarationBlockEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -550,6 +582,46 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	@Override
 	public EReference getSTVarDeclarationBlock_VarDeclarations() {
 		return (EReference)stVarDeclarationBlockEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTVarPlainDeclarationBlock() {
+		return stVarPlainDeclarationBlockEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTVarInputDeclarationBlock() {
+		return stVarInputDeclarationBlockEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTVarOutputDeclarationBlock() {
+		return stVarOutputDeclarationBlockEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTVarTempDeclarationBlock() {
+		return stVarTempDeclarationBlockEClass;
 	}
 
 	/**
@@ -1710,6 +1782,14 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEAttribute(stVarDeclarationBlockEClass, ST_VAR_DECLARATION_BLOCK__CONSTANT);
 		createEReference(stVarDeclarationBlockEClass, ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS);
 
+		stVarPlainDeclarationBlockEClass = createEClass(ST_VAR_PLAIN_DECLARATION_BLOCK);
+
+		stVarInputDeclarationBlockEClass = createEClass(ST_VAR_INPUT_DECLARATION_BLOCK);
+
+		stVarOutputDeclarationBlockEClass = createEClass(ST_VAR_OUTPUT_DECLARATION_BLOCK);
+
+		stVarTempDeclarationBlockEClass = createEClass(ST_VAR_TEMP_DECLARATION_BLOCK);
+
 		stInitializerExpressionEClass = createEClass(ST_INITIALIZER_EXPRESSION);
 
 		stElementaryInitializerExpressionEClass = createEClass(ST_ELEMENTARY_INITIALIZER_EXPRESSION);
@@ -1897,6 +1977,10 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		// Add supertypes to classes
 		stCoreSourceEClass.getESuperTypes().add(this.getSTSource());
+		stVarPlainDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
+		stVarInputDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
+		stVarOutputDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
+		stVarTempDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
 		stElementaryInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
 		stArrayInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
 		stAssignmentStatementEClass.getESuperTypes().add(this.getSTStatement());
@@ -1936,6 +2020,14 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEClass(stVarDeclarationBlockEClass, STVarDeclarationBlock.class, "STVarDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSTVarDeclarationBlock_Constant(), ecorePackage.getEBoolean(), "constant", null, 0, 1, STVarDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTVarDeclarationBlock_VarDeclarations(), this.getSTVarDeclaration(), null, "varDeclarations", null, 0, -1, STVarDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stVarPlainDeclarationBlockEClass, STVarPlainDeclarationBlock.class, "STVarPlainDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(stVarInputDeclarationBlockEClass, STVarInputDeclarationBlock.class, "STVarInputDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(stVarOutputDeclarationBlockEClass, STVarOutputDeclarationBlock.class, "STVarOutputDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(stVarTempDeclarationBlockEClass, STVarTempDeclarationBlock.class, "STVarTempDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(stInitializerExpressionEClass, STInitializerExpression.class, "STInitializerExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

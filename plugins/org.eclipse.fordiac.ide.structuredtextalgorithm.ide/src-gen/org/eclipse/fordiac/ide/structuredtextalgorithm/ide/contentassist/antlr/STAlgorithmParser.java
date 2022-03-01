@@ -31,6 +31,8 @@ public class STAlgorithmParser extends AbstractContentAssistParser {
 		}
 		
 		private static void init(ImmutableMap.Builder<AbstractElement, String> builder, STAlgorithmGrammarAccess grammarAccess) {
+			builder.put(grammarAccess.getSTAlgorithmSourceElementAccess().getAlternatives(), "rule__STAlgorithmSourceElement__Alternatives");
+			builder.put(grammarAccess.getSTMethodBodyAccess().getVarDeclarationsAlternatives_1_0(), "rule__STMethodBody__VarDeclarationsAlternatives_1_0");
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getAlternatives_4_1(), "rule__STVarDeclaration__Alternatives_4_1");
 			builder.put(grammarAccess.getSTInitializerExpressionAccess().getAlternatives(), "rule__STInitializerExpression__Alternatives");
 			builder.put(grammarAccess.getSTStatementAccess().getAlternatives(), "rule__STStatement__Alternatives");
@@ -70,6 +72,9 @@ public class STAlgorithmParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTAlgorithmSourceAccess().getGroup(), "rule__STAlgorithmSource__Group__0");
 			builder.put(grammarAccess.getSTAlgorithmAccess().getGroup(), "rule__STAlgorithm__Group__0");
 			builder.put(grammarAccess.getSTAlgorithmBodyAccess().getGroup(), "rule__STAlgorithmBody__Group__0");
+			builder.put(grammarAccess.getSTMethodAccess().getGroup(), "rule__STMethod__Group__0");
+			builder.put(grammarAccess.getSTMethodAccess().getGroup_2(), "rule__STMethod__Group_2__0");
+			builder.put(grammarAccess.getSTMethodBodyAccess().getGroup(), "rule__STMethodBody__Group__0");
 			builder.put(grammarAccess.getSTCoreSourceAccess().getGroup(), "rule__STCoreSource__Group__0");
 			builder.put(grammarAccess.getSTVarDeclarationBlockAccess().getGroup(), "rule__STVarDeclarationBlock__Group__0");
 			builder.put(grammarAccess.getSTVarTempDeclarationBlockAccess().getGroup(), "rule__STVarTempDeclarationBlock__Group__0");
@@ -164,11 +169,16 @@ public class STAlgorithmParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getTimeOfDayAccess().getGroup(), "rule__TimeOfDay__Group__0");
 			builder.put(grammarAccess.getTimeOfDayAccess().getGroup_5(), "rule__TimeOfDay__Group_5__0");
 			builder.put(grammarAccess.getTimeAccess().getGroup(), "rule__Time__Group__0");
-			builder.put(grammarAccess.getSTAlgorithmSourceAccess().getAlgorithmsAssignment_1(), "rule__STAlgorithmSource__AlgorithmsAssignment_1");
+			builder.put(grammarAccess.getSTAlgorithmSourceAccess().getElementsAssignment_1(), "rule__STAlgorithmSource__ElementsAssignment_1");
 			builder.put(grammarAccess.getSTAlgorithmAccess().getNameAssignment_1(), "rule__STAlgorithm__NameAssignment_1");
 			builder.put(grammarAccess.getSTAlgorithmAccess().getBodyAssignment_2(), "rule__STAlgorithm__BodyAssignment_2");
 			builder.put(grammarAccess.getSTAlgorithmBodyAccess().getVarTempDeclarationsAssignment_1(), "rule__STAlgorithmBody__VarTempDeclarationsAssignment_1");
 			builder.put(grammarAccess.getSTAlgorithmBodyAccess().getStatementsAssignment_2(), "rule__STAlgorithmBody__StatementsAssignment_2");
+			builder.put(grammarAccess.getSTMethodAccess().getNameAssignment_1(), "rule__STMethod__NameAssignment_1");
+			builder.put(grammarAccess.getSTMethodAccess().getReturnTypeAssignment_2_1(), "rule__STMethod__ReturnTypeAssignment_2_1");
+			builder.put(grammarAccess.getSTMethodAccess().getBodyAssignment_3(), "rule__STMethod__BodyAssignment_3");
+			builder.put(grammarAccess.getSTMethodBodyAccess().getVarDeclarationsAssignment_1(), "rule__STMethodBody__VarDeclarationsAssignment_1");
+			builder.put(grammarAccess.getSTMethodBodyAccess().getStatementsAssignment_2(), "rule__STMethodBody__StatementsAssignment_2");
 			builder.put(grammarAccess.getSTCoreSourceAccess().getStatementsAssignment_1(), "rule__STCoreSource__StatementsAssignment_1");
 			builder.put(grammarAccess.getSTVarDeclarationBlockAccess().getConstantAssignment_2(), "rule__STVarDeclarationBlock__ConstantAssignment_2");
 			builder.put(grammarAccess.getSTVarDeclarationBlockAccess().getVarDeclarationsAssignment_3(), "rule__STVarDeclarationBlock__VarDeclarationsAssignment_3");

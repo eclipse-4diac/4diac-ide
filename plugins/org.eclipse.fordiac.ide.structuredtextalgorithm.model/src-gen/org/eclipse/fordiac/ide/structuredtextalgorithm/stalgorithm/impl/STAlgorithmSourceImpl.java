@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl;
 
 /**
@@ -42,22 +43,21 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmSourceImpl#getAlgorithms <em>Algorithms</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmSourceImpl#getElements <em>Elements</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSource {
 	/**
-	 * The cached value of the '{@link #getAlgorithms() <em>Algorithms</em>}' containment reference list.
+	 * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAlgorithms()
+	 * @see #getElements()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<STAlgorithm> algorithms;
-
+	protected EList<STAlgorithmSourceElement> elements;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -83,11 +83,11 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 	 * @generated
 	 */
 	@Override
-	public EList<STAlgorithm> getAlgorithms() {
-		if (algorithms == null) {
-			algorithms = new EObjectContainmentEList<STAlgorithm>(STAlgorithm.class, this, STAlgorithmPackage.ST_ALGORITHM_SOURCE__ALGORITHMS);
+	public EList<STAlgorithmSourceElement> getElements() {
+		if (elements == null) {
+			elements = new EObjectContainmentEList<STAlgorithmSourceElement>(STAlgorithmSourceElement.class, this, STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS);
 		}
-		return algorithms;
+		return elements;
 	}
 
 	/**
@@ -98,8 +98,8 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ALGORITHMS:
-				return ((InternalEList<?>)getAlgorithms()).basicRemove(otherEnd, msgs);
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS:
+				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -113,8 +113,8 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ALGORITHMS:
-				return getAlgorithms();
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS:
+				return getElements();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -129,9 +129,9 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ALGORITHMS:
-				getAlgorithms().clear();
-				getAlgorithms().addAll((Collection<? extends STAlgorithm>)newValue);
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS:
+				getElements().clear();
+				getElements().addAll((Collection<? extends STAlgorithmSourceElement>)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -147,8 +147,8 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ALGORITHMS:
-				getAlgorithms().clear();
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS:
+				getElements().clear();
 				return;
 			default:
 				super.eUnset(featureID);
@@ -164,8 +164,8 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ALGORITHMS:
-				return algorithms != null && !algorithms.isEmpty();
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS:
+				return elements != null && !elements.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}

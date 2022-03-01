@@ -34,6 +34,9 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmFa
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
 
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 
 /**
@@ -63,6 +66,27 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 	 * @generated
 	 */
 	private EClass stAlgorithmSourceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stAlgorithmSourceElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stMethodEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stMethodBodyEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -147,18 +171,8 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSTAlgorithm_Name() {
-		return (EAttribute)stAlgorithmEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getSTAlgorithm_Body() {
-		return (EReference)stAlgorithmEClass.getEStructuralFeatures().get(1);
+		return (EReference)stAlgorithmEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -207,8 +221,78 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 	 * @generated
 	 */
 	@Override
-	public EReference getSTAlgorithmSource_Algorithms() {
+	public EReference getSTAlgorithmSource_Elements() {
 		return (EReference)stAlgorithmSourceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTAlgorithmSourceElement() {
+		return stAlgorithmSourceElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTMethod() {
+		return stMethodEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTMethod_ReturnType() {
+		return (EReference)stMethodEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTMethod_Body() {
+		return (EReference)stMethodEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTMethodBody() {
+		return stMethodBodyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTMethodBody_VarDeclarations() {
+		return (EReference)stMethodBodyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTMethodBody_Statements() {
+		return (EReference)stMethodBodyEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -241,7 +325,6 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 
 		// Create classes and their features
 		stAlgorithmEClass = createEClass(ST_ALGORITHM);
-		createEAttribute(stAlgorithmEClass, ST_ALGORITHM__NAME);
 		createEReference(stAlgorithmEClass, ST_ALGORITHM__BODY);
 
 		stAlgorithmBodyEClass = createEClass(ST_ALGORITHM_BODY);
@@ -249,7 +332,17 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 		createEReference(stAlgorithmBodyEClass, ST_ALGORITHM_BODY__STATEMENTS);
 
 		stAlgorithmSourceEClass = createEClass(ST_ALGORITHM_SOURCE);
-		createEReference(stAlgorithmSourceEClass, ST_ALGORITHM_SOURCE__ALGORITHMS);
+		createEReference(stAlgorithmSourceEClass, ST_ALGORITHM_SOURCE__ELEMENTS);
+
+		stAlgorithmSourceElementEClass = createEClass(ST_ALGORITHM_SOURCE_ELEMENT);
+
+		stMethodEClass = createEClass(ST_METHOD);
+		createEReference(stMethodEClass, ST_METHOD__RETURN_TYPE);
+		createEReference(stMethodEClass, ST_METHOD__BODY);
+
+		stMethodBodyEClass = createEClass(ST_METHOD_BODY);
+		createEReference(stMethodBodyEClass, ST_METHOD_BODY__VAR_DECLARATIONS);
+		createEReference(stMethodBodyEClass, ST_METHOD_BODY__STATEMENTS);
 	}
 
 	/**
@@ -276,26 +369,50 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
+		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 		STCorePackage theSTCorePackage = (STCorePackage)EPackage.Registry.INSTANCE.getEPackage(STCorePackage.eNS_URI);
+		DataPackage theDataPackage = (DataPackage)EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
 
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		stAlgorithmEClass.getESuperTypes().add(this.getSTAlgorithmSourceElement());
+		stAlgorithmEClass.getESuperTypes().add(theLibraryElementPackage.getICallable());
 		stAlgorithmSourceEClass.getESuperTypes().add(theSTCorePackage.getSTSource());
+		stAlgorithmSourceElementEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
+		stMethodEClass.getESuperTypes().add(this.getSTAlgorithmSourceElement());
+		stMethodEClass.getESuperTypes().add(theLibraryElementPackage.getICallable());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(stAlgorithmEClass, STAlgorithm.class, "STAlgorithm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getSTAlgorithm_Name(), ecorePackage.getEString(), "name", null, 0, 1, STAlgorithm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTAlgorithm_Body(), this.getSTAlgorithmBody(), null, "body", null, 0, 1, STAlgorithm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(stAlgorithmEClass, theLibraryElementPackage.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stAlgorithmEClass, theLibraryElementPackage.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(stAlgorithmBodyEClass, STAlgorithmBody.class, "STAlgorithmBody", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getSTAlgorithmBody_VarTempDeclarations(), theSTCorePackage.getSTVarDeclarationBlock(), null, "varTempDeclarations", null, 0, -1, STAlgorithmBody.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTAlgorithmBody_VarTempDeclarations(), theSTCorePackage.getSTVarTempDeclarationBlock(), null, "varTempDeclarations", null, 0, -1, STAlgorithmBody.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTAlgorithmBody_Statements(), theSTCorePackage.getSTStatement(), null, "statements", null, 0, -1, STAlgorithmBody.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stAlgorithmSourceEClass, STAlgorithmSource.class, "STAlgorithmSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getSTAlgorithmSource_Algorithms(), this.getSTAlgorithm(), null, "algorithms", null, 0, -1, STAlgorithmSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTAlgorithmSource_Elements(), this.getSTAlgorithmSourceElement(), null, "elements", null, 0, -1, STAlgorithmSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stAlgorithmSourceElementEClass, STAlgorithmSourceElement.class, "STAlgorithmSourceElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(stMethodEClass, STMethod.class, "STMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTMethod_ReturnType(), theDataPackage.getDataType(), null, "returnType", null, 0, 1, STMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTMethod_Body(), this.getSTMethodBody(), null, "body", null, 0, 1, STMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stMethodEClass, theLibraryElementPackage.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stMethodEClass, theLibraryElementPackage.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stMethodBodyEClass, STMethodBody.class, "STMethodBody", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTMethodBody_VarDeclarations(), theSTCorePackage.getSTVarDeclarationBlock(), null, "varDeclarations", null, 0, -1, STMethodBody.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTMethodBody_Statements(), theSTCorePackage.getSTStatement(), null, "statements", null, 0, -1, STMethodBody.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

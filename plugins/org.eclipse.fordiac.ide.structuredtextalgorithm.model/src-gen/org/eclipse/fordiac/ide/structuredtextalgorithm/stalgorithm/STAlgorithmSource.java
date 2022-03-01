@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource#getAlgorithms <em>Algorithms</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource#getElements <em>Elements</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTAlgorithmSource()
@@ -38,15 +38,15 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
  */
 public interface STAlgorithmSource extends STSource {
 	/**
-	 * Returns the value of the '<em><b>Algorithms</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm}.
+	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Algorithms</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTAlgorithmSource_Algorithms()
+	 * @return the value of the '<em>Elements</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTAlgorithmSource_Elements()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<STAlgorithm> getAlgorithms();
+	EList<STAlgorithmSourceElement> getElements();
 
 } // STAlgorithmSource

@@ -27,23 +27,23 @@ import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
 STCoreSource returns STSource:
 	{STCoreSource} statements+=STStatement*;
 
-STVarDeclarationBlock returns STVarDeclarationBlock:
-	{STVarDeclarationBlock} 'VAR' (constant?='CONSTANT')?
+STVarDeclarationBlock returns STVarPlainDeclarationBlock:
+	{STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 	varDeclarations+=STVarDeclaration*
 	'END_VAR';
 
-STVarTempDeclarationBlock returns STVarDeclarationBlock:
-	{STVarDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
+STVarTempDeclarationBlock returns STVarTempDeclarationBlock:
+	{STVarTempDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
 	varDeclarations+=STVarDeclaration*
 	'END_VAR';
 
-STVarInputDeclarationBlock returns STVarDeclarationBlock:
-	{STVarDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
+STVarInputDeclarationBlock returns STVarInputDeclarationBlock:
+	{STVarInputDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
 	varDeclarations+=STVarDeclaration*
 	'END_VAR';
 
-STVarOutputDeclarationBlock returns STVarDeclarationBlock:
-	{STVarDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+STVarOutputDeclarationBlock returns STVarOutputDeclarationBlock:
+	{STVarOutputDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
 	varDeclarations+=STVarDeclaration*
 	'END_VAR';
 

@@ -51,7 +51,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class STVarDeclarationBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STVarDeclarationBlock");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cSTVarDeclarationBlockAction_0 = (Action)cGroup.eContents().get(0);
+		private final Action cSTVarPlainDeclarationBlockAction_0 = (Action)cGroup.eContents().get(0);
 		private final Keyword cVARKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cConstantAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final Keyword cConstantCONSTANTKeyword_2_0 = (Keyword)cConstantAssignment_2.eContents().get(0);
@@ -59,19 +59,19 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cVarDeclarationsSTVarDeclarationParserRuleCall_3_0 = (RuleCall)cVarDeclarationsAssignment_3.eContents().get(0);
 		private final Keyword cEND_VARKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		//STVarDeclarationBlock returns STVarDeclarationBlock:
-		//    {STVarDeclarationBlock} 'VAR' (constant?='CONSTANT')?
+		//STVarDeclarationBlock returns STVarPlainDeclarationBlock:
+		//    {STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 		//    varDeclarations+=STVarDeclaration*
 		//    'END_VAR';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STVarDeclarationBlock} 'VAR' (constant?='CONSTANT')?
+		//{STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 		//varDeclarations+=STVarDeclaration*
 		//'END_VAR'
 		public Group getGroup() { return cGroup; }
 		
-		//{STVarDeclarationBlock}
-		public Action getSTVarDeclarationBlockAction_0() { return cSTVarDeclarationBlockAction_0; }
+		//{STVarPlainDeclarationBlock}
+		public Action getSTVarPlainDeclarationBlockAction_0() { return cSTVarPlainDeclarationBlockAction_0; }
 		
 		//'VAR'
 		public Keyword getVARKeyword_1() { return cVARKeyword_1; }
@@ -94,7 +94,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class STVarTempDeclarationBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STVarTempDeclarationBlock");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cSTVarDeclarationBlockAction_0 = (Action)cGroup.eContents().get(0);
+		private final Action cSTVarTempDeclarationBlockAction_0 = (Action)cGroup.eContents().get(0);
 		private final Keyword cVAR_TEMPKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cConstantAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final Keyword cConstantCONSTANTKeyword_2_0 = (Keyword)cConstantAssignment_2.eContents().get(0);
@@ -102,19 +102,19 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cVarDeclarationsSTVarDeclarationParserRuleCall_3_0 = (RuleCall)cVarDeclarationsAssignment_3.eContents().get(0);
 		private final Keyword cEND_VARKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		//STVarTempDeclarationBlock returns STVarDeclarationBlock:
-		//    {STVarDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
+		//STVarTempDeclarationBlock returns STVarTempDeclarationBlock:
+		//    {STVarTempDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
 		//    varDeclarations+=STVarDeclaration*
 		//    'END_VAR';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STVarDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
+		//{STVarTempDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
 		//varDeclarations+=STVarDeclaration*
 		//'END_VAR'
 		public Group getGroup() { return cGroup; }
 		
-		//{STVarDeclarationBlock}
-		public Action getSTVarDeclarationBlockAction_0() { return cSTVarDeclarationBlockAction_0; }
+		//{STVarTempDeclarationBlock}
+		public Action getSTVarTempDeclarationBlockAction_0() { return cSTVarTempDeclarationBlockAction_0; }
 		
 		//'VAR_TEMP'
 		public Keyword getVAR_TEMPKeyword_1() { return cVAR_TEMPKeyword_1; }
@@ -137,7 +137,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class STVarInputDeclarationBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STVarInputDeclarationBlock");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cSTVarDeclarationBlockAction_0 = (Action)cGroup.eContents().get(0);
+		private final Action cSTVarInputDeclarationBlockAction_0 = (Action)cGroup.eContents().get(0);
 		private final Keyword cVAR_INPUTKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cConstantAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final Keyword cConstantCONSTANTKeyword_2_0 = (Keyword)cConstantAssignment_2.eContents().get(0);
@@ -145,19 +145,19 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cVarDeclarationsSTVarDeclarationParserRuleCall_3_0 = (RuleCall)cVarDeclarationsAssignment_3.eContents().get(0);
 		private final Keyword cEND_VARKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		//STVarInputDeclarationBlock returns STVarDeclarationBlock:
-		//    {STVarDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
+		//STVarInputDeclarationBlock returns STVarInputDeclarationBlock:
+		//    {STVarInputDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
 		//    varDeclarations+=STVarDeclaration*
 		//    'END_VAR';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STVarDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
+		//{STVarInputDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
 		//varDeclarations+=STVarDeclaration*
 		//'END_VAR'
 		public Group getGroup() { return cGroup; }
 		
-		//{STVarDeclarationBlock}
-		public Action getSTVarDeclarationBlockAction_0() { return cSTVarDeclarationBlockAction_0; }
+		//{STVarInputDeclarationBlock}
+		public Action getSTVarInputDeclarationBlockAction_0() { return cSTVarInputDeclarationBlockAction_0; }
 		
 		//'VAR_INPUT'
 		public Keyword getVAR_INPUTKeyword_1() { return cVAR_INPUTKeyword_1; }
@@ -180,7 +180,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class STVarOutputDeclarationBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STVarOutputDeclarationBlock");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cSTVarDeclarationBlockAction_0 = (Action)cGroup.eContents().get(0);
+		private final Action cSTVarOutputDeclarationBlockAction_0 = (Action)cGroup.eContents().get(0);
 		private final Keyword cVAR_OUTPUTKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cConstantAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final Keyword cConstantCONSTANTKeyword_2_0 = (Keyword)cConstantAssignment_2.eContents().get(0);
@@ -188,19 +188,19 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cVarDeclarationsSTVarDeclarationParserRuleCall_3_0 = (RuleCall)cVarDeclarationsAssignment_3.eContents().get(0);
 		private final Keyword cEND_VARKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		//STVarOutputDeclarationBlock returns STVarDeclarationBlock:
-		//    {STVarDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+		//STVarOutputDeclarationBlock returns STVarOutputDeclarationBlock:
+		//    {STVarOutputDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
 		//    varDeclarations+=STVarDeclaration*
 		//    'END_VAR';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STVarDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+		//{STVarOutputDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
 		//varDeclarations+=STVarDeclaration*
 		//'END_VAR'
 		public Group getGroup() { return cGroup; }
 		
-		//{STVarDeclarationBlock}
-		public Action getSTVarDeclarationBlockAction_0() { return cSTVarDeclarationBlockAction_0; }
+		//{STVarOutputDeclarationBlock}
+		public Action getSTVarOutputDeclarationBlockAction_0() { return cSTVarOutputDeclarationBlockAction_0; }
 		
 		//'VAR_OUTPUT'
 		public Keyword getVAR_OUTPUTKeyword_1() { return cVAR_OUTPUTKeyword_1; }
@@ -3375,8 +3375,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTCoreSourceAccess().getRule();
 	}
 	
-	//STVarDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR' (constant?='CONSTANT')?
+	//STVarDeclarationBlock returns STVarPlainDeclarationBlock:
+	//    {STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STVarDeclarationBlockElements getSTVarDeclarationBlockAccess() {
@@ -3387,8 +3387,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTVarDeclarationBlockAccess().getRule();
 	}
 	
-	//STVarTempDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
+	//STVarTempDeclarationBlock returns STVarTempDeclarationBlock:
+	//    {STVarTempDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STVarTempDeclarationBlockElements getSTVarTempDeclarationBlockAccess() {
@@ -3399,8 +3399,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTVarTempDeclarationBlockAccess().getRule();
 	}
 	
-	//STVarInputDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
+	//STVarInputDeclarationBlock returns STVarInputDeclarationBlock:
+	//    {STVarInputDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STVarInputDeclarationBlockElements getSTVarInputDeclarationBlockAccess() {
@@ -3411,8 +3411,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTVarInputDeclarationBlockAccess().getRule();
 	}
 	
-	//STVarOutputDeclarationBlock returns STVarDeclarationBlock:
-	//    {STVarDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+	//STVarOutputDeclarationBlock returns STVarOutputDeclarationBlock:
+	//    {STVarOutputDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STVarOutputDeclarationBlockElements getSTVarOutputDeclarationBlockAccess() {

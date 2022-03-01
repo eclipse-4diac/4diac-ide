@@ -12,15 +12,31 @@
   <genPackages prefix="STAlgorithm" basePackage="org.eclipse.fordiac.ide.structuredtextalgorithm"
       disposableProviderFactory="true" fileExtensions="stalg" ecorePackage="STAlgorithm.ecore#/">
     <genClasses ecoreClass="STAlgorithm.ecore#//STAlgorithm">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STAlgorithm.ecore#//STAlgorithm/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STAlgorithm/body"/>
+      <genOperations ecoreOperation="STAlgorithm.ecore#//STAlgorithm/getInputParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInputParameters(this);"/>
+      <genOperations ecoreOperation="STAlgorithm.ecore#//STAlgorithm/getOutputParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);"/>
     </genClasses>
     <genClasses ecoreClass="STAlgorithm.ecore#//STAlgorithmBody">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STAlgorithmBody/varTempDeclarations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STAlgorithmBody/statements"/>
     </genClasses>
     <genClasses ecoreClass="STAlgorithm.ecore#//STAlgorithmSource">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STAlgorithmSource/algorithms"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STAlgorithmSource/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="STAlgorithm.ecore#//STAlgorithmSourceElement"/>
+    <genClasses ecoreClass="STAlgorithm.ecore#//STMethod">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STMethod/returnType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STMethod/body"/>
+      <genOperations ecoreOperation="STAlgorithm.ecore#//STMethod/getInputParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInputParameters(this);"/>
+      <genOperations ecoreOperation="STAlgorithm.ecore#//STMethod/getOutputParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="STAlgorithm.ecore#//STMethodBody">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STMethodBody/varDeclarations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STMethodBody/statements"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

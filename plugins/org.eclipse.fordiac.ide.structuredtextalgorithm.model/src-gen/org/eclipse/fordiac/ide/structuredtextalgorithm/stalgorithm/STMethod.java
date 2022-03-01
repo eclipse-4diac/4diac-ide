@@ -16,48 +16,72 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
+
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>ST Algorithm</b></em>'.
+ * A representation of the model object '<em><b>ST Method</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm#getBody <em>Body</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod#getReturnType <em>Return Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod#getBody <em>Body</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTAlgorithm()
+ * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTMethod()
  * @model
  * @generated
  */
-public interface STAlgorithm extends STAlgorithmSourceElement, ICallable {
+public interface STMethod extends STAlgorithmSourceElement, ICallable {
+	/**
+	 * Returns the value of the '<em><b>Return Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Return Type</em>' reference.
+	 * @see #setReturnType(DataType)
+	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTMethod_ReturnType()
+	 * @model
+	 * @generated
+	 */
+	DataType getReturnType();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod#getReturnType <em>Return Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Return Type</em>' reference.
+	 * @see #getReturnType()
+	 * @generated
+	 */
+	void setReturnType(DataType value);
+
 	/**
 	 * Returns the value of the '<em><b>Body</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Body</em>' containment reference.
-	 * @see #setBody(STAlgorithmBody)
-	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTAlgorithm_Body()
+	 * @see #setBody(STMethodBody)
+	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage#getSTMethod_Body()
 	 * @model containment="true"
 	 * @generated
 	 */
-	STAlgorithmBody getBody();
+	STMethodBody getBody();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm#getBody <em>Body</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod#getBody <em>Body</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Body</em>' containment reference.
 	 * @see #getBody()
 	 * @generated
 	 */
-	void setBody(STAlgorithmBody value);
+	void setBody(STMethodBody value);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -75,4 +99,4 @@ public interface STAlgorithm extends STAlgorithmSourceElement, ICallable {
 	 */
 	EList<INamedElement> getOutputParameters();
 
-} // STAlgorithm
+} // STMethod

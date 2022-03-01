@@ -7,11 +7,14 @@ import com.google.inject.Inject;
 import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSequencer;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
@@ -47,7 +50,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
 import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Parameter;
@@ -78,6 +84,12 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 				return; 
 			case STAlgorithmPackage.ST_ALGORITHM_SOURCE:
 				sequence_STAlgorithmSource(context, (STAlgorithmSource) semanticObject); 
+				return; 
+			case STAlgorithmPackage.ST_METHOD:
+				sequence_STMethod(context, (STMethod) semanticObject); 
+				return; 
+			case STAlgorithmPackage.ST_METHOD_BODY:
+				sequence_STMethodBody(context, (STMethodBody) semanticObject); 
 				return; 
 			}
 		else if (epackage == STCorePackage.eINSTANCE)
@@ -181,24 +193,18 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 			case STCorePackage.ST_VAR_DECLARATION:
 				sequence_STVarDeclaration(context, (STVarDeclaration) semanticObject); 
 				return; 
-			case STCorePackage.ST_VAR_DECLARATION_BLOCK:
-				if (rule == grammarAccess.getSTVarDeclarationBlockRule()) {
-					sequence_STVarDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
-					return; 
-				}
-				else if (rule == grammarAccess.getSTVarInputDeclarationBlockRule()) {
-					sequence_STVarInputDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
-					return; 
-				}
-				else if (rule == grammarAccess.getSTVarOutputDeclarationBlockRule()) {
-					sequence_STVarOutputDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
-					return; 
-				}
-				else if (rule == grammarAccess.getSTVarTempDeclarationBlockRule()) {
-					sequence_STVarTempDeclarationBlock(context, (STVarDeclarationBlock) semanticObject); 
-					return; 
-				}
-				else break;
+			case STCorePackage.ST_VAR_INPUT_DECLARATION_BLOCK:
+				sequence_STVarInputDeclarationBlock(context, (STVarInputDeclarationBlock) semanticObject); 
+				return; 
+			case STCorePackage.ST_VAR_OUTPUT_DECLARATION_BLOCK:
+				sequence_STVarOutputDeclarationBlock(context, (STVarOutputDeclarationBlock) semanticObject); 
+				return; 
+			case STCorePackage.ST_VAR_PLAIN_DECLARATION_BLOCK:
+				sequence_STVarDeclarationBlock(context, (STVarPlainDeclarationBlock) semanticObject); 
+				return; 
+			case STCorePackage.ST_VAR_TEMP_DECLARATION_BLOCK:
+				sequence_STVarTempDeclarationBlock(context, (STVarTempDeclarationBlock) semanticObject); 
+				return; 
 			case STCorePackage.ST_WHILE_STATEMENT:
 				sequence_STWhileStatement(context, (STWhileStatement) semanticObject); 
 				return; 
@@ -224,7 +230,7 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 	 *     STAlgorithmSource returns STAlgorithmSource
 	 *
 	 * Constraint:
-	 *     algorithms+=STAlgorithm*
+	 *     elements+=STAlgorithmSourceElement*
 	 */
 	protected void sequence_STAlgorithmSource(ISerializationContext context, STAlgorithmSource semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -233,6 +239,7 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 	
 	/**
 	 * Contexts:
+	 *     STAlgorithmSourceElement returns STAlgorithm
 	 *     STAlgorithm returns STAlgorithm
 	 *
 	 * Constraint:
@@ -240,8 +247,8 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 	 */
 	protected void sequence_STAlgorithm(ISerializationContext context, STAlgorithm semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STAlgorithmPackage.Literals.ST_ALGORITHM__NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STAlgorithmPackage.Literals.ST_ALGORITHM__NAME));
+			if (transientValues.isValueTransient(semanticObject, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME));
 			if (transientValues.isValueTransient(semanticObject, STAlgorithmPackage.Literals.ST_ALGORITHM__BODY) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STAlgorithmPackage.Literals.ST_ALGORITHM__BODY));
 		}
@@ -249,6 +256,34 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 		feeder.accept(grammarAccess.getSTAlgorithmAccess().getNameIDTerminalRuleCall_1_0(), semanticObject.getName());
 		feeder.accept(grammarAccess.getSTAlgorithmAccess().getBodySTAlgorithmBodyParserRuleCall_2_0(), semanticObject.getBody());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STMethodBody returns STMethodBody
+	 *
+	 * Constraint:
+	 *     (
+	 *         (varDeclarations+=STVarTempDeclarationBlock | varDeclarations+=STVarInputDeclarationBlock | varDeclarations+=STVarOutputDeclarationBlock)* 
+	 *         statements+=STStatement*
+	 *     )
+	 */
+	protected void sequence_STMethodBody(ISerializationContext context, STMethodBody semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     STAlgorithmSourceElement returns STMethod
+	 *     STMethod returns STMethod
+	 *
+	 * Constraint:
+	 *     (name=ID returnType=[DataType|STAnyType]? body=STMethodBody)
+	 */
+	protected void sequence_STMethod(ISerializationContext context, STMethod semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

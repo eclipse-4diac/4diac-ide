@@ -158,6 +158,154 @@ public interface STCorePackage extends EPackage {
 	int ST_VAR_DECLARATION_BLOCK_FEATURE_COUNT = 2;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarPlainDeclarationBlockImpl <em>ST Var Plain Declaration Block</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarPlainDeclarationBlockImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarPlainDeclarationBlock()
+	 * @generated
+	 */
+	int ST_VAR_PLAIN_DECLARATION_BLOCK = 3;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_PLAIN_DECLARATION_BLOCK__CONSTANT = ST_VAR_DECLARATION_BLOCK__CONSTANT;
+
+	/**
+	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_PLAIN_DECLARATION_BLOCK__VAR_DECLARATIONS = ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS;
+
+	/**
+	 * The number of structural features of the '<em>ST Var Plain Declaration Block</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_PLAIN_DECLARATION_BLOCK_FEATURE_COUNT = ST_VAR_DECLARATION_BLOCK_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarInputDeclarationBlockImpl <em>ST Var Input Declaration Block</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarInputDeclarationBlockImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarInputDeclarationBlock()
+	 * @generated
+	 */
+	int ST_VAR_INPUT_DECLARATION_BLOCK = 4;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_INPUT_DECLARATION_BLOCK__CONSTANT = ST_VAR_DECLARATION_BLOCK__CONSTANT;
+
+	/**
+	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_INPUT_DECLARATION_BLOCK__VAR_DECLARATIONS = ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS;
+
+	/**
+	 * The number of structural features of the '<em>ST Var Input Declaration Block</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_INPUT_DECLARATION_BLOCK_FEATURE_COUNT = ST_VAR_DECLARATION_BLOCK_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarOutputDeclarationBlockImpl <em>ST Var Output Declaration Block</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarOutputDeclarationBlockImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarOutputDeclarationBlock()
+	 * @generated
+	 */
+	int ST_VAR_OUTPUT_DECLARATION_BLOCK = 5;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_OUTPUT_DECLARATION_BLOCK__CONSTANT = ST_VAR_DECLARATION_BLOCK__CONSTANT;
+
+	/**
+	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_OUTPUT_DECLARATION_BLOCK__VAR_DECLARATIONS = ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS;
+
+	/**
+	 * The number of structural features of the '<em>ST Var Output Declaration Block</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_OUTPUT_DECLARATION_BLOCK_FEATURE_COUNT = ST_VAR_DECLARATION_BLOCK_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarTempDeclarationBlockImpl <em>ST Var Temp Declaration Block</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarTempDeclarationBlockImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarTempDeclarationBlock()
+	 * @generated
+	 */
+	int ST_VAR_TEMP_DECLARATION_BLOCK = 6;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_TEMP_DECLARATION_BLOCK__CONSTANT = ST_VAR_DECLARATION_BLOCK__CONSTANT;
+
+	/**
+	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_TEMP_DECLARATION_BLOCK__VAR_DECLARATIONS = ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS;
+
+	/**
+	 * The number of structural features of the '<em>ST Var Temp Declaration Block</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_VAR_TEMP_DECLARATION_BLOCK_FEATURE_COUNT = ST_VAR_DECLARATION_BLOCK_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STInitializerExpressionImpl <em>ST Initializer Expression</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -165,7 +313,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTInitializerExpression()
 	 * @generated
 	 */
-	int ST_INITIALIZER_EXPRESSION = 3;
+	int ST_INITIALIZER_EXPRESSION = 7;
 
 	/**
 	 * The number of structural features of the '<em>ST Initializer Expression</em>' class.
@@ -184,7 +332,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTElementaryInitializerExpression()
 	 * @generated
 	 */
-	int ST_ELEMENTARY_INITIALIZER_EXPRESSION = 4;
+	int ST_ELEMENTARY_INITIALIZER_EXPRESSION = 8;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
@@ -212,7 +360,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTArrayInitializerExpression()
 	 * @generated
 	 */
-	int ST_ARRAY_INITIALIZER_EXPRESSION = 5;
+	int ST_ARRAY_INITIALIZER_EXPRESSION = 9;
 
 	/**
 	 * The feature id for the '<em><b>Values</b></em>' containment reference list.
@@ -240,7 +388,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTArrayInitElement()
 	 * @generated
 	 */
-	int ST_ARRAY_INIT_ELEMENT = 6;
+	int ST_ARRAY_INIT_ELEMENT = 10;
 
 	/**
 	 * The feature id for the '<em><b>Index Or Init Expression</b></em>' containment reference.
@@ -277,7 +425,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTStatement()
 	 * @generated
 	 */
-	int ST_STATEMENT = 7;
+	int ST_STATEMENT = 11;
 
 	/**
 	 * The number of structural features of the '<em>ST Statement</em>' class.
@@ -296,7 +444,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTAssignmentStatement()
 	 * @generated
 	 */
-	int ST_ASSIGNMENT_STATEMENT = 8;
+	int ST_ASSIGNMENT_STATEMENT = 12;
 
 	/**
 	 * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -333,7 +481,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallStatement()
 	 * @generated
 	 */
-	int ST_CALL_STATEMENT = 9;
+	int ST_CALL_STATEMENT = 13;
 
 	/**
 	 * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -361,7 +509,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallArgument()
 	 * @generated
 	 */
-	int ST_CALL_ARGUMENT = 10;
+	int ST_CALL_ARGUMENT = 14;
 
 	/**
 	 * The number of structural features of the '<em>ST Call Argument</em>' class.
@@ -380,7 +528,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallUnnamedArgument()
 	 * @generated
 	 */
-	int ST_CALL_UNNAMED_ARGUMENT = 11;
+	int ST_CALL_UNNAMED_ARGUMENT = 15;
 
 	/**
 	 * The feature id for the '<em><b>Arg</b></em>' containment reference.
@@ -408,7 +556,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallNamedInputArgument()
 	 * @generated
 	 */
-	int ST_CALL_NAMED_INPUT_ARGUMENT = 12;
+	int ST_CALL_NAMED_INPUT_ARGUMENT = 16;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -445,7 +593,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCallNamedOutputArgument()
 	 * @generated
 	 */
-	int ST_CALL_NAMED_OUTPUT_ARGUMENT = 13;
+	int ST_CALL_NAMED_OUTPUT_ARGUMENT = 17;
 
 	/**
 	 * The feature id for the '<em><b>Not</b></em>' attribute.
@@ -491,7 +639,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTIfStatement()
 	 * @generated
 	 */
-	int ST_IF_STATEMENT = 14;
+	int ST_IF_STATEMENT = 18;
 
 	/**
 	 * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -546,7 +694,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTElseIfPart()
 	 * @generated
 	 */
-	int ST_ELSE_IF_PART = 15;
+	int ST_ELSE_IF_PART = 19;
 
 	/**
 	 * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -583,7 +731,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCaseStatement()
 	 * @generated
 	 */
-	int ST_CASE_STATEMENT = 16;
+	int ST_CASE_STATEMENT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Selector</b></em>' containment reference.
@@ -629,7 +777,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCaseCases()
 	 * @generated
 	 */
-	int ST_CASE_CASES = 17;
+	int ST_CASE_CASES = 21;
 
 	/**
 	 * The feature id for the '<em><b>Conditions</b></em>' containment reference list.
@@ -666,7 +814,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTElsePart()
 	 * @generated
 	 */
-	int ST_ELSE_PART = 18;
+	int ST_ELSE_PART = 22;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -694,7 +842,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTForStatement()
 	 * @generated
 	 */
-	int ST_FOR_STATEMENT = 19;
+	int ST_FOR_STATEMENT = 23;
 
 	/**
 	 * The feature id for the '<em><b>Variable</b></em>' reference.
@@ -758,7 +906,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTWhileStatement()
 	 * @generated
 	 */
-	int ST_WHILE_STATEMENT = 20;
+	int ST_WHILE_STATEMENT = 24;
 
 	/**
 	 * The feature id for the '<em><b>Condition</b></em>' containment reference.
@@ -795,7 +943,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTRepeatStatement()
 	 * @generated
 	 */
-	int ST_REPEAT_STATEMENT = 21;
+	int ST_REPEAT_STATEMENT = 25;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -832,7 +980,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTExpression()
 	 * @generated
 	 */
-	int ST_EXPRESSION = 22;
+	int ST_EXPRESSION = 26;
 
 	/**
 	 * The number of structural features of the '<em>ST Expression</em>' class.
@@ -851,7 +999,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTNumericLiteral()
 	 * @generated
 	 */
-	int ST_NUMERIC_LITERAL = 23;
+	int ST_NUMERIC_LITERAL = 27;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -888,7 +1036,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateLiteral()
 	 * @generated
 	 */
-	int ST_DATE_LITERAL = 24;
+	int ST_DATE_LITERAL = 28;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -925,7 +1073,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeLiteral()
 	 * @generated
 	 */
-	int ST_TIME_LITERAL = 25;
+	int ST_TIME_LITERAL = 29;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -962,7 +1110,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDayLiteral()
 	 * @generated
 	 */
-	int ST_TIME_OF_DAY_LITERAL = 26;
+	int ST_TIME_OF_DAY_LITERAL = 30;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -999,7 +1147,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTimeLiteral()
 	 * @generated
 	 */
-	int ST_DATE_AND_TIME_LITERAL = 27;
+	int ST_DATE_AND_TIME_LITERAL = 31;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -1036,7 +1184,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTStringLiteral()
 	 * @generated
 	 */
-	int ST_STRING_LITERAL = 28;
+	int ST_STRING_LITERAL = 32;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -1073,7 +1221,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarDeclaration()
 	 * @generated
 	 */
-	int ST_VAR_DECLARATION = 29;
+	int ST_VAR_DECLARATION = 33;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1173,7 +1321,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTReturn()
 	 * @generated
 	 */
-	int ST_RETURN = 30;
+	int ST_RETURN = 34;
 
 	/**
 	 * The number of structural features of the '<em>ST Return</em>' class.
@@ -1192,7 +1340,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTContinue()
 	 * @generated
 	 */
-	int ST_CONTINUE = 31;
+	int ST_CONTINUE = 35;
 
 	/**
 	 * The number of structural features of the '<em>ST Continue</em>' class.
@@ -1211,7 +1359,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTExit()
 	 * @generated
 	 */
-	int ST_EXIT = 32;
+	int ST_EXIT = 36;
 
 	/**
 	 * The number of structural features of the '<em>ST Exit</em>' class.
@@ -1230,7 +1378,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTNop()
 	 * @generated
 	 */
-	int ST_NOP = 33;
+	int ST_NOP = 37;
 
 	/**
 	 * The number of structural features of the '<em>ST Nop</em>' class.
@@ -1249,7 +1397,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBinaryExpression()
 	 * @generated
 	 */
-	int ST_BINARY_EXPRESSION = 34;
+	int ST_BINARY_EXPRESSION = 38;
 
 	/**
 	 * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1295,7 +1443,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTUnaryExpression()
 	 * @generated
 	 */
-	int ST_UNARY_EXPRESSION = 35;
+	int ST_UNARY_EXPRESSION = 39;
 
 	/**
 	 * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1332,7 +1480,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMemberAccessExpression()
 	 * @generated
 	 */
-	int ST_MEMBER_ACCESS_EXPRESSION = 36;
+	int ST_MEMBER_ACCESS_EXPRESSION = 40;
 
 	/**
 	 * The feature id for the '<em><b>Receiver</b></em>' containment reference.
@@ -1369,7 +1517,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTArrayAccessExpression()
 	 * @generated
 	 */
-	int ST_ARRAY_ACCESS_EXPRESSION = 37;
+	int ST_ARRAY_ACCESS_EXPRESSION = 41;
 
 	/**
 	 * The feature id for the '<em><b>Receiver</b></em>' containment reference.
@@ -1406,7 +1554,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTFeatureExpression()
 	 * @generated
 	 */
-	int ST_FEATURE_EXPRESSION = 38;
+	int ST_FEATURE_EXPRESSION = 42;
 
 	/**
 	 * The feature id for the '<em><b>Feature</b></em>' reference.
@@ -1443,7 +1591,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMultibitPartialExpression()
 	 * @generated
 	 */
-	int ST_MULTIBIT_PARTIAL_EXPRESSION = 39;
+	int ST_MULTIBIT_PARTIAL_EXPRESSION = 43;
 
 	/**
 	 * The feature id for the '<em><b>Specifier</b></em>' attribute.
@@ -1489,7 +1637,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBinaryOperator()
 	 * @generated
 	 */
-	int ST_BINARY_OPERATOR = 40;
+	int ST_BINARY_OPERATOR = 44;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator <em>ST Unary Operator</em>}' enum.
@@ -1499,7 +1647,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTUnaryOperator()
 	 * @generated
 	 */
-	int ST_UNARY_OPERATOR = 41;
+	int ST_UNARY_OPERATOR = 45;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier <em>ST Multi Bit Access Specifier</em>}' enum.
@@ -1509,7 +1657,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMultiBitAccessSpecifier()
 	 * @generated
 	 */
-	int ST_MULTI_BIT_ACCESS_SPECIFIER = 42;
+	int ST_MULTI_BIT_ACCESS_SPECIFIER = 46;
 
 	/**
 	 * The meta object id for the '<em>ST Date</em>' data type.
@@ -1519,7 +1667,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDate()
 	 * @generated
 	 */
-	int ST_DATE = 43;
+	int ST_DATE = 47;
 
 	/**
 	 * The meta object id for the '<em>ST Time</em>' data type.
@@ -1529,7 +1677,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTime()
 	 * @generated
 	 */
-	int ST_TIME = 44;
+	int ST_TIME = 48;
 
 	/**
 	 * The meta object id for the '<em>ST Time Of Day</em>' data type.
@@ -1539,7 +1687,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDay()
 	 * @generated
 	 */
-	int ST_TIME_OF_DAY = 45;
+	int ST_TIME_OF_DAY = 49;
 
 	/**
 	 * The meta object id for the '<em>ST Date And Time</em>' data type.
@@ -1549,8 +1697,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTime()
 	 * @generated
 	 */
-	int ST_DATE_AND_TIME = 46;
-
+	int ST_DATE_AND_TIME = 50;
 
 	/**
 	 * The meta object id for the '<em>ST String</em>' data type.
@@ -1560,7 +1707,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTString()
 	 * @generated
 	 */
-	int ST_STRING = 47;
+	int ST_STRING = 51;
 
 
 	/**
@@ -1625,6 +1772,46 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSTVarDeclarationBlock_VarDeclarations();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock <em>ST Var Plain Declaration Block</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Var Plain Declaration Block</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock
+	 * @generated
+	 */
+	EClass getSTVarPlainDeclarationBlock();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock <em>ST Var Input Declaration Block</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Var Input Declaration Block</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
+	 * @generated
+	 */
+	EClass getSTVarInputDeclarationBlock();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock <em>ST Var Output Declaration Block</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Var Output Declaration Block</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
+	 * @generated
+	 */
+	EClass getSTVarOutputDeclarationBlock();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock <em>ST Var Temp Declaration Block</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Var Temp Declaration Block</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
+	 * @generated
+	 */
+	EClass getSTVarTempDeclarationBlock();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression <em>ST Initializer Expression</em>}'.
@@ -2893,6 +3080,46 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS = eINSTANCE.getSTVarDeclarationBlock_VarDeclarations();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarPlainDeclarationBlockImpl <em>ST Var Plain Declaration Block</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarPlainDeclarationBlockImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarPlainDeclarationBlock()
+		 * @generated
+		 */
+		EClass ST_VAR_PLAIN_DECLARATION_BLOCK = eINSTANCE.getSTVarPlainDeclarationBlock();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarInputDeclarationBlockImpl <em>ST Var Input Declaration Block</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarInputDeclarationBlockImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarInputDeclarationBlock()
+		 * @generated
+		 */
+		EClass ST_VAR_INPUT_DECLARATION_BLOCK = eINSTANCE.getSTVarInputDeclarationBlock();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarOutputDeclarationBlockImpl <em>ST Var Output Declaration Block</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarOutputDeclarationBlockImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarOutputDeclarationBlock()
+		 * @generated
+		 */
+		EClass ST_VAR_OUTPUT_DECLARATION_BLOCK = eINSTANCE.getSTVarOutputDeclarationBlock();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarTempDeclarationBlockImpl <em>ST Var Temp Declaration Block</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarTempDeclarationBlockImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTVarTempDeclarationBlock()
+		 * @generated
+		 */
+		EClass ST_VAR_TEMP_DECLARATION_BLOCK = eINSTANCE.getSTVarTempDeclarationBlock();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STInitializerExpressionImpl <em>ST Initializer Expression</em>}' class.

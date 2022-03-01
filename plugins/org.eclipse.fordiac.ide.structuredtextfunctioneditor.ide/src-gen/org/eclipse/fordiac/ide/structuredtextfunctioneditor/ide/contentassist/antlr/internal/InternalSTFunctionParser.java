@@ -12709,7 +12709,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             // InternalSTFunctionParser.g:3426:2: ()
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTVarDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); 
+               before(grammarAccess.getSTVarDeclarationBlockAccess().getSTVarPlainDeclarationBlockAction_0()); 
             }
             // InternalSTFunctionParser.g:3427:2: ()
             // InternalSTFunctionParser.g:3427:3: 
@@ -12717,7 +12717,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTVarDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); 
+               after(grammarAccess.getSTVarDeclarationBlockAccess().getSTVarPlainDeclarationBlockAction_0()); 
             }
 
             }
@@ -13148,7 +13148,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             // InternalSTFunctionParser.g:3561:2: ()
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); 
+               before(grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarTempDeclarationBlockAction_0()); 
             }
             // InternalSTFunctionParser.g:3562:2: ()
             // InternalSTFunctionParser.g:3562:3: 
@@ -13156,7 +13156,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); 
+               after(grammarAccess.getSTVarTempDeclarationBlockAccess().getSTVarTempDeclarationBlockAction_0()); 
             }
 
             }
@@ -13587,7 +13587,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             // InternalSTFunctionParser.g:3696:2: ()
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); 
+               before(grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarInputDeclarationBlockAction_0()); 
             }
             // InternalSTFunctionParser.g:3697:2: ()
             // InternalSTFunctionParser.g:3697:3: 
@@ -13595,7 +13595,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); 
+               after(grammarAccess.getSTVarInputDeclarationBlockAccess().getSTVarInputDeclarationBlockAction_0()); 
             }
 
             }
@@ -14026,7 +14026,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             // InternalSTFunctionParser.g:3831:2: ()
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); 
+               before(grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarOutputDeclarationBlockAction_0()); 
             }
             // InternalSTFunctionParser.g:3832:2: ()
             // InternalSTFunctionParser.g:3832:3: 
@@ -14034,7 +14034,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarDeclarationBlockAction_0()); 
+               after(grammarAccess.getSTVarOutputDeclarationBlockAccess().getSTVarOutputDeclarationBlockAction_0()); 
             }
 
             }

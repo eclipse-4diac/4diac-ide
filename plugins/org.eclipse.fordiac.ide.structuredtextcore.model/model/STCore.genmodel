@@ -57,6 +57,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STVarDeclarationBlock/constant"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclarationBlock/varDeclarations"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STVarPlainDeclarationBlock"/>
+    <genClasses ecoreClass="STCore.ecore#//STVarInputDeclarationBlock"/>
+    <genClasses ecoreClass="STCore.ecore#//STVarOutputDeclarationBlock"/>
+    <genClasses ecoreClass="STCore.ecore#//STVarTempDeclarationBlock"/>
     <genClasses ecoreClass="STCore.ecore#//STInitializerExpression"/>
     <genClasses ecoreClass="STCore.ecore#//STElementaryInitializerExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STElementaryInitializerExpression/value"/>
