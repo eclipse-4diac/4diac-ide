@@ -207,7 +207,8 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 			final Object sourceContainer = connEditPart.getSource().getParent().getParent();
 			final Object targetContainer = connEditPart.getTarget().getParent().getParent();
 			// save connections for later
-			if (sourceContainer instanceof GroupContentEditPart || targetContainer instanceof GroupContentEditPart) {
+			if ((sourceContainer instanceof GroupContentEditPart || targetContainer instanceof GroupContentEditPart)
+					&& sourceContainer != targetContainer) {
 				mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS).add(connEditPart);	
 			} else {
 				mapping.getProperty(CONNECTIONS).add(connEditPart);		
