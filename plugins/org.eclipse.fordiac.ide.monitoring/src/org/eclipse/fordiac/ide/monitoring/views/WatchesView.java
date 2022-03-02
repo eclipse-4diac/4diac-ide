@@ -148,7 +148,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			@Override
 			public void partHidden(final IWorkbenchPartReference ref) {
 				final IWorkbenchPart part = ref.getPart(false);
-				if (part != null && part.getClass().getName().equals(this.getClass().getName().split("\\$")[0])) {
+				if (part instanceof WatchesView) {
 					visible = false;
 				}
 			}
@@ -156,7 +156,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			@Override
 			public void partVisible(final IWorkbenchPartReference ref) {
 				final IWorkbenchPart part = ref.getPart(false);
-				if (part != null && part.getClass().getName().equals(this.getClass().getName().split("\\$")[0])) {
+				if (part instanceof WatchesView) {
 					visible = true;
 				}
 			}
