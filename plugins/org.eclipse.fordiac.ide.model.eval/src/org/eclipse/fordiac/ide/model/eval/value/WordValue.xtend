@@ -12,43 +12,41 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
-import org.eclipse.fordiac.ide.model.data.UintType
+import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class UIntValue implements AnyUnsignedValue {
+class WordValue implements AnyBitValue {
 	final short value;
 
-	public static final UIntValue DEFAULT = new UIntValue(0 as short)
+	public static final WordValue DEFAULT = new WordValue(0 as short)
 
 	private new(short value) {
 		this.value = value;
 	}
 
-	def static toUIntValue(short value) { new UIntValue(value) }
+	def static toWordValue(short value) { new WordValue(value) }
 
-	def static toUIntValue(Number value) { new UIntValue(value.shortValue) }
+	def static toWordValue(Number value) { new WordValue(value.shortValue) }
 
-	def static toUIntValue(String value) { new UIntValue(Integer.parseUnsignedInt(value) as short) }
+	def static toWordValue(String value) { new WordValue(Integer.parseUnsignedInt(value) as short) }
 
-	def static toUIntValue(AnyMagnitudeValue value) { value.shortValue.toUIntValue }
+	def static toWordValue(AnyBitValue value) { value.shortValue.toWordValue }
 
-	override UintType getType() { ElementaryTypes.UINT }
-	
+	override WordType getType() { ElementaryTypes.WORD }
+
+	override boolValue() { value != 0 }
+
 	override byteValue() { value as byte }
 
-	override shortValue() { value }
+	override shortValue() { Short.toUnsignedInt(value) as short }
 
 	override intValue() { Short.toUnsignedInt(value) }
 
 	override longValue() { Short.toUnsignedLong(value) }
 
-	override doubleValue() { intValue }
+	override equals(Object obj) { if(obj instanceof WordValue) value == obj.value else false }
 
-	override floatValue() { intValue }
-
-	override equals(Object obj) { if(obj instanceof UIntValue) value == obj.value else false }
-
-	override hashCode() { value }
+	override hashCode() { Short.hashCode(value) }
 
 	override toString() { Integer.toUnsignedString(intValue) }
 }

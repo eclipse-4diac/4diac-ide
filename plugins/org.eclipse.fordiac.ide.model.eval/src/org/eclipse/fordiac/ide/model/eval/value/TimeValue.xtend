@@ -12,27 +12,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
-import org.eclipse.fordiac.ide.model.data.RealType
+import java.time.Duration
+import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class RealValue implements AnyRealValue {
-	final float value;
+class TimeValue extends AnyDurationValue {
+	final long value;
 
-	public static final RealValue DEFAULT = new RealValue(0.0f)
+	public static final TimeValue DEFAULT = new TimeValue(0)
 
-	private new(float value) {
+	private new(long value) {
 		this.value = value;
 	}
 
-	def static toRealValue(float value) { new RealValue(value) }
+	def static toTimeValue(long value) { new TimeValue(value) }
 
-	def static toRealValue(Number value) { new RealValue(value.floatValue) }
+	def static toTimeValue(Number value) { new TimeValue(value.longValue) }
 
-	def static toRealValue(String value) { new RealValue(Float.parseFloat(value)) }
+	def static toTimeValue(Duration value) { new TimeValue(value.toNanos) }
 
-	def static toRealValue(AnyMagnitudeValue value) { value.floatValue.toRealValue }
+	def static toTimeValue(String value) { value.parseValue.toTimeValue }
 
-	override RealType getType() { ElementaryTypes.REAL }
+	def static toTimeValue(AnyMagnitudeValue value) { value.longValue.toTimeValue }
+
+	override TimeType getType() { ElementaryTypes.TIME }
 
 	override byteValue() { value as byte }
 
@@ -40,15 +43,15 @@ class RealValue implements AnyRealValue {
 
 	override intValue() { value as int }
 
-	override longValue() { value as long }
+	override longValue() { value }
 
 	override doubleValue() { value }
 
 	override floatValue() { value }
 
-	override equals(Object obj) { if(obj instanceof RealValue) value == obj.value else false }
+	override toDuration() { Duration.ofNanos(value) }
 
-	override hashCode() { Float.hashCode(value) }
+	override equals(Object obj) { if(obj instanceof TimeValue) value == obj.value else false }
 
-	override toString() { Float.toString(value) }
+	override hashCode() { Long.hashCode(value) }
 }

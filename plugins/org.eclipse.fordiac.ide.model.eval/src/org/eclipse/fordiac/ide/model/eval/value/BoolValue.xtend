@@ -28,11 +28,23 @@ class BoolValue implements AnyBitValue {
 
 	def static toBoolValue(boolean value) { new BoolValue(value) }
 
+	def static toBoolValue(Boolean value) { new BoolValue(value.booleanValue) }
+
 	def static toBoolValue(String value) { new BoolValue(Boolean.parseBoolean(value)) }
+
+	def static toBoolValue(AnyBitValue value) { value.boolValue.toBoolValue }
 
 	override BoolType getType() { IecTypes.ElementaryTypes.BOOL }
 
-	def boolValue() { value }
+	override boolValue() { value }
+
+	override byteValue() { intValue as byte }
+
+	override shortValue() { intValue as short }
+
+	override intValue() { if(value) 1 else 0 }
+
+	override longValue() { intValue }
 
 	override equals(Object obj) { if(obj instanceof BoolValue) value == obj.value else false }
 

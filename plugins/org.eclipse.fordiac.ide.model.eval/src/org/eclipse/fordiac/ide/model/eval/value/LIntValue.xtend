@@ -30,7 +30,7 @@ class LIntValue implements AnySignedValue {
 
 	def static toLIntValue(String value) { new LIntValue(Long.parseLong(value)) }
 
-	def static toLIntValue(AnyNumValue value) { value.longValue.toLIntValue }
+	def static toLIntValue(AnyMagnitudeValue value) { value.longValue.toLIntValue }
 
 	override LintType getType() { ElementaryTypes.LINT }
 	

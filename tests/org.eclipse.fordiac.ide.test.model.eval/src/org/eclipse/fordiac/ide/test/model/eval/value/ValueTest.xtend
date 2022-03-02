@@ -12,9 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.eval.value
 
+import java.time.LocalDate
 import java.util.stream.Stream
-import org.eclipse.fordiac.ide.model.data.AnyNumType
-import org.eclipse.fordiac.ide.model.data.BoolType
+import org.eclipse.fordiac.ide.model.data.AnyCharType
+import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.DateType
+import org.eclipse.fordiac.ide.model.data.LdateType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.junit.jupiter.params.ParameterizedTest
@@ -27,43 +30,40 @@ class ValueTest {
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testValueEquals(String typeName) {
-		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			BoolType,
-			AnyNumType: {
-				assertTrue(type.defaultValue.equals(type.defaultValue))
-				assertFalse(type.defaultValue.equals(1.wrapValue(type)))
-				assertFalse(type.defaultValue.equals(null))
-			}
-			default:
-				UnsupportedOperationException.assertThrows[type.defaultValue]
+		val type = ElementaryTypes.getTypeByName(typeName)
+		assertTrue(type.defaultValue.equals(type.defaultValue))
+		assertFalse(type.defaultValue.equals(null))
+		switch (type) {
+			AnyCharType,
+			AnyStringType: assertFalse(type.defaultValue.equals("a".wrapValue(type)))
+			default: assertFalse(type.defaultValue.equals(1.wrapValue(type)))
 		}
 	}
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testValueHashCode(String typeName) {
-		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			BoolType,
-			AnyNumType: {
-				type.defaultValue.hashCode.assertEquals(type.defaultValue.hashCode)
-				type.defaultValue.hashCode.assertNotEquals(1.wrapValue(type).hashCode)
-			}
-			default:
-				UnsupportedOperationException.assertThrows[type.defaultValue]
+		val type = ElementaryTypes.getTypeByName(typeName)
+		type.defaultValue.hashCode.assertEquals(type.defaultValue.hashCode)
+		switch (type) {
+			AnyCharType,
+			AnyStringType: type.defaultValue.hashCode.assertNotEquals("a".wrapValue(type).hashCode)
+			default: type.defaultValue.hashCode.assertNotEquals(1.wrapValue(type).hashCode)
 		}
 	}
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testValueStringConversion(String typeName) {
-		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			BoolType,
-			AnyNumType: {
-				type.defaultValue.assertEquals(type.defaultValue.toString.parseValue(type))
-				1.wrapValue(type).assertEquals(1.wrapValue(type).toString.parseValue(type))
-			}
-			default:
-				UnsupportedOperationException.assertThrows[type.defaultValue]
+		val type = ElementaryTypes.getTypeByName(typeName)
+		type.defaultValue.assertEquals(type.defaultValue.toString.parseValue(type))
+		switch (type) {
+			AnyCharType,
+			AnyStringType: "a".wrapValue(type).assertEquals("a".wrapValue(type).toString.parseValue(type))
+			DateType,
+			LdateType: LocalDate.of(1970, 01, 02).wrapValue(type).assertEquals(
+				LocalDate.of(1970, 01, 02).wrapValue(type).toString.parseValue(type))
+			default: 1.wrapValue(type).assertEquals(1.wrapValue(type).toString.parseValue(type))
 		}
 	}
 

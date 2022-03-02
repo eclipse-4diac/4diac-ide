@@ -12,20 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
-import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
+import org.eclipse.fordiac.ide.model.data.AnyCharType
 
-interface AnyMagnitudeValue extends AnyElementaryValue {
-	override AnyMagnitudeType getType()
-
-	def byte byteValue()
-
-	def short shortValue()
-
-	def int intValue()
-
-	def long longValue()
-
-	def float floatValue()
-
-	def double doubleValue()
+interface AnyCharValue extends AnyCharsValue {
+	override AnyCharType getType()
 }

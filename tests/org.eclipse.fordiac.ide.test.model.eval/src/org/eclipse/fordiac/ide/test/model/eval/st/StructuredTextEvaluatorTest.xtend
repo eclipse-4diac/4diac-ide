@@ -13,12 +13,18 @@
 package org.eclipse.fordiac.ide.test.model.eval.st
 
 import java.math.BigDecimal
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.Collection
 import java.util.Queue
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
+import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
+import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.AnyRealType
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.BoolType
@@ -52,17 +58,33 @@ import org.junit.jupiter.params.provider.MethodSource
 import static org.junit.jupiter.params.provider.Arguments.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.value.BoolValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.ByteValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.CharValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.DIntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.DWordValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.DateAndTimeValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.DateValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.IntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LDateAndTimeValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LDateValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LRealValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LTimeOfDayValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LTimeValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LWordValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.RealValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.SIntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.StringValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.TimeOfDayValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.TimeValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.UDIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.UIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ULIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.USIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.WCharValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.WStringValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.WordValue.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.junit.jupiter.api.Assertions.*
 
@@ -79,7 +101,7 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
-	def void testNumericLiterals() {
+	def void testLiterals() {
 		// BOOL
 		true.toBoolValue.assertEquals("BOOL#TRUE".evaluateExpression)
 		false.toBoolValue.assertEquals("BOOL#FALSE".evaluateExpression)
@@ -165,6 +187,102 @@ class StructuredTextEvaluatorTest {
 		17.toLRealValue.assertEquals("LREAL#17".evaluateExpression)
 		(-4).toLRealValue.assertEquals("LREAL#-4".evaluateExpression)
 		(3.1415).toLRealValue.assertEquals("LREAL#3.1415".evaluateExpression)
+		// BYTE
+		0.toByteValue.assertEquals("BYTE#0".evaluateExpression)
+		17.toByteValue.assertEquals("BYTE#17".evaluateExpression)
+		17.toByteValue.assertEquals("BYTE#16#11".evaluateExpression)
+		255.toByteValue.assertEquals("BYTE#255".evaluateExpression)
+		255.toByteValue.assertEquals("BYTE#16#ff".evaluateExpression)
+		// WORD
+		0.toWordValue.assertEquals("WORD#0".evaluateExpression)
+		17.toWordValue.assertEquals("WORD#17".evaluateExpression)
+		17.toWordValue.assertEquals("WORD#16#11".evaluateExpression)
+		(-4).toWordValue.assertEquals("WORD#-4".evaluateExpression)
+		(-4).toWordValue.assertEquals("WORD#16#fffc".evaluateExpression)
+		65535.toWordValue.assertEquals("WORD#65535".evaluateExpression)
+		65535.toWordValue.assertEquals("WORD#16#ffff".evaluateExpression)
+		// DWORD
+		0.toDWordValue.assertEquals("DWORD#0".evaluateExpression)
+		17.toDWordValue.assertEquals("DWORD#17".evaluateExpression)
+		17.toDWordValue.assertEquals("DWORD#16#11".evaluateExpression)
+		(-4).toDWordValue.assertEquals("DWORD#-4".evaluateExpression)
+		(-4).toDWordValue.assertEquals("DWORD#16#fffffffc".evaluateExpression)
+		0xffffffff.toDWordValue.assertEquals("DWORD#4294967295".evaluateExpression)
+		0xffffffff.toDWordValue.assertEquals("DWORD#16#ffffffff".evaluateExpression)
+		// LWORD
+		0.toLWordValue.assertEquals("LWORD#0".evaluateExpression)
+		17.toLWordValue.assertEquals("LWORD#17".evaluateExpression)
+		17.toLWordValue.assertEquals("LWORD#16#11".evaluateExpression)
+		(-4).toLWordValue.assertEquals("LWORD#-4".evaluateExpression)
+		(-4).toLWordValue.assertEquals("LWORD#16#fffffffffffffffc".evaluateExpression)
+		0xffffffffffffffff#L.toLWordValue.assertEquals("LWORD#18446744073709551615".evaluateExpression)
+		0xffffffffffffffff#L.toLWordValue.assertEquals("LWORD#16#ffffffffffffffff".evaluateExpression)
+		// TIME
+		0.toTimeValue.assertEquals("TIME#0s".evaluateExpression)
+		Duration.ofNanos(17).toTimeValue.assertEquals("TIME#17ns".evaluateExpression)
+		Duration.ofNanos(-4).toTimeValue.assertEquals("TIME#-4ns".evaluateExpression)
+		Duration.ofNanos(3141500000L).toTimeValue.assertEquals("TIME#3.1415s".evaluateExpression)
+		// LTIME
+		0.toLTimeValue.assertEquals("LTIME#0s".evaluateExpression)
+		Duration.ofNanos(17).toLTimeValue.assertEquals("LTIME#17ns".evaluateExpression)
+		Duration.ofNanos(-4).toLTimeValue.assertEquals("LTIME#-4ns".evaluateExpression)
+		Duration.ofNanos(3141500000L).toLTimeValue.assertEquals("LTIME#3.1415s".evaluateExpression)
+		// DATE
+		0.toDateValue.assertEquals("DATE#1970-01-01".evaluateExpression)
+		LocalDate.of(1970, 1, 1).toDateValue.assertEquals("DATE#1970-01-01".evaluateExpression)
+		LocalDate.of(2021, 4, 17).toDateValue.assertEquals("DATE#2021-04-17".evaluateExpression)
+		LocalDate.of(1969, 4, 17).toDateValue.assertEquals("DATE#1969-04-17".evaluateExpression)
+		// LDATE
+		0.toLDateValue.assertEquals("LDATE#1970-01-01".evaluateExpression)
+		LocalDate.of(1970, 1, 1).toLDateValue.assertEquals("LDATE#1970-01-01".evaluateExpression)
+		LocalDate.of(2021, 4, 17).toLDateValue.assertEquals("LDATE#2021-04-17".evaluateExpression)
+		LocalDate.of(1969, 4, 17).toLDateValue.assertEquals("LDATE#1969-04-17".evaluateExpression)
+		// TOD
+		0.toTimeOfDayValue.assertEquals("TOD#00:00:00".evaluateExpression)
+		LocalTime.of(0, 0, 0).toTimeOfDayValue.assertEquals("TOD#00:00:00".evaluateExpression)
+		LocalTime.of(4, 17, 21).toTimeOfDayValue.assertEquals("TOD#04:17:21".evaluateExpression)
+		LocalTime.of(4, 17, 21, 420000000).toTimeOfDayValue.assertEquals("TOD#04:17:21.42".evaluateExpression)
+		// LTOD
+		0.toLTimeOfDayValue.assertEquals("LTOD#00:00:00".evaluateExpression)
+		LocalTime.of(0, 0, 0).toLTimeOfDayValue.assertEquals("LTOD#00:00:00".evaluateExpression)
+		LocalTime.of(4, 17, 21).toLTimeOfDayValue.assertEquals("LTOD#04:17:21".evaluateExpression)
+		LocalTime.of(4, 17, 21, 420000000).toLTimeOfDayValue.assertEquals("LTOD#04:17:21.42".evaluateExpression)
+		// DT
+		0.toDateAndTimeValue.assertEquals("DT#1970-01-01-00:00:00".evaluateExpression)
+		LocalDateTime.of(1970, 1, 1, 0, 0, 0).toDateAndTimeValue.assertEquals(
+			"DT#1970-01-01-00:00:00".evaluateExpression)
+		LocalDateTime.of(2021, 4, 17, 4, 17, 21, 420000000).toDateAndTimeValue.assertEquals(
+			"DT#2021-04-17-04:17:21.42".evaluateExpression)
+		LocalDateTime.of(1969, 4, 17, 4, 17, 21, 420000000).toDateAndTimeValue.assertEquals(
+			"DT#1969-04-17-04:17:21.42".evaluateExpression)
+		// LDT
+		0.toLDateAndTimeValue.assertEquals("LDT#1970-01-01-00:00:00".evaluateExpression)
+		LocalDateTime.of(1970, 1, 1, 0, 0, 0).toLDateAndTimeValue.assertEquals(
+			"LDT#1970-01-01-00:00:00".evaluateExpression)
+		LocalDateTime.of(2021, 4, 17, 4, 17, 21, 420000000).toLDateAndTimeValue.assertEquals(
+			"LDT#2021-04-17-04:17:21.42".evaluateExpression)
+		LocalDateTime.of(1969, 4, 17, 4, 17, 21, 420000000).toLDateAndTimeValue.assertEquals(
+			"LDT#1969-04-17-04:17:21.42".evaluateExpression)
+		// CHAR
+		'\u0000'.toCharValue.assertEquals("CHAR#'$00'".evaluateExpression)
+		'0'.toCharValue.assertEquals("CHAR#'$30'".evaluateExpression)
+		'\n'.toCharValue.assertEquals("CHAR#'$N'".evaluateExpression)
+		'a'.toCharValue.assertEquals("CHAR#'a'".evaluateExpression)
+		// WCHAR
+		'\u0000'.toWCharValue.assertEquals("WCHAR#\"$0000\"".evaluateExpression)
+		'0'.toWCharValue.assertEquals("WCHAR#\"$0030\"".evaluateExpression)
+		'\n'.toWCharValue.assertEquals("WCHAR#'$N'".evaluateExpression)
+		'a'.toWCharValue.assertEquals("WCHAR#\"a\"".evaluateExpression)
+		// STRING
+		"\u0000".toStringValue.assertEquals("STRING#'$00'".evaluateExpression)
+		"0".toStringValue.assertEquals("STRING#'$30'".evaluateExpression)
+		"\n".toStringValue.assertEquals("STRING#'$N'".evaluateExpression)
+		"abc".toStringValue.assertEquals("STRING#'abc'".evaluateExpression)
+		// WSTRING
+		"\u0000".toWStringValue.assertEquals("WSTRING#\"$0000\"".evaluateExpression)
+		"0".toWStringValue.assertEquals("WSTRING#\"$0030\"".evaluateExpression)
+		"\n".toWStringValue.assertEquals("WSTRING#'$N'".evaluateExpression)
+		"abc".toWStringValue.assertEquals("WSTRING#\"abc\"".evaluateExpression)
 	}
 
 	@ParameterizedTest(name="{index}: {0} {1}#{2}")
@@ -184,11 +302,12 @@ class StructuredTextEvaluatorTest {
 				GenericTypes.ANY_NUM.isCompatibleWith(it) || it instanceof BoolType
 			].flatMap [ type |
 				#["0", "1", "-1", "17", "-4"].reject [
-					(type instanceof AnyUnsignedType && contains('-')) || (type instanceof BoolType && length > 1)
+					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
+						(type instanceof BoolType && length > 1)
 				].flatMap [ value |
 					STUnaryOperator.VALUES.reject [
-						(type instanceof AnyRealType && it == STUnaryOperator.NOT) ||
-							(type instanceof BoolType && it != STUnaryOperator.NOT)
+						(type instanceof AnyNumType && it == STUnaryOperator.NOT) ||
+							(type instanceof AnyBitType && it != STUnaryOperator.NOT)
 					].map [ operator |
 						arguments(operator, type.name, value)
 					]
@@ -261,11 +380,14 @@ class StructuredTextEvaluatorTest {
 				GenericTypes.ANY_NUM.isCompatibleWith(it) || it instanceof BoolType
 			].flatMap [ type |
 				#["0", "1", "-1", "17", "-4"].reject [
-					(type instanceof AnyUnsignedType && contains('-')) || (type instanceof BoolType && length > 1)
+					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
+						(type instanceof BoolType && length > 1)
 				].flatMap [ value |
 					STBinaryOperator.VALUES.reject [
-						it == STBinaryOperator.RANGE || (type instanceof AnyIntType && it == STBinaryOperator.POWER) ||
-							(type instanceof AnyRealType && isLogical) || (type instanceof BoolType && !isLogical)
+						it == STBinaryOperator.RANGE ||
+							(type instanceof AnyIntType && (it == STBinaryOperator.POWER || logical)) ||
+							(type instanceof AnyBitType && (arithmetic && !logical)) ||
+							(type instanceof AnyRealType && logical) || (type instanceof BoolType && !logical)
 					].flatMap [ operator |
 						#[
 							arguments(operator, type.name, value, "1"),

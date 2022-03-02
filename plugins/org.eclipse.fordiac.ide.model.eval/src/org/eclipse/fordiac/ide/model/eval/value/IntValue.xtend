@@ -30,7 +30,7 @@ class IntValue implements AnySignedValue {
 
 	def static toIntValue(String value) { new IntValue(Short.parseShort(value)) }
 
-	def static toIntValue(AnyNumValue value) { value.shortValue.toIntValue }
+	def static toIntValue(AnyMagnitudeValue value) { value.shortValue.toIntValue }
 
 	override IntType getType() { ElementaryTypes.INT }
 	

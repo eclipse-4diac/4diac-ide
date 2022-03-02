@@ -28,6 +28,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
@@ -38,6 +40,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
@@ -269,6 +274,26 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def private dispatch Value evaluateExpression(STNumericLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def private dispatch Value evaluateExpression(STStringLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def private dispatch Value evaluateExpression(STDateLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def private dispatch Value evaluateExpression(STTimeLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def private dispatch Value evaluateExpression(STTimeOfDayLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def private dispatch Value evaluateExpression(STDateAndTimeLiteral expr) {
 		expr.value.wrapValue(expr.resultType as DataType)
 	}
 

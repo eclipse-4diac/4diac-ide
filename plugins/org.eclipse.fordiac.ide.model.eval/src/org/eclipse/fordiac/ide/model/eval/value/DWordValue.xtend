@@ -12,27 +12,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
-import org.eclipse.fordiac.ide.model.data.DintType
+import org.eclipse.fordiac.ide.model.data.DwordType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-final class DIntValue implements AnySignedValue {
+class DWordValue implements AnyBitValue {
 	final int value;
 
-	public static final DIntValue DEFAULT = new DIntValue(0)
+	public static final DWordValue DEFAULT = new DWordValue(0)
 
 	private new(int value) {
 		this.value = value;
 	}
 
-	def static toDIntValue(int value) { new DIntValue(value) }
+	def static toDWordValue(int value) { new DWordValue(value) }
 
-	def static toDIntValue(Number value) { new DIntValue(value.intValue) }
+	def static toDWordValue(Number value) { new DWordValue(value.intValue) }
 
-	def static toDIntValue(String value) { new DIntValue(Integer.parseInt(value)) }
+	def static toDWordValue(String value) { new DWordValue(Integer.parseUnsignedInt(value)) }
 
-	def static toDIntValue(AnyMagnitudeValue value) { value.intValue.toDIntValue }
+	def static toDWordValue(AnyBitValue value) { value.intValue.toDWordValue }
 
-	override DintType getType() { ElementaryTypes.DINT }
+	override DwordType getType() { ElementaryTypes.DWORD }
+
+	override boolValue() { value != 0 }
 
 	override byteValue() { value as byte }
 
@@ -40,15 +42,11 @@ final class DIntValue implements AnySignedValue {
 
 	override intValue() { value }
 
-	override longValue() { value }
+	override longValue() { Integer.toUnsignedLong(value) }
 
-	override doubleValue() { value }
+	override equals(Object obj) { if(obj instanceof DWordValue) value == obj.value else false }
 
-	override floatValue() { value }
+	override hashCode() { Integer.hashCode(value) }
 
-	override equals(Object obj) { if(obj instanceof DIntValue) value == obj.value else false }
-
-	override hashCode() { value }
-
-	override toString() { Integer.toString(value) }
+	override toString() { Integer.toUnsignedString(value) }
 }

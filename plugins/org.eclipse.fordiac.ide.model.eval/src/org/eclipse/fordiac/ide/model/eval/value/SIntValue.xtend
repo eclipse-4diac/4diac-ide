@@ -30,7 +30,7 @@ class SIntValue implements AnySignedValue {
 
 	def static toSIntValue(String value) { new SIntValue(Byte.parseByte(value)) }
 
-	def static toSIntValue(AnyNumValue value) { value.byteValue.toSIntValue }
+	def static toSIntValue(AnyMagnitudeValue value) { value.byteValue.toSIntValue }
 
 	override SintType getType() { ElementaryTypes.SINT }
 	

@@ -12,27 +12,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
-import org.eclipse.fordiac.ide.model.data.RealType
+import java.time.Duration
+import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class RealValue implements AnyRealValue {
-	final float value;
+class LTimeValue extends AnyDurationValue {
+	final long value;
 
-	public static final RealValue DEFAULT = new RealValue(0.0f)
+	public static final LTimeValue DEFAULT = new LTimeValue(0)
 
-	private new(float value) {
+	private new(long value) {
 		this.value = value;
 	}
 
-	def static toRealValue(float value) { new RealValue(value) }
+	def static toLTimeValue(long value) { new LTimeValue(value) }
 
-	def static toRealValue(Number value) { new RealValue(value.floatValue) }
+	def static toLTimeValue(Number value) { new LTimeValue(value.longValue) }
 
-	def static toRealValue(String value) { new RealValue(Float.parseFloat(value)) }
+	def static toLTimeValue(Duration value) { new LTimeValue(value.toNanos) }
 
-	def static toRealValue(AnyMagnitudeValue value) { value.floatValue.toRealValue }
+	def static toLTimeValue(String value) { value.parseValue.toLTimeValue }
 
-	override RealType getType() { ElementaryTypes.REAL }
+	def static toLTimeValue(AnyMagnitudeValue value) { value.longValue.toLTimeValue }
+
+	override LtimeType getType() { ElementaryTypes.LTIME }
 
 	override byteValue() { value as byte }
 
@@ -40,15 +43,15 @@ class RealValue implements AnyRealValue {
 
 	override intValue() { value as int }
 
-	override longValue() { value as long }
+	override longValue() { value }
 
 	override doubleValue() { value }
 
 	override floatValue() { value }
 
-	override equals(Object obj) { if(obj instanceof RealValue) value == obj.value else false }
+	override toDuration() { Duration.ofNanos(value) }
 
-	override hashCode() { Float.hashCode(value) }
+	override equals(Object obj) { if(obj instanceof LTimeValue) value == obj.value else false }
 
-	override toString() { Float.toString(value) }
+	override hashCode() { Long.hashCode(value) }
 }

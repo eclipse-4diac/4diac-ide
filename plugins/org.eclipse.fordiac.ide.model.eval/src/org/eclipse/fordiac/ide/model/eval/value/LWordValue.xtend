@@ -12,28 +12,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
-import org.eclipse.fordiac.ide.model.data.UlintType
+import org.eclipse.fordiac.ide.model.data.LwordType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class ULIntValue implements AnyUnsignedValue {
+class LWordValue implements AnyBitValue {
 	final long value;
 
-	public static final ULIntValue DEFAULT = new ULIntValue(0)
+	public static final LWordValue DEFAULT = new LWordValue(0)
 
 	private new(long value) {
 		this.value = value;
 	}
 
-	def static toULIntValue(long value) { new ULIntValue(value) }
+	def static toLWordValue(long value) { new LWordValue(value) }
 
-	def static toULIntValue(Number value) { new ULIntValue(value.longValue) }
+	def static toLWordValue(Number value) { new LWordValue(value.longValue) }
 
-	def static toULIntValue(String value) { new ULIntValue(Long.parseUnsignedLong(value)) }
+	def static toLWordValue(String value) { new LWordValue(Long.parseUnsignedLong(value)) }
 
-	def static toULIntValue(AnyMagnitudeValue value) { value.longValue.toULIntValue }
+	def static toLWordValue(AnyBitValue value) { value.longValue.toLWordValue }
 
-	override UlintType getType() { ElementaryTypes.ULINT }
-	
+	override LwordType getType() { ElementaryTypes.LWORD }
+
+	override boolValue() { value != 0 }
+
 	override byteValue() { value as byte }
 
 	override shortValue() { value as short }
@@ -42,11 +44,7 @@ class ULIntValue implements AnyUnsignedValue {
 
 	override longValue() { value }
 
-	override doubleValue() { value }
-
-	override floatValue() { value }
-
-	override equals(Object obj) { if(obj instanceof ULIntValue) value == obj.value else false }
+	override equals(Object obj) { if(obj instanceof LWordValue) value == obj.value else false }
 
 	override hashCode() { Long.hashCode(value) }
 

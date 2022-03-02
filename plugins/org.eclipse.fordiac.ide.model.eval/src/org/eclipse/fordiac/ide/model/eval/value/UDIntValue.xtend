@@ -30,7 +30,7 @@ class UDIntValue implements AnyUnsignedValue {
 
 	def static toUDIntValue(String value) { new UDIntValue(Integer.parseUnsignedInt(value)) }
 
-	def static toUDIntValue(AnyNumValue value) { value.intValue.toUDIntValue }
+	def static toUDIntValue(AnyMagnitudeValue value) { value.intValue.toUDIntValue }
 
 	override UdintType getType() { ElementaryTypes.UDINT }
 

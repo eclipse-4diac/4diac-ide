@@ -12,28 +12,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
-import org.eclipse.fordiac.ide.model.data.UsintType
+import org.eclipse.fordiac.ide.model.data.ByteType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
-class USIntValue implements AnyUnsignedValue {
+class ByteValue implements AnyBitValue {
 	final byte value;
 
-	public static final USIntValue DEFAULT = new USIntValue(0 as byte)
+	public static final ByteValue DEFAULT = new ByteValue(0 as byte)
 
 	private new(byte value) {
 		this.value = value;
 	}
 
-	def static toUSIntValue(byte value) { new USIntValue(value) }
+	def static toByteValue(byte value) { new ByteValue(value) }
 
-	def static toUSIntValue(Number value) { new USIntValue(value.byteValue) }
+	def static toByteValue(Number value) { new ByteValue(value.byteValue) }
 
-	def static toUSIntValue(String value) { new USIntValue(Integer.parseUnsignedInt(value) as byte) }
+	def static toByteValue(String value) { new ByteValue(Integer.parseUnsignedInt(value) as byte) }
 
-	def static toUSIntValue(AnyMagnitudeValue value) { value.byteValue.toUSIntValue }
+	def static toByteValue(AnyBitValue value) { value.byteValue.toByteValue }
 
-	override UsintType getType() { ElementaryTypes.USINT }
-	
+	override ByteType getType() { ElementaryTypes.BYTE }
+
+	override boolValue() { value != 0 }
+
 	override byteValue() { value }
 
 	override shortValue() { Byte.toUnsignedInt(value) as short }
@@ -42,13 +44,9 @@ class USIntValue implements AnyUnsignedValue {
 
 	override longValue() { Byte.toUnsignedLong(value) }
 
-	override doubleValue() { intValue }
+	override equals(Object obj) { if(obj instanceof ByteValue) value == obj.value else false }
 
-	override floatValue() { intValue }
-
-	override equals(Object obj) { if(obj instanceof USIntValue) value == obj.value else false }
-
-	override hashCode() { value }
+	override hashCode() { Byte.hashCode(value) }
 
 	override toString() { Integer.toUnsignedString(intValue) }
 }
