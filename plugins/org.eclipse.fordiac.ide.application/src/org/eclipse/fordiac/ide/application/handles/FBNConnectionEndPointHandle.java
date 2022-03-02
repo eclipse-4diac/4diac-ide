@@ -12,14 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handles;
 
+import java.util.List;
+
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.tools.FBNScrollingConnectionEndpointTracker;
+import org.eclipse.fordiac.ide.application.tools.MultiFBNScrollingconnectionEndpointTracker;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.tools.ConnectionEndpointTracker;
 
 public class FBNConnectionEndPointHandle extends ScrollingConnectionEndpointHandle {
@@ -77,7 +81,14 @@ public class FBNConnectionEndPointHandle extends ScrollingConnectionEndpointHand
 
 	@Override
 	protected ConnectionEndpointTracker createConnectionEndPointTracker(
-			final org.eclipse.gef.ConnectionEditPart connectionEditPart) {
-		return new FBNScrollingConnectionEndpointTracker(connectionEditPart);
+			final List<ConnectionEditPart> coSelectedConnections) {
+		if (coSelectedConnections.size() > 1) {
+			return new MultiFBNScrollingconnectionEndpointTracker(coSelectedConnections);
+		}
+		return new FBNScrollingConnectionEndpointTracker(coSelectedConnections.get(0));
 	}
+
+
+
+
 }

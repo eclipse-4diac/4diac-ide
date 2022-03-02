@@ -302,23 +302,28 @@ public class HideableConnection extends PolylineConnection {
 
 	private boolean isAdapterConnectionOrStructConnection() {
 		if (model instanceof DataConnection) {
-			// if the connections end point fb type could not be loaded it source or
-			// destination may be null
-			IInterfaceElement refElement = model.getSource();
-			if (null == refElement) {
-				refElement = model.getDestination();
-			}
+			final IInterfaceElement refElement = getRefPin();
+			return ((null != refElement) && (refElement.getType() instanceof StructuredType));
+		}
+		return (model instanceof AdapterConnection);
+	}
 
+	private IInterfaceElement getRefPin() {
+		// if the connections end point fb type could not be loaded it source or
+		// destination may be null
+		IInterfaceElement refElement = model.getSource();
+		if (null == refElement) {
+			refElement = model.getDestination();
+		}
+		if (refElement != null) {   // during reconnect or delete both sides could be null see Bug 579040 for details
 			final DataType dataType = refElement.getType();
 			if ((dataType instanceof AnyType) && (dataType == IecTypes.GenericTypes.ANY)
 					&& (refElement == model.getSource())) {
 				// if source is of any type change to destination so that source any target struct are shown correctly
 				refElement = getModel().getDestination();
 			}
-
-			return ((null != refElement) && (refElement.getType() instanceof StructuredType));
 		}
-		return (model instanceof AdapterConnection);
+		return refElement;
 	}
 
 	private void drawDoublePolyline(final Graphics g, final PointList beveledPoints) {

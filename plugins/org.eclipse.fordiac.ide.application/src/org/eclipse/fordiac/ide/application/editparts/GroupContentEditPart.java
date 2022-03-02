@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -94,6 +94,17 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 	}
 
 	@Override
+	public EditPart getTargetEditPart(final Request request) {
+		final Object type = request.getType();
+		if ((type == RequestConstants.REQ_SELECTION || type == RequestConstants.REQ_SELECTION_HOVER)
+				&& (getParent() != null)) {
+			// forward selection requests to the parent
+			return getParent().getTargetEditPart(request);
+		}
+		return super.getTargetEditPart(request);
+	}
+
+	@Override
 	public void setLayoutConstraint(final EditPart child, final IFigure childFigure, final Object constraint) {
 		if ((constraint instanceof Rectangle)  && (child instanceof ValueEditPart)){
 			final Rectangle rectConstraint = (Rectangle) constraint;
@@ -101,16 +112,17 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 			rectConstraint.performTranslate(-topLeft.x, -topLeft.y);
 		}
 		super.setLayoutConstraint(child, childFigure, constraint);
-
 	}
 
 	@Override
 	public void performRequest(final Request request) {
-		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
-		// REQ_OPEN -> doubleclick
-
-		if (((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
-				|| (request.getType() == RequestConstants.REQ_OPEN)) && (request instanceof SelectionRequest)) {
+		final Object type = request.getType();
+		if (type == RequestConstants.REQ_SELECTION || type == RequestConstants.REQ_SELECTION_HOVER) {
+			if (getParent() != null) {
+				getParent().performRequest(request);
+			}
+		} else if ((type == RequestConstants.REQ_DIRECT_EDIT || type == RequestConstants.REQ_OPEN)
+				&& (request instanceof SelectionRequest)) {
 			performDirectEdit((SelectionRequest) request);
 		} else {
 			super.performRequest(request);

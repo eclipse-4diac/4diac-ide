@@ -13,17 +13,19 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
-import org.eclipse.fordiac.ide.application.handlers.TrimGroupHandler;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -98,7 +100,8 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 
 	private Command createAddToGroupCommand(final ChangeBoundsRequest request, final Group dropGroup,
 			final List<FBNetworkElement> fbEls) {
-		final Rectangle groupContentBounds = ((GraphicalEditPart) getTargetEditPart(request)).getFigure().getBounds();
+		final GraphicalEditPart targetEditPart = (GraphicalEditPart) getTargetEditPart(request);
+		final Rectangle groupContentBounds = getGroupAreaBounds((GraphicalEditPart) targetEditPart.getParent(), targetEditPart);
 		final Point topLeft = groupContentBounds.getTopLeft();
 		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
 		topLeft.translate(-moveDelta.x, -moveDelta.y);
@@ -114,11 +117,25 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 		return addElementsToGroup;
 	}
 
-	private static Rectangle getNewContentBounds(final List<EditPart> editParts) {
+	public static Rectangle getGroupAreaBounds(final GraphicalEditPart groupEP,
+			final GraphicalEditPart groupContentEP) {
+		final Rectangle groupContentBounds = groupContentEP.getFigure().getBounds().getCopy();
+		final Rectangle groupBounds = groupEP.getFigure().getBounds();
+		final int borderSize = groupContentBounds.x - groupBounds.x;
+		if (groupBounds.width < groupContentBounds.width) {
+			groupContentBounds.width = groupBounds.width - borderSize;
+		}
+		final int dy = groupContentBounds.y - groupBounds.y;
+		if ((groupBounds.height - dy) < groupContentBounds.height) {
+			groupContentBounds.height = groupBounds.height - dy - borderSize;
+		}
+		return groupContentBounds;
+	}
+
+	private Rectangle getNewContentBounds(final List<EditPart> editParts) {
 		Rectangle selectionExtend = null;
 		for (final EditPart selElem : editParts) {
-			if (selElem instanceof GraphicalEditPart
-					&& ((GraphicalEditPart) selElem).getModel() instanceof FBNetworkElement) {
+			if (selElem instanceof GraphicalEditPart && selElem.getModel() instanceof FBNetworkElement) {
 				// only consider the selected FBNetworkElements
 				final Rectangle fbBounds = ((GraphicalEditPart) selElem).getFigure().getBounds();
 				if (selectionExtend == null) {
@@ -126,21 +143,38 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 				} else {
 					selectionExtend.union(fbBounds);
 				}
+				addValueBounds((FBNetworkElement) selElem.getModel(), selectionExtend);
 			}
 		}
 		return (selectionExtend != null) ? selectionExtend : new Rectangle();
+	}
+
+	private void addValueBounds(final FBNetworkElement model, final Rectangle selectionExtend) {
+		final Map<Object, Object> editPartRegistry = getHost().getViewer().getEditPartRegistry();
+		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
+		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+		.forEach(ep -> selectionExtend.union(((GraphicalEditPart) ep).getFigure().getBounds()));
 	}
 
 	private static Command createAddGroupAndResizeCommand(final Group dropGroup,
 			final AddElementsToGroup addElementsToGroup, final Rectangle groupContentBounds, final Rectangle newContentBounds) {
 		final CompoundCommand cmd = new CompoundCommand();
 		newContentBounds.union(groupContentBounds);
-		cmd.add(TrimGroupHandler.createChangeGroupBoundsCommand(dropGroup, groupContentBounds, newContentBounds));
+		cmd.add(createChangeGroupBoundsCommand(dropGroup, groupContentBounds, newContentBounds));
 		final Point offset = addElementsToGroup.getOffset();
 		offset.translate(newContentBounds.x - groupContentBounds.x, newContentBounds.y - groupContentBounds.y);
 		addElementsToGroup.setOffset(offset);
 		cmd.add(addElementsToGroup);
 		return cmd;
+	}
+
+	public static ChangeGroupBoundsCommand createChangeGroupBoundsCommand(final Group group,
+			final Rectangle groupContentContainerBounds, final Rectangle groupContentBounds) {
+		final int dx = groupContentBounds.x - groupContentContainerBounds.x;
+		final int dy = groupContentBounds.y - groupContentContainerBounds.y;
+		final int dw = groupContentBounds.width - groupContentContainerBounds.width;
+		final int dh = groupContentBounds.height - groupContentContainerBounds.height;
+		return new ChangeGroupBoundsCommand(group, dx, dy, dw, dh);
 	}
 
 }

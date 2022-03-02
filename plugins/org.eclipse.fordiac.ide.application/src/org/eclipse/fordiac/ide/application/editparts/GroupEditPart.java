@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.RoundedRectangle;
@@ -40,13 +41,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -143,6 +148,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 		mainFigure.setBorder(new RoundedRectangleShadowBorder());
 		mainFigure.setLayoutManager(new ToolbarLayout());
 		commentFigure = new InstanceCommentFigure();
+		commentFigure.setCursor(Cursors.SIZEALL);
 		mainFigure.add(commentFigure);
 		refreshComment();
 		return mainFigure;
@@ -158,6 +164,21 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 		final List<Object> children = new ArrayList<>(2);
 		children.add(getSubappContents());
 		return children;
+	}
+
+	@Override
+	public void performRequest(final Request request) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN)
+				&& (request instanceof SelectionRequest)) {
+			// if it is direct edit request and inside of the content area forward request to there so we are creating
+			// fbs inside
+			final GroupContentEditPart groupContentEP = getGroupContentEP();
+			if (isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
+				groupContentEP.performRequest(request);
+				return;
+			}
+		}
+		super.performRequest(request);
 	}
 
 	@Override
@@ -203,8 +224,24 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 		commentFigure.setText(getModel().getComment());
 	}
 
+	@Override
+	public DragTracker getDragTracker(final Request request) {
+		if (request instanceof SelectionRequest) {
+			final GroupContentEditPart groupContentEP = getGroupContentEP();
+			if (isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
+				return groupContentEP.getDragTracker(request);
+			}
+		}
+		return super.getDragTracker(request);
+	}
+
 	private Dimension getGroupSize() {
 		return new Dimension(getModel().getWidth(), getModel().getHeight());
+	}
+
+	private GroupContentEditPart getGroupContentEP() {
+		return (GroupContentEditPart) getChildren().stream().filter(GroupContentEditPart.class::isInstance).findAny()
+				.orElse(null);
 	}
 
 	private GroupContentNetwork getSubappContents() {
@@ -212,6 +249,12 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 			groupContents = new GroupContentNetwork(getModel());
 		}
 		return groupContents;
+	}
+
+	boolean isGroupContentTargetingRequest(final SelectionRequest request, final GroupContentEditPart groupContentEP) {
+		final Point location = request.getLocation().getCopy();
+		getFigure().translateToRelative(location);
+		return ((groupContentEP != null) && (groupContentEP.getFigure().getBounds().contains(location)));
 	}
 
 }

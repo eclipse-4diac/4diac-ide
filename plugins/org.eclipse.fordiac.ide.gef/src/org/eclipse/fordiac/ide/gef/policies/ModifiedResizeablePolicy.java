@@ -14,17 +14,82 @@ package org.eclipse.fordiac.ide.gef.policies;
 
 import java.util.List;
 
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 
 public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 
 	private final Insets insets = new Insets(2);
 
+	private RoundedRectangle selectionFeedback;
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		removeSelectionFeedbackFigure();
+	}
+
 	@Override
 	protected void createMoveHandle(final List handles) {
 		handles.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), insets, DiagramPreferences.CORNER_DIM));
+		removeSelectionFeedbackFigure();
 	}
+
+	@Override
+	protected IFigure createDragSourceFeedbackFigure() {
+		final RectangleFigure figure = (RectangleFigure) super.createDragSourceFeedbackFigure();
+		figure.setFillXOR(false);
+		figure.setOutlineXOR(false);
+		figure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
+		figure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
+		figure.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
+		figure.setLineWidth(ModifiedMoveHandle.SELECTION_BORDER_WIDTH);
+		return figure;
+	}
+
+	@Override
+	public void showTargetFeedback(final Request request) {
+		super.showTargetFeedback(request);
+
+		if (isFeedbackRequest(request) && (null == selectionFeedback) && (null == handles)) {
+			// we don't have already a feedback showing and we are not selected
+			selectionFeedback = ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(), 2);
+			if (null != selectionFeedback) {
+				addFeedback(selectionFeedback);
+			}
+		}
+	}
+
+	@Override
+	public void eraseTargetFeedback(final Request request) {
+		super.showTargetFeedback(request);
+		removeSelectionFeedbackFigure();
+	}
+
+	private void removeSelectionFeedbackFigure() {
+		if (selectionFeedback != null) {
+			removeFeedback(selectionFeedback);
+			selectionFeedback = null;
+		}
+	}
+
+	private boolean isFeedbackRequest(final Request request) {
+		return (REQ_SELECTION.equals(request.getType()))
+				|| (REQ_SELECTION_HOVER.equals(request.getType()) || isValidConnectionRequest(request));
+	}
+
+	private boolean isValidConnectionRequest(final Request request) {
+		return (getHost() instanceof AbstractConnectableEditPart)
+				&& ((AbstractConnectableEditPart) getHost()).isConnectable()
+				&& (REQ_RECONNECT_SOURCE.equals(request.getType()) || REQ_RECONNECT_TARGET.equals(request.getType())
+						|| REQ_CONNECTION_END.equals(request.getType()));
+	}
+
 }

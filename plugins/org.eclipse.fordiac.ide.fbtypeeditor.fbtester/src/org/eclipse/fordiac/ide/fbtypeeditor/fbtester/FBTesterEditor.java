@@ -13,7 +13,7 @@
  *    - initial implementation
  *   Bianca Wiesmayr
  *    - clean up to extract TableViewer creation
- *   Christoph Binder 
+ *   Christoph Binder
  *    - Reset and reload buttons and ecxeption handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester;
@@ -120,7 +120,7 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 
 	@Override
 	public void dispose() {
-		String response = configCreator.close();
+		final String response = configCreator.close();
 		if (response != null) {
 			final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
 			msb.setMessage(MessageFormat.format(
@@ -210,7 +210,7 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 				widgetSelected(e);
 			}
 		});
-		
+
 		reloadButton = new Button(testConfigSelection, SWT.PUSH);
 		reloadButton.setText(Messages.FBTester_ReloadButton);
 		reloadButton.setEnabled(true);
@@ -222,34 +222,35 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 				resetButton.setSelection(false);
 				resetButton.setText(Messages.FBTester_ResetButton_Reset);
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
 				widgetSelected(e);
 			}
 		});
-		
-		
+
+
 		final SashForm horizontal = new SashForm(topEditorContents, SWT.HORIZONTAL | SWT.SMOOTH);
 		final Composite graphicalEditor = new Composite(horizontal, SWT.NONE);
 		graphicalEditor.setLayout(new FillLayout());
 		super.createPartControl(graphicalEditor);
-		
-		setScrollPosition(getGraphicalViewer());		
+
+		setScrollPosition(getGraphicalViewer());
 	}
 
-	private void setScrollPosition(GraphicalViewer viewer) {
+	private void setScrollPosition(final GraphicalViewer viewer) {
 		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-
 			Display.getDefault().asyncExec(() -> {
-				viewer.flush();
-				if (viewer.getSelectedEditParts().isEmpty()) {
-					final Point scrollPos = getInitialScrollPos();
-					canvas.scrollTo(scrollPos.x, scrollPos.y);
-				} 
+				final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+				if (canvas != null && !canvas.isDisposed()) {
+					viewer.flush();
+					if (viewer.getSelectedEditParts().isEmpty()) {
+						final Point scrollPos = getInitialScrollPos();
+						canvas.scrollTo(scrollPos.x, scrollPos.y);
+					}
+				}
 			});
-		}		
+		}
 	}
 
 	private Point getInitialScrollPos() {

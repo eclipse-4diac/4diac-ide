@@ -46,7 +46,7 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 
 
 	/** This selection updater is based on perform selection from {@link org.eclipse.gef.tools.SelectEditPartTracker} */
-	private void performSelection() {
+	protected void performSelection() {
 		final EditPartViewer viewer = getCurrentViewer();
 		final List<Object> selectedObjects = viewer.getSelectedEditParts();
 

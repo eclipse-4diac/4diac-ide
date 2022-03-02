@@ -185,13 +185,15 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	 * shown. We are only here if there is no element under the cursor.
 	 *
 	 * Furthermore it performs autoscrolling if the user went beyond the viewport boundaries. */
-	public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
+	public static class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 
 		@Override
 		protected boolean handleButtonDown(final int button) {
 			if (3 == button) {
 				// on right click deselect everything
-				getViewer().setSelection(StructuredSelection.EMPTY);
+				if (getCurrentViewer() != null) {
+					getCurrentViewer().setSelection(StructuredSelection.EMPTY);
+				}
 			}
 			return super.handleButtonDown(button);
 		}
