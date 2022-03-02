@@ -30,7 +30,7 @@ class Formatter2Test {
 		assertFormatted[
 			toBeFormatted = '''
 				FUNCTION hubert VAR internal1 : REAL; END_VAR VAR CONSTANT internalConstant1 : LREAL ; END_VAR VAR_TEMP temporary : USINT; END_VAR VAR_INPUT bol1:BOOL:=BOOL#TRUE;bol2:BOOL:= TRUE; bol3 : BOOL := BOOL#TRUE; bol4 :BOOL:=BOOL#FALSE; bol5 :BOOL := true ; bol6 : BOOL := false; bol7 : BOOL := BOOL#true; bol8 : BOOL := BOOL#false; bol9 : BOOL := BOOL#0; bol10 : BOOL := BOOL#1; bol11 : BOOL := 0; bol12 : BOOL := 1; structMaster : DRV_InputStruct; test1: TestStruct1; test : NewStruct; test2 : NewStruct; END_VAR VAR_OUTPUT real1: REAL; real1: REAL := REAL#+1.0; real1: REAL := REAL#-1; real1: REAL := REAL#1.4e3; real1: REAL := REAL#-1.4e+3; real1: REAL := REAL#+1.4e-3; int1 : INT := 2#10001; int1 : INT := 8#723; int3 : INT := 16#AFFE; END_VAR END_FUNCTION
-				'''
+			'''
 			expectation = '''
 				FUNCTION hubert
 				VAR
@@ -97,6 +97,22 @@ class Formatter2Test {
 			'''
 		]
 	}
+	
+	@Test
+	def void testAssignmentStatement() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert bol1:=TRUE ; END_FUNCTION
+			'''
+
+			expectation = '''
+				FUNCTION hubert
+				bol1 := TRUE;
+				END_FUNCTION
+			'''
+		]
+	}
+	
 
 	@Test
 	def void testForStatements() {
@@ -204,9 +220,9 @@ class Formatter2Test {
 		assertFormatted[
 			toBeFormatted = '''FUNCTION hubert:INT CONTINUE;END_FUNCTION'''
 			expectation = '''
-			FUNCTION hubert : INT
-			CONTINUE;
-			END_FUNCTION
+				FUNCTION hubert : INT
+				CONTINUE;
+				END_FUNCTION
 			'''
 		]
 	}
@@ -216,13 +232,91 @@ class Formatter2Test {
 		assertFormatted[
 			toBeFormatted = '''FUNCTION hubert:INT IF bol1 THEN IF bol1 THEN bol1 := TRUE;	END_IF;	END_IF;END_FUNCTION'''
 			expectation = '''
-			FUNCTION hubert : INT
-			IF bol1 THEN
+				FUNCTION hubert : INT
 				IF bol1 THEN
-					bol1 := TRUE;
+					IF bol1 THEN
+						bol1 := TRUE;
+					END_IF;
 				END_IF;
-			END_IF;
-			END_FUNCTION
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testElementaryInitializerExpression() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					bol1:BOOL:=2#100<100;
+					int1:INT:=8#723>=33;
+					int2:INT:=16#AFFE;
+					real1:REAL:=REAL#-1.4e+3+3.0;
+					real2:REAL:=REAL#+1.4e-3**2;
+				END_VAR
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					bol1 : BOOL := 2#100 < 100;
+					int1 : INT := 8#723 >= 33;
+					int2 : INT := 16#AFFE;
+					real1 : REAL := REAL#-1.4e+3 + 3.0;
+					real2 : REAL := REAL#+1.4e-3 ** 2;
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testArrayInitializerExpression() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+				    arr1:ARRAY [1..5] OF INT:=[1,2,3,4,5];
+				    arr2:ARRAY [1..2,3..4] OF INT:=[1,3(7)];
+				    arr3:ARRAY [1..2,2..3,3..4] OF INT:=[2(0),4(4),2,3];
+				    arr4:ARRAY [1..5] OF INT:=[1+3,2+3,3*8,4,5];
+				END_VAR
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					arr1 : ARRAY [1..5] OF INT := [1, 2, 3, 4, 5];
+					arr2 : ARRAY [1..2, 3..4] OF INT := [1, 3(7)];
+					arr3 : ARRAY [1..2, 2..3, 3..4] OF INT := [2(0), 4(4), 2, 3];
+					arr4 : ARRAY [1..5] OF INT := [1 + 3, 2 + 3, 3 * 8, 4, 5];
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testArrayAccess() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					arr1 : ARRAY [1..5] OF INT := [1, 2, 3, 4, 5];
+				END_VAR
+				arr[1]:=2;
+				arr[1,2,3]:=3;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					arr1 : ARRAY [1..5] OF INT := [1, 2, 3, 4, 5];
+				END_VAR
+				arr[1] := 2;
+				arr[1, 2, 3] := 3;
+				END_FUNCTION
 			'''
 		]
 	}

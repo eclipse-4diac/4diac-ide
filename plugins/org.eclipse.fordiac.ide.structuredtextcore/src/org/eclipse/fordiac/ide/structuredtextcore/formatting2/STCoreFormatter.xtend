@@ -28,6 +28,23 @@ import org.eclipse.xtext.formatting2.AbstractFormatter2
 import org.eclipse.xtext.formatting2.IFormattableDocument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
+import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -49,11 +66,19 @@ class STCoreFormatter extends AbstractFormatter2 {
 			]
 		}
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
-			varDeclaration.regionFor.keywords(":", ":=").forEach[surround[oneSpace]]
-			varDeclaration.regionFor.keyword(";").prepend[noSpace]
-			varDeclaration.surround[indent].append[newLine]
+			varDeclaration.format
 		}
 		varDeclarationBlock.append[newLine]
+	}
+	
+	def dispatch void format(STVarDeclaration varDeclaration, extension IFormattableDocument document) {
+		varDeclaration.regionFor.keywords(":", ":=").forEach[surround[oneSpace]]
+		varDeclaration.regionFor.keyword(";").prepend[noSpace]	
+		if(varDeclaration.ranges !== null){
+			commaSpacing(varDeclaration.ranges, document)
+		}
+		varDeclaration?.defaultValue.format
+		varDeclaration.surround[indent].append[newLine]
 	}
 
 	def dispatch void format(STIfStatement ifStatement, extension IFormattableDocument document) {
@@ -64,12 +89,12 @@ class STCoreFormatter extends AbstractFormatter2 {
 		ifStatement.regionFor.keyword(";").surround[noSpace]
 		ifStatement.append[newLine]
 	}
-	
+
 	def dispatch void format(STElseIfPart elseIfStatement, extension IFormattableDocument document) {
 		elseIfStatement.regionFor.keyword(STElseIfPartAccess.THENKeyword_2).append[newLine]
 		elseIfStatement.statements.forEach[surround[indent] format]
 	}
-	
+
 	def dispatch void format(STElsePart elseStatement, extension IFormattableDocument document) {
 		elseStatement.regionFor.keyword(STElsePartAccess.ELSEKeyword_1).append[newLine]
 		elseStatement.statements.forEach[surround[indent] format]
@@ -92,7 +117,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 			whileStatement.regionFor.keyword("DO").append[newLine],
 			whileStatement.regionFor.keyword("END_WHILE"),
 			[indent]
-		)		
+		)
 		whileStatement.statements.forEach[format]
 		whileStatement.regionFor.keyword(";").surround[noSpace]
 		whileStatement.append[newLine]
@@ -116,21 +141,108 @@ class STCoreFormatter extends AbstractFormatter2 {
 			caseStatement.regionFor.keyword("END_CASE"),
 			[indent]
 		)
+		caseStatement.regionFor.keyword(";").surround[noSpace]
 		caseStatement.cases.forEach[format]
 		caseStatement.cases.forEach[append[newLine]]
 		caseStatement.^else.format
 		caseStatement.append[newLine]
 	}
-	
+
 	def dispatch format(STCaseCases stCase, extension IFormattableDocument document) {
 		stCase.conditions.forEach[format]
 		stCase.regionFor.keyword(STCaseCasesAccess.colonKeyword_2).prepend[oneSpace].append[newLine]
 		stCase.statements.forEach[surround[indent] format]
 	}
+	
+	def dispatch void format(STAssignmentStatement assignmentStatement, extension IFormattableDocument document) {
+		assignmentStatement.regionFor.keyword(":=").surround[oneSpace]
+		assignmentStatement.regionFor.keyword(";").surround[noSpace]
+		assignmentStatement.append[newLine]
+		assignmentStatement.left.format
+		assignmentStatement.right.format
+	}
 
 	def dispatch void format(STStatement statement, extension IFormattableDocument document) {
+		statement.regionFor.keyword(";").surround[noSpace]
 		statement.append[newLine]
 	}
 
-// TODO: implement for STVarDeclaration, STElementaryInitializerExpression, STArrayInitializerExpression, STArrayInitElement, STAssignmentStatement, STCallStatement, STCallUnnamedArgument, STCallNamedInputArgument, STIfStatement, STElseIfPart, STCaseStatement, STCaseCases, STElsePart, STForStatement, STWhileStatement, STRepeatStatement, STBinaryExpression, STUnaryExpression, STMemberAccessExpression, STArrayAccessExpression, STFeatureExpression, STMultibitPartialExpression
+	def dispatch void format(STElementaryInitializerExpression initExpression, extension IFormattableDocument document) {
+		initExpression.value.format
+	}
+
+	def dispatch void format(STArrayInitializerExpression arrayInitExpression, extension IFormattableDocument document) {
+		if(arrayInitExpression.values !== null){
+			commaSpacing(arrayInitExpression.values, document)
+		}
+	}
+
+	def dispatch void format(STArrayInitElement element, extension IFormattableDocument document) {
+		element.indexOrInitExpression.format
+
+		if (element.initExpressions !== null) {
+			commaSpacing(element.initExpressions, document)
+		}
+	}
+
+	def dispatch void format(STBinaryExpression binaryExpression, extension IFormattableDocument document) {
+		if(binaryExpression.op != STBinaryOperator.RANGE){
+			binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP).surround[oneSpace]
+		}
+	}
+	
+	def dispatch void format(STUnaryExpression unaryExpression, extension IFormattableDocument document) {
+		unaryExpression.regionFor.feature(ST_UNARY_EXPRESSION__OP).append[noSpace]
+	}
+	
+	def dispatch void format(STMemberAccessExpression mExpression, extension IFormattableDocument document) {
+		mExpression.member.format
+		mExpression.receiver.format
+	}
+	
+	def dispatch void format(STFeatureExpression featureExpression, extension IFormattableDocument document) {
+		if(featureExpression.parameters !== null){
+			commaSpacing(featureExpression.parameters, document)
+		}
+		
+		featureExpression.feature.format
+	}
+	
+	def dispatch void format(STCallUnnamedArgument unnamedArgument, extension IFormattableDocument document) {
+		unnamedArgument.arg.format
+	}
+	
+	def dispatch void format(STCallNamedInputArgument namedInputArgument, extension IFormattableDocument document) {
+		namedInputArgument.regionFor.keyword(":=").surround[oneSpace]
+		namedInputArgument.source.format
+	}
+	
+	def dispatch void format(STCallNamedOutputArgument namedOutputArgument, extension IFormattableDocument document) {
+		if(namedOutputArgument.not){
+			namedOutputArgument.regionFor.keyword("NOT").surround[oneSpace]
+		}
+		namedOutputArgument.regionFor.keyword("=>").surround[oneSpace]
+	}
+	
+	def dispatch void format(STMultibitPartialExpression mBPExpression, extension IFormattableDocument document) {
+		mBPExpression.expression.format
+	}
+	
+	def dispatch void format(STArrayAccessExpression arrayAccessExpression, extension IFormattableDocument document) {
+		arrayAccessExpression.receiver.format
+		if (arrayAccessExpression.index !== null) {
+			commaSpacing(arrayAccessExpression.index, document)
+		}
+	}
+	
+	def private void commaSpacing(EList<? extends EObject> list, extension IFormattableDocument document){
+		for (var i = 0; i < list.size; i++) {
+			if (i !== 0) {
+				list.get(i).prepend[oneSpace]
+			}
+			list.get(i).format
+		}
+	}
+	
+	// TODO: implement for STVarDeclaration, STElementaryInitializerExpression, STArrayInitializerExpression, STArrayInitElement, STAssignmentStatement, STCallStatement, STCallUnnamedArgument, STCallNamedInputArgument, STIfStatement, STElseIfPart, STCaseStatement, STCaseCases, STElsePart, STForStatement, STWhileStatement, STRepeatStatement, STBinaryExpression, STUnaryExpression, STMemberAccessExpression, STArrayAccessExpression, STFeatureExpression, STMultibitPartialExpression
 }
