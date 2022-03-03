@@ -436,4 +436,25 @@ class Formatter2Test {
 		]
 	}
 
+	@Test
+	def void testReplaceAmpersandwithAndKeyword() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert VAR bool1:BOOL; bool2:BOOL; bool3:BOOL; END_VAR
+				bool1 := bool2 & bool3;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					bool1 : BOOL;
+					bool2 : BOOL;
+					bool3 : BOOL;
+				END_VAR
+				bool1 := bool2 AND bool3;
+				END_FUNCTION
+			'''
+		]
+	}
+
 }

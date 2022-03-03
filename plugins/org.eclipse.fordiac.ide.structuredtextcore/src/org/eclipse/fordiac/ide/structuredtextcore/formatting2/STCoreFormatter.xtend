@@ -49,6 +49,8 @@ import org.eclipse.xtext.formatting2.AbstractFormatter2
 import org.eclipse.xtext.formatting2.IFormattableDocument
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
+import org.eclipse.xtext.formatting2.internal.AbstractTextReplacer
+import org.eclipse.xtext.formatting2.ITextReplacerContext
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -284,6 +286,16 @@ class STCoreFormatter extends AbstractFormatter2 {
 	def dispatch void format(STBinaryExpression binaryExpression, extension IFormattableDocument document) {
 		if (binaryExpression.op != STBinaryOperator.RANGE) {
 			binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP).surround[oneSpace]
+		}
+		if (binaryExpression.op == STBinaryOperator.AMPERSAND) {
+			document.addReplacer(new AbstractTextReplacer(document, 
+			binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)){		
+				override createReplacements(ITextReplacerContext context) {
+					context.addReplacement(region.replaceWith(STBinaryOperator.AND.toString))
+					return context
+				}
+				
+			})
 		}
 		binaryExpression.left.format
 		binaryExpression.right.format
