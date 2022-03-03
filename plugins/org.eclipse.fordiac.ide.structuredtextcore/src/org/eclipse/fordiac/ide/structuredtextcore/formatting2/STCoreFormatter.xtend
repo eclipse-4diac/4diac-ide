@@ -8,43 +8,44 @@
  * SPDX-License-Identifier: EPL-2.0
  * 
  * Contributors:
- *   Martin Melik Merkumians - initial API and implementation and/or initial documentation
+ *   Ulzii Jargalsaikhan - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - replace commaSpacing method, fixed some formating methods
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.formatting2
 
 import com.google.inject.Inject
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtext.formatting2.AbstractFormatter2
 import org.eclipse.xtext.formatting2.IFormattableDocument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
-import org.eclipse.emf.common.util.EList
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -65,20 +66,23 @@ class STCoreFormatter extends AbstractFormatter2 {
 				append[newLine]
 			]
 		}
+		interior(
+			varDeclarationBlock.regionFor.keywords("VAR", "VAR_TEMP", "VAR_INPUT", "VAR_OUTPUT").head,
+			varDeclarationBlock.regionFor.keyword("END_VAR"),
+			[indent]
+		)
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
 		varDeclarationBlock.append[newLine]
 	}
-	
+
 	def dispatch void format(STVarDeclaration varDeclaration, extension IFormattableDocument document) {
+		varDeclaration.regionFor.keywords(",").forEach[prepend[noSpace] append[oneSpace]]
 		varDeclaration.regionFor.keywords(":", ":=").forEach[surround[oneSpace]]
-		varDeclaration.regionFor.keyword(";").prepend[noSpace]	
-		if(varDeclaration.ranges !== null){
-			commaSpacing(varDeclaration.ranges, document)
-		}
+		varDeclaration.regionFor.keyword(";").prepend[noSpace]
 		varDeclaration?.defaultValue.format
-		varDeclaration.surround[indent].append[newLine]
+		varDeclaration.append[newLine]
 	}
 
 	def dispatch void format(STIfStatement ifStatement, extension IFormattableDocument document) {
@@ -153,7 +157,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		stCase.regionFor.keyword(STCaseCasesAccess.colonKeyword_2).prepend[oneSpace].append[newLine]
 		stCase.statements.forEach[surround[indent] format]
 	}
-	
+
 	def dispatch void format(STAssignmentStatement assignmentStatement, extension IFormattableDocument document) {
 		assignmentStatement.regionFor.keyword(":=").surround[oneSpace]
 		assignmentStatement.regionFor.keyword(";").surround[noSpace]
@@ -162,87 +166,107 @@ class STCoreFormatter extends AbstractFormatter2 {
 		assignmentStatement.right.format
 	}
 
+	def dispatch void format(STCallStatement callStatement, extension IFormattableDocument document) {
+		callStatement.call.format
+		callStatement.regionFor.keyword(";").surround[noSpace]
+		callStatement.append[newLine]
+	}
+
 	def dispatch void format(STStatement statement, extension IFormattableDocument document) {
 		statement.regionFor.keyword(";").surround[noSpace]
 		statement.append[newLine]
 	}
 
-	def dispatch void format(STElementaryInitializerExpression initExpression, extension IFormattableDocument document) {
+	def dispatch void format(STElementaryInitializerExpression initExpression,
+		extension IFormattableDocument document) {
 		initExpression.value.format
 	}
 
-	def dispatch void format(STArrayInitializerExpression arrayInitExpression, extension IFormattableDocument document) {
-		if(arrayInitExpression.values !== null){
-			commaSpacing(arrayInitExpression.values, document)
-		}
+	def dispatch void format(STArrayInitializerExpression arrayInitExpression,
+		extension IFormattableDocument document) {
+		arrayInitExpression.regionFor.keyword(STArrayInitializerExpressionAccess.leftSquareBracketKeyword_0).append [
+			noSpace
+		]
+		arrayInitExpression.regionFor.keyword(STArrayInitializerExpressionAccess.rightSquareBracketKeyword_3).prepend [
+			noSpace
+		]
+		arrayInitExpression.regionFor.keywords(STArrayInitializerExpressionAccess.commaKeyword_2_0).forEach [
+			prepend[noSpace]
+			append[oneSpace]
+		]
+		arrayInitExpression.values.forEach[format]
 	}
 
 	def dispatch void format(STArrayInitElement element, extension IFormattableDocument document) {
 		element.indexOrInitExpression.format
-
-		if (element.initExpressions !== null) {
-			commaSpacing(element.initExpressions, document)
-		}
 	}
 
 	def dispatch void format(STBinaryExpression binaryExpression, extension IFormattableDocument document) {
-		if(binaryExpression.op != STBinaryOperator.RANGE){
+		if (binaryExpression.op != STBinaryOperator.RANGE) {
 			binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP).surround[oneSpace]
 		}
+		binaryExpression.left.format
+		binaryExpression.right.format
 	}
-	
+
 	def dispatch void format(STUnaryExpression unaryExpression, extension IFormattableDocument document) {
 		unaryExpression.regionFor.feature(ST_UNARY_EXPRESSION__OP).append[noSpace]
+		unaryExpression.expression.format
 	}
-	
+
 	def dispatch void format(STMemberAccessExpression mExpression, extension IFormattableDocument document) {
+		mExpression.regionFor.keyword(".").surround[noSpace]
 		mExpression.member.format
 		mExpression.receiver.format
 	}
-	
+
 	def dispatch void format(STFeatureExpression featureExpression, extension IFormattableDocument document) {
-		if(featureExpression.parameters !== null){
-			commaSpacing(featureExpression.parameters, document)
-		}
-		
-		featureExpression.feature.format
+		featureExpression.regionFor.keywords(STFeatureExpressionAccess.commaKeyword_2_1_1_0).forEach [
+			prepend[noSpace]
+			append[oneSpace]
+		]
+		featureExpression.regionFor.keyword(STFeatureExpressionAccess.leftParenthesisKeyword_2_0).surround[noSpace]
+		featureExpression.regionFor.keyword(STFeatureExpressionAccess.rightParenthesisKeyword_2_2).prepend[noSpace]
+		featureExpression.parameters.forEach[format]
 	}
-	
+
+	def dispatch void format(STMultibitPartialExpression mBPExpression, extension IFormattableDocument document) {
+		mBPExpression.regionFor.assignment(STMultibitPartialExpressionAccess.specifierAssignment_1).surround[noSpace]
+		mBPExpression.regionFor.keyword(STMultibitPartialExpressionAccess.leftParenthesisKeyword_2_1_0).append[noSpace]
+		mBPExpression.regionFor.keyword(STMultibitPartialExpressionAccess.rightParenthesisKeyword_2_1_2).prepend [
+			noSpace
+		]
+		mBPExpression.expression.format
+	}
+
 	def dispatch void format(STCallUnnamedArgument unnamedArgument, extension IFormattableDocument document) {
 		unnamedArgument.arg.format
 	}
-	
+
 	def dispatch void format(STCallNamedInputArgument namedInputArgument, extension IFormattableDocument document) {
 		namedInputArgument.regionFor.keyword(":=").surround[oneSpace]
 		namedInputArgument.source.format
 	}
-	
+
 	def dispatch void format(STCallNamedOutputArgument namedOutputArgument, extension IFormattableDocument document) {
-		if(namedOutputArgument.not){
-			namedOutputArgument.regionFor.keyword("NOT").surround[oneSpace]
+		if (namedOutputArgument.not) {
+			namedOutputArgument.regionFor.keyword(STCallNamedOutputArgumentAccess.notNOTKeyword_0_0).append[oneSpace]
 		}
-		namedOutputArgument.regionFor.keyword("=>").surround[oneSpace]
+		namedOutputArgument.regionFor.keyword(STCallNamedOutputArgumentAccess.equalsSignGreaterThanSignKeyword_2).
+			surround[oneSpace]
 	}
-	
-	def dispatch void format(STMultibitPartialExpression mBPExpression, extension IFormattableDocument document) {
-		mBPExpression.expression.format
-	}
-	
+
 	def dispatch void format(STArrayAccessExpression arrayAccessExpression, extension IFormattableDocument document) {
+		arrayAccessExpression.regionFor.keyword(STAccessExpressionAccess.leftSquareBracketKeyword_1_1_1).append[noSpace]
+		arrayAccessExpression.regionFor.keyword(STAccessExpressionAccess.rightSquareBracketKeyword_1_1_4).prepend [
+			noSpace
+		]
+		arrayAccessExpression.regionFor.keywords(STAccessExpressionAccess.commaKeyword_1_1_3_0).forEach [
+			prepend[noSpace]
+			append[oneSpace]
+		]
 		arrayAccessExpression.receiver.format
-		if (arrayAccessExpression.index !== null) {
-			commaSpacing(arrayAccessExpression.index, document)
-		}
 	}
-	
-	def private void commaSpacing(EList<? extends EObject> list, extension IFormattableDocument document){
-		for (var i = 0; i < list.size; i++) {
-			if (i !== 0) {
-				list.get(i).prepend[oneSpace]
-			}
-			list.get(i).format
-		}
-	}
-	
-	// TODO: implement for STVarDeclaration, STElementaryInitializerExpression, STArrayInitializerExpression, STArrayInitElement, STAssignmentStatement, STCallStatement, STCallUnnamedArgument, STCallNamedInputArgument, STIfStatement, STElseIfPart, STCaseStatement, STCaseCases, STElsePart, STForStatement, STWhileStatement, STRepeatStatement, STBinaryExpression, STUnaryExpression, STMemberAccessExpression, STArrayAccessExpression, STFeatureExpression, STMultibitPartialExpression
+
+// TODO: implement for STVarDeclaration, STElementaryInitializerExpression, STArrayInitializerExpression, STArrayInitElement, STAssignmentStatement, STCallStatement, STCallUnnamedArgument, STCallNamedInputArgument, STIfStatement, STElseIfPart, STCaseStatement, STCaseCases, STElsePart, STForStatement, STWhileStatement, STRepeatStatement, STBinaryExpression, STUnaryExpression, STMemberAccessExpression, STArrayAccessExpression, STFeatureExpression, STMultibitPartialExpression
 }

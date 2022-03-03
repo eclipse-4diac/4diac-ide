@@ -9,15 +9,16 @@
  * 
  * Contributors:
  *   Ulzii Jargalsaikhan - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - adds test for partial access
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
+import com.google.inject.Inject
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
+import org.eclipse.xtext.testing.formatter.FormatterTestHelper
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
-import org.eclipse.xtext.testing.formatter.*
-import com.google.inject.Inject
 
 @ExtendWith(InjectionExtension)
 @InjectWith(STFunctionInjectorProvider)
@@ -97,7 +98,7 @@ class Formatter2Test {
 			'''
 		]
 	}
-	
+
 	@Test
 	def void testAssignmentStatement() {
 		assertFormatted[
@@ -112,7 +113,6 @@ class Formatter2Test {
 			'''
 		]
 	}
-	
 
 	@Test
 	def void testForStatements() {
@@ -316,6 +316,31 @@ class Formatter2Test {
 				END_VAR
 				arr[1] := 2;
 				arr[1, 2, 3] := 3;
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testMultibitPartialAccess() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert VAR int1:INT; END_VAR VAR_OUTPUT dword1 : DWORD;
+				END_VAR
+				bol1 := -bol1. %X 1;
+				bol1 := -bol1. %X ( int1 ) ;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					int1 : INT;
+				END_VAR
+				VAR_OUTPUT
+					dword1 : DWORD;
+				END_VAR
+				bol1 := -bol1.%X1;
+				bol1 := -bol1.%X(int1);
 				END_FUNCTION
 			'''
 		]

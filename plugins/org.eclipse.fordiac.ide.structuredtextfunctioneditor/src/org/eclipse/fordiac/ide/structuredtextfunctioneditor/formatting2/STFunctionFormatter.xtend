@@ -14,19 +14,14 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.formatting2
 
 import com.google.inject.Inject
 import org.eclipse.fordiac.ide.structuredtextcore.formatting2.STCoreFormatter
-import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtext.formatting2.IFormattableDocument
 
-import static org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage.Literals.*
-import org.eclipse.xtext.formatting2.regionaccess.ISemanticRegionFinder
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionGrammarAccess
-
 class STFunctionFormatter extends STCoreFormatter {
 
-	@Inject extension STCoreGrammarAccess
 	@Inject extension STFunctionGrammarAccess
 
 	def dispatch void format(STFunctionSource stFunctionSource, extension IFormattableDocument document) {
