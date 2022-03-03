@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
+import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
@@ -69,6 +70,33 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 		return null;
 	}
 
+	@Override
+	protected Command getChangeConstraintCommand(final ChangeBoundsRequest request) {
+		final Command cmd = super.getChangeConstraintCommand(request);
+
+		if (RequestUtil.isMoveRequest(request)) {
+			final Point moveDelta = getScaledMoveDelta(request);
+			final Rectangle newContentBounds = getNewContentBounds(request.getEditParts());
+			newContentBounds.translate(moveDelta);
+			final Rectangle groupContentBounds = getGroupAreaBounds(getHost());
+			if (!groupContentBounds.contains(newContentBounds)) {
+				newContentBounds.union(groupContentBounds);
+				final ChangeGroupBoundsCommand changeSizeCmd = createChangeGroupBoundsCommand(getGroup(),
+						groupContentBounds, newContentBounds);
+				if (cmd instanceof CompoundCommand) {
+					((CompoundCommand) cmd).add(changeSizeCmd);
+				} else {
+					final CompoundCommand compCmd = new CompoundCommand();
+					compCmd.add(cmd);
+					compCmd.add(changeSizeCmd);
+					return compCmd;
+				}
+			}
+		}
+
+		return cmd;
+	}
+
 	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts, final Group dropGroup) {
 		// only allow to add FBs to the group that are in the same FBNetwork
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
@@ -100,10 +128,9 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 
 	private Command createAddToGroupCommand(final ChangeBoundsRequest request, final Group dropGroup,
 			final List<FBNetworkElement> fbEls) {
-		final GraphicalEditPart targetEditPart = (GraphicalEditPart) getTargetEditPart(request);
-		final Rectangle groupContentBounds = getGroupAreaBounds((GraphicalEditPart) targetEditPart.getParent(), targetEditPart);
+		final Rectangle groupContentBounds = getGroupAreaBounds(getHost());
 		final Point topLeft = groupContentBounds.getTopLeft();
-		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		final Point moveDelta = getScaledMoveDelta(request);
 		topLeft.translate(-moveDelta.x, -moveDelta.y);
 		final AddElementsToGroup addElementsToGroup = new AddElementsToGroup(dropGroup, fbEls, topLeft);
 
@@ -117,10 +144,9 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 		return addElementsToGroup;
 	}
 
-	public static Rectangle getGroupAreaBounds(final GraphicalEditPart groupEP,
-			final GraphicalEditPart groupContentEP) {
+	public static Rectangle getGroupAreaBounds(final GraphicalEditPart groupContentEP) {
 		final Rectangle groupContentBounds = groupContentEP.getFigure().getBounds().getCopy();
-		final Rectangle groupBounds = groupEP.getFigure().getBounds();
+		final Rectangle groupBounds = ((GraphicalEditPart) groupContentEP.getParent()).getFigure().getBounds();
 		final int borderSize = groupContentBounds.x - groupBounds.x;
 		if (groupBounds.width < groupContentBounds.width) {
 			groupContentBounds.width = groupBounds.width - borderSize;
