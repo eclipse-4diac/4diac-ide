@@ -123,7 +123,7 @@ public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		baseAlgorithm.setAlgorithm(fbType.getAlgorithm().get(0));
+		// we are not reacting to outside selection change requests
 	}
 
 	@Override

@@ -78,12 +78,12 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	private Command createChangeGroupSizeCommand(final Group group, final ChangeBoundsRequest request) {
-		final Dimension sizeDelta = request.getSizeDelta().getScaled(1.0 / getZoomManager().getZoom());
+		final Dimension sizeDelta = getScaledSizeDelta(request);
 		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
 			// we hit the min size and we are just moving, return a set position command
 			return createMoveCommand(group, request);
 		}
-		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		final Point moveDelta = getScaledMoveDelta(request);
 		final ChangeGroupBoundsCommand changeGroupBoundsCommand = new ChangeGroupBoundsCommand(group, moveDelta.x,
 				moveDelta.y, sizeDelta.width, sizeDelta.height);
 
@@ -98,19 +98,6 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		}
 
 		return changeGroupBoundsCommand;
-	}
-
-	private static boolean isMoveWithResizing(final Dimension sizeDelta, final Point moveDelta) {
-		return (moveDelta.x != 0 && (moveDelta.x + sizeDelta.width) != 0)
-				|| (moveDelta.y != 0 && (moveDelta.y + sizeDelta.height) != 0);
-	}
-
-	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request) {
-		final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
-		if (model instanceof FBNetworkElement) {
-			return new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y);
-		}
-		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
 	}
 
 	@Override
@@ -165,7 +152,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final List<FBNetworkElement> fbEls = collectFromGroupDraggedFBs(editParts);
 			if (!fbEls.isEmpty()) {
 				final Point topLeft = groupContent.getFigure().getBounds().getTopLeft();
-				final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+				final Point moveDelta = getScaledMoveDelta(request);
 				topLeft.translate(moveDelta.x, moveDelta.y);
 				return new RemoveElementsFromGroup(fbEls, topLeft);
 			}
@@ -208,7 +195,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	private Point getDestinationPoint(final ChangeBoundsRequest request) {
-		return request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		return getScaledMoveDelta(request);
 	}
 
 	public static boolean isDragAndDropRequestToRoot(final Request generic, final EditPart targetEditPart) {
@@ -222,6 +209,27 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	private FBNetwork getFBNetwork() {
 		final Object model = getHost().getModel();
 		return (model instanceof FBNetwork) ? (FBNetwork) model : null;
+	}
+
+	private static boolean isMoveWithResizing(final Dimension sizeDelta, final Point moveDelta) {
+		return (moveDelta.x != 0 && (moveDelta.x + sizeDelta.width) != 0)
+				|| (moveDelta.y != 0 && (moveDelta.y + sizeDelta.height) != 0);
+	}
+
+	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request) {
+		final Point moveDelta = getScaledMoveDelta(request);
+		if (model instanceof FBNetworkElement) {
+			return new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y);
+		}
+		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
+	}
+
+	protected Dimension getScaledSizeDelta(final ChangeBoundsRequest request) {
+		return request.getSizeDelta().getScaled(1.0 / getZoomManager().getZoom());
+	}
+
+	protected Point getScaledMoveDelta(final ChangeBoundsRequest request) {
+		return request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
 	}
 
 }
