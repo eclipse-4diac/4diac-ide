@@ -17,6 +17,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.Objects
+import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.data.ByteType
 import org.eclipse.fordiac.ide.model.data.CharType
@@ -496,6 +497,115 @@ final class ValueOperations {
 		Long.compare(first.toNanos, second.toNanos)
 	}
 
+	def static dispatch Value partial(Value value, DataType type, int index) {
+		throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name»''')
+	}
+
+	def static dispatch Value partial(ByteValue value, DataType type, int index) {
+		switch (type) {
+			BoolType: BoolValue.toBoolValue((value.byteValue >>> index).bitwiseAnd(1) != 0)
+			default: throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
+		}
+	}
+
+	def static dispatch Value partial(WordValue value, DataType type, int index) {
+		switch (type) {
+			BoolType: BoolValue.toBoolValue((value.shortValue >>> index).bitwiseAnd(1) != 0)
+			ByteType: ByteValue.toByteValue((value.shortValue >>> (index * 8)) as byte)
+			default: throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
+		}
+	}
+
+	def static dispatch Value partial(DWordValue value, DataType type, int index) {
+		switch (type) {
+			BoolType: BoolValue.toBoolValue((value.intValue >>> index).bitwiseAnd(1) != 0)
+			ByteType: ByteValue.toByteValue((value.intValue >>> (index * 8)) as byte)
+			WordType: WordValue.toWordValue((value.intValue >>> (index * 16)) as short)
+			default: throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
+		}
+	}
+
+	def static dispatch Value partial(LWordValue value, DataType type, int index) {
+		switch (type) {
+			BoolType: BoolValue.toBoolValue((value.longValue >>> index).bitwiseAnd(1) != 0)
+			ByteType: ByteValue.toByteValue((value.longValue >>> (index * 8)) as byte)
+			WordType: WordValue.toWordValue((value.longValue >>> (index * 16)) as short)
+			DwordType: DWordValue.toDWordValue((value.longValue >>> (index * 32)) as int)
+			default: throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
+		}
+	}
+
+	def static dispatch Value partial(Value value, DataType type, int index, Value partial) {
+		throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial value type «partial.type.name»''')
+	}
+
+	def static dispatch Value partial(ByteValue value, AnyBitType type, int index, AnyBitValue partial) {
+		if (type == value.type || !type.isCompatibleWith(value.type))
+			throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
+		ByteValue.toByteValue(value.byteValue.combine(
+			(partial.byteValue << (index * type.bitSize)) as byte,
+			(type.bitMask << (index * type.bitSize)) as byte
+		))
+	}
+
+	def static dispatch Value partial(WordValue value, AnyBitType type, int index, AnyBitValue partial) {
+		if (type == value.type || !type.isCompatibleWith(value.type))
+			throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
+		WordValue.toWordValue(value.shortValue.combine(
+			(partial.shortValue << (index * type.bitSize)) as short,
+			(type.bitMask << (index * type.bitSize)) as short
+		))
+	}
+
+	def static dispatch Value partial(DWordValue value, AnyBitType type, int index, AnyBitValue partial) {
+		if (type == value.type || !type.isCompatibleWith(value.type))
+			throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
+		DWordValue.toDWordValue(value.intValue.combine(
+			partial.intValue << (index * type.bitSize),
+			(type.bitMask << (index * type.bitSize)) as int
+		))
+	}
+
+	def static dispatch Value partial(LWordValue value, AnyBitType type, int index, AnyBitValue partial) {
+		if (type == value.type || !type.isCompatibleWith(value.type))
+			throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
+		LWordValue.toLWordValue(value.longValue.combine(
+			partial.longValue << (index * type.bitSize),
+			type.bitMask << (index * type.bitSize)
+		))
+	}
+
+	def private static byte combine(byte value, byte partial, byte mask) {
+		value.bitwiseXor(value.bitwiseXor(partial).bitwiseAnd(mask)) as byte // (value & ~mask) | (partial & mask)
+	}
+
+	def private static short combine(short value, short partial, short mask) {
+		value.bitwiseXor(value.bitwiseXor(partial).bitwiseAnd(mask)) as short // (value & ~mask) | (partial & mask)
+	}
+
+	def private static int combine(int value, int partial, int mask) {
+		value.bitwiseXor(value.bitwiseXor(partial).bitwiseAnd(mask)) // (value & ~mask) | (partial & mask)
+	}
+
+	def private static long combine(long value, long partial, long mask) {
+		value.bitwiseXor(value.bitwiseXor(partial).bitwiseAnd(mask)) // (value & ~mask) | (partial & mask)
+	}
+
+	def static int bitSize(DataType type) {
+		switch (type) {
+			BoolType: 1
+			ByteType: 8
+			WordType: 16
+			DwordType: 32
+			LwordType: 64
+			default: throw new UnsupportedOperationException('''The bit size is not defined for type «type.name»''')
+		}
+	}
+
+	def static long bitMask(DataType type) {
+		(0xffffffffffffffff#L >>> (64 - type.bitSize))
+	}
+
 	def static Value defaultValue(DataType type) {
 		switch (type) {
 			case null:
@@ -883,6 +993,14 @@ final class ValueOperations {
 
 	def static asBoolean(Value value) {
 		(value as BoolValue).boolValue
+	}
+
+	def static int asInteger(Value value) {
+		switch(value) {
+			AnyMagnitudeValue: value.intValue
+			AnyBitValue: value.intValue
+			default: throw new UnsupportedOperationException('''The type «value.type.name» is not supported''')
+		}
 	}
 
 	def static resultType(DataType first, DataType second) {

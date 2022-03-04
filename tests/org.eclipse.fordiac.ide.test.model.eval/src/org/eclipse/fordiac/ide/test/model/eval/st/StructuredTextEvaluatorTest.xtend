@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
@@ -424,6 +425,31 @@ class StructuredTextEvaluatorTest {
 			END_VAR
 			
 			test := test + INT#4;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testPartial() {
+		21.toWordValue.assertTrace(#[STAlgorithmBody, STMemberAccessExpression], '''
+			VAR_TEMP
+				test: WORD := WORD#17;
+			END_VAR
+			
+			test.%X2 := test.%X0;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testPartialExpression() {
+		21.toWordValue.assertTrace(#[STAlgorithmBody] + STMemberAccessExpression.repeat(3) + #[STNumericLiteral], '''
+			VAR_TEMP
+				test: WORD := WORD#17;
+			END_VAR
+			
+			test.%B1 := test.%B0;
+			test.%X(8 + 2) := test.%X(8 + 0);
+			test.%B0 := test.%B1;
+			test.%B1 := BYTE#0;
 		'''.evaluateAlgorithm)
 	}
 

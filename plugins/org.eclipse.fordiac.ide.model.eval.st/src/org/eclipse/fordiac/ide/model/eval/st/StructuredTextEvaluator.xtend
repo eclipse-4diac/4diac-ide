@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
+import org.eclipse.fordiac.ide.model.eval.variable.PartialVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
@@ -36,6 +37,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
@@ -310,6 +313,20 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
+	def private dispatch Value evaluateExpression(STMemberAccessExpression expr) {
+		expr.member.evaluateExpression(expr.receiver.evaluateExpression)
+	}
+
+	def private dispatch Value evaluateExpression(STExpression expr, Value receiver) {
+		error('''The expression «expr.eClass.name» is not supported''')
+		throw new UnsupportedOperationException('''The expression «expr.eClass.name» is not supported''')
+	}
+
+	def private dispatch Value evaluateExpression(STMultibitPartialExpression expr, Value receiver) {
+		receiver.partial(expr.resultType as DataType,
+			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
+	}
+
 	def private dispatch Variable evaluateVariable(STExpression expr) {
 		error('''The lvalue expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The lvalue expression «expr.eClass.name» is not supported''')
@@ -326,6 +343,20 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				throw new UnsupportedOperationException('''The feature «feature.eClass.name» is not supported''')
 			}
 		}
+	}
+
+	def private dispatch Variable evaluateVariable(STMemberAccessExpression expr) {
+		expr.member.evaluateVariable(expr.receiver.evaluateVariable)
+	}
+
+	def private dispatch Variable evaluateVariable(STExpression expr, Variable receiver) {
+		error('''The expression «expr.eClass.name» is not supported''')
+		throw new UnsupportedOperationException('''The lvalue expression «expr.eClass.name» is not supported''')
+	}
+
+	def private dispatch Variable evaluateVariable(STMultibitPartialExpression expr, Variable receiver) {
+		new PartialVariable(receiver, expr.resultType as DataType,
+			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
 	}
 
 	static class StructuredTextException extends Exception {
