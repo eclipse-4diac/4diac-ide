@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtext.formatting2.IFormattableDocument
+import org.eclipse.fordiac.ide.structuredtextcore.formatting2.KeywordCaseTextReplacer
 
 class STFunctionFormatter extends STCoreFormatter {
 
@@ -31,6 +32,9 @@ class STFunctionFormatter extends STCoreFormatter {
 	}
 
 	def dispatch void format(STFunction stFunction, extension IFormattableDocument document) {
+		stFunction.regionFor.keywords("FUNCTION", "END_FUNCTION").forEach [
+			document.addReplacer(new KeywordCaseTextReplacer(document, it))
+		]
 		stFunction.regionFor.keyword("FUNCTION").prepend[noIndentation].append[oneSpace]
 
 		if (stFunction.returnType !== null) {
@@ -43,9 +47,8 @@ class STFunctionFormatter extends STCoreFormatter {
 			stFunction.regionFor.assignment(STFunctionAccess.nameAssignment_2).append[newLine]
 		}
 
-		(stFunction.varDeclarations + stFunction.varTempDeclarations + stFunction.varInputDeclarations +
-			stFunction.varOutputDeclarations).forEach[format]
-
+		stFunction.varDeclarations.forEach[format]
+		
 		stFunction.code.forEach[format]
 
 		stFunction.regionFor.keyword("END_FUNCTION").prepend[noIndentation]

@@ -345,4 +345,95 @@ class Formatter2Test {
 			'''
 		]
 	}
+
+	@Test
+	def void testKeywordCase() {
+		assertFormatted[
+			toBeFormatted = '''
+				FunCTiON hubert
+				VAR
+								test1 : INT;
+								END_VAR
+				VAR_TEMP
+												test2 : INT;
+												END_VAR
+				vAR_Input 
+				dword1 : DWORD;
+				END_var
+				vAR_oUtput 
+								dword2 : DWORD;
+								END_var
+				eND_FUNCtioN
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					test1 : INT;
+				END_VAR
+				VAR_TEMP
+					test2 : INT;
+				END_VAR
+				VAR_INPUT
+					dword1 : DWORD;
+				END_VAR
+				VAR_OUTPUT
+					dword2 : DWORD;
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testKeywordCase1() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VaR_outpuT
+												test2 : INT;
+												End_VaR
+				VaR_InpuT
+				test1 : INT;
+				End_VaR
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					test2 : INT;
+				END_VAR
+				VAR_INPUT
+					test1 : INT;
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testKeywordCase2() {
+		assertFormatted[
+			toBeFormatted = '''
+				function hubert
+				VaR
+				test1 : INT;
+				End_VaR
+				VaR_temp
+				test2 : INT;
+				End_VaR
+				end_function
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					test1 : INT;
+				END_VAR
+				VAR_TEMP
+					test2 : INT;
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+	}
+
 }

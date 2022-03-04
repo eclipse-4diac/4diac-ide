@@ -179,38 +179,8 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
 	 * @generated
 	 */
 	@Override
-	public EReference getSTFunction_VarTempDeclarations() {
-		return (EReference)stFunctionEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSTFunction_VarInputDeclarations() {
-		return (EReference)stFunctionEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSTFunction_VarOutputDeclarations() {
-		return (EReference)stFunctionEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getSTFunction_Code() {
-		return (EReference)stFunctionEClass.getEStructuralFeatures().get(5);
+		return (EReference)stFunctionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -248,9 +218,6 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
 		stFunctionEClass = createEClass(ST_FUNCTION);
 		createEReference(stFunctionEClass, ST_FUNCTION__RETURN_TYPE);
 		createEReference(stFunctionEClass, ST_FUNCTION__VAR_DECLARATIONS);
-		createEReference(stFunctionEClass, ST_FUNCTION__VAR_TEMP_DECLARATIONS);
-		createEReference(stFunctionEClass, ST_FUNCTION__VAR_INPUT_DECLARATIONS);
-		createEReference(stFunctionEClass, ST_FUNCTION__VAR_OUTPUT_DECLARATIONS);
 		createEReference(stFunctionEClass, ST_FUNCTION__CODE);
 	}
 
@@ -297,9 +264,6 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
 		initEClass(stFunctionEClass, STFunction.class, "STFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTFunction_ReturnType(), theDataPackage.getDataType(), null, "returnType", null, 0, 1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTFunction_VarDeclarations(), theSTCorePackage.getSTVarDeclarationBlock(), null, "varDeclarations", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTFunction_VarTempDeclarations(), theSTCorePackage.getSTVarDeclarationBlock(), null, "varTempDeclarations", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTFunction_VarInputDeclarations(), theSTCorePackage.getSTVarDeclarationBlock(), null, "varInputDeclarations", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTFunction_VarOutputDeclarations(), theSTCorePackage.getSTVarDeclarationBlock(), null, "varOutputDeclarations", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTFunction_Code(), theSTCorePackage.getSTStatement(), null, "code", null, 0, -1, STFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stFunctionEClass, theLibraryElementPackage.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

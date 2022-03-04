@@ -31,7 +31,7 @@ public class STFunctionParser extends AbstractContentAssistParser {
 		}
 		
 		private static void init(ImmutableMap.Builder<AbstractElement, String> builder, STFunctionGrammarAccess grammarAccess) {
-			builder.put(grammarAccess.getSTFunctionAccess().getAlternatives_4(), "rule__STFunction__Alternatives_4");
+			builder.put(grammarAccess.getSTFunctionAccess().getVarDeclarationsAlternatives_4_0(), "rule__STFunction__VarDeclarationsAlternatives_4_0");
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getAlternatives_4_1(), "rule__STVarDeclaration__Alternatives_4_1");
 			builder.put(grammarAccess.getSTInitializerExpressionAccess().getAlternatives(), "rule__STInitializerExpression__Alternatives");
 			builder.put(grammarAccess.getSTStatementAccess().getAlternatives(), "rule__STStatement__Alternatives");
@@ -168,10 +168,7 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTFunctionSourceAccess().getFunctionsAssignment_1(), "rule__STFunctionSource__FunctionsAssignment_1");
 			builder.put(grammarAccess.getSTFunctionAccess().getNameAssignment_2(), "rule__STFunction__NameAssignment_2");
 			builder.put(grammarAccess.getSTFunctionAccess().getReturnTypeAssignment_3_1(), "rule__STFunction__ReturnTypeAssignment_3_1");
-			builder.put(grammarAccess.getSTFunctionAccess().getVarDeclarationsAssignment_4_0(), "rule__STFunction__VarDeclarationsAssignment_4_0");
-			builder.put(grammarAccess.getSTFunctionAccess().getVarTempDeclarationsAssignment_4_1(), "rule__STFunction__VarTempDeclarationsAssignment_4_1");
-			builder.put(grammarAccess.getSTFunctionAccess().getVarInputDeclarationsAssignment_4_2(), "rule__STFunction__VarInputDeclarationsAssignment_4_2");
-			builder.put(grammarAccess.getSTFunctionAccess().getVarOutputDeclarationsAssignment_4_3(), "rule__STFunction__VarOutputDeclarationsAssignment_4_3");
+			builder.put(grammarAccess.getSTFunctionAccess().getVarDeclarationsAssignment_4(), "rule__STFunction__VarDeclarationsAssignment_4");
 			builder.put(grammarAccess.getSTFunctionAccess().getCodeAssignment_5(), "rule__STFunction__CodeAssignment_5");
 			builder.put(grammarAccess.getSTCoreSourceAccess().getStatementsAssignment_1(), "rule__STCoreSource__StatementsAssignment_1");
 			builder.put(grammarAccess.getSTVarDeclarationBlockAccess().getConstantAssignment_2(), "rule__STVarDeclarationBlock__ConstantAssignment_2");

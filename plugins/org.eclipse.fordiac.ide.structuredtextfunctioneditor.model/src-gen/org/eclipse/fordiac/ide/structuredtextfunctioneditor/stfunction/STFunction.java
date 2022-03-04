@@ -37,9 +37,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarDeclarations <em>Var Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarTempDeclarations <em>Var Temp Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarInputDeclarations <em>Var Input Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarOutputDeclarations <em>Var Output Declarations</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getCode <em>Code</em>}</li>
  * </ul>
  *
@@ -81,42 +78,6 @@ public interface STFunction extends ICallable {
 	 * @generated
 	 */
 	EList<STVarDeclarationBlock> getVarDeclarations();
-
-	/**
-	 * Returns the value of the '<em><b>Var Temp Declarations</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Var Temp Declarations</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage#getSTFunction_VarTempDeclarations()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<STVarDeclarationBlock> getVarTempDeclarations();
-
-	/**
-	 * Returns the value of the '<em><b>Var Input Declarations</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Var Input Declarations</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage#getSTFunction_VarInputDeclarations()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<STVarDeclarationBlock> getVarInputDeclarations();
-
-	/**
-	 * Returns the value of the '<em><b>Var Output Declarations</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Var Output Declarations</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage#getSTFunction_VarOutputDeclarations()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<STVarDeclarationBlock> getVarOutputDeclarations();
 
 	/**
 	 * Returns the value of the '<em><b>Code</b></em>' containment reference list.

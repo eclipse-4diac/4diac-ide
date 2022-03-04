@@ -220,9 +220,9 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 	 *         returnType=[DataType|STAnyType]? 
 	 *         (
 	 *             varDeclarations+=STVarDeclarationBlock | 
-	 *             varTempDeclarations+=STVarTempDeclarationBlock | 
-	 *             varInputDeclarations+=STVarInputDeclarationBlock | 
-	 *             varOutputDeclarations+=STVarOutputDeclarationBlock
+	 *             varDeclarations+=STVarTempDeclarationBlock | 
+	 *             varDeclarations+=STVarInputDeclarationBlock | 
+	 *             varDeclarations+=STVarOutputDeclarationBlock
 	 *         )* 
 	 *         code+=STStatement*
 	 *     )

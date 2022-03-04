@@ -41,6 +41,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtext.formatting2.AbstractFormatter2
 import org.eclipse.xtext.formatting2.IFormattableDocument
@@ -60,15 +63,92 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	def dispatch void format(STVarDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
 		if (varDeclarationBlock.constant) {
-			varDeclarationBlock.regionFor.keyword("CONSTANT").prepend[oneSpace].append[newLine]
+			varDeclarationBlock.regionFor.keyword(STVarDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
+				oneSpace
+			].append[newLine]
 		} else {
-			varDeclarationBlock.regionFor.keywords("VAR", "VAR_TEMP", "VAR_INPUT", "VAR_OUTPUT").forEach [
-				append[newLine]
-			]
+			varDeclarationBlock.regionFor.keyword(STVarDeclarationBlockAccess.VARKeyword_1).append[newLine]
 		}
 		interior(
-			varDeclarationBlock.regionFor.keywords("VAR", "VAR_TEMP", "VAR_INPUT", "VAR_OUTPUT").head,
-			varDeclarationBlock.regionFor.keyword("END_VAR"),
+			varDeclarationBlock.regionFor.keyword(STVarDeclarationBlockAccess.VARKeyword_1),
+			varDeclarationBlock.regionFor.keyword(STVarDeclarationBlockAccess.END_VARKeyword_4),
+			[indent]
+		)
+		varDeclarationBlock.regionFor.keywords(STVarDeclarationBlockAccess.VARKeyword_1,
+			STVarDeclarationBlockAccess.END_VARKeyword_4, STVarDeclarationBlockAccess.constantCONSTANTKeyword_2_0).
+			forEach [
+				document.addReplacer(new KeywordCaseTextReplacer(document, it))
+			]
+		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
+			varDeclaration.format
+		}
+		varDeclarationBlock.append[newLine]
+	}
+
+	def dispatch void format(STVarTempDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
+		if (varDeclarationBlock.constant) {
+			varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
+				oneSpace
+			].append[newLine]
+		} else {
+			varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.VAR_TEMPKeyword_1).append[newLine]
+		}
+		interior(
+			varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.VAR_TEMPKeyword_1),
+			varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.END_VARKeyword_4),
+			[indent]
+		)
+		varDeclarationBlock.regionFor.keywords(STVarTempDeclarationBlockAccess.VAR_TEMPKeyword_1,
+			STVarTempDeclarationBlockAccess.END_VARKeyword_4,
+			STVarTempDeclarationBlockAccess.constantCONSTANTKeyword_2_0).forEach [
+			document.addReplacer(new KeywordCaseTextReplacer(document, it))
+		]
+		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
+			varDeclaration.format
+		}
+		varDeclarationBlock.append[newLine]
+	}
+
+	def dispatch void format(STVarInputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
+		if (varDeclarationBlock.constant) {
+			varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
+				oneSpace
+			].append[newLine]
+		} else {
+			varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.VAR_INPUTKeyword_1).append[newLine]
+		}
+		interior(
+			varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.VAR_INPUTKeyword_1),
+			varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.END_VARKeyword_4),
+			[indent]
+		)
+		varDeclarationBlock.regionFor.keywords(STVarInputDeclarationBlockAccess.VAR_INPUTKeyword_1,
+			STVarInputDeclarationBlockAccess.END_VARKeyword_4,
+			STVarInputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).forEach [
+			document.addReplacer(new KeywordCaseTextReplacer(document, it))
+		]
+		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
+			varDeclaration.format
+		}
+		varDeclarationBlock.append[newLine]
+	}
+
+	def dispatch void format(STVarOutputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
+		varDeclarationBlock.regionFor.keywords(STVarOutputDeclarationBlockAccess.VAR_OUTPUTKeyword_1,
+			STVarOutputDeclarationBlockAccess.END_VARKeyword_4,
+			STVarOutputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).forEach [
+			document.addReplacer(new KeywordCaseTextReplacer(document, it))
+		]
+		if (varDeclarationBlock.constant) {
+			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
+				oneSpace
+			].append[newLine]
+		} else {
+			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.VAR_OUTPUTKeyword_1).append[newLine]
+		}
+		interior(
+			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.VAR_OUTPUTKeyword_1),
+			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.END_VARKeyword_4),
 			[indent]
 		)
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {

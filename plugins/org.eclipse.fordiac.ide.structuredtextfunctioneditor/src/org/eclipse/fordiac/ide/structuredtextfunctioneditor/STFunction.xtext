@@ -29,7 +29,7 @@ STFunctionSource returns stcore::STSource:
 STFunction:
 	{STFunction}
 	'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
-		(varDeclarations+=STVarDeclarationBlock | varTempDeclarations+=STVarTempDeclarationBlock |
-		varInputDeclarations+=STVarInputDeclarationBlock | varOutputDeclarations+=STVarOutputDeclarationBlock)*
+		varDeclarations+=(STVarDeclarationBlock | STVarTempDeclarationBlock |
+		STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
 		code += STStatement*
 	'END_FUNCTION';

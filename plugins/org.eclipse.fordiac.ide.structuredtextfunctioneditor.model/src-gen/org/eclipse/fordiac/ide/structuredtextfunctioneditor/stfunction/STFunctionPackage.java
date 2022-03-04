@@ -147,40 +147,13 @@ public interface STFunctionPackage extends EPackage {
 	int ST_FUNCTION__VAR_DECLARATIONS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Var Temp Declarations</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_FUNCTION__VAR_TEMP_DECLARATIONS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Var Input Declarations</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_FUNCTION__VAR_INPUT_DECLARATIONS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Var Output Declarations</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_FUNCTION__VAR_OUTPUT_DECLARATIONS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Code</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION__CODE = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 5;
+	int ST_FUNCTION__CODE = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>ST Function</em>' class.
@@ -189,7 +162,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 6;
+	int ST_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 3;
 
 
 	/**
@@ -244,39 +217,6 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSTFunction_VarDeclarations();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarTempDeclarations <em>Var Temp Declarations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Temp Declarations</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarTempDeclarations()
-	 * @see #getSTFunction()
-	 * @generated
-	 */
-	EReference getSTFunction_VarTempDeclarations();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarInputDeclarations <em>Var Input Declarations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Input Declarations</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarInputDeclarations()
-	 * @see #getSTFunction()
-	 * @generated
-	 */
-	EReference getSTFunction_VarInputDeclarations();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarOutputDeclarations <em>Var Output Declarations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Output Declarations</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getVarOutputDeclarations()
-	 * @see #getSTFunction()
-	 * @generated
-	 */
-	EReference getSTFunction_VarOutputDeclarations();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction#getCode <em>Code</em>}'.
@@ -354,30 +294,6 @@ public interface STFunctionPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_FUNCTION__VAR_DECLARATIONS = eINSTANCE.getSTFunction_VarDeclarations();
-
-		/**
-		 * The meta object literal for the '<em><b>Var Temp Declarations</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ST_FUNCTION__VAR_TEMP_DECLARATIONS = eINSTANCE.getSTFunction_VarTempDeclarations();
-
-		/**
-		 * The meta object literal for the '<em><b>Var Input Declarations</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ST_FUNCTION__VAR_INPUT_DECLARATIONS = eINSTANCE.getSTFunction_VarInputDeclarations();
-
-		/**
-		 * The meta object literal for the '<em><b>Var Output Declarations</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ST_FUNCTION__VAR_OUTPUT_DECLARATIONS = eINSTANCE.getSTFunction_VarOutputDeclarations();
 
 		/**
 		 * The meta object literal for the '<em><b>Code</b></em>' containment reference list feature.
