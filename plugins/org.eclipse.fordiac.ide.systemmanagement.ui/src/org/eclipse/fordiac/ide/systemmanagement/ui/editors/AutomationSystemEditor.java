@@ -390,10 +390,11 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (!getBreadcrumb().openPath(path, system)) {
 			if (!system.getApplication().isEmpty()) {
 				OpenListenerManager.openEditor(system.getApplication().get(0));
+				showReloadErrorMessage(path, "Showing first application.");
 			} else {
-				EditorUtils.CloseEditor.run(this);
+				OpenListenerManager.openEditor(system);
+				showReloadErrorMessage(path, "Showing system.");
 			}
-			showReloadErrorMessage(path);
 		}
 		selectRootModelOfEditor();
 	}

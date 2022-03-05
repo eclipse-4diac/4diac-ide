@@ -246,7 +246,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			createPages();
 			if (!getBreadcrumb().openPath(path, (SubAppType) type)) {
 				getBreadcrumb().setInput(type);
-				showReloadErrorMessage(path);
+				showReloadErrorMessage(path, "Showing subapp root.");
 			}
 		} else {
 			EditorUtils.CloseEditor.run(this);
