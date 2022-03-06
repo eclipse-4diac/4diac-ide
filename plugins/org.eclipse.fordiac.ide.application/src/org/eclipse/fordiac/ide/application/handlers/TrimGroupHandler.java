@@ -19,9 +19,11 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.policies.GroupResizePolicy;
 import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.ISelection;
@@ -59,8 +61,14 @@ public class TrimGroupHandler extends AbstractHandler {
 	private static GroupEditPart getGroupEditPart(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structSel = (IStructuredSelection) selection;
-			if (structSel.size() == 1 && structSel.getFirstElement() instanceof GroupEditPart) {
-				return (GroupEditPart) structSel.getFirstElement();
+			if (structSel.size() == 1) {
+				final Object firstElement = structSel.getFirstElement();
+				if (firstElement instanceof GroupEditPart) {
+					return (GroupEditPart) firstElement;
+				}
+				if (firstElement instanceof GroupContentEditPart) {
+					return (GroupEditPart) ((EditPart) firstElement).getParent();
+				}
 			}
 		}
 		return null;

@@ -41,11 +41,18 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Point;
 
 public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart {
-	private class ContainerMarqueeDragTracker extends FBNetworkRootEditPart.FBNetworkMarqueeDragTracker {
+	private static class ContainerMarqueeDragTracker extends FBNetworkRootEditPart.FBNetworkMarqueeDragTracker {
+		private final AbstractContainerContentEditPart host;
 		private boolean dragStarted = false;
+
+		public ContainerMarqueeDragTracker(final AbstractContainerContentEditPart host) {
+			super();
+			this.host = host;
+		}
 
 		@Override
 		protected boolean handleButtonDown(final int button) {
@@ -64,10 +71,15 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 			if (!dragStarted) {
 				// we had just a click without drag provide the parent to make it feel like a background click selection
 				final ArrayList<EditPart> list = new ArrayList<>(1);
-				list.add(getParent());
+				list.add(host.getParent());
 				return list;
 			}
 			return super.calculateMarqueeSelectedEditParts();
+		}
+
+		@Override
+		protected StructuredSelection getDefaultSelectionForRightMouseDown() {
+			return new StructuredSelection(host.getParent());
 		}
 	}
 
@@ -173,7 +185,7 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 
 	@Override
 	public DragTracker getDragTracker(final Request request) {
-		final FBNetworkMarqueeDragTracker dragTracker = new ContainerMarqueeDragTracker();
+		final FBNetworkMarqueeDragTracker dragTracker = new ContainerMarqueeDragTracker(this);
 		dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 		return dragTracker;
 	}

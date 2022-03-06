@@ -15,10 +15,10 @@ package org.eclipse.fordiac.ide.application.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.commands.change.UngroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -54,11 +54,9 @@ public class UngroupHandler extends AbstractHandler {
 	private static Group getGroup(final ISelection selection) {
 		if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			if (structuredSelection.size() == 1 && structuredSelection.getFirstElement() instanceof EditPart) {
-				final EditPart part = (EditPart) structuredSelection.getFirstElement();
-				if (part.getModel() instanceof Group) {
-					return (Group) part.getModel();
-				}
+			if (structuredSelection.size() == 1 && structuredSelection.getFirstElement() instanceof IAdaptable) {
+				final IAdaptable adapter = (IAdaptable) structuredSelection.getFirstElement();
+				return adapter.getAdapter(Group.class);
 			}
 		}
 		return null;
