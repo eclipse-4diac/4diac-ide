@@ -54,9 +54,6 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionImpl#getVarDeclarations <em>Var Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionImpl#getVarTempDeclarations <em>Var Temp Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionImpl#getVarInputDeclarations <em>Var Input Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionImpl#getVarOutputDeclarations <em>Var Output Declarations</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionImpl#getCode <em>Code</em>}</li>
  * </ul>
  *
@@ -122,36 +119,6 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 	 * @ordered
 	 */
 	protected EList<STVarDeclarationBlock> varDeclarations;
-
-	/**
-	 * The cached value of the '{@link #getVarTempDeclarations() <em>Var Temp Declarations</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVarTempDeclarations()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<STVarDeclarationBlock> varTempDeclarations;
-
-	/**
-	 * The cached value of the '{@link #getVarInputDeclarations() <em>Var Input Declarations</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVarInputDeclarations()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<STVarDeclarationBlock> varInputDeclarations;
-
-	/**
-	 * The cached value of the '{@link #getVarOutputDeclarations() <em>Var Output Declarations</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVarOutputDeclarations()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<STVarDeclarationBlock> varOutputDeclarations;
 
 	/**
 	 * The cached value of the '{@link #getCode() <em>Code</em>}' containment reference list.
@@ -287,45 +254,6 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 	 * @generated
 	 */
 	@Override
-	public EList<STVarDeclarationBlock> getVarTempDeclarations() {
-		if (varTempDeclarations == null) {
-			varTempDeclarations = new EObjectContainmentEList<STVarDeclarationBlock>(STVarDeclarationBlock.class, this, STFunctionPackage.ST_FUNCTION__VAR_TEMP_DECLARATIONS);
-		}
-		return varTempDeclarations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<STVarDeclarationBlock> getVarInputDeclarations() {
-		if (varInputDeclarations == null) {
-			varInputDeclarations = new EObjectContainmentEList<STVarDeclarationBlock>(STVarDeclarationBlock.class, this, STFunctionPackage.ST_FUNCTION__VAR_INPUT_DECLARATIONS);
-		}
-		return varInputDeclarations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<STVarDeclarationBlock> getVarOutputDeclarations() {
-		if (varOutputDeclarations == null) {
-			varOutputDeclarations = new EObjectContainmentEList<STVarDeclarationBlock>(STVarDeclarationBlock.class, this, STFunctionPackage.ST_FUNCTION__VAR_OUTPUT_DECLARATIONS);
-		}
-		return varOutputDeclarations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<STStatement> getCode() {
 		if (code == null) {
 			code = new EObjectContainmentEList<STStatement>(STStatement.class, this, STFunctionPackage.ST_FUNCTION__CODE);
@@ -363,12 +291,6 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 		switch (featureID) {
 			case STFunctionPackage.ST_FUNCTION__VAR_DECLARATIONS:
 				return ((InternalEList<?>)getVarDeclarations()).basicRemove(otherEnd, msgs);
-			case STFunctionPackage.ST_FUNCTION__VAR_TEMP_DECLARATIONS:
-				return ((InternalEList<?>)getVarTempDeclarations()).basicRemove(otherEnd, msgs);
-			case STFunctionPackage.ST_FUNCTION__VAR_INPUT_DECLARATIONS:
-				return ((InternalEList<?>)getVarInputDeclarations()).basicRemove(otherEnd, msgs);
-			case STFunctionPackage.ST_FUNCTION__VAR_OUTPUT_DECLARATIONS:
-				return ((InternalEList<?>)getVarOutputDeclarations()).basicRemove(otherEnd, msgs);
 			case STFunctionPackage.ST_FUNCTION__CODE:
 				return ((InternalEList<?>)getCode()).basicRemove(otherEnd, msgs);
 			default:
@@ -393,12 +315,6 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 				return basicGetReturnType();
 			case STFunctionPackage.ST_FUNCTION__VAR_DECLARATIONS:
 				return getVarDeclarations();
-			case STFunctionPackage.ST_FUNCTION__VAR_TEMP_DECLARATIONS:
-				return getVarTempDeclarations();
-			case STFunctionPackage.ST_FUNCTION__VAR_INPUT_DECLARATIONS:
-				return getVarInputDeclarations();
-			case STFunctionPackage.ST_FUNCTION__VAR_OUTPUT_DECLARATIONS:
-				return getVarOutputDeclarations();
 			case STFunctionPackage.ST_FUNCTION__CODE:
 				return getCode();
 			default:
@@ -427,18 +343,6 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 			case STFunctionPackage.ST_FUNCTION__VAR_DECLARATIONS:
 				getVarDeclarations().clear();
 				getVarDeclarations().addAll((Collection<? extends STVarDeclarationBlock>)newValue);
-				return;
-			case STFunctionPackage.ST_FUNCTION__VAR_TEMP_DECLARATIONS:
-				getVarTempDeclarations().clear();
-				getVarTempDeclarations().addAll((Collection<? extends STVarDeclarationBlock>)newValue);
-				return;
-			case STFunctionPackage.ST_FUNCTION__VAR_INPUT_DECLARATIONS:
-				getVarInputDeclarations().clear();
-				getVarInputDeclarations().addAll((Collection<? extends STVarDeclarationBlock>)newValue);
-				return;
-			case STFunctionPackage.ST_FUNCTION__VAR_OUTPUT_DECLARATIONS:
-				getVarOutputDeclarations().clear();
-				getVarOutputDeclarations().addAll((Collection<? extends STVarDeclarationBlock>)newValue);
 				return;
 			case STFunctionPackage.ST_FUNCTION__CODE:
 				getCode().clear();
@@ -470,15 +374,6 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 			case STFunctionPackage.ST_FUNCTION__VAR_DECLARATIONS:
 				getVarDeclarations().clear();
 				return;
-			case STFunctionPackage.ST_FUNCTION__VAR_TEMP_DECLARATIONS:
-				getVarTempDeclarations().clear();
-				return;
-			case STFunctionPackage.ST_FUNCTION__VAR_INPUT_DECLARATIONS:
-				getVarInputDeclarations().clear();
-				return;
-			case STFunctionPackage.ST_FUNCTION__VAR_OUTPUT_DECLARATIONS:
-				getVarOutputDeclarations().clear();
-				return;
 			case STFunctionPackage.ST_FUNCTION__CODE:
 				getCode().clear();
 				return;
@@ -504,12 +399,6 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 				return returnType != null;
 			case STFunctionPackage.ST_FUNCTION__VAR_DECLARATIONS:
 				return varDeclarations != null && !varDeclarations.isEmpty();
-			case STFunctionPackage.ST_FUNCTION__VAR_TEMP_DECLARATIONS:
-				return varTempDeclarations != null && !varTempDeclarations.isEmpty();
-			case STFunctionPackage.ST_FUNCTION__VAR_INPUT_DECLARATIONS:
-				return varInputDeclarations != null && !varInputDeclarations.isEmpty();
-			case STFunctionPackage.ST_FUNCTION__VAR_OUTPUT_DECLARATIONS:
-				return varOutputDeclarations != null && !varOutputDeclarations.isEmpty();
 			case STFunctionPackage.ST_FUNCTION__CODE:
 				return code != null && !code.isEmpty();
 			default:

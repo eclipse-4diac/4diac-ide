@@ -60,15 +60,12 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		private final Assignment cReturnTypeAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
 		private final CrossReference cReturnTypeDataTypeCrossReference_3_1_0 = (CrossReference)cReturnTypeAssignment_3_1.eContents().get(0);
 		private final RuleCall cReturnTypeDataTypeSTAnyTypeParserRuleCall_3_1_0_1 = (RuleCall)cReturnTypeDataTypeCrossReference_3_1_0.eContents().get(1);
-		private final Alternatives cAlternatives_4 = (Alternatives)cGroup.eContents().get(4);
-		private final Assignment cVarDeclarationsAssignment_4_0 = (Assignment)cAlternatives_4.eContents().get(0);
-		private final RuleCall cVarDeclarationsSTVarDeclarationBlockParserRuleCall_4_0_0 = (RuleCall)cVarDeclarationsAssignment_4_0.eContents().get(0);
-		private final Assignment cVarTempDeclarationsAssignment_4_1 = (Assignment)cAlternatives_4.eContents().get(1);
-		private final RuleCall cVarTempDeclarationsSTVarTempDeclarationBlockParserRuleCall_4_1_0 = (RuleCall)cVarTempDeclarationsAssignment_4_1.eContents().get(0);
-		private final Assignment cVarInputDeclarationsAssignment_4_2 = (Assignment)cAlternatives_4.eContents().get(2);
-		private final RuleCall cVarInputDeclarationsSTVarInputDeclarationBlockParserRuleCall_4_2_0 = (RuleCall)cVarInputDeclarationsAssignment_4_2.eContents().get(0);
-		private final Assignment cVarOutputDeclarationsAssignment_4_3 = (Assignment)cAlternatives_4.eContents().get(3);
-		private final RuleCall cVarOutputDeclarationsSTVarOutputDeclarationBlockParserRuleCall_4_3_0 = (RuleCall)cVarOutputDeclarationsAssignment_4_3.eContents().get(0);
+		private final Assignment cVarDeclarationsAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final Alternatives cVarDeclarationsAlternatives_4_0 = (Alternatives)cVarDeclarationsAssignment_4.eContents().get(0);
+		private final RuleCall cVarDeclarationsSTVarDeclarationBlockParserRuleCall_4_0_0 = (RuleCall)cVarDeclarationsAlternatives_4_0.eContents().get(0);
+		private final RuleCall cVarDeclarationsSTVarTempDeclarationBlockParserRuleCall_4_0_1 = (RuleCall)cVarDeclarationsAlternatives_4_0.eContents().get(1);
+		private final RuleCall cVarDeclarationsSTVarInputDeclarationBlockParserRuleCall_4_0_2 = (RuleCall)cVarDeclarationsAlternatives_4_0.eContents().get(2);
+		private final RuleCall cVarDeclarationsSTVarOutputDeclarationBlockParserRuleCall_4_0_3 = (RuleCall)cVarDeclarationsAlternatives_4_0.eContents().get(3);
 		private final Assignment cCodeAssignment_5 = (Assignment)cGroup.eContents().get(5);
 		private final RuleCall cCodeSTStatementParserRuleCall_5_0 = (RuleCall)cCodeAssignment_5.eContents().get(0);
 		private final Keyword cEND_FUNCTIONKeyword_6 = (Keyword)cGroup.eContents().get(6);
@@ -76,16 +73,16 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		//STFunction:
 		//    {STFunction}
 		//    'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
-		//        (varDeclarations+=STVarDeclarationBlock | varTempDeclarations+=STVarTempDeclarationBlock |
-		//        varInputDeclarations+=STVarInputDeclarationBlock | varOutputDeclarations+=STVarOutputDeclarationBlock)*
+		//        varDeclarations+=(STVarDeclarationBlock | STVarTempDeclarationBlock |
+		//        STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
 		//        code += STStatement*
 		//    'END_FUNCTION';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{STFunction}
 		//'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
-		//    (varDeclarations+=STVarDeclarationBlock | varTempDeclarations+=STVarTempDeclarationBlock |
-		//    varInputDeclarations+=STVarInputDeclarationBlock | varOutputDeclarations+=STVarOutputDeclarationBlock)*
+		//    varDeclarations+=(STVarDeclarationBlock | STVarTempDeclarationBlock |
+		//    STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
 		//    code += STStatement*
 		//'END_FUNCTION'
 		public Group getGroup() { return cGroup; }
@@ -117,33 +114,25 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		//STAnyType
 		public RuleCall getReturnTypeDataTypeSTAnyTypeParserRuleCall_3_1_0_1() { return cReturnTypeDataTypeSTAnyTypeParserRuleCall_3_1_0_1; }
 		
-		//(varDeclarations+=STVarDeclarationBlock | varTempDeclarations+=STVarTempDeclarationBlock |
-		//varInputDeclarations+=STVarInputDeclarationBlock | varOutputDeclarations+=STVarOutputDeclarationBlock)*
-		public Alternatives getAlternatives_4() { return cAlternatives_4; }
+		//varDeclarations+=(STVarDeclarationBlock | STVarTempDeclarationBlock |
+		//STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
+		public Assignment getVarDeclarationsAssignment_4() { return cVarDeclarationsAssignment_4; }
 		
-		//varDeclarations+=STVarDeclarationBlock
-		public Assignment getVarDeclarationsAssignment_4_0() { return cVarDeclarationsAssignment_4_0; }
+		//(STVarDeclarationBlock | STVarTempDeclarationBlock |
+		//        STVarInputDeclarationBlock | STVarOutputDeclarationBlock)
+		public Alternatives getVarDeclarationsAlternatives_4_0() { return cVarDeclarationsAlternatives_4_0; }
 		
 		//STVarDeclarationBlock
 		public RuleCall getVarDeclarationsSTVarDeclarationBlockParserRuleCall_4_0_0() { return cVarDeclarationsSTVarDeclarationBlockParserRuleCall_4_0_0; }
 		
-		//varTempDeclarations+=STVarTempDeclarationBlock
-		public Assignment getVarTempDeclarationsAssignment_4_1() { return cVarTempDeclarationsAssignment_4_1; }
-		
 		//STVarTempDeclarationBlock
-		public RuleCall getVarTempDeclarationsSTVarTempDeclarationBlockParserRuleCall_4_1_0() { return cVarTempDeclarationsSTVarTempDeclarationBlockParserRuleCall_4_1_0; }
-		
-		//varInputDeclarations+=STVarInputDeclarationBlock
-		public Assignment getVarInputDeclarationsAssignment_4_2() { return cVarInputDeclarationsAssignment_4_2; }
+		public RuleCall getVarDeclarationsSTVarTempDeclarationBlockParserRuleCall_4_0_1() { return cVarDeclarationsSTVarTempDeclarationBlockParserRuleCall_4_0_1; }
 		
 		//STVarInputDeclarationBlock
-		public RuleCall getVarInputDeclarationsSTVarInputDeclarationBlockParserRuleCall_4_2_0() { return cVarInputDeclarationsSTVarInputDeclarationBlockParserRuleCall_4_2_0; }
-		
-		//varOutputDeclarations+=STVarOutputDeclarationBlock
-		public Assignment getVarOutputDeclarationsAssignment_4_3() { return cVarOutputDeclarationsAssignment_4_3; }
+		public RuleCall getVarDeclarationsSTVarInputDeclarationBlockParserRuleCall_4_0_2() { return cVarDeclarationsSTVarInputDeclarationBlockParserRuleCall_4_0_2; }
 		
 		//STVarOutputDeclarationBlock
-		public RuleCall getVarOutputDeclarationsSTVarOutputDeclarationBlockParserRuleCall_4_3_0() { return cVarOutputDeclarationsSTVarOutputDeclarationBlockParserRuleCall_4_3_0; }
+		public RuleCall getVarDeclarationsSTVarOutputDeclarationBlockParserRuleCall_4_0_3() { return cVarDeclarationsSTVarOutputDeclarationBlockParserRuleCall_4_0_3; }
 		
 		//code += STStatement*
 		public Assignment getCodeAssignment_5() { return cCodeAssignment_5; }
@@ -212,8 +201,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//STFunction:
 	//    {STFunction}
 	//    'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
-	//        (varDeclarations+=STVarDeclarationBlock | varTempDeclarations+=STVarTempDeclarationBlock |
-	//        varInputDeclarations+=STVarInputDeclarationBlock | varOutputDeclarations+=STVarOutputDeclarationBlock)*
+	//        varDeclarations+=(STVarDeclarationBlock | STVarTempDeclarationBlock |
+	//        STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
 	//        code += STStatement*
 	//    'END_FUNCTION';
 	public STFunctionElements getSTFunctionAccess() {

@@ -16,6 +16,9 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
@@ -55,14 +58,14 @@ class STFunctionSupport extends StructuredTextSupport {
 	'''«func.returnType?.generateTypeName ?: "void"» «func.generateFeatureName»(«func.generateStructuredTextFunctionInputs»«func.generateStructuredTextFunctionOutputs»)'''
 
 	def private CharSequence generateStructuredTextFunctionInputs(STFunction func) //
-	'''«FOR param : func.varInputDeclarations.flatMap[varDeclarations].filter(STVarDeclaration) SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
+	'''«FOR param : func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].filter(STVarDeclaration) SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
 
 	def private CharSequence generateStructuredTextFunctionOutputs(STFunction func) //
-	'''«FOR param : func.varOutputDeclarations.flatMap[varDeclarations].filter(STVarDeclaration) BEFORE "," SEPARATOR ", "»«param.generateTypeName» &«param.generateFeatureName»«ENDFOR»'''
+	'''«FOR param : func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].filter(STVarDeclaration) BEFORE "," SEPARATOR ", "»«param.generateTypeName» &«param.generateFeatureName»«ENDFOR»'''
 
 	def private CharSequence generateStructuredTextFunctionBody(STFunction func) '''
 		«func.varDeclarations.generateLocalVariables(false)»
-		«func.varTempDeclarations.generateLocalVariables(true)»
+		«func.varDeclarations.filter(STVarTempDeclarationBlock).generateLocalVariables(true)»
 		
 		«func.code.generateStatementList»
 	'''
@@ -71,7 +74,7 @@ class STFunctionSupport extends StructuredTextSupport {
 		prepare(options)
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			(function.functions.map[returnType].filterNull + function.functions.flatMap [
-				varInputDeclarations + varOutputDeclarations
+				varDeclarations.filter[it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock]
 			].flatMap[varDeclarations].map[type]).toSet
 		else
 			function.containedDependencies
