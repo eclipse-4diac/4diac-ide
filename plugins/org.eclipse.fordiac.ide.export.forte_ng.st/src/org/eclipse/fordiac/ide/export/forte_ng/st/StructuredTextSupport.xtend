@@ -80,12 +80,14 @@ import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
+	int uniqueVariableIndex = 0;
 
 	override getInfos() { emptyList }
 
 	override getWarnings() { emptyList }
 
-	def protected CharSequence generateLocalVariables(Iterable<? extends STVarDeclarationBlock> blocks, boolean temp) '''
+	def protected CharSequence generateLocalVariables(Iterable<? extends STVarDeclarationBlock> blocks,
+		boolean temp) '''
 		«FOR block : blocks»
 			«block.generateLocalVariableBlock(temp)»
 		«ENDFOR»
@@ -169,7 +171,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''
 
 	def protected dispatch generateStatement(STForStatement stmt) '''
-		for (auto «stmt.variable.generateFeatureName» : ST_FOR_ITER(«stmt.variable.generateFeatureName», «stmt.from.generateExpression», «stmt.to.generateExpression», «IF stmt.by !== null»«stmt.by.generateExpression»«ELSE»1«ENDIF»)) {
+		for (auto «generateUniqueVariableName» : ST_FOR_ITER(«stmt.variable.generateFeatureName», «stmt.from.generateExpression», «stmt.to.generateExpression», «IF stmt.by !== null»«stmt.by.generateExpression»«ELSE»1«ENDIF»)) {
 		  «stmt.statements.generateStatementList»
 		}
 	'''
@@ -358,4 +360,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				emptySet
 		}
 	}
+
+	def protected generateUniqueVariableName() '''st_lv_synthetic_«uniqueVariableIndex++»'''
 }
