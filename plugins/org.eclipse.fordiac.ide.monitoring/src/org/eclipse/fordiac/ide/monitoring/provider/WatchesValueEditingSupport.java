@@ -14,9 +14,13 @@ package org.eclipse.fordiac.ide.monitoring.provider;
 
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNode;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -35,7 +39,9 @@ public class WatchesValueEditingSupport extends EditingSupport {
 		if (element instanceof WatchValueTreeNode) {
 			final MonitoringBaseElement monitoringBaseElement = ((WatchValueTreeNode) element)
 					.getMonitoringBaseElement();
-			MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement, (String) value);
+			if (isValid((String) value, monitoringBaseElement)) {
+				MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement, (String) value);
+			}
 		}
 	}
 
@@ -63,5 +69,19 @@ public class WatchesValueEditingSupport extends EditingSupport {
 			return !(watchNode.getMonitoringBaseElement().getPort().getInterfaceElement() instanceof Event);
 		}
 		return false;
+	}
+
+	public static boolean isValid(final String newValue, final MonitoringBaseElement monElement) {
+		if (!newValue.isBlank()) {
+			final IInterfaceElement ie = monElement.getPort().getInterfaceElement();
+			final String validationMsg = (ie instanceof VarDeclaration)
+					? ValueValidator.validateValue((VarDeclaration) ie, newValue)
+							: null;
+			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
+				ErrorMessenger.popUpErrorMessage(validationMsg);
+				return false;
+			}
+		}
+		return true;
 	}
 }

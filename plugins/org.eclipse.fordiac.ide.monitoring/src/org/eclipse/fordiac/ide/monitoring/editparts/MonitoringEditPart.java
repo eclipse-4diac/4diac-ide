@@ -29,15 +29,13 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueEditingSupport;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNodeUtils;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -60,7 +58,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 
 		private void applyNewValue(final String value) {
 			final MonitoringEditPart editPart = (MonitoringEditPart) getHost();
-			if (isValid(value)) {
+			if (WatchesValueEditingSupport.isValid(value, editPart.getModel())) {
 				MonitoringManager.getInstance().writeValue(editPart.getModel(), value);
 			}
 		}
@@ -72,21 +70,6 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			if (null != editPart) {
 				editPart.getNameLabel().setText(value);
 			}
-		}
-
-		private boolean isValid(final String newValue) {
-			if (!newValue.isBlank()) {
-				final MonitoringEditPart editPart = (MonitoringEditPart) getHost();
-				final IInterfaceElement ie = editPart.getModel().getPort().getInterfaceElement();
-				final String validationMsg = (ie instanceof VarDeclaration)
-						? ValueValidator.validateValue((VarDeclaration) ie, newValue)
-						: null;
-				if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
-					ErrorMessenger.popUpErrorMessage(validationMsg);
-					return false;
-				}
-			}
-			return true;
 		}
 
 	}
