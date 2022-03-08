@@ -16,12 +16,13 @@ import java.util.Map
 import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
-import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.xtend.lib.annotations.Accessors
+
+import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
 	@Accessors final Map<Algorithm, Evaluator> algorithmEvaluators
@@ -29,7 +30,7 @@ abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
 	new(T type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
 		super(type, queue, variables, parent)
 		type.internalVars.forEach [ variable |
-			this.variables.computeIfAbsent(variable.name)[new ElementaryVariable(variable.name, variable.type)]
+			this.variables.computeIfAbsent(variable.name)[newVariable(variable)]
 		]
 		algorithmEvaluators = type.algorithm.toInvertedMap [
 			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>,

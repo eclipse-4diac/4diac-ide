@@ -15,18 +15,21 @@ package org.eclipse.fordiac.ide.model.eval.st
 import java.util.List
 import java.util.Map
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
+import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
-import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.eval.variable.PartialVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
@@ -51,7 +54,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtend.lib.annotations.Accessors
 
+import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
+
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import static extension org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
 
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
@@ -87,17 +93,36 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def private void evaluateLocalVariable(STVarDeclaration variable) {
+		val type = if (variable.array)
+				(variable.type as DataType).newArrayType(variable.ranges.map[evaluateSubrange])
+			else
+				variable.type as DataType
 		variables.put(variable.name,
-			new ElementaryVariable(variable.name, variable.type as DataType,
-				variable.defaultValue?.evaluateInitializerExpression))
+			newVariable(variable.name, type).evaluateInitializerExpression(variable.defaultValue))
 	}
 
-	def private dispatch Value evaluateInitializerExpression(STElementaryInitializerExpression expression) {
-		expression.value.evaluateExpression
+	def private dispatch Variable evaluateInitializerExpression(Variable variable, Void expression) {
+		variable
 	}
 
-	def private dispatch Value evaluateInitializerExpression(STArrayInitializerExpression expression) {
-		throw new UnsupportedOperationException
+	def private dispatch Variable evaluateInitializerExpression(Variable variable,
+		STElementaryInitializerExpression expression) {
+		variable.value = expression.value.evaluateExpression
+		variable
+	}
+
+	def private dispatch Variable evaluateInitializerExpression(Variable variable,
+		STArrayInitializerExpression expression) {
+		val value = variable.value as ArrayValue
+		expression.values.flatMap [ elem |
+			if (elem.initExpressions.empty)
+				#[elem.indexOrInitExpression.evaluateExpression]
+			else {
+				val initValues = elem.initExpressions.map[evaluateExpression]
+				(0 ..< elem.indexOrInitExpression.evaluateExpression.asInteger).flatMap[initValues]
+			}
+		].forEach[initValue, index|value.getRaw(index).value = initValue]
+		variable
 	}
 
 	def private void evaluateStatementList(List<STStatement> statements) {
@@ -317,6 +342,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		expr.member.evaluateExpression(expr.receiver.evaluateExpression)
 	}
 
+	def private dispatch Value evaluateExpression(STArrayAccessExpression expr) {
+		val receiver = expr.receiver.evaluateExpression as ArrayValue
+		val index = expr.index.map[evaluateExpression.asInteger].toList
+		receiver.get(index).value
+	}
+
 	def private dispatch Value evaluateExpression(STExpression expr, Value receiver) {
 		error('''The expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The expression «expr.eClass.name» is not supported''')
@@ -349,6 +380,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		expr.member.evaluateVariable(expr.receiver.evaluateVariable)
 	}
 
+	def private dispatch Variable evaluateVariable(STArrayAccessExpression expr) {
+		val receiver = expr.receiver.evaluateExpression as ArrayValue
+		val index = expr.index.map[evaluateExpression.asInteger].toList
+		receiver.get(index)
+	}
+
 	def private dispatch Variable evaluateVariable(STExpression expr, Variable receiver) {
 		error('''The expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The lvalue expression «expr.eClass.name» is not supported''')
@@ -357,6 +394,15 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def private dispatch Variable evaluateVariable(STMultibitPartialExpression expr, Variable receiver) {
 		new PartialVariable(receiver, expr.resultType as DataType,
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
+	}
+
+	def private Subrange evaluateSubrange(STExpression expr) {
+		switch (expr) {
+			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
+				newSubrange(expr.left.evaluateExpression.asInteger, expr.right.evaluateExpression.asInteger)
+			default:
+				newSubrange(0, expr.evaluateExpression.asInteger)
+		}
 	}
 
 	static class StructuredTextException extends Exception {

@@ -25,8 +25,9 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.debug.ui.MainLaunchConfigurationTab;
-import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable;
+import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -204,7 +205,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 
 	protected static List<Variable> getDefaultArguments(final FBType fbType) {
 		if (fbType != null) {
-			return fbType.getInterfaceList().getInputVars().stream().map(ElementaryVariable::new)
+			return fbType.getInterfaceList().getInputVars().stream().map(VariableOperations::newVariable)
 					.collect(Collectors.toList());
 		}
 		return Collections.emptyList();
@@ -272,6 +273,9 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 
 		@Override
 		public Object[] getChildren(final Object parentElement) {
+			if (parentElement instanceof ArrayVariable) {
+				return ((ArrayVariable) parentElement).getElements().toArray();
+			}
 			return new Object[0];
 		}
 
@@ -282,7 +286,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 
 		@Override
 		public boolean hasChildren(final Object element) {
-			return false;
+			return element instanceof ArrayVariable;
 		}
 	}
 
@@ -345,11 +349,20 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 				try {
 					variable.setValue(value.toString());
 				} catch (final Throwable t) {
-					MessageDialog.openError(getViewer().getControl().getShell(), "Invalid Value",
-							String.format("'%s' is not a valid value for variable %s with type %s", value.toString(),
+					MessageDialog.openError(getViewer().getControl().getShell(), "Invalid Value", //$NON-NLS-1$
+							String.format("'%s' is not a valid value for variable %s with type %s", value.toString(), //$NON-NLS-1$
 									variable.getName(), variable.getType().getName()));
 				}
+				// update element itself
 				getViewer().update(element, null);
+				// update child elements
+				if (variable instanceof ArrayVariable) {
+					((ArrayVariable) variable).getElements().forEach(child -> getViewer().update(child, null));
+				}
+				// update parent element (if exists)
+				FBLaunchConfigurationTab.this.arguments.stream().filter(
+						arg -> arg instanceof ArrayVariable && ((ArrayVariable) arg).getElements().contains(element))
+				.forEach(container -> getViewer().update(container, null));
 				FBLaunchConfigurationTab.this.updateLaunchConfigurationDialog();
 			}
 		}

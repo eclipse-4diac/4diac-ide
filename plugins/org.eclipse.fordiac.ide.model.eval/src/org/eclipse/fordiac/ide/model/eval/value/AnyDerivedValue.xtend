@@ -10,18 +10,10 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.eval.variable
+package org.eclipse.fordiac.ide.model.eval.value
 
-import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType
 
-@FinalFieldsConstructor
-abstract class AbstractVariable implements Variable {
-	@Accessors final String name
-	@Accessors final DataType type
-	
-	override toString() {
-		value.toString
-	}
+interface AnyDerivedValue extends AnyValue {
+	override AnyDerivedType getType()
 }

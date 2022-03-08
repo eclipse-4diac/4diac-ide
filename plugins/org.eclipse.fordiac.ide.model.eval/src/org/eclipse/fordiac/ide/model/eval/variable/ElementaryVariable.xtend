@@ -12,9 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
-import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.eval.value.Value
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
@@ -22,19 +21,15 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 final class ElementaryVariable extends AbstractVariable {
 	@Accessors Value value
 
-	new(VarDeclaration declaration) {
-		this(declaration.name, declaration.type, null as Value)
-	}
-
-	new(String name, DataType type) {
+	new(String name, AnyElementaryType type) {
 		this(name, type, null as Value)
 	}
 
-	new(String name, DataType type, String value) {
+	new(String name, AnyElementaryType type, String value) {
 		this(name, type, value.parseValue(type))
 	}
 
-	new(String name, DataType type, Value value) {
+	new(String name, AnyElementaryType type, Value value) {
 		super(name, type)
 		setValue(value)
 	}

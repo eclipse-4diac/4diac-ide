@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.st.ECTransitionEvaluator
 import org.eclipse.fordiac.ide.model.eval.st.STAlgorithmEvaluator
+import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -450,6 +452,136 @@ class StructuredTextEvaluatorTest {
 			test.%X(8 + 2) := test.%X(8 + 0);
 			test.%B0 := test.%B1;
 			test.%B1 := BYTE#0;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArray() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
+			#[STAlgorithmBody] + STNumericLiteral.repeat(2) + #[STBinaryExpression], '''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 2 ] OF INT;
+				END_VAR
+				
+				test[0] := 17;
+				test[1] := 4;
+				test[2] := test[0] + test[1];
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayMulti() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
+			#[STAlgorithmBody] + STNumericLiteral.repeat(6) + STArrayAccessExpression.repeat(3) + #[STBinaryExpression],
+			'''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 2 ] OF INT;
+					testMulti: ARRAY [ 0 .. 2, 0 .. 1] OF INT;
+					testMultiPart: ARRAY [ 0 .. 1] OF INT;
+				END_VAR
+				
+				testMulti[0, 0] := 17;
+				testMulti[0, 1] := 4;
+				testMulti[1, 0] := 17;
+				testMulti[1, 1] := 4;
+				testMulti[2, 0] := 17;
+				testMulti[2, 1] := 4;
+				test[0] := testMulti[0, 0];
+				test[1] := testMulti[0, 1];
+				testMultiPart := testMulti[0];
+				test[2] := testMultiPart[0] + testMultiPart[1];
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayInitializer() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(#[STAlgorithmBody, STBinaryExpression], '''
+			VAR_TEMP
+				test: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+			END_VAR
+			
+			test[2] := test[0] + test[1];
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayInitializerWithIndex() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue, 17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
+			#[STAlgorithmBody] + STBinaryExpression.repeat(2), '''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 5 ] OF INT := [ 2(17, 4, 0) ];
+				END_VAR
+				
+				test[2] := test[0] + test[1];
+				test[5] := test[3] + test[4];
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayIndexOutOfBounds() {
+		ArrayIndexOutOfBoundsException.assertThrows [
+			'''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 1 ] OF INT := [ 17, 4 ];
+				END_VAR
+				
+				test[3] := test[0] + test[1];
+			'''.evaluateAlgorithm
+		]
+	}
+
+	@Test
+	def void testArrayEquals() {
+		true.toBoolValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(3), '''
+			VAR_TEMP
+				test: BOOL;
+				test1: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+				test2: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+				test3: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+			END_VAR
+			
+			test1[2] := test1[0] + test1[1];
+			test2[2] := test2[0] + test2[1];
+			test := test1 = test2 AND test1 <> test3;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayCopy() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
+			#[STAlgorithmBody, STBinaryExpression, STFeatureExpression], '''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 2 ] OF INT;
+					test2: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+				END_VAR
+				
+				test2[2] := test2[0] + test2[1];
+				test := test2;
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArraySubrange() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
+			#[STAlgorithmBody] + STNumericLiteral.repeat(2) + #[STBinaryExpression], '''
+				VAR_TEMP
+					test: ARRAY [ 1 .. 3 ] OF INT;
+				END_VAR
+				
+				test[1] := 17;
+				test[2] := 4;
+				test[3] := test[1] + test[2];
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArraySubrangeInitializer() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(#[STAlgorithmBody, STBinaryExpression], '''
+			VAR_TEMP
+				test: ARRAY [ 1 .. 3 ] OF INT := [ 17, 4 ];
+			END_VAR
+			
+			test[3] := test[1] + test[2];
 		'''.evaluateAlgorithm)
 	}
 
@@ -952,10 +1084,14 @@ class StructuredTextEvaluatorTest {
 	}
 
 	def static evaluateAlgorithm(CharSequence algorithm) {
+		algorithm.evaluateAlgorithm(emptyList)
+	}
+
+	def static evaluateAlgorithm(CharSequence algorithm, Iterable<Variable> variables) {
 		val alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm
 		alg.name = "TEST_ALGORITHM"
 		alg.text = algorithm.toString
-		val eval = new TracingStructuredTextEvaluator(alg, emptyList, null)
+		val eval = new TracingStructuredTextEvaluator(alg, variables, null)
 		eval.evaluate
 		return eval
 	}
@@ -963,6 +1099,12 @@ class StructuredTextEvaluatorTest {
 	def static void assertTrace(Object expectedResult, Iterable<? extends Class<?>> expectedTrace,
 		TracingStructuredTextEvaluator actual) {
 		expectedResult.assertEquals(actual.variables.get("test").value)
+		expectedTrace.assertIterableEquals(actual.trace.filterNull.map[class.interfaces.head].filterNull)
+	}
+
+	def static void assertIterableTrace(Iterable<? extends Object> expectedResult,
+		Iterable<? extends Class<?>> expectedTrace, TracingStructuredTextEvaluator actual) {
+		expectedResult.assertIterableEquals(actual.variables.get("test").value as ArrayValue)
 		expectedTrace.assertIterableEquals(actual.trace.filterNull.map[class.interfaces.head].filterNull)
 	}
 
@@ -978,7 +1120,7 @@ class StructuredTextEvaluatorTest {
 		@Accessors
 		final Queue<Object> trace = new ArrayBlockingQueue(1000)
 
-		new(STAlgorithm alg, Collection<Variable> variables, Evaluator parent) {
+		new(STAlgorithm alg, Iterable<Variable> variables, Evaluator parent) {
 			super(alg, variables, parent)
 		}
 

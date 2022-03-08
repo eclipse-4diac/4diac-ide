@@ -16,9 +16,11 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
-public class EvaluatorDebugVariable extends EvaluatorDebugElement implements IVariable, Comparable<EvaluatorDebugVariable> {
+public class EvaluatorDebugVariable extends EvaluatorDebugElement
+implements IVariable, Comparable<EvaluatorDebugVariable> {
 	private final Variable variable;
 	private EvaluatorDebugValue cachedValue;
 
@@ -48,7 +50,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement implements IVa
 
 	@Override
 	public boolean supportsValueModification() {
-		return true;
+		return variable instanceof ElementaryVariable;
 	}
 
 	@Override
@@ -59,8 +61,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement implements IVa
 	@Override
 	public boolean verifyValue(final IValue value) throws DebugException {
 		if (value instanceof EvaluatorDebugValue) {
-			return ((EvaluatorDebugValue) value).getInternalValue().getType()
-					.isCompatibleWith(this.variable.getType());
+			return ((EvaluatorDebugValue) value).getInternalValue().getType().isCompatibleWith(this.variable.getType());
 		}
 		return this.verifyValue(value.getValueString());
 	}

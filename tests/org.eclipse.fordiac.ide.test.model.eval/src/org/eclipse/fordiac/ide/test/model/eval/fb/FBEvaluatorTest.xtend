@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.test.model.eval.fb
 
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
-import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
@@ -61,7 +61,7 @@ class FBEvaluatorTest {
 		return alg
 	}
 
-	def static newVariable(Value value, String name) {
+	def static newVariable(AnyElementaryValue value, String name) {
 		new ElementaryVariable(name, value.type, value)
 	}
 }

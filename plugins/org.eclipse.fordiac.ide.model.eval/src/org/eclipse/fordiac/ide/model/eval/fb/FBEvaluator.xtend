@@ -16,11 +16,12 @@ import java.util.Map
 import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
-import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.xtend.lib.annotations.Accessors
+
+import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	@Accessors final T type
@@ -33,7 +34,7 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 		this.queue = queue
 		this.variables = variables?.toMap[name] ?: newHashMap;
 		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach [ variable |
-			this.variables.computeIfAbsent(variable.name)[new ElementaryVariable(variable.name, variable.type)]
+			this.variables.computeIfAbsent(variable.name)[newVariable(variable)]
 		]
 	}
 
