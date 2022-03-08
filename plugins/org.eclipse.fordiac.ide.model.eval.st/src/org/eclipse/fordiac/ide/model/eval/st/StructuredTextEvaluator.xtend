@@ -20,8 +20,10 @@ import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
+import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.PartialVariable
+import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
@@ -358,6 +360,15 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
 	}
 
+	def private dispatch Value evaluateExpression(STFeatureExpression expr, Value receiver) {
+		error('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+		throw new UnsupportedOperationException('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+	}
+
+	def private dispatch Value evaluateExpression(STFeatureExpression expr, StructValue receiver) {
+		receiver.get(expr.feature.name).value
+	}
+
 	def private dispatch Variable evaluateVariable(STExpression expr) {
 		error('''The lvalue expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The lvalue expression «expr.eClass.name» is not supported''')
@@ -389,6 +400,15 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def private dispatch Variable evaluateVariable(STExpression expr, Variable receiver) {
 		error('''The expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The lvalue expression «expr.eClass.name» is not supported''')
+	}
+
+	def private dispatch Variable evaluateVariable(STFeatureExpression expr, Variable receiver) {
+		error('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+		throw new UnsupportedOperationException('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+	}
+
+	def private dispatch Variable evaluateVariable(STFeatureExpression expr, StructVariable receiver) {
+		receiver.value.get(expr.feature.name)
 	}
 
 	def private dispatch Variable evaluateVariable(STMultibitPartialExpression expr, Variable receiver) {

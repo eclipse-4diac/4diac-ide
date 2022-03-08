@@ -13,13 +13,18 @@
 package org.eclipse.fordiac.ide.test.model.eval.fb
 
 import java.util.concurrent.ArrayBlockingQueue
+import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.fb.SimpleFBEvaluator
+import org.eclipse.fordiac.ide.model.eval.value.StructValue
+import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.junit.jupiter.api.Test
+
+import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.value.IntValue.*
 import static extension org.junit.jupiter.api.Assertions.*
@@ -41,6 +46,26 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 			'''DO1 := DI1 + DI2;'''.newSTAlgorithm("REQ2")
 		].evaluateSimpleFB("REQ2", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
 			"DO1".newVarDeclaration(ElementaryTypes.INT, false)).variables.get("DO1").value)
+	}
+
+	@Test
+	def void testSimpleWithStruct() {
+		val structType = DataFactory.eINSTANCE.createStructuredType => [
+			name = "TestStruct"
+			memberVariables += newVarDeclaration("a", ElementaryTypes.INT, false)
+			memberVariables += newVarDeclaration("b", ElementaryTypes.INT, false)
+		]
+		val inputVarDecl = newVarDeclaration("DI1", structType, true)
+		val inputVar = newVariable(inputVarDecl) as StructVariable
+		inputVar.members.get("a").value = 17.toIntValue
+		inputVar.members.get("b").value = 4.toIntValue
+		val outputVarDecl = newVarDeclaration("DO1", structType, false)
+		#[21.toIntValue, 42.toIntValue].assertIterableEquals(#[
+			'''
+				DO1.a := DI1.a + DI1.b;
+				DO1.b := 42;
+			'''.newSTAlgorithm("REQ")
+		].evaluateSimpleFB("REQ", #[inputVar], outputVarDecl).variables.get("DO1").value as StructValue)
 	}
 
 	def static evaluateSimpleFB(Iterable<STAlgorithm> algorithm, String inputEventName, Iterable<Variable> variables,

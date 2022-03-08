@@ -26,6 +26,7 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.debug.ui.MainLaunchConfigurationTab;
 import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
+import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -275,6 +276,8 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		public Object[] getChildren(final Object parentElement) {
 			if (parentElement instanceof ArrayVariable) {
 				return ((ArrayVariable) parentElement).getElements().toArray();
+			} else if (parentElement instanceof StructVariable) {
+				return ((StructVariable) parentElement).getMembers().values().toArray();
 			}
 			return new Object[0];
 		}
@@ -286,7 +289,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 
 		@Override
 		public boolean hasChildren(final Object element) {
-			return element instanceof ArrayVariable;
+			return element instanceof ArrayVariable || element instanceof StructVariable;
 		}
 	}
 
@@ -358,10 +361,14 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 				// update child elements
 				if (variable instanceof ArrayVariable) {
 					((ArrayVariable) variable).getElements().forEach(child -> getViewer().update(child, null));
+				} else if (variable instanceof StructVariable) {
+					((StructVariable) variable).getMembers().values().forEach(child -> getViewer().update(child, null));
 				}
 				// update parent element (if exists)
 				FBLaunchConfigurationTab.this.arguments.stream().filter(
-						arg -> arg instanceof ArrayVariable && ((ArrayVariable) arg).getElements().contains(element))
+						arg -> (arg instanceof ArrayVariable && ((ArrayVariable) arg).getElements().contains(element))
+						|| (arg instanceof StructVariable
+								&& ((StructVariable) arg).getMembers().values().contains(element)))
 				.forEach(container -> getViewer().update(container, null));
 				FBLaunchConfigurationTab.this.updateLaunchConfigurationDialog();
 			}

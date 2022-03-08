@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.variable
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
@@ -27,6 +28,7 @@ final class VariableOperations {
 		switch (type) {
 			AnyElementaryType: new ElementaryVariable(name, type)
 			ArrayType: new ArrayVariable(name, type)
+			StructuredType: new StructVariable(name, type)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
 		}
 	}

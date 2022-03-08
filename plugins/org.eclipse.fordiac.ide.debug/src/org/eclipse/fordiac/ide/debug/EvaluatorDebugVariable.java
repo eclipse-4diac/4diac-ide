@@ -16,7 +16,6 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 public class EvaluatorDebugVariable extends EvaluatorDebugElement
@@ -50,7 +49,7 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 
 	@Override
 	public boolean supportsValueModification() {
-		return variable instanceof ElementaryVariable;
+		return true;
 	}
 
 	@Override
