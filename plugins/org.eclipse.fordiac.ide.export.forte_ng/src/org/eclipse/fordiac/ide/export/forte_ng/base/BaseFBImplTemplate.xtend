@@ -107,18 +107,21 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate 
 
 	override protected generateImplIncludes() '''
 		«super.generateImplIncludes»
-		«algorithmLanguageSupport.values.filterNull.flatMap[getDependencies(emptyMap)].generateDependencyIncludes»
+		«(algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap[getDependencies(emptyMap)].generateDependencyIncludes»
 	'''
 
 	override getErrors() {
-		(super.errors + algorithmLanguageSupport.values.filterNull.flatMap[errors].toSet).toList
+		(super.errors +
+			(algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap[errors].toSet).toList
 	}
 
 	override getWarnings() {
-		(super.warnings + algorithmLanguageSupport.values.filterNull.flatMap[warnings].toSet).toList
+		(super.warnings +
+			(algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap[warnings].toSet).toList
 	}
 
 	override getInfos() {
-		(super.infos + algorithmLanguageSupport.values.filterNull.flatMap[infos].toSet).toList
+		(super.infos +
+			(algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap[infos].toSet).toList
 	}
 }

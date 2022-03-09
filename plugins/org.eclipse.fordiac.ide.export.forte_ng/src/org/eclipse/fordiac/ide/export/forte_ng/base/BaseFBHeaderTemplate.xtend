@@ -106,7 +106,9 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		«IF !type.internalFbs.isEmpty»
 			#include "typelib.h"
 		«ENDIF»
-		«(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).map[getType].generateTypeIncludes»
+		«((type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).map[getType]
+			+ methodLanguageSupport.values.filterNull.flatMap[getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})]
+		).toSet.generateDependencyIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
 		
 		«type.compilerInfo?.header»
@@ -129,4 +131,16 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 			«methodLanguageSupport.get(method)?.generate(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})»
 		«ENDFOR»
 	'''
+
+	override getErrors() {
+		(super.errors + methodLanguageSupport.values.filterNull.flatMap[errors].toSet).toList
+	}
+
+	override getWarnings() {
+		(super.warnings + methodLanguageSupport.values.filterNull.flatMap[warnings].toSet).toList
+	}
+
+	override getInfos() {
+		(super.infos + methodLanguageSupport.values.filterNull.flatMap[infos].toSet).toList
+	}
 }

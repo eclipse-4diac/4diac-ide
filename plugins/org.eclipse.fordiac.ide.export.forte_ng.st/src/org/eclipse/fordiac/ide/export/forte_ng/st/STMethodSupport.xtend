@@ -90,6 +90,14 @@ class STMethodSupport extends StructuredTextSupport {
 
 	override getDependencies(Map<?, ?> options) {
 		prepare(options)
-		parseResult?.containedDependencies ?: emptySet
+		if (parseResult !== null) {
+			if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
+				(#[parseResult.returnType].filterNull + parseResult.body.varDeclarations.filter [
+					it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock
+				].flatMap[varDeclarations].map[type]).toSet
+			else
+				parseResult.containedDependencies
+		} else
+			emptySet
 	}
 }
