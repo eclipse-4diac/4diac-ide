@@ -6377,13 +6377,22 @@ public interface LibraryElementPackage extends EPackage {
 	int TEXT_METHOD__OUTPUT_PARAMETERS = METHOD_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Return Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT_METHOD__RETURN_TYPE = METHOD_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD__TEXT = METHOD_FEATURE_COUNT + 2;
+	int TEXT_METHOD__TEXT = METHOD_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Text Method</em>' class.
@@ -6392,7 +6401,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD_FEATURE_COUNT = METHOD_FEATURE_COUNT + 3;
+	int TEXT_METHOD_FEATURE_COUNT = METHOD_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherMethodImpl <em>Other Method</em>}' class.
@@ -6439,6 +6448,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int OTHER_METHOD__OUTPUT_PARAMETERS = TEXT_METHOD__OUTPUT_PARAMETERS;
+
+	/**
+	 * The feature id for the '<em><b>Return Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_METHOD__RETURN_TYPE = TEXT_METHOD__RETURN_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -6512,6 +6530,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ST_METHOD__OUTPUT_PARAMETERS = TEXT_METHOD__OUTPUT_PARAMETERS;
+
+	/**
+	 * The feature id for the '<em><b>Return Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_METHOD__RETURN_TYPE = TEXT_METHOD__RETURN_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -9238,6 +9265,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getTextMethod_OutputParameters();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getReturnType <em>Return Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Return Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getReturnType()
+	 * @see #getTextMethod()
+	 * @generated
+	 */
+	EReference getTextMethod_ReturnType();
+
+	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getText <em>Text</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11514,6 +11552,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TEXT_METHOD__OUTPUT_PARAMETERS = eINSTANCE.getTextMethod_OutputParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Return Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TEXT_METHOD__RETURN_TYPE = eINSTANCE.getTextMethod_ReturnType();
 
 		/**
 		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.

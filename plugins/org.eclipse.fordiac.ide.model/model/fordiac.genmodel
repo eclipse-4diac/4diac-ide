@@ -203,6 +203,7 @@
     <genClasses image="false" ecoreClass="lib.ecore#//Algorithm">
       <genOperations ecoreOperation="lib.ecore#//Algorithm/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Algorithm/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Algorithm/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Application">
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
@@ -356,6 +357,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/service"/>
       <genOperations ecoreOperation="lib.ecore#//FBType/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBType/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBType/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Identification">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/applicationDomain"/>
@@ -724,11 +726,13 @@
     <genClasses image="false" ecoreClass="lib.ecore#//ICallable">
       <genOperations ecoreOperation="lib.ecore#//ICallable/getInputParameters"/>
       <genOperations ecoreOperation="lib.ecore#//ICallable/getOutputParameters"/>
+      <genOperations ecoreOperation="lib.ecore#//ICallable/getReturnType"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Method"/>
     <genClasses image="false" ecoreClass="lib.ecore#//TextMethod">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/inputParameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/outputParameters"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/returnType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextMethod/text"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//OtherMethod">

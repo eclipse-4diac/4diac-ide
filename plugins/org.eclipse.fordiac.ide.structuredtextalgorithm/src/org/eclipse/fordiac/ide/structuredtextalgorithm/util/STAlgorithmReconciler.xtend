@@ -57,6 +57,7 @@ class STAlgorithmReconciler {
 			text = source.text
 			ECollections.setEList(inputParameters, source.inputParameters.map[copy].toList)
 			ECollections.setEList(outputParameters, source.outputParameters.map[copy].toList)
+			returnType = source.returnType
 		]
 		true
 	}

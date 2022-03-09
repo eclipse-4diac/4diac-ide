@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl
 
 import org.eclipse.emf.common.util.EList
+import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
@@ -28,6 +29,8 @@ final class STAlgorithmAnnotations {
 	def package static EList<INamedElement> getInputParameters(STAlgorithm algorithm) { emptyEList }
 
 	def package static EList<INamedElement> getOutputParameters(STAlgorithm algorithm) { emptyEList }
+
+	def package static DataType getReturnType(STAlgorithm algorithm) { null }
 
 	def package static EList<INamedElement> getInputParameters(STMethod method) {
 		method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].toEList.

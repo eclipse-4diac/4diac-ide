@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
@@ -45,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl#getOutputParameters <em>Output Parameters</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl#getText <em>Text</em>}</li>
  * </ul>
  *
@@ -70,6 +72,16 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 	 * @ordered
 	 */
 	protected EList<INamedElement> outputParameters;
+
+	/**
+	 * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReturnType()
+	 * @generated
+	 * @ordered
+	 */
+	protected DataType returnType;
 
 	/**
 	 * The default value of the '{@link #getText() <em>Text</em>}' attribute.
@@ -142,6 +154,46 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 	 * @generated
 	 */
 	@Override
+	public DataType getReturnType() {
+		if (returnType != null && returnType.eIsProxy()) {
+			InternalEObject oldReturnType = (InternalEObject)returnType;
+			returnType = (DataType)eResolveProxy(oldReturnType);
+			if (returnType != oldReturnType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.TEXT_METHOD__RETURN_TYPE, oldReturnType, returnType));
+			}
+		}
+		return returnType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DataType basicGetReturnType() {
+		return returnType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setReturnType(DataType newReturnType) {
+		DataType oldReturnType = returnType;
+		returnType = newReturnType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.TEXT_METHOD__RETURN_TYPE, oldReturnType, returnType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getText() {
 		return text;
 	}
@@ -188,6 +240,9 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 				return getInputParameters();
 			case LibraryElementPackage.TEXT_METHOD__OUTPUT_PARAMETERS:
 				return getOutputParameters();
+			case LibraryElementPackage.TEXT_METHOD__RETURN_TYPE:
+				if (resolve) return getReturnType();
+				return basicGetReturnType();
 			case LibraryElementPackage.TEXT_METHOD__TEXT:
 				return getText();
 			default:
@@ -212,6 +267,9 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 				getOutputParameters().clear();
 				getOutputParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
+			case LibraryElementPackage.TEXT_METHOD__RETURN_TYPE:
+				setReturnType((DataType)newValue);
+				return;
 			case LibraryElementPackage.TEXT_METHOD__TEXT:
 				setText((String)newValue);
 				return;
@@ -235,6 +293,9 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 			case LibraryElementPackage.TEXT_METHOD__OUTPUT_PARAMETERS:
 				getOutputParameters().clear();
 				return;
+			case LibraryElementPackage.TEXT_METHOD__RETURN_TYPE:
+				setReturnType((DataType)null);
+				return;
 			case LibraryElementPackage.TEXT_METHOD__TEXT:
 				setText(TEXT_EDEFAULT);
 				return;
@@ -256,6 +317,8 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 				return inputParameters != null && !inputParameters.isEmpty();
 			case LibraryElementPackage.TEXT_METHOD__OUTPUT_PARAMETERS:
 				return outputParameters != null && !outputParameters.isEmpty();
+			case LibraryElementPackage.TEXT_METHOD__RETURN_TYPE:
+				return returnType != null;
 			case LibraryElementPackage.TEXT_METHOD__TEXT:
 				return TEXT_EDEFAULT == null ? text != null : !TEXT_EDEFAULT.equals(text);
 			default:

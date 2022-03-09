@@ -13,6 +13,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getReturnType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getReturnType(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//STAlgorithmBody"
         containment="true"/>
   </eClassifiers>

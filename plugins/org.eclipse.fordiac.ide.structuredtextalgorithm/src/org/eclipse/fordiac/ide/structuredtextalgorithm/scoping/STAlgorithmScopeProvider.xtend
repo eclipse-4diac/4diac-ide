@@ -12,6 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.scoping
 
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EReference
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage
+import org.eclipse.xtext.scoping.impl.SimpleScope
+import org.eclipse.xtext.scoping.Scopes
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 
 /**
  * This class contains custom scoping description.
@@ -20,5 +26,12 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.scoping
  * on how and when to use it.
  */
 class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
-
+	override getScope(EObject context, EReference reference) {
+		if (reference == STAlgorithmPackage.Literals.ST_METHOD__RETURN_TYPE) {
+			val globalScope = super.getScope(context, reference);
+			return new SimpleScope(globalScope, Scopes.scopedElementsFor(DataTypeLibrary.getNonUserDefinedDataTypes()),
+				true);
+		}
+		return super.getScope(context, reference);
+	}
 }

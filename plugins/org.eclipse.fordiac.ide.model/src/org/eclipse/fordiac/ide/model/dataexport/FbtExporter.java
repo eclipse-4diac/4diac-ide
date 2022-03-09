@@ -286,6 +286,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		addStartElement(LibraryElementTags.METHOD_ELEMENT);
 
 		addNameAttribute(method.getName());
+		addTypeAttribute(method.getReturnType());
 		addCommentAttribute(method);
 
 		if (method instanceof STMethod) {

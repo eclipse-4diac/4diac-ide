@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
@@ -74,5 +75,13 @@ public interface STAlgorithm extends STAlgorithmSourceElement, ICallable {
 	 * @generated
 	 */
 	EList<INamedElement> getOutputParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	DataType getReturnType();
 
 } // STAlgorithm

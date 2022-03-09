@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -594,6 +595,12 @@ public class FBTImporter extends TypeImporter {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 
+		DataType type = null;
+		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		if (null != typeName) {
+			type = getDataTypeLibrary().getType(typeName);
+		}
+
 		Method retVal = null;
 		while (getReader().hasNext()) {
 			final int event = getReader().next();
@@ -640,6 +647,9 @@ public class FBTImporter extends TypeImporter {
 		if (null != retVal) {
 			retVal.setName(name);
 			retVal.setComment(comment);
+		}
+		if (retVal instanceof TextMethod) {
+			((TextMethod) retVal).setReturnType(type);
 		}
 		return retVal;
 	}

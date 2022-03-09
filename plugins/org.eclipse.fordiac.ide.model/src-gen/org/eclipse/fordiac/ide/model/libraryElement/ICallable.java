@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,5 +45,13 @@ public interface ICallable extends INamedElement {
 	 * @generated
 	 */
 	EList<INamedElement> getOutputParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	DataType getReturnType();
 
 } // ICallable

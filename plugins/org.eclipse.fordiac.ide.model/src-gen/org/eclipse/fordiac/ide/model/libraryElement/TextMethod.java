@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,6 +30,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getOutputParameters <em>Output Parameters</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getText <em>Text</em>}</li>
  * </ul>
  *
@@ -60,6 +62,28 @@ public interface TextMethod extends Method {
 	 * @generated
 	 */
 	EList<INamedElement> getOutputParameters();
+
+	/**
+	 * Returns the value of the '<em><b>Return Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Return Type</em>' reference.
+	 * @see #setReturnType(DataType)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextMethod_ReturnType()
+	 * @model
+	 * @generated
+	 */
+	DataType getReturnType();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getReturnType <em>Return Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Return Type</em>' reference.
+	 * @see #getReturnType()
+	 * @generated
+	 */
+	void setReturnType(DataType value);
 
 	/**
 	 * Returns the value of the '<em><b>Text</b></em>' attribute.

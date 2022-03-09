@@ -370,8 +370,8 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 
 		// Obtain other dependent packages
 		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
-		STCorePackage theSTCorePackage = (STCorePackage)EPackage.Registry.INSTANCE.getEPackage(STCorePackage.eNS_URI);
 		DataPackage theDataPackage = (DataPackage)EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
+		STCorePackage theSTCorePackage = (STCorePackage)EPackage.Registry.INSTANCE.getEPackage(STCorePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -392,6 +392,8 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 		addEOperation(stAlgorithmEClass, theLibraryElementPackage.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stAlgorithmEClass, theLibraryElementPackage.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stAlgorithmEClass, theDataPackage.getDataType(), "getReturnType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stAlgorithmBodyEClass, STAlgorithmBody.class, "STAlgorithmBody", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTAlgorithmBody_VarTempDeclarations(), theSTCorePackage.getSTVarTempDeclarationBlock(), null, "varTempDeclarations", null, 0, -1, STAlgorithmBody.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

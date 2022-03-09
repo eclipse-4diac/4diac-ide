@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -31,11 +32,19 @@ final class CallableAnnotations {
 		return ECollections.emptyEList(); // algorithms may not have parameters
 	}
 
+	static DataType getReturnType(final Algorithm algorithm) {
+		return null; // algorithms may not have a return type
+	}
+
 	static EList<INamedElement> getInputParameters(final FBType type) {
 		return ECollections.unmodifiableEList(type.getInterfaceList().getInputVars());
 	}
 
 	static EList<INamedElement> getOutputParameters(final FBType type) {
 		return ECollections.unmodifiableEList(type.getInterfaceList().getOutputVars());
+	}
+
+	static DataType getReturnType(final FBType type) {
+		return null; // FB types may not have a return type
 	}
 }

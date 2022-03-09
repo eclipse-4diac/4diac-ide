@@ -17,6 +17,8 @@
           body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInputParameters(this);"/>
       <genOperations ecoreOperation="STAlgorithm.ecore#//STAlgorithm/getOutputParameters"
           body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="STAlgorithm.ecore#//STAlgorithm/getReturnType"
+          body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getReturnType(this);"/>
     </genClasses>
     <genClasses ecoreClass="STAlgorithm.ecore#//STAlgorithmBody">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STAlgorithmBody/varTempDeclarations"/>
