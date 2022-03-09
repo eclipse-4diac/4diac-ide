@@ -15,9 +15,12 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
@@ -25,7 +28,8 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 @FinalFieldsConstructor
 class STFunctionSupport extends StructuredTextSupport {
-	final STFunctionSource function
+	final STFunctionSource source
+	STFunction currentFunction
 
 	override prepare(Map<?, ?> options) {
 		return true
@@ -34,28 +38,44 @@ class STFunctionSupport extends StructuredTextSupport {
 	override generate(Map<?, ?> options) throws ExportException {
 		prepare(options)
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-			function.generateStructuredTextFunctionHeader
+			source.generateStructuredTextFunctionSourceHeader
 		else
-			function.generateStructuredTextFunctionImpl
+			source.generateStructuredTextFunctionSourceImpl
 	}
 
-	def private CharSequence generateStructuredTextFunctionHeader(STFunctionSource func) '''
-		«FOR definition : func.functions.filter(STFunction)»
-			«definition.generateStructuredTextFunctionDeclaration»;
+	def private CharSequence generateStructuredTextFunctionSourceHeader(STFunctionSource source) {
+		val result = new StringBuilder
+		for(function : source.functions) {
+			currentFunction = function
+			result.append(function.generateStructuredTextFunctionHeader)
+			currentFunction = null
+		}
+		result
+	}
+
+	def private CharSequence generateStructuredTextFunctionSourceImpl(STFunctionSource source) {
+		val result = new StringBuilder
+		for(function : source.functions) {
+			currentFunction = function
+			result.append(function.generateStructuredTextFunctionImpl)
+			currentFunction = null
+		}
+		result
+	}
+
+	def private CharSequence generateStructuredTextFunctionHeader(STFunction func) '''
+		«func.generateStructuredTextFunctionDeclaration»;
 			
-		«ENDFOR»
 	'''
 
-	def private CharSequence generateStructuredTextFunctionImpl(STFunctionSource func) '''
-		«FOR definition : func.functions.filter(STFunction)»
-			«definition.generateStructuredTextFunctionDeclaration» {
-			  «definition.generateStructuredTextFunctionBody»
-			}
-		«ENDFOR»
+	def private CharSequence generateStructuredTextFunctionImpl(STFunction func) '''
+		«func.generateStructuredTextFunctionDeclaration» {
+		  «func.generateStructuredTextFunctionBody»
+		}
 	'''
 
 	def private CharSequence generateStructuredTextFunctionDeclaration(STFunction func) //
-	'''«func.returnType?.generateTypeName ?: "void"» «func.generateFeatureName»(«func.generateStructuredTextFunctionInputs»«func.generateStructuredTextFunctionOutputs»)'''
+	'''«func.returnType?.generateTypeName ?: "void"» func_«func.name»(«func.generateStructuredTextFunctionInputs»«func.generateStructuredTextFunctionOutputs»)'''
 
 	def private CharSequence generateStructuredTextFunctionInputs(STFunction func) //
 	'''«FOR param : func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].filter(STVarDeclaration) SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
@@ -64,19 +84,30 @@ class STFunctionSupport extends StructuredTextSupport {
 	'''«FOR param : func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].filter(STVarDeclaration) BEFORE "," SEPARATOR ", "»«param.generateTypeName» &«param.generateFeatureName»«ENDFOR»'''
 
 	def private CharSequence generateStructuredTextFunctionBody(STFunction func) '''
-		«func.varDeclarations.generateLocalVariables(false)»
+		«IF func.returnType !== null»«func.returnType.generateTypeName» st_ret_val(0);«ENDIF»
+		«func.varDeclarations.filter(STVarPlainDeclarationBlock).generateLocalVariables(true)»
 		«func.varDeclarations.filter(STVarTempDeclarationBlock).generateLocalVariables(true)»
 		
 		«func.code.generateStatementList»
+		
+		«IF func.returnType !== null»return st_ret_val;«ENDIF»
 	'''
+
+	override protected dispatch CharSequence generateStatement(STReturn stmt) '''return«IF currentFunction.returnType !== null» st_ret_val«ENDIF»;'''
+
+	override protected dispatch CharSequence generateFeatureName(STFunction feature) '''«IF feature === currentFunction»st_ret_val«ELSE»func_«feature.name»«ENDIF»'''
+
+	override protected getMappedArguments(STFeatureExpression expr) {
+		if(expr.feature === currentFunction) emptyList else super.getMappedArguments(expr)
+	}
 
 	override getDependencies(Map<?, ?> options) {
 		prepare(options)
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-			(function.functions.map[returnType].filterNull + function.functions.flatMap [
+			(source.functions.map[returnType].filterNull + source.functions.flatMap [
 				varDeclarations.filter[it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock]
 			].flatMap[varDeclarations].map[type]).toSet
 		else
-			function.containedDependencies
+			source.containedDependencies
 	}
 }

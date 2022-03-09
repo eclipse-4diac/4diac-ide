@@ -17,9 +17,10 @@ import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
@@ -58,7 +59,7 @@ class STMethodSupport extends StructuredTextSupport {
 	'''
 
 	def private CharSequence generateStructuredTextMethodDeclaration(STMethod method, boolean header) //
-	'''«method.returnType?.generateTypeName ?: "void"» «IF !header»FORTE_«FBType?.name»::«ENDIF»«method.generateFeatureName»(«method.generateStructuredTextMethodInputs»«method.generateStructuredTextMethodOutputs»)'''
+	'''«method.returnType?.generateTypeName ?: "void"» «IF !header»FORTE_«FBType?.name»::«ENDIF»method_«method.name»(«method.generateStructuredTextMethodInputs»«method.generateStructuredTextMethodOutputs»)'''
 
 	def private CharSequence generateStructuredTextMethodInputs(STMethod method) //
 	'''«FOR param : method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations] SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
@@ -67,11 +68,23 @@ class STMethodSupport extends StructuredTextSupport {
 	'''«FOR param : method.body.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations] BEFORE ", " SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
 
 	def private CharSequence generateStructuredTextMethodBody(STMethod method) '''
-		«method.body.varDeclarations.filter(STVarPlainDeclarationBlock).generateLocalVariables(false)»
+		«IF method.returnType !== null»«method.returnType.generateTypeName» st_ret_val(0);«ENDIF»
 		«method.body.varDeclarations.filter(STVarTempDeclarationBlock).generateLocalVariables(true)»
 		
 		«method.body.statements.generateStatementList»
+		
+		«IF method.returnType !== null»return st_ret_val;«ENDIF»
 	'''
+
+	override protected dispatch CharSequence generateStatement(STReturn stmt) //
+	'''return«IF parseResult.returnType !== null» st_ret_val«ENDIF»;'''
+
+	override protected dispatch CharSequence generateFeatureName(STMethod feature) //
+	'''«IF feature === parseResult»st_ret_val«ELSE»method_«feature.name»«ENDIF»'''
+
+	override protected getMappedArguments(STFeatureExpression expr) {
+		if(expr.feature === parseResult) emptyList else super.getMappedArguments(expr)
+	}
 
 	def private getFBType() { switch (root : method.rootContainer) { BaseFBType: root } }
 
