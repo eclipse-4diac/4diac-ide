@@ -2,6 +2,31 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.eclipse.fordiac.ide.typemanagement.TypeManagementPerspective"
+            fixed="false"
+            icon="fordiacimage://ICON_TYPE_NAVIGATOR"
+            id="org.eclipse.fordiac.ide.typemanagement.perspective"
+            name="Type Management">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.fordiac.ide.SystemPerspective">
+         <perspectiveShortcut
+               id="org.eclipse.fordiac.ide.typemanagement.perspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         <perspectiveShortcut
+               id="org.eclipse.fordiac.ide.typemanagement.perspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+   </extension>
+   <extension
          point="org.eclipse.ui.views">
       <view
             allowMultiple="false"
