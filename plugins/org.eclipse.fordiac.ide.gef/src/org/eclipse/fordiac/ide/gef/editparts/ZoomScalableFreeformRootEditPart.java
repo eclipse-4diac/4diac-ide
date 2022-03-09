@@ -192,10 +192,15 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			if (3 == button) {
 				// on right click deselect everything
 				if (getCurrentViewer() != null) {
-					getCurrentViewer().setSelection(StructuredSelection.EMPTY);
+					getCurrentViewer().setSelection(getDefaultSelectionForRightMouseDown());
 				}
 			}
 			return super.handleButtonDown(button);
+		}
+
+		@SuppressWarnings("static-method")  // allow sub-classes to provide own default selections
+		protected StructuredSelection getDefaultSelectionForRightMouseDown() {
+			return StructuredSelection.EMPTY;
 		}
 
 		@Override

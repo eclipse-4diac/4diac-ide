@@ -334,9 +334,11 @@ INavigationLocationProvider, IPersistableEditor {
 
 	}
 
-	protected void showReloadErrorMessage(String path) {
-		MessageDialog.openError(getSite().getShell(), Messages.AutoReloadError_PathNotFound_Title,
-				MessageFormat.format(Messages.AutoReloadError_PathNotFound, path));
+	protected void showReloadErrorMessage(final String path, final String whatEditor) {
+		String printPath = path.substring(1);// get rid of the leading /
+		printPath = printPath.replace('/', '.');
+		MessageDialog.openInformation(getSite().getShell(), Messages.AutoReloadError_PathNotFound_Title,
+				MessageFormat.format(Messages.AutoReloadError_PathNotFound, printPath, whatEditor));
 	}
 
 	public abstract CommandStack getCommandStack();

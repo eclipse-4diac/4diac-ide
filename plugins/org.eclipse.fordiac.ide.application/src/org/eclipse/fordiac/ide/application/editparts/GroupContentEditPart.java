@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -127,6 +128,14 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 		} else {
 			super.performRequest(request);
 		}
+	}
+
+	@Override
+	public Object getAdapter(final Class key) {
+		if (key == Group.class) {
+			return getModel().getGroup();
+		}
+		return super.getAdapter(key);
 	}
 
 	private NewInstanceDirectEditManager createDirectEditManager() {

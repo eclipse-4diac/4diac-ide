@@ -173,7 +173,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 			// if it is direct edit request and inside of the content area forward request to there so we are creating
 			// fbs inside
 			final GroupContentEditPart groupContentEP = getGroupContentEP();
-			if (isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
+			if (groupContentEP != null && isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
 				groupContentEP.performRequest(request);
 				return;
 			}
@@ -228,11 +228,19 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 	public DragTracker getDragTracker(final Request request) {
 		if (request instanceof SelectionRequest) {
 			final GroupContentEditPart groupContentEP = getGroupContentEP();
-			if (isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
+			if (groupContentEP != null && isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
 				return groupContentEP.getDragTracker(request);
 			}
 		}
 		return super.getDragTracker(request);
+	}
+
+	@Override
+	public Object getAdapter(final Class key) {
+		if (key == Group.class) {
+			return getModel();
+		}
+		return super.getAdapter(key);
 	}
 
 	private Dimension getGroupSize() {

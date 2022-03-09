@@ -894,7 +894,12 @@
               <iterate ifEmpty="true">
                 <or>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+                  <and>
+                  	<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+                  	<not>
+                  	<instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart"/>
+                  	</not>
+                  </and>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
@@ -907,9 +912,12 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="Ungroup"
                tooltip="Remove group">
-        <visibleWhen checkEnabled="true">
-          <with variable="activeEditor">
-            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+        <visibleWhen checkEnabled="false">
+          <with variable="selection">
+            <count value="1" />
+            <iterate ifEmpty="false">
+            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group" />
+            </iterate>
           </with>
         </visibleWhen>
       </command>
@@ -918,7 +926,7 @@
           <with variable="selection">
             <count value="1" />
             <iterate ifEmpty="false">
-            	<instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupEditPart" />
+            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group" />
             </iterate>
           </with>
         </visibleWhen>
