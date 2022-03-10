@@ -52,7 +52,7 @@ class StructuredTextParseUtil {
 		switch (root : algorithm.rootContainer) {
 			BaseFBType:
 				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors)?.
-					rootASTElement as STAlgorithmSource)?.elements.filter(
+					rootASTElement as STAlgorithmSource)?.elements?.filter(
 					org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm)?.findFirst [
 					name == algorithm.name
 				]?.body
@@ -69,7 +69,7 @@ class StructuredTextParseUtil {
 		switch (root : method.rootContainer) {
 			BaseFBType:
 				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors)?.
-					rootASTElement as STAlgorithmSource)?.elements.filter(
+					rootASTElement as STAlgorithmSource)?.elements?.filter(
 					org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod)?.findFirst [
 					name == method.name
 				]

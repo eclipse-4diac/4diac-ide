@@ -43,9 +43,9 @@ class STMethodSupport extends StructuredTextSupport {
 	override generate(Map<?, ?> options) throws ExportException {
 		prepare(options)
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-			parseResult.generateStructuredTextMethodHeader
+			parseResult?.generateStructuredTextMethodHeader
 		else
-			parseResult.generateStructuredTextMethodImpl
+			parseResult?.generateStructuredTextMethodImpl
 	}
 
 	def private CharSequence generateStructuredTextMethodHeader(STMethod method) '''
