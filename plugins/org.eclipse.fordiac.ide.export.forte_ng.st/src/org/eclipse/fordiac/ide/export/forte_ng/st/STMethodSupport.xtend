@@ -59,13 +59,15 @@ class STMethodSupport extends StructuredTextSupport {
 	'''
 
 	def private CharSequence generateStructuredTextMethodDeclaration(STMethod method, boolean header) //
-	'''«method.returnType?.generateTypeName ?: "void"» «IF !header»FORTE_«FBType?.name»::«ENDIF»method_«method.name»(«method.generateStructuredTextMethodInputs»«method.generateStructuredTextMethodOutputs»)'''
+	'''«method.returnType?.generateTypeName ?: "void"» «IF !header»FORTE_«FBType?.name»::«ENDIF»method_«method.name»(«method.generateStructuredTextMethodParameters»)'''
 
-	def private CharSequence generateStructuredTextMethodInputs(STMethod method) //
-	'''«FOR param : method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations] SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
+	def private CharSequence generateStructuredTextMethodParameters(STMethod method) //
+	'''«FOR param : method.structuredTextMethodParameters SEPARATOR ", "»«param.key.generateTypeName» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''
 
-	def private CharSequence generateStructuredTextMethodOutputs(STMethod method) //
-	'''«FOR param : method.body.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations] BEFORE ", " SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
+	def private getStructuredTextMethodParameters(STMethod method) {
+		method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
+			method.body.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].map[it -> true]
+	}
 
 	def private CharSequence generateStructuredTextMethodBody(STMethod method) '''
 		«IF method.returnType !== null»«method.returnType.generateTypeName» st_ret_val(0);«ENDIF»

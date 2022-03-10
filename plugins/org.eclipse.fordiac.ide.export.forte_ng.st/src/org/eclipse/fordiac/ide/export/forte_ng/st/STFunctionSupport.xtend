@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock
@@ -45,7 +44,7 @@ class STFunctionSupport extends StructuredTextSupport {
 
 	def private CharSequence generateStructuredTextFunctionSourceHeader(STFunctionSource source) {
 		val result = new StringBuilder
-		for(function : source.functions) {
+		for (function : source.functions) {
 			currentFunction = function
 			result.append(function.generateStructuredTextFunctionHeader)
 			currentFunction = null
@@ -55,7 +54,7 @@ class STFunctionSupport extends StructuredTextSupport {
 
 	def private CharSequence generateStructuredTextFunctionSourceImpl(STFunctionSource source) {
 		val result = new StringBuilder
-		for(function : source.functions) {
+		for (function : source.functions) {
 			currentFunction = function
 			result.append(function.generateStructuredTextFunctionImpl)
 			currentFunction = null
@@ -75,13 +74,15 @@ class STFunctionSupport extends StructuredTextSupport {
 	'''
 
 	def private CharSequence generateStructuredTextFunctionDeclaration(STFunction func) //
-	'''«func.returnType?.generateTypeName ?: "void"» func_«func.name»(«func.generateStructuredTextFunctionInputs»«func.generateStructuredTextFunctionOutputs»)'''
+	'''«func.returnType?.generateTypeName ?: "void"» func_«func.name»(«func.generateStructuredTextFunctionParameters»)'''
 
-	def private CharSequence generateStructuredTextFunctionInputs(STFunction func) //
-	'''«FOR param : func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].filter(STVarDeclaration) SEPARATOR ", "»«param.generateTypeName» «param.generateFeatureName»«ENDFOR»'''
+	def private CharSequence generateStructuredTextFunctionParameters(STFunction func) //
+	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ", "»«param.key.generateTypeName» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''
 
-	def private CharSequence generateStructuredTextFunctionOutputs(STFunction func) //
-	'''«FOR param : func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].filter(STVarDeclaration) BEFORE "," SEPARATOR ", "»«param.generateTypeName» &«param.generateFeatureName»«ENDFOR»'''
+	def private getStructuredTextFunctionParameters(STFunction func) {
+		func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
+			func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].map[it -> true]
+	}
 
 	def private CharSequence generateStructuredTextFunctionBody(STFunction func) '''
 		«IF func.returnType !== null»«func.returnType.generateTypeName» st_ret_val(0);«ENDIF»
@@ -93,9 +94,11 @@ class STFunctionSupport extends StructuredTextSupport {
 		«IF func.returnType !== null»return st_ret_val;«ENDIF»
 	'''
 
-	override protected dispatch CharSequence generateStatement(STReturn stmt) '''return«IF currentFunction.returnType !== null» st_ret_val«ENDIF»;'''
+	override protected dispatch CharSequence generateStatement(STReturn stmt) //
+	'''return«IF currentFunction.returnType !== null» st_ret_val«ENDIF»;'''
 
-	override protected dispatch CharSequence generateFeatureName(STFunction feature) '''«IF feature === currentFunction»st_ret_val«ELSE»func_«feature.name»«ENDIF»'''
+	override protected dispatch CharSequence generateFeatureName(STFunction feature) //
+	'''«IF feature === currentFunction»st_ret_val«ELSE»func_«feature.name»«ENDIF»'''
 
 	override protected getMappedArguments(STFeatureExpression expr) {
 		if(expr.feature === currentFunction) emptyList else super.getMappedArguments(expr)
@@ -105,7 +108,9 @@ class STFunctionSupport extends StructuredTextSupport {
 		prepare(options)
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			(source.functions.map[returnType].filterNull + source.functions.flatMap [
-				varDeclarations.filter[it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock]
+				varDeclarations.filter [
+					it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock
+				]
 			].flatMap[varDeclarations].map[type]).toSet
 		else
 			source.containedDependencies
