@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.data.DataType;
 
 /** <!-- begin-user-doc --> A representation of the model object '<em><b>Event</b></em>'. <!-- end-user-doc -->
  *
@@ -29,7 +30,7 @@ import org.eclipse.emf.common.util.EList;
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getEvent()
  * @model
  * @generated */
-public interface Event extends IInterfaceElement {
+public interface Event extends IInterfaceElement, ICallable {
 	/** Returns the value of the '<em><b>With</b></em>' containment reference list. The list contents are of type
 	 * {@link org.eclipse.fordiac.ide.model.libraryElement.With}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -38,5 +39,29 @@ public interface Event extends IInterfaceElement {
 	 * @model containment="true" extendedMetaData="kind='element' name='With' namespace='##targetNamespace'"
 	 * @generated */
 	EList<With> getWith();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<INamedElement> getInputParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<INamedElement> getOutputParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	DataType getReturnType();
 
 } // Event

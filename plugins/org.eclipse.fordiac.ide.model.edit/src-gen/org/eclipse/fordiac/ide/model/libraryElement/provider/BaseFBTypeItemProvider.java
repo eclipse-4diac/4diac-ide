@@ -236,6 +236,11 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
 				 LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
 
 		newChildDescriptors.add
@@ -262,6 +267,11 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
 				 LibraryElementFactory.eINSTANCE.createAdapterFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createAdapterEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter

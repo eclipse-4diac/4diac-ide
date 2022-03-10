@@ -315,6 +315,9 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
+      <genOperations ecoreOperation="lib.ecore#//Event/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Event/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Event/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FB">
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceFB" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceFB(this);"/>

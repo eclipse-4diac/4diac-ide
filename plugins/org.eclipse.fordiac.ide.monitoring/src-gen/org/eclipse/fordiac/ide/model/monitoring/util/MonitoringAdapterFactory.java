@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -144,6 +145,10 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseIInterfaceElement(IInterfaceElement object) {
 				return createIInterfaceElementAdapter();
+			}
+			@Override
+			public Adapter caseICallable(ICallable object) {
+				return createICallableAdapter();
 			}
 			@Override
 			public Adapter caseEvent(Event object) {
@@ -359,6 +364,20 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createIInterfaceElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ICallable
+	 * @generated
+	 */
+	public Adapter createICallableAdapter() {
 		return null;
 	}
 

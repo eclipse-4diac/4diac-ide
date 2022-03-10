@@ -406,6 +406,7 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		MonitoringBasePackage theMonitoringBasePackage = (MonitoringBasePackage)EPackage.Registry.INSTANCE.getEPackage(MonitoringBasePackage.eNS_URI);
 		XMLTypePackage theXMLTypePackage = (XMLTypePackage)EPackage.Registry.INSTANCE.getEPackage(XMLTypePackage.eNS_URI);
 		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
+		DataPackage theDataPackage = (DataPackage)EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -441,6 +442,12 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		initEReference(getAdapterPortElement_Ports(), theMonitoringBasePackage.getPortElement(), null, "ports", null, 0, -1, AdapterPortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(adapterMonitoringEventEClass, AdapterMonitoringEvent.class, "AdapterMonitoringEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		addEOperation(adapterMonitoringEventEClass, theLibraryElementPackage.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(adapterMonitoringEventEClass, theLibraryElementPackage.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(adapterMonitoringEventEClass, theDataPackage.getDataType(), "getReturnType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(adapterMonitoringVarDeclarationEClass, AdapterMonitoringVarDeclaration.class, "AdapterMonitoringVarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

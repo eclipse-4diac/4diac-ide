@@ -22,7 +22,23 @@
         eType="ecore:EClass ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//PortElement"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AdapterMonitoringEvent" eSuperTypes="#//IEditPartCreator ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AdapterMonitoringEvent" eSuperTypes="#//IEditPartCreator ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Event">
+    <eOperations name="getInputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOutputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getReturnType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return null;"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterMonitoringVarDeclaration" eSuperTypes="#//IEditPartCreator ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
   <eClassifiers xsi:type="ecore:EClass" name="IEditPartCreator" instanceClassName="org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator"
       abstract="true" interface="true"/>

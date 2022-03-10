@@ -27,7 +27,14 @@
     <genClasses ecoreClass="monitoring.ecore#//AdapterPortElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference monitoring.ecore#//AdapterPortElement/ports"/>
     </genClasses>
-    <genClasses ecoreClass="monitoring.ecore#//AdapterMonitoringEvent"/>
+    <genClasses ecoreClass="monitoring.ecore#//AdapterMonitoringEvent">
+      <genOperations ecoreOperation="monitoring.ecore#//AdapterMonitoringEvent/getInputParameters"
+          body="return null;"/>
+      <genOperations ecoreOperation="monitoring.ecore#//AdapterMonitoringEvent/getOutputParameters"
+          body="return null;"/>
+      <genOperations ecoreOperation="monitoring.ecore#//AdapterMonitoringEvent/getReturnType"
+          body="return null;"/>
+    </genClasses>
     <genClasses ecoreClass="monitoring.ecore#//AdapterMonitoringVarDeclaration"/>
     <genClasses image="false" ecoreClass="monitoring.ecore#//IEditPartCreator"/>
     <genClasses ecoreClass="monitoring.ecore#//SubAppPortElement">

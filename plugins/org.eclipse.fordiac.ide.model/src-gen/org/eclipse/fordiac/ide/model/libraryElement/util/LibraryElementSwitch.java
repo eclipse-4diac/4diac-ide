@@ -293,6 +293,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				Event event = (Event)theEObject;
 				T result = caseEvent(event);
 				if (result == null) result = caseIInterfaceElement(event);
+				if (result == null) result = caseICallable(event);
 				if (result == null) result = caseConfigurableObject(event);
 				if (result == null) result = caseINamedElement(event);
 				if (result == null) result = defaultCase(theEObject);
@@ -658,6 +659,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseAdapterEvent(adapterEvent);
 				if (result == null) result = caseEvent(adapterEvent);
 				if (result == null) result = caseIInterfaceElement(adapterEvent);
+				if (result == null) result = caseICallable(adapterEvent);
 				if (result == null) result = caseConfigurableObject(adapterEvent);
 				if (result == null) result = caseINamedElement(adapterEvent);
 				if (result == null) result = defaultCase(theEObject);
