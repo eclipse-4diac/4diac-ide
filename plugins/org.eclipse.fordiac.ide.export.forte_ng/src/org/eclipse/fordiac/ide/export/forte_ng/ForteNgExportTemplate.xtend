@@ -31,7 +31,7 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 		super(name, prefix)
 	}
 
-	def protected generateDependencyIncludes(Iterable<INamedElement> dependencies) '''
+	def protected generateDependencyIncludes(Iterable<? extends INamedElement> dependencies) '''
 		«dependencies.filter(DataType).generateTypeIncludes»
 		«FOR include : dependencies.reject(DataType).map[name].toSet»
 			#include "«include».h"
@@ -57,6 +57,20 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 			DateAndTimeType,
 			LdtType: "forte_date_and_time.h"
 			default: '''forte_«type.name.toLowerCase».h'''
+		}
+	}
+
+	def protected CharSequence generateTypeName(DataType type) {
+		switch (type) {
+			TimeType,
+			LtimeType: "CIEC_TIME"
+			DateType,
+			LdateType: "CIEC_DATE"
+			TimeOfDayType,
+			LtodType: "CIEC_TIME_OF_DAY"
+			DateAndTimeType,
+			LdtType: "CIEC_DATE_AND_TIME"
+			default: '''CIEC_«type.name»'''
 		}
 	}
 

@@ -69,6 +69,8 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate 
 		
 		«generateExecuteEvent»
 		
+		«generateEventAccessorDefinitions»
+		
 	'''
 
 	def protected dispatch generateSendEvent(Event event) '''

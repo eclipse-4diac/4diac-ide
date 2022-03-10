@@ -31,6 +31,8 @@ import org.eclipse.fordiac.ide.model.data.LtodType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -297,6 +299,10 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STMethod feature) '''method_«feature.name»'''
+
+	def protected dispatch CharSequence generateFeatureName(FB feature) '''fb_«feature.name»()'''
+
+	def protected dispatch CharSequence generateFeatureName(Event feature) '''evt_«feature.name»'''
 
 	def protected CharSequence generateTypeName(STVarDeclaration variable) {
 		if (variable.locatedAt !== null && variable.array) {

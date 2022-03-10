@@ -61,10 +61,8 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  «IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
 		  	«generateInitialValueAssignmentDeclaration»
 		  «ENDIF»
-		  «type.interfaceList.inputVars.generateAccessors("getDI")»
-		  «type.interfaceList.outputVars.generateAccessors("getDO")»
 		  «type.internalVars.generateAccessors("getVarInternal")»
-		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
+		  «type.internalFbs.generateInternalFBAccessors»
 		  «generateAlgorithms»
 		  «generateMethods»
 		  «generateAdditionalDeclarations»
@@ -93,6 +91,12 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  «ELSE»
 		  	virtual ~«FBClassName»() = default;
 		  «ENDIF»
+		
+		  «type.interfaceList.inputVars.generateAccessors("getDI")»
+		  «type.interfaceList.outputVars.generateAccessors("getDO")»
+		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
+		  «generateEventAccessorDeclarations»
+		
 		};
 		
 		«generateIncludeGuardEnd»
@@ -110,6 +114,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 			+ methodLanguageSupport.values.filterNull.flatMap[getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})]
 		).toSet.generateDependencyIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
+		«type.internalFbs.map[getType].generateDependencyIncludes»
 		
 		«type.compilerInfo?.header»
 	'''

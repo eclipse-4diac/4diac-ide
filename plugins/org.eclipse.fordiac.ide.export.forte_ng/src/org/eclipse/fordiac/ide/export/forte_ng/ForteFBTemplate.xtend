@@ -14,6 +14,7 @@
  *   Alois Zoitl  - extracted base class for all types from fbtemplate
  *   Martin Melik Merkumians - adds clause to prevent generation of zero size arrays
  *   Martin Melik Merkumians - adds generation of initial value assignment
+ *   Martin Jobst - add event accessors
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
@@ -24,6 +25,7 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
@@ -38,17 +40,17 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 	}
 
 	override protected FBType getType()
-	
+
 	def protected baseClass() {
-		if(type?.compilerInfo?.classdef !== null) {
-			type.compilerInfo.classdef.trim.isEmpty ? DEFAULT_BASE_CLASS : type.compilerInfo.classdef 
+		if (type?.compilerInfo?.classdef !== null) {
+			type.compilerInfo.classdef.trim.isEmpty ? DEFAULT_BASE_CLASS : type.compilerInfo.classdef
 		} else {
 			DEFAULT_BASE_CLASS
 		}
 	}
-	
+
 	def protected generateFBClassHeader() '''
-	class «FBClassName»: public «baseClass» {
+		class «FBClassName»: public «baseClass» {
 	'''
 
 	def protected generateHeaderIncludes() '''
@@ -69,7 +71,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
 	def protected generateImplTypeIncludes(Iterable<DataType> vars) '''
 		«IF !vars.empty»
-		«vars.generateTypeIncludes»
+			«vars.generateTypeIncludes»
 		«ENDIF»
 	'''
 
@@ -133,7 +135,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 	def protected generateEventConstants(List<Event> events) '''«FOR event : events»
 			static const TEventID «event.generateEventName» = «events.indexOf(event)»;
 		«ENDFOR»'''
-	
+
 	def protected generateEventName(Event event) '''scm_nEvent«event.name»ID'''
 
 	def protected generateFBInterfaceDefinition() {
@@ -233,57 +235,53 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 			static const SInternalVarsInformation scm_stInternalVars;
 		«ENDIF»
 	'''
-	
+
 	def protected generateInitialValueAssignmentDeclaration() '''
-	virtual void setInitialValues();
+		virtual void setInitialValues();
 	'''
-	
+
 	def protected generateInitialValueAssignmentDefinition(Iterable<VarDeclaration> declarationList) '''
-	void FORTE_«type.name»::setInitialValues() {
-	  «FOR variable : declarationList»
-	  «IF null !== variable.value && !variable.value.value.isEmpty »
-	  «EXPORT_PREFIX»«generateInitialAssignment(variable)»
-	  «ENDIF»
-	  «ENDFOR»
-	}
+		void FORTE_«type.name»::setInitialValues() {
+		  «FOR variable : declarationList»
+		  	«IF null !== variable.value && !variable.value.value.isEmpty »
+		  		«EXPORT_PREFIX»«generateInitialAssignment(variable)»
+		  	«ENDIF»
+		  «ENDFOR»
+		}
 	'''
-	
+
 	def protected generateInitialAssignment(VarDeclaration variable) {
 		switch variable.typeName {
-			case FordiacKeywords.STRING:  '''«variable.name»() = "«variable.value.value»";'''
-			case FordiacKeywords.WSTRING:  '''«variable.name»() = "«variable.value.value»";'''
-			case "ARRAY":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.TIME:  '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.DATE:  '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.TIME_OF_DAY:  '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.DATE_AND_TIME:  '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.BOOL:  '''«variable.name»() = «variable.value.value.generatBoolLiteral»;'''
-			case FordiacKeywords.REAL:  '''«variable.name»() = «variable.value.value»;'''
-			case FordiacKeywords.LREAL:  '''«variable.name»() = «variable.value.value»;'''
-			default: 
-				if(isNumeric(variable.value.value)){   
+			case FordiacKeywords.STRING: '''«variable.name»() = "«variable.value.value»";'''
+			case FordiacKeywords.WSTRING: '''«variable.name»() = "«variable.value.value»";'''
+			case "ARRAY": '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.TIME: '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.DATE: '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.TIME_OF_DAY: '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.DATE_AND_TIME: '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.BOOL: '''«variable.name»() = «variable.value.value.generatBoolLiteral»;'''
+			case FordiacKeywords.REAL: '''«variable.name»() = «variable.value.value»;'''
+			case FordiacKeywords.LREAL: '''«variable.name»() = «variable.value.value»;'''
+			default:
+				if (isNumeric(variable.value.value)) {
 					'''«variable.name»() = «variable.value.value»;'''
-				}else {
+				} else {
 					'''«variable.name»().fromString("«variable.value.value»");'''
 				}
 		}
 	}
-	
-	def private generatBoolLiteral(String value){
-		switch value{
-			case "0":
-				'''false'''			
-			case "1":
-				'''true'''			
-			default:
-				'''«value.toLowerCase»'''
+
+	def private generatBoolLiteral(String value) {
+		switch value {
+			case "0": '''false'''
+			case "1": '''true'''
+			default: '''«value.toLowerCase»'''
 		}
 	}
-	
+
 	def private isNumeric(String input) {
-		input.chars().allMatch([in | Character.isDigit(in)])
+		input.chars().allMatch([in|Character.isDigit(in)])
 	}
-	
 
 	def protected generateInternalVarDefinition(BaseFBType baseFBType) '''
 		«IF !baseFBType.internalVars.isEmpty»
@@ -302,19 +300,76 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		«ENDFOR»
 	'''
 
+	def protected generateInternalFBAccessors(List<FB> fbs) '''
+		«FOR fb : fbs»
+			«fb.generateInternalFBAccessors(fbs.indexOf(fb))»
+		«ENDFOR»
+	'''
+
+	def protected generateInternalFBAccessors(FB fb, int index) '''
+		FORTE_«fb.type.name» &fb_«fb.name»() {
+		  return *static_cast<FORTE_«fb.type.name»*>(mInternalFBs[«index»]);
+		};
+	'''
+
+	def protected generateEventAccessorDeclarations() '''
+		«FOR event : type.interfaceList.eventInputs»
+			«event.generateEventAccessorDeclaration»
+		«ENDFOR»
+	'''
+
+	def protected generateEventAccessorDeclaration(Event event) '''
+		void «event.generateEventAccessorName»(«event.generateEventAccessorParameters»);
+	'''
+
+	def protected generateEventAccessorDefinitions() '''
+		«FOR event : type.interfaceList.eventInputs»
+			«event.generateEventAccessorDefinition»
+		«ENDFOR»
+	'''
+
+	def protected generateEventAccessorDefinition(Event event) '''
+		void «FBClassName»::«event.generateEventAccessorName»(«event.generateEventAccessorParameters») {
+		  «FOR variable : event.inputParameters.filter(VarDeclaration)»
+		  	«exportPrefix»«variable.name»() = «variable.generateName»;
+		  «ENDFOR»
+		  receiveInputEvent(«event.generateEventName», nullptr);
+		  «FOR variable : event.outputParameters.filter(VarDeclaration)»
+		  	«variable.generateName» = «exportPrefix»«variable.name»();
+		  «ENDFOR»
+		}
+	'''
+
+	def protected generateEventAccessorName(Event event) '''evt_«event.name»'''
+
+	def protected CharSequence generateEventAccessorParameters(Event event) //
+	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateTypeName» «IF !param.isIsInput»&«ENDIF»«param.generateName»«ENDFOR»'''
+
+	def protected getEventAccessorParameters(Event event) {
+		(event.inputParameters + event.outputParameters).filter(VarDeclaration)
+	}
+
 	def protected getFBClassName() '''FORTE_«type.name»'''
 
 	def protected generateBasicFBDataArray(
 		BaseFBType baseType) '''FORTE_BASIC_FB_DATA_ARRAY(«baseType.interfaceList.eventOutputs.size», «baseType.interfaceList.inputVars.size», «baseType.interfaceList.outputVars.size», «baseType.internalVars.size», «type.interfaceList.sockets.size + baseType.interfaceList.plugs.size»);'''
-	
+
 	def generateInternalFbDefinition() '''
 		static const SCFB_FBInstanceData scmInternalFBs[];
 	'''
-	
-	def generateInteralFbDeclarations(BaseFBType type)'''
+
+	def generateInteralFbDeclarations(BaseFBType type) '''
 		const SCFB_FBInstanceData «FBClassName»::scmInternalFBs[] = {
 		  «FOR elem : type.internalFbs SEPARATOR ",\n"»{«elem.name.FORTEString», «elem.type.name.FORTEString»}«ENDFOR»
 		};
 	'''
 
+	def protected CharSequence generateTypeName(VarDeclaration variable) {
+		if (variable.array)
+			"CIEC_ARRAY"
+		else
+			variable.type.generateTypeName
+	}
+
+	def protected CharSequence generateName(VarDeclaration variable) '''var_«variable.name»'''
 }
