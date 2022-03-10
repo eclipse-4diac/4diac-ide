@@ -23,6 +23,9 @@ import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IFileEditorInput
 import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider
+import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
+
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 
 class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 	@Inject
@@ -79,6 +82,32 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 			Platform.getLog(class).error("Error saving algorithms to FB type", e)
 		} finally {
 			monitor.done
+		}
+	}
+
+	override handleElementContentChanged(IFileEditorInput fileEditorInput) {
+		val info = getElementInfo(fileEditorInput) as FileInfo;
+		if (info === null) {
+			return
+		}
+		val document = info.fDocument as XtextDocument
+		super.handleElementContentChanged(fileEditorInput)
+		if (document === info.fDocument) { // still unchanged? -> update FB reference and reparse
+			val paletteEntry = TypeLibrary.getPaletteEntryForFile(fileEditorInput.file)
+			if (paletteEntry !== null) {
+				val libraryElement = paletteEntry.typeEditable
+				if (libraryElement instanceof BaseFBType) {
+					removeUnchangedElementListeners(fileEditorInput, info);
+
+					document.modify [ resource |
+						(resource as STAlgorithmResource).fbType = libraryElement.copy
+						resource.reparse(document.get)
+						null
+					]
+
+					addUnchangedElementListeners(fileEditorInput, info);
+				}
+			}
 		}
 	}
 }
