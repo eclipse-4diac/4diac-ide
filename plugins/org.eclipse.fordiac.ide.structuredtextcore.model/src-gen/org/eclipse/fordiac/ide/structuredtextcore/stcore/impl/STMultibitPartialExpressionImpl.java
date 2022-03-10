@@ -57,7 +57,7 @@ public class STMultibitPartialExpressionImpl extends STExpressionImpl implements
 	 * @generated
 	 * @ordered
 	 */
-	protected static final STMultiBitAccessSpecifier SPECIFIER_EDEFAULT = STMultiBitAccessSpecifier.L;
+	protected static final STMultiBitAccessSpecifier SPECIFIER_EDEFAULT = STMultiBitAccessSpecifier.X;
 
 	/**
 	 * The cached value of the '{@link #getSpecifier() <em>Specifier</em>}' attribute.

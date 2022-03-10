@@ -146,11 +146,11 @@
     <eLiterals name="NOT" value="2" literal="NOT"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="STMultiBitAccessSpecifier">
-    <eLiterals name="L" literal="%L"/>
-    <eLiterals name="D" value="1" literal="%D"/>
+    <eLiterals name="X" literal="%X"/>
+    <eLiterals name="B" value="1" literal="%B"/>
     <eLiterals name="W" value="2" literal="%W"/>
-    <eLiterals name="B" value="3" literal="%B"/>
-    <eLiterals name="X" value="4" literal="%X"/>
+    <eLiterals name="D" value="3" literal="%D"/>
+    <eLiterals name="L" value="4" literal="%L"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STNumericLiteral" eSuperTypes="#//STExpression">
     <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">

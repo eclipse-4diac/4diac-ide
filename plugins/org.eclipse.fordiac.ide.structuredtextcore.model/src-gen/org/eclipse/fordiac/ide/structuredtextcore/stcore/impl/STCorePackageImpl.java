@@ -2226,11 +2226,11 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		addEEnumLiteral(stUnaryOperatorEEnum, STUnaryOperator.NOT);
 
 		initEEnum(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.class, "STMultiBitAccessSpecifier"); //$NON-NLS-1$
-		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.L);
-		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.D);
-		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.W);
-		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.B);
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.X);
+		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.B);
+		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.W);
+		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.D);
+		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.L);
 
 		// Initialize data types
 		initEDataType(stDateEDataType, LocalDate.class, "STDate", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

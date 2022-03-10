@@ -38,11 +38,11 @@
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STUnaryOperator/NOT"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STMultiBitAccessSpecifier">
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/L"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/D"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/W"/>
-      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/B"/>
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/X"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/B"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/W"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/D"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/L"/>
     </genEnums>
     <genDataTypes ecoreDataType="STCore.ecore#//STDate"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STTime"/>

@@ -32,25 +32,27 @@ import org.eclipse.emf.common.util.Enumerator;
  * @generated
  */
 public enum STMultiBitAccessSpecifier implements Enumerator {
-	/**
-	 * The '<em><b>L</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #L_VALUE
-	 * @generated
-	 * @ordered
-	 */
-	L(0, "L", "%L"), //$NON-NLS-1$ //$NON-NLS-2$
+	//$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
-	 * The '<em><b>D</b></em>' literal object.
+	 * The '<em><b>X</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #D_VALUE
+	 * @see #X_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	D(1, "D", "%D"), //$NON-NLS-1$ //$NON-NLS-2$
+	X(0, "X", "%X"), //$NON-NLS-1$ //$NON-NLS-2$
+
+	/**
+	 * The '<em><b>B</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #B_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	B(1, "B", "%B"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>W</b></em>' literal object.
@@ -63,46 +65,44 @@ public enum STMultiBitAccessSpecifier implements Enumerator {
 	W(2, "W", "%W"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
-	 * The '<em><b>B</b></em>' literal object.
+	 * The '<em><b>D</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #B_VALUE
+	 * @see #D_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	B(3, "B", "%B"), //$NON-NLS-1$ //$NON-NLS-2$
+	D(3, "D", "%D"), /**
+	 * The '<em><b>L</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #L_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	L(4, "L", "%L"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
-	 * The '<em><b>X</b></em>' literal object.
+	 * The '<em><b>X</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #X_VALUE
+	 * @see #X
+	 * @model literal="%X"
 	 * @generated
 	 * @ordered
 	 */
-	X(4, "X", "%X"); //$NON-NLS-1$ //$NON-NLS-2$
+	public static final int X_VALUE = 0;
 
 	/**
-	 * The '<em><b>L</b></em>' literal value.
+	 * The '<em><b>B</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #L
-	 * @model literal="%L"
+	 * @see #B
+	 * @model literal="%B"
 	 * @generated
 	 * @ordered
 	 */
-	public static final int L_VALUE = 0;
-
-	/**
-	 * The '<em><b>D</b></em>' literal value.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #D
-	 * @model literal="%D"
-	 * @generated
-	 * @ordered
-	 */
-	public static final int D_VALUE = 1;
+	public static final int B_VALUE = 1;
 
 	/**
 	 * The '<em><b>W</b></em>' literal value.
@@ -116,26 +116,26 @@ public enum STMultiBitAccessSpecifier implements Enumerator {
 	public static final int W_VALUE = 2;
 
 	/**
-	 * The '<em><b>B</b></em>' literal value.
+	 * The '<em><b>D</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #B
-	 * @model literal="%B"
+	 * @see #D
+	 * @model literal="%D"
 	 * @generated
 	 * @ordered
 	 */
-	public static final int B_VALUE = 3;
+	public static final int D_VALUE = 3;
 
 	/**
-	 * The '<em><b>X</b></em>' literal value.
+	 * The '<em><b>L</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #X
-	 * @model literal="%X"
+	 * @see #L
+	 * @model literal="%L"
 	 * @generated
 	 * @ordered
 	 */
-	public static final int X_VALUE = 4;
+	public static final int L_VALUE = 4;
 
 	/**
 	 * An array of all the '<em><b>ST Multi Bit Access Specifier</b></em>' enumerators.
@@ -145,11 +145,11 @@ public enum STMultiBitAccessSpecifier implements Enumerator {
 	 */
 	private static final STMultiBitAccessSpecifier[] VALUES_ARRAY =
 		new STMultiBitAccessSpecifier[] {
-			L,
-			D,
-			W,
-			B,
 			X,
+			B,
+			W,
+			D,
+			L,
 		};
 
 	/**
@@ -206,11 +206,11 @@ public enum STMultiBitAccessSpecifier implements Enumerator {
 	 */
 	public static STMultiBitAccessSpecifier get(int value) {
 		switch (value) {
-			case L_VALUE: return L;
-			case D_VALUE: return D;
-			case W_VALUE: return W;
-			case B_VALUE: return B;
 			case X_VALUE: return X;
+			case B_VALUE: return B;
+			case W_VALUE: return W;
+			case D_VALUE: return D;
+			case L_VALUE: return L;
 			default: return null;
 		}
 	}
