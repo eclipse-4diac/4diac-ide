@@ -45,7 +45,7 @@ class STAlgorithmPartitioner {
 	}
 
 	def String combine(EList<? extends ICallable> callables) {
-		callables.map[toSTText].join + "\n"
+		callables.map[toSTText].join
 	}
 
 	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm) {
@@ -178,7 +178,7 @@ class STAlgorithmPartitioner {
 		}
 		val totalEndOffset = source.node.rootNode.totalEndOffset
 		if (totalEndOffset > lastOffset) {
-			source.handleLostAndFound(result.size, lastOffset, totalEndOffset, result)
+			result.last.appendText(source.node.rootNode.text.substring(lastOffset, totalEndOffset))
 		}
 	}
 
@@ -188,6 +188,14 @@ class STAlgorithmPartitioner {
 		if (!text.trim.empty) {
 			result.add(text.newLostAndFound(index))
 		}
+	}
+	
+	def protected dispatch appendText(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm, String text) {
+		algorithm.text = algorithm.text + text
+	}
+
+	def protected dispatch appendText(org.eclipse.fordiac.ide.model.libraryElement.STMethod method, String text) {
+		method.text = method.text + text
 	}
 
 	def protected newLostAndFound(String content, int index) {
