@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.provider;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
@@ -28,6 +29,8 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Group} object.
@@ -36,6 +39,11 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
  * @generated
  */
 public class GroupItemProvider extends FBNetworkElementItemProvider {
+
+	private static final String TRUNCATION_STRING = "\u2026"; //$NON-NLS-1$
+
+	private static int maxWidth = -1;
+
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -99,16 +107,32 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
-	public String getText(Object object) {
-		String label = ((Group)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Group_type") : //$NON-NLS-1$
-			getString("_UI_Group_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+	public String getText(final Object object) {
+		String comment = ((Group) object).getComment();
+		if (comment != null && !comment.isBlank()) {
+			final int linebreak = comment.indexOf('\n');
+			if (linebreak != -1) {
+				comment = comment.substring(0, linebreak);
+			}
+			if (comment.length() > getMaxWidth()) {
+				comment = comment.substring(0, getMaxWidth()) + TRUNCATION_STRING;
+			}
+			return comment;
+		}
+		return "[empty comment]";
 	}
 
+	private static int getMaxWidth() {
+		if (-1 == maxWidth) {
+			final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+					"org.eclipse.fordiac.ide.gef"); //$NON-NLS-1$
+			return store.getInt("MaxTypeLabelSize");
+		}
+		return maxWidth;
+	}
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
