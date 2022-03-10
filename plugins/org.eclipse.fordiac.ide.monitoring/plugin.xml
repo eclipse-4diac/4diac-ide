@@ -27,15 +27,15 @@
             restorable="true">
       </view>
    </extension>
-   <extension
-         point="org.eclipse.ui.perspectives">
-      <perspective
-            class="org.eclipse.fordiac.ide.monitoring.MonitoringPerspective"
-            icon="fordiacimage://ICON_MONITORING_PERSPECTIVE"
-            id="org.eclipse.fordiac.ide.monitoring.MonitoringPerspective"
-            name="4diac IDE Debug">
-      </perspective>
-   </extension>
+   <extension point="org.eclipse.ui.perspectiveExtensions">
+	  <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
+         <view
+               relative="org.eclipse.debug.ui.VariableView"
+               relationship="stack"
+               id="org.eclipse.fordiac.ide.monitoring.views.WatchesView">
+         </view>        
+	  </perspectiveExtension> 
+    </extension>  
    <extension
          point="org.eclipse.fordiac.ide.gef.ChildrenProvider">
       <children

@@ -10,7 +10,7 @@
             icon="fordiacimage://ICON_NEW_4DIAC_PROJECT"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"
             name="%wizard.name.0"
-            preferredPerspectives="org.eclipse.fordiac.ide.SystemPerspective, org.eclipse.fordiac.ide.typemanagement.perspective, org.eclipse.fordiac.ide.monitoring.MonitoringPerspective"
+            preferredPerspectives="org.eclipse.fordiac.ide.SystemPerspective, org.eclipse.fordiac.ide.typemanagement.perspective"
             project="true">
          <description>
             %wizard.description.0
@@ -57,6 +57,16 @@
             name="%SystemExplorer.name">
       </view>
    </extension>
+   <extension point="org.eclipse.ui.perspectiveExtensions">
+	  <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
+         <view
+               id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"
+               minimized="false"
+               relationship="stack"
+               relative="org.eclipse.debug.ui.DebugView">
+         </view>
+	  </perspectiveExtension> 
+    </extension>     
    <extension
          point="org.eclipse.ui.editors">
       <editor
