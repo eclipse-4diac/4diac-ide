@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -90,6 +91,7 @@ final package class ExpressionAnnotations {
 	}
 
 	def package static INamedElement getResultType(STFeatureExpression expr) {
+		// mirror changes here in callaSTCoreScopeProvider.isApplicableForFeatureReference(IEObjectDescription)
 		switch (feature : expr.feature) {
 			VarDeclaration:
 				if (feature.array)
@@ -101,6 +103,10 @@ final package class ExpressionAnnotations {
 					(feature.type as DataType).newArrayType(feature.ranges.map[toSubrange])
 				else
 					feature.type
+			FB:
+				feature.type
+			ICallable:
+				feature.returnType
 		}
 	}
 

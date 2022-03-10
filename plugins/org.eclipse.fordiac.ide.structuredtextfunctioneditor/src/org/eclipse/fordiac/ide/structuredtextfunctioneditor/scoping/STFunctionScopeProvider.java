@@ -13,6 +13,7 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - add scope for function return values
+ *       - clean up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.scoping;
 
@@ -21,8 +22,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.xtext.scoping.IScope;
-import org.eclipse.xtext.scoping.Scopes;
-import org.eclipse.xtext.scoping.impl.SimpleScope;
 
 /**
  * This class contains custom scoping description.
@@ -35,8 +34,7 @@ public class STFunctionScopeProvider extends AbstractSTFunctionScopeProvider {
 	public IScope getScope(final EObject context, final EReference reference) {
 		if (reference == STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE) {
 			final IScope globalScope = super.getScope(context, reference);
-			return new SimpleScope(globalScope, Scopes.scopedElementsFor(DataTypeLibrary.getNonUserDefinedDataTypes()),
-					true);
+			return scopeFor(DataTypeLibrary.getNonUserDefinedDataTypes(), globalScope);
 		}
 		return super.getScope(context, reference);
 	}
