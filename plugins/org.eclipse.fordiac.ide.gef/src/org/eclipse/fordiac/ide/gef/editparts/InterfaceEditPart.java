@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.gef.policies.DataInterfaceLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.InterfaceElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -504,7 +505,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	protected static int getYPositionFromAttribute(final IInterfaceElement ie) {
-		final Attribute attribute = ie.getAttribute("YPOSITION"); //$NON-NLS-1$
+		final Attribute attribute = ie.getAttribute(FordiacKeywords.INTERFACE_Y_POSITION);
 		if (attribute != null) {
 			return Integer.parseInt(attribute.getValue());
 		}

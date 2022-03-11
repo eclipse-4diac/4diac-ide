@@ -438,12 +438,9 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		container.setLayoutManager(new ToolbarLayout());
 
 		final int yPositionFromAttribute = getYPositionFromAttribute(ep.getModel());
-
-		if (yPositionFromAttribute > 0) {
-			final IFigure paddingFigure = new MinSizeFigure();
-			paddingFigure.setMinimumSize(new Dimension(-1, yPositionFromAttribute));
-			container.add(paddingFigure);
-		}
+		final IFigure paddingFigure = new MinSizeFigure();
+		paddingFigure.setMinimumSize(new Dimension(-1, yPositionFromAttribute));
+		container.add(paddingFigure);
 
 		container.add(ep.getFigure());
 
