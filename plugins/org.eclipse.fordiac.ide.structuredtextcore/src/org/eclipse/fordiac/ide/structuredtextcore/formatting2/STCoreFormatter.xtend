@@ -317,7 +317,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 			prepend[noSpace]
 			append[oneSpace]
 		]
-		featureExpression.regionFor.keyword(STFeatureExpressionAccess.leftParenthesisKeyword_2_0).surround[noSpace]
+		featureExpression.regionFor.keyword(STFeatureExpressionAccess.callLeftParenthesisKeyword_2_0_0).surround[noSpace]
 		featureExpression.regionFor.keyword(STFeatureExpressionAccess.rightParenthesisKeyword_2_2).prepend[noSpace]
 		featureExpression.parameters.forEach[format]
 	}

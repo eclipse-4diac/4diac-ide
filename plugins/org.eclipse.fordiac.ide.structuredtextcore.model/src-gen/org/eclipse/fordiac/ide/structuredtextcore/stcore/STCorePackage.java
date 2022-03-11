@@ -1566,13 +1566,22 @@ public interface STCorePackage extends EPackage {
 	int ST_FEATURE_EXPRESSION__FEATURE = ST_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Call</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_FEATURE_EXPRESSION__CALL = ST_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FEATURE_EXPRESSION__PARAMETERS = ST_EXPRESSION_FEATURE_COUNT + 1;
+	int ST_FEATURE_EXPRESSION__PARAMETERS = ST_EXPRESSION_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>ST Feature Expression</em>' class.
@@ -1581,7 +1590,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FEATURE_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 2;
+	int ST_FEATURE_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STMultibitPartialExpressionImpl <em>ST Multibit Partial Expression</em>}' class.
@@ -2867,6 +2876,17 @@ public interface STCorePackage extends EPackage {
 	EReference getSTFeatureExpression_Feature();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression#isCall <em>Call</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Call</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression#isCall()
+	 * @see #getSTFeatureExpression()
+	 * @generated
+	 */
+	EAttribute getSTFeatureExpression_Call();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression#getParameters <em>Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3984,6 +4004,14 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_FEATURE_EXPRESSION__FEATURE = eINSTANCE.getSTFeatureExpression_Feature();
+
+		/**
+		 * The meta object literal for the '<em><b>Call</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_FEATURE_EXPRESSION__CALL = eINSTANCE.getSTFeatureExpression_Call();
 
 		/**
 		 * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.

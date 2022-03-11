@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
+import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression#getFeature <em>Feature</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression#isCall <em>Call</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression#getParameters <em>Parameters</em>}</li>
  * </ul>
  *
@@ -61,6 +63,28 @@ public interface STFeatureExpression extends STExpression {
 	void setFeature(INamedElement value);
 
 	/**
+	 * Returns the value of the '<em><b>Call</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Call</em>' attribute.
+	 * @see #setCall(boolean)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTFeatureExpression_Call()
+	 * @model
+	 * @generated
+	 */
+	boolean isCall();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression#isCall <em>Call</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Call</em>' attribute.
+	 * @see #isCall()
+	 * @generated
+	 */
+	void setCall(boolean value);
+
+	/**
 	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument}.
 	 * <!-- begin-user-doc -->
@@ -86,7 +110,7 @@ public interface STFeatureExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<STCallArgument> getMappedInputArguments();
+	Map<INamedElement, STExpression> getMappedInputArguments();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -94,6 +118,6 @@ public interface STFeatureExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<STCallArgument> getMappedOutputArguments();
+	Map<INamedElement, INamedElement> getMappedOutputArguments();
 
 } // STFeatureExpression

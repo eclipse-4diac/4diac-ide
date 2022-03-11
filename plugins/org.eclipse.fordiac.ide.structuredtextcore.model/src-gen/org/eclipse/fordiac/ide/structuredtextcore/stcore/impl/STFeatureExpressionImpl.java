@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
 import java.util.Collection;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -35,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 
 /**
@@ -46,6 +48,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STFeatureExpressionImpl#getFeature <em>Feature</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STFeatureExpressionImpl#isCall <em>Call</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STFeatureExpressionImpl#getParameters <em>Parameters</em>}</li>
  * </ul>
  *
@@ -61,6 +64,26 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 	 * @ordered
 	 */
 	protected INamedElement feature;
+
+	/**
+	 * The default value of the '{@link #isCall() <em>Call</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCall()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean CALL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isCall() <em>Call</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCall()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean call = CALL_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference list.
@@ -137,6 +160,29 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 	 * @generated
 	 */
 	@Override
+	public boolean isCall() {
+		return call;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCall(boolean newCall) {
+		boolean oldCall = call;
+		call = newCall;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_FEATURE_EXPRESSION__CALL, oldCall, call));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<STCallArgument> getParameters() {
 		if (parameters == null) {
 			parameters = new EObjectContainmentEList<STCallArgument>(STCallArgument.class, this, STCorePackage.ST_FEATURE_EXPRESSION__PARAMETERS);
@@ -160,7 +206,7 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 	 * @generated
 	 */
 	@Override
-	public EList<STCallArgument> getMappedInputArguments() {
+	public Map<INamedElement, STExpression> getMappedInputArguments() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInputArguments(this);
 	}
 
@@ -170,7 +216,7 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 	 * @generated
 	 */
 	@Override
-	public EList<STCallArgument> getMappedOutputArguments() {
+	public Map<INamedElement, INamedElement> getMappedOutputArguments() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedOutputArguments(this);
 	}
 
@@ -200,6 +246,8 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 			case STCorePackage.ST_FEATURE_EXPRESSION__FEATURE:
 				if (resolve) return getFeature();
 				return basicGetFeature();
+			case STCorePackage.ST_FEATURE_EXPRESSION__CALL:
+				return isCall();
 			case STCorePackage.ST_FEATURE_EXPRESSION__PARAMETERS:
 				return getParameters();
 			default:
@@ -218,6 +266,9 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 		switch (featureID) {
 			case STCorePackage.ST_FEATURE_EXPRESSION__FEATURE:
 				setFeature((INamedElement)newValue);
+				return;
+			case STCorePackage.ST_FEATURE_EXPRESSION__CALL:
+				setCall((Boolean)newValue);
 				return;
 			case STCorePackage.ST_FEATURE_EXPRESSION__PARAMETERS:
 				getParameters().clear();
@@ -240,6 +291,9 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 			case STCorePackage.ST_FEATURE_EXPRESSION__FEATURE:
 				setFeature((INamedElement)null);
 				return;
+			case STCorePackage.ST_FEATURE_EXPRESSION__CALL:
+				setCall(CALL_EDEFAULT);
+				return;
 			case STCorePackage.ST_FEATURE_EXPRESSION__PARAMETERS:
 				getParameters().clear();
 				return;
@@ -259,11 +313,29 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 		switch (featureID) {
 			case STCorePackage.ST_FEATURE_EXPRESSION__FEATURE:
 				return feature != null;
+			case STCorePackage.ST_FEATURE_EXPRESSION__CALL:
+				return call != CALL_EDEFAULT;
 			case STCorePackage.ST_FEATURE_EXPRESSION__PARAMETERS:
 				return parameters != null && !parameters.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (call: "); //$NON-NLS-1$
+		result.append(call);
+		result.append(')');
+		return result.toString();
 	}
 
 } //STFeatureExpressionImpl

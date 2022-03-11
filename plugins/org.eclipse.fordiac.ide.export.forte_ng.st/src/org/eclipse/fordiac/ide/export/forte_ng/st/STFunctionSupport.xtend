@@ -64,13 +64,13 @@ class STFunctionSupport extends StructuredTextSupport {
 
 	def private CharSequence generateStructuredTextFunctionHeader(STFunction func) '''
 		«func.generateStructuredTextFunctionDeclaration»;
-			
 	'''
 
 	def private CharSequence generateStructuredTextFunctionImpl(STFunction func) '''
 		«func.generateStructuredTextFunctionDeclaration» {
 		  «func.generateStructuredTextFunctionBody»
 		}
+		
 	'''
 
 	def private CharSequence generateStructuredTextFunctionDeclaration(STFunction func) //
@@ -85,7 +85,7 @@ class STFunctionSupport extends StructuredTextSupport {
 	}
 
 	def private CharSequence generateStructuredTextFunctionBody(STFunction func) '''
-		«IF func.returnType !== null»«func.returnType.generateTypeName» st_ret_val(0);«ENDIF»
+		«IF func.returnType !== null»«func.returnType.generateTypeName» st_ret_val = «func.returnType.generateDefaultValue»;«ENDIF»
 		«func.varDeclarations.filter(STVarPlainDeclarationBlock).generateLocalVariables(true)»
 		«func.varDeclarations.filter(STVarTempDeclarationBlock).generateLocalVariables(true)»
 		
@@ -97,11 +97,11 @@ class STFunctionSupport extends StructuredTextSupport {
 	override protected dispatch CharSequence generateStatement(STReturn stmt) //
 	'''return«IF currentFunction.returnType !== null» st_ret_val«ENDIF»;'''
 
-	override protected dispatch CharSequence generateFeatureName(STFunction feature) //
-	'''«IF feature === currentFunction»st_ret_val«ELSE»func_«feature.name»«ENDIF»'''
-
-	override protected getMappedArguments(STFeatureExpression expr) {
-		if(expr.feature === currentFunction) emptyList else super.getMappedArguments(expr)
+	override protected dispatch CharSequence generateExpression(STFeatureExpression expr) {
+		if (expr.feature === currentFunction && !expr.call)
+			"st_ret_val"
+		else
+			'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
 	}
 
 	override getDependencies(Map<?, ?> options) {

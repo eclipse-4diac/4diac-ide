@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl
 
 import java.math.BigDecimal
-import org.eclipse.emf.common.util.EList
+import java.util.Map
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
@@ -43,7 +42,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
-import static extension org.eclipse.emf.common.util.ECollections.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 final package class ExpressionAnnotations {
@@ -193,25 +191,41 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static EList<STCallArgument> getMappedInputArguments(STFeatureExpression expr) {
+	def package static Map<INamedElement, STExpression> getMappedInputArguments(STFeatureExpression expr) {
 		val feature = expr.feature
 		if (feature instanceof ICallable) {
 			val parameters = feature.inputParameters
-			val namedArguments = expr.parameters.filter(STCallNamedInputArgument).toMap[target]
-			val unnamedArguments = expr.parameters.filter(STCallUnnamedArgument).iterator
-			parameters.map[namedArguments.get(it) ?: if(unnamedArguments.hasNext) unnamedArguments.next else null].
-				newBasicEList.unmodifiableEList
+			if (expr.parameters.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
+				parameters.toInvertedMap [ parameter |
+					(expr.parameters.get(parameters.indexOf(parameter)) as STCallUnnamedArgument).arg
+				].unmodifiableView
+			} else { // named arguments
+				val namedArguments = expr.parameters.filter(STCallNamedInputArgument).toMap[target]
+				parameters.toInvertedMap [ parameter |
+					namedArguments.get(parameter)?.source
+				].unmodifiableView
+			}
 		} else
-			emptyEList
+			emptyMap
 	}
 
-	def package static EList<STCallArgument> getMappedOutputArguments(STFeatureExpression expr) {
+	def package static Map<INamedElement, INamedElement> getMappedOutputArguments(STFeatureExpression expr) {
 		val feature = expr.feature
 		if (feature instanceof ICallable) {
 			val parameters = feature.outputParameters
-			val namedArguments = expr.parameters.filter(STCallNamedOutputArgument).toMap[source]
-			parameters.map[namedArguments.get(it)].newBasicEList.unmodifiableEList
+			if (expr.parameters.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
+				val inputCount = feature.inputParameters.size
+				parameters.toInvertedMap [ parameter |
+					((expr.parameters.get(inputCount + parameters.indexOf(parameter)) as STCallUnnamedArgument).
+						arg as STFeatureExpression).feature
+				].unmodifiableView
+			} else { // named arguments
+				val namedArguments = expr.parameters.filter(STCallNamedOutputArgument).toMap[source]
+				parameters.toInvertedMap [ parameter |
+					namedArguments.get(parameter)?.target
+				].unmodifiableView
+			}
 		} else
-			emptyEList
+			emptyMap
 	}
 }

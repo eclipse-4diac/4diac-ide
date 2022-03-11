@@ -21,6 +21,9 @@ import java.util.List
 import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType
+import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
 import org.eclipse.fordiac.ide.model.data.DateType
@@ -28,6 +31,7 @@ import org.eclipse.fordiac.ide.model.data.LdateType
 import org.eclipse.fordiac.ide.model.data.LdtType
 import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.LtodType
+import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -42,7 +46,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
@@ -222,13 +225,28 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''«expr.receiver.generateExpression»«FOR index : expr.index»[«index.generateExpression»]«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) //
-	'''«expr.feature.generateFeatureName»«FOR param : expr.mappedArguments BEFORE "(" SEPARATOR ", " AFTER ")"»«param.generateCallArgument»«ENDFOR»'''
+	'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
 
-	def protected Iterable<STCallArgument> getMappedArguments(STFeatureExpression expr) {
-		expr.mappedInputArguments + expr.mappedOutputArguments
+	def protected Iterable<CharSequence> generateCallArguments(STFeatureExpression expr) {
+		try {
+			expr.mappedInputArguments.entrySet.map[key.generateInputCallArgument(value)] +
+				expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
+		} catch (IndexOutOfBoundsException e) {
+			errors.add('''Not enough arguments for «expr.feature.name»''')
+			emptyList
+		} catch (ClassCastException e) {
+			errors.add('''Mixing named and unnamed arguments is not allowed''')
+			emptyList
+		}
 	}
 
-	def protected dispatch CharSequence generateCallArgument(Void arg) { "0" }
+	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
+		if(argument === null) parameter.type.generateDefaultValue else argument.generateExpression
+	}
+
+	def protected CharSequence generateOutputCallArgument(INamedElement parameter, INamedElement argument) {
+		if(argument === null) parameter.type.generateDefaultValue else argument.generateFeatureName
+	}
 
 	def protected dispatch CharSequence generateCallArgument(STCallUnnamedArgument arg) {
 		arg.arg.generateExpression
@@ -273,11 +291,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateExpression(STDateAndTimeLiteral expr) //
 	'''CIEC_DATE_AND_TIME(«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»)'''
 
-	def protected dispatch CharSequence generateFeatureName(INamedElement feature) {
-		errors.add('''The feature «feature.eClass.name» is not supported''')
-		""
-	}
-
 	def protected dispatch CharSequence generateTemplateExpression(STBinaryExpression expr) {
 		switch (expr.op) {
 			case RANGE: '''«expr.left.generateTemplateExpression», «expr.right.generateTemplateExpression»'''
@@ -291,6 +304,22 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateTemplateExpression(STNumericLiteral expr) { expr.value.toString }
 
+	def protected CharSequence generateDefaultValue(INamedElement type) {
+		switch (type) {
+			AnyStringType: '''«type.generateTypeName»("")'''
+			AnyElementaryType: '''«type.generateTypeName»(0)'''
+			ArrayType: '''«type.generateTypeName»()'''
+			StructuredType: '''«type.generateTypeName»{}'''
+			default:
+				"0"
+		}
+	}
+
+	def protected dispatch CharSequence generateFeatureName(INamedElement feature) {
+		errors.add('''The feature «feature.eClass.name» is not supported''')
+		""
+	}
+
 	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) //
 	'''«IF feature.rootContainer instanceof BaseFBType»st_«ENDIF»«feature.name»()'''
 
@@ -303,6 +332,15 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateFeatureName(FB feature) '''fb_«feature.name»()'''
 
 	def protected dispatch CharSequence generateFeatureName(Event feature) '''evt_«feature.name»'''
+
+	def protected dispatch INamedElement getType(INamedElement feature) {
+		errors.add('''The feature «feature.eClass.name» is not supported''')
+		null
+	}
+
+	def protected dispatch INamedElement getType(VarDeclaration feature) { feature.type }
+
+	def protected dispatch INamedElement getType(STVarDeclaration feature) { feature.type }
 
 	def protected CharSequence generateTypeName(STVarDeclaration variable) {
 		if (variable.locatedAt !== null && variable.array) {

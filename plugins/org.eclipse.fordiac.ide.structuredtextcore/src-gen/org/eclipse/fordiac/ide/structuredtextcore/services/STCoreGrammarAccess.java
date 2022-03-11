@@ -1825,7 +1825,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final CrossReference cFeatureINamedElementCrossReference_1_0 = (CrossReference)cFeatureAssignment_1.eContents().get(0);
 		private final RuleCall cFeatureINamedElementIDTerminalRuleCall_1_0_1 = (RuleCall)cFeatureINamedElementCrossReference_1_0.eContents().get(1);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
-		private final Keyword cLeftParenthesisKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cCallAssignment_2_0 = (Assignment)cGroup_2.eContents().get(0);
+		private final Keyword cCallLeftParenthesisKeyword_2_0_0 = (Keyword)cCallAssignment_2_0.eContents().get(0);
 		private final Group cGroup_2_1 = (Group)cGroup_2.eContents().get(1);
 		private final Assignment cParametersAssignment_2_1_0 = (Assignment)cGroup_2_1.eContents().get(0);
 		private final RuleCall cParametersSTCallArgumentParserRuleCall_2_1_0_0 = (RuleCall)cParametersAssignment_2_1_0.eContents().get(0);
@@ -1836,10 +1837,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cRightParenthesisKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
 		
 		//STFeatureExpression returns STExpression:
-		//    {STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
+		//    {STFeatureExpression} feature=[libraryElement::INamedElement] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?
+		//{STFeatureExpression} feature=[libraryElement::INamedElement] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?
 		public Group getGroup() { return cGroup; }
 		
 		//{STFeatureExpression}
@@ -1854,11 +1855,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//ID
 		public RuleCall getFeatureINamedElementIDTerminalRuleCall_1_0_1() { return cFeatureINamedElementIDTerminalRuleCall_1_0_1; }
 		
-		//( => '(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?
+		//( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?
 		public Group getGroup_2() { return cGroup_2; }
 		
-		//=> '('
-		public Keyword getLeftParenthesisKeyword_2_0() { return cLeftParenthesisKeyword_2_0; }
+		//=> call?='('
+		public Assignment getCallAssignment_2_0() { return cCallAssignment_2_0; }
+		
+		//'('
+		public Keyword getCallLeftParenthesisKeyword_2_0_0() { return cCallLeftParenthesisKeyword_2_0_0; }
 		
 		//(parameters+=STCallArgument (',' parameters+=STCallArgument)* )?
 		public Group getGroup_2_1() { return cGroup_2_1; }
@@ -3872,7 +3876,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STFeatureExpression returns STExpression:
-	//    {STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
+	//    {STFeatureExpression} feature=[libraryElement::INamedElement] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
 	public STFeatureExpressionElements getSTFeatureExpressionAccess() {
 		return pSTFeatureExpression;
 	}

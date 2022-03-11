@@ -624,7 +624,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STFeatureExpression returns STFeatureExpression
 	 *
 	 * Constraint:
-	 *     (feature=[INamedElement|ID] (parameters+=STCallArgument parameters+=STCallArgument*)?)
+	 *     (feature=[INamedElement|ID] (call?='(' (parameters+=STCallArgument parameters+=STCallArgument*)?)?)
 	 */
 	protected void sequence_STFeatureExpression(ISerializationContext context, STFeatureExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

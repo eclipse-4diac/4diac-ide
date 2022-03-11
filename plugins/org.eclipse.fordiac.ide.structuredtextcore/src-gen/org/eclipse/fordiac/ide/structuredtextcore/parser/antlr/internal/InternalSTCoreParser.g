@@ -2732,11 +2732,22 @@ ruleSTFeatureExpression returns [EObject current=null]
 		)
 		(
 			(
-				(LeftParenthesis)=>
-				otherlv_2=LeftParenthesis
-				{
-					newLeafNode(otherlv_2, grammarAccess.getSTFeatureExpressionAccess().getLeftParenthesisKeyword_2_0());
-				}
+				((
+					LeftParenthesis
+				)
+				)=>
+				(
+					lv_call_2_0=LeftParenthesis
+					{
+						newLeafNode(lv_call_2_0, grammarAccess.getSTFeatureExpressionAccess().getCallLeftParenthesisKeyword_2_0_0());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getSTFeatureExpressionRule());
+						}
+						setWithLastConsumed($current, "call", lv_call_2_0 != null, "(");
+					}
+				)
 			)
 			(
 				(

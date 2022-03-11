@@ -25,6 +25,8 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -1620,8 +1622,18 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSTFeatureExpression_Call() {
+		return (EAttribute)stFeatureExpressionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getSTFeatureExpression_Parameters() {
-		return (EReference)stFeatureExpressionEClass.getEStructuralFeatures().get(1);
+		return (EReference)stFeatureExpressionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1924,6 +1936,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		stFeatureExpressionEClass = createEClass(ST_FEATURE_EXPRESSION);
 		createEReference(stFeatureExpressionEClass, ST_FEATURE_EXPRESSION__FEATURE);
+		createEAttribute(stFeatureExpressionEClass, ST_FEATURE_EXPRESSION__CALL);
 		createEReference(stFeatureExpressionEClass, ST_FEATURE_EXPRESSION__PARAMETERS);
 
 		stMultibitPartialExpressionEClass = createEClass(ST_MULTIBIT_PARTIAL_EXPRESSION);
@@ -2185,13 +2198,26 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		initEClass(stFeatureExpressionEClass, STFeatureExpression.class, "STFeatureExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTFeatureExpression_Feature(), theLibraryElementPackage.getINamedElement(), null, "feature", null, 0, 1, STFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTFeatureExpression_Call(), ecorePackage.getEBoolean(), "call", null, 0, 1, STFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTFeatureExpression_Parameters(), this.getSTCallArgument(), null, "parameters", null, 0, -1, STFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stFeatureExpressionEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(stFeatureExpressionEClass, this.getSTCallArgument(), "getMappedInputArguments", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		EOperation op = addEOperation(stFeatureExpressionEClass, null, "getMappedInputArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		EGenericType g1 = createEGenericType(ecorePackage.getEMap());
+		EGenericType g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(this.getSTExpression());
+		g1.getETypeArguments().add(g2);
+		initEOperation(op, g1);
 
-		addEOperation(stFeatureExpressionEClass, this.getSTCallArgument(), "getMappedOutputArguments", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		op = addEOperation(stFeatureExpressionEClass, null, "getMappedOutputArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g1.getETypeArguments().add(g2);
+		initEOperation(op, g1);
 
 		initEClass(stMultibitPartialExpressionEClass, STMultibitPartialExpression.class, "STMultibitPartialExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSTMultibitPartialExpression_Specifier(), this.getSTMultiBitAccessSpecifier(), "specifier", null, 0, 1, STMultibitPartialExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

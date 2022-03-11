@@ -56,6 +56,7 @@ class STMethodSupport extends StructuredTextSupport {
 		«method.generateStructuredTextMethodDeclaration(false)» {
 		  «method.generateStructuredTextMethodBody»
 		}
+		
 	'''
 
 	def private CharSequence generateStructuredTextMethodDeclaration(STMethod method, boolean header) //
@@ -70,7 +71,7 @@ class STMethodSupport extends StructuredTextSupport {
 	}
 
 	def private CharSequence generateStructuredTextMethodBody(STMethod method) '''
-		«IF method.returnType !== null»«method.returnType.generateTypeName» st_ret_val(0);«ENDIF»
+		«IF method.returnType !== null»«method.returnType.generateTypeName» st_ret_val = «method.returnType.generateDefaultValue»;«ENDIF»
 		«method.body.varDeclarations.filter(STVarTempDeclarationBlock).generateLocalVariables(true)»
 		
 		«method.body.statements.generateStatementList»
@@ -81,11 +82,11 @@ class STMethodSupport extends StructuredTextSupport {
 	override protected dispatch CharSequence generateStatement(STReturn stmt) //
 	'''return«IF parseResult.returnType !== null» st_ret_val«ENDIF»;'''
 
-	override protected dispatch CharSequence generateFeatureName(STMethod feature) //
-	'''«IF feature === parseResult»st_ret_val«ELSE»method_«feature.name»«ENDIF»'''
-
-	override protected getMappedArguments(STFeatureExpression expr) {
-		if(expr.feature === parseResult) emptyList else super.getMappedArguments(expr)
+	override protected dispatch CharSequence generateExpression(STFeatureExpression expr) {
+		if (expr.feature === parseResult && !expr.call)
+			"st_ret_val"
+		else
+			'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
 	}
 
 	def private getFBType() { switch (root : method.rootContainer) { BaseFBType: root } }
