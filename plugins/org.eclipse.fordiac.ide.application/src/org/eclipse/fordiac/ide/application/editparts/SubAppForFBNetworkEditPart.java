@@ -62,6 +62,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 					}
 					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
 							.equals(notification.getFeature())) {
+						refreshVisuals();
 						refreshChildren();
 						refreshInterfaceEditParts();
 						refreshRoot();
@@ -74,6 +75,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 					}
 					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
 							.equals(notification.getFeature())) {
+						refreshVisuals();
 						refreshChildren();
 						refreshInterfaceEditParts();
 						refreshRoot();
@@ -205,6 +207,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		super.refreshVisuals();
 		final SubAppForFbNetworkFigure figure = getFigure();
 		figure.updateTypeLabel(getModel());
+		figure.updateExpandedFigure();
 	}
 
 	@Override

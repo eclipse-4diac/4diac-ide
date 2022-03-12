@@ -38,6 +38,7 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
@@ -58,8 +59,12 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 	private static final int FB_NOTCH_INSET = 9;
 
+	private Figure fbFigureContainer;
+
 	/** The top. */
 	private RoundedRectangle top;
+
+	Figure middleContainer;
 
 	/** The middle. */
 	private RectangleFigure middle;
@@ -170,6 +175,14 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return bottom;
 	}
 
+	public final Figure getMiddleContainer() {
+		return middleContainer;
+	}
+
+	public Figure getFbFigureContainer() {
+		return fbFigureContainer;
+	}
+
 	private static int getMaxWidth() {
 		if (-1 == maxWidth) {
 			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
@@ -234,7 +247,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	private void createFBFigureShape(final FBType fbType) {
-		final Figure fbFigureContainer = createFigureContainer();
+		createFigureContainer();
 		createFBTop(fbFigureContainer, DiagramPreferences.CORNER_DIM);
 		configureFBMiddle(fbType, fbFigureContainer);
 		createFBBottom(fbFigureContainer, DiagramPreferences.CORNER_DIM);
@@ -256,16 +269,17 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		setBottomIOs(bottom);
 	}
 
-	private void configureFBMiddle(final FBType fbType, final Figure fbFigureContainer) {
-		final Figure middleContainer = new Figure();
+	protected void configureFBMiddle(final FBType fbType, final Figure fbFigureContainer) {
+		middleContainer = new Figure();
 		middleContainer.setLayoutManager(new BorderLayout());
 		middleContainer.setBorder(new MarginBorder(0, FB_NOTCH_INSET, 0, FB_NOTCH_INSET));
 
-		fbFigureContainer.add(middleContainer);
-		final GridData middleLayouData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		fbFigureContainer.setConstraint(middleContainer, middleLayouData);
-
+		fbFigureContainer.add(middleContainer, createMiddleLayoutData(), -1);
 		setupTypeNameAndVersion(fbType, middleContainer);
+	}
+
+	protected static GridData createMiddleLayoutData() {
+		return new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	}
 
 	private void createFBTop(final Figure fbFigureContainer, final int cornerDim) {
@@ -291,10 +305,17 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return topLayout;
 	}
 
-	private Figure createFigureContainer() {
-		final Figure fbFigureContainer = new Figure();
+	private void createFigureContainer() {
+		fbFigureContainer = new Figure() {
+			@Override
+			public Insets getInsets() {
+				// even if we have a border do not return insets.
+				return NO_INSETS;
+			}
+		};
 		add(fbFigureContainer);
-		setConstraint(fbFigureContainer, new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
+		final GridData layoutConstraint = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
+		setConstraint(fbFigureContainer, layoutConstraint);
 
 		final GridLayout gridLayout = new GridLayout(1, true);
 		gridLayout.marginHeight = 0;
@@ -302,7 +323,6 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		gridLayout.horizontalSpacing = 0;
 		gridLayout.verticalSpacing = -1;
 		fbFigureContainer.setLayoutManager(gridLayout);
-		return fbFigureContainer;
 	}
 
 	private void setupTopIOs(final IFigure parent) {

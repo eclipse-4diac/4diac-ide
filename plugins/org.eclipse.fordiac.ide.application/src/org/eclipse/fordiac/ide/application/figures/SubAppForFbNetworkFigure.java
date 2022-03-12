@@ -18,6 +18,8 @@
 package org.eclipse.fordiac.ide.application.figures;
 
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.figures.FBShapeShadowBorder;
+import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -30,6 +32,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	public SubAppForFbNetworkFigure(final SubApp model, final SubAppForFBNetworkEditPart editPart) {
 		super(model, editPart);
 		updateTypeLabel(model);
+		updateExpandedFigure();
 	}
 
 	public void updateTypeLabel(final SubApp model) {
@@ -38,6 +41,27 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 			getTypeLabel().setIcon(FordiacImage.ICON_SUB_APP.getImage());
 		} else {
 			getTypeLabel().setIcon(ResultListLabelProvider.getTypeImage(model.getType()));
+		}
+	}
+
+	@Override
+	protected SubApp getModel() {
+		return (SubApp) super.getModel();
+	}
+
+	public final void updateExpandedFigure() {
+		if (getModel().isUnfolded()) {
+			if (getMiddleContainer().getParent() != null) {
+				getFbFigureContainer().remove(getMiddleContainer());
+				setBorder(null);
+				getFbFigureContainer().setBorder(new RoundedRectangleShadowBorder());
+			}
+		} else {
+			if (getMiddleContainer().getParent() == null) {
+				getFbFigureContainer().add(getMiddleContainer(), createMiddleLayoutData(), 1);
+				getFbFigureContainer().setBorder(null);
+				setBorder(new FBShapeShadowBorder());
+			}
 		}
 	}
 
