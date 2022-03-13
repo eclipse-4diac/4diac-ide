@@ -255,7 +255,6 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 			subApp = (SubApp) subApp.getOpposite();
 		}
 		OpenListenerManager.openEditor(subApp);
-
 	}
 
 	private boolean subAppIsMapped(final SubApp subApp) {
@@ -273,9 +272,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
-			getFigure().getBottom().add(((UnfoldedSubappContentEditPart) childEditPart).getFigure(), 1);
-		} else if (childEditPart instanceof InstanceCommentEditPart) {
-			getFigure().getTop().add(((InstanceCommentEditPart) childEditPart).getFigure(), 1);
+			getFigure().getExpandedMainFigure().add(((UnfoldedSubappContentEditPart) childEditPart).getFigure(), 2);
 		} else {
 			super.addChildVisual(childEditPart, index);
 		}
@@ -284,9 +281,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
-			getFigure().getBottom().remove(((UnfoldedSubappContentEditPart) childEditPart).getFigure());
-		} else if (childEditPart instanceof InstanceCommentEditPart) {
-			getFigure().getTop().remove(((InstanceCommentEditPart) childEditPart).getFigure());
+			if (getFigure().getExpandedMainFigure() != null) {
+				getFigure().getExpandedMainFigure().remove(((UnfoldedSubappContentEditPart) childEditPart).getFigure());
+			}
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
