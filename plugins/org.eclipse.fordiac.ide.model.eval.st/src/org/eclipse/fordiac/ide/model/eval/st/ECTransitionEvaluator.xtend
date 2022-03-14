@@ -49,7 +49,7 @@ class ECTransitionEvaluator extends StructuredTextEvaluator {
 
 	override evaluate() {
 		prepare();
-		parseResult.evaluate
+		parseResult.trap.evaluateExpression
 	}
 
 	override ECTransition getSourceElement() {

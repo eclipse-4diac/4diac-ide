@@ -14,6 +14,9 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 
@@ -30,5 +33,36 @@ class STAlgorithmMapper {
 
 	def dispatch STMethod fromModel(Resource resource, org.eclipse.fordiac.ide.model.libraryElement.STMethod element) {
 		return resource.allContents.filter(STMethod).filter[name == element.name].head
+	}
+
+	def dispatch EObject toModel(EObject element) {
+		if(element.eResource.FBType.eAllContents.contains(element)) element else null
+	}
+
+	def dispatch org.eclipse.fordiac.ide.model.libraryElement.STMethod toModel(STMethod method) {
+		val type = method.eResource.FBType
+		if (type instanceof BaseFBType) {
+			type.methods.filter(org.eclipse.fordiac.ide.model.libraryElement.STMethod).findFirst [
+				name == method.name
+			]
+		} else
+			null
+	}
+
+	def dispatch org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm toModel(STAlgorithm algorithm) {
+		val type = algorithm.eResource.FBType
+		if (type instanceof BaseFBType) {
+			type.algorithm.filter(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm).findFirst [
+				name == algorithm.name
+			]
+		} else
+			null
+	}
+
+	def protected FBType getFBType(Resource resource) {
+		if (resource instanceof STAlgorithmResource)
+			resource.fbType
+		else
+			null
 	}
 }

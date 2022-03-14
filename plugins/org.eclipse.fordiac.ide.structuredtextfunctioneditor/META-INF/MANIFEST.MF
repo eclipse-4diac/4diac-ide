@@ -29,5 +29,6 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.scoping,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.serializer,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.services,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.util,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation
 Import-Package: org.apache.log4j

@@ -44,7 +44,17 @@ class STAlgorithmEvaluator extends StructuredTextEvaluator {
 
 	override evaluate() {
 		prepare();
-		parseResult.evaluate
+		parseResult.evaluateStructuredTextAlgorithm
+		null
+	}
+
+	def protected void evaluateStructuredTextAlgorithm(STAlgorithmBody alg) {
+		alg.varTempDeclarations.flatMap[varDeclarations].forEach[evaluateVariableInitialization]
+		try {
+			alg.statements.evaluateStatementList
+		} catch (StructuredTextException e) {
+			// return
+		}
 	}
 
 	override STAlgorithm getSourceElement() {

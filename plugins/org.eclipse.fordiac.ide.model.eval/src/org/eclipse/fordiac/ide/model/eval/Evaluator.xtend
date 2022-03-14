@@ -15,17 +15,20 @@ package org.eclipse.fordiac.ide.model.eval
 import java.util.Map
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 
 interface Evaluator {
 	def void prepare()
-	
+
 	def Value evaluate() throws EvaluatorException, InterruptedException
-	
+
 	def String getName()
-	
+
 	def Evaluator getParent()
-	
+
+	def Map<? extends ICallable, ? extends Evaluator> getChildren()
+
 	def Object getSourceElement()
-	
+
 	def Map<String, Variable> getVariables()
 }

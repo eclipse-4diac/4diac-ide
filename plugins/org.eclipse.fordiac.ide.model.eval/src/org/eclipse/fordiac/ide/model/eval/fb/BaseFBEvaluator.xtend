@@ -41,4 +41,8 @@ abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
 	override prepare() {
 		algorithmEvaluators.values.forEach[prepare]
 	}
+	
+	override getChildren() {
+		algorithmEvaluators
+	}
 }

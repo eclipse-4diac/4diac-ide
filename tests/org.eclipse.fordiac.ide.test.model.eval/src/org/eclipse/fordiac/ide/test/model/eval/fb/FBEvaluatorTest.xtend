@@ -61,6 +61,13 @@ class FBEvaluatorTest {
 		return alg
 	}
 
+	def static newSTMethod(CharSequence text, String name) {
+		val method = LibraryElementFactory.eINSTANCE.createSTMethod
+		method.name = name
+		method.text = text.toString
+		return method
+	}
+
 	def static newVariable(AnyElementaryValue value, String name) {
 		new ElementaryVariable(name, value.type, value)
 	}
