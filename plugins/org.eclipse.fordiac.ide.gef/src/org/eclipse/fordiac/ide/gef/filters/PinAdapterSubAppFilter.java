@@ -22,8 +22,7 @@ public class PinAdapterSubAppFilter implements IFilter {
 	public boolean select(final Object toTest) {
 		if (toTest instanceof EditPart) {
 			final Object type = ((EditPart) toTest).getModel();
-			if (type instanceof AdapterDeclaration) { // change the VAr
-				System.err.println("In the PinAdapterSubAppFilter and it is and adapter declaration");
+			if (type instanceof AdapterDeclaration) {
 				return true;
 			}
 		}
