@@ -56,4 +56,8 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	override getVariables() {
 		variables.unmodifiableView
 	}
+
+	def protected getVariablesInternal() {
+		variables
+	}
 }

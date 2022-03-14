@@ -30,7 +30,7 @@ abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
 	new(T type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
 		super(type, queue, variables, parent)
 		type.internalVars.forEach [ variable |
-			this.variables.computeIfAbsent(variable.name)[newVariable(variable)]
+			this.variablesInternal.computeIfAbsent(variable.name)[newVariable(variable)]
 		]
 		algorithmEvaluators = type.algorithm.toInvertedMap [
 			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>,
