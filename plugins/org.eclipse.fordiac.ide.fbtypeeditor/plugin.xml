@@ -120,45 +120,18 @@
                filter="org.eclipse.fordiac.ide.fbtypeeditor.properties.AdapterInterfaceFilter"
                id="property.section.interface.adapter"
                tab="property.tab.adapter">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.AbstractInterfaceElementEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.properties.DataInterfaceElementSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.properties.DataInterfaceFilter"
                id="property.section.interface.data"
                tab="property.tab.data">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.AbstractInterfaceElementEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EventInterfaceElementSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.properties.EventInterfaceFilter"
                id="property.section.interface.even"
                tab="property.tab.event">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.AbstractInterfaceElementEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceAdapterSection"
