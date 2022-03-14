@@ -56,19 +56,19 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class ConnectionDisplayWidget {
 
-	private Section connectionSection;
-	private TableViewer connectionsViewer;
-	private AddDeleteWidget deleteButton;
+	protected Section connectionSection;
+	protected TableViewer connectionsViewer;
+	protected AddDeleteWidget deleteButton;
 
 	private static final String TARGET = "target"; //$NON-NLS-1$
 	private static final String PIN = "pin"; //$NON-NLS-1$
-	private static final String COMMENT = "comment"; //$NON-NLS-1$
+	protected static final String COMMENT = "comment"; //$NON-NLS-1$
 
 	private static final int TARGET_PIN_WIDTH = 100;
 	private static final int COMMENT_WIDTH = 200;
 
 	private final TabbedPropertySheetWidgetFactory widgetFactory;
-	private IInterfaceElement type;
+	protected IInterfaceElement type;
 	private ComposedAdapterFactory adapterFactory;
 	private final AbstractSection parentSection;
 
@@ -79,13 +79,10 @@ public class ConnectionDisplayWidget {
 			final AbstractSection section) {
 		this.widgetFactory = widgetFactory;
 		parentSection = section;
-		if (!(this instanceof InternalConnectionsViewer)) {
-			createConnectionDisplaySection(parent);
-		}
-
+		createConnectionDisplaySection(parent);
 	}
 
-	private void createConnectionDisplaySection(final Composite parent) {
+	protected void createConnectionDisplaySection(final Composite parent) {
 		connectionSection = widgetFactory.createSection(parent,
 				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
 		connectionSection.setText(Messages.InterfaceElementSection_ConnectionGroup);
@@ -109,7 +106,7 @@ public class ConnectionDisplayWidget {
 		connectionSection.setClient(composite);
 	}
 
-	private TableViewer createConnectionsViewer(final Composite parent) {
+	protected TableViewer createConnectionsViewer(final Composite parent) {
 		final TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
 		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
 		viewer.setColumnProperties(new String[] { TARGET, PIN, COMMENT });
@@ -120,7 +117,7 @@ public class ConnectionDisplayWidget {
 		return viewer;
 	}
 
-	private static TableLayout createTableLayout(final Table table) {
+	protected static TableLayout createTableLayout(final Table table) {
 		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(FordiacMessages.Target);
 		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
@@ -139,7 +136,6 @@ public class ConnectionDisplayWidget {
 		this.type = type;
 		isInputViewer = type.isIsInput();
 		refreshConnectionsViewerManual(isInputViewer);
-
 	}
 
 	// For setting it manually when needed
