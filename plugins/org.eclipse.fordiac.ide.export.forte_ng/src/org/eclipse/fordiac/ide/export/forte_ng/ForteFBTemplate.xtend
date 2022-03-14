@@ -15,12 +15,17 @@
  *   Martin Melik Merkumians - adds clause to prevent generation of zero size arrays
  *   Martin Melik Merkumians - adds generation of initial value assignment
  *   Martin Jobst - add event accessors
+ *                - add constructor calls for initial value assignments
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
-import org.eclipse.fordiac.ide.model.FordiacKeywords
+import org.eclipse.fordiac.ide.model.data.AnyBitType
+import org.eclipse.fordiac.ide.model.data.AnyCharType
+import org.eclipse.fordiac.ide.model.data.AnyNumType
+import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -250,37 +255,16 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		}
 	'''
 
-	def protected generateInitialAssignment(VarDeclaration variable) {
-		switch variable.typeName {
-			case FordiacKeywords.STRING: '''«variable.name»() = "«variable.value.value»";'''
-			case FordiacKeywords.WSTRING: '''«variable.name»() = "«variable.value.value»";'''
-			case "ARRAY": '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.TIME: '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.DATE: '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.TIME_OF_DAY: '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.DATE_AND_TIME: '''«variable.name»().fromString("«variable.value.value»");'''
-			case FordiacKeywords.BOOL: '''«variable.name»() = «variable.value.value.generatBoolLiteral»;'''
-			case FordiacKeywords.REAL: '''«variable.name»() = «variable.value.value»;'''
-			case FordiacKeywords.LREAL: '''«variable.name»() = «variable.value.value»;'''
-			default:
-				if (isNumeric(variable.value.value)) {
-					'''«variable.name»() = «variable.value.value»;'''
-				} else {
-					'''«variable.name»().fromString("«variable.value.value»");'''
-				}
+	def protected CharSequence generateInitialAssignment(VarDeclaration variable) {
+		switch (type : variable.type) {
+			case variable.array,
+			ArrayType: '''«variable.name»().fromString("«variable.value.value»");'''
+			AnyNumType,
+			AnyBitType: '''«variable.name»() = «type.generateTypeName»(«variable.value.value»);'''
+			AnyCharType: '''«variable.name»() = «type.generateTypeName»('«variable.value.value.substring(1, variable.value.value.length - 1)»');'''
+			AnyStringType: '''«variable.name»() = «type.generateTypeName»("«variable.value.value.substring(1, variable.value.value.length - 1)»");'''
+			default: '''«variable.name»().fromString("«variable.value.value»");'''
 		}
-	}
-
-	def private generatBoolLiteral(String value) {
-		switch value {
-			case "0": '''false'''
-			case "1": '''true'''
-			default: '''«value.toLowerCase»'''
-		}
-	}
-
-	def private isNumeric(String input) {
-		input.chars().allMatch([in|Character.isDigit(in)])
 	}
 
 	def protected generateInternalVarDefinition(BaseFBType baseFBType) '''
