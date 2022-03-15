@@ -10,19 +10,19 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextalgorithm.validation
+package org.eclipse.fordiac.ide.structuredtextcore.validation
 
-import org.eclipse.emf.ecore.EValidator
-import org.eclipse.emf.ecore.impl.EValidatorRegistryImpl
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.common.util.DiagnosticChain
 import java.util.Map
+import org.eclipse.emf.common.util.DiagnosticChain
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EDataType
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EValidator
+import org.eclipse.emf.ecore.impl.EValidatorRegistryImpl
 
-class STAlgorithmValidatorRegistry extends EValidatorRegistryImpl implements EValidator.Registry {
+class STCoreValidatorRegistry extends EValidatorRegistryImpl implements EValidator.Registry {
 
-	public static final STAlgorithmValidatorRegistry INSTANCE = new STAlgorithmValidatorRegistry
+	public static final STCoreValidatorRegistry INSTANCE = new STCoreValidatorRegistry
 
 	new() {
 		super(EValidator.Registry.INSTANCE)

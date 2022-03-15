@@ -15,8 +15,8 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm
 import com.google.inject.Binder
 import com.google.inject.name.Names
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
-import org.eclipse.fordiac.ide.structuredtextalgorithm.validation.STAlgorithmValidatorRegistry
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidatorRegistry
 import org.eclipse.xtext.validation.CompositeEValidator
 
 /**
@@ -33,7 +33,7 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	
 	override bindEValidatorRegistry() {
 		// ignore dangling reference errors (until Palette vs. Resource issues have been addressed)
-		return STAlgorithmValidatorRegistry.INSTANCE
+		return STCoreValidatorRegistry.INSTANCE
 	}
 
 	def void configureCompositeEValidator(Binder binder) {
