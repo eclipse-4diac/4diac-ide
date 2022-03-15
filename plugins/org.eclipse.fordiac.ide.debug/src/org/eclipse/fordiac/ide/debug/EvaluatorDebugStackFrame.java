@@ -50,6 +50,24 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 		return this.evaluator;
 	}
 
+	public EvaluatorDebugStackFrame getParent() {
+		final Evaluator parent = this.evaluator.getParent();
+		if (parent != null) {
+			final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
+			return debugger.getStackFrame(parent, thread);
+		}
+		return null;
+	}
+
+	public boolean isAncestorOf(final EvaluatorDebugStackFrame frame) {
+		if (frame == this) {
+			return true;
+		} else if (frame == null) {
+			return false;
+		}
+		return isAncestorOf(frame.getParent());
+	}
+
 	@Override
 	public boolean canResume() {
 		return this.thread.canResume();
