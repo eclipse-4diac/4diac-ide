@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.eval.st
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
-import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmMapper
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
@@ -26,8 +25,6 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 	final STMethod method
 
 	final Variable returnVariable
-
-	final extension STAlgorithmMapper mapper = new STAlgorithmMapper
 
 	new(STMethod method, Iterable<Variable> variables, Evaluator parent) {
 		super(method.name, variables, parent)
@@ -50,6 +47,7 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 	override evaluate() {
 		prepare();
 		method.evaluateStructuredTextMethod
+		method.trap
 		returnVariable?.value
 	}
 
@@ -64,7 +62,7 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 		}
 	}
 
-	override org.eclipse.fordiac.ide.model.libraryElement.STMethod getSourceElement() {
-		method.toModel as org.eclipse.fordiac.ide.model.libraryElement.STMethod
+	override STMethod getSourceElement() {
+		method
 	}
 }

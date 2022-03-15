@@ -47,6 +47,7 @@ class STFunctionEvaluator extends StructuredTextEvaluator {
 	override evaluate() {
 		prepare();
 		function.evaluateStructuredTextFunction
+		function.trap
 		returnVariable?.value
 	}
 

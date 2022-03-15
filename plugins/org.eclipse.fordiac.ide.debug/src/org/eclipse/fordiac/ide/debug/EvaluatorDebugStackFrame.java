@@ -161,7 +161,9 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 		final Object context = this.getCurrentContext();
 		if (context instanceof EObject) {
 			final ICompositeNode node = NodeModelUtils.findActualNodeFor((EObject) context);
-			return node.getStartLine();
+			if (node != null) {
+				return node.getEndLine();
+			}
 		}
 		return -1;
 	}

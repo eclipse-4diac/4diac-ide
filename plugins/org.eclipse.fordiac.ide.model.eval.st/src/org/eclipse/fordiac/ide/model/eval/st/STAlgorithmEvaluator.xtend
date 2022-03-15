@@ -14,19 +14,18 @@ package org.eclipse.fordiac.ide.model.eval.st
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
 @FinalFieldsConstructor
 class STAlgorithmEvaluator extends StructuredTextEvaluator {
-	final STAlgorithm algorithm
+	final org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm
 
-	STAlgorithmBody parseResult
+	STAlgorithm parseResult
 
-	new(STAlgorithm algorithm, Iterable<Variable> variables, Evaluator parent) {
+	new(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm, Iterable<Variable> variables, Evaluator parent) {
 		super(algorithm.name, variables, parent)
 		this.algorithm = algorithm
 	}
@@ -45,19 +44,20 @@ class STAlgorithmEvaluator extends StructuredTextEvaluator {
 	override evaluate() {
 		prepare();
 		parseResult.evaluateStructuredTextAlgorithm
+		parseResult.trap
 		null
 	}
 
-	def protected void evaluateStructuredTextAlgorithm(STAlgorithmBody alg) {
-		alg.varTempDeclarations.flatMap[varDeclarations].forEach[evaluateVariableInitialization]
+	def protected void evaluateStructuredTextAlgorithm(STAlgorithm alg) {
+		alg.body.varTempDeclarations.flatMap[varDeclarations].forEach[evaluateVariableInitialization]
 		try {
-			alg.statements.evaluateStatementList
+			alg.body.statements.evaluateStatementList
 		} catch (StructuredTextException e) {
 			// return
 		}
 	}
 
 	override STAlgorithm getSourceElement() {
-		algorithm
+		parseResult
 	}
 }

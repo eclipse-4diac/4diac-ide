@@ -18,9 +18,9 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.xtext.ParserRule
@@ -35,7 +35,6 @@ import org.eclipse.xtext.validation.CheckMode
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
-import org.eclipse.fordiac.ide.model.libraryElement.STMethod
 
 class StructuredTextParseUtil {
 	static final String SYNTHETIC_URI = "__synthetic.stalg"
@@ -46,7 +45,7 @@ class StructuredTextParseUtil {
 	private new() {
 	}
 
-	def static STAlgorithmBody parse(STAlgorithm algorithm, List<String> errors) {
+	def static org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm parse(STAlgorithm algorithm, List<String> errors) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
 		switch (root : algorithm.rootContainer) {
@@ -55,10 +54,10 @@ class StructuredTextParseUtil {
 					rootASTElement as STAlgorithmSource)?.elements?.filter(
 					org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm)?.findFirst [
 					name == algorithm.name
-				]?.body
+				]
 			default:
 				(algorithm.toSTText.parse(parser.grammarAccess.STAlgorithmRule, algorithm.name, null, errors)?.
-					rootASTElement as org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm)?.body
+					rootASTElement as org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm)
 		}
 	}
 

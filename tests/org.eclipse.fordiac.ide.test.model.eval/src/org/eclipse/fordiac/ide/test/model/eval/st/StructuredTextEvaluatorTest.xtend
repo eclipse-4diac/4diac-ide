@@ -1085,13 +1085,19 @@ class StructuredTextEvaluatorTest {
 	def static void assertTrace(Object expectedResult, Iterable<? extends Class<?>> expectedTrace,
 		TracingStructuredTextEvaluator actual) {
 		expectedResult.assertEquals(actual.variables.get("test").value)
-		expectedTrace.assertIterableEquals(actual.trace.filterNull.map[class.interfaces.head].filterNull)
+		(expectedTrace + #[org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm]).
+			assertIterableEquals(
+				actual.trace.filterNull.map[class.interfaces.head].filterNull
+			)
 	}
 
 	def static void assertIterableTrace(Iterable<? extends Object> expectedResult,
 		Iterable<? extends Class<?>> expectedTrace, TracingStructuredTextEvaluator actual) {
 		expectedResult.assertIterableEquals(actual.variables.get("test").value as ArrayValue)
-		expectedTrace.assertIterableEquals(actual.trace.filterNull.map[class.interfaces.head].filterNull)
+		(expectedTrace + #[org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm]).
+			assertIterableEquals(
+				actual.trace.filterNull.map[class.interfaces.head].filterNull
+			)
 	}
 
 	def static Iterable<? extends Class<?>> repeat(Class<?> clazz, int repeat) {
