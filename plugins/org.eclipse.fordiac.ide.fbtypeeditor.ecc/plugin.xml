@@ -80,33 +80,18 @@
                filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECStateFilter"
                id="property.section.state"
                tab="property.tab.state">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ActionSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECActionFilter"
                id="property.section.action"
                tab="property.tab.action">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.ECAction">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.AlgorithmsSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCFilter"
                id="property.section.algorithms"
                tab="property.tab.algorithms">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart">
-            </input>
          </propertySection>
       </propertySections>
    </extension>
