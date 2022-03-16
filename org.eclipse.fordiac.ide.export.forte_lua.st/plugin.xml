@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.fordiac.ide.export.language.supportFactory">
+      <factory
+            class="org.eclipse.fordiac.ide.export.forte_lua.st.StructuredTextSupportFactory"
+            filter="forte_lua">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STMethod">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource">
+         </source>
+      </factory>
+   </extension>
+
+</plugin>
