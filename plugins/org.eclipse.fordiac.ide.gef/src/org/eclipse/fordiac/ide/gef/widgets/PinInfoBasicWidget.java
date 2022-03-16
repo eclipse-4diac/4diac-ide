@@ -15,8 +15,12 @@ package org.eclipse.fordiac.ide.gef.widgets;
 import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
@@ -58,7 +62,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 		commentText.addModifyListener(e -> executeCommand(new ChangeCommentCommand(type, commentText.getText())));
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
-		typeSelectionWidget = new TypeSelectionWidget(widgetFactory);
+		typeSelectionWidget = new TypeSelectionWidget(widgetFactory, this::handleTypeSelectionChanged);
 		typeSelectionWidget.createControls(parent);
 	}
 
@@ -109,40 +113,46 @@ public class PinInfoBasicWidget implements CommandExecutor {
 
 	protected boolean isTypeChangeable() {
 		if (type != null) {
-			return type.getOutputConnections().isEmpty() && type.getInputConnections().isEmpty();
+			// currently we have only one event type therefore we don't want it be changeable
+			return !(type instanceof Event)
+					&& hasNoConnections();
 		}
 		return false;
 	}
 
-	public Text getNameText() {
-		return nameText;
+	public IInterfaceElement getType() {
+		return type;
 	}
 
-	public Text getCommentText() {
-		return commentText;
+	private boolean hasNoConnections() {
+		return type.getOutputConnections().isEmpty() && type.getInputConnections().isEmpty();
 	}
 
 	public TypeSelectionWidget getTypeSelectionWidget() {
 		return typeSelectionWidget;
 	}
 
-	public TabbedPropertySheetWidgetFactory getWidgetFactory() {
+	protected TabbedPropertySheetWidgetFactory getWidgetFactory() {
 		return widgetFactory;
 	}
 
-	public void setNameText(final Text nameText) {
-		this.nameText = nameText;
+	private void handleTypeSelectionChanged(final String newTypeName) {
+		if (getType() instanceof VarDeclaration) {
+			final DataType newType = getSelectedType(newTypeName);
+			if (newType != null) {
+				executeCommand(new ChangeDataTypeCommand((VarDeclaration) getType(), newType));
+				// ensure that the new value is shown
+				final Consumer<Command> commandExecutorBuffer = commandExecutor;
+				commandExecutor = null;
+				typeSelectionWidget.refresh();
+				commandExecutor = commandExecutorBuffer;
+			}
+		}
 	}
 
-	public void setCommentText(final Text commentText) {
-		this.commentText = commentText;
+	private DataType getSelectedType(final String newTypeName) {
+		return getTypeSelectionWidget().getContentProvider().getTypes().stream()
+				.filter(el -> el.getName().equals(newTypeName)).findFirst().orElse(null);
 	}
-
-	public void setTypeSelectionWidget(final TypeSelectionWidget typeSelectionWidget) {
-		this.typeSelectionWidget = typeSelectionWidget;
-	}
-
-
-
 
 }

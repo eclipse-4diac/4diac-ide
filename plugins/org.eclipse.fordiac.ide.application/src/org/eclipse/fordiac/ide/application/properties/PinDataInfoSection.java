@@ -12,16 +12,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoDataWidget;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
+import org.eclipse.swt.widgets.Composite;
 
 /** Here only because it's relevant for the filtering of the PinInfos */
 
 public class PinDataInfoSection extends PinEventInfoSection {
 
+	@Override
+	protected VarDeclaration getType() {
+		return (VarDeclaration) super.getType();
+	}
 
 	@Override
-	protected void pinInfoCreation() {
-		pinInfo = new PinInfoDataWidget(leftComposite, widgetFactory);
+	protected PinInfoBasicWidget pinInfoCreation(final Composite parent) {
+		return new PinInfoDataWidget(parent, widgetFactory);
+	}
+
+	@Override
+	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
+		return () -> getDataTypeLib().getDataTypesSorted();
 	}
 
 }

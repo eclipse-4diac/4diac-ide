@@ -12,8 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.widgets;
 
+import java.util.function.Consumer;
+
+import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.swt.custom.CLabel;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
@@ -23,29 +28,42 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 	private Text arraySizeText;
 	private Text initValueText;
 
-	private CLabel arraySizeLabel;
-	private CLabel initValueLabel;
-
 	public PinInfoDataWidget(final Composite parent, final TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(parent, widgetFactory);
 	}
 
 	@Override
-	protected void createWidget(final Composite parent) {
-		super.createWidget(parent);
-		arraySizeLabel = widgetFactory.createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
-		arraySizeText = createText(parent);
+	public void refresh() {
+		super.refresh();
+		if (getType() != null) {
+			final Consumer<Command> commandExecutorBuffer = commandExecutor;
+			commandExecutor = null;
+			arraySizeText.setText((getType().getArraySize() > 0) ?
+					String.valueOf(getType().getArraySize()) : ""); //$NON-NLS-1$
 
-		initValueLabel = widgetFactory.createCLabel(parent, FordiacMessages.InitialValue + ":");// $NON-NLS-1$
-		initValueText = createText(parent);
+			initValueText.setText((getType().getValue() != null) ?
+					getType().getValue().getValue() : ""); //$NON-NLS-1$
+			commandExecutor = commandExecutorBuffer;
+		}
 	}
 
-	public void setAdapterVisibility(final boolean visible) {
-		arraySizeText.setVisible(visible);
-		initValueText.setVisible(visible);
+	@Override
+	public VarDeclaration getType() {
+		return (VarDeclaration) super.getType();
+	}
 
-		arraySizeLabel.setVisible(visible);
-		initValueLabel.setVisible(visible);
+	@Override
+	protected void createWidget(final Composite parent) {
+		super.createWidget(parent);
+		widgetFactory.createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
+		arraySizeText = createText(parent);
+		arraySizeText
+		.addModifyListener(e -> executeCommand(new ChangeArraySizeCommand(getType(), arraySizeText.getText())));
+
+		widgetFactory.createCLabel(parent, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
+		initValueText = createText(parent);
+		initValueText
+		.addModifyListener(e -> executeCommand(new ChangeValueCommand(getType(), initValueText.getText())));
 	}
 
 	@Override
@@ -61,19 +79,5 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 		arraySizeText.setEnabled(isTypeChangeable());
 	}
 
-	public Text getArraySizeText() {
-		return arraySizeText;
-	}
 
-	public Text getInitValueText() {
-		return initValueText;
-	}
-
-	public void setArraySizeText(final Text arraySizeText) {
-		this.arraySizeText = arraySizeText;
-	}
-
-	public void setInitValueText(final Text initValueText) {
-		this.initValueText = initValueText;
-	}
 }

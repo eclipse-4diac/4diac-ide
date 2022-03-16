@@ -129,12 +129,6 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	}
 
 	@Override
-	protected void handleDataSelectionChanged(final String dataName) {
-		// currently we only have one kind of data type therefore we will return null
-		// here so that it is not changed
-	}
-
-	@Override
 	protected Event getType() {
 		return (Event) super.getType();
 	}

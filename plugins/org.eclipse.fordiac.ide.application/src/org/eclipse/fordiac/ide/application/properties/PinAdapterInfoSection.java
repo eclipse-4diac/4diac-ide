@@ -12,14 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.gef.widgets.PinInfoDataWidget;
+import java.util.stream.Collectors;
+
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 
 public class PinAdapterInfoSection extends PinEventInfoSection {
 
 
 	@Override
-	protected void pinInfoCreation() {
-		pinInfo = new PinInfoDataWidget(leftComposite, widgetFactory);
-		((PinInfoDataWidget) pinInfo).setAdapterVisibility(false);
+	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
+		return () -> getTypeLibrary().getBlockTypeLib().getAdapterTypesSorted().stream()
+				.map(AdapterTypePaletteEntry::getType).collect(Collectors.toList());
 	}
+
 }

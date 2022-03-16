@@ -18,7 +18,6 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart;
@@ -27,16 +26,12 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AdapterInterfaceElementSection extends AbstractSection {
@@ -66,11 +61,11 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createPinInfoSection(getLeftComposite());
+		pinInfoBasicWidget = createPinInfoSection(getLeftComposite());
 	}
 
-	protected void createPinInfoSection(final Composite parent) {
-		pinInfoBasicWidget = new PinInfoBasicWidget(parent, getWidgetFactory());
+	protected PinInfoBasicWidget createPinInfoSection(final Composite parent) {
+		return new PinInfoBasicWidget(parent, getWidgetFactory());
 	}
 
 	@Override
@@ -89,43 +84,22 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	}
 
 	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		super.setInput(part, selection);
-		if (pinInfoBasicWidget != null) {
-			pinInfoBasicWidget.getTypeSelectionWidget().initialize(getType(), getTypeSelectionContentProvider(),
-					this::handleDataSelectionChanged);
-		}
-
-	}
-
-	protected void handleDataSelectionChanged(final String dataName) {
-		final AdapterTypePaletteEntry adapterEntry = getTypeLibrary().getBlockTypeLib().getAdapterTypeEntry(dataName);
-		final DataType newType = adapterEntry == null ? null : adapterEntry.getType();
-		if (newType != null) {
-			commandStack.execute(new ChangeDataTypeCommand((VarDeclaration) getType(), newType));
-		}
-	}
-
-	@Override
 	protected IInterfaceElement getType() {
 		return (IInterfaceElement) type;
 	}
 
 	@Override
 	protected void setInputInit() {
-		// pinInfoBasicWidget.getTypeSelectionWidget().initialize(getType(), this::executeCommand);
+		if (pinInfoBasicWidget != null) {
+			pinInfoBasicWidget.initialize(getType(), this::executeCommand);
+			pinInfoBasicWidget.getTypeSelectionWidget().initialize(getType(), getTypeSelectionContentProvider());
+		}
+
 	}
 
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
-		return new AdapterTypeSelectionContentProvider();
+		return () -> getTypeLibrary().getBlockTypeLib().getAdapterTypesSorted().stream()
+				.map(AdapterTypePaletteEntry::getType).collect(Collectors.toList());
 	}
 
-	private class AdapterTypeSelectionContentProvider implements ITypeSelectionContentProvider {
-		@Override
-		public List<DataType> getTypes() {
-			return getTypeLibrary().getBlockTypeLib().getAdapterTypesSorted().stream()
-					.map(AdapterTypePaletteEntry::getType)
-					.collect(Collectors.toList());
-		}
-	}
 }

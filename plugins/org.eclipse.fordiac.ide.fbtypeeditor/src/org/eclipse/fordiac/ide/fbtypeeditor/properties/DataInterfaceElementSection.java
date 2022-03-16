@@ -23,11 +23,10 @@ import java.util.Arrays;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventLabelProvider;
+import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoDataWidget;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -57,8 +56,6 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 
 	private TableViewer withEventsViewer;
 	private Group eventComposite;
-	private PinInfoDataWidget pinInfoDataWidget;
-
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -67,10 +64,9 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	@Override
-	protected void createPinInfoSection(final Composite parent) {
-		pinInfoDataWidget = new PinInfoDataWidget(parent, getWidgetFactory());
+	protected PinInfoBasicWidget createPinInfoSection(final Composite parent) {
+		return new PinInfoDataWidget(parent, getWidgetFactory());
 	}
-
 
 	private void createEventSection(final Composite parent) {
 		eventComposite = getWidgetFactory().createGroup(parent, FordiacMessages.With);
@@ -124,14 +120,6 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			pinInfoDataWidget.getNameText().setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			pinInfoDataWidget.getCommentText().setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			pinInfoDataWidget.getTypeSelectionWidget().refresh(); // TODO: have a selection for this widget
-
-			pinInfoDataWidget.getArraySizeText()
-			.setText(0 >= getType().getArraySize() ? "" : (Integer.toString((getType()).getArraySize())));//$NON-NLS-1$
-			pinInfoDataWidget.getInitValueText()
-			.setText(null == getType().getValue() ? "" : getType().getValue().getValue());//$NON-NLS-1$
 			if (getType().eContainer().eContainer() instanceof FBType) {
 				eventComposite.setVisible(true);
 				withEventsViewer.setInput(getType());
@@ -152,17 +140,8 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		// hide with part for sub app type events
 		eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
 		if (null == commandStack) { // disable all fields
-			pinInfoDataWidget.disableAllFields();
 			withEventsViewer.setInput(null);
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
-		}
-	}
-
-	@Override
-	protected void handleDataSelectionChanged(final String dataName) {
-		final DataType newType = getDataTypeLib().getTypeIfExists(dataName);
-		if (newType != null) {
-			commandStack.execute(new ChangeDataTypeCommand(getType(), newType));
 		}
 	}
 
