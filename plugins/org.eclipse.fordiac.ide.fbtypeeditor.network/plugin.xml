@@ -152,30 +152,6 @@
                   type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart">
             </input>
          </propertySection>
-                  <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceAdapterSection"
-               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditAdapters"
-               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart">
-            </input>
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceEventSection"
-               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditEvents"
-               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart">
-            </input>
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceDataSection"
-               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditData"
-               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart">
-            </input>
-         </propertySection>
       </propertySections>
    </extension>
 	<extension

@@ -342,6 +342,9 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			}
 			return adapter.cast(contentOutline);
 		}
+		if (adapter == FBType.class) {
+			return adapter.cast(getFBType());
+		}
 		if (adapter == CommandStack.class) {
 			return adapter.cast(getCommandStack());
 		}

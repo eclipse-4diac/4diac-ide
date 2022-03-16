@@ -491,20 +491,6 @@
       </renameParticipant>
    </extension>
    <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertySections">
-      <propertySections
-            contributorId="property.contributor.fb">
-         <propertySection
-               class="org.eclipse.fordiac.ide.typemanagement.properties.FBTypeInfoSection"
-               id="property.section.typenavigator.fBTypeInfo"
-               tab="property.tab.fbtypeinfo">
-            <input
-                  type="org.eclipse.core.resources.IFile">
-            </input>
-         </propertySection>
-      </propertySections>
-   </extension>
-   <extension
          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
             class="org.eclipse.fordiac.ide.typemanagement.DeleteFBTypeParticipant"
