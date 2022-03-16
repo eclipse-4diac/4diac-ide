@@ -56,6 +56,8 @@ public class TypeSelectionWidget {
 	private TableViewer tableViewer;
 	private Button openEditorButton;
 
+	private boolean typeChangeEnabled;
+
 	public TypeSelectionWidget(final TabbedPropertySheetWidgetFactory widgetFactory) {
 		this.widgetFactory = widgetFactory;
 	}
@@ -94,7 +96,7 @@ public class TypeSelectionWidget {
 
 			@Override
 			public boolean canModify(final Object element, final String property) {
-				return true;
+				return typeChangeEnabled;
 			}
 		});
 
@@ -112,6 +114,10 @@ public class TypeSelectionWidget {
 				OpenStructMenu.openStructEditor(dataType.getPaletteEntry().getFile());
 			}
 		});
+	}
+
+	public void setEnabled(final boolean enabled) {
+		typeChangeEnabled = enabled;
 	}
 
 	public void initialize(final ConfigurableObject type, final ITypeSelectionContentProvider contentProvider,

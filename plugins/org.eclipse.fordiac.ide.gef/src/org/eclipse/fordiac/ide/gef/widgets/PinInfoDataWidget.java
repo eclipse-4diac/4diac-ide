@@ -48,6 +48,19 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 		initValueLabel.setVisible(visible);
 	}
 
+	@Override
+	public void disableAllFields() {
+		super.disableAllFields();
+		arraySizeText.setEnabled(false);
+		initValueText.setEnabled(false);
+	}
+
+	@Override
+	protected void checkFieldEnablements() {
+		super.checkFieldEnablements();
+		arraySizeText.setEnabled(isTypeChangeable());
+	}
+
 	public Text getArraySizeText() {
 		return arraySizeText;
 	}
@@ -62,12 +75,5 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 
 	public void setInitValueText(final Text initValueText) {
 		this.initValueText = initValueText;
-	}
-
-	@Override
-	public void disableAllFields() {
-		super.disableAllFields();
-		arraySizeText.setEnabled(false);
-		initValueText.setEnabled(false);
 	}
 }

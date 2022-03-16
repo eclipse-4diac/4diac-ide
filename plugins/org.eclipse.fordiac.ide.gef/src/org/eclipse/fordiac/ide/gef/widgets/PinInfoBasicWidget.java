@@ -33,11 +33,11 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	private Text nameText;
 	private Text commentText;
 	protected TypeSelectionWidget typeSelectionWidget;
-	private IInterfaceElement type;
+	private IInterfaceElement type; // changed from private
 
 	protected final TabbedPropertySheetWidgetFactory widgetFactory;
 
-	private Consumer<Command> commandExecutor;
+	protected Consumer<Command> commandExecutor;
 
 	public PinInfoBasicWidget(final Composite parent, final TabbedPropertySheetWidgetFactory widgetFactory) {
 		this.widgetFactory = widgetFactory;
@@ -84,6 +84,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 				nameText.setText(type.getName());
 				commentText.setText(type.getComment());
 				typeSelectionWidget.refresh();
+				checkFieldEnablements();
 			}
 			commandExecutor = commandExecutorBuffer;
 		}
@@ -100,6 +101,17 @@ public class PinInfoBasicWidget implements CommandExecutor {
 		if (commandExecutor != null) {
 			commandExecutor.accept(cmd);
 		}
+	}
+
+	protected void checkFieldEnablements() {
+		typeSelectionWidget.setEnabled(isTypeChangeable());
+	}
+
+	protected boolean isTypeChangeable() {
+		if (type != null) {
+			return type.getOutputConnections().isEmpty() && type.getInputConnections().isEmpty();
+		}
+		return false;
 	}
 
 	public Text getNameText() {

@@ -23,4 +23,5 @@ public class PinDataInfoSection extends PinEventInfoSection {
 	protected void pinInfoCreation() {
 		pinInfo = new PinInfoDataWidget(leftComposite, widgetFactory);
 	}
+
 }
