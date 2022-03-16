@@ -153,4 +153,22 @@
 			</toolbar>
 		</menuContribution>	
 	</extension>
+	<extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections
+            contributorId="property.contributor.fb">
+         <propertySection
+               class="org.eclipse.fordiac.ide.gef.properties.InternalVarsSection"
+               filter="org.eclipse.fordiac.ide.gef.properties.BaseFBFilter"
+               id="property.propertysection.ivars"
+               tab="property.tab.ivars">
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.gef.properties.InternalFbsSection"
+               filter="org.eclipse.fordiac.ide.gef.properties.BaseFBFilter"
+               id="property.section.ifbs"
+               tab="property.tab.ifbs">
+         </propertySection>
+         </propertySections>         
+   </extension>
 </plugin>

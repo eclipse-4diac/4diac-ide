@@ -33,7 +33,8 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.core.resources,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide,
- org.eclipse.fordiac.ide.model.ui
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.jface.text
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier
@@ -43,3 +44,4 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gef;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.gef
+

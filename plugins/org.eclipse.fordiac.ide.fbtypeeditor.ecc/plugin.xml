@@ -108,24 +108,6 @@
                   type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart">
             </input>
          </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.InternalVarsSectionBasic"
-               filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCFilter"
-               id="property.section.ivars"
-               tab="property.tab.ivars">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart">
-            </input>
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.InternalFbsSectionBasic"
-               filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCFilter"
-               id="property.section.ifbs"
-               tab="property.tab.ifbs">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart">
-            </input>
-         </propertySection>
       </propertySections>
    </extension>
 </plugin>
