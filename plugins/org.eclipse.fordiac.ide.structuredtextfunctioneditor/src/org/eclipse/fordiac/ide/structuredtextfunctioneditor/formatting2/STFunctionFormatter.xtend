@@ -20,21 +20,32 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtext.formatting2.IFormattableDocument
 import org.eclipse.fordiac.ide.structuredtextcore.formatting2.KeywordCaseTextReplacer
+import org.eclipse.xtext.Keyword
+import org.eclipse.xtext.RuleCall
 
 class STFunctionFormatter extends STCoreFormatter {
 
 	@Inject extension STFunctionGrammarAccess
 
 	def dispatch void format(STFunctionSource stFunctionSource, extension IFormattableDocument document) {
+		stFunctionSource.allSemanticRegions.filter [
+			switch (element : grammarElement) {
+				Keyword case element.value.matches("[_a-zA-Z]+"): true
+				RuleCall case element.rule == boolLiteralRule: true
+				RuleCall case element.rule == STNumericLiteralTypeRule: true
+				RuleCall case element.rule == STDateLiteralTypeRule: true
+				RuleCall case element.rule == STTimeLiteralTypeRule: true
+				default: false
+			}
+		].forEach [
+			document.addReplacer(new KeywordCaseTextReplacer(document, it))
+		]
 		for (stFunction : stFunctionSource.functions) {
 			stFunction.format
 		}
 	}
 
 	def dispatch void format(STFunction stFunction, extension IFormattableDocument document) {
-		stFunction.regionFor.keywords("FUNCTION", "END_FUNCTION").forEach [
-			document.addReplacer(new KeywordCaseTextReplacer(document, it))
-		]
 		stFunction.regionFor.keyword("FUNCTION").prepend[noIndentation].append[oneSpace]
 
 		if (stFunction.returnType !== null) {
@@ -48,7 +59,7 @@ class STFunctionFormatter extends STCoreFormatter {
 		}
 
 		stFunction.varDeclarations.forEach[format]
-		
+
 		stFunction.code.forEach[format]
 
 		stFunction.regionFor.keyword("END_FUNCTION").prepend[noIndentation]

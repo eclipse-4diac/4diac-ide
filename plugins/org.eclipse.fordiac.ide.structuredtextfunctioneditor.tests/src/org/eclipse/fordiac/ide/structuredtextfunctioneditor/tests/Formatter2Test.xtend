@@ -19,6 +19,7 @@ import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.formatter.FormatterTestHelper
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
+import org.junit.jupiter.api.BeforeEach
 
 @ExtendWith(InjectionExtension)
 @InjectWith(STFunctionInjectorProvider)
@@ -48,10 +49,10 @@ class Formatter2Test {
 					bol2 : BOOL := TRUE;
 					bol3 : BOOL := BOOL#TRUE;
 					bol4 : BOOL := BOOL#FALSE;
-					bol5 : BOOL := true;
-					bol6 : BOOL := false;
-					bol7 : BOOL := BOOL#true;
-					bol8 : BOOL := BOOL#false;
+					bol5 : BOOL := TRUE;
+					bol6 : BOOL := FALSE;
+					bol7 : BOOL := BOOL#TRUE;
+					bol8 : BOOL := BOOL#FALSE;
 					bol9 : BOOL := BOOL#0;
 					bol10 : BOOL := BOOL#1;
 					bol11 : BOOL := 0;
@@ -352,17 +353,17 @@ class Formatter2Test {
 			toBeFormatted = '''
 				FunCTiON hubert
 				VAR
-								test1 : INT;
-								END_VAR
+				test1 : INT;
+				END_VAR
 				VAR_TEMP
-												test2 : INT;
-												END_VAR
+					test2 : INT;
+					END_VAR
 				vAR_Input 
-				dword1 : DWORD;
+				dword1 : Dword;
 				END_var
 				vAR_oUtput 
-								dword2 : DWORD;
-								END_var
+					dword2 : DWOrD;
+				END_var
 				eND_FUNCtioN
 			'''
 			expectation = '''
@@ -390,20 +391,47 @@ class Formatter2Test {
 			toBeFormatted = '''
 				FUNCTION hubert
 				VaR_outpuT
-												test2 : INT;
-												End_VaR
+					test1 : InT;
+					test2 : real;
+					End_VaR
 				VaR_InpuT
-				test1 : INT;
+				test3 : date;
+				test4 : BooL;
 				End_VaR
 				END_FUNCTION
 			'''
 			expectation = '''
 				FUNCTION hubert
 				VAR_OUTPUT
-					test2 : INT;
+					test1 : INT;
+					test2 : REAL;
 				END_VAR
 				VAR_INPUT
-					test1 : INT;
+					test3 : DATE;
+					test4 : BOOL;
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@BeforeEach
+	@Test
+	def void testKeywordCase2() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR
+				    test2 : InT := InT#4;
+				    test3 : REal := REal#4.5;
+				END_VAR	
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					test2 : INT := INT#4;
+					test3 : REAL := REAL#4.5;
 				END_VAR
 				END_FUNCTION
 			'''
@@ -411,25 +439,107 @@ class Formatter2Test {
 	}
 
 	@Test
-	def void testKeywordCase2() {
+	def void testKeywordCase3() {
 		assertFormatted[
 			toBeFormatted = '''
 				function hubert
-				VaR
-				test1 : INT;
-				End_VaR
-				VaR_temp
-				test2 : INT;
-				End_VaR
+				CaSe bol0 of
+					0 :
+						bol1 := TRuE;
+					1 :
+						bol7 := FalSE;
+					2 :
+						bol2 := FALSE;
+					ELSE
+						bol7 := FALSE;
+				END_CASE;
+				IF bol1 theN
+					bol1 := TRUE;
+				ElsIF bol1 ThEn
+					bol1 := TRUE;
+				Else
+				bol1 := FALSE;
+				End_IF;
 				end_function
 			'''
 			expectation = '''
 				FUNCTION hubert
+				CASE bol0 OF
+					0 :
+						bol1 := TRUE;
+					1 :
+						bol7 := FALSE;
+					2 :
+						bol2 := FALSE;
+					ELSE
+						bol7 := FALSE;
+				END_CASE;
+				IF bol1 THEN
+					bol1 := TRUE;
+				ELSIF bol1 THEN
+					bol1 := TRUE;
+				ELSE
+					bol1 := FALSE;
+				END_IF;
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testKeywordCase4() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				fOr int1 := 1 to 4 Do
+				bol7 := FALSE;
+				End_fOR;
+				WhiLE bol1 = TrUE dO
+					bol1 := TruE;
+				end_WhIlE;
+				RepeAT
+					bol7 := FALSe;
+				UnTiL bol8 END_RePeAt;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				FOR int1 := 1 TO 4 DO
+					bol7 := FALSE;
+				END_FOR;
+				WHILE bol1 = TRUE DO
+					bol1 := TRUE;
+				END_WHILE;
+				REPEAT
+					bol7 := FALSE;
+				UNTIL bol8 END_REPEAT;
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testKeywordCase5() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
 				VAR
-					test1 : INT;
+				    intx : int;
+					structMaster : DRV_InputStruct;
+					test1 : TestStruct1;
+					test : NewStruct;
+					test2 : NewStruct;
 				END_VAR
-				VAR_TEMP
-					test2 : INT;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					intx : INT;
+					structMaster : DRV_InputStruct;
+					test1 : TestStruct1;
+					test : NewStruct;
+					test2 : NewStruct;
 				END_VAR
 				END_FUNCTION
 			'''

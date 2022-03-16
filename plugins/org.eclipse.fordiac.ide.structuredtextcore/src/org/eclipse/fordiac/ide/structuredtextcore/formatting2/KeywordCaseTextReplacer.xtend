@@ -18,15 +18,23 @@ import org.eclipse.xtext.formatting2.regionaccess.ITextSegment
 import org.eclipse.xtext.formatting2.ITextReplacerContext
 
 class KeywordCaseTextReplacer extends AbstractTextReplacer {
-	
+
+	String replacementText
+
 	new(IFormattableDocument document, ITextSegment region) {
 		super(document, region)
 	}
-	
+
+	new(IFormattableDocument document, ITextSegment region, String replacementText) {
+		super(document, region)
+		this.replacementText = replacementText
+	}
+
 	override createReplacements(ITextReplacerContext context) {
-		val replacement = region.replaceWith(region.text.toUpperCase)
+		val replacement = replacementText === null ? region.replaceWith(region.text.toUpperCase) : region.replaceWith(
+				replacementText)
 		context.addReplacement(replacement)
 		return context
 	}
-	
+
 }

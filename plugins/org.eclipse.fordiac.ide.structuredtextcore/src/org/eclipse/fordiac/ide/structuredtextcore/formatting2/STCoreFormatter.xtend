@@ -51,6 +51,10 @@ import org.eclipse.xtext.formatting2.IFormattableDocument
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
 import org.eclipse.xtext.formatting2.internal.AbstractTextReplacer
 import org.eclipse.xtext.formatting2.ITextReplacerContext
+import org.eclipse.xtext.RuleCall
+import org.eclipse.fordiac.ide.model.data.ElementaryType
+import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -76,11 +80,6 @@ class STCoreFormatter extends AbstractFormatter2 {
 			varDeclarationBlock.regionFor.keyword(STVarDeclarationBlockAccess.END_VARKeyword_4),
 			[indent]
 		)
-		varDeclarationBlock.regionFor.keywords(STVarDeclarationBlockAccess.VARKeyword_1,
-			STVarDeclarationBlockAccess.END_VARKeyword_4, STVarDeclarationBlockAccess.constantCONSTANTKeyword_2_0).
-			forEach [
-				document.addReplacer(new KeywordCaseTextReplacer(document, it))
-			]
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
@@ -100,11 +99,6 @@ class STCoreFormatter extends AbstractFormatter2 {
 			varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.END_VARKeyword_4),
 			[indent]
 		)
-		varDeclarationBlock.regionFor.keywords(STVarTempDeclarationBlockAccess.VAR_TEMPKeyword_1,
-			STVarTempDeclarationBlockAccess.END_VARKeyword_4,
-			STVarTempDeclarationBlockAccess.constantCONSTANTKeyword_2_0).forEach [
-			document.addReplacer(new KeywordCaseTextReplacer(document, it))
-		]
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
@@ -124,11 +118,6 @@ class STCoreFormatter extends AbstractFormatter2 {
 			varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.END_VARKeyword_4),
 			[indent]
 		)
-		varDeclarationBlock.regionFor.keywords(STVarInputDeclarationBlockAccess.VAR_INPUTKeyword_1,
-			STVarInputDeclarationBlockAccess.END_VARKeyword_4,
-			STVarInputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).forEach [
-			document.addReplacer(new KeywordCaseTextReplacer(document, it))
-		]
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
@@ -136,11 +125,6 @@ class STCoreFormatter extends AbstractFormatter2 {
 	}
 
 	def dispatch void format(STVarOutputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
-		varDeclarationBlock.regionFor.keywords(STVarOutputDeclarationBlockAccess.VAR_OUTPUTKeyword_1,
-			STVarOutputDeclarationBlockAccess.END_VARKeyword_4,
-			STVarOutputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).forEach [
-			document.addReplacer(new KeywordCaseTextReplacer(document, it))
-		]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -163,6 +147,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 		varDeclaration.regionFor.keywords(",").forEach[prepend[noSpace] append[oneSpace]]
 		varDeclaration.regionFor.keywords(":", ":=").forEach[surround[oneSpace]]
 		varDeclaration.regionFor.keyword(";").prepend[noSpace]
+
+		if (varDeclaration.type.name != "") {
+			document.addReplacer(
+				new KeywordCaseTextReplacer(document,
+					varDeclaration.regionFor.assignment(STVarDeclarationAccess.getTypeAssignment_5),
+					varDeclaration.type.name))
+		}
+
 		varDeclaration?.defaultValue.format
 		varDeclaration.append[newLine]
 	}
@@ -288,14 +280,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 			binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP).surround[oneSpace]
 		}
 		if (binaryExpression.op == STBinaryOperator.AMPERSAND) {
-			document.addReplacer(new AbstractTextReplacer(document, 
-			binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)){		
-				override createReplacements(ITextReplacerContext context) {
-					context.addReplacement(region.replaceWith(STBinaryOperator.AND.toString))
-					return context
-				}
-				
-			})
+			document.addReplacer(
+				new AbstractTextReplacer(document, binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)) {
+					override createReplacements(ITextReplacerContext context) {
+						context.addReplacement(region.replaceWith(STBinaryOperator.AND.toString))
+						return context
+					}
+
+				})
 		}
 		binaryExpression.left.format
 		binaryExpression.right.format
@@ -317,7 +309,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 			prepend[noSpace]
 			append[oneSpace]
 		]
-		featureExpression.regionFor.keyword(STFeatureExpressionAccess.callLeftParenthesisKeyword_2_0_0).surround[noSpace]
+		featureExpression.regionFor.keyword(STFeatureExpressionAccess.callLeftParenthesisKeyword_2_0_0).surround [
+			noSpace
+		]
 		featureExpression.regionFor.keyword(STFeatureExpressionAccess.rightParenthesisKeyword_2_2).prepend[noSpace]
 		featureExpression.parameters.forEach[format]
 	}
