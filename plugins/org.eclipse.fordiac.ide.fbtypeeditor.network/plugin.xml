@@ -119,11 +119,9 @@
          <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
                enablesFor="1"
-               id="org.eclipse.fordiac.ide.fbnet.properties.ConnectionSection"
+               filter="org.eclipse.fordiac.ide.application.properties.ConnectionFilter"
+            	id="org.eclipse.fordiac.ide.fbnet.properties.ConnectionSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab">
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.InterfaceElementSection"
@@ -143,14 +141,9 @@
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
                enablesFor="2"
+               filter="org.eclipse.fordiac.ide.application.properties.CreateConnectionFilter"
                id="org.eclipse.fordiac.ide.fbnet.properties.ConnectionSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab">
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart">
-            </input>
          </propertySection>
       </propertySections>
    </extension>
