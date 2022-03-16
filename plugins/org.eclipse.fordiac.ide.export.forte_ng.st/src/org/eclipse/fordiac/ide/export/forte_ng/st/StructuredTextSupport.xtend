@@ -176,7 +176,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''
 
 	def protected dispatch generateStatement(STForStatement stmt) '''
-		for (auto «generateUniqueVariableName» : ST_FOR_ITER(«stmt.variable.generateFeatureName», «stmt.from.generateExpression», «stmt.to.generateExpression», «IF stmt.by !== null»«stmt.by.generateExpression»«ELSE»1«ENDIF»)) {
+		for (auto «generateUniqueVariableName» : ST_FOR_ITER<«stmt.variable.generateTypeName»«IF stmt.by !== null», «(stmt.by.resultType as DataType).generateTypeName»«ENDIF»>(«stmt.variable.generateFeatureName», «stmt.from.generateExpression», «stmt.to.generateExpression»«IF stmt.by !== null», «stmt.by.generateExpression»«ENDIF»)) {
 		  «stmt.statements.generateStatementList»
 		}
 	'''
