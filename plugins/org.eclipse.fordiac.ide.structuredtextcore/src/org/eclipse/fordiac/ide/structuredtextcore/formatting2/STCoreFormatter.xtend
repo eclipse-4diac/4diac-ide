@@ -160,6 +160,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 	}
 
 	def dispatch void format(STIfStatement ifStatement, extension IFormattableDocument document) {
+		ifStatement.condition.format
 		ifStatement.regionFor.keyword("THEN").append[newLine]
 		ifStatement.statements.forEach[surround[indent] format]
 		ifStatement.elseifs.forEach[format]
@@ -169,6 +170,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 	}
 
 	def dispatch void format(STElseIfPart elseIfStatement, extension IFormattableDocument document) {
+		elseIfStatement.condition.format
 		elseIfStatement.regionFor.keyword(STElseIfPartAccess.THENKeyword_2).append[newLine]
 		elseIfStatement.statements.forEach[surround[indent] format]
 	}
@@ -196,6 +198,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 			whileStatement.regionFor.keyword("END_WHILE"),
 			[indent]
 		)
+		whileStatement.condition.format
 		whileStatement.statements.forEach[format]
 		whileStatement.regionFor.keyword(";").surround[noSpace]
 		whileStatement.append[newLine]
@@ -207,6 +210,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 			repeatStatement.regionFor.keyword("UNTIL"),
 			[indent]
 		)
+		repeatStatement.condition.format
 		repeatStatement.statements.forEach[format]
 		repeatStatement.statements.forEach[surround[newLine]]
 		repeatStatement.regionFor.keyword(";").surround[noSpace]

@@ -20,6 +20,7 @@ import org.eclipse.xtext.testing.formatter.FormatterTestHelper
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 
 @ExtendWith(InjectionExtension)
 @InjectWith(STFunctionInjectorProvider)
@@ -562,6 +563,46 @@ class Formatter2Test {
 					bool3 : BOOL;
 				END_VAR
 				bool1 := bool2 AND bool3;
+				END_FUNCTION
+			'''
+		]
+	}
+	
+	@Test
+	def void testComparisonOperatorSpacing(){
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				IF int1<int2 THEN
+					bol1:=TRue;
+				ELSIF real2=real3 THEN
+					bol2:=FALSE;
+				Else
+					bol3:=1;
+				END_IF;
+				WHILE bol1=TRUE DO
+					bol1 := TRUE;
+					END_WHILE;
+					REPEAT
+					bol7 := FALSE;
+				UNTIL bol8>bol6 END_REPEAT;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				IF int1 < int2 THEN
+					bol1 := TRUE;
+				ELSIF real2 = real3 THEN
+					bol2 := FALSE;
+				ELSE
+					bol3 := 1;
+				END_IF;
+				WHILE bol1 = TRUE DO
+					bol1 := TRUE;
+				END_WHILE;
+				REPEAT
+					bol7 := FALSE;
+				UNTIL bol8 > bol6 END_REPEAT;
 				END_FUNCTION
 			'''
 		]
