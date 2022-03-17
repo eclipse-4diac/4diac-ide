@@ -259,6 +259,12 @@
                   label="Open Subapplication">
     </openListener>
   </extension>
+  <extension point="org.eclipse.fordiac.ide.model.ui.openListener">
+    <openListener class="org.eclipse.fordiac.ide.application.actions.OpenGroupEditorAction"
+                  id="org.eclipse.fordiac.ide.application.actions.OpenGroupEditorAction"
+                  label="Select Group">
+    </openListener>
+  </extension>
   <extension point="org.eclipse.ui.commands">
     <category id="org.eclipse.fordiac.ide.commands.category"
               name="4diac IDE Commands">

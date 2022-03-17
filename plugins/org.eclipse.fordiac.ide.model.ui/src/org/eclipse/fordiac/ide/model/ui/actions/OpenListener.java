@@ -19,8 +19,10 @@ package org.eclipse.fordiac.ide.model.ui.actions;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -65,7 +67,12 @@ public abstract class OpenListener implements IOpenListener {
 		if (null != openedEditor) {
 			final AbstractBreadCrumbEditor breadCrumbEditor = getBreadCrumbEditor(openedEditor);
 			if (null != breadCrumbEditor) {
-				breadCrumbEditor.getBreadcrumb().setInput(element);
+				if (sameLevelAsParent(element)) {
+					breadCrumbEditor.getBreadcrumb().setInput(element.eContainer().eContainer());
+					HandlerHelper.selectElement(element, getOpenedEditor());
+				} else {
+					breadCrumbEditor.getBreadcrumb().setInput(element);
+				}
 			}
 		}
 	}
@@ -96,6 +103,10 @@ public abstract class OpenListener implements IOpenListener {
 			}
 		}
 		return null;
+	}
+
+	private static boolean sameLevelAsParent(final Object element) {
+		return element instanceof Group;
 	}
 
 }

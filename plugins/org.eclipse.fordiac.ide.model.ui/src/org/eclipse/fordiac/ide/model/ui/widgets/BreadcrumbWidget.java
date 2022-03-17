@@ -113,8 +113,6 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		// @formatter:on
 	}
 
-
-
 	ToolBar getToolBar() {
 		return toolbar;
 	}
