@@ -22,6 +22,7 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
@@ -82,7 +83,7 @@ public class ConnectionDisplayWidget {
 		createConnectionDisplaySection(parent);
 	}
 
-	protected void createConnectionDisplaySection(final Composite parent) {
+	private void createConnectionDisplaySection(final Composite parent) {
 		connectionSection = widgetFactory.createSection(parent,
 				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
 		connectionSection.setText(Messages.InterfaceElementSection_ConnectionGroup);
@@ -114,6 +115,7 @@ public class ConnectionDisplayWidget {
 		viewer.setCellEditors(new CellEditor[] { null, null, new CustomTextCellEditor(viewer.getTable()) });
 		viewer.setLabelProvider(new ConnectionTableLabelProvider());
 		viewer.setContentProvider(new ConnectionContentProvider());
+		viewer.addDoubleClickListener(ElementSelector::jumpToPinFromDoubleClickEvent);
 		return viewer;
 	}
 
