@@ -21,10 +21,8 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.gef.EditPart;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
@@ -44,16 +42,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 
 	@Override
 	protected FBType getInputType(final Object input) {
-		if (input instanceof EditPart) {
-			final Object model = ((EditPart) input).getModel();
-			if (model instanceof FBType) {
-				return (FBType) model;
-			}
-			if ((model instanceof FBNetwork) && (((FBNetwork) model).eContainer() instanceof FBType)) {
-				return (FBType) ((FBNetwork) model).eContainer();
-			}
-		}
-		return null;
+		return FBTypePropertiesFilter.getFBTypeFromSelectedElement(input);
 	}
 
 	@Override

@@ -59,7 +59,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class InternalFbsSection extends AbstractSection implements I4diacTableUtil {
+public class InternalFbsSection extends AbstractSection implements I4diacTableUtil {
 	private static final String FB_NAME = "NAME"; //$NON-NLS-1$
 	private static final String FB_TYPE = "TYPE"; //$NON-NLS-1$
 	private static final String FB_COMMENT = "COMMENT"; //$NON-NLS-1$
@@ -154,6 +154,11 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 
 		return new CellEditor[] { fbNameEditor, fbTypeEditor, new TextCellEditor(table), new TextCellEditor(table),
 				new TextCellEditor(table) };
+	}
+
+	@Override
+	protected Object getInputType(final Object input) {
+		return BaseFBFilter.getFBTypeFromSelectedElement(input);
 	}
 
 	@Override
