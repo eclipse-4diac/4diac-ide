@@ -192,27 +192,21 @@
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               filter="org.eclipse.fordiac.ide.application.properties.StructInterfacePinFilter"                       
                id="org.eclipse.fordiac.ide.application.properties.StructInterfaceElementSection"
                tab="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab">
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               filter="org.eclipse.fordiac.ide.application.properties.FBNetworkElementTypeFilter"
                id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               filter="org.eclipse.fordiac.ide.application.properties.FBNetworkElementTypeFilter"
                id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
-            <input
-                  type="org.eclipse.fordiac.ide.gef.editparts.ValueEditPart">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceDataSection"

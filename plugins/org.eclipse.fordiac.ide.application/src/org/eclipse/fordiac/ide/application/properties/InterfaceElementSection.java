@@ -23,8 +23,6 @@ import java.text.MessageFormat;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -282,12 +280,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected Object getInputType(final Object input) {
-		if (input instanceof InterfaceEditPart) {
-			return ((InterfaceEditPart) input).getModel();
-		} else if (input instanceof ValueEditPart) {
-			return ((ValueEditPart) input).getModel().getVarDeclaration();
-		}
-		return null;
+		return TypedInterfacePinFilter.getInterfaceElementFromSelectedElement(input);
 	}
 
 	@Override

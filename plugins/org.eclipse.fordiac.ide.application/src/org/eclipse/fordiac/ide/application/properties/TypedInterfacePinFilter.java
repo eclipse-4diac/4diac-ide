@@ -13,8 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
-import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IFilter;
 
 // Filtering the additional pin tab out
@@ -23,9 +24,27 @@ public class TypedInterfacePinFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		return (toTest instanceof InterfaceEditPartForFBNetwork
-				&& !(toTest instanceof UntypedSubAppInterfaceElementEditPart));
+		return getInterfaceElementFromSelectedElement(toTest) != null;
 
+	}
+
+	static IInterfaceElement getInterfaceElementFromSelectedElement(final Object element) {
+		Object retval = element;
+		if (retval instanceof EditPart) {
+			retval = ((EditPart) retval).getModel();
+		}
+		if (retval instanceof Value) {
+			retval = ((Value) retval).getVarDeclaration();
+		}
+		return isPinOfTypedElement(retval) ? (IInterfaceElement) retval : null;
+	}
+
+	private static boolean isPinOfTypedElement(final Object element) {
+		if (element instanceof IInterfaceElement) {
+			final IInterfaceElement ie = (IInterfaceElement) element;
+			return (ie.getFBNetworkElement() != null && ie.getFBNetworkElement().getType() != null);
+		}
+		return false;
 	}
 
 }
