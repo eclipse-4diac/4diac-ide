@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class FilterProperties {
@@ -39,6 +40,9 @@ public class FilterProperties {
 	}
 
 	public static boolean isDataPin(Object o) {
+		if (o instanceof Value) {
+			return isDataPin(((Value) o).getVarDeclaration());
+		}
 		return o instanceof VarDeclaration && !(o instanceof AdapterDeclaration);
 	}
 
