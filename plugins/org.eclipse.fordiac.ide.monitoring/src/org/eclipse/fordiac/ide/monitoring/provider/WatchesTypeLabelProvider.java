@@ -24,7 +24,12 @@ public class WatchesTypeLabelProvider extends ColumnLabelProvider {
 
 		if (element instanceof WatchValueTreeNode) {
 			final WatchValueTreeNode tn = (WatchValueTreeNode) element;
-			final IInterfaceElement ie = tn.getMonitoringBaseElement().getPort().getInterfaceElement();
+			IInterfaceElement ie;
+			if (tn.getVariable() == null) {
+				ie = tn.getMonitoringBaseElement().getPort().getInterfaceElement();
+			} else {
+				ie = tn.getVariable();
+			}
 			if (ie instanceof VarDeclaration) {
 				return ie.getTypeName();
 			}
