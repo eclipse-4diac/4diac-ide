@@ -113,14 +113,6 @@
                tab="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab">
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.gef.properties.InterfaceElementSection"
-               id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceElementSection"
-               tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceElementTab">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart">
-            </input>
-         </propertySection>
-         <propertySection
                enablesFor="1"
                class="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
                id="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"

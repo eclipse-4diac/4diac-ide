@@ -24,6 +24,6 @@ public class AdapterInterfaceFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		return (InterfaceFilterSelection.getSelectableObject(toTest) instanceof AdapterDeclaration);
+		return (InterfaceFilterSelection.getSelectableInterfaceElementOfType(toTest) instanceof AdapterDeclaration);
 	}
 }

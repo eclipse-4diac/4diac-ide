@@ -24,8 +24,8 @@ import org.eclipse.jface.viewers.IFilter;
 public class DataInterfaceFilter implements IFilter {
 
 	@Override
-	public boolean select(Object toTest) {
-		Object selection = InterfaceFilterSelection.getSelectableObject(toTest);
+	public boolean select(final Object toTest) {
+		final Object selection = InterfaceFilterSelection.getSelectableInterfaceElementOfType(toTest);
 		return (!(selection instanceof AdapterDeclaration) && (selection instanceof VarDeclaration));
 	}
 
