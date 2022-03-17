@@ -188,7 +188,7 @@
          	class="org.eclipse.fordiac.ide.application.properties.StructManipulatorSection"
          	id="org.eclipse.fordiac.ide.application.properties.StructManipulatorSection"
          	tab="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
-         	filter="org.eclipse.fordiac.ide.application.properties.DemultiplexerFilter">
+         	filter="org.eclipse.fordiac.ide.application.properties.MultiplexerFilter">
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"

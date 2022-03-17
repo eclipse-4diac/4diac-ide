@@ -62,25 +62,15 @@
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.ServiceSection"
                id="property.section.service"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.ServiceFilter"
                tab="property.tab.service">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.Service">
-            </input>
          </propertySection>
          <propertySection
                afterSection="property.section.service"
                class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.ServiceSequenceSection"
                id="property.section.serviceSequence"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.ServiceSequenceFilter"
                tab="property.tab.serviceSequence">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.InputPrimitiveSection"
