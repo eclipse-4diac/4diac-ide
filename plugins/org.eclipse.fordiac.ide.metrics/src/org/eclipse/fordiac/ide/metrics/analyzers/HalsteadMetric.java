@@ -230,7 +230,7 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 	protected MetricData analyzeSFB(final SimpleFBType simpleFBType) {
 		final HalsteadData data = new HalsteadData();
 
-		analyzeAlgorithm(simpleFBType.getAlgorithm(), data);
+		simpleFBType.getAlgorithm().forEach(alg -> analyzeAlgorithm(alg, data));
 		return data;
 	}
 

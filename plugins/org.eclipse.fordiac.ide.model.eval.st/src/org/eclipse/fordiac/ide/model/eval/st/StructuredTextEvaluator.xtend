@@ -15,149 +15,124 @@ package org.eclipse.fordiac.ide.model.eval.st
 import java.util.List
 import java.util.Map
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
-import org.eclipse.fordiac.ide.model.eval.EvaluatorExitException
+import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
+import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
+import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
-import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
+import org.eclipse.fordiac.ide.model.eval.variable.PartialVariable
+import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
-import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmBody
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.ArrayInitializerExpression
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STAssignmentStatement
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCaseStatement
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExit
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STExpression
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STForStatement
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STIfStatement
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STRepeatStatement
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STStatement
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STUnaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STVarDeclaration
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STWhileStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.xtext.parser.IParseResult
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
+import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
+
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
-import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
+import static extension org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
 
-class StructuredTextEvaluator extends AbstractEvaluator {
-
+abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	@Accessors final String name
-	final String text
-	final BaseFBType fbType
-	final boolean singleExpression
-	final Map<String, Variable> variables
+	protected final Map<String, Variable> variables
 
-	new(STAlgorithm alg, Iterable<Variable> variables, Evaluator parent) {
+	new(String name, Iterable<Variable> variables, Evaluator parent) {
 		super(parent)
-		val root = alg.rootContainer
-		this.fbType = if(root instanceof BaseFBType) root else null
-		this.name = '''«IF fbType !== null»«fbType.name».«ENDIF»«alg.name»'''
-		this.text = alg.text
-		this.singleExpression = false
+		this.name = name
 		this.variables = variables.toMap[getName]
 	}
 
-	new(ECTransition transition, Iterable<Variable> variables, Evaluator parent) {
-		super(parent)
-		this.name = "anonymous"
-		this.text = transition.conditionExpression
-		val root = transition.rootContainer
-		this.fbType = if(root instanceof BaseFBType) root else null
-		this.singleExpression = true
-		this.variables = variables.toMap[getName]
-	}
-
-	new(String text, Iterable<Variable> variables, BaseFBType fbType, Evaluator parent) {
-		super(parent)
-		this.name = "anonymous"
-		this.text = text
-		this.fbType = fbType
-		this.singleExpression = true
-		this.variables = variables.toMap[getName]
+	override getChildren() {
+		emptyMap
 	}
 
 	override getVariables() {
 		variables.unmodifiableView
 	}
 
-	override getSourceElement() {
-		this.fbType
-	}
-
-	override Value evaluate() {
-		val parseResult = parse()
-		val root = parseResult.rootASTElement
-		root.evaluate
-	}
-
-	def private dispatch Value evaluate(STAlgorithmBody alg) {
-		alg.trap.evaluateStructuredTextAlgorithm
-		null
-	}
-
-	def private dispatch Value evaluate(STExpression expr) {
-		expr.trap.evaluateExpression
-	}
-
-	def private IParseResult parse() {
-		val errors = newArrayList
-		val parseResult = text.parse(singleExpression, name, fbType, errors)
-		if (parseResult === null) {
-			errors.forEach[error("Parse error: " + it)]
-			throw new Exception("Parse error: " + errors.join(", "))
-		}
-		return parseResult
-	}
-
-	def private evaluateStructuredTextAlgorithm(STAlgorithmBody alg) {
-		alg.varTempDeclarations.flatMap[varDeclarations].filter(STVarDeclaration).forEach[evaluateLocalVariable]
-		try {
-			alg.statements.evaluateStatementList
-		} catch (ReturnException e) {
-			// return
-		}
-	}
-
-	def private void evaluateLocalVariable(STVarDeclaration variable) {
+	def protected void evaluateVariableInitialization(STVarDeclaration variable) {
+		val type = if (variable.array)
+				(variable.type as DataType).newArrayType(variable.ranges.map[evaluateSubrange])
+			else
+				variable.type as DataType
 		variables.put(variable.name,
-			new ElementaryVariable(variable.name, variable.type as DataType,
-				variable.defaultValue?.evaluateInitializerExpression))
+			newVariable(variable.name, type).evaluateInitializerExpression(variable.defaultValue))
 	}
 
-	def private dispatch Value evaluateInitializerExpression(STExpression expression) {
-		expression.evaluateExpression
+	def protected dispatch Variable evaluateInitializerExpression(Variable variable, Void expression) {
+		variable
 	}
 
-	def private dispatch Value evaluateInitializerExpression(ArrayInitializerExpression expression) {
-		throw new UnsupportedOperationException
+	def protected dispatch Variable evaluateInitializerExpression(Variable variable,
+		STElementaryInitializerExpression expression) {
+		variable.value = expression.value.evaluateExpression
+		variable
 	}
 
-	def private void evaluateStatementList(List<STStatement> statements) {
+	def protected dispatch Variable evaluateInitializerExpression(Variable variable,
+		STArrayInitializerExpression expression) {
+		val value = variable.value as ArrayValue
+		expression.values.flatMap [ elem |
+			if (elem.initExpressions.empty)
+				#[elem.indexOrInitExpression.evaluateExpression]
+			else {
+				val initValues = elem.initExpressions.map[evaluateExpression]
+				(0 ..< elem.indexOrInitExpression.evaluateExpression.asInteger).flatMap[initValues]
+			}
+		].forEach[initValue, index|value.getRaw(index).value = initValue]
+		variable
+	}
+
+	def protected void evaluateStatementList(List<STStatement> statements) {
 		statements.forEach[evaluateStatement]
 	}
 
-	def private dispatch void evaluateStatement(STStatement stmt) {
+	def protected dispatch void evaluateStatement(STStatement stmt) {
 		error('''The statement «stmt.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The statement «stmt.eClass.name» is not supported''')
 	}
 
-	def private dispatch void evaluateStatement(STAssignmentStatement stmt) {
+	def protected dispatch void evaluateStatement(STAssignmentStatement stmt) {
 		stmt.left.evaluateVariable.value = stmt.right.trap.evaluateExpression
 	}
 
-	def private dispatch void evaluateStatement(STIfStatement stmt) {
+	def protected dispatch void evaluateStatement(STCallStatement stmt) {
+		stmt.call.trap.evaluateExpression
+	}
+
+	def protected dispatch void evaluateStatement(STIfStatement stmt) {
 		if (stmt.condition.trap.evaluateExpression.asBoolean) {
 			stmt.statements.evaluateStatementList
 		} else {
@@ -166,13 +141,13 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	def private dispatch void evaluateStatement(STCaseStatement stmt) {
+	def protected dispatch void evaluateStatement(STCaseStatement stmt) {
 		val value = stmt.selector.trap.evaluateExpression;
 		(stmt.cases.findFirst[conditions.exists[trap.evaluateExpression == value]]?.statements ?:
 			stmt.^else?.statements)?.evaluateStatementList
 	}
 
-	def private dispatch void evaluateStatement(STForStatement stmt) {
+	def protected dispatch void evaluateStatement(STForStatement stmt) {
 		val variable = variables.get(stmt.variable.name)
 		// from
 		variable.value = stmt.from.trap.evaluateExpression
@@ -182,62 +157,76 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		val by = stmt.by?.evaluateExpression ?: 1.wrapValue(variable.type)
 		// direction?
 		if (by >= variable.type.defaultValue) {
-			while (variable.value <= to) {
-				try {
-					stmt.statements.evaluateStatementList
-				} catch (ContinueException e) {
-					// continue
+			try {
+				while (variable.value <= to) {
+					try {
+						stmt.statements.evaluateStatementList
+					} catch (ContinueException e) {
+						// continue
+					}
+					(stmt.by ?: stmt.from).trap
+					variable.value = variable.value + by
 				}
-				(stmt.by ?: stmt.from).trap
-				variable.value = variable.value + by
+			} catch (ExitException e) {
+				// break
 			}
 		} else {
-			while (variable.value >= to) {
+			try {
+				while (variable.value >= to) {
+					try {
+						stmt.statements.evaluateStatementList
+					} catch (ContinueException e) {
+						// continue
+					}
+					stmt.by.trap
+					variable.value = variable.value + by
+				}
+			} catch (ExitException e) {
+				// break
+			}
+		}
+	}
+
+	def protected dispatch void evaluateStatement(STWhileStatement stmt) {
+		try {
+			while (stmt.condition.trap.evaluateExpression.asBoolean) {
 				try {
 					stmt.statements.evaluateStatementList
 				} catch (ContinueException e) {
 					// continue
 				}
-				stmt.by.trap
-				variable.value = variable.value + by
 			}
+		} catch (ExitException e) {
+			// break
 		}
 	}
 
-	def private dispatch void evaluateStatement(STWhileStatement stmt) {
-		while (stmt.condition.trap.evaluateExpression.asBoolean) {
-			try {
-				stmt.statements.evaluateStatementList
-			} catch (ContinueException e) {
-				// continue
-			}
+	def protected dispatch void evaluateStatement(STRepeatStatement stmt) {
+		try {
+			do {
+				try {
+					stmt.statements.evaluateStatementList
+				} catch (ContinueException e) {
+					// continue
+				}
+			} while (!stmt.condition.trap.evaluateExpression.asBoolean);
+		} catch (ExitException e) {
+			// break
 		}
 	}
 
-	def private dispatch void evaluateStatement(STRepeatStatement stmt) {
-		do {
-			try {
-				stmt.statements.evaluateStatementList
-			} catch (ContinueException e) {
-				// continue
-			}
-		} while (!stmt.condition.trap.evaluateExpression.asBoolean);
-	}
+	def protected dispatch void evaluateStatement(STContinue stmt) { throw new ContinueException(stmt.trap) }
 
-	def private dispatch void evaluateStatement(STContinue stmt) { throw new ContinueException(stmt.trap) }
+	def protected dispatch void evaluateStatement(STReturn stmt) { throw new ReturnException(stmt.trap) }
 
-	def private dispatch void evaluateStatement(STReturn stmt) { throw new ReturnException(stmt.trap) }
+	def protected dispatch void evaluateStatement(STExit stmt) { throw new ExitException(stmt.trap) }
 
-	def private dispatch void evaluateStatement(STExit stmt) {
-		throw new StructuredTextExitException(stmt.trap, this)
-	}
-
-	def private dispatch Value evaluateExpression(STExpression expr) {
+	def protected dispatch Value evaluateExpression(STExpression expr) {
 		error('''The expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The expression «expr.eClass.name» is not supported''')
 	}
 
-	def private dispatch Value evaluateExpression(STBinaryExpression expr) {
+	def protected dispatch Value evaluateExpression(STBinaryExpression expr) {
 		switch (expr.op) {
 			case ADD:
 				expr.left.evaluateExpression + expr.right.evaluateExpression
@@ -288,7 +277,7 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	def private dispatch Value evaluateExpression(STUnaryExpression expr) {
+	def protected dispatch Value evaluateExpression(STUnaryExpression expr) {
 		switch (expr.op) {
 			case PLUS:
 				+expr.expression.evaluateExpression
@@ -306,16 +295,54 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	def private dispatch Value evaluateExpression(STNumericLiteral expr) {
-		expr.value.wrapValue(expr.type)
+	def protected dispatch Value evaluateExpression(STNumericLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
 	}
 
-	def private dispatch Value evaluateExpression(STFeatureExpression expr) {
+	def protected dispatch Value evaluateExpression(STStringLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def protected dispatch Value evaluateExpression(STDateLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def protected dispatch Value evaluateExpression(STTimeLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def protected dispatch Value evaluateExpression(STTimeOfDayLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def protected dispatch Value evaluateExpression(STDateAndTimeLiteral expr) {
+		expr.value.wrapValue(expr.resultType as DataType)
+	}
+
+	def protected dispatch Value evaluateExpression(STFeatureExpression expr) {
 		switch (feature: expr.feature) {
-			VarDeclaration:
+			VarDeclaration,
+			STVarDeclaration,
+			ICallable case !expr.call:
 				variables.get(feature.name).value
-			STVarDeclaration:
-				variables.get(feature.name).value
+			ICallable case expr.call: {
+				val arguments = expr.mappedInputArguments.entrySet.filter[value !== null].map [
+					val parameter = newVariable(key.name, key.type as DataType)
+					parameter.value = value.evaluateExpression
+					parameter
+				].toList
+				val eval = EvaluatorFactory.createEvaluator(feature,
+					feature.eClass.instanceClass as Class<? extends ICallable>, arguments, this)
+				if (eval === null) {
+					error('''Cannot create evaluator for callable «feature.eClass.name»''')
+					throw new UnsupportedOperationException('''Cannot create evaluator for callable «feature.eClass.name»''')
+				}
+				val result = eval.evaluate
+				expr.mappedOutputArguments.forEach [ parameter, argument |
+					variables.get(argument.name).value = eval.variables.get(parameter.name).value
+				]
+				result
+			}
 			default: {
 				error('''The feature «feature.eClass.name» is not supported''')
 				throw new UnsupportedOperationException('''The feature «feature.eClass.name» is not supported''')
@@ -323,16 +350,45 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	def private dispatch Variable evaluateVariable(STExpression expr) {
+	def protected dispatch Value evaluateExpression(STMemberAccessExpression expr) {
+		expr.member.evaluateExpression(expr.receiver.evaluateExpression)
+	}
+
+	def protected dispatch Value evaluateExpression(STArrayAccessExpression expr) {
+		val receiver = expr.receiver.evaluateExpression as ArrayValue
+		val index = expr.index.map[evaluateExpression.asInteger].toList
+		receiver.get(index).value
+	}
+
+	def protected dispatch Value evaluateExpression(STExpression expr, Value receiver) {
+		error('''The expression «expr.eClass.name» is not supported''')
+		throw new UnsupportedOperationException('''The expression «expr.eClass.name» is not supported''')
+	}
+
+	def protected dispatch Value evaluateExpression(STMultibitPartialExpression expr, Value receiver) {
+		receiver.partial(expr.resultType as DataType,
+			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
+	}
+
+	def protected dispatch Value evaluateExpression(STFeatureExpression expr, Value receiver) {
+		error('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+		throw new UnsupportedOperationException('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+	}
+
+	def protected dispatch Value evaluateExpression(STFeatureExpression expr, StructValue receiver) {
+		receiver.get(expr.feature.name).value
+	}
+
+	def protected dispatch Variable evaluateVariable(STExpression expr) {
 		error('''The lvalue expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The lvalue expression «expr.eClass.name» is not supported''')
 	}
 
-	def private dispatch Variable evaluateVariable(STFeatureExpression expr) {
+	def protected dispatch Variable evaluateVariable(STFeatureExpression expr) {
 		switch (feature: expr.feature) {
-			VarDeclaration:
-				variables.get(feature.name)
-			STVarDeclaration:
+			VarDeclaration,
+			STVarDeclaration,
+			ICallable case !expr.call:
 				variables.get(feature.name)
 			default: {
 				error('''The feature «feature.eClass.name» is not supported''')
@@ -340,6 +396,48 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 			}
 		}
 	}
+
+	def protected dispatch Variable evaluateVariable(STMemberAccessExpression expr) {
+		expr.member.evaluateVariable(expr.receiver.evaluateVariable)
+	}
+
+	def protected dispatch Variable evaluateVariable(STArrayAccessExpression expr) {
+		val receiver = expr.receiver.evaluateExpression as ArrayValue
+		val index = expr.index.map[evaluateExpression.asInteger].toList
+		receiver.get(index)
+	}
+
+	def protected dispatch Variable evaluateVariable(STExpression expr, Variable receiver) {
+		error('''The expression «expr.eClass.name» is not supported''')
+		throw new UnsupportedOperationException('''The lvalue expression «expr.eClass.name» is not supported''')
+	}
+
+	def protected dispatch Variable evaluateVariable(STFeatureExpression expr, Variable receiver) {
+		error('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+		throw new UnsupportedOperationException('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+	}
+
+	def protected dispatch Variable evaluateVariable(STFeatureExpression expr, StructVariable receiver) {
+		receiver.value.get(expr.feature.name)
+	}
+
+	def protected dispatch Variable evaluateVariable(STMultibitPartialExpression expr, Variable receiver) {
+		new PartialVariable(receiver, expr.resultType as DataType,
+			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
+	}
+
+	def protected Subrange evaluateSubrange(STExpression expr) {
+		switch (expr) {
+			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
+				newSubrange(expr.left.evaluateExpression.asInteger, expr.right.evaluateExpression.asInteger)
+			default:
+				newSubrange(0, expr.evaluateExpression.asInteger)
+		}
+	}
+
+	def protected dispatch INamedElement getType(VarDeclaration v) { v.type }
+
+	def protected dispatch INamedElement getType(STVarDeclaration v) { v.type }
 
 	static class StructuredTextException extends Exception {
 		new(STStatement statement) {
@@ -359,9 +457,9 @@ class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	static class StructuredTextExitException extends EvaluatorExitException {
-		new(STStatement statement, Evaluator evaluator) {
-			super(evaluator)
+	static class ExitException extends StructuredTextException {
+		new(STStatement statement) {
+			super(statement)
 		}
 	}
 }

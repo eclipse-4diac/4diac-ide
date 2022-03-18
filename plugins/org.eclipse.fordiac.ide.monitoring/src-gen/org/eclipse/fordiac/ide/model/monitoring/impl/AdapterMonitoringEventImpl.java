@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -253,7 +254,7 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES);
+			attributes = new EObjectContainmentEList.Resolving<>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -307,7 +308,7 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
@@ -319,7 +320,7 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
@@ -368,9 +369,39 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	@Override
 	public EList<With> getWith() {
 		if (with == null) {
-			with = new EObjectContainmentEList<With>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH);
+			with = new EObjectContainmentEList<>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH);
 		}
 		return with;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<INamedElement> getInputParameters() {
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<INamedElement> getOutputParameters() {
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DataType getReturnType() {
+		return null;
 	}
 
 	/**
@@ -634,6 +665,11 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 				default: return -1;
 			}
 		}
+		if (baseClass == ICallable.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
 		if (baseClass == Event.class) {
 			switch (derivedFeatureID) {
 				case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH: return LibraryElementPackage.EVENT__WITH;
@@ -669,6 +705,11 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 				case LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS: return MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS;
 				case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE: return MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE;
 				case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE_NAME: return MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE_NAME;
+				default: return -1;
+			}
+		}
+		if (baseClass == ICallable.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}

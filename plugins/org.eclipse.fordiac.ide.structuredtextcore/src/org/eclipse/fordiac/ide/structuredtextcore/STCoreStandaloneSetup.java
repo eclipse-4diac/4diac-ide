@@ -13,6 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore;
 
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+
+import com.google.inject.Injector;
 
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
@@ -21,5 +24,11 @@ public class STCoreStandaloneSetup extends STCoreStandaloneSetupGenerated {
 
 	public static void doSetup() {
 		new STCoreStandaloneSetup().createInjectorAndDoEMFRegistration();
+	}
+
+	@Override
+	public void register(final Injector injector) {
+		STCorePackage.eINSTANCE.eClass();
+		super.register(injector);
 	}
 }

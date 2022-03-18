@@ -12,6 +12,21 @@
       </perspective>
    </extension>
    <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.fordiac.ide.typemanagement.perspective">
+         <perspectiveShortcut
+               id="org.eclipse.fordiac.ide.SystemPerspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         <perspectiveShortcut
+               id="org.eclipse.fordiac.ide.SystemPerspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+   </extension>
+   <extension
          id="product"
          point="org.eclipse.core.runtime.products">
       <product

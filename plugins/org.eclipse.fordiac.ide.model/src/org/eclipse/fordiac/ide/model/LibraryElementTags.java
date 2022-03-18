@@ -78,6 +78,7 @@ public interface LibraryElementTags {
 	String ECTRANSITION_ELEMENT = "ECTransition"; //$NON-NLS-1$
 	String ECSTATE_ELEMENT = "ECState"; //$NON-NLS-1$
 	String ALGORITHM_ELEMENT = "Algorithm"; //$NON-NLS-1$
+	String METHOD_ELEMENT = "Method"; //$NON-NLS-1$
 
 	String PARAMETER_ELEMENT = "Parameter"; //$NON-NLS-1$
 

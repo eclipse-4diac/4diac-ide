@@ -166,7 +166,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	public List<FileObject> generateFunctionBlock(final CompilableType fb) {
 		final Set<IExportTemplate> templates = (new ForteNgExportFilter() {
 			Set<IExportTemplate> getTemplateSet(final LibraryElement type) {
-				return getTemplates(type);
+				return getTemplates(type.getName(), type);
 			}
 		}).getTemplateSet(functionBlock);
 

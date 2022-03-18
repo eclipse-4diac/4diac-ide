@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STCorePackage;
 import org.eclipse.xtext.ISetup;
 import org.eclipse.xtext.XtextPackage;
 import org.eclipse.xtext.resource.IResourceFactory;
@@ -44,9 +43,6 @@ public class STCoreStandaloneSetupGenerated implements ISetup {
 	}
 	
 	public void register(Injector injector) {
-		if (!EPackage.Registry.INSTANCE.containsKey("http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore")) {
-			EPackage.Registry.INSTANCE.put("http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore", STCorePackage.eINSTANCE);
-		}
 		IResourceFactory resourceFactory = injector.getInstance(IResourceFactory.class);
 		IResourceServiceProvider serviceProvider = injector.getInstance(IResourceServiceProvider.class);
 		

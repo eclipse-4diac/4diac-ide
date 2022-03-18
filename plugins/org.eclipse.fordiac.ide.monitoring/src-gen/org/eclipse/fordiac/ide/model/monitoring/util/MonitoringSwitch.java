@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -116,6 +117,7 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIEditPartCreator(adapterMonitoringEvent);
 				if (result == null) result = caseEvent(adapterMonitoringEvent);
 				if (result == null) result = caseIInterfaceElement(adapterMonitoringEvent);
+				if (result == null) result = caseICallable(adapterMonitoringEvent);
 				if (result == null) result = caseConfigurableObject(adapterMonitoringEvent);
 				if (result == null) result = caseINamedElement(adapterMonitoringEvent);
 				if (result == null) result = defaultCase(theEObject);
@@ -346,6 +348,21 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIInterfaceElement(IInterfaceElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseICallable(ICallable object) {
 		return null;
 	}
 

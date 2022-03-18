@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.application.search;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -21,12 +22,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -48,6 +52,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	private static final int TYPE_COLUMN_WIDTH = 100;
 	private static final int NAME_COMMENT_COLUMN_WIDTH = 200;
+	private static final int FULL_HIERARCHICAL_NAME_COLUMN_WIDTH = 300;
+
+	private static final String FULL_NAME_COLUMN = "Full Hierarchical Name";
 
 	public ModelSearchResultPage() {
 		super(AbstractTextSearchViewPage.FLAG_LAYOUT_FLAT); // FLAG_LAYOUT_FLAT = table layout
@@ -165,6 +172,36 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			}
 		});
 
+		final TableViewerColumn fullHierarchicalName = new TableViewerColumn(viewer, SWT.LEAD);
+		fullHierarchicalName.getColumn().setText(FULL_NAME_COLUMN);
+		fullHierarchicalName.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof FBNetworkElement) {
+					return FBNetworkHelper.getFullHierarchicalName((FBNetworkElement) element);
+				}
+				return super.getText(element);
+			}
+
+		});
+
+
+		viewer.addDoubleClickListener(ModelSearchResultPage::jumpToBlock);
+	}
+
+	// Double click to access the element we looked for
+	private static void jumpToBlock(final DoubleClickEvent doubleClick) {
+		final StructuredSelection selectionList = (StructuredSelection) doubleClick.getSelection();
+		if (!selectionList.isEmpty()) {
+			final Object selection = selectionList.getFirstElement();
+			if (selection instanceof FBNetworkElement) {
+				final FBNetworkElement fbSelection = (FBNetworkElement) selection;
+				final IEditorPart editor = OpenListenerManager.openEditor(fbSelection.eContainer().eContainer());
+				HandlerHelper.selectElement(selection, HandlerHelper.getViewer(editor));
+			}
+
+		}
+
 	}
 
 	protected static TableLayout createTableLayout(final Table table) {
@@ -173,6 +210,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TYPE_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(FULL_HIERARCHICAL_NAME_COLUMN_WIDTH));
 		return layout;
 	}
 

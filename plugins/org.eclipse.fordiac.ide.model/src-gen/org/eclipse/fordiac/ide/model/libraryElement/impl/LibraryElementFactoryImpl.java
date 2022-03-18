@@ -79,6 +79,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
@@ -88,6 +89,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
@@ -224,6 +226,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.CFB_INSTANCE: return createCFBInstance();
 			case LibraryElementPackage.ERROR_MARKER_REF: return createErrorMarkerRef();
 			case LibraryElementPackage.GROUP: return createGroup();
+			case LibraryElementPackage.OTHER_METHOD: return createOtherMethod();
+			case LibraryElementPackage.ST_METHOD: return createSTMethod();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1076,6 +1080,28 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public Group createGroup() {
 		GroupImpl group = new GroupImpl();
 		return group;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OtherMethod createOtherMethod() {
+		OtherMethodImpl otherMethod = new OtherMethodImpl();
+		return otherMethod;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STMethod createSTMethod() {
+		STMethodImpl stMethod = new STMethodImpl();
+		return stMethod;
 	}
 
 	/**

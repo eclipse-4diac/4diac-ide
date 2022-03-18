@@ -13,6 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor;
 
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
+
+import com.google.inject.Injector;
 
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
@@ -21,5 +24,11 @@ public class STFunctionStandaloneSetup extends STFunctionStandaloneSetupGenerate
 
 	public static void doSetup() {
 		new STFunctionStandaloneSetup().createInjectorAndDoEMFRegistration();
+	}
+
+	@Override
+	public void register(final Injector injector) {
+		STFunctionPackage.eINSTANCE.eClass();
+		super.register(injector);
 	}
 }

@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.export.ui.wizard;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
@@ -27,13 +26,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Messages;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -50,9 +48,7 @@ import org.eclipse.ui.ide.IDE;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-/**
- * The Class FordiacExportWizard.
- */
+/** The Class FordiacExportWizard. */
 public class FordiacExportWizard extends Wizard implements IExportWizard {
 
 	private static final String FORDIAC_EXPORT_SECTION = "4DIAC_EXPORT_SECTION"; //$NON-NLS-1$
@@ -90,7 +86,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		page.saveWidgetValues();
 
 		final Exporter exporter = new Exporter(page.getSelectedExportFilter(), collectExportees(), page.getDirectory(),
-				page.overwriteWithoutWarning());
+				page.overwriteWithoutWarning(), page.enableCMakeLists());
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, exporter);
 		} catch (final InterruptedException e) {
@@ -110,63 +106,66 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		msg.open();
 	}
 
-	private final List<LibraryElement> collectExportees() {
+	private final List<IFile> collectExportees() {
 		final List<Object> resources = page.getSelectedResources();
-		final List<LibraryElement> exportees = resources.parallelStream().filter(IFile.class::isInstance)
-				.map(exportee -> TypeLibrary.getPaletteEntryForFile((IFile) exportee)).filter(Objects::nonNull)
-				.map(PaletteEntry::getType)
+		return resources.parallelStream().filter(IFile.class::isInstance).map(IFile.class::cast)
 				.collect(Collectors.toList());
-
-		if (page.enableCMakeLists()) {
-			exportees.add(new CMakeListsMarker());
-		}
-		return exportees;
 	}
 
 	private static class Exporter implements IRunnableWithProgress {
 
-		private final List<LibraryElement> exportees;
+		private final List<IFile> exportees;
 		private final String outputDirectory;
 		private final IConfigurationElement conf;
 		private final boolean overwriteWithoutWarning;
+		private final boolean enableCMakeLists;
 
-		public Exporter(final IConfigurationElement conf, final List<LibraryElement> exportees,
-				final String outputDirectory, final boolean overwriteWithoutWarning) {
+		public Exporter(final IConfigurationElement conf, final List<IFile> exportees, final String outputDirectory,
+				final boolean overwriteWithoutWarning, final boolean enableCMakeLists) {
 			this.conf = conf;
 			this.exportees = exportees;
 			this.outputDirectory = outputDirectory;
 			this.overwriteWithoutWarning = overwriteWithoutWarning;
+			this.enableCMakeLists = enableCMakeLists;
 		}
 
 		@Override
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			monitor.beginTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingSelectedTypesUsingExporter,
-					conf.getAttribute("name")), exportees.size()); //$NON-NLS-1$
+					conf.getAttribute("name")), exportees.size() + 1); //$NON-NLS-1$
 
 			final IExportFilter filter = createExportFilter();
 			if (null != filter) {
-				for (final LibraryElement type : exportees) {
-					exportElement(monitor, filter, type);
+				for (final IFile file : exportees) {
+					exportElement(monitor, filter, file, null);
 					monitor.worked(1);
 				}
+				if (enableCMakeLists) {
+					exportElement(monitor, filter, null, new CMakeListsMarker());
+				}
+				monitor.worked(1);
 				showErrorWarningSummary(filter);
 			}
 			monitor.done();
 		}
 
-		private void exportElement(final IProgressMonitor monitor, final IExportFilter filter,
-				final LibraryElement type) {
+		private void exportElement(final IProgressMonitor monitor, final IExportFilter filter, final IFile file,
+				final EObject source) {
 			try {
-				if (type instanceof CMakeListsMarker) {
+				if (source instanceof CMakeListsMarker) {
 					monitor.subTask(Messages.FordiacExportWizard_ExportingCMakeLists);
-					filter.export(null, outputDirectory, overwriteWithoutWarning, type);
+					filter.export(null, outputDirectory, overwriteWithoutWarning, source);
 				} else {
-					monitor.subTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingType,
-							type.getPaletteEntry().getLabel()));
-					filter.export(type.getPaletteEntry().getFile(), outputDirectory, overwriteWithoutWarning,
-							type);
-				}
+					String name = "anonymous"; //$NON-NLS-1$
+					if (source instanceof INamedElement) {
+						name = ((INamedElement) source).getName();
+					} else if (file != null) {
+						name = file.getFullPath().removeFileExtension().lastSegment();
+					}
 
+					monitor.subTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingType, name));
+					filter.export(file, outputDirectory, overwriteWithoutWarning, source);
+				}
 			} catch (final ExportException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 				final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());

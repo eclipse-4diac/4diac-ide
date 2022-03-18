@@ -106,7 +106,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 		muxLabel = getWidgetFactory().createCLabel(structComp, Messages.StructManipulatorSection_STRUCTURED_TYPE);
 
-		typeSelectionWidget = new TypeSelectionWidget(getWidgetFactory());
+		typeSelectionWidget = new TypeSelectionWidget(getWidgetFactory(), this::handleStructSelectionChanged);
 		typeSelectionWidget.createControls(structComp);
 	}
 
@@ -256,8 +256,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 			initTree(getType(), memberVarViewer);
 		}
 
-		typeSelectionWidget.initialize(getType(), new StructuredTypeSelectionContentProvider(),
-				this::handleStructSelectionChanged);
+		typeSelectionWidget.initialize(getType(), new StructuredTypeSelectionContentProvider());
 
 		if (commandStack != null) {
 			commandStack.addCommandStackEventListener(this);

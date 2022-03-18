@@ -13,12 +13,13 @@
 package org.eclipse.fordiac.ide.model.eval.variable
 
 import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-@Data
+@FinalFieldsConstructor
 abstract class AbstractVariable implements Variable {
-	String name
-	DataType type
+	@Accessors final String name
+	@Accessors final DataType type
 	
 	override toString() {
 		value.toString

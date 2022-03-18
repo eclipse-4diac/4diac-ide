@@ -16,4 +16,14 @@ import org.eclipse.fordiac.ide.model.data.AnyBitType
 
 interface AnyBitValue extends AnyElementaryValue {
 	override AnyBitType getType()
+
+	def boolean boolValue()
+
+	def byte byteValue()
+
+	def short shortValue()
+
+	def int intValue()
+
+	def long longValue()
 }

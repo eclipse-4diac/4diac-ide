@@ -24,10 +24,10 @@ public class InsertAlgorithmCommand extends Command {
 
 	private final BasicFBType fbType;
 	private STAlgorithm newAlgorithm;
-	private Algorithm oldAlgorithm;
-	private int index;
+	private final Algorithm oldAlgorithm;
+	private final int index;
 
-	public InsertAlgorithmCommand(final BasicFBType fbType, Algorithm oldAlgorithm, int index) {
+	public InsertAlgorithmCommand(final BasicFBType fbType, final Algorithm oldAlgorithm, final int index) {
 		this.fbType = fbType;
 		this.oldAlgorithm = oldAlgorithm;
 		this.index = index;
@@ -45,12 +45,12 @@ public class InsertAlgorithmCommand extends Command {
 
 	@Override
 	public void undo() {
-		fbType.getAlgorithm().remove(newAlgorithm);
+		fbType.getCallables().remove(newAlgorithm);
 	}
 
 	@Override
 	public void redo() {
-		fbType.getAlgorithm().add(index, newAlgorithm);
+		fbType.getCallables().add(index, newAlgorithm);
 	}
 
 }

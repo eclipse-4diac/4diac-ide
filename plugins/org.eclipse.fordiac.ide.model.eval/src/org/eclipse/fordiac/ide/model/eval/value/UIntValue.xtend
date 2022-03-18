@@ -30,7 +30,7 @@ class UIntValue implements AnyUnsignedValue {
 
 	def static toUIntValue(String value) { new UIntValue(Integer.parseUnsignedInt(value) as short) }
 
-	def static toUIntValue(AnyNumValue value) { value.shortValue.toUIntValue }
+	def static toUIntValue(AnyMagnitudeValue value) { value.shortValue.toUIntValue }
 
 	override UintType getType() { ElementaryTypes.UINT }
 	

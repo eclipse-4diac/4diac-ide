@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.test.model.eval.fb
 
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
-import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
@@ -54,14 +54,21 @@ class FBEvaluatorTest {
 		return decl
 	}
 
-	def static newSTAlgorithm(CharSequence text) {
+	def static newSTAlgorithm(CharSequence text, String name) {
 		val alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm
-		alg.name = "TEST"
+		alg.name = name
 		alg.text = text.toString
 		return alg
 	}
 
-	def static newVariable(Value value, String name) {
+	def static newSTMethod(CharSequence text, String name) {
+		val method = LibraryElementFactory.eINSTANCE.createSTMethod
+		method.name = name
+		method.text = text.toString
+		return method
+	}
+
+	def static newVariable(AnyElementaryValue value, String name) {
 		new ElementaryVariable(name, value.type, value)
 	}
 }

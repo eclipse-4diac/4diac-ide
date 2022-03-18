@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -32,17 +32,17 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 	private final AtomicBoolean suspended = new AtomicBoolean();
 	private final AtomicReference<Evaluator> currentEvaluator = new AtomicReference<>();
 
-	public EvaluatorDebugThread(Thread thread, EvaluatorDebugTarget debugTarget) {
+	public EvaluatorDebugThread(final Thread thread, final EvaluatorDebugTarget debugTarget) {
 		super(debugTarget);
 		this.thread = thread;
 		this.fireCreationEvent();
 	}
 
-	protected void request(int kind, int detail) {
+	protected void request(final int kind, final int detail) {
 		this.request(this, kind, detail);
 	}
 
-	protected void request(Object source, int kind, int detail) {
+	protected void request(final Object source, final int kind, final int detail) {
 		synchronized (this.request) {
 			this.request.set(new DebugEvent(source, kind, detail));
 			this.request.notifyAll();
@@ -67,7 +67,7 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 		return this.currentEvaluator.get();
 	}
 
-	public void setCurrentEvaluator(Evaluator evaluator) {
+	public void setCurrentEvaluator(final Evaluator evaluator) {
 		this.currentEvaluator.set(evaluator);
 	}
 
@@ -90,7 +90,7 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 		return this.suspended.get();
 	}
 
-	public void setSuspended(boolean suspended) {
+	public void setSuspended(final boolean suspended) {
 		this.suspended.set(suspended);
 	}
 
@@ -111,17 +111,17 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 
 	@Override
 	public boolean canStepOver() {
-		return false;
+		return isSuspended();
 	}
 
 	@Override
 	public boolean canStepReturn() {
-		return false;
+		return isSuspended();
 	}
 
 	@Override
 	public boolean isStepping() {
-		DebugEvent request = this.request.get();
+		final DebugEvent request = this.request.get();
 		return request != null && request.isStepStart();
 	}
 
@@ -157,7 +157,7 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 
 	@Override
 	public EvaluatorDebugStackFrame getTopStackFrame() throws DebugException {
-		Evaluator evaluator = this.getCurrentEvaluator();
+		final Evaluator evaluator = this.getCurrentEvaluator();
 		if (evaluator == null) {
 			return null;
 		}
@@ -166,8 +166,8 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 
 	@Override
 	public IStackFrame[] getStackFrames() throws DebugException {
-		CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
-		List<EvaluatorDebugStackFrame> stackFrames = new ArrayList<>();
+		final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
+		final List<EvaluatorDebugStackFrame> stackFrames = new ArrayList<>();
 		for (Evaluator evaluator = this.getCurrentEvaluator(); evaluator != null; evaluator = evaluator.getParent()) {
 			stackFrames.add(debugger.getStackFrame(evaluator, this));
 		}

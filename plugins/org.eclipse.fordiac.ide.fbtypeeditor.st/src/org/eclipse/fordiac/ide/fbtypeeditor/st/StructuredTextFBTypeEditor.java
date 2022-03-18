@@ -14,9 +14,10 @@ package org.eclipse.fordiac.ide.fbtypeeditor.st;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmMapper;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -29,9 +30,19 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
+import org.eclipse.xtext.resource.ILocationInFileProvider;
 import org.eclipse.xtext.ui.editor.XtextEditor;
+import org.eclipse.xtext.util.ITextRegion;
+
+import com.google.inject.Inject;
 
 public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEditorPart {
+
+	@Inject
+	private STAlgorithmMapper algorithmMapper;
+
+	@Inject
+	private ILocationInFileProvider locationProvider;
 
 	public StructuredTextFBTypeEditor() {
 	}
@@ -67,6 +78,25 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 		super.selectAndReveal(selectionStart, selectionLength, revealStart, revealLength);
 	}
 
+	protected boolean selectAndReveal(final Object element, final boolean revealEditor) {
+		final ITextRegion location = getDocument().priorityReadOnly(resource -> {
+			if (resource != null) {
+				final EObject object = algorithmMapper.fromModel(resource, element);
+				if (object != null) {
+					return locationProvider.getSignificantTextRegion(object);
+				}
+			}
+			return null;
+		});
+		if (location != null) {
+			selectAndReveal(location.getOffset(), location.getLength());
+			if (revealEditor) {
+				revealEditor();
+			}
+		}
+		return location != null;
+	}
+
 	protected void revealEditor() {
 		final IEditorSite editorSite = getEditorSite();
 		if (editorSite instanceof MultiPageEditorSite) {
@@ -85,10 +115,7 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
-		if (selectedElement instanceof STAlgorithm) {
-			return true;
-		}
-		return false;
+		return selectAndReveal(selectedElement, false);
 	}
 
 	@Override

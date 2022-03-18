@@ -13,35 +13,43 @@
 package org.eclipse.fordiac.ide.test.model.eval.st
 
 import java.math.BigDecimal
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.Collection
 import java.util.Queue
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
+import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
+import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.AnyRealType
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
-import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator
-import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator.StructuredTextExitException
+import org.eclipse.fordiac.ide.model.eval.st.ECTransitionEvaluator
+import org.eclipse.fordiac.ide.model.eval.st.STAlgorithmEvaluator
+import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
-import org.eclipse.fordiac.ide.structuredtextalgorithm.sTAlgorithm.STAlgorithmBody
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.BinaryOperator
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STContinue
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STFeatureExpression
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STNumericLiteral
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.STReturn
-import org.eclipse.fordiac.ide.structuredtextcore.sTCore.UnaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -52,17 +60,34 @@ import org.junit.jupiter.params.provider.MethodSource
 import static org.junit.jupiter.params.provider.Arguments.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.value.BoolValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.ByteValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.CharValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.DIntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.DWordValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.DateAndTimeValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.DateValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.IntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LDateAndTimeValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LDateValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LRealValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LTimeOfDayValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LTimeValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LWordValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.RealValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.SIntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.StringValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.TimeOfDayValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.TimeValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.UDIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.UIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ULIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.USIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.WCharValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.WStringValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.WordValue.*
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.junit.jupiter.api.Assertions.*
 
 class StructuredTextEvaluatorTest {
@@ -78,7 +103,7 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
-	def void testNumericLiterals() {
+	def void testLiterals() {
 		// BOOL
 		true.toBoolValue.assertEquals("BOOL#TRUE".evaluateExpression)
 		false.toBoolValue.assertEquals("BOOL#FALSE".evaluateExpression)
@@ -164,11 +189,107 @@ class StructuredTextEvaluatorTest {
 		17.toLRealValue.assertEquals("LREAL#17".evaluateExpression)
 		(-4).toLRealValue.assertEquals("LREAL#-4".evaluateExpression)
 		(3.1415).toLRealValue.assertEquals("LREAL#3.1415".evaluateExpression)
+		// BYTE
+		0.toByteValue.assertEquals("BYTE#0".evaluateExpression)
+		17.toByteValue.assertEquals("BYTE#17".evaluateExpression)
+		17.toByteValue.assertEquals("BYTE#16#11".evaluateExpression)
+		255.toByteValue.assertEquals("BYTE#255".evaluateExpression)
+		255.toByteValue.assertEquals("BYTE#16#ff".evaluateExpression)
+		// WORD
+		0.toWordValue.assertEquals("WORD#0".evaluateExpression)
+		17.toWordValue.assertEquals("WORD#17".evaluateExpression)
+		17.toWordValue.assertEquals("WORD#16#11".evaluateExpression)
+		(-4).toWordValue.assertEquals("WORD#-4".evaluateExpression)
+		(-4).toWordValue.assertEquals("WORD#16#fffc".evaluateExpression)
+		65535.toWordValue.assertEquals("WORD#65535".evaluateExpression)
+		65535.toWordValue.assertEquals("WORD#16#ffff".evaluateExpression)
+		// DWORD
+		0.toDWordValue.assertEquals("DWORD#0".evaluateExpression)
+		17.toDWordValue.assertEquals("DWORD#17".evaluateExpression)
+		17.toDWordValue.assertEquals("DWORD#16#11".evaluateExpression)
+		(-4).toDWordValue.assertEquals("DWORD#-4".evaluateExpression)
+		(-4).toDWordValue.assertEquals("DWORD#16#fffffffc".evaluateExpression)
+		0xffffffff.toDWordValue.assertEquals("DWORD#4294967295".evaluateExpression)
+		0xffffffff.toDWordValue.assertEquals("DWORD#16#ffffffff".evaluateExpression)
+		// LWORD
+		0.toLWordValue.assertEquals("LWORD#0".evaluateExpression)
+		17.toLWordValue.assertEquals("LWORD#17".evaluateExpression)
+		17.toLWordValue.assertEquals("LWORD#16#11".evaluateExpression)
+		(-4).toLWordValue.assertEquals("LWORD#-4".evaluateExpression)
+		(-4).toLWordValue.assertEquals("LWORD#16#fffffffffffffffc".evaluateExpression)
+		0xffffffffffffffff#L.toLWordValue.assertEquals("LWORD#18446744073709551615".evaluateExpression)
+		0xffffffffffffffff#L.toLWordValue.assertEquals("LWORD#16#ffffffffffffffff".evaluateExpression)
+		// TIME
+		0.toTimeValue.assertEquals("TIME#0s".evaluateExpression)
+		Duration.ofNanos(17).toTimeValue.assertEquals("TIME#17ns".evaluateExpression)
+		Duration.ofNanos(-4).toTimeValue.assertEquals("TIME#-4ns".evaluateExpression)
+		Duration.ofNanos(3141500000L).toTimeValue.assertEquals("TIME#3.1415s".evaluateExpression)
+		// LTIME
+		0.toLTimeValue.assertEquals("LTIME#0s".evaluateExpression)
+		Duration.ofNanos(17).toLTimeValue.assertEquals("LTIME#17ns".evaluateExpression)
+		Duration.ofNanos(-4).toLTimeValue.assertEquals("LTIME#-4ns".evaluateExpression)
+		Duration.ofNanos(3141500000L).toLTimeValue.assertEquals("LTIME#3.1415s".evaluateExpression)
+		// DATE
+		0.toDateValue.assertEquals("DATE#1970-01-01".evaluateExpression)
+		LocalDate.of(1970, 1, 1).toDateValue.assertEquals("DATE#1970-01-01".evaluateExpression)
+		LocalDate.of(2021, 4, 17).toDateValue.assertEquals("DATE#2021-04-17".evaluateExpression)
+		LocalDate.of(1969, 4, 17).toDateValue.assertEquals("DATE#1969-04-17".evaluateExpression)
+		// LDATE
+		0.toLDateValue.assertEquals("LDATE#1970-01-01".evaluateExpression)
+		LocalDate.of(1970, 1, 1).toLDateValue.assertEquals("LDATE#1970-01-01".evaluateExpression)
+		LocalDate.of(2021, 4, 17).toLDateValue.assertEquals("LDATE#2021-04-17".evaluateExpression)
+		LocalDate.of(1969, 4, 17).toLDateValue.assertEquals("LDATE#1969-04-17".evaluateExpression)
+		// TOD
+		0.toTimeOfDayValue.assertEquals("TOD#00:00:00".evaluateExpression)
+		LocalTime.of(0, 0, 0).toTimeOfDayValue.assertEquals("TOD#00:00:00".evaluateExpression)
+		LocalTime.of(4, 17, 21).toTimeOfDayValue.assertEquals("TOD#04:17:21".evaluateExpression)
+		LocalTime.of(4, 17, 21, 420000000).toTimeOfDayValue.assertEquals("TOD#04:17:21.42".evaluateExpression)
+		// LTOD
+		0.toLTimeOfDayValue.assertEquals("LTOD#00:00:00".evaluateExpression)
+		LocalTime.of(0, 0, 0).toLTimeOfDayValue.assertEquals("LTOD#00:00:00".evaluateExpression)
+		LocalTime.of(4, 17, 21).toLTimeOfDayValue.assertEquals("LTOD#04:17:21".evaluateExpression)
+		LocalTime.of(4, 17, 21, 420000000).toLTimeOfDayValue.assertEquals("LTOD#04:17:21.42".evaluateExpression)
+		// DT
+		0.toDateAndTimeValue.assertEquals("DT#1970-01-01-00:00:00".evaluateExpression)
+		LocalDateTime.of(1970, 1, 1, 0, 0, 0).toDateAndTimeValue.assertEquals(
+			"DT#1970-01-01-00:00:00".evaluateExpression)
+		LocalDateTime.of(2021, 4, 17, 4, 17, 21, 420000000).toDateAndTimeValue.assertEquals(
+			"DT#2021-04-17-04:17:21.42".evaluateExpression)
+		LocalDateTime.of(1969, 4, 17, 4, 17, 21, 420000000).toDateAndTimeValue.assertEquals(
+			"DT#1969-04-17-04:17:21.42".evaluateExpression)
+		// LDT
+		0.toLDateAndTimeValue.assertEquals("LDT#1970-01-01-00:00:00".evaluateExpression)
+		LocalDateTime.of(1970, 1, 1, 0, 0, 0).toLDateAndTimeValue.assertEquals(
+			"LDT#1970-01-01-00:00:00".evaluateExpression)
+		LocalDateTime.of(2021, 4, 17, 4, 17, 21, 420000000).toLDateAndTimeValue.assertEquals(
+			"LDT#2021-04-17-04:17:21.42".evaluateExpression)
+		LocalDateTime.of(1969, 4, 17, 4, 17, 21, 420000000).toLDateAndTimeValue.assertEquals(
+			"LDT#1969-04-17-04:17:21.42".evaluateExpression)
+		// CHAR
+		'\u0000'.toCharValue.assertEquals("CHAR#'$00'".evaluateExpression)
+		'0'.toCharValue.assertEquals("CHAR#'$30'".evaluateExpression)
+		'\n'.toCharValue.assertEquals("CHAR#'$N'".evaluateExpression)
+		'a'.toCharValue.assertEquals("CHAR#'a'".evaluateExpression)
+		// WCHAR
+		'\u0000'.toWCharValue.assertEquals("WCHAR#\"$0000\"".evaluateExpression)
+		'0'.toWCharValue.assertEquals("WCHAR#\"$0030\"".evaluateExpression)
+		'\n'.toWCharValue.assertEquals("WCHAR#'$N'".evaluateExpression)
+		'a'.toWCharValue.assertEquals("WCHAR#\"a\"".evaluateExpression)
+		// STRING
+		"\u0000".toStringValue.assertEquals("STRING#'$00'".evaluateExpression)
+		"0".toStringValue.assertEquals("STRING#'$30'".evaluateExpression)
+		"\n".toStringValue.assertEquals("STRING#'$N'".evaluateExpression)
+		"abc".toStringValue.assertEquals("STRING#'abc'".evaluateExpression)
+		// WSTRING
+		"\u0000".toWStringValue.assertEquals("WSTRING#\"$0000\"".evaluateExpression)
+		"0".toWStringValue.assertEquals("WSTRING#\"$0030\"".evaluateExpression)
+		"\n".toWStringValue.assertEquals("WSTRING#'$N'".evaluateExpression)
+		"abc".toWStringValue.assertEquals("WSTRING#\"abc\"".evaluateExpression)
 	}
 
 	@ParameterizedTest(name="{index}: {0} {1}#{2}")
 	@MethodSource("testUnaryExpressionArgumentsProvider")
-	def void testUnaryExpression(UnaryOperator operator, String typeName, BigDecimal value) {
+	def void testUnaryExpression(STUnaryOperator operator, String typeName, BigDecimal value) {
 		val type = ElementaryTypes.getTypeByName(typeName)
 		switch (operator) {
 			case PLUS: value.abs
@@ -183,11 +304,12 @@ class StructuredTextEvaluatorTest {
 				GenericTypes.ANY_NUM.isCompatibleWith(it) || it instanceof BoolType
 			].flatMap [ type |
 				#["0", "1", "-1", "17", "-4"].reject [
-					(type instanceof AnyUnsignedType && contains('-')) || (type instanceof BoolType && length > 1)
+					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
+						(type instanceof BoolType && length > 1)
 				].flatMap [ value |
-					UnaryOperator.VALUES.reject [
-						(type instanceof AnyRealType && it == UnaryOperator.NOT) ||
-							(type instanceof BoolType && it != UnaryOperator.NOT)
+					STUnaryOperator.VALUES.reject [
+						(type instanceof AnyNumType && it == STUnaryOperator.NOT) ||
+							(type instanceof AnyBitType && it != STUnaryOperator.NOT)
 					].map [ operator |
 						arguments(operator, type.name, value)
 					]
@@ -208,7 +330,7 @@ class StructuredTextEvaluatorTest {
 
 	@ParameterizedTest(name="{index}: {1}#{2} {0} {1}#{3}")
 	@MethodSource("testBinaryExpressionArgumentsProvider")
-	def void testBinaryExpression(BinaryOperator operator, String typeName, BigDecimal first, BigDecimal second) {
+	def void testBinaryExpression(STBinaryOperator operator, String typeName, BigDecimal first, BigDecimal second) {
 		val type = ElementaryTypes.getTypeByName(typeName)
 		val resultType = if(operator.isComparison) ElementaryTypes.BOOL else type
 		switch (operator) {
@@ -260,11 +382,14 @@ class StructuredTextEvaluatorTest {
 				GenericTypes.ANY_NUM.isCompatibleWith(it) || it instanceof BoolType
 			].flatMap [ type |
 				#["0", "1", "-1", "17", "-4"].reject [
-					(type instanceof AnyUnsignedType && contains('-')) || (type instanceof BoolType && length > 1)
+					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
+						(type instanceof BoolType && length > 1)
 				].flatMap [ value |
-					BinaryOperator.VALUES.reject [
-						it == BinaryOperator.RANGE || (type instanceof AnyIntType && it == BinaryOperator.POWER) ||
-							(type instanceof AnyRealType && isLogical) || (type instanceof BoolType && !isLogical)
+					STBinaryOperator.VALUES.reject [
+						it == STBinaryOperator.RANGE ||
+							(type instanceof AnyIntType && (it == STBinaryOperator.POWER || logical)) ||
+							(type instanceof AnyBitType && (arithmetic && !logical)) ||
+							(type instanceof AnyRealType && logical) || (type instanceof BoolType && !logical)
 					].flatMap [ operator |
 						#[
 							arguments(operator, type.name, value, "1"),
@@ -295,7 +420,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testVariable() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody, STBinaryExpression], '''
+		21.toIntValue.assertTrace(#[STBinaryExpression], '''
 			VAR_TEMP
 				test: INT := INT#17;
 			END_VAR
@@ -305,8 +430,162 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testPartial() {
+		21.toWordValue.assertTrace(#[STMemberAccessExpression], '''
+			VAR_TEMP
+				test: WORD := WORD#17;
+			END_VAR
+			
+			test.%X2 := test.%X0;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testPartialExpression() {
+		21.toWordValue.assertTrace(STMemberAccessExpression.repeat(3) + #[STNumericLiteral], '''
+			VAR_TEMP
+				test: WORD := WORD#17;
+			END_VAR
+			
+			test.%B1 := test.%B0;
+			test.%X(8 + 2) := test.%X(8 + 0);
+			test.%B0 := test.%B1;
+			test.%B1 := BYTE#0;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArray() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
+			STNumericLiteral.repeat(2) + #[STBinaryExpression], '''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 2 ] OF INT;
+				END_VAR
+				
+				test[0] := 17;
+				test[1] := 4;
+				test[2] := test[0] + test[1];
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayMulti() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
+			STNumericLiteral.repeat(6) + STArrayAccessExpression.repeat(3) + #[STBinaryExpression], '''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 2 ] OF INT;
+					testMulti: ARRAY [ 0 .. 2, 0 .. 1] OF INT;
+					testMultiPart: ARRAY [ 0 .. 1] OF INT;
+				END_VAR
+				
+				testMulti[0, 0] := 17;
+				testMulti[0, 1] := 4;
+				testMulti[1, 0] := 17;
+				testMulti[1, 1] := 4;
+				testMulti[2, 0] := 17;
+				testMulti[2, 1] := 4;
+				test[0] := testMulti[0, 0];
+				test[1] := testMulti[0, 1];
+				testMultiPart := testMulti[0];
+				test[2] := testMultiPart[0] + testMultiPart[1];
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayInitializer() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(#[STBinaryExpression], '''
+			VAR_TEMP
+				test: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+			END_VAR
+			
+			test[2] := test[0] + test[1];
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayInitializerWithIndex() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue, 17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
+			STBinaryExpression.repeat(2), '''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 5 ] OF INT := [ 2(17, 4, 0) ];
+				END_VAR
+				
+				test[2] := test[0] + test[1];
+				test[5] := test[3] + test[4];
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayIndexOutOfBounds() {
+		ArrayIndexOutOfBoundsException.assertThrows [
+			'''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 1 ] OF INT := [ 17, 4 ];
+				END_VAR
+				
+				test[3] := test[0] + test[1];
+			'''.evaluateAlgorithm
+		]
+	}
+
+	@Test
+	def void testArrayEquals() {
+		true.toBoolValue.assertTrace(STBinaryExpression.repeat(3), '''
+			VAR_TEMP
+				test: BOOL;
+				test1: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+				test2: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+				test3: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+			END_VAR
+			
+			test1[2] := test1[0] + test1[1];
+			test2[2] := test2[0] + test2[1];
+			test := test1 = test2 AND test1 <> test3;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayCopy() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(#[STBinaryExpression, STFeatureExpression],
+			'''
+				VAR_TEMP
+					test: ARRAY [ 0 .. 2 ] OF INT;
+					test2: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4 ];
+				END_VAR
+				
+				test2[2] := test2[0] + test2[1];
+				test := test2;
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArraySubrange() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
+			STNumericLiteral.repeat(2) + #[STBinaryExpression], '''
+				VAR_TEMP
+					test: ARRAY [ 1 .. 3 ] OF INT;
+				END_VAR
+				
+				test[1] := 17;
+				test[2] := 4;
+				test[3] := test[1] + test[2];
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArraySubrangeInitializer() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(#[STBinaryExpression], '''
+			VAR_TEMP
+				test: ARRAY [ 1 .. 3 ] OF INT := [ 17, 4 ];
+			END_VAR
+			
+			test[3] := test[1] + test[2];
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testIfStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(2), '''
+		21.toIntValue.assertTrace(STBinaryExpression.repeat(2), '''
 			VAR_TEMP
 				test: INT := INT#17;
 			END_VAR
@@ -319,7 +598,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testIfWithElsifStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(3), '''
+		21.toIntValue.assertTrace(STBinaryExpression.repeat(3), '''
 			VAR_TEMP
 				test: INT := INT#17;
 			END_VAR
@@ -334,7 +613,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testIfWithElseStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(3), '''
+		21.toIntValue.assertTrace(STBinaryExpression.repeat(3), '''
 			VAR_TEMP
 				test: INT := INT#17;
 			END_VAR
@@ -351,7 +630,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testCaseStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody, STFeatureExpression, STNumericLiteral, STBinaryExpression], '''
+		21.toIntValue.assertTrace(#[STFeatureExpression, STNumericLiteral, STBinaryExpression], '''
 			VAR_TEMP
 				test: INT := INT#17;
 			END_VAR
@@ -364,8 +643,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testCaseWithElseStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody, STFeatureExpression] + STNumericLiteral.repeat(2) +
-			#[STBinaryExpression], '''
+		21.toIntValue.assertTrace(#[STFeatureExpression] + STNumericLiteral.repeat(2) + #[STBinaryExpression], '''
 			VAR_TEMP
 				test: INT := INT#17;
 			END_VAR
@@ -380,8 +658,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testForStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody, STNumericLiteral] +
-			#[STBinaryExpression, STNumericLiteral].repeat(4), '''
+		21.toIntValue.assertTrace(#[STNumericLiteral] + #[STBinaryExpression, STNumericLiteral].repeat(4), '''
 			VAR_TEMP
 				test: INT := INT#17;
 				i: INT;
@@ -395,9 +672,8 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testForWithContinueStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody, STNumericLiteral] +
-			#[STBinaryExpression, STContinue, STNumericLiteral, // if taken 
-			STBinaryExpression, STBinaryExpression, STNumericLiteral].repeat(4), '''
+		21.toIntValue.assertTrace(#[STNumericLiteral] + #[STBinaryExpression, STContinue, STNumericLiteral, // if taken 
+		STBinaryExpression, STBinaryExpression, STNumericLiteral].repeat(4), '''
 			VAR_TEMP
 				test: INT := INT#17;
 				i: INT;
@@ -413,28 +689,131 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testForWithExitStatement() {
+		21.toIntValue.assertTrace(#[STNumericLiteral] + (STBinaryExpression.repeat(2) + #[STNumericLiteral]).repeat(4) +
+			#[STBinaryExpression, STExit, STBinaryExpression], '''
+			VAR_TEMP
+				test: INT := INT#16;
+				i: INT;
+			END_VAR
+			
+			FOR i := INT#0 TO INT#7 DO
+				IF i = INT#4 THEN
+					EXIT;
+				END_IF;
+				test := test + INT#1;
+			END_FOR;
+			test := test + INT#1;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testForWithReturnStatement() {
+		21.toIntValue.assertTrace(#[STNumericLiteral] + (STBinaryExpression.repeat(2) + #[STNumericLiteral]).repeat(4) +
+			#[STBinaryExpression, STReturn], '''
+			VAR_TEMP
+				test: INT := INT#17;
+				i: INT;
+			END_VAR
+			
+			FOR i := INT#0 TO INT#7 DO
+				IF i = INT#4 THEN
+					RETURN;
+				END_IF;
+				test := test + INT#1;
+			END_FOR;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testNestedForStatement() {
+		21.toIntValue.assertTrace(#[STNumericLiteral] +
+			(#[STNumericLiteral] + #[STBinaryExpression, STNumericLiteral].repeat(2) + #[STNumericLiteral]).repeat(2),
+			'''
+				VAR_TEMP
+					test: INT := INT#17;
+					i: INT;
+					j: INT;
+				END_VAR
+				
+				FOR i := INT#0 TO INT#1 DO
+					FOR j := INT#0 TO INT#1 DO
+						test := test + INT#1;
+					END_FOR;
+				END_FOR;
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testNestedForWithContinueStatement() {
+		21.toIntValue.assertTrace(#[STNumericLiteral] +
+			(#[STNumericLiteral] + #[STBinaryExpression, STContinue, STNumericLiteral, // if taken 
+			STBinaryExpression, STBinaryExpression, STNumericLiteral].repeat(4) + #[STNumericLiteral]).repeat(3), '''
+			VAR_TEMP
+				test: INT := INT#9;
+				i: INT;
+				j: INT;
+			END_VAR
+			
+			FOR i := INT#0 TO INT#2 DO
+				FOR j := INT#0 TO INT#7 DO
+					IF j MOD INT#2 = INT#0 THEN
+						CONTINUE;
+					END_IF;
+					test := test + INT#1;
+				END_FOR;
+			END_FOR;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testNestedForWithExitStatement() {
+		21.toIntValue.assertTrace(#[STNumericLiteral] +
+			(#[STNumericLiteral] + (STBinaryExpression.repeat(2) + #[STNumericLiteral]).repeat(4) +
+				#[STBinaryExpression, STExit, STBinaryExpression, STNumericLiteral]).repeat(3), '''
+			VAR_TEMP
+				test: INT := INT#6;
+				i: INT;
+				j: INT;
+			END_VAR
+			
+			FOR i := INT#0 TO INT#2 DO
+				FOR j := INT#0 TO INT#7 DO
+					IF j = INT#4 THEN
+						EXIT;
+					END_IF;
+					test := test + INT#1;
+				END_FOR;
+				test := test + INT#1;
+			END_FOR;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testNestedForWithReturnStatement() {
 		21.toIntValue.assertTrace(
-			#[STAlgorithmBody, STNumericLiteral] + (STBinaryExpression.repeat(2) + #[STNumericLiteral]).repeat(4) +
+			STNumericLiteral.repeat(2) + (STBinaryExpression.repeat(2) + #[STNumericLiteral]).repeat(4) +
 				#[STBinaryExpression, STReturn], '''
 				VAR_TEMP
 					test: INT := INT#17;
 					i: INT;
+					j: INT;
 				END_VAR
 				
 				FOR i := INT#0 TO INT#7 DO
-					IF i = INT#4 THEN
-						RETURN;
-					END_IF;
-					test := test + INT#1;
+					FOR j := INT#0 TO INT#7 DO
+						IF j = INT#4 THEN
+							RETURN;
+						END_IF;
+						test := test + INT#1;
+					END_FOR;
 				END_FOR;
 			'''.evaluateAlgorithm)
 	}
 
 	@Test
 	def void testForWithByStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody, STNumericLiteral] +
-			#[STBinaryExpression, STNumericLiteral].repeat(4), '''
+		21.toIntValue.assertTrace(#[STNumericLiteral] + #[STBinaryExpression, STNumericLiteral].repeat(4), '''
 			VAR_TEMP
 				test: INT := INT#17;
 				i: INT;
@@ -448,8 +827,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testForWithNegativeByStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody, STNumericLiteral] +
-			#[STBinaryExpression, STNumericLiteral].repeat(4), '''
+		21.toIntValue.assertTrace(#[STNumericLiteral] + #[STBinaryExpression, STNumericLiteral].repeat(4), '''
 			VAR_TEMP
 				test: INT := INT#17;
 				i: INT;
@@ -463,9 +841,8 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testForWithNegativeByAndContinueStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody, STNumericLiteral] +
-			#[STBinaryExpression, STBinaryExpression, STNumericLiteral, // if not taken
-			STBinaryExpression, STContinue, STNumericLiteral].repeat(4), '''
+		21.toIntValue.assertTrace(#[STNumericLiteral] + #[STBinaryExpression, STBinaryExpression, STNumericLiteral, // if not taken
+		STBinaryExpression, STContinue, STNumericLiteral].repeat(4), '''
 			VAR_TEMP
 				test: INT := INT#17;
 				i: INT;
@@ -481,11 +858,30 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testForWithNegativeByAndExitStatement() {
+		21.toIntValue.assertTrace(
+			#[STNumericLiteral] + #[STBinaryExpression, STBinaryExpression, STNumericLiteral].repeat(4) +
+				#[STBinaryExpression, STExit, STBinaryExpression], '''
+				VAR_TEMP
+					test: INT := INT#16;
+					i: INT;
+				END_VAR
+				
+				FOR i := INT#7 TO INT#0 BY INT#-1 DO
+					IF i = INT#3 THEN
+						EXIT;
+					END_IF;
+					test := test + INT#1;
+				END_FOR;
+				test := test + INT#1;
+			'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testForWithNegativeByAndReturnStatement() {
 		21.toIntValue.assertTrace(
-			#[STAlgorithmBody, STNumericLiteral] +
-				#[STBinaryExpression, STBinaryExpression, STNumericLiteral].repeat(4) + #[STBinaryExpression, STReturn],
-			'''
+			#[STNumericLiteral] + #[STBinaryExpression, STBinaryExpression, STNumericLiteral].repeat(4) +
+				#[STBinaryExpression, STReturn], '''
 				VAR_TEMP
 					test: INT := INT#17;
 					i: INT;
@@ -502,7 +898,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testWhileStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody] + #[STBinaryExpression].repeat(13), '''
+		21.toIntValue.assertTrace(#[STBinaryExpression].repeat(13), '''
 			VAR_TEMP
 				test: INT := INT#17;
 				i: INT := INT#0;
@@ -517,7 +913,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testWhileWithContinueStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody] + (STBinaryExpression.repeat(4) + // if not taken
+		21.toIntValue.assertTrace((STBinaryExpression.repeat(4) + // if not taken
 		STBinaryExpression.repeat(3) + #[STContinue]).repeat(4) + #[STBinaryExpression], '''
 			VAR_TEMP
 				test: INT := INT#17;
@@ -535,8 +931,27 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testWhileWithExitStatement() {
+		21.toIntValue.assertTrace(STBinaryExpression.repeat(19) + #[STExit, STBinaryExpression], '''
+			VAR_TEMP
+				test: INT := INT#16;
+				i: INT := INT#0;
+			END_VAR
+			
+			WHILE i < INT#8 DO
+				i := i + INT#1;
+				IF i = INT#5 THEN
+					EXIT;
+				END_IF;
+				test := test + INT#1;
+			END_WHILE;
+			test := test + INT#1;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testWhileWithReturnStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(19) + #[STReturn], '''
+		21.toIntValue.assertTrace(STBinaryExpression.repeat(19) + #[STReturn], '''
 			VAR_TEMP
 				test: INT := INT#17;
 				i: INT := INT#0;
@@ -554,7 +969,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testRepeatStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(12), '''
+		21.toIntValue.assertTrace(STBinaryExpression.repeat(12), '''
 			VAR_TEMP
 				test: INT := INT#17;
 				i: INT := INT#0;
@@ -570,7 +985,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testRepeatWithContinueStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody] + (STBinaryExpression.repeat(4) + // if not taken
+		21.toIntValue.assertTrace((STBinaryExpression.repeat(4) + // if not taken
 		STBinaryExpression.repeat(2) + #[STContinue, STBinaryExpression]).repeat(4), '''
 			VAR_TEMP
 				test: INT := INT#17;
@@ -589,8 +1004,28 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testRepeatWithExitStatement() {
+		21.toIntValue.assertTrace(STBinaryExpression.repeat(18) + #[STExit, STBinaryExpression], '''
+			VAR_TEMP
+				test: INT := INT#16;
+				i: INT := INT#0;
+			END_VAR
+			
+			REPEAT
+				i := i + INT#1;
+				IF i = INT#5 THEN
+					EXIT;
+				END_IF;
+				test := test + INT#1;
+			UNTIL i = INT#8
+			END_REPEAT;
+			test := test + INT#1;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testRepeatWithReturnStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody] + STBinaryExpression.repeat(18) + #[STReturn], '''
+		21.toIntValue.assertTrace(STBinaryExpression.repeat(18) + #[STReturn], '''
 			VAR_TEMP
 				test: INT := INT#17;
 				i: INT := INT#0;
@@ -609,7 +1044,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testReturnStatement() {
-		21.toIntValue.assertTrace(#[STAlgorithmBody, STBinaryExpression, STReturn], '''
+		21.toIntValue.assertTrace(#[STBinaryExpression, STReturn], '''
 			VAR_TEMP
 				test: INT := INT#17;
 			END_VAR
@@ -618,11 +1053,6 @@ class StructuredTextEvaluatorTest {
 			RETURN;
 			test := INT#0;
 		'''.evaluateAlgorithm)
-	}
-
-	@Test
-	def void testExitStatement() {
-		StructuredTextExitException.assertThrows["EXIT;".evaluateAlgorithm]
 	}
 
 	def static evaluateExpression(CharSequence expression) {
@@ -634,14 +1064,20 @@ class StructuredTextEvaluatorTest {
 	}
 
 	def static evaluateExpression(CharSequence expression, Collection<Variable> variables) {
-		new StructuredTextEvaluator(expression.toString, variables, null, null).evaluate
+		val transition = LibraryElementFactory.eINSTANCE.createECTransition
+		transition.conditionExpression = expression.toString
+		new ECTransitionEvaluator(transition, variables, null).evaluate
 	}
 
 	def static evaluateAlgorithm(CharSequence algorithm) {
+		algorithm.evaluateAlgorithm(emptyList)
+	}
+
+	def static evaluateAlgorithm(CharSequence algorithm, Iterable<Variable> variables) {
 		val alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm
-		alg.name = "TEST"
+		alg.name = "TEST_ALGORITHM"
 		alg.text = algorithm.toString
-		val eval = new TracingStructuredTextEvaluator(alg, emptyList, null)
+		val eval = new TracingStructuredTextEvaluator(alg, variables, null)
 		eval.evaluate
 		return eval
 	}
@@ -649,7 +1085,19 @@ class StructuredTextEvaluatorTest {
 	def static void assertTrace(Object expectedResult, Iterable<? extends Class<?>> expectedTrace,
 		TracingStructuredTextEvaluator actual) {
 		expectedResult.assertEquals(actual.variables.get("test").value)
-		expectedTrace.assertIterableEquals(actual.trace.filterNull.map[class.interfaces.head].filterNull)
+		(expectedTrace + #[org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm]).
+			assertIterableEquals(
+				actual.trace.filterNull.map[class.interfaces.head].filterNull
+			)
+	}
+
+	def static void assertIterableTrace(Iterable<? extends Object> expectedResult,
+		Iterable<? extends Class<?>> expectedTrace, TracingStructuredTextEvaluator actual) {
+		expectedResult.assertIterableEquals(actual.variables.get("test").value as ArrayValue)
+		(expectedTrace + #[org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm]).
+			assertIterableEquals(
+				actual.trace.filterNull.map[class.interfaces.head].filterNull
+			)
 	}
 
 	def static Iterable<? extends Class<?>> repeat(Class<?> clazz, int repeat) {
@@ -660,59 +1108,17 @@ class StructuredTextEvaluatorTest {
 		(0 ..< repeat).map[clazz].flatten
 	}
 
-	static class TracingStructuredTextEvaluator extends StructuredTextEvaluator {
+	static class TracingStructuredTextEvaluator extends STAlgorithmEvaluator {
 		@Accessors
 		final Queue<Object> trace = new ArrayBlockingQueue(1000)
 
-		new(STAlgorithm alg, Collection<Variable> variables, Evaluator parent) {
+		new(STAlgorithm alg, Iterable<Variable> variables, Evaluator parent) {
 			super(alg, variables, parent)
-		}
-
-		new(String text, Collection<Variable> variables, BaseFBType fbType, Evaluator parent) {
-			super(text, variables, fbType, parent)
 		}
 
 		override protected <T> T trap(T context) {
 			trace.add(context)
 			return super.trap(context)
-		}
-	}
-
-	def static boolean isArithmetic(BinaryOperator operator) {
-		switch (operator) {
-			case ADD,
-			case SUB,
-			case MUL,
-			case DIV,
-			case MOD,
-			case POWER,
-			case AMPERSAND,
-			case AND,
-			case OR,
-			case XOR: true
-			default: false
-		}
-	}
-
-	def static boolean isComparison(BinaryOperator operator) {
-		switch (operator) {
-			case EQ,
-			case NE,
-			case GE,
-			case GT,
-			case LE,
-			case LT: true
-			default: false
-		}
-	}
-
-	def static boolean isLogical(BinaryOperator operator) {
-		switch (operator) {
-			case AMPERSAND,
-			case AND,
-			case OR,
-			case XOR: true
-			default: false
 		}
 	}
 }

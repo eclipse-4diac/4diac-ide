@@ -14,15 +14,11 @@ package org.eclipse.fordiac.ide.model.eval.fb
 
 import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.Evaluator
-import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 
-class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
-	Evaluator algorithmEvaluator
-
+class SimpleFBEvaluator extends BaseFBEvaluator<SimpleFBType> {
 	new(SimpleFBType type, Evaluator parent) {
 		this(type, null, parent)
 	}
@@ -33,17 +29,13 @@ class SimpleFBEvaluator extends FBEvaluator<SimpleFBType> {
 
 	new(SimpleFBType type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
 		super(type, queue, variables, parent)
-		algorithmEvaluator = EvaluatorFactory.createEvaluator(type.algorithm,
-			type.algorithm.eClass.instanceClass as Class<? extends Algorithm>, getVariables.values, this)
-		if (algorithmEvaluator === null) {
-			throw new UnsupportedOperationException('''Cannot evaluate algorithm «type.algorithm.eClass.name»''')
-		}
 	}
 
 	override evaluate(Event event) {
-		if (event === null || type.interfaceList.eventInputs.contains(event)) {
-			algorithmEvaluator.evaluate
-			queue?.addAll(type.interfaceList.eventOutputs)
+		val algorithm = if(event !== null) type.getAlgorithmNamed(event.name) else type.algorithm.head
+		if (algorithm !== null) {
+			algorithmEvaluators.get(algorithm)?.evaluate
 		}
+		queue?.addAll(type.interfaceList.eventOutputs)
 	}
 }

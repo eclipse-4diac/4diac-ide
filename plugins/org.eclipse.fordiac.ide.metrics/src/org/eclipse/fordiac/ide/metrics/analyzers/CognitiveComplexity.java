@@ -221,10 +221,11 @@ public class CognitiveComplexity extends AbstractCodeMetricAnalyzer {
 
 		double ccfb = 0;
 
-		final double ccalg = analyzeAlgorithm(simpleFBType.getAlgorithm());
-		ccfb += ccalg;
-		metrics.add(new MetricResult(
-				formatResultName(simpleFBType.getName(), simpleFBType.getAlgorithm().getName()), ccalg));
+		for (final Algorithm algorithm : simpleFBType.getAlgorithm()) {
+			final double ccalg = analyzeAlgorithm(algorithm);
+			ccfb += ccalg;
+			metrics.add(new MetricResult(formatResultName(simpleFBType.getName(), algorithm.getName()), ccalg));
+		}
 
 		data.cc += ccfb;
 		metrics.add(new MetricResult(formatResultName(simpleFBType.getName()), ccfb));

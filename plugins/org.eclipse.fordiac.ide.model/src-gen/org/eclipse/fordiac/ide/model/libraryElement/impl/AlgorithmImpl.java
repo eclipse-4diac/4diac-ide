@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,16 +9,19 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
+ *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *    - initial API and implementation and/or initial documentation
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Algorithm</b></em>'. <!-- end-user-doc -->
@@ -100,6 +104,36 @@ public abstract class AlgorithmImpl extends EObjectImpl implements Algorithm {
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ALGORITHM__COMMENT, oldComment,
 					comment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<INamedElement> getInputParameters() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<INamedElement> getOutputParameters() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DataType getReturnType() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

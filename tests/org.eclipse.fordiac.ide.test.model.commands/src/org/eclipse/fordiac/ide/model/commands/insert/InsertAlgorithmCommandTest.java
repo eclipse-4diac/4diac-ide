@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeAlgorithmOrderCommand
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInternalVariableCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.junit.jupiter.params.provider.Arguments;
@@ -92,8 +93,8 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 	}
 
 	private static State executeReorder(final State state, final int index, final boolean direction) {
-		final EList<Algorithm> algorithmList = ((BasicFBType) state.getFbNetwork().getNetworkElements().get(0)
-				.getType()).getAlgorithm();
+		final EList<ICallable> algorithmList = ((BasicFBType) state.getFbNetwork().getNetworkElements().get(0)
+				.getType()).getCallables();
 		state.setCommand(new ChangeAlgorithmOrderCommand(algorithmList, algorithmList.get(index), direction));
 
 		return commandExecution(state);

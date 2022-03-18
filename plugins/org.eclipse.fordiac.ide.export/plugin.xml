@@ -2,5 +2,6 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="org.eclipse.fordiac.ide.export.openCompareEditor" name="openCompareEditor" schema="schema/org.eclipse.fordiac.ide.export.openCompareEditor.exsd"/>
-   <extension-point id="org.eclipse.fordiac.ide.export.exportFilter" name="exportFilter" schema="schema/org.eclipse.fordiac.ide.export.exportFilter.exsd"/>   
+   <extension-point id="org.eclipse.fordiac.ide.export.exportFilter" name="exportFilter" schema="schema/org.eclipse.fordiac.ide.export.exportFilter.exsd"/>
+   <extension-point id="org.eclipse.fordiac.ide.export.language.supportFactory" name="Language Export Support Factory" schema="schema/org.eclipse.fordiac.ide.export.language.supportFactory.exsd"/>   
 </plugin>

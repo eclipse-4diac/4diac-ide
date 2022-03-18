@@ -48,7 +48,7 @@ public class ChangeValueCommand extends Command {
 		}
 		if (!newValue.isBlank()) {
 			// if we have a non empty value check if it is a valid literal
-			final String validationMsg = ValueValidator.validateValue(variable.getType(), newValue);
+			final String validationMsg = ValueValidator.validateValue(variable, newValue);
 			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
 				ErrorMessenger.popUpErrorMessage(validationMsg);
 				return false;

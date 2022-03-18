@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xA;Copyright (c) 2022 Primetals Technologies GmbH,&#xA;              2022 Martin Erich Jobst&#xA;&#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-2.0.&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;   Martin Jobst, Martin Melik Merkumians&#xA;     - initial API and implementation and/or initial documentation&#xA;*******************************************************************************"
+    modelDirectory="/org.eclipse.fordiac.ide.structuredtextfunctioneditor.model/src-gen"
+    creationSubmenus="true" editDirectory="/org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.edit/src"
+    editorDirectory="/org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.editor/src"
+    modelPluginID="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model" forceOverwrite="true"
+    modelName="STFunction" editPluginClass="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.stfunction.provider.STFunctionEditPlugin"
+    updateClasspath="false" nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    commentFormatting="true" testSuiteClass="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.stfunction.tests.STFunctionAllTests"
+    complianceLevel="11.0" copyrightFields="false" editorPluginID="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.editor"
+    runtimeVersion="2.28" usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel#//stcore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette">
+  <genPackages prefix="STFunction" basePackage="org.eclipse.fordiac.ide.structuredtextfunctioneditor"
+      disposableProviderFactory="true" fileExtensions="stfunc" ecorePackage="STFunction.ecore#/">
+    <genClasses ecoreClass="STFunction.ecore#//STFunctionSource">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STFunction.ecore#//STFunctionSource/functions"/>
+    </genClasses>
+    <genClasses ecoreClass="STFunction.ecore#//STFunction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STFunction.ecore#//STFunction/returnType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STFunction.ecore#//STFunction/varDeclarations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STFunction.ecore#//STFunction/code"/>
+      <genOperations ecoreOperation="STFunction.ecore#//STFunction/getInputParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getInputParameters(this);"/>
+      <genOperations ecoreOperation="STFunction.ecore#//STFunction/getOutputParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getOutputParameters(this);"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

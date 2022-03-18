@@ -30,7 +30,7 @@ class ULIntValue implements AnyUnsignedValue {
 
 	def static toULIntValue(String value) { new ULIntValue(Long.parseUnsignedLong(value)) }
 
-	def static toULIntValue(AnyNumValue value) { value.longValue.toULIntValue }
+	def static toULIntValue(AnyMagnitudeValue value) { value.longValue.toULIntValue }
 
 	override UlintType getType() { ElementaryTypes.ULINT }
 	

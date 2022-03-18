@@ -31,8 +31,8 @@ import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
-import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -72,7 +72,7 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 			List<Variable> variables) throws CoreException;
 
 	protected List<Variable> getDefaultArguments(final FBType type) {
-		return type.getInterfaceList().getInputVars().stream().map(ElementaryVariable::new)
+		return type.getInterfaceList().getInputVars().stream().map(VariableOperations::newVariable)
 				.collect(Collectors.toList());
 	}
 

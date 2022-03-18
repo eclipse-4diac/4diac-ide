@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -113,9 +113,9 @@ public final class Annotations {
 		return (AutomationSystem) a.eContainer();
 	}
 
-	// *** BasicFBType ***//
-	public static Algorithm getAlgorithmNamed(final BasicFBType basicFBType, final String name) {
-		return basicFBType.getAlgorithm().stream().filter(alg -> alg.getName().equals(name)).findFirst().orElse(null);
+	// *** BaseFBType ***//
+	public static Algorithm getAlgorithmNamed(final BaseFBType baseFBType, final String name) {
+		return baseFBType.getAlgorithm().stream().filter(alg -> alg.getName().equals(name)).findFirst().orElse(null);
 	}
 
 	// *** Connection ***//

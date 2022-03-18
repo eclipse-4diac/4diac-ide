@@ -101,37 +101,16 @@
             contributorId="property.contributor.fb">
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
+               filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
                id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.InstanceCommentEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
                enablesFor="1"
-               id="org.eclipse.fordiac.ide.fbnet.properties.ConnectionSection"
+               filter="org.eclipse.fordiac.ide.application.properties.ConnectionFilter"
+            	id="org.eclipse.fordiac.ide.fbnet.properties.ConnectionSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab">
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
-            </input>
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.gef.properties.InterfaceElementSection"
-               id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceElementSection"
-               tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceElementTab">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart">
-            </input>
          </propertySection>
          <propertySection
                enablesFor="1"
@@ -143,38 +122,9 @@
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
                enablesFor="2"
+               filter="org.eclipse.fordiac.ide.application.properties.CreateConnectionFilter"
                id="org.eclipse.fordiac.ide.fbnet.properties.ConnectionSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab">
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart">
-            </input>
-         </propertySection>
-                  <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceAdapterSection"
-               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditAdapters"
-               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart">
-            </input>
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceEventSection"
-               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditEvents"
-               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart">
-            </input>
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceDataSection"
-               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditData"
-               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart">
-            </input>
          </propertySection>
       </propertySections>
    </extension>

@@ -3,9 +3,10 @@ Export-Package: org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.gef.commands,
  org.eclipse.fordiac.ide.gef.dnd,
  org.eclipse.fordiac.ide.gef.draw2d,
- org.eclipse.fordiac.ide.gef.editparts,
  org.eclipse.fordiac.ide.gef.editors,
+ org.eclipse.fordiac.ide.gef.editparts,
  org.eclipse.fordiac.ide.gef.figures,
+ org.eclipse.fordiac.ide.gef.filters,
  org.eclipse.fordiac.ide.gef.handlers,
  org.eclipse.fordiac.ide.gef.handles,
  org.eclipse.fordiac.ide.gef.listeners,
@@ -33,7 +34,9 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.core.resources,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide,
- org.eclipse.fordiac.ide.model.ui
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.jface.text,
+ org.eclipse.emf.edit.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier
@@ -43,3 +46,4 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gef;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.gef
+

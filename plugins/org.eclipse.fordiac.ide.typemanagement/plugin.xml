@@ -2,6 +2,31 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.eclipse.fordiac.ide.typemanagement.TypeManagementPerspective"
+            fixed="false"
+            icon="fordiacimage://ICON_TYPE_NAVIGATOR"
+            id="org.eclipse.fordiac.ide.typemanagement.perspective"
+            name="Type Management">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.fordiac.ide.SystemPerspective">
+         <perspectiveShortcut
+               id="org.eclipse.fordiac.ide.typemanagement.perspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         <perspectiveShortcut
+               id="org.eclipse.fordiac.ide.typemanagement.perspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+   </extension>
+   <extension
          point="org.eclipse.ui.views">
       <view
             allowMultiple="false"
@@ -466,20 +491,6 @@
       </renameParticipant>
    </extension>
    <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertySections">
-      <propertySections
-            contributorId="property.contributor.fb">
-         <propertySection
-               class="org.eclipse.fordiac.ide.typemanagement.properties.FBTypeInfoSection"
-               id="property.section.typenavigator.fBTypeInfo"
-               tab="property.tab.fbtypeinfo">
-            <input
-                  type="org.eclipse.core.resources.IFile">
-            </input>
-         </propertySection>
-      </propertySections>
-   </extension>
-   <extension
          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
             class="org.eclipse.fordiac.ide.typemanagement.DeleteFBTypeParticipant"
@@ -565,11 +576,18 @@
                         <instanceof
                               value="org.eclipse.core.resources.IFile">
                         </instanceof>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="fbt">
-                        </test>
+                        <or>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="org.eclipse.core.resources.extension"
+                                 value="stfunc">
+                           </test>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="org.eclipse.core.resources.extension"
+                                 value="fbt">
+                           </test>
+                        </or>
                      </and>
                   </iterate>
                </with>

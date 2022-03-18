@@ -28,7 +28,7 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 	def void validForLoop() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE2_NAME, DINT))
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		FOR «VARIABLE_NAME»:=1 TO 5 DO
 			«VARIABLE2_NAME» := 0;
 		END_FOR;'''))
@@ -54,7 +54,7 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 	def void validForLoopWithBy() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE2_NAME, DINT))
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		FOR «VARIABLE_NAME»:=1 TO 5 BY 2 DO
 			«VARIABLE2_NAME» := 0;
 		END_FOR;'''))
@@ -80,7 +80,7 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 	def void multipleForLoopsOnSameLevel() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE2_NAME, DINT))
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		FOR «VARIABLE_NAME»:=1 TO 5 DO
 			«VARIABLE2_NAME» := 0;
 		END_FOR;
@@ -117,7 +117,7 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 	def void multipleForLoopsContained() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE2_NAME, DINT))
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		FOR «VARIABLE_NAME»:=1 TO 5 DO
 			«VARIABLE2_NAME» := 0;
 			FOR «VARIABLE_NAME»:=6 TO 10 DO

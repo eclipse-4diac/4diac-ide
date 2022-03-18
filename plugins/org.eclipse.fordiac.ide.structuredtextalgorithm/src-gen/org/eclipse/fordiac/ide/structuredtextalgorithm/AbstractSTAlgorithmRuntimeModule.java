@@ -7,6 +7,7 @@ import com.google.inject.Binder;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
 import java.util.Properties;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.formatting2.STAlgorithmFormatter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmAntlrTokenFileProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.lexer.InternalSTAlgorithmLexer;
@@ -19,6 +20,9 @@ import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.IGrammarAccess;
 import org.eclipse.xtext.conversion.impl.AbstractIDValueConverter;
 import org.eclipse.xtext.conversion.impl.IgnoreCaseIDValueConverter;
+import org.eclipse.xtext.formatting2.FormatterPreferenceValuesProvider;
+import org.eclipse.xtext.formatting2.FormatterPreferences;
+import org.eclipse.xtext.formatting2.IFormatter2;
 import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.parser.ITokenToStringConverter;
 import org.eclipse.xtext.parser.antlr.AntlrTokenDefProvider;
@@ -30,6 +34,7 @@ import org.eclipse.xtext.parser.antlr.LexerBindings;
 import org.eclipse.xtext.parser.antlr.LexerProvider;
 import org.eclipse.xtext.parsetree.reconstr.ITokenSerializer;
 import org.eclipse.xtext.parsetree.reconstr.impl.IgnoreCaseKeywordSerializer;
+import org.eclipse.xtext.preferences.IPreferenceValuesProvider;
 import org.eclipse.xtext.scoping.IGlobalScopeProvider;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.IgnoreCaseLinking;
@@ -168,6 +173,16 @@ public abstract class AbstractSTAlgorithmRuntimeModule extends DefaultRuntimeMod
 	// contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
 	public void configureIgnoreCaseLinking(Binder binder) {
 		binder.bindConstant().annotatedWith(IgnoreCaseLinking.class).to(true);
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.formatting.Formatter2Fragment2
+	public Class<? extends IFormatter2> bindIFormatter2() {
+		return STAlgorithmFormatter.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.formatting.Formatter2Fragment2
+	public void configureFormatterPreferences(Binder binder) {
+		binder.bind(IPreferenceValuesProvider.class).annotatedWith(FormatterPreferences.class).to(FormatterPreferenceValuesProvider.class);
 	}
 	
 }

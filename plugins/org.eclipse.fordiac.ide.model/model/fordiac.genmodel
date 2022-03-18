@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xA;Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH&#xA;&#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-2.0.&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst&#xA;     - initial API and implementation and/or initial documentation&#xA;*******************************************************************************"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xA;Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH&#xA;              2022 Martin Erich Jobst&#xA;&#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-2.0.&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst&#xA;     - initial API and implementation and/or initial documentation&#xA;*******************************************************************************"
     modelDirectory="/org.eclipse.fordiac.ide.model/src-gen" creationSubmenus="true"
     editDirectory="/org.eclipse.fordiac.ide.model.edit/src-gen" modelPluginID="org.eclipse.fordiac.ide.model"
     templateDirectory="" modelName="fordiac" editPluginClass="org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin"
@@ -200,7 +200,11 @@
       <genOperations ecoreOperation="lib.ecore#//AdapterType/getPlugType" body="return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterType/getSocketType" body="return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//Algorithm"/>
+    <genClasses image="false" ecoreClass="lib.ecore#//Algorithm">
+      <genOperations ecoreOperation="lib.ecore#//Algorithm/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Algorithm/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Algorithm/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Application">
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
           ecoreFeature="ecore:EReference lib.ecore#//Application/fBNetwork"/>
@@ -209,10 +213,6 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//BasicFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/eCC"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/algorithm"/>
-      <genOperations ecoreOperation="lib.ecore#//BasicFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//BasicFBType/getAlgorithmNamed/name"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompilerInfo">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilerInfo/compiler"/>
@@ -315,6 +315,9 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
+      <genOperations ecoreOperation="lib.ecore#//Event/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Event/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Event/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FB">
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceFB" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceFB(this);"/>
@@ -355,6 +358,9 @@
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/service"/>
+      <genOperations ecoreOperation="lib.ecore#//FBType/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBType/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBType/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Identification">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/applicationDomain"/>
@@ -672,12 +678,18 @@
     <genClasses image="false" ecoreClass="lib.ecore#//TypedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedElement/type"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//SimpleFBType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleFBType/algorithm"/>
-    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//SimpleFBType"/>
     <genClasses ecoreClass="lib.ecore#//BaseFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalVars"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalFbs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/algorithm"
+          get="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getAlgorithm(this);"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/methods"
+          get="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getMethods(this);"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/callables"/>
+      <genOperations ecoreOperation="lib.ecore#//BaseFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//BaseFBType/getAlgorithmNamed/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
@@ -714,6 +726,22 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/width"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/height"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//ICallable">
+      <genOperations ecoreOperation="lib.ecore#//ICallable/getInputParameters"/>
+      <genOperations ecoreOperation="lib.ecore#//ICallable/getOutputParameters"/>
+      <genOperations ecoreOperation="lib.ecore#//ICallable/getReturnType"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Method"/>
+    <genClasses image="false" ecoreClass="lib.ecore#//TextMethod">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/inputParameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/outputParameters"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/returnType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextMethod/text"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//OtherMethod">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OtherMethod/language"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//STMethod"/>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">

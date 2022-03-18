@@ -16,37 +16,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.editparts.InstanceComment;
-import org.eclipse.fordiac.ide.application.editparts.InstanceName;
 import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class InterfaceSection extends AbstractInterfaceSection {
 
 	@Override
-	protected FBNetworkElement getInputType(Object input) {
-		if (input instanceof EditPart) {
-			input = ((EditPart) input).getModel();
-		}
-
-		if (input instanceof FBNetwork) {
-			input = ((FBNetwork) input).eContainer();
-		}
-
-		if (input instanceof FBNetworkElement) {
-			return (FBNetworkElement) input;
-		}
-		if (input instanceof InstanceComment) {
-			return ((InstanceComment) input).getRefElement();
-		}
-		if (input instanceof InstanceName) {
-			return ((InstanceName) input).getRefElement();
-		}
-		return null;
+	protected FBNetworkElement getInputType(final Object input) {
+		return InstanceSectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
 	@Override

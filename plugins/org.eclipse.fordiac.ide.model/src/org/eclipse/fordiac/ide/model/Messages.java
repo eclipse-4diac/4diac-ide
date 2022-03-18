@@ -110,6 +110,8 @@ public final class Messages extends NLS {
 	/** The FBT importer_ othe r_ al g_ missin g_ tex t_ exception. */
 	public static String FBTImporter_OTHER_ALG_MISSING_TEXT_EXCEPTION;
 
+	public static String FBTImporter_OTHER_METHOD_MISSING_LANG_EXCEPTION;
+
 	/** The FBT importer_ outpu t_ primitiv e_ even t_ exception. */
 	public static String FBTImporter_OUTPUT_PRIMITIVE_EVENT_EXCEPTION;
 
@@ -252,6 +254,9 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_VIRTUAL_DNS_CHARACTERS_OUT_OF_BOUNDS;
 	public static String VALIDATOR_VIRTUAL_DNS_MULTIPLE_BOUNDING_CHARACTERS;
 	public static String VALIDATOR_VIRTUAL_DNS_ILLEGAL_FORMAT;
+	public static String VALIDATOR_ARRAY_MISSES_BRACKETS;
+	public static String VALIDATOR_ARRAY_STARTS_WITH_VALUE_DELIMITER;
+	public static String VALIDATOR_INDEX;
 
 	public static String Error_SelfInsertion;
 	public static String Error_RecursiveType;

@@ -34,10 +34,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * The Class FbtExporter.
@@ -81,8 +88,8 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		addStartElement(LibraryElementTags.BASIC_F_B_ELEMENT);
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
 		addECC(type.getECC());
-		for (final Algorithm alg : type.getAlgorithm()) {
-			addAlgorithm(alg);
+		for (final ICallable callable : type.getCallables()) {
+			addICallable(callable);
 		}
 		addEndElement();
 	}
@@ -233,7 +240,9 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	private void addSimpleFB(final SimpleFBType type) throws XMLStreamException {
 		addStartElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
-		addAlgorithm(type.getAlgorithm());
+		for (final ICallable callable : type.getCallables()) {
+			addICallable(callable);
+		}
 		addEndElement();
 	}
 
@@ -255,6 +264,101 @@ class FbtExporter extends AbstractBlockTypeExporter {
 			addOtherAlgorithm((OtherAlgorithm) algorithm);
 		}
 		addEndElement();
+	}
+
+	/** Adds the method.
+	 *
+	 * @param method the method
+	 * @throws XMLStreamException */
+	private void addICallable(final ICallable callable) throws XMLStreamException {
+		if (callable instanceof Algorithm) {
+			addAlgorithm((Algorithm) callable);
+		} else if (callable instanceof Method) {
+			addMethod((Method) callable);
+		}
+	}
+
+	/** Adds the method.
+	 *
+	 * @param method the method
+	 * @throws XMLStreamException */
+	private void addMethod(final Method method) throws XMLStreamException {
+		addStartElement(LibraryElementTags.METHOD_ELEMENT);
+
+		addNameAttribute(method.getName());
+		addTypeAttribute(method.getReturnType());
+		addCommentAttribute(method);
+
+		if (method instanceof STMethod) {
+			addSTMethod((STMethod) method);
+		} else if (method instanceof OtherMethod) {
+			addOtherMethod((OtherMethod) method);
+		}
+		addEndElement();
+	}
+
+	/** Adds the st method.
+	 *
+	 * @param method the method
+	 * @throws XMLStreamException */
+	private void addSTMethod(final STMethod method) throws XMLStreamException {
+		addStartElement(LibraryElementTags.ST_ELEMENT);
+		writeTextMethodText(method);
+		addInlineEndElement();
+		writeTextMethodParameters(method);
+	}
+
+	/** Adds the other method.
+	 *
+	 * @param method the method
+	 * @throws XMLStreamException */
+	private void addOtherMethod(final OtherMethod method) throws XMLStreamException {
+		addStartElement(LibraryElementTags.OTHER_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
+				(null != method.getLanguage()) ? method.getLanguage() : ""); //$NON-NLS-1$
+
+		writeTextMethodText(method);
+		addInlineEndElement();
+		writeTextMethodParameters(method);
+	}
+
+	private void writeTextMethodParameters(final TextMethod method) throws XMLStreamException {
+		for (final INamedElement element : method.getInputParameters()) {
+			addParameter(element);
+		}
+		for (final INamedElement element : method.getOutputParameters()) {
+			addParameter(element);
+		}
+	}
+
+	private void addParameter(final INamedElement element) throws XMLStreamException {
+		if (element instanceof VarDeclaration) {
+			addVarDeclaration((VarDeclaration) element);
+		}
+	}
+
+	private void writeTextMethodText(final TextMethod method) throws XMLStreamException {
+		if (null != method.getText()) {
+			final Matcher endPatternMatcher = CDATA_END_PATTERN.matcher(method.getText());
+			int currentPosition = 0;
+			if (endPatternMatcher.find()) { // Check if we have at least one CData end pattern in the string
+				do {
+					getWriter().writeCData(method.getText().substring(currentPosition, endPatternMatcher.start()));
+					getWriter().writeCharacters("]]>"); //$NON-NLS-1$
+					currentPosition = endPatternMatcher.end();
+				} while (endPatternMatcher.find());
+
+				if (currentPosition < method.getText().length()) {
+					// there is some text after the last CData end pattern
+					getWriter().writeCData(method.getText().substring(currentPosition));
+				}
+			} else {
+				// no CData end pattern write the algorithm text as whole
+				getWriter().writeCData(method.getText());
+			}
+		} else {
+			getWriter().writeCharacters(""); //$NON-NLS-1$
+		}
 	}
 
 }

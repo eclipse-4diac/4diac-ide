@@ -13,9 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
-import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IFileEditorInput
@@ -36,14 +34,9 @@ class STAlgorithmResourceForIEditorInputFactory extends ResourceForIEditorInputF
 						if (resource instanceof STAlgorithmResource) {
 							resource.fbType = libraryElement.copy
 						}
-						if (libraryElement instanceof SimpleFBType) {
-							val parser = resource.parser as STAlgorithmParser
-							resource.entryPoint = parser.grammarAccess.STAlgorithmBodyRule
-						}
 					}
 				}
 			}
-
 		}
 		return resource
 	}

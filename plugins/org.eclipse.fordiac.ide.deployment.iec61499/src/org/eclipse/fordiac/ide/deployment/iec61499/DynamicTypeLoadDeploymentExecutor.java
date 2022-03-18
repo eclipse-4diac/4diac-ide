@@ -72,6 +72,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
@@ -374,7 +375,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				FBTypePaletteEntry entry = res.getDevice().getAutomationSystem().getPalette()
 						.getFBTypeEntry(fbresult.getType());
 				if (null == entry) {
-					addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE); //$NON-NLS-1$
+					addTypeToTypelib(res, fbresult.getType(), TypeLibraryTags.FB_TYPE_FILE_ENDING, QUERY_FB_TYPE);
 					entry = res.getDevice().getAutomationSystem().getPalette().getFBTypeEntry(fbresult.getType());
 				}
 				final FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);

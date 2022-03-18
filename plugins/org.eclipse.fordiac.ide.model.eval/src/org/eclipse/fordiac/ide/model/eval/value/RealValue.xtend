@@ -30,7 +30,7 @@ class RealValue implements AnyRealValue {
 
 	def static toRealValue(String value) { new RealValue(Float.parseFloat(value)) }
 
-	def static toRealValue(AnyNumValue value) { value.floatValue.toRealValue }
+	def static toRealValue(AnyMagnitudeValue value) { value.floatValue.toRealValue }
 
 	override RealType getType() { ElementaryTypes.REAL }
 

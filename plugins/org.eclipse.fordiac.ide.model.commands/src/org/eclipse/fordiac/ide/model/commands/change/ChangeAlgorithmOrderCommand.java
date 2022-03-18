@@ -17,16 +17,16 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeAlgorithmOrderCommand extends Command {
-	private final Algorithm alg;
-	private final EList<Algorithm> type;
+	private final ICallable alg;
+	private final EList<ICallable> type;
 	private final int oldIndex;
 	private int newIndex;
 
-	public ChangeAlgorithmOrderCommand(final EList<Algorithm> type, final Algorithm alg, int indexChanged) {
+	public ChangeAlgorithmOrderCommand(final EList<ICallable> type, final ICallable alg, final int indexChanged) {
 		this.type = type;
 		this.alg = alg;
 
@@ -48,7 +48,7 @@ public class ChangeAlgorithmOrderCommand extends Command {
 		}
 	}
 
-	public ChangeAlgorithmOrderCommand(final EList<Algorithm> type, final Algorithm alg, boolean moveUp) {
+	public ChangeAlgorithmOrderCommand(final EList<ICallable> type, final ICallable alg, final boolean moveUp) {
 		this(type, alg, moveUp ? -1 : 1);
 	}
 
@@ -72,7 +72,7 @@ public class ChangeAlgorithmOrderCommand extends Command {
 		moveTo(oldIndex);
 	}
 
-	private void moveTo(int index) {
+	private void moveTo(final int index) {
 		type.move(index, alg);
 	}
 }

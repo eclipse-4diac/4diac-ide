@@ -72,7 +72,7 @@ public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
 		final FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		baseAlgorithm.createControls(parent, toolkit);
 		baseAlgorithm.initialize(fbType, commandStack);
-		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
+		baseAlgorithm.setAlgorithm(fbType.getAlgorithm().get(0));
 		super.createPartControl(baseAlgorithm.getCodeEditors());
 	}
 
@@ -157,7 +157,7 @@ public class SimpleFBEditor extends GraphicalEditor implements IFBTEditorPart {
 	public void reloadType(final FBType type) {
 		if (type instanceof SimpleFBType) {
 			fbType = (SimpleFBType) type;
-			baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
+			baseAlgorithm.setAlgorithm(fbType.getAlgorithm().get(0));
 			try {
 				init(getEditorSite(), new FBTypeEditorInput(type, type.getPaletteEntry()));
 				initializeGraphicalViewer();

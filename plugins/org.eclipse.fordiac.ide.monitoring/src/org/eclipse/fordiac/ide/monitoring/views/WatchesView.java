@@ -13,7 +13,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added removing the watch listener on dispose
- *   Fabio Gandolfi - added selection handling
+ *   Fabio Gandolfi - added selection handling & context menu
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.views;
 
@@ -24,30 +24,41 @@ import java.util.List;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
+import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Messages;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.handlers.ClearForceHandler;
+import org.eclipse.fordiac.ide.monitoring.handlers.ForceHandler;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesCommentLabelProvider;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesContentProvider;
-import org.eclipse.fordiac.ide.monitoring.provider.WatchesLabelProvider;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesNameLabelProvider;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesTypeLabelProvider;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueEditingSupport;
+import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueLabelProvider;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
@@ -103,7 +114,9 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		root.setLayout(new GridLayout());
 		final PatternFilter patternFilter = new PatternFilter();
 
-		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL, patternFilter, true, true);
+		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION,
+				patternFilter, true,
+				true);
 
 		final GridData treeGridData = new GridData();
 		treeGridData.grabExcessHorizontalSpace = true;
@@ -113,55 +126,20 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 		filteredTree.setLayoutData(treeGridData);
 
-		final TreeViewerColumn column1 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
-		column1.getColumn().setText("Watched Element");
-		column1.getColumn().setWidth(340);
-		final TreeViewerColumn column2 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
-		column2.getColumn().setText("Value");
-		column2.getColumn().setWidth(100);
-		column2.setEditingSupport(new EditingSupport(column2.getViewer()) {
-
-			@Override
-			protected void setValue(final Object element, final Object value) {
-				if (element instanceof WatchValueTreeNode) {
-					final MonitoringBaseElement monitoringBaseElement = ((WatchValueTreeNode) element)
-							.getMonitoringBaseElement();
-					MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement,
-							(String) value);
-				}
-
-			}
-
-			@Override
-			protected Object getValue(final Object element) {
-				if (element instanceof WatchValueTreeNode) {
-					return ((WatchValueTreeNode) element).getValue();
-				}
-				return ""; //$NON-NLS-1$
-			}
-
-			@Override
-			protected CellEditor getCellEditor(final Object element) {
-				return new TextCellEditor(filteredTree.getViewer().getTree());
-			}
-
-			@Override
-			protected boolean canEdit(final Object element) {
-				// TODO REMOVE that check after forcing is possible
-				if (element instanceof WatchValueTreeNode && ((WatchValueTreeNode) element).isStructNode()) {
-					return ((WatchValueTreeNode) element).isStructRootNode();
-				}
-				return true;
-			}
-		});
+		createNameColumn();
+		createValueColumn();
+		createTypeColumn();
+		createCommentColumn();
 
 		filteredTree.getViewer().getTree().setHeaderVisible(true);
 		filteredTree.getViewer().getTree().setLinesVisible(true);
 
 		filteredTree.getViewer().setContentProvider(provider);
 
-		filteredTree.getViewer().setLabelProvider(new WatchesLabelProvider());
 		filteredTree.getViewer().setInput(new Object());
+
+		final Menu contextMenu = createContextMenu();
+		filteredTree.getViewer().getControl().setMenu(contextMenu);
 
 		contributeToActionBars();
 
@@ -170,7 +148,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			@Override
 			public void partHidden(final IWorkbenchPartReference ref) {
 				final IWorkbenchPart part = ref.getPart(false);
-				if (part != null && part.getClass().getName().equals(this.getClass().getName().split("\\$")[0])) {
+				if (part instanceof WatchesView) {
 					visible = false;
 				}
 			}
@@ -178,15 +156,45 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			@Override
 			public void partVisible(final IWorkbenchPartReference ref) {
 				final IWorkbenchPart part = ref.getPart(false);
-				if (part != null && part.getClass().getName().equals(this.getClass().getName().split("\\$")[0])) {
+				if (part instanceof WatchesView) {
 					visible = true;
 				}
 			}
 		});
 
 		addWatchesAdapters();
-
 	}
+
+	private void createNameColumn() {
+		final TreeViewerColumn nameColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		nameColumn.getColumn().setText(Messages.MonitoringWatchesView_WatchedElement);
+		nameColumn.getColumn().setWidth(340);
+		nameColumn.setLabelProvider(new WatchesNameLabelProvider());
+	}
+
+	private void createValueColumn() {
+		final TreeViewerColumn valueColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		valueColumn.getColumn().setText(Messages.MonitoringWatchesView_Value);
+		valueColumn.getColumn().setWidth(100);
+		valueColumn.setLabelProvider(new WatchesValueLabelProvider());
+		valueColumn.setEditingSupport(
+				new WatchesValueEditingSupport(valueColumn.getViewer(), filteredTree.getViewer().getTree()));
+	}
+
+	private void createTypeColumn() {
+		final TreeViewerColumn typeColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		typeColumn.getColumn().setText(Messages.MonitoringWatchesView_Type);
+		typeColumn.getColumn().setWidth(100);
+		typeColumn.setLabelProvider(new WatchesTypeLabelProvider());
+	}
+
+	private void createCommentColumn() {
+		final TreeViewerColumn commentColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
+		commentColumn.getColumn().setText(Messages.MonitoringWatchesView_Comment);
+		commentColumn.getColumn().setWidth(340);
+		commentColumn.setLabelProvider(new WatchesCommentLabelProvider());
+	}
+
 
 	private void addWatchesAdapters() {
 		MonitoringManager.getInstance().addMonitoringListener(listener);
@@ -327,5 +335,104 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			}
 		}
 		return activeElements;
+	}
+
+	private Menu createContextMenu() {
+		final Menu contextMenu = new Menu(filteredTree.getViewer().getControl());
+		final MenuItem forceMenuItem = createForceMenuItem(filteredTree.getViewer(), contextMenu);
+		final MenuItem clearForceMenuItem = createClearForceMenuItem(filteredTree.getViewer(), contextMenu);
+		final MenuItem triggerMenuItem = createTriggerMenuItem(filteredTree.getViewer(), contextMenu);
+		contextMenu.addMenuListener(new MenuListener() {
+			@Override
+			public void menuShown(final MenuEvent e) {
+				if (filteredTree.getViewer().getSelection() instanceof StructuredSelection) {
+					final MonitoringManager manager = MonitoringManager.getInstance();
+					final StructuredSelection selection = (StructuredSelection) filteredTree.getViewer().getSelection();
+					if (selection.getFirstElement() instanceof WatchValueTreeNode) {
+						final MonitoringBaseElement element = manager
+								.getMonitoringElement(((WatchValueTreeNode) selection.getFirstElement())
+										.getMonitoringBaseElement().getPort().getInterfaceElement());
+						forceMenuItem.setEnabled(
+								!(((WatchValueTreeNode) selection.getFirstElement()).getMonitoringBaseElement()
+										.getPort().getInterfaceElement().getType() instanceof EventType));
+						clearForceMenuItem.setEnabled(
+								!(((WatchValueTreeNode) selection.getFirstElement()).getMonitoringBaseElement()
+										.getPort().getInterfaceElement().getType() instanceof EventType)
+								&& ((MonitoringElement) element).isForce());
+						triggerMenuItem.setEnabled(
+								((WatchValueTreeNode) selection.getFirstElement()).getMonitoringBaseElement().getPort()
+								.getInterfaceElement().getType() instanceof EventType);
+					}
+				} else {
+					contextMenu.setVisible(false);
+				}
+			}
+
+			@Override
+			public void menuHidden(final MenuEvent e) {
+				// currently nothing to be done here
+			}
+
+		});
+		return contextMenu;
+	}
+
+	private static MenuItem createForceMenuItem(final TreeViewer viewer, final Menu menu) {
+		final MenuItem forceMenuItem = new MenuItem(menu, SWT.NONE);
+		forceMenuItem.addListener(SWT.Selection, event -> {
+			if (viewer.getSelection() instanceof StructuredSelection) {
+				final StructuredSelection sel = (StructuredSelection) viewer.getSelection();
+				if (sel.getFirstElement() instanceof WatchValueTreeNode) {
+					if (((WatchValueTreeNode) sel.getFirstElement()).getMonitoringBaseElement().getPort()
+							.getInterfaceElement() instanceof VarDeclaration) {
+						final VarDeclaration variable = (VarDeclaration) ((WatchValueTreeNode) sel
+								.getFirstElement())
+								.getMonitoringBaseElement().getPort().getInterfaceElement();
+						ForceHandler.showDialogAndProcess(variable);
+						viewer.refresh();
+					}
+				}
+			}
+		});
+		forceMenuItem.setText(Messages.MonitoringWatchesView_Force);
+		forceMenuItem.setImage(FordiacImage.ICON_FORCE_VALUE.getImage());
+		return forceMenuItem;
+	}
+
+	private static MenuItem createClearForceMenuItem(final TreeViewer viewer, final Menu menu) {
+		final MenuItem clearForceMenuItem = new MenuItem(menu, SWT.NONE);
+		clearForceMenuItem.addListener(SWT.Selection, event -> {
+			if (viewer.getSelection() instanceof StructuredSelection) {
+				final StructuredSelection sel = (StructuredSelection) viewer.getSelection();
+				if (sel.getFirstElement() instanceof WatchValueTreeNode) {
+					if (((WatchValueTreeNode) sel.getFirstElement()).getMonitoringBaseElement().getPort()
+							.getInterfaceElement() instanceof VarDeclaration) {
+						final VarDeclaration variable = (VarDeclaration) ((WatchValueTreeNode) sel
+								.getFirstElement()).getMonitoringBaseElement().getPort().getInterfaceElement();
+						ClearForceHandler.processHandler(variable);
+						viewer.refresh();
+					}
+				}
+			}
+		});
+		clearForceMenuItem.setText(Messages.MonitoringWatchesView_ClearForce);
+		clearForceMenuItem.setImage(FordiacImage.ICON_CLEAR_FORCE.getImage());
+		return clearForceMenuItem;
+	}
+
+	private static MenuItem createTriggerMenuItem(final TreeViewer viewer, final Menu menu) {
+		final MenuItem triggerMenuItem = new MenuItem(menu, SWT.NONE);
+		triggerMenuItem.addListener(SWT.Selection, event -> {
+			if (viewer.getSelection() instanceof StructuredSelection) {
+				final StructuredSelection sel = (StructuredSelection) viewer.getSelection();
+				if (sel.getFirstElement() instanceof WatchValueTreeNode) {
+					MonitoringManager.getInstance().triggerEvent(((WatchValueTreeNode) sel.getFirstElement())
+							.getMonitoringBaseElement().getPort().getInterfaceElement());
+				}
+			}
+		});
+		triggerMenuItem.setText(Messages.MonitoringWatchesView_TriggerEvent);
+		triggerMenuItem.setImage(FordiacImage.ICON_TRIGGER_EVENT.getImage());
+		return triggerMenuItem;
 	}
 }

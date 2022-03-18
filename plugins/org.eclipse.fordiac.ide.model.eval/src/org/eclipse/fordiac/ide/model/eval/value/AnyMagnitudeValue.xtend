@@ -16,4 +16,16 @@ import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 
 interface AnyMagnitudeValue extends AnyElementaryValue {
 	override AnyMagnitudeType getType()
+
+	def byte byteValue()
+
+	def short shortValue()
+
+	def int intValue()
+
+	def long longValue()
+
+	def float floatValue()
+
+	def double doubleValue()
 }

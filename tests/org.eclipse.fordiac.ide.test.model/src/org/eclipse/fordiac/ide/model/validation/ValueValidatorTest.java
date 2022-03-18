@@ -26,17 +26,16 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-@SuppressWarnings("squid:S5960")
-public class ValueValidatorTest {
+class ValueValidatorTest {
 
 	private static final String NO_ERROR = ""; //$NON-NLS-1$
 	private static final String INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE = "Invalid BOOL Literal! Valid BOOL literals are 0, 1, FALSE and TRUE"; //$NON-NLS-1$
 	private static final String BASE_SPECIFIER_INVALID_FOR_BOOL = "Base specifiers are not allowed for BOOL literals!"; //$NON-NLS-1$
 	private static final String TYPE_SPECIFIER_MANDATORY_FOR_ANYS = "Concrete type specifier is mandatory for ANY types!"; //$NON-NLS-1$
-	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1 = "Characters used outside boundaries!";
-	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_2 = "\'%\' symbols used inside boundaries!";
-	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_3 = "Characters outside boundaries, \'%\' symbols used inside boundaries!";
-	
+	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1 = "Characters used outside boundaries!"; //$NON-NLS-1$
+	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_2 = "\'%\' symbols used inside boundaries!"; //$NON-NLS-1$
+	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_3 = "Characters outside boundaries, \'%\' symbols used inside boundaries!"; //$NON-NLS-1$
+
 	static Stream<Arguments> validateValidBoolLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.BOOL, "0", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "1", NO_ERROR), //$NON-NLS-1$
@@ -136,56 +135,62 @@ public class ValueValidatorTest {
 		final String resultString = ValueValidator.validateValue(type, value);
 		assertEquals(expectedErrorString, resultString);
 	}
-	
-	
+
+
 	@DisplayName("Validator tests for single correctly typed virtual DNS entries")
 	@ParameterizedTest
 	@ValueSource(strings = {"%sgsgs%", "%Hello%", "%moduleValue%", "%sign%"})
+	@SuppressWarnings("static-method")
 	void validateSingularValidDNSEntries(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(NO_ERROR, resultString);
 	}
-	
-	
+
+
 	@DisplayName("Validator tests for incorrect virtual DNS entries with outbound characters")
 	@ParameterizedTest
 	@ValueSource(strings = {"2%sgsgs%2", "33%Hello%5", "ee%moduleValue%hello", "rr%r%"})
+	@SuppressWarnings("static-method")
 	void validateInvalidDNSEntries_1(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1, resultString);
 	}
-	
-	
+
+
 	@DisplayName("Validator tests for incorrect virtual DNS entries with inbound % symbols")
 	@ParameterizedTest
 	@ValueSource(strings = {"%sg%sgs%", "%Hel%lo%", "%module%Value%", "%%%"})
+	@SuppressWarnings("static-method")
 	void validateInvalidDNSEntries_2(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_2, resultString);
 	}
 
-	
+
 	@DisplayName("Validator tests for incorrect virtual DNS entries with inbound and outbound % symbols")
 	@ParameterizedTest
 	@ValueSource(strings = {"333%sg%sgs%222", "@me%Hel%lo%hi", "%module%Value%rain", "tt%s%ww%5 "})
+	@SuppressWarnings("static-method")
 	void validateInvalidDNSEntries_3(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_3, resultString);
 	}
-	
-	
+
+
 	@DisplayName("Validator tests for several correctly typed virtual DNS entries")
 	@ParameterizedTest
 	@ValueSource(strings = {"%sgsgs%%sigsev%", "%Hello%%milsev%", "%moduleValue%%what%%my%", "%sign%%vile%%style%"})
+	@SuppressWarnings("static-method")
 	void validateMultipleValidDNSEntries(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(NO_ERROR, resultString);
 	}
-	
-	
+
+
 	@DisplayName("Validator tests for several incorrectly typed virtual DNS entries")
 	@ParameterizedTest
 	@ValueSource(strings = {"%sgsgs%name%sigsev%", "%Hello%sign%milsev%", "a%moduleValue%cnt%what%b", "e%sign%i%vile%f"})
+	@SuppressWarnings("static-method")
 	void validateMultipleInvalidDNSEntries_1(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1, resultString);

@@ -15,19 +15,20 @@ Require-Bundle: org.eclipse.xtext,
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
+ org.eclipse.core.resources,
  org.eclipse.fordiac.ide.model,
- org.eclipse.core.resources
+ org.eclipse.fordiac.ide.structuredtextcore;visibility:=reexport,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.model;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor,
- org.eclipse.fordiac.ide.structuredtextfunctioneditor.scoping,
- org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation,
- org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.impl,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.formatting2,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.generator,
- org.eclipse.fordiac.ide.structuredtextfunctioneditor.parser.antlr.internal,
- org.eclipse.fordiac.ide.structuredtextfunctioneditor.serializer,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.parser.antlr,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.parser.antlr.internal,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.parser.antlr.lexer,
- org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.util,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.scoping,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.serializer,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.services,
- org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.util,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation
 Import-Package: org.apache.log4j

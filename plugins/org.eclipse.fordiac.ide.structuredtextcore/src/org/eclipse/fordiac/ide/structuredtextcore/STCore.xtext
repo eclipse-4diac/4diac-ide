@@ -14,52 +14,56 @@
  *   Martin Jobst
  *       - access expressions and assignment lvalues
  *       - literal data types
+ *       - enhanced partial access
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
-generate sTCore "http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore"
+import "http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore"
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 import "org.eclipse.fordiac.ide.model.datatype" as datatype
 import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
 
-Code:
-	statements+=STStatement*;
+STCoreSource returns STSource:
+	{STCoreSource} statements+=STStatement*;
 
-VarDeclarationBlock returns VarDeclarationBlock:
-	{VarDeclarationBlock} 'VAR' (constant?='CONSTANT')?
-	varDeclarations+=VarDeclaration*
+STVarDeclarationBlock returns STVarPlainDeclarationBlock:
+	{STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
 	'END_VAR';
 
-VarTempDeclarationBlock returns VarDeclarationBlock:
-	{VarDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
-	varDeclarations+=VarDeclaration*
+STVarTempDeclarationBlock returns STVarTempDeclarationBlock:
+	{STVarTempDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
 	'END_VAR';
 
-VarInputDeclarationBlock returns VarDeclarationBlock:
-	{VarDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
-	varDeclarations+=VarDeclaration*
+STVarInputDeclarationBlock returns STVarInputDeclarationBlock:
+	{STVarInputDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
 	'END_VAR';
 
-VarOutputDeclarationBlock returns VarDeclarationBlock:
-	{VarDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
-	varDeclarations+=VarDeclaration*
+STVarOutputDeclarationBlock returns STVarOutputDeclarationBlock:
+	{STVarOutputDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
 	'END_VAR';
 
-VarDeclaration returns libraryElement::INamedElement:
+STVarDeclaration:
 	{STVarDeclaration}
 	name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
-	defaultValue=InitializerExpression)? ';';
+	defaultValue=STInitializerExpression)? ';';
 	
-InitializerExpression:
-	STExpression | ArrayInitializerExpression;
+STInitializerExpression:
+	STElementaryInitializerExpression | STArrayInitializerExpression;
 
-ArrayInitializerExpression:
-	'[' values+=ArrayInitElement (',' values+=ArrayInitElement)* ']';
+STElementaryInitializerExpression:
+	value=STExpression;
 
-ArrayInitElement:
-	indexOrInitExpression=STExpression ('(' initExpression=STExpression ')')?;
+STArrayInitializerExpression:
+	'[' values+=STArrayInitElement (',' values+=STArrayInitElement)* ']';
+
+STArrayInitElement:
+	indexOrInitExpression=STExpression ('(' initExpressions+=STExpression (',' initExpressions+=STExpression)* ')')?;
 	
 STStatement:
 	(STIfStatement |
@@ -132,43 +136,43 @@ STRepeatStatement:
 STExpression returns STExpression:
 	STSubrangeExpression;
 
-enum SubrangeOperator returns BinaryOperator: Range='..';
+enum SubrangeOperator returns STBinaryOperator: Range='..';
 STSubrangeExpression returns STExpression:
 	STOrExpression (({STBinaryExpression.left=current} op=SubrangeOperator) right=STOrExpression)*;
 
-enum OrOperator returns BinaryOperator: OR;
+enum OrOperator returns STBinaryOperator: OR;
 STOrExpression returns STExpression:
 	STXorExpression (({STBinaryExpression.left=current} op=OrOperator) right=STXorExpression)*;
 
-enum XorOperator returns BinaryOperator: XOR;
+enum XorOperator returns STBinaryOperator: XOR;
 STXorExpression returns STExpression:
 	STAndExpression (({STBinaryExpression.left=current} op=XorOperator) right=STAndExpression)*;
 
-enum AndOperator returns BinaryOperator: AND | AMPERSAND='&';
+enum AndOperator returns STBinaryOperator: AND | AMPERSAND='&';
 STAndExpression returns STExpression:
 	STEqualityExpression (({STBinaryExpression.left=current} op=AndOperator) right=STEqualityExpression)*;
 
-enum EqualityOperator returns BinaryOperator: EQ='=' | NE='<>';
+enum EqualityOperator returns STBinaryOperator: EQ='=' | NE='<>';
 STEqualityExpression returns STExpression:
 	STComparisonExpression (({STBinaryExpression.left=current} op=EqualityOperator) right=STComparisonExpression)*;
 
-enum CompareOperator returns BinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
+enum CompareOperator returns STBinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
 STComparisonExpression returns STExpression:
 	STAddSubExpression (({STBinaryExpression.left=current} op=CompareOperator) right=STAddSubExpression)*;
 
-enum AddSubOperator returns BinaryOperator: ADD='+' | SUB='-';
+enum AddSubOperator returns STBinaryOperator: ADD='+' | SUB='-';
 STAddSubExpression returns STExpression:
 	STMulDivModExpression (({STBinaryExpression.left=current} op=AddSubOperator) right=STMulDivModExpression)*;
 
-enum MulDivModOperator returns BinaryOperator: MUL='*' | DIV='/' | MOD;
+enum MulDivModOperator returns STBinaryOperator: MUL='*' | DIV='/' | MOD;
 STMulDivModExpression returns STExpression:
 	STPowerExpression (({STBinaryExpression.left=current} op=MulDivModOperator) right=STPowerExpression)*;
 
-enum PowerOperator returns BinaryOperator: POWER='**';
+enum PowerOperator returns STBinaryOperator: POWER='**';
 STPowerExpression returns STExpression:
 	STUnaryExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STUnaryExpression)*;
 
-enum UnaryOperator returns UnaryOperator: MINUS='-' | PLUS='+' | NOT;
+enum UnaryOperator returns STUnaryOperator: MINUS='-' | PLUS='+' | NOT;
 STUnaryExpression returns STExpression:
 	=> STAccessExpression | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
 
@@ -181,13 +185,13 @@ STPrimaryExpression returns STExpression:
 	'(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
 
 STFeatureExpression returns STExpression:
-	{STFeatureExpression} feature=[libraryElement::INamedElement] ( => '(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
+	{STFeatureExpression} feature=[libraryElement::INamedElement] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
 
 enum STMultiBitAccessSpecifier:
 	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';
 
 STMultibitPartialExpression returns STExpression:
-	{STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? index=INT;
+	{STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? (index=INT | ('(' expression=STExpression ')'));
 
 STLiteralExpressions returns STExpression:
 	STNumericLiteral |
@@ -226,10 +230,10 @@ STTimeOfDayLiteral:
 	type=[datatype::DataType|STTimeOfDayType] '#' value=TimeOfDay;
 
 STDateAndTimeLiteral:
-	type=[datatype::DataType|STDateAndTimeType] '#' dateValue=Date '-' timeOfDayValue=TimeOfDay;
+	type=[datatype::DataType|STDateAndTimeType] '#' value=DateAndTime;
 
 STStringLiteral:
-	(type=[datatype::DataType|STAnyCharsType] '#')? value=(STRING|WSTRING);
+	(type=[datatype::DataType|STAnyCharsType] '#')? value=STRING;
 
 STAnyType:
 	ID | STAnyBuiltinType;
@@ -280,13 +284,16 @@ BoolLiteral returns ecore::EBigDecimal:
 Number returns ecore::EBigDecimal:
 	('+' | '-')? INT (=> '.' (EXT_INT | INT))?;
 
-Date returns ecore::EDate:
+Date returns STDate:
 	INT '-' INT '-' INT;
 
-TimeOfDay:
+DateAndTime returns STDateAndTime:
+	INT '-' INT '-' INT '-' INT ':' INT ':' INT (=> '.' INT)?;
+
+TimeOfDay returns STTimeOfDay:
 	INT ':' INT ':' INT (=> '.' INT)?;
 
-Time:
+Time returns STTime:
 	(Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
 
 terminal fragment HEX_DIGIT:
@@ -304,11 +311,9 @@ terminal INT returns ecore::EBigInteger:
 terminal ID:
 	'^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 
-terminal STRING returns ecore::EString:
+terminal STRING returns STString:
+	'"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"' |
 	"'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
-
-terminal WSTRING returns ecore::EString:
-	'"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"';
 
 terminal ML_COMMENT:
 	'/*'->'*/' | '(*'->'*)';

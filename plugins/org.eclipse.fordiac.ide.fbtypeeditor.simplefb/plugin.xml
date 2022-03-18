@@ -8,32 +8,7 @@
             sortIndex="60"
             type="simple">
       </editor>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertySections">
-      <propertySections
-            contributorId="property.contributor.fb">
-         <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.InternalVarsSectionSimple"
-               filter="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.SimpleFBFilter"
-               id="property.propertysection.ivars"
-               tab="property.tab.ivars">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB">
-            </input>
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.InternalFbsSectionSimple"
-               filter="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.SimpleFBFilter"
-               id="property.section.ifbs"
-               tab="property.tab.ifbs">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB">
-            </input>
-         </propertySection>
-         </propertySections>
-         
-   </extension>
+   </extension>   
   <extension
         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
      <propertyContributor

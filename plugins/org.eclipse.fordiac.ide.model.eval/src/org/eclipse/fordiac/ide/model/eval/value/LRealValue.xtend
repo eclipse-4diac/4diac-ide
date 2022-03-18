@@ -30,7 +30,7 @@ class LRealValue implements AnyRealValue {
 
 	def static toLRealValue(String value) { new LRealValue(Double.parseDouble(value)) }
 
-	def static toLRealValue(AnyNumValue value) { value.doubleValue.toLRealValue }
+	def static toLRealValue(AnyMagnitudeValue value) { value.doubleValue.toLRealValue }
 
 	override LrealType getType() { ElementaryTypes.LREAL }
 	

@@ -88,6 +88,10 @@ public final class Messages extends NLS {
 	public static String SetProfileCommand_LABEL_SetProfile;
 	public static String ViewRenameCommand_LABEL_RenameView;
 
+	public static String InterfaceElementSection_ConnectionGroup;
+	public static String InterfaceElementSection_InConnections;
+	public static String InterfaceElementSection_OutConnections;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

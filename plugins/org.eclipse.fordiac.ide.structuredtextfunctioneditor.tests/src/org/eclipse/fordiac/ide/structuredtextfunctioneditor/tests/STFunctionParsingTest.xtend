@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
 import com.google.inject.Inject
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.sTFunction.STFunction
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.util.ParseHelper
@@ -26,7 +26,7 @@ import org.junit.jupiter.api.^extension.ExtendWith
 @InjectWith(STFunctionInjectorProvider)
 class STFunctionParsingTest {
 	@Inject
-	ParseHelper<STFunction> parseHelper
+	ParseHelper<STFunctionSource> parseHelper
 	
 	@Test
 	def void loadModel() {

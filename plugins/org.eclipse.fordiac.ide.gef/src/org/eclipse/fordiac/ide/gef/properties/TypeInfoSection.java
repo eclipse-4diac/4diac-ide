@@ -57,8 +57,8 @@ public abstract class TypeInfoSection extends AbstractSection {
 		typeInfo.createControls(getLeftComposite(), getRightComposite());
 	}
 
-	private void createTypeAndCommentSection(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	private void createTypeAndCommentSection(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, FordiacMessages.TypeName + ":"); //$NON-NLS-1$
@@ -76,7 +76,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			fbTypeNameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$

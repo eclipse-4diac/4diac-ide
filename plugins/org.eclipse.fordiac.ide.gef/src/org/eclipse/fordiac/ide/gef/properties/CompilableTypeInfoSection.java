@@ -39,7 +39,6 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -227,13 +226,10 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
-		if (selection instanceof IStructuredSelection) {
-			commandStack = getCommandStack(part, null);
-			if (null == commandStack) { // disable all field
-				headerText.setEnabled(false);
-				classdefText.setEnabled(false);
-				compilerViewer.setCellModifier(null);
-			}
+		if (null == commandStack) { // disable all field
+			headerText.setEnabled(false);
+			classdefText.setEnabled(false);
+			compilerViewer.setCellModifier(null);
 		}
 	}
 

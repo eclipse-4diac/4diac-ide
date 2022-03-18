@@ -99,15 +99,16 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
+		Object input = selection;
 		if (selection instanceof IStructuredSelection) {
-			final Object input = ((IStructuredSelection) selection).getFirstElement();
-			commandStack = getCommandStack(part, input);
-			if (null == commandStack) { // disable all fields
-				setInputCode();
-			}
-			setType(input);
-			setInputInit();
+			input = ((IStructuredSelection) selection).getFirstElement();
 		}
+		commandStack = getCommandStack(part, input);
+		if (null == commandStack) { // disable all fields
+			setInputCode();
+		}
+		setType(input);
+		setInputInit();
 	}
 
 	private final Adapter contentAdapter = new EContentAdapter() {

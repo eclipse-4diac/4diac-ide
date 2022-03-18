@@ -90,6 +90,28 @@ public class LibraryElementItemProvider extends ItemProviderAdapter implements I
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
+	/**
+	 * This adds a property descriptor for the Palette Entry feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPaletteEntryPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LibraryElement_paletteEntry_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_LibraryElement_paletteEntry_feature", "_UI_LibraryElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.LIBRARY_ELEMENT__PALETTE_ENTRY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
 	/** This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--

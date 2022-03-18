@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -42,13 +42,13 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 	private final String name;
 	private final Evaluator evaluator;
 	private final ILaunch launch;
-	private FutureTask<IStatus> task;
+	private final FutureTask<IStatus> task;
 	private final Thread thread;
 	private final EvaluatorThreadGroup threadGroup;
 	private final EvaluatorStreamsProxy streamsProxy;
-	private Map<String, String> attributes = new HashMap<>();
+	private final Map<String, String> attributes = new HashMap<>();
 
-	public EvaluatorProcess(String name, Evaluator evaluator, ILaunch launch) {
+	public EvaluatorProcess(final String name, final Evaluator evaluator, final ILaunch launch) {
 		this.name = evaluator.getClass().getSimpleName();
 		this.evaluator = evaluator;
 		this.launch = launch;
@@ -63,21 +63,22 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 	@Override
 	public IStatus call() throws Exception {
 		try {
-			long start = System.nanoTime();
+			this.evaluator.prepare();
+			final long start = System.nanoTime();
 			try {
 				this.evaluator.evaluate();
-			} catch (EvaluatorExitException e) {
+			} catch (final EvaluatorExitException e) {
 				// exit
 			}
-			long finish = System.nanoTime();
-			Duration elapsed = Duration.ofNanos(finish - start);
+			final long finish = System.nanoTime();
+			final Duration elapsed = Duration.ofNanos(finish - start);
 			this.streamsProxy.getOutputStreamMonitor().info(String.format("Elapsed: %d:%02d:%02d:%03d",
 					elapsed.toHours(), elapsed.toMinutesPart(), elapsed.toSecondsPart(), elapsed.toMillisPart()));
 			return Status.OK_STATUS;
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			this.streamsProxy.getErrorStreamMonitor().error("Terminated");
 			return Status.error("Terminated");
-		} catch (Throwable t) {
+		} catch (final Throwable t) {
 			this.streamsProxy.getErrorStreamMonitor().error("Exception occurred", t);
 			return Status.error("Exception occurred", t);
 		} finally {
@@ -118,7 +119,7 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 			return this.task.get(-1, TimeUnit.NANOSECONDS).getCode();
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			throw new DebugException(Status.error("Couldn't get exit code", e));
-		} catch (CancellationException e) {
+		} catch (final CancellationException e) {
 			return -1;
 		}
 	}
@@ -150,32 +151,32 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 		fireEvent(new DebugEvent(this, DebugEvent.CHANGE));
 	}
 
-	protected void fireEvent(DebugEvent event) {
-		DebugPlugin manager = DebugPlugin.getDefault();
+	protected void fireEvent(final DebugEvent event) {
+		final DebugPlugin manager = DebugPlugin.getDefault();
 		if (manager != null) {
 			manager.fireDebugEventSet(new DebugEvent[] { event });
 		}
 	}
 
 	@Override
-	public void setAttribute(String key, String value) {
+	public void setAttribute(final String key, final String value) {
 		this.attributes.put(key, value);
 	}
 
 	@Override
-	public String getAttribute(String key) {
+	public String getAttribute(final String key) {
 		return this.attributes.get(key);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getAdapter(Class<T> adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter.equals(IProcess.class)) {
 			return (T) this;
 		} else if (adapter.equals(IDebugTarget.class)) {
-			ILaunch launch = getLaunch();
-			IDebugTarget[] targets = launch.getDebugTargets();
-			for (IDebugTarget target : targets) {
+			final ILaunch launch = getLaunch();
+			final IDebugTarget[] targets = launch.getDebugTargets();
+			for (final IDebugTarget target : targets) {
 				if (this.equals(target.getProcess())) {
 					return (T) target;
 				}

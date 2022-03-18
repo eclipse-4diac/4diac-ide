@@ -13,10 +13,23 @@
 package org.eclipse.fordiac.ide.test.model.eval.value
 
 import java.util.stream.Stream
+import org.eclipse.fordiac.ide.model.data.AnyBitType
+import org.eclipse.fordiac.ide.model.data.AnyCharType
+import org.eclipse.fordiac.ide.model.data.AnyCharsType
+import org.eclipse.fordiac.ide.model.data.AnyDateType
+import org.eclipse.fordiac.ide.model.data.AnyDurationType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
+import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.AnyRealType
+import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.BoolType
+import org.eclipse.fordiac.ide.model.data.DateAndTimeType
+import org.eclipse.fordiac.ide.model.data.DateType
+import org.eclipse.fordiac.ide.model.data.LdateType
+import org.eclipse.fordiac.ide.model.data.LdtType
+import org.eclipse.fordiac.ide.model.data.LtodType
+import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
@@ -62,7 +75,7 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testAbs(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyNumType: type.defaultValue.assertEquals(+type.defaultValue)
+			AnyMagnitudeType: type.defaultValue.assertEquals(+type.defaultValue)
 			default: UnsupportedOperationException.assertThrows[+type.defaultValue]
 		}
 	}
@@ -71,7 +84,7 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testNegate(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyNumType: type.defaultValue.assertEquals(-type.defaultValue)
+			AnyMagnitudeType: type.defaultValue.assertEquals(-type.defaultValue)
 			default: UnsupportedOperationException.assertThrows[-type.defaultValue]
 		}
 	}
@@ -80,7 +93,7 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testBitwiseNot(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyIntType: type.defaultValue.assertNotEquals(type.defaultValue.bitwiseNot)
+			AnyBitType: type.defaultValue.assertNotEquals(type.defaultValue.bitwiseNot)
 			default: UnsupportedOperationException.assertThrows[type.defaultValue.bitwiseNot]
 		}
 	}
@@ -89,7 +102,7 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testAdd(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyNumType: type.defaultValue.assertEquals(type.defaultValue + type.defaultValue)
+			AnyMagnitudeType: type.defaultValue.assertEquals(type.defaultValue + type.defaultValue)
 			default: UnsupportedOperationException.assertThrows[type.defaultValue + type.defaultValue]
 		}
 	}
@@ -98,7 +111,7 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testSubtract(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyNumType: type.defaultValue.assertEquals(type.defaultValue - type.defaultValue)
+			AnyMagnitudeType: type.defaultValue.assertEquals(type.defaultValue - type.defaultValue)
 			default: UnsupportedOperationException.assertThrows[type.defaultValue - type.defaultValue]
 		}
 	}
@@ -107,7 +120,7 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testMultiply(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyNumType: type.defaultValue.assertEquals(type.defaultValue * type.defaultValue)
+			AnyMagnitudeType: type.defaultValue.assertEquals(type.defaultValue * type.defaultValue)
 			default: UnsupportedOperationException.assertThrows[type.defaultValue * type.defaultValue]
 		}
 	}
@@ -118,7 +131,8 @@ class ValueOperationsTest {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
 			AnyRealType:
 				type.defaultValue.assertNotEquals(type.defaultValue / type.defaultValue)
-			AnyIntType: {
+			AnyIntType,
+			AnyDurationType: {
 				type.defaultValue.assertEquals(type.defaultValue / 1.wrapValue(type))
 				ArithmeticException.assertThrows[type.defaultValue / type.defaultValue]
 			}
@@ -133,7 +147,8 @@ class ValueOperationsTest {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
 			AnyRealType:
 				type.defaultValue.assertNotEquals(type.defaultValue / type.defaultValue)
-			AnyIntType: {
+			AnyIntType,
+			AnyDurationType: {
 				type.defaultValue.assertEquals(type.defaultValue % 1.wrapValue(type))
 				ArithmeticException.assertThrows[type.defaultValue % type.defaultValue]
 			}
@@ -157,7 +172,7 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testAnd(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyIntType: type.defaultValue.assertEquals(type.defaultValue.bitwiseAnd(type.defaultValue))
+			AnyBitType: type.defaultValue.assertEquals(type.defaultValue.bitwiseAnd(type.defaultValue))
 			default: UnsupportedOperationException.assertThrows[type.defaultValue.bitwiseAnd(type.defaultValue)]
 		}
 	}
@@ -166,7 +181,7 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testOr(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyIntType: type.defaultValue.assertEquals(type.defaultValue.bitwiseOr(type.defaultValue))
+			AnyBitType: type.defaultValue.assertEquals(type.defaultValue.bitwiseOr(type.defaultValue))
 			default: UnsupportedOperationException.assertThrows[type.defaultValue.bitwiseOr(type.defaultValue)]
 		}
 	}
@@ -175,7 +190,7 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testXor(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyIntType: type.defaultValue.assertEquals(type.defaultValue.bitwiseXor(type.defaultValue))
+			AnyBitType: type.defaultValue.assertEquals(type.defaultValue.bitwiseXor(type.defaultValue))
 			default: UnsupportedOperationException.assertThrows[type.defaultValue.bitwiseXor(type.defaultValue)]
 		}
 	}
@@ -183,29 +198,23 @@ class ValueOperationsTest {
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testEquals(String typeName) {
-		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			BoolType,
-			AnyNumType: true.assertEquals(type.defaultValue == type.defaultValue)
-			default: UnsupportedOperationException.assertThrows[type.defaultValue]
-		}
+		val type = ElementaryTypes.getTypeByName(typeName)
+		true.assertEquals(type.defaultValue == type.defaultValue)
 	}
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testNotEquals(String typeName) {
-		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			BoolType,
-			AnyNumType: false.assertEquals(type.defaultValue != type.defaultValue)
-			default: UnsupportedOperationException.assertThrows[type.defaultValue]
-		}
+		val type = ElementaryTypes.getTypeByName(typeName)
+		false.assertEquals(type.defaultValue != type.defaultValue)
 	}
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testLessThan(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyNumType: false.assertEquals(type.defaultValue < type.defaultValue)
-			default: UnsupportedOperationException.assertThrows[type.defaultValue < type.defaultValue]
+			AnyBitType: UnsupportedOperationException.assertThrows[type.defaultValue < type.defaultValue]
+			default: false.assertEquals(type.defaultValue < type.defaultValue)
 		}
 	}
 
@@ -213,8 +222,8 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testLessEquals(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyNumType: true.assertEquals(type.defaultValue <= type.defaultValue)
-			default: UnsupportedOperationException.assertThrows[type.defaultValue <= type.defaultValue]
+			AnyBitType: UnsupportedOperationException.assertThrows[type.defaultValue <= type.defaultValue]
+			default: true.assertEquals(type.defaultValue <= type.defaultValue)
 		}
 	}
 
@@ -222,8 +231,8 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testGreaterThan(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyNumType: false.assertEquals(type.defaultValue > type.defaultValue)
-			default: UnsupportedOperationException.assertThrows[type.defaultValue > type.defaultValue]
+			AnyBitType: UnsupportedOperationException.assertThrows[type.defaultValue > type.defaultValue]
+			default: false.assertEquals(type.defaultValue > type.defaultValue)
 		}
 	}
 
@@ -231,25 +240,78 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testGreaterEquals(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyNumType: true.assertEquals(type.defaultValue >= type.defaultValue)
-			default: UnsupportedOperationException.assertThrows[type.defaultValue >= type.defaultValue]
+			AnyBitType: UnsupportedOperationException.assertThrows[type.defaultValue >= type.defaultValue]
+			default: true.assertEquals(type.defaultValue >= type.defaultValue)
 		}
 	}
 
-	@ParameterizedTest(name="{index}: {1} as {0}")
+	@ParameterizedTest(name="{index}: {0} partial {1}")
+	@MethodSource("typeArgumentsCartesianProvider")
+	def void testPartial(String typeName, String partialTypeName) {
+		val type = ElementaryTypes.getTypeByName(typeName)
+		val partialType = ElementaryTypes.getTypeByName(partialTypeName)
+		// both type and partialType must be ANY_BIT types and the partialType must be smaller than type
+		if(type instanceof AnyBitType && partialType instanceof AnyBitType && type != partialType && partialType.isCompatibleWith(type)) {
+			for(index : 0..<(type.bitSize / partialType.bitSize)) {
+				partialType.defaultValue.assertEquals(type.defaultValue.partial(partialType, index))
+				(0xffffffff >>> (32 - partialType.bitSize)).wrapValue(partialType).assertEquals(0xffffffffffffffff#L.wrapValue(type).partial(partialType, index))
+				type.defaultValue.assertEquals(type.defaultValue.partial(partialType, index, partialType.defaultValue))
+				(0x1#L << (index * partialType.bitSize)).wrapValue(type).assertEquals(type.defaultValue.partial(partialType, index, 1.wrapValue(partialType)))
+			}
+		} else {
+			UnsupportedOperationException.assertThrows[type.defaultValue.partial(partialType, 0)]
+			UnsupportedOperationException.assertThrows[type.defaultValue.partial(partialType, 0, partialType.defaultValue)]
+		}
+	}
+	
+	@ParameterizedTest(name="{index}: {0} as {1}")
 	@MethodSource("typeArgumentsCartesianProvider")
 	def void testCastValue(String typeName, String castTypeName) {
 		val castType = ElementaryTypes.getTypeByName(castTypeName)
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
 			BoolType: {
-				if (castType instanceof BoolType)
+				if (castType instanceof AnyBitType)
 					castType.defaultValue.assertEquals(type.defaultValue.castValue(castType))
 				else
 					ClassCastException.assertThrows[type.defaultValue.castValue(castType)]
 				type.defaultValue.castValue(null).type.defaultValue
 			}
-			AnyNumType: {
-				if (castType instanceof AnyNumType)
+			AnyMagnitudeType: {
+				if (castType instanceof AnyMagnitudeType ||
+					(castType instanceof AnyBitType && !(castType instanceof BoolType)))
+					castType.defaultValue.assertEquals(type.defaultValue.castValue(castType))
+				else
+					ClassCastException.assertThrows[type.defaultValue.castValue(castType)]
+				type.defaultValue.castValue(null).type.defaultValue
+			}
+			AnyBitType: {
+				if (castType instanceof AnyNumType ||
+					(castType instanceof AnyBitType && !(castType instanceof BoolType)))
+					castType.defaultValue.assertEquals(type.defaultValue.castValue(castType))
+				else
+					ClassCastException.assertThrows[type.defaultValue.castValue(castType)]
+				type.defaultValue.castValue(null).type.defaultValue
+			}
+			AnyCharType: {
+				if (castType instanceof AnyCharType)
+					castType.defaultValue.assertEquals(type.defaultValue.castValue(castType))
+				else if (castType instanceof AnyStringType)
+					"\u0000".wrapValue(castType).assertEquals(type.defaultValue.castValue(castType))
+				else
+					ClassCastException.assertThrows[type.defaultValue.castValue(castType)]
+				type.defaultValue.castValue(null).type.defaultValue
+			}
+			AnyStringType: {
+				if (castType instanceof AnyStringType)
+					castType.defaultValue.assertEquals(type.defaultValue.castValue(castType))
+				else if (castType instanceof AnyCharType)
+					"\u0000".wrapValue(castType).assertEquals(type.defaultValue.castValue(castType))
+				else
+					ClassCastException.assertThrows[type.defaultValue.castValue(castType)]
+				type.defaultValue.castValue(null).type.defaultValue
+			}
+			AnyDateType: {
+				if (castType instanceof AnyDateType)
 					castType.defaultValue.assertEquals(type.defaultValue.castValue(castType))
 				else
 					ClassCastException.assertThrows[type.defaultValue.castValue(castType)]
@@ -265,9 +327,9 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testWrapValue(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			BoolType,
-			AnyNumType: type.defaultValue.assertEquals(0.wrapValue(type))
-			default: UnsupportedOperationException.assertThrows[0.wrapValue(type)]
+			AnyCharType: type.defaultValue.assertEquals("\u0000".wrapValue(type))
+			AnyStringType: type.defaultValue.assertEquals("".wrapValue(type))
+			default: type.defaultValue.assertEquals(0.wrapValue(type))
 		}
 	}
 
@@ -275,8 +337,16 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testParseValue(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			BoolType,
-			AnyNumType: type.defaultValue.assertEquals("0".parseValue(type))
+			AnyNumType,
+			AnyBitType: type.defaultValue.assertEquals("0".parseValue(type))
+			AnyDurationType: type.defaultValue.assertEquals("0s".parseValue(type))
+			AnyCharsType: type.defaultValue.assertEquals("".parseValue(type))
+			DateType,
+			LdateType: type.defaultValue.assertEquals("1970-01-01".parseValue(type))
+			TimeOfDayType,
+			LtodType: type.defaultValue.assertEquals("00:00:00".parseValue(type))
+			DateAndTimeType,
+			LdtType: type.defaultValue.assertEquals("1970-01-01-00:00:00".parseValue(type))
 			default: UnsupportedOperationException.assertThrows["0".parseValue(type)]
 		}
 	}

@@ -25,16 +25,13 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.Identification;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-public class CMakeListsMarker implements LibraryElement {
+public class CMakeListsMarker implements INamedElement {
 
 	@Override
 	public String getName() {
-		throw new UnsupportedOperationException();
+		return "CMakeLists.txt"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -146,36 +143,4 @@ public class CMakeListsMarker implements LibraryElement {
 	public void eNotify(final Notification notification) {
 		throw new UnsupportedOperationException();
 	}
-
-	@Override
-	public EList<VersionInfo> getVersionInfo() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Identification getIdentification() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setIdentification(final Identification value) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public PaletteEntry getPaletteEntry() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setPaletteEntry(final PaletteEntry value) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public TypeLibrary getTypeLibrary() {
-		throw new UnsupportedOperationException();
-	}
-
-
 }

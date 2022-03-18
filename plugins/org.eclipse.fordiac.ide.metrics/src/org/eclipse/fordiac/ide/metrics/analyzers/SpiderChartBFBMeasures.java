@@ -176,13 +176,17 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 		data.independentPaths = 2;
 		data.transitions = 2;
 
-		data.loc = calculateLOC(simpleFBType.getAlgorithm());
+		for (final Algorithm alg : simpleFBType.getAlgorithm()) {
+			data.loc += calculateLOC(alg);
+		}
 
 		data.internalVar = simpleFBType.getInternalVars().size();
 		data.interfaceEl += countInterfaceElements(simpleFBType.getInterfaceList());
 
-		data.actions = 1;
-		data.independentPaths += analyzeAlgorithm(simpleFBType.getAlgorithm());
+		data.actions = simpleFBType.getAlgorithm().size();
+		for (final Algorithm alg : simpleFBType.getAlgorithm()) {
+			data.independentPaths += analyzeAlgorithm(alg);
+		}
 
 		return data;
 	}

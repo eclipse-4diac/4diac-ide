@@ -12,6 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.scoping
 
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EReference
+import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
+import org.eclipse.xtext.resource.IEObjectDescription
 
 /**
  * This class contains custom scoping description.
@@ -20,5 +29,33 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.scoping
  * on how and when to use it.
  */
 class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
+	override getScope(EObject context, EReference reference) {
+		if (reference == STAlgorithmPackage.Literals.ST_METHOD__RETURN_TYPE) {
+			val globalScope = super.getScope(context, reference)
+			return scopeFor(DataTypeLibrary.nonUserDefinedDataTypes, globalScope)
+		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__TARGET) {
+			val method = context.method
+			return if(method !== null) scopeFor(#[method], super.getScope(context, reference)) else super.
+				getScope(context, reference)
+		}
+		return super.getScope(context, reference)
+	}
 
+	override protected isApplicableForVariableReference(IEObjectDescription description) {
+		val clazz = description.EClass
+		super.isApplicableForVariableReference(description) &&
+			!(LibraryElementPackage.eINSTANCE.getVarDeclaration().isSuperTypeOf(clazz) &&
+				description.EObjectOrProxy.eContainer?.eContainer instanceof FB); // ensure the VarDeclaration is not in an internal FB
+	}
+
+	override protected isApplicableForFeatureReference(IEObjectDescription description) {
+		val clazz = description.EClass
+		super.isApplicableForFeatureReference(description) &&
+			!(LibraryElementPackage.eINSTANCE.getVarDeclaration().isSuperTypeOf(clazz) &&
+				description.EObjectOrProxy.eContainer?.eContainer instanceof FB); // ensure the VarDeclaration is not in an internal FB
+	}
+
+	def protected STMethod getMethod(EObject context) {
+		if(context instanceof STMethod) context else context?.eContainer?.method
+	}
 }

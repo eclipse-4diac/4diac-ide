@@ -76,6 +76,28 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 				LibraryElementPackage.Literals.FB_NETWORK_ELEMENT__MAPPING, true, false, true, null, null, null));
 	}
 
+	/**
+	 * This adds a property descriptor for the Group feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGroupPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FBNetworkElement_group_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_FBNetworkElement_group_feature", "_UI_FBNetworkElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.FB_NETWORK_ELEMENT__GROUP,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
 	/** This returns FBNetworkElement.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */

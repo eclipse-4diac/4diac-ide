@@ -28,7 +28,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def exportValidBasicFB() {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : ARRAY [0..31] OF DWORD;
 		END_VAR'''))
@@ -58,6 +58,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 					#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
 
 					#include "basicfb.h"
+					#include "forte_array.h"
 					#include "forte_array_at.h"
 
 

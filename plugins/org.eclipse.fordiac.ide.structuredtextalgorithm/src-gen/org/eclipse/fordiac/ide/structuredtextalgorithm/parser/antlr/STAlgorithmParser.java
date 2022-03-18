@@ -27,7 +27,7 @@ public class STAlgorithmParser extends AbstractAntlrParser {
 
 	@Override 
 	protected String getDefaultRuleName() {
-		return "STAlgorithms";
+		return "STAlgorithmSource";
 	}
 
 	public STAlgorithmGrammarAccess getGrammarAccess() {

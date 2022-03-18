@@ -48,7 +48,7 @@ public class TypeSelectionWidget {
 	private static final String TYPE = "TYPE"; //$NON-NLS-1$
 
 	private final TabbedPropertySheetWidgetFactory widgetFactory;
-	private Consumer<String> handleSelectionChanged;
+	private final Consumer<String> handleSelectionChanged;
 
 	private ConfigurableObject configurableObject;
 	private ITypeSelectionContentProvider contentProvider;
@@ -56,12 +56,20 @@ public class TypeSelectionWidget {
 	private TableViewer tableViewer;
 	private Button openEditorButton;
 
-	public TypeSelectionWidget(final TabbedPropertySheetWidgetFactory widgetFactory) {
+	private boolean typeChangeEnabled;
+
+	public TypeSelectionWidget(final TabbedPropertySheetWidgetFactory widgetFactory,
+			final Consumer<String> handleSelectionChanged) {
 		this.widgetFactory = widgetFactory;
+		this.handleSelectionChanged = handleSelectionChanged;
 	}
 
 	public TabbedPropertySheetWidgetFactory getWidgetFactory() {
 		return widgetFactory;
+	}
+
+	public ITypeSelectionContentProvider getContentProvider() {
+		return contentProvider;
 	}
 
 	public void createControls(final Composite parent) {
@@ -94,7 +102,7 @@ public class TypeSelectionWidget {
 
 			@Override
 			public boolean canModify(final Object element, final String property) {
-				return true;
+				return typeChangeEnabled;
 			}
 		});
 
@@ -114,11 +122,13 @@ public class TypeSelectionWidget {
 		});
 	}
 
-	public void initialize(final ConfigurableObject type, final ITypeSelectionContentProvider contentProvider,
-			final Consumer<String> handleSelectionChanged) {
+	public void setEnabled(final boolean enabled) {
+		typeChangeEnabled = enabled;
+	}
+
+	public void initialize(final ConfigurableObject type, final ITypeSelectionContentProvider contentProvider) {
 		this.configurableObject = type;
 		this.contentProvider = contentProvider;
-		this.handleSelectionChanged = handleSelectionChanged;
 
 		if (type instanceof StructManipulator) {
 			resizeTextField();

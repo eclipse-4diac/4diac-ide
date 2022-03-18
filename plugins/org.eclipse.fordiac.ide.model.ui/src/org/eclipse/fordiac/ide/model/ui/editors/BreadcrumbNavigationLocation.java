@@ -58,7 +58,7 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 	public static void generateItemPath(final StringBuilder sb, final Object model,
 			final AdapterFactoryContentProvider adapterFactoryContentProvider,
 			final AdapterFactoryLabelProvider adapterFactoryLabelProvider) {
-		if (model == null) {
+		if (model == null || (model instanceof org.eclipse.emf.ecore.resource.Resource)) {
 			return;
 		}
 		generateItemPath(sb, adapterFactoryContentProvider.getParent(model), adapterFactoryContentProvider,

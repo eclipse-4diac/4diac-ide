@@ -30,7 +30,7 @@ class USIntValue implements AnyUnsignedValue {
 
 	def static toUSIntValue(String value) { new USIntValue(Integer.parseUnsignedInt(value) as byte) }
 
-	def static toUSIntValue(AnyNumValue value) { value.byteValue.toUSIntValue }
+	def static toUSIntValue(AnyMagnitudeValue value) { value.byteValue.toUSIntValue }
 
 	override UsintType getType() { ElementaryTypes.USINT }
 	

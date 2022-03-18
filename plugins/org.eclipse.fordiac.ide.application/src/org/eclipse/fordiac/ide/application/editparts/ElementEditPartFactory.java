@@ -114,7 +114,6 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return new ErrorMarkerInterfaceEditPart();
 		}
 
-		EditPart part;
 		final IInterfaceElement element = (IInterfaceElement) modelElement;
 
 		if ((element.getFBNetworkElement() instanceof StructManipulator)
@@ -126,6 +125,8 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 				return new StructInterfaceEditPart();
 			}
 		}
+
+		EditPart part;
 		if ((element.getFBNetworkElement() instanceof SubApp) && (null == element.getFBNetworkElement().getType())) {
 			part = new UntypedSubAppInterfaceElementEditPart();
 		} else {
@@ -134,11 +135,11 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		return part;
 	}
 
-	private static boolean isDemuxInput(final IInterfaceElement element) {
+	public static boolean isDemuxInput(final IInterfaceElement element) {
 		return (element.getFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput());
 	}
 
-	private static boolean isMuxOutput(final IInterfaceElement element) {
+	public static boolean isMuxOutput(final IInterfaceElement element) {
 		return (element.getFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput());
 	}
 

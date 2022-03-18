@@ -30,7 +30,7 @@ final class DIntValue implements AnySignedValue {
 
 	def static toDIntValue(String value) { new DIntValue(Integer.parseInt(value)) }
 
-	def static toDIntValue(AnyNumValue value) { value.intValue.toDIntValue }
+	def static toDIntValue(AnyMagnitudeValue value) { value.intValue.toDIntValue }
 
 	override DintType getType() { ElementaryTypes.DINT }
 

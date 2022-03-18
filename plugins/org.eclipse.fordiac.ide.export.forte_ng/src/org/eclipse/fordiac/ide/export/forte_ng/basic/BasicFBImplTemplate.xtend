@@ -170,4 +170,11 @@ class BasicFBImplTemplate extends ForteFBTemplate {
     def protected dispatch generateTransitionEvent(AdapterEvent event) '''
         «EXPORT_PREFIX»«event.adapterDeclaration.name»().«event.adapterEventName»()'''
 	
+	
+	override protected generateImplIncludes() '''
+		«super.generateImplIncludes»
+		«FOR alg : type.algorithm.filter(STAlgorithm)»
+			«alg.generateLocalVariables.map[getType].generateImplTypeIncludes»
+		«ENDFOR»
+	'''
 }

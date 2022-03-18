@@ -21,7 +21,9 @@ import org.eclipse.debug.ui.IDebugModelPresentation;
 import org.eclipse.debug.ui.IValueDetailListener;
 import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -35,9 +37,13 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 
 	@Override
 	public IEditorInput getEditorInput(final Object element) {
-		if (element instanceof FBType) {
-			final FBType fbType = (FBType) element;
-			return new FileEditorInput(fbType.getPaletteEntry().getFile());
+		if (element instanceof EObject) {
+			final EObject root = EcoreUtil.getRootContainer((EObject) element);
+			if (root instanceof FBType) {
+				final FBType fbType = (FBType) root;
+				return new FileEditorInput(fbType.getPaletteEntry().getFile());
+			}
+			return getEditorInput(((EObject) element).eResource());
 		} else if (element instanceof Resource) {
 			final Resource resource = (Resource) element;
 			final URI uri = resource.getURI();

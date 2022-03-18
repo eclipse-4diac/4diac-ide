@@ -1507,6 +1507,52 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 		return groupItemProvider;
 	}
 
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.OtherMethod} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OtherMethodItemProvider otherMethodItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.OtherMethod}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOtherMethodAdapter() {
+		if (otherMethodItemProvider == null) {
+			otherMethodItemProvider = new OtherMethodItemProvider(this);
+		}
+
+		return otherMethodItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.STMethod} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected STMethodItemProvider stMethodItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.STMethod}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSTMethodAdapter() {
+		if (stMethodItemProvider == null) {
+			stMethodItemProvider = new STMethodItemProvider(this);
+		}
+
+		return stMethodItemProvider;
+	}
+
 	/** This returns the root adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
